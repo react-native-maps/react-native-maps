@@ -1,0 +1,3 @@
+rootProject.name = 'rn_mapview'
+
+include ':app'
