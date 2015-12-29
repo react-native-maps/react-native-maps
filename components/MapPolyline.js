@@ -84,6 +84,16 @@ var MapPolyline = React.createClass({
      * @platform ios
      */
     miterLimit: PropTypes.number,
+
+    /**
+     * Boolean to indicate whether to draw each segment of the line as a geodesic as opposed to
+     * straight lines on the Mercator projection. A geodesic is the shortest path between two
+     * points on the Earth's surface. The geodesic curve is constructed assuming the Earth is
+     * a sphere.
+     *
+     * @platform android
+     */
+    geodesic: PropTypes.bool,
   },
 
   getDefaultProps: function() {
