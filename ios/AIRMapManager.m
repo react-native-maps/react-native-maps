@@ -75,13 +75,16 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDeselect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
 
 RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
 {
+    if (json == nil) return;
+
     // don't emit region change events when we are setting the region
     BOOL originalIgnore = view.ignoreRegionChanges;
     view.ignoreRegionChanges = YES;
-    [view setRegion:json ? [RCTConvert MKCoordinateRegion:json] : defaultView.region animated:NO];
+    [view setRegion:[RCTConvert MKCoordinateRegion:json] animated:NO];
     view.ignoreRegionChanges = originalIgnore;
 }
 

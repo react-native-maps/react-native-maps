@@ -57,7 +57,7 @@ var MapMarker = React.createClass({
        */
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
-    }),
+    }).isRequired,
 
     /**
      * The offset (in points) at which to display the view.
@@ -184,7 +184,7 @@ var MapMarker = React.createClass({
   },
 
   _getHandle: function() {
-    return React.findNodeHandle(this.refs.map);
+    return React.findNodeHandle(this.refs.marker);
   },
 
   _runCommand: function (name, args) {
@@ -213,6 +213,7 @@ var MapMarker = React.createClass({
   render: function() {
     return (
       <AIRMapMarker
+        ref="marker"
         {...this.props}
         style={[styles.marker, this.props.style]}
         onPress={this._onPress}

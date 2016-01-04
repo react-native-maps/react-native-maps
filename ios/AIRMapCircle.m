@@ -14,46 +14,46 @@
 
 - (void)setFillColor:(UIColor *)fillColor {
     _fillColor = fillColor;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setStrokeColor:(UIColor *)strokeColor {
     _strokeColor = strokeColor;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setStrokeWidth:(CGFloat)strokeWidth {
     _strokeWidth = strokeWidth;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setLineJoin:(CGLineJoin)lineJoin {
     _lineJoin = lineJoin;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setLineCap:(CGLineCap)lineCap {
     _lineCap = lineCap;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setMiterLimit:(CGFloat)miterLimit {
     _miterLimit = miterLimit;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setRadius:(CLLocationDistance)radius {
     _radius = radius;
     _radiusSet = YES;
     [self createCircleAndRendererIfPossible];
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate{
     _centerCoordinate = centerCoordinate;
     _centerSet = YES;
     [self createCircleAndRendererIfPossible];
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void) createCircleAndRendererIfPossible
@@ -63,17 +63,19 @@
     self.renderer = [[MKCircleRenderer alloc] initWithCircle:self.circle];
 }
 
-- (void) applyPropsToRenderer
+- (void) update
 {
-    if (!_renderer) {
-        return;
-    };
+    if (!_renderer) return;
     _renderer.fillColor = _fillColor;
     _renderer.strokeColor = _strokeColor;
     _renderer.lineWidth = _strokeWidth;
     _renderer.lineCap = _lineCap;
     _renderer.lineJoin = _lineJoin;
     _renderer.miterLimit = _miterLimit;
+
+    if (!_map != nil) return;
+    [_map removeOverlay:self];
+    [_map addOverlay:self];
 }
 
 

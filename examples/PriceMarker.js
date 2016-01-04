@@ -11,7 +11,7 @@ var PriceMarker = React.createClass({
       <View style={styles.container}>
         <View style={styles.bubble}>
           <Text style={styles.dollar}>$</Text>
-          <Text style={styles.amount}>99</Text>
+          <Text style={styles.amount}>{this.props.amount}</Text>
         </View>
         <View style={styles.arrowBorder} />
         <View style={styles.arrow} />

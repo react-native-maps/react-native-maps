@@ -33,6 +33,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 {
     UIView *_legalLabel;
     CLLocationManager *_locationManager;
+    BOOL _initialRegionSet;
 }
 
 - (instancetype)init
@@ -70,10 +71,14 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self addAnnotation:(id <MKAnnotation>) subview];
     } else if ([subview isKindOfClass:[AIRMapPolyline class]]) {
         [self addOverlay:(id<MKOverlay>)subview];
+        [super insertReactSubview:subview atIndex:atIndex];
     } else if ([subview isKindOfClass:[AIRMapPolygon class]]) {
+        ((AIRMapPolygon *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
+        [super insertReactSubview:subview atIndex:atIndex];
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
         [self addOverlay:(id<MKOverlay>)subview];
+        [super insertReactSubview:subview atIndex:atIndex];
     } else {
         [super insertReactSubview:subview atIndex:atIndex];
     }
@@ -86,10 +91,13 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self removeAnnotation:(id<MKAnnotation>)subview];
     } else if ([subview isKindOfClass:[AIRMapPolyline class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
+        [super removeReactSubview:subview];
     } else if ([subview isKindOfClass:[AIRMapPolygon class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
+        [super removeReactSubview:subview];
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
+        [super removeReactSubview:subview];
     } else {
         [super removeReactSubview:subview];
     }
@@ -177,8 +185,15 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         region.span.longitudeDelta = self.region.span.longitudeDelta;
     }
 
-    // Animate to new position
+    // Animate/move to new position
     [super setRegion:region animated:animated];
+}
+
+- (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
+    if (!_initialRegionSet) {
+        _initialRegionSet = YES;
+        [self setRegion:initialRegion animated:NO];
+    }
 }
 
 @end

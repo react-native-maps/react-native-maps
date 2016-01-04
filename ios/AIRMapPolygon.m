@@ -13,32 +13,32 @@
 
 - (void)setFillColor:(UIColor *)fillColor {
     _fillColor = fillColor;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setStrokeColor:(UIColor *)strokeColor {
     _strokeColor = strokeColor;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setStrokeWidth:(CGFloat)strokeWidth {
     _strokeWidth = strokeWidth;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setLineJoin:(CGLineJoin)lineJoin {
     _lineJoin = lineJoin;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setLineCap:(CGLineCap)lineCap {
     _lineCap = lineCap;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setMiterLimit:(CGFloat)miterLimit {
     _miterLimit = miterLimit;
-    [self applyPropsToRenderer];
+    [self update];
 }
 
 - (void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates {
@@ -49,11 +49,13 @@
         coords[i] = coordinates[i].coordinate;
     }
     self.polygon = [MKPolygon polygonWithCoordinates:coords count:coordinates.count];
+    // TODO: we could lazy-initialize the polygon, since we don't need it until the
+    // polygon is in view.
     self.renderer = [[MKPolygonRenderer alloc] initWithPolygon:self.polygon];
-    [self applyPropsToRenderer];
+    [self update];
 }
 
-- (void) applyPropsToRenderer
+- (void) update
 {
     if (!_renderer) return;
     _renderer.fillColor = _fillColor;
@@ -62,8 +64,11 @@
     _renderer.lineCap = _lineCap;
     _renderer.lineJoin = _lineJoin;
     _renderer.miterLimit = _miterLimit;
-}
 
+    if (!_map != nil) return;
+    [_map removeOverlay:self];
+    [_map addOverlay:self];
+}
 
 #pragma mark MKOverlay implementation
 

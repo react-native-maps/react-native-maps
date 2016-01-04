@@ -19,8 +19,12 @@ var PriceMarker = require('./components/PriceMarker');
 
 var { width, height } = Dimensions.get('window');
 
-const LATITUDE = 38.89399;
-const LONGITUDE = -77.03659;
+const LATITUDE = 37.78825;
+const LONGITUDE = -122.4324;
+
+const LATD = LATITUDE - 38.89399;
+const LNGD = LONGITUDE + 77.03659;
+
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = 0.1218;
 
@@ -53,7 +57,7 @@ var MapViewTest = React.createClass({
   },
 
   onRegionChange(region) {
-    //console.log(region);
+    //console.log("onRegionChange", region);
     this.state.region.setValue(region);
     //this.setState({ region });
   },
@@ -94,10 +98,6 @@ var MapViewTest = React.createClass({
     ]).start();
   },
 
-  onMapPress(e) {
-    console.log("onMapPress", e);
-  },
-
   onMarkerMove() {
     this.setState({
       coord: {
@@ -116,45 +116,71 @@ var MapViewTest = React.createClass({
     }, 100);
   },
 
+  onZoomToFit() {
+    this.refs.map.refs.node.fitToElements(true);
+  },
+
   render() {
 
     return (
       <View>
         <MapView.Animated
+          ref="map"
           style={styles.map}
           region={this.state.region}
           onRegionChange={this.onRegionChange}
-          onPress={this.onMapPress}
-          onMarkerPress={() => console.log("onMarkerPress")}
-          onCalloutPress={() => console.log("onCalloutPress")}
-          onMapPress={() => console.log("onMapPress")}
-          ref="map"
-        >
+          onRegionChangeComplete={(e) => console.log("Map::onRegionChangeComplete", e.nativeEvent)}
+          onPress={(e) => console.log("Map::onPress", e.nativeEvent)}
+          onLongPress={(e) => console.log("Map::onLongPress", e.nativeEvent)}
+          onMarkerPress={(e) => console.log("Map::onMarkerPress", e.nativeEvent)}
+          onMarkerSelect={(e) => console.log("Map::onMarkerSelect", e.nativeEvent)}
+          onMarkerDeselect={(e) => console.log("Map::onMarkerDeselect", e.nativeEvent)}
+          onCalloutPress={(e) => console.log("Map::onCalloutPress", e.nativeEvent)}
+          onMapPress={(e) => console.log("Map::onMapPress", e.nativeEvent)}
+          >
+          <MapView.Circle
+            center={{ latitude: LATITUDE, longitude: LONGITUDE }}
+            radius={500}
+            fillColor="rgba(255,0,0,0.5)"
+            strokeWidth={0.5}
+            />
+          <MapView.Polygon
+            coordinates={[
+              { latitude: LATITUDE, longitude: LONGITUDE },
+              { latitude: LATITUDE + 0.04, longitude: LONGITUDE },
+              { latitude: LATITUDE + 0.04, longitude: LONGITUDE + 0.04 },
+              { latitude: LATITUDE, longitude: LONGITUDE + 0.04 },
+              { latitude: LATITUDE, longitude: LONGITUDE },
+            ]}
+            fillColor="rgba(255,0,0,0.5)"
+            strokeWidth={0.5}
+            strokeColor="#000"
+            />
           <MapView.Polyline
             coordinates={[
-              { latitude: 38.893596444352134, longitude: -77.03814983367920},
-              { latitude: 38.893379333722040, longitude: -77.03792452812195},
-              { latitude: 38.893162222428310, longitude: -77.03761339187622},
-              { latitude: 38.893028615148424, longitude: -77.03731298446655},
-              { latitude: 38.892920059048464, longitude: -77.03691601753235},
-              { latitude: 38.892903358095296, longitude: -77.03637957572937},
-              { latitude: 38.893011914220770, longitude: -77.03592896461487},
-              { latitude: 38.893162222428310, longitude: -77.03549981117249},
-              { latitude: 38.893404384982480, longitude: -77.03514575958252},
-              { latitude: 38.893596444352134, longitude: -77.03496336936950},
+              { latitude: 38.893596444352134 + LATD, longitude: -77.03814983367920 + LNGD},
+              { latitude: 38.893379333722040 + LATD, longitude: -77.03792452812195 + LNGD},
+              { latitude: 38.893162222428310 + LATD, longitude: -77.03761339187622 + LNGD},
+              { latitude: 38.893028615148424 + LATD, longitude: -77.03731298446655 + LNGD},
+              { latitude: 38.892920059048464 + LATD, longitude: -77.03691601753235 + LNGD},
+              { latitude: 38.892903358095296 + LATD, longitude: -77.03637957572937 + LNGD},
+              { latitude: 38.893011914220770 + LATD, longitude: -77.03592896461487 + LNGD},
+              { latitude: 38.893162222428310 + LATD, longitude: -77.03549981117249 + LNGD},
+              { latitude: 38.893404384982480 + LATD, longitude: -77.03514575958252 + LNGD},
+              { latitude: 38.893596444352134 + LATD, longitude: -77.03496336936950 + LNGD},
             ]}
-          />
+            />
           <MapView.Marker
             coordinate={this.state.coord}
-            onPress={() => console.log("Marker::onPress")}
-            onCalloutPress={() => console.log("Marker::onCalloutPress")}
-          >
+            onPress={(e) => console.log("Marker::onPress", e.nativeEvent)}
+            onCalloutPress={(e) => console.log("Marker::onCalloutPress", e.nativeEvent)}
+            >
             <PriceMarker />
             <MapView.Callout
               style={styles.callout}
               tooltip
-              onPress={() => console.log("Callout::onPress")}
-            >
+              onPress={(e) => console.log("Callout::onPress", e.nativeEvent)}
+              >
               <View>
                 <Text>Well hello there...</Text>
               </View>
@@ -164,14 +190,14 @@ var MapViewTest = React.createClass({
             <MapView.Marker
               key={i}
               coordinate={coord}
-              onPress={() => console.log("Marker::onPress")}
-              onCalloutPress={() => console.log("Marker::onCalloutPress")}
-            >
+              onPress={(e) => console.log("Marker::onPress", e.nativeEvent)}
+              onCalloutPress={(e) => console.log("Marker::onCalloutPress", e.nativeEvent)}
+              >
               <PriceMarker />
               <MapView.Callout
                 style={styles.callout}
-                onPress={() => console.log("Callout::onPress")}
-              >
+                onPress={(e) => console.log("Callout::onPress", e.nativeEvent)}
+                >
                 <View>
                   <Text>Well hello there...</Text>
                 </View>
@@ -201,6 +227,12 @@ var MapViewTest = React.createClass({
         <TouchableOpacity onPress={this.onAnimateMapRegion}>
           <View>
             <Text>Animate Map Region</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={this.onZoomToFit}>
+          <View>
+            <Text>Fit To Elements</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -247,11 +279,11 @@ var styles = StyleSheet.create({
   callout: {
     //flex: 0,
     //flexDirection: 'column',
-    position: 'absolute',
+    //position: 'absolute',
     //flex: 0,
     //backgroundColor: '#fff',
-    width: 100,
-    height: 100,
+    //width: 100,
+    //height: 100,
   },
 });
 

@@ -28,6 +28,7 @@ extern const CGFloat RCTMapZoomBoundBuffer;
 @property (nonatomic, assign) CGFloat maxDelta;
 @property (nonatomic, assign) UIEdgeInsets legalLabelInsets;
 @property (nonatomic, strong) NSTimer *regionChangeObserveTimer;
+@property (nonatomic, assign) MKCoordinateRegion initialRegion;
 
 @property (nonatomic, assign) CLLocationCoordinate2D pendingCenter;
 @property (nonatomic, assign) MKCoordinateSpan pendingSpan;

@@ -11,11 +11,14 @@
 #import "RCTConvert+MapKit.h"
 #import "RCTComponent.h"
 #import "AIRMapCoordinate.h"
+#import "AIRMap.h"
 #import "RCTView.h"
 
 
 
 @interface AIRMapCircle: MKAnnotationView <MKOverlay>
+
+@property (nonatomic, weak) AIRMap *map;
 
 @property (nonatomic, strong) MKCircle *circle;
 @property (nonatomic, strong) MKCircleRenderer *renderer;

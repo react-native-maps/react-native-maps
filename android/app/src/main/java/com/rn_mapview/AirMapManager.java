@@ -64,6 +64,7 @@ public class AirMapManager
     // into a `ReactMapView` class or something that has all of the APIs that the GoogleMap class has.
     private MapView mView;
     private GoogleMap map;
+    private LatLngBounds initialRegion;
 
     private ReactContext reactContext;
     private LatLngBounds boundsToMove;
@@ -162,6 +163,8 @@ public class AirMapManager
 
     @ReactProp(name="region")
     public void setRegion(MapView view, ReadableMap region) {
+        if (region == null) return;
+
         Double lng = region.getDouble("longitude");
         Double lat = region.getDouble("latitude");
         Double lngDelta = region.getDouble("longitudeDelta");
@@ -170,6 +173,33 @@ public class AirMapManager
                 new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
                 new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
         );
+        if (view.getHeight() <= 0 || view.getWidth() <= 0) {
+            // in this case, our map has not been laid out yet, so we save the bounds in a local
+            // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
+            // occurs, we will move the camera to the saved bounds. Note that if we tried to move
+            // to the bounds now, it would trigger an exception.
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
+            boundsToMove = bounds;
+        } else {
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+            boundsToMove = null;
+        }
+    }
+
+    @ReactProp(name="initialRegion")
+    public void setInitialRegion(MapView view, ReadableMap region) {
+        if (region == null) return;
+        if (initialRegion != null) return;
+
+        Double lng = region.getDouble("longitude");
+        Double lat = region.getDouble("latitude");
+        Double lngDelta = region.getDouble("longitudeDelta");
+        Double latDelta = region.getDouble("latitudeDelta");
+        LatLngBounds bounds = new LatLngBounds(
+                new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+                new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+        );
+        initialRegion = bounds;
         if (view.getHeight() <= 0 || view.getWidth() <= 0) {
             // in this case, our map has not been laid out yet, so we save the bounds in a local
             // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout

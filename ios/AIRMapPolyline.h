@@ -11,10 +11,13 @@
 #import "RCTConvert+MapKit.h"
 #import "RCTComponent.h"
 #import "AIRMapCoordinate.h"
+#import "AIRMap.h"
 #import "RCTView.h"
 
 
 @interface AIRMapPolyline: MKAnnotationView <MKOverlay>
+
+@property (nonatomic, weak) AIRMap *map;
 
 @property (nonatomic, strong) MKPolyline *polyline;
 @property (nonatomic, strong) MKPolylineRenderer *renderer;

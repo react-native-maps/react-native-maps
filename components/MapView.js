@@ -146,6 +146,29 @@ var MapView = React.createClass({
     }),
 
     /**
+     * The initial region to be displayed by the map.  Use this prop instead of `region`
+     * only if you don't want to control the viewport of the map besides the initial region.
+     *
+     * Changing this prop after the component has mounted will not result in a region change.
+     *
+     * This is similar to the `initialValue` prop of a text input.
+     */
+    initialRegion: PropTypes.shape({
+      /**
+       * Coordinates for the center of the map.
+       */
+      latitude: PropTypes.number.isRequired,
+      longitude: PropTypes.number.isRequired,
+
+      /**
+       * Difference between the minimun and the maximum latitude/longitude
+       * to be displayed.
+       */
+      latitudeDelta: PropTypes.number.isRequired,
+      longitudeDelta: PropTypes.number.isRequired,
+    }),
+
+    /**
      * Maximum size of area that can be displayed.
      *
      * @platform ios
@@ -213,7 +236,28 @@ var MapView = React.createClass({
 
   },
 
+  componentDidMount: function() {
+    if (this.props.region) {
+      this.refs.map.setNativeProps({ region: this.props.region });
+    }
+  },
+
+  componentWillUpdate: function(nextProps) {
+    var a = this.__lastRegion;
+    var b = nextProps.region;
+    if (!a || !b) return;
+    if (
+      a.latitude !== b.latitude ||
+      a.longitude !== b.longitude ||
+      a.latitudeDelta !== b.latitudeDelta ||
+      a.longitudeDelta !== b.longitudeDelta
+    ) {
+      this.refs.map.setNativeProps({ region: b });
+    }
+  },
+
   _onChange: function(event: Event) {
+    this.__lastRegion = event.nativeEvent.region;
     if (event.nativeEvent.continuous) {
       this.props.onRegionChange &&
       this.props.onRegionChange(event.nativeEvent.region);
@@ -263,6 +307,7 @@ var MapView = React.createClass({
       <AIRMap
         ref="map"
         {...this.props}
+        region={null}
         onChange={this._onChange}
       />
     );

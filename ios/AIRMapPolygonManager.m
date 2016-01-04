@@ -11,6 +11,7 @@
 
 #import "RCTBridge.h"
 #import "RCTConvert.h"
+#import "RCTConvert+MoreMapKit.h"
 #import "RCTConvert+CoreLocation.h"
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
