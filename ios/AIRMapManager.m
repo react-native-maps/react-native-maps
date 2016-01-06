@@ -230,8 +230,8 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
     // This is where we present our custom callout view... MapKit's built-in callout doesn't have the flexibility
     // we need, but a lot of work was done by Nick Farina to make this identical to MapKit's built-in.
-    [mapView.calloutView presentCalloutFromRect:marker.bounds
-                                         inView:marker
+    [mapView.calloutView presentCalloutFromRect:view.bounds
+                                         inView:view
                               constrainedToView:mapView
                                        animated:YES];
 }

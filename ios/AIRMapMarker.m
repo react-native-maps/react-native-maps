@@ -15,7 +15,9 @@
 @implementation EmptyCalloutBackgroundView
 @end
 
-@implementation AIRMapMarker
+@implementation AIRMapMarker {
+    BOOL _hasSetCalloutOffset;
+}
 
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
     if ([subview isKindOfClass:[AIRMapCallout class]]) {
@@ -35,15 +37,10 @@
 
 - (MKAnnotationView *)getAnnotationView
 {
-    if (self.subviews.count > 0 || self.image) {
-        // If it has subviews, it means we are wanting to render a custom marker with arbitrary react views.
-        // if it has a non-null image, it means we want to render a custom marker with the image.
-        // In either case, we want to return the AIRMapMarker since it is both an MKAnnotation and an
-        // MKAnnotationView all at the same time.
-        return self;
-    } else {
+    if ([self shouldUsePinView]) {
         // In this case, we want to render a platform "default" marker.
         MKPinAnnotationView *view = [MKPinAnnotationView new];
+        view.annotation = self;
 
         // TODO(lmr): Looks like this API was introduces in iOS 8. We may want to handle differently for earlier
         // versions. Right now it's just leaving it with the default color. People needing the colors are free to
@@ -53,14 +50,25 @@
         }
 
         return view;
+    } else {
+        // If it has subviews, it means we are wanting to render a custom marker with arbitrary react views.
+        // if it has a non-null image, it means we want to render a custom marker with the image.
+        // In either case, we want to return the AIRMapMarker since it is both an MKAnnotation and an
+        // MKAnnotationView all at the same time.
+        return self;
     }
 }
 
-- (void)fillCalloutView:(SMCalloutView *)calloutView {
+- (void)fillCalloutView:(SMCalloutView *)calloutView
+{
     // Set everything necessary on the calloutView before it becomes visible.
 
     // Apply the MKAnnotationView's desired calloutOffset (from the top-middle of the view)
-    calloutView.calloutOffset = self.calloutOffset;
+    if ([self shouldUsePinView] && !_hasSetCalloutOffset) {
+        calloutView.calloutOffset = CGPointMake(-8,0);
+    } else {
+        calloutView.calloutOffset = self.calloutOffset;
+    }
 
     if (self.calloutView) {
         calloutView.title = nil;
@@ -80,6 +88,7 @@
         calloutView.contentView = self.calloutView;
 
     } else {
+
         // if there is no calloutView, it means the user wants to use the default callout behavior with title/subtitle
         // pairs.
         calloutView.title = self.title;
@@ -89,8 +98,20 @@
     }
 }
 
-- (BOOL)shouldShowCalloutView {
+- (void)setCalloutOffset:(CGPoint)calloutOffset
+{
+    _hasSetCalloutOffset = YES;
+    [super setCalloutOffset:calloutOffset];
+}
+
+- (BOOL)shouldShowCalloutView
+{
     return self.calloutView != nil || self.title != nil || self.subtitle != nil;
+}
+
+- (BOOL)shouldUsePinView
+{
+    return self.subviews.count == 0 && !self.image;
 }
 
 
