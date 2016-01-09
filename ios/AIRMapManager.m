@@ -281,7 +281,7 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 {
     [self _regionChanged:mapView];
 
-    mapView.regionChangeObserveTimer = [NSTimer timerWithTimeInterval:RCTMapRegionChangeObserveInterval
+    mapView.regionChangeObserveTimer = [NSTimer timerWithTimeInterval:AIRMapRegionChangeObserveInterval
                                                                target:self
                                                              selector:@selector(_onTick:)
                                                              userInfo:@{ RCTMapViewKey: mapView }
