@@ -337,6 +337,15 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
         }
     }
 
+    public void animateToRegion(LatLngBounds bounds, int duration) {
+        startMonitoringRegion();
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+    }
+
+    public void animateToCoordinate(LatLng coordinate, int duration) {
+        startMonitoringRegion();
+        map.animateCamera(CameraUpdateFactory.newLatLng(coordinate), duration, null);
+    }
 
     public void fitToElements(boolean animated) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -350,6 +359,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
         LatLngBounds bounds = builder.build();
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
         if (animated) {
+            startMonitoringRegion();
             map.animateCamera(cu);
         } else {
             map.moveCamera(cu);

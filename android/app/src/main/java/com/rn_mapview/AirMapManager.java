@@ -166,7 +166,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                         new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
                         new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
                 );
-                view.map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+                view.animateToRegion(bounds, duration);
                 break;
 
             case ANIMATE_TO_COORDINATE:
@@ -174,7 +174,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                 duration = args.getInt(1);
                 lng = region.getDouble("longitude");
                 lat = region.getDouble("latitude");
-                view.map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, lng)), duration, null);
+                view.animateToCoordinate(new LatLng(lat, lng), duration);
                 break;
 
             case FIT_TO_ELEMENTS:
