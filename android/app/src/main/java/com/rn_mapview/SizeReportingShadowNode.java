@@ -14,13 +14,15 @@ import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import java.util.HashMap;
 
-// Custom LayoutShadowNode implementation used in conjunction with the AirMapMarker
+// Custom LayoutShadowNode implementation used in conjunction with the AirMapManager
 // which sends the width/height of the view after layout occurs.
-public class AirMapMarkerShadowNode extends LayoutShadowNode {
+public class SizeReportingShadowNode extends LayoutShadowNode {
+
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiViewOperationQueue) {
         super.onCollectExtraUpdates(uiViewOperationQueue);
-        HashMap<String, Float> data = new HashMap<String, Float>();
+
+        HashMap<String, Float> data = new HashMap<>();
         data.put("width", getLayoutWidth());
         data.put("height", getLayoutHeight());
 

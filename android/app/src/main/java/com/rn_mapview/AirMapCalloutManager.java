@@ -44,7 +44,7 @@ public class AirMapCalloutManager extends ViewGroupManager<AirMapCallout> {
         // we use a custom shadow node that emits the width/height of the view
         // after layout with the updateExtraData method. Without this, we can't generate
         // a bitmap of the appropriate width/height of the rendered view.
-        return new AirMapMarkerShadowNode();
+        return new SizeReportingShadowNode();
     }
 
     @Override

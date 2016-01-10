@@ -9,17 +9,15 @@ React Native MapView component for iOS + Android
 The `<MapView />` component and its child components have several events that you can subscribe to.
 This example displays some of them in a log as a demonstration.
 
-![](http://i.giphy.com/3o6UBpncYQASu2WTW8.gif) ![](http://i.giphy.com/xT77XVmavQ5Lbfs08w.gif)
-
-Issues: Android doesn't yet support continuous region change events. This will be coming soon.
+![](http://i.giphy.com/3o6UBpncYQASu2WTW8.gif) ![](http://i.giphy.com/xT77YdviLqtjaecRYA.gif)
 
 
 
 ### Tracking Region / Location
 
-![](http://i.giphy.com/3o6UBoPSLlIKQ2dv7q.gif) ![](http://i.giphy.com/3o6UB6MIdfrtTkEqUE.gif)
+![](http://i.giphy.com/3o6UBoPSLlIKQ2dv7q.gif) ![](http://i.giphy.com/xT77XWjqECvdgjx9oA.gif)
 
-Issues: Android doesn't yet support continuous region change events. This will be coming soon.
+
 
 
 ### Programmatically Changing Region
@@ -28,16 +26,13 @@ One can change the mapview's position using refs and component methods, or by pa
 `region` prop.  The component methods will allow one to animate to a given position like the native 
 API could.
 
-![](http://i.giphy.com/3o6UB7poyB6YJ0KPWU.gif) ![](http://i.giphy.com/3o6UB2dztF4OhJKAjm.gif)
+![](http://i.giphy.com/3o6UB7poyB6YJ0KPWU.gif) ![](http://i.giphy.com/xT77Yc4wK3pzZusEbm.gif)
+
 
 
 ### Arbitrary React Views as Markers
 
-![](http://i.giphy.com/xT77XTgnkAsDyJosVO.gif) ![](http://i.giphy.com/3o6UB1qGEM9jYni3KM.gif)
-
-Issues: Updating a sub-view of a marker in iOS right now will render the view in the top left corner
-of the screen until the MapView is interacted with again. Currently looking for the reason and a 
-potential fix.
+![](http://i.giphy.com/3o6UBcsCLoLQtksJxe.gif) ![](http://i.giphy.com/3o6UB1qGEM9jYni3KM.gif)
 
 
 
@@ -91,9 +86,7 @@ the `<Marker />`'s `title` and `description` props.
 Custom callout views can be the entire tooltip bubble, or just the content inside of the system
 default bubble.
 
-![](http://i.giphy.com/xT77XNePGnMIIDpbnq.gif)
-
-Issues: Android custom callouts seem to be getting sized improperly right now. Working on a fix.
+![](http://i.giphy.com/xT77XNePGnMIIDpbnq.gif) ![](http://i.giphy.com/xT77YdU0HXryvoRqaQ.gif)
 
 
 

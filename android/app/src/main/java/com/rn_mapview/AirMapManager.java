@@ -14,7 +14,6 @@ import com.facebook.react.uimanager.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
@@ -213,7 +212,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     public LayoutShadowNode createShadowNodeInstance() {
         // A custom shadow node is needed in order to pass back the width/height of the map to the
         // view manager so that it can start applying camera moves with bounds.
-        return new AirMapShadowNode();
+        return new SizeReportingShadowNode();
     }
 
     @Override

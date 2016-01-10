@@ -33,16 +33,15 @@ var DisplayLatLng = React.createClass({
         longitude: LONGITUDE,
       },
       amount: 99,
-      fontSize: 13,
     };
   },
 
   increment() {
-    this.setState({ amount: this.state.amount + 1, fontSize: this.state.fontSize + 1 });
+    this.setState({ amount: this.state.amount + 1 });
   },
 
   decrement() {
-    this.setState({ amount: this.state.amount - 1, fontSize: this.state.fontSize + 1 });
+    this.setState({ amount: this.state.amount - 1 });
   },
 
   render() {
@@ -53,7 +52,7 @@ var DisplayLatLng = React.createClass({
           initialRegion={this.state.region}
         >
           <MapView.Marker coordinate={this.state.coordinate}>
-            <PriceMarker amount={this.state.amount} fontSize={this.state.fontSize} />
+            <PriceMarker amount={this.state.amount} />
           </MapView.Marker>
         </MapView>
         <View style={styles.buttonContainer}>

@@ -63,24 +63,24 @@ var App = React.createClass({
 
 
   render() {
-    //return this.renderExamples([
-    //  [DisplayLatLng, 'Tracking Position'],
-    //  [ViewsAsMarkers, 'Arbitrary Views as Markers'],
-    //  [EventListener, 'Events'],
-    //  [MarkerTypes, 'Custom Markers'],
-    //  [PolygonCreator, 'Polygon Creator'],
-    //  [AnimatedViews, 'Animating with MapViews'],
-    //  [Callouts, 'Custom Callouts'],
-    //  [Overlays, 'Circles, Polygons, and Polylines'],
-    //  [DefaultMarkers, 'Default Markers'],
-    //]);
+    return this.renderExamples([
+      [DisplayLatLng, 'Tracking Position'],
+      [ViewsAsMarkers, 'Arbitrary Views as Markers'],
+      [EventListener, 'Events'],
+      [MarkerTypes, 'Custom Markers'],
+      [PolygonCreator, 'Polygon Creator'],
+      [AnimatedViews, 'Animating with MapViews'],
+      [Callouts, 'Custom Callouts'],
+      [Overlays, 'Circles, Polygons, and Polylines'],
+      [DefaultMarkers, 'Default Markers'],
+    ]);
     //return <DisplayLatLng />;
     //return <ViewsAsMarkers />;
     //return <EventListener />;
     //return <MarkerTypes />;
     //return <PolygonCreator />;
     //return <AnimatedViews />;
-    return <Callouts />;
+    //return <Callouts />;
     //return <Overlays />;
     //return <DefaultMarkers />;
   },
