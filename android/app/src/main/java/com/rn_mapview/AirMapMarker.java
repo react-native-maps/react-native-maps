@@ -3,6 +3,7 @@ package com.rn_mapview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -55,6 +56,7 @@ public class AirMapMarker extends AirMapFeature {
         if (marker != null) {
             marker.setPosition(position);
         }
+        update();
     }
 
     public void setTitle(String title) {
@@ -62,6 +64,7 @@ public class AirMapMarker extends AirMapFeature {
         if (marker != null) {
             marker.setTitle(title);
         }
+        update();
     }
 
     public void setSnippet(String snippet) {
@@ -69,6 +72,7 @@ public class AirMapMarker extends AirMapFeature {
         if (marker != null) {
             marker.setSnippet(snippet);
         }
+        update();
     }
 
     public void setRotation(float rotation) {
@@ -76,6 +80,7 @@ public class AirMapMarker extends AirMapFeature {
         if (marker != null) {
             marker.setRotation(rotation);
         }
+        update();
     }
 
     public void setFlat(boolean flat) {
@@ -83,6 +88,7 @@ public class AirMapMarker extends AirMapFeature {
         if (marker != null) {
             marker.setFlat(flat);
         }
+        update();
     }
 
     public void setMarkerHue(float markerHue) {
@@ -97,6 +103,7 @@ public class AirMapMarker extends AirMapFeature {
         if (marker != null) {
             marker.setAnchor(anchorX, anchorY);
         }
+        update();
     }
 
     public void setCalloutAnchor(double x, double y) {
@@ -106,6 +113,7 @@ public class AirMapMarker extends AirMapFeature {
         if (marker != null) {
             marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
         }
+        update();
     }
 
     public void setImage(ReadableMap image) {
@@ -129,7 +137,9 @@ public class AirMapMarker extends AirMapFeature {
     public void addView(View child, int index) {
         super.addView(child, index);
         // if children are added, it means we are rendering a custom marker
-        hasCustomMarkerView = true;
+        if (!(child instanceof AirMapCallout)) {
+            hasCustomMarkerView = true;
+        }
         update();
     }
 
@@ -164,7 +174,7 @@ public class AirMapMarker extends AirMapFeature {
     private MarkerOptions createMarkerOptions() {
         MarkerOptions options = new MarkerOptions().position(position);
         if (anchorIsSet) options.anchor(anchorX, anchorY);
-        if (calloutAnchorIsSet) options.anchor(calloutAnchorX, calloutAnchorY);
+        if (calloutAnchorIsSet) options.infoWindowAnchor(calloutAnchorX, calloutAnchorY);
         options.title(title);
         options.snippet(snippet);
         options.rotation(rotation);
@@ -200,7 +210,6 @@ public class AirMapMarker extends AirMapFeature {
     }
 
     public void setCalloutView(AirMapCallout view) {
-        hasCustomMarkerView = view != null;
         this.calloutView = view;
     }
 
@@ -245,25 +254,23 @@ public class AirMapMarker extends AirMapFeature {
 
         LinearLayout LL = new LinearLayout(context);
         LL.setOrientation(LinearLayout.VERTICAL);
-        LL.setLayoutParams(new LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
+        LL.setLayoutParams(new LinearLayout.LayoutParams(
+                this.calloutView.width,
+                this.calloutView.height,
+                0f
         ));
 
 
         LinearLayout LL2 = new LinearLayout(context);
         LL2.setOrientation(LinearLayout.HORIZONTAL);
-        LL2.setLayoutParams(new LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
+        LL2.setLayoutParams(new LinearLayout.LayoutParams(
+                this.calloutView.width,
+                this.calloutView.height,
+                0f
         ));
 
-
-        View child = this.calloutView.getChildAt(0);
-        this.calloutView.removeView(child);
-
         LL.addView(LL2);
-        LL2.addView(child);
+        LL2.addView(this.calloutView);
 
         this.wrappedCalloutView = LL;
     }

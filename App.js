@@ -75,12 +75,12 @@ var App = React.createClass({
     //  [DefaultMarkers, 'Default Markers'],
     //]);
     //return <DisplayLatLng />;
-    return <ViewsAsMarkers />;
+    //return <ViewsAsMarkers />;
     //return <EventListener />;
     //return <MarkerTypes />;
     //return <PolygonCreator />;
     //return <AnimatedViews />;
-    //return <Callouts />;
+    return <Callouts />;
     //return <Overlays />;
     //return <DefaultMarkers />;
   },

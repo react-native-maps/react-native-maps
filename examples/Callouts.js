@@ -77,6 +77,7 @@ var Callouts = React.createClass({
           <MapView.Marker
             coordinate={markers[2].coordinate}
             calloutOffset={{ x: -8, y: 28 }}
+            calloutAnchor={{ x: 0.5, y: 0.4 }}
           >
             <MapView.Callout tooltip>
               <CustomCallout>

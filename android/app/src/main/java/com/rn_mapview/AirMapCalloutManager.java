@@ -4,11 +4,13 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -35,6 +37,25 @@ public class AirMapCalloutManager extends ViewGroupManager<AirMapCallout> {
         return MapBuilder.of(
             "onPress", MapBuilder.of("registrationName", "onPress")
         );
+    }
+
+    @Override
+    public LayoutShadowNode createShadowNodeInstance() {
+        // we use a custom shadow node that emits the width/height of the view
+        // after layout with the updateExtraData method. Without this, we can't generate
+        // a bitmap of the appropriate width/height of the rendered view.
+        return new AirMapMarkerShadowNode();
+    }
+
+    @Override
+    public void updateExtraData(AirMapCallout view, Object extraData) {
+        // This method is called from the shadow node with the width/height of the rendered
+        // marker view.
+        HashMap<String, Float> data = (HashMap<String, Float>)extraData;
+        float width = data.get("width");
+        float height = data.get("height");
+        view.width = (int) width;
+        view.height = (int) height;
     }
 
 }

@@ -103,7 +103,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     }
 
     @ReactProp(name = "flat", defaultBoolean = false)
-    public void setMarkerRotation(AirMapMarker view, boolean flat) {
+    public void setFlat(AirMapMarker view, boolean flat) {
         view.setFlat(flat);
     }
 

@@ -370,14 +370,14 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
 
     @Override
     public View getInfoWindow(Marker marker) {
-        AirMapMarker annotation = markerMap.get(marker);
-        return annotation.getCallout();
+        AirMapMarker markerView = markerMap.get(marker);
+        return markerView.getCallout();
     }
 
     @Override
     public View getInfoContents(Marker marker) {
-        AirMapMarker annotation = markerMap.get(marker);
-        return annotation.getInfoContents();
+        AirMapMarker markerView = markerMap.get(marker);
+        return markerView.getInfoContents();
     }
 
     @Override
