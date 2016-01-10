@@ -6,12 +6,17 @@ var {
 } = React;
 
 var PriceMarker = React.createClass({
+  getDefaultProps() {
+    return {
+      fontSize: 13,
+    };
+  },
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.bubble}>
           <Text style={styles.dollar}>$</Text>
-          <Text style={styles.amount}>{this.props.amount}</Text>
+          <Text style={[styles.amount, { fontSize: this.props.fontSize }]}>{this.props.amount}</Text>
         </View>
         <View style={styles.arrowBorder} />
         <View style={styles.arrow} />

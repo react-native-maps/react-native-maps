@@ -267,8 +267,8 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 {
     if (mapView.followUserLocation) {
         MKCoordinateRegion region;
-        region.span.latitudeDelta = RCTMapDefaultSpan;
-        region.span.longitudeDelta = RCTMapDefaultSpan;
+        region.span.latitudeDelta = AIRMapDefaultSpan;
+        region.span.longitudeDelta = AIRMapDefaultSpan;
         region.center = location.coordinate;
         [mapView setRegion:region animated:YES];
 
@@ -334,10 +334,10 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
     // So let's try to make map zoom back to 99% max or 101% min so that there are some buffer that moving the map won't constantly hitting the max/min bound.
     if (mapView.maxDelta > FLT_EPSILON && region.span.longitudeDelta > mapView.maxDelta) {
         needZoom = YES;
-        newLongitudeDelta = mapView.maxDelta * (1 - RCTMapZoomBoundBuffer);
+        newLongitudeDelta = mapView.maxDelta * (1 - AIRMapZoomBoundBuffer);
     } else if (mapView.minDelta > FLT_EPSILON && region.span.longitudeDelta < mapView.minDelta) {
         needZoom = YES;
-        newLongitudeDelta = mapView.minDelta * (1 + RCTMapZoomBoundBuffer);
+        newLongitudeDelta = mapView.minDelta * (1 + AIRMapZoomBoundBuffer);
     }
     if (needZoom) {
         region.span.latitudeDelta = region.span.latitudeDelta / region.span.longitudeDelta * newLongitudeDelta;

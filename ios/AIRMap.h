@@ -14,9 +14,9 @@
 #import "RCTComponent.h"
 #import "SMCalloutView.h"
 
-extern const CLLocationDegrees RCTMapDefaultSpan;
-extern const NSTimeInterval RCTMapRegionChangeObserveInterval;
-extern const CGFloat RCTMapZoomBoundBuffer;
+extern const CLLocationDegrees AIRMapDefaultSpan;
+extern const NSTimeInterval AIRMapRegionChangeObserveInterval;
+extern const CGFloat AIRMapZoomBoundBuffer;
 
 @interface AIRMap: MKMapView<SMCalloutViewDelegate>
 

@@ -19,6 +19,29 @@
     BOOL _hasSetCalloutOffset;
 }
 
+- (void)reactSetFrame:(CGRect)frame
+{
+    CGRect bounds = {CGPointZero, frame.size};
+
+    // The MapView is basically in charge of figuring out the center position of the marker view. If the view changed in
+    // height though, we need to compensate in such a way that the bottom of the marker stays at the same spot on the
+    // map.
+    CGFloat dy = (bounds.size.height - self.bounds.size.height) / 2;
+    CGPoint center = (CGPoint){ self.center.x, self.center.y - dy };
+
+    // Avoid crashes due to nan coords
+    if (isnan(center.x) || isnan(center.y) ||
+            isnan(bounds.origin.x) || isnan(bounds.origin.y) ||
+            isnan(bounds.size.width) || isnan(bounds.size.height)) {
+        RCTLogError(@"Invalid layout for (%@)%@. position: %@. bounds: %@",
+                self.reactTag, self, NSStringFromCGPoint(center), NSStringFromCGRect(bounds));
+        return;
+    }
+
+    self.center = center;
+    self.bounds = bounds;
+}
+
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
     if ([subview isKindOfClass:[AIRMapCallout class]]) {
         self.calloutView = (AIRMapCallout *)subview;
