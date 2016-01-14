@@ -52,8 +52,9 @@ var DisplayLatLng = React.createClass({
 
   render() {
     //var asset = resolveAssetSource(require('./assets/pin-green.png'));
-    var asset = AssetRegistry.getAssetByID(require('./assets/pin-green.png'));
-    var uri = resolveAssetSource.getPathInArchive(asset);
+    //var asset = AssetRegistry.getAssetByID(require('./assets/pin-green.png'));
+    //var uri = resolveAssetSource.getPathInArchive(asset);
+    //var image = { uri };
     return (
       <View style={styles.container}>
         <MapView
@@ -65,7 +66,7 @@ var DisplayLatLng = React.createClass({
           })}
           <MapView.Marker
             coordinate={this.state.coordinate}
-            image={{ uri }}
+            image={require('./assets/pin-green.png')}
           />
         </MapView>
         <View style={styles.buttonContainer}>
@@ -75,9 +76,6 @@ var DisplayLatLng = React.createClass({
           <TouchableOpacity onPress={this.increment} style={[styles.bubble, styles.button]}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>+</Text>
           </TouchableOpacity>
-        </View>
-        <View>
-          <Image source={require('./assets/pin-green.png')} />
         </View>
       </View>
     );

@@ -10,6 +10,8 @@ var {
   NativeModules,
 } = React;
 
+var resolveAssetSource = require('resolveAssetSource');
+
 var MapMarker = React.createClass({
   mixins: [NativeMethodsMixin],
 
@@ -38,9 +40,7 @@ var MapMarker = React.createClass({
      * A custom image to be used as the marker's icon. Only local image resources are allowed to be
      * used.
      */
-    image: PropTypes.shape({
-      uri: PropTypes.string,
-    }),
+    image: PropTypes.any,
 
     /**
      * If no custom marker view or custom image is provided, the platform default pin will be used,
@@ -211,10 +211,17 @@ var MapMarker = React.createClass({
   },
 
   render: function() {
+    var image = null;
+    if (this.props.image) {
+      image = resolveAssetSource(this.props.image) || {};
+      image = image.uri;
+    }
+
     return (
       <AIRMapMarker
         ref="marker"
         {...this.props}
+        image={image}
         style={[styles.marker, this.props.style]}
         onPress={this._onPress}
       />

@@ -7,6 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.RoundingParams;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.facebook.imagepipeline.request.Postprocessor;
 import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -116,13 +124,14 @@ public class AirMapMarker extends AirMapFeature {
         update();
     }
 
-    public void setImage(ReadableMap image) {
-        String name = image.getString("uri");
+    public void setImage(String name) {
         name = name.toLowerCase().replace("-", "_");
+        Log.d("AirMapMarker", name);
         iconResourceId = context.getResources().getIdentifier(
                 name,
                 "drawable",
                 context.getPackageName());
+        Log.d("AirMapMarker", "" + iconResourceId);
         update();
     }
 
@@ -162,9 +171,12 @@ public class AirMapMarker extends AirMapFeature {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
             return BitmapDescriptorFactory.fromBitmap(createDrawable());
-        } else if (iconResourceId != null) {
+        } else if (iconResourceId != null && iconResourceId != 0) {
             // use local image as a marker
-            return BitmapDescriptorFactory.fromResource(iconResourceId);
+            Log.d("AirMapMarker", "" + iconResourceId);
+            BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(iconResourceId);
+            Log.d("AirMapMarker", bd.toString());
+            return bd;
         } else {
             // render the default marker pin
             return BitmapDescriptorFactory.defaultMarker(this.markerHue);
@@ -273,5 +285,56 @@ public class AirMapMarker extends AirMapFeature {
         LL2.addView(this.calloutView);
 
         this.wrappedCalloutView = LL;
+    }
+
+
+    public void updateImageSource() {
+//        if (!mIsDirty) {
+//            return;
+//        }
+//
+//        boolean doResize = shouldResize(mUri);
+//        if (doResize && (getWidth() <= 0 || getHeight() <=0)) {
+//            // If need a resize and the size is not yet set, wait until the layout pass provides one
+//            return;
+//        }
+
+//        GenericDraweeHierarchy hierarchy = getHierarchy();
+//        hierarchy.setActualImageScaleType(mScaleType);
+//
+//        boolean usePostprocessorScaling =
+//                mScaleType != ScalingUtils.ScaleType.CENTER_CROP &&
+//                        mScaleType != ScalingUtils.ScaleType.FOCUS_CROP;
+//        float hierarchyRadius = usePostprocessorScaling ? 0 : mBorderRadius;
+
+//        RoundingParams roundingParams = hierarchy.getRoundingParams();
+//        roundingParams.setCornersRadius(hierarchyRadius);
+//        roundingParams.setBorder(mBorderColor, mBorderWidth);
+//        hierarchy.setRoundingParams(roundingParams);
+//        hierarchy.setFadeDuration(
+//                mFadeDurationMs >= 0
+//                        ? mFadeDurationMs
+//                        : mIsLocalImage ? 0 : REMOTE_IMAGE_FADE_DURATION_MS);
+
+//        Postprocessor postprocessor = usePostprocessorScaling ? mRoundedCornerPostprocessor : null;
+
+//        ResizeOptions resizeOptions = doResize ? new ResizeOptions(getWidth(), getHeight()) : null;
+
+//        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(mUri)
+//                .setPostprocessor(postprocessor)
+//                .setResizeOptions(resizeOptions)
+//                .setProgressiveRenderingEnabled(mProgressiveRenderingEnabled)
+//                .build();
+
+//        DraweeController draweeController = mDraweeControllerBuilder
+//                .reset()
+//                .setAutoPlayAnimations(true)
+//                .setCallerContext(mCallerContext)
+//                .setOldController(getController())
+//                .setImageRequest(imageRequest)
+//                .setControllerListener(mControllerListener)
+//                .build();
+//        setController(draweeController);
+//        mIsDirty = false;
     }
 }

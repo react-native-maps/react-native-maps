@@ -11,12 +11,16 @@
 
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
+#import "RCTBridge.h"
+#import "RCTUtils.h"
+#import "RCTImageLoader.h"
 
 @implementation EmptyCalloutBackgroundView
 @end
 
 @implementation AIRMapMarker {
     BOOL _hasSetCalloutOffset;
+    RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
 }
 
 - (void)reactSetFrame:(CGRect)frame
@@ -134,7 +138,31 @@
 
 - (BOOL)shouldUsePinView
 {
-    return self.subviews.count == 0 && !self.image;
+    return self.subviews.count == 0 && !self.imageSrc;
+}
+
+- (void)setImageSrc:(NSString *)imageSrc
+{
+    _imageSrc = imageSrc;
+
+    if (_reloadImageCancellationBlock) {
+        _reloadImageCancellationBlock();
+        _reloadImageCancellationBlock = nil;
+    }
+    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithTag:_imageSrc
+                                                                     size:self.bounds.size
+                                                                    scale:RCTScreenScale()
+                                                               resizeMode:UIViewContentModeCenter
+                                                            progressBlock:nil
+                                                          completionBlock:^(NSError *error, UIImage *image) {
+                                                              if (error) {
+                                                                  // TODO(lmr): do something with the error?
+                                                                  NSLog(@"%@", error);
+                                                              }
+                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                self.image = image;
+                                                              });
+                                                          }];
 }
 
 
