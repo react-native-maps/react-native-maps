@@ -1,5 +1,7 @@
 # react-native-mapview
 
+[![Join the chat at https://gitter.im/lelandrichardson/react-native-mapview](https://badges.gitter.im/lelandrichardson/react-native-mapview.svg)](https://gitter.im/lelandrichardson/react-native-mapview?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 React Native MapView component for iOS + Android
 
 ## Examples
