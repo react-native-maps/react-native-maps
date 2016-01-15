@@ -55,7 +55,6 @@ var MapView = React.createClass({
      * If `false` points of interest won't be displayed on the map.
      * Default value is `true`.
      *
-     * @platform ios
      */
     showsPointsOfInterest: PropTypes.bool,
 
@@ -71,15 +70,20 @@ var MapView = React.createClass({
      * If `false` the user won't be able to pinch/zoom the map.
      * Default value is `true`.
      *
-     * @platform ios
      */
     zoomEnabled: PropTypes.bool,
+
+    /**
+     * If `false` the user won't be able to pinch/rotate the map.
+     * Default value is `true`.
+     *
+     */
+    rotateEnabled: PropTypes.bool,
 
     /**
      * If `false` the user won't be able to change the map region being displayed.
      * Default value is `true`.
      *
-     * @platform ios
      */
     scrollEnabled: PropTypes.bool,
 
@@ -87,7 +91,6 @@ var MapView = React.createClass({
      * A Boolean indicating whether the map shows scale information.
      * Default value is `false`
      *
-     * @platform ios
      */
     showsScale: PropTypes.bool,
 
