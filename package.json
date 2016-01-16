@@ -1,11 +1,27 @@
 {
-  "name": "rn_mapview",
+  "name": "react-native-maps",
+  "description": "React Native Mapview component for iOS + Android",
+  "main": "index.js",
+  "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "version": "0.0.1",
-  "private": true,
   "scripts": {
     "start": "react-native start"
   },
-  "dependencies": {
-    "react-native": "^0.16.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lelandrichardson/react-native-maps"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "map",
+    "mapview",
+    "google-maps",
+    "mapkit"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "react-native": "^0.18.0-rc"
   }
 }
