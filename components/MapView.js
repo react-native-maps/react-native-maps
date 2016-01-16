@@ -19,10 +19,6 @@ var MapPolygon = require('./MapPolygon');
 var MapCircle = require('./MapCircle');
 var MapCallout = require('./MapCallout');
 
-var deepDiffer = require('deepDiffer');
-var insetsDiffer = require('insetsDiffer');
-var merge = require('merge');
-
 var MapView = React.createClass({
   mixins: [NativeMethodsMixin],
 

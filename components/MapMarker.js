@@ -1,3 +1,4 @@
+'use strict';
 
 var React = require('react-native');
 var {
@@ -10,7 +11,7 @@ var {
   NativeModules,
 } = React;
 
-var resolveAssetSource = require('resolveAssetSource');
+var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 var MapMarker = React.createClass({
   mixins: [NativeMethodsMixin],
