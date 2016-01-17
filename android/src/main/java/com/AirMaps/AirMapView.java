@@ -22,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
@@ -33,11 +34,10 @@ import com.google.android.gms.maps.model.Polyline;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
+public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback
 {
     public GoogleMap map;
 
-    private LatLngBounds initialRegion;
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
@@ -49,21 +49,21 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
     private HashMap<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
     private HashMap<Circle, AirMapCircle> circleMap = new HashMap<>();
 
-    /* Using it */
     private ScaleGestureDetector scaleDetector;
     private GestureDetectorCompat gestureDetector;
+    private AirMapManager manager;
 
     final EventDispatcher eventDispatcher;
 
 
 
-    public AirMapView(ThemedReactContext context) {
+    public AirMapView(ThemedReactContext context, AirMapManager manager) {
         super(context);
+        this.manager = manager;
+
         super.onCreate(null);
         super.onResume();
-        map = super.getMap();
-
-        map.setInfoWindowAdapter(this);
+        super.getMapAsync(this);
 
         // We need to be sure to disable location-tracking when app enters background, in-case some other module
         // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
@@ -119,6 +119,83 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
         eventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
+    @Override
+    public void onMapReady(final GoogleMap map) {
+        this.map = map;
+        this.map.setInfoWindowAdapter(this);
+
+        manager.pushEvent(this, "onMapReady", new WritableNativeMap());
+
+        final AirMapView view = this;
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                WritableMap event;
+
+                event = makeClickEventData(marker.getPosition());
+                event.putString("action", "marker-press");
+                manager.pushEvent(view, "onMarkerPress", event);
+
+                event = makeClickEventData(marker.getPosition());
+                event.putString("action", "marker-press");
+                manager.pushEvent(markerMap.get(marker), "onPress", event);
+
+                return false; // returning false opens the callout window, if possible
+            }
+        });
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                WritableMap event;
+
+                event = makeClickEventData(marker.getPosition());
+                event.putString("action", "callout-press");
+                manager.pushEvent(view, "onCalloutPress", event);
+
+                event = makeClickEventData(marker.getPosition());
+                event.putString("action", "callout-press");
+                AirMapMarker markerView = markerMap.get(marker);
+                manager.pushEvent(markerView, "onCalloutPress", event);
+
+                event = makeClickEventData(marker.getPosition());
+                event.putString("action", "callout-press");
+                AirMapCallout infoWindow = markerView.getCalloutView();
+                if (infoWindow != null) manager.pushEvent(infoWindow, "onPress", event);
+            }
+        });
+
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                WritableMap event = makeClickEventData(point);
+                event.putString("action", "press");
+                manager.pushEvent(view, "onPress", event);
+            }
+        });
+
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng point) {
+                WritableMap event = makeClickEventData(point);
+                event.putString("action", "long-press");
+                manager.pushEvent(view, "onLongPress", makeClickEventData(point));
+            }
+        });
+
+        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition position) {
+                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+                lastBoundsEmitted = bounds;
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, isTouchDown));
+                view.stopMonitoringRegion();
+            }
+        });
+
+    }
+
     public void setRegion(ReadableMap region) {
         if (region == null) return;
 
@@ -130,32 +207,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
                 new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
                 new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
         );
-        if (super.getHeight() <= 0 || super.getWidth() <= 0) {
-            // in this case, our map has not been laid out yet, so we save the bounds in a local
-            // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
-            // occurs, we will move the camera to the saved bounds. Note that if we tried to move
-            // to the bounds now, it would trigger an exception.
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
-            boundsToMove = bounds;
-        } else {
-            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-            boundsToMove = null;
-        }
-    }
-
-    public void setInitialRegion(ReadableMap region) {
-        if (region == null) return;
-        if (initialRegion != null) return;
-
-        Double lng = region.getDouble("longitude");
-        Double lat = region.getDouble("latitude");
-        Double lngDelta = region.getDouble("longitudeDelta");
-        Double latDelta = region.getDouble("latitudeDelta");
-        LatLngBounds bounds = new LatLngBounds(
-                new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-                new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
-        );
-        initialRegion = bounds;
         if (super.getHeight() <= 0 || super.getWidth() <= 0) {
             // in this case, our map has not been laid out yet, so we save the bounds in a local
             // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
@@ -246,76 +297,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter
         event.putMap("position", position);
 
         return event;
-    }
-
-    public void addEventEmitters(final AirMapManager manager, ThemedReactContext reactContext) {
-        final AirMapView view = this;
-
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                WritableMap event;
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "marker-press");
-                manager.pushEvent(view, "onMarkerPress", event);
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "marker-press");
-                manager.pushEvent(markerMap.get(marker), "onPress", event);
-
-                return false; // returning false opens the callout window, if possible
-            }
-        });
-
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                WritableMap event;
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "callout-press");
-                manager.pushEvent(view, "onCalloutPress", event);
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "callout-press");
-                AirMapMarker markerView = markerMap.get(marker);
-                manager.pushEvent(markerView, "onCalloutPress", event);
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "callout-press");
-                AirMapCallout infoWindow = markerView.getCalloutView();
-                if (infoWindow != null) manager.pushEvent(infoWindow, "onPress", event);
-            }
-        });
-
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng point) {
-                WritableMap event = makeClickEventData(point);
-                event.putString("action", "press");
-                manager.pushEvent(view, "onPress", event);
-            }
-        });
-
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng point) {
-                WritableMap event = makeClickEventData(point);
-                event.putString("action", "long-press");
-                manager.pushEvent(view, "onLongPress", makeClickEventData(point));
-            }
-        });
-
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition position) {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-                lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, isTouchDown));
-                view.stopMonitoringRegion();
-            }
-        });
     }
 
     public void updateExtraData(Object extraData) {

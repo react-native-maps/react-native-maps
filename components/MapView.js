@@ -235,9 +235,18 @@ var MapView = React.createClass({
 
   },
 
+  getInitialState: function() {
+    return {
+      isReady: Platform.OS === 'ios',
+    };
+  },
+
   componentDidMount: function() {
-    if (this.props.region) {
-      this.refs.map.setNativeProps({ region: this.props.region });
+    const { region, initialRegion } = this.props;
+    if (region && this.state.isReady) {
+      this.refs.map.setNativeProps({ region });
+    } else if (initialRegion && this.state.isReady) {
+      this.refs.map.setNativeProps({ region: initialRegion });
     }
   },
 
@@ -253,6 +262,27 @@ var MapView = React.createClass({
     ) {
       this.refs.map.setNativeProps({ region: b });
     }
+  },
+
+  _onMapReady: function() {
+    const { region, initialRegion } = this.props;
+    if (region) {
+      this.refs.map.setNativeProps({ region });
+    } else if (initialRegion) {
+      this.refs.map.setNativeProps({ region: initialRegion });
+    }
+    this.setState({ isReady: true });
+  },
+
+  _onLayout: function(e) {
+    const { region, initialRegion, onLayout } = this.props;
+    const { isReady } = this.state;
+    if (region && isReady) {
+      this.refs.map.setNativeProps({ region });
+    } else if (initialRegion && isReady) {
+      this.refs.map.setNativeProps({ region: initialRegion });
+    }
+    onLayout && onLayout(e);
   },
 
   _onChange: function(event: Event) {
@@ -302,13 +332,29 @@ var MapView = React.createClass({
   },
 
   render: function() {
+    let props;
+
+    if (this.state.isReady) {
+      props = {
+        ...this.props,
+        region: null,
+        initialRegion: null,
+        onChange: this._onChange,
+        onMapReady: this._onMapReady,
+        onLayout: this._onLayout,
+      };
+    } else {
+      props = {
+        region: null,
+        initialRegion: null,
+        onChange: this._onChange,
+        onMapReady: this._onMapReady,
+        onLayout: this._onLayout,
+      };
+    }
+
     return (
-      <AIRMap
-        ref="map"
-        {...this.props}
-        region={null}
-        onChange={this._onChange}
-      />
+      <AIRMap ref="map" {...props} />
     );
   },
 });
@@ -316,6 +362,7 @@ var MapView = React.createClass({
 var AIRMap = requireNativeComponent('AIRMap', MapView, {
   nativeOnly: {
     onChange: true,
+    onMapReady: true,
   },
 });
 

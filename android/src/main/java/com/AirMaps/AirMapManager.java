@@ -66,18 +66,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @Override
     protected AirMapView createViewInstance(ThemedReactContext context) {
         reactContext = context;
-        AirMapView view = new AirMapView(context);
+        AirMapView view = new AirMapView(context, this);
 
-        if (view.map == null) {
-            emitMapError("Map is null", "map_null");
-        } else {
-
-            try {
-                MapsInitializer.initialize(context.getApplicationContext());
-            } catch (Exception e) {
-                e.printStackTrace();
-                emitMapError("Map initialize error", "map_init_error");
-            }
+        try {
+            MapsInitializer.initialize(context.getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+            emitMapError("Map initialize error", "map_init_error");
         }
 
         return view;
@@ -96,11 +91,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @ReactProp(name="region")
     public void setRegion(AirMapView view, ReadableMap region) {
         view.setRegion(region);
-    }
-
-    @ReactProp(name="initialRegion")
-    public void setInitialRegion(AirMapView view, ReadableMap region) {
-        view.setInitialRegion(region);
     }
 
     @ReactProp(name="mapType")
@@ -190,6 +180,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @Override
     public @Nullable Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
+            "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
             "onPress", MapBuilder.of("registrationName", "onPress"),
             "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
             "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
@@ -206,11 +197,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             "animateToCoordinate", ANIMATE_TO_COORDINATE,
             "fitToElements", FIT_TO_ELEMENTS
         );
-    }
-
-    @Override
-    protected void addEventEmitters(ThemedReactContext reactContext, AirMapView view) {
-        view.addEventEmitters(this, reactContext);
     }
 
     @Override
