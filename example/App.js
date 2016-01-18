@@ -12,6 +12,7 @@ var EventListener = require('./examples/EventListener');
 var MarkerTypes = require('./examples/MarkerTypes');
 var PolygonCreator = require('./examples/PolygonCreator');
 var AnimatedViews = require('./examples/AnimatedViews');
+var AnimatedMarkers = require('./examples/AnimatedMarkers');
 var Callouts = require('./examples/Callouts');
 var Overlays = require('./examples/Overlays');
 var DefaultMarkers = require('./examples/DefaultMarkers');
@@ -70,6 +71,7 @@ var App = React.createClass({
       [MarkerTypes, 'Image Based Markers'],
       [PolygonCreator, 'Polygon Creator'],
       [AnimatedViews, 'Animating with MapViews'],
+      [AnimatedMarkers, 'Animated Marker Position'],
       [Callouts, 'Custom Callouts'],
       [Overlays, 'Circles, Polygons, and Polylines'],
       [DefaultMarkers, 'Default Markers'],
