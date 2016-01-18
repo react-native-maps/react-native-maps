@@ -1,6 +1,6 @@
 # react-native-maps
 
-React Native MapView component for iOS + Android
+React Native Map components for iOS + Android
 
 ## Installation
 
@@ -86,6 +86,105 @@ or do it manually as described below:
       android:name="com.google.android.geo.API_KEY"
       android:value="{{Your Google maps API Key Here}}"/>
 </application>
+```
+
+## General Usage
+
+```js
+import MapView from 'react-native-maps';
+```
+or
+
+```js
+var MapView = require('react-native-maps');
+```
+
+This MapView component is built so that features on the map (such as Markers, Polygons, etc.) are
+specified as children of the MapView itself. This provides an intuitive and react-like API for
+declaratively controlling features on the map.
+
+### Rendering a Map with an initial region
+
+```jsx
+  <MapView 
+    initialRegion={{
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }}
+  />
+```
+
+### Using a MapView while controlling the region as state
+
+```jsx
+getInitialState() {
+  return {
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
+}
+
+onRegionChange(region) {
+  this.setState({ region });
+}
+
+render() {
+  return (
+    <MapView 
+      region={this.state.region}
+      onRegionChange={this.onRegionChange}
+    />
+  );
+}
+```
+
+### Rendering a list of markers on a map
+
+```jsx
+<MapView 
+  region={this.state.region}
+  onRegionChange={this.onRegionChange}
+>
+  {this.state.markers.map(marker => (
+    <MapView.Marker 
+      coordinate={marker.latlng}
+      title={marker.title}
+      description={marker.description}
+    />
+  ))}
+</MapView>
+```
+
+### Rendering a Marker with a custom view
+
+```jsx
+<MapView.Marker coordinate={marker.latlng}>
+  <MyCustomMarkerView {...marker} />
+</MapView.Marker>
+```
+
+### Rendering a Marker with a custom image
+
+```jsx
+<MapView.Marker 
+  coordinate={marker.latlng}
+  image={require('../assets/pin.png')}
+/>
+```
+
+### Rendering a custom Marker with a custom Callout
+
+```jsx
+<MapView.Marker coordinate={marker.latlng}>
+  <MyCustomMarkerView {...marker} />
+  <MapView.Callout>
+    <MyCustomCalloutView {...marker} />
+  </MapView.Callout>
+</MapView.Marker>
 ```
 
 
