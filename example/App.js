@@ -67,7 +67,7 @@ var App = React.createClass({
       [DisplayLatLng, 'Tracking Position'],
       [ViewsAsMarkers, 'Arbitrary Views as Markers'],
       [EventListener, 'Events'],
-      [MarkerTypes, 'Custom Markers'],
+      [MarkerTypes, 'Image Based Markers'],
       [PolygonCreator, 'Polygon Creator'],
       [AnimatedViews, 'Animating with MapViews'],
       [Callouts, 'Custom Callouts'],

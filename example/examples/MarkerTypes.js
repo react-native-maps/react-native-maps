@@ -8,8 +8,6 @@ var {
   TouchableOpacity,
   Image,
 } = React;
-var resolveAssetSource = require('resolveAssetSource');
-var AssetRegistry = require('AssetRegistry');
 
 var MapView = require('react-native-maps');
 var PriceMarker = require('./PriceMarker');
@@ -21,62 +19,41 @@ const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const SPACE = 0.01;
 
-var DisplayLatLng = React.createClass({
-  getInitialState() {
-    return {
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      markers: [
-
-      ],
-      coordinate: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-      },
-      amount: 99,
-    };
-  },
-
-  increment() {
-    this.setState({ amount: this.state.amount + 1 });
-  },
-
-  decrement() {
-    this.setState({ amount: this.state.amount - 1 });
-  },
-
+var MarkerTypes = React.createClass({
   render() {
-    //var asset = resolveAssetSource(require('./assets/pin-green.png'));
-    //var asset = AssetRegistry.getAssetByID(require('./assets/pin-green.png'));
-    //var uri = resolveAssetSource.getPathInArchive(asset);
-    //var image = { uri };
     return (
       <View style={styles.container}>
         <MapView
+          ref="map"
           style={styles.map}
-          initialRegion={this.state.region}
-        >
-          {this.state.markers.map(marker => {
-
-          })}
+          initialRegion={{
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }}
+          >
           <MapView.Marker
-            coordinate={this.state.coordinate}
-            image={require('./assets/pin-green.png')}
-          />
+            coordinate={{
+              latitude: LATITUDE + SPACE,
+              longitude: LONGITUDE + SPACE,
+            }}
+            centerOffset={{ x: -18, y: -60 }}
+            anchor={{ x: 0.69, y: 1 }}
+            image={require('./assets/flag-blue.png')}
+            />
+          <MapView.Marker
+            coordinate={{
+              latitude: LATITUDE - SPACE,
+              longitude: LONGITUDE - SPACE,
+            }}
+            centerOffset={{ x: -42, y: -60 }}
+            anchor={{ x: 0.84, y: 1 }}
+            image={require('./assets/flag-pink.png')}
+            />
         </MapView>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this.decrement} style={[styles.bubble, styles.button]}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>-</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.increment} style={[styles.bubble, styles.button]}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>+</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     );
   },
@@ -99,27 +76,6 @@ var styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
-  latlng: {
-    width: 200,
-    alignItems: 'stretch',
-  },
-  button: {
-    width: 80,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    marginVertical: 20,
-    backgroundColor: 'transparent',
-  },
 });
 
-module.exports = DisplayLatLng;
+module.exports = MarkerTypes;

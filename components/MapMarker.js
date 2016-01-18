@@ -212,7 +212,7 @@ var MapMarker = React.createClass({
   },
 
   render: function() {
-    var image = null;
+    var image = undefined;
     if (this.props.image) {
       image = resolveAssetSource(this.props.image) || {};
       image = image.uri;
