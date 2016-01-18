@@ -223,3 +223,66 @@ Markers can be customized by just using images, and specified using the `image` 
 
 ## Using with the Animated API
 
+The API of this Map has been built with the intention of it being able to utilize the [Animated API](https://facebook.github.io/react-native/docs/animated.html).
+
+In order to get this to work, you will need to modify the `AnimatedImplementation.js` file in the
+source of react-native with [this one](https://gist.github.com/lelandrichardson/c0d938e02301f9294465).
+
+Ideally this will be possible in the near future without this modification.
+
+### Animated Region
+
+The MapView can accept an `Animated.Region` value as its `region` prop. This allows you to utilize
+the Animated API to control the map's center and zoom.
+
+```jsx
+getInitialState() {
+  return {
+    region: new Animated.Region({
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    }),
+  };
+}
+
+onRegionChange(region) {
+  this.state.region.setValue(region);
+}
+
+render() {
+  return (
+    <MapView.Animated
+      region={this.state.region}
+      onRegionChange={this.onRegionChange}
+    />
+  );
+}
+```
+
+### Animated Marker Position
+
+Markers can also accept an `Animated.Region` value as a coordinate.
+
+```jsx
+getInitialState() {
+  return {
+    coordinate: new Animated.Region({
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
+    }),
+  };
+}
+
+render() {
+  return (
+    <MapView initialRegion={...}>
+      <MapView.Marker.Animated coordinate={this.state.coordinate} />
+    </MapView>
+  );
+}
+```
+
+
+
