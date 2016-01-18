@@ -32,9 +32,9 @@ var AnimatedMarkers = React.createClass({
 
   animate() {
     var { coordinate } = this.state;
-    coordinate.spring({
-      latitude: LATITUDE + (Math.random() - 0.5) * coordinate.latitudeDelta.__getValue() / 2,
-      longitude: LONGITUDE + (Math.random() - 0.5) * coordinate.longitudeDelta.__getValue() / 2,
+    coordinate.timing({
+      latitude: LATITUDE + (Math.random() - 0.5) * LATITUDE_DELTA / 2,
+      longitude: LONGITUDE + (Math.random() - 0.5) * LONGITUDE_DELTA / 2,
     }).start();
   },
 
