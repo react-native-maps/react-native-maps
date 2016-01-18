@@ -153,6 +153,10 @@ Further, Marker views can use the animated API to enhance the effect.
 Issue: Since android needs to render its marker views as a bitmap, the animations APIs may not be 
 compatible with the Marker views. Not sure if this can be worked around yet or not.
 
+Markers' coordinates can also be animated, as shown in this example:
+
+![](http://i.giphy.com/xTcnTelp1OwGPu1Wh2.gif) ![](http://i.giphy.com/xTcnT6WVpwlCiQnFW8.gif)
+
 
 
 ### Polygon Creator
@@ -198,6 +202,7 @@ default bubble.
 
 Markers can be customized by just using images, and specified using the `image` prop.
 
+![](http://i.imgur.com/mzrOjTR.png)
 
 
 ## Component API
