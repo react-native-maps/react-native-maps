@@ -3,18 +3,27 @@ package com.AirMaps;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
+import android.graphics.drawable.Animatable;
+import android.net.Uri;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.facebook.common.references.CloseableReference;
+import com.facebook.datasource.DataSource;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.RoundingParams;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.drawee.view.DraweeHolder;
+import com.facebook.imagepipeline.core.ImagePipeline;
+import com.facebook.imagepipeline.image.CloseableImage;
+import com.facebook.imagepipeline.image.CloseableStaticBitmap;
+import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.facebook.imagepipeline.request.Postprocessor;
 import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -22,6 +31,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import javax.annotation.Nullable;
 
 public class AirMapMarker extends AirMapFeature {
 
@@ -43,7 +54,7 @@ public class AirMapMarker extends AirMapFeature {
     private Context context;
 
     private float markerHue = 0.0f; // should be between 0 and 360
-    private Integer iconResourceId;
+    private BitmapDescriptor iconBitmapDescriptor;
 
     private float rotation = 0.0f;
     private boolean flat = false;
@@ -54,9 +65,51 @@ public class AirMapMarker extends AirMapFeature {
 
     private boolean hasCustomMarkerView = false;
 
+    private final DraweeHolder mLogoHolder;
+    private DataSource<CloseableReference<CloseableImage>> dataSource;
+    private final ControllerListener<ImageInfo> mLogoControllerListener =
+            new BaseControllerListener<ImageInfo>() {
+                @Override
+                public void onFinalImageSet(
+                        String id,
+                        @Nullable final ImageInfo imageInfo,
+                        @Nullable Animatable animatable) {
+                    CloseableReference<CloseableImage> imageReference = null;
+                    try {
+                        imageReference = dataSource.getResult();
+                        if (imageReference != null) {
+                            CloseableImage image = imageReference.get();
+                            if (image != null && image instanceof CloseableStaticBitmap) {
+                                CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
+                                Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
+                                if (bitmap != null) {
+                                    bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                                    iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                                }
+                            }
+                        }
+                    } finally {
+                        dataSource.close();
+                        if (imageReference != null) {
+                            CloseableReference.closeSafely(imageReference);
+                        }
+                    }
+                    update();
+                }
+            };
+
     public AirMapMarker(Context context) {
         super(context);
         this.context = context;
+        mLogoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
+        mLogoHolder.onAttach();
+    }
+
+    private GenericDraweeHierarchy createDraweeHierarchy() {
+        return new GenericDraweeHierarchyBuilder(getResources())
+                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
+                .setFadeDuration(0)
+                .build();
     }
 
     public void setCoordinate(ReadableMap coordinate) {
@@ -124,15 +177,27 @@ public class AirMapMarker extends AirMapFeature {
         update();
     }
 
-    public void setImage(String name) {
-        name = name.toLowerCase().replace("-", "_");
-        Log.d("AirMapMarker", name);
-        iconResourceId = context.getResources().getIdentifier(
-                name,
-                "drawable",
-                context.getPackageName());
-        Log.d("AirMapMarker", "" + iconResourceId);
-        update();
+    public void setImage(String uri) {
+        if (uri == null) {
+            iconBitmapDescriptor = null;
+            update();
+        } else if (uri.startsWith("http://") || uri.startsWith("https://")) {
+            ImageRequest imageRequest = ImageRequestBuilder
+                    .newBuilderWithSource(Uri.parse(uri))
+                    .build();
+
+            ImagePipeline imagePipeline = Fresco.getImagePipeline();
+            dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setImageRequest(imageRequest)
+                    .setControllerListener(mLogoControllerListener)
+                    .setOldController(mLogoHolder.getController())
+                    .build();
+            mLogoHolder.setController(controller);
+        } else {
+            iconBitmapDescriptor = getBitmapDescriptorByName(uri);
+            update();
+        }
     }
 
     public MarkerOptions getMarkerOptions() {
@@ -171,12 +236,9 @@ public class AirMapMarker extends AirMapFeature {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
             return BitmapDescriptorFactory.fromBitmap(createDrawable());
-        } else if (iconResourceId != null && iconResourceId != 0) {
+        } else if (iconBitmapDescriptor != null) {
             // use local image as a marker
-            Log.d("AirMapMarker", "" + iconResourceId);
-            BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(iconResourceId);
-            Log.d("AirMapMarker", bd.toString());
-            return bd;
+            return iconBitmapDescriptor;
         } else {
             // render the default marker pin
             return BitmapDescriptorFactory.defaultMarker(this.markerHue);
@@ -287,54 +349,15 @@ public class AirMapMarker extends AirMapFeature {
         this.wrappedCalloutView = LL;
     }
 
-
-    public void updateImageSource() {
-//        if (!mIsDirty) {
-//            return;
-//        }
-//
-//        boolean doResize = shouldResize(mUri);
-//        if (doResize && (getWidth() <= 0 || getHeight() <=0)) {
-//            // If need a resize and the size is not yet set, wait until the layout pass provides one
-//            return;
-//        }
-
-//        GenericDraweeHierarchy hierarchy = getHierarchy();
-//        hierarchy.setActualImageScaleType(mScaleType);
-//
-//        boolean usePostprocessorScaling =
-//                mScaleType != ScalingUtils.ScaleType.CENTER_CROP &&
-//                        mScaleType != ScalingUtils.ScaleType.FOCUS_CROP;
-//        float hierarchyRadius = usePostprocessorScaling ? 0 : mBorderRadius;
-
-//        RoundingParams roundingParams = hierarchy.getRoundingParams();
-//        roundingParams.setCornersRadius(hierarchyRadius);
-//        roundingParams.setBorder(mBorderColor, mBorderWidth);
-//        hierarchy.setRoundingParams(roundingParams);
-//        hierarchy.setFadeDuration(
-//                mFadeDurationMs >= 0
-//                        ? mFadeDurationMs
-//                        : mIsLocalImage ? 0 : REMOTE_IMAGE_FADE_DURATION_MS);
-
-//        Postprocessor postprocessor = usePostprocessorScaling ? mRoundedCornerPostprocessor : null;
-
-//        ResizeOptions resizeOptions = doResize ? new ResizeOptions(getWidth(), getHeight()) : null;
-
-//        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(mUri)
-//                .setPostprocessor(postprocessor)
-//                .setResizeOptions(resizeOptions)
-//                .setProgressiveRenderingEnabled(mProgressiveRenderingEnabled)
-//                .build();
-
-//        DraweeController draweeController = mDraweeControllerBuilder
-//                .reset()
-//                .setAutoPlayAnimations(true)
-//                .setCallerContext(mCallerContext)
-//                .setOldController(getController())
-//                .setImageRequest(imageRequest)
-//                .setControllerListener(mControllerListener)
-//                .build();
-//        setController(draweeController);
-//        mIsDirty = false;
+    private int getDrawableResourceByName(String name) {
+        return getResources().getIdentifier(
+                name,
+                "drawable",
+                getContext().getPackageName());
     }
+
+    private BitmapDescriptor getBitmapDescriptorByName(String name) {
+        return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
+    }
+
 }
