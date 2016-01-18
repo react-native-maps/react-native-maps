@@ -7,6 +7,6 @@
   },
   "dependencies": {
     "react-native": "^0.17.0",
-    "react-native-maps": "github:christopherdro/react-native-maps#package-lib"
+    "react-native-maps": "github:lelandrichardson/react-native-maps"
   }
 }
