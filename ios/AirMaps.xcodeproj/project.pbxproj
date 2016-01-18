@@ -131,7 +131,6 @@
 				1125B2D81C4AD3DA007D0023 /* RCTConvert+MoreMapKit.h */,
 				1125B2D91C4AD3DA007D0023 /* RCTConvert+MoreMapKit.m */,
 			);
-			name = AirMaps;
 			path = AirMaps;
 			sourceTree = "<group>";
 		};
@@ -298,8 +297,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../node_modules/react-native/**",
 					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../react-native/Libraries/Image",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -311,8 +310,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../node_modules/react-native/**",
 					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../react-native/Libraries/Image",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
