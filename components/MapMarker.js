@@ -160,6 +160,8 @@ var MapMarker = React.createClass({
      */
     flat: PropTypes.bool,
 
+    draggable: PropTypes.bool,
+
     /**
      * Callback that is called when the user presses on the marker
      */
@@ -181,6 +183,22 @@ var MapMarker = React.createClass({
      * Callback that is called when the user taps the callout view.
      */
     onCalloutPress: PropTypes.func,
+
+    /**
+     * Callback that is called when the user initiates a drag on this marker (if it is draggable)
+     */
+    onDragStart: PropTypes.func,
+
+    /**
+     * Callback called continuously as the marker is dragged
+     */
+    onDrag: PropTypes.func,
+
+    /**
+     * Callback that is called when a drag on this marker finishes. This is usually the point you
+     * will want to setState on the marker's coordinate again
+     */
+    onDragEnd: PropTypes.func,
 
   },
 

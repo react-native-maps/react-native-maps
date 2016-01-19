@@ -10,6 +10,7 @@ var DisplayLatLng = require('./examples/DisplayLatLng');
 var ViewsAsMarkers = require('./examples/ViewsAsMarkers');
 var EventListener = require('./examples/EventListener');
 var MarkerTypes = require('./examples/MarkerTypes');
+var DraggableMarkers = require('./examples/DraggableMarkers');
 var PolygonCreator = require('./examples/PolygonCreator');
 var AnimatedViews = require('./examples/AnimatedViews');
 var AnimatedMarkers = require('./examples/AnimatedMarkers');
@@ -69,6 +70,7 @@ var App = React.createClass({
       [ViewsAsMarkers, 'Arbitrary Views as Markers'],
       [EventListener, 'Events'],
       [MarkerTypes, 'Image Based Markers'],
+      [DraggableMarkers, 'Draggable Markers'],
       [PolygonCreator, 'Polygon Creator'],
       [AnimatedViews, 'Animating with MapViews'],
       [AnimatedMarkers, 'Animated Marker Position'],
@@ -80,6 +82,7 @@ var App = React.createClass({
     //return <ViewsAsMarkers />;
     //return <EventListener />;
     //return <MarkerTypes />;
+    //return <DraggableMarkers />;
     //return <PolygonCreator />;
     //return <AnimatedViews />;
     //return <Callouts />;

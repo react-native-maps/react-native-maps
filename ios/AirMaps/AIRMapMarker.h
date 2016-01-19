@@ -37,6 +37,10 @@
 @property (nonatomic, copy) RCTDirectEventBlock onSelect;
 @property (nonatomic, copy) RCTDirectEventBlock onDeselect;
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
+@property (nonatomic, copy) RCTDirectEventBlock onDragStart;
+@property (nonatomic, copy) RCTDirectEventBlock onDrag;
+@property (nonatomic, copy) RCTDirectEventBlock onDragEnd;
+
 
 - (MKAnnotationView *)getAnnotationView;
 - (void)fillCalloutView:(SMCalloutView *)calloutView;

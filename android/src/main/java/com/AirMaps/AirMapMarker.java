@@ -58,6 +58,7 @@ public class AirMapMarker extends AirMapFeature {
 
     private float rotation = 0.0f;
     private boolean flat = false;
+    private boolean draggable = false;
 
     private float calloutAnchorX;
     private float calloutAnchorY;
@@ -148,6 +149,14 @@ public class AirMapMarker extends AirMapFeature {
         this.flat = flat;
         if (marker != null) {
             marker.setFlat(flat);
+        }
+        update();
+    }
+
+    public void setDraggable(boolean draggable) {
+        this.draggable = draggable;
+        if (marker != null) {
+            marker.setDraggable(draggable);
         }
         update();
     }
@@ -253,6 +262,7 @@ public class AirMapMarker extends AirMapFeature {
         options.snippet(snippet);
         options.rotation(rotation);
         options.flat(flat);
+        options.draggable(draggable);
         options.icon(getIcon());
         return options;
     }

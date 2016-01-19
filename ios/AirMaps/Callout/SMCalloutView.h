@@ -81,7 +81,7 @@ extern NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView;
 @property (nonatomic, strong, nullable) UIView *subtitleView;
 
 /// Custom "content" view that can be any width/height. If this is set, title/subtitle/titleView/subtitleView are all ignored.
-@property (nonatomic, retain) UIView *contentView;
+@property (nonatomic, retain, nullable) UIView *contentView;
 
 /// Custom content view margin
 @property (nonatomic, assign) UIEdgeInsets contentViewInset;

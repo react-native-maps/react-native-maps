@@ -63,7 +63,7 @@
     _renderer.lineJoin = _lineJoin;
     _renderer.miterLimit = _miterLimit;
 
-    if (!_map != nil) return;
+    if (_map == nil) return;
     [_map removeOverlay:self];
     [_map addOverlay:self];
 }

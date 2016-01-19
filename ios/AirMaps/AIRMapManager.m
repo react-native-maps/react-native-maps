@@ -75,6 +75,9 @@ RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDeselect, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMarkerDragStart, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMarkerDrag, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMarkerDragEnd, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
 
@@ -266,6 +269,84 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
     marker.map = mapView;
     return [marker getAnnotationView];
+}
+
+static int kDragCenterContext;
+
+- (void)mapView:(AIRMap *)mapView
+    annotationView:(MKAnnotationView *)view
+    didChangeDragState:(MKAnnotationViewDragState)newState
+    fromOldState:(MKAnnotationViewDragState)oldState
+{
+    if (![view.annotation isKindOfClass:[AIRMapMarker class]]) return;
+    AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
+
+    BOOL isPinView = [view isKindOfClass:[MKPinAnnotationView class]];
+    
+    id event = @{
+                 @"id": marker.identifier ?: @"unknown",
+                 @"coordinate": @{
+                         @"latitude": @(marker.coordinate.latitude),
+                         @"longitude": @(marker.coordinate.longitude)
+                         }
+                 };
+    
+    if (newState == MKAnnotationViewDragStateEnding || newState == MKAnnotationViewDragStateCanceling) {
+        if (!isPinView) {
+            [view setDragState:MKAnnotationViewDragStateNone animated:NO];
+        }
+        if (mapView.onMarkerDragEnd) mapView.onMarkerDragEnd(event);
+        if (marker.onDragEnd) marker.onDragEnd(event);
+
+        [view removeObserver:self forKeyPath:@"center"];
+    } else if (newState == MKAnnotationViewDragStateStarting) {
+        // MapKit doesn't emit continuous drag events. To get around this, we are going to use KVO.
+        [view addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:&kDragCenterContext];
+
+        if (mapView.onMarkerDragStart) mapView.onMarkerDragStart(event);
+        if (marker.onDragStart) marker.onDragStart(event);
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if ([keyPath isEqualToString:@"center"] && [object isKindOfClass:[MKAnnotationView class]]) {
+        MKAnnotationView *view = (MKAnnotationView *)object;
+        AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
+
+        // a marker we don't control might be getting dragged. Check just in case.
+        if (!marker) return;
+
+        AIRMap *map = marker.map;
+
+        // don't waste time calculating if there are no events to listen to it
+        if (!map.onMarkerDrag && !marker.onDrag) return;
+
+        CGPoint position = CGPointMake(view.center.x - view.centerOffset.x, view.center.y - view.centerOffset.y);
+        CLLocationCoordinate2D coordinate = [map convertPoint:position toCoordinateFromView:map];
+
+        id event = @{
+                @"id": marker.identifier ?: @"unknown",
+                @"position": @{
+                        @"x": @(position.x),
+                        @"y": @(position.y),
+                },
+                @"coordinate": @{
+                        @"latitude": @(coordinate.latitude),
+                        @"longitude": @(coordinate.longitude),
+                }
+        };
+
+        if (map.onMarkerDrag) map.onMarkerDrag(event);
+        if (marker.onDrag) marker.onDrag(event);
+
+    } else {
+        // This message is not for me; pass it on to super.
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (void)mapView:(AIRMap *)mapView didUpdateUserLocation:(MKUserLocation *)location
