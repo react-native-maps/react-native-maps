@@ -260,6 +260,10 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
 - (MKAnnotationView *)mapView:(__unused AIRMap *)mapView viewForAnnotation:(AIRMapMarker *)marker
 {
+    if (![marker isKindOfClass:[AIRMapMarker class]]) {
+        return nil;
+    }
+
     marker.map = mapView;
     return [marker getAnnotationView];
 }
