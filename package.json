@@ -3,7 +3,7 @@
   "description": "React Native Mapview component for iOS + Android",
   "main": "index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "scripts": {
     "start": "react-native start"
   },
