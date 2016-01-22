@@ -65,28 +65,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter, 
         super.onResume();
         super.getMapAsync(this);
 
-        // We need to be sure to disable location-tracking when app enters background, in-case some other module
-        // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
-        // updating location constantly, killing the battery, even though some other location-mgmt module may
-        // desire to shut-down location-services.
-        LifecycleEventListener listener = new LifecycleEventListener() {
-            @Override
-            public void onHostResume() {
-                map.setMyLocationEnabled(showUserLocation);
-            }
-
-            @Override
-            public void onHostPause() {
-                map.setMyLocationEnabled(false);
-            }
-
-            @Override
-            public void onHostDestroy() {
-
-            }
-        };
-
-        context.addLifecycleEventListener(listener);
         final AirMapView view = this;
         scaleDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 //            @Override
@@ -194,6 +172,28 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter, 
             }
         });
 
+        // We need to be sure to disable location-tracking when app enters background, in-case some other module
+        // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
+        // updating location constantly, killing the battery, even though some other location-mgmt module may
+        // desire to shut-down location-services.
+        LifecycleEventListener listener = new LifecycleEventListener() {
+            @Override
+            public void onHostResume() {
+                map.setMyLocationEnabled(showUserLocation);
+            }
+
+            @Override
+            public void onHostPause() {
+                map.setMyLocationEnabled(false);
+            }
+
+            @Override
+            public void onHostDestroy() {
+
+            }
+        };
+
+        ((ThemedReactContext) getContext()).addLifecycleEventListener(listener);
     }
 
     public void setRegion(ReadableMap region) {
