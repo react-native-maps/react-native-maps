@@ -45,6 +45,8 @@
 - (MKAnnotationView *)getAnnotationView;
 - (void)fillCalloutView:(SMCalloutView *)calloutView;
 - (BOOL)shouldShowCalloutView;
+- (void)showCalloutView;
+- (void)hideCalloutView;
 
 @end
 

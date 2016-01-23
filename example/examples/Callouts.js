@@ -54,6 +54,14 @@ var Callouts = React.createClass({
     };
   },
 
+  show() {
+    this.refs.m1.showCallout();
+  },
+
+  hide() {
+    this.refs.m1.hideCallout();
+  },
+
   render() {
     const { region, markers } = this.state;
     return (
@@ -63,11 +71,12 @@ var Callouts = React.createClass({
           initialRegion={region}
         >
           <MapView.Marker
+            ref="m1"
             coordinate={markers[0].coordinate}
             title="This is a title"
             description="This is a description"
           />
-          <MapView.Marker coordinate={markers[1].coordinate}>
+          <MapView.Marker ref="m2" coordinate={markers[1].coordinate}>
             <MapView.Callout>
               <View>
                 <Text>This is a plain view</Text>
@@ -75,6 +84,7 @@ var Callouts = React.createClass({
             </MapView.Callout>
           </MapView.Marker>
           <MapView.Marker
+            ref="m3"
             coordinate={markers[2].coordinate}
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}
@@ -90,6 +100,14 @@ var Callouts = React.createClass({
           <View style={styles.bubble}>
             <Text>Tap on markers to see different callouts</Text>
           </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={this.show} style={[styles.bubble, styles.button]}>
+            <Text>Show</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.hide} style={[styles.bubble, styles.button]}>
+            <Text>Hide</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
