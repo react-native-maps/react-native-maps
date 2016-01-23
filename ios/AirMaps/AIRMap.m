@@ -89,7 +89,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
         [self addOverlay:(id<MKOverlay>)subview];
     }
-    [_reactSubviews insertObject:subview atIndex:atIndex];
+    [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
 
 - (void)removeReactSubview:(id<RCTComponent>)subview {
@@ -104,7 +104,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
     }
-    [_reactSubviews removeObject:subview];
+    [_reactSubviews removeObject:(UIView *)subview];
 }
 
 - (NSArray<id<RCTComponent>> *)reactSubviews {

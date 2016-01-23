@@ -105,6 +105,17 @@ render() {
 </MapView.Marker>
 ```
 
+### Draggable Markers
+
+```jsx
+<MapView initialRegion={...}>
+  <MapView.Marker draggable
+    coordinate={this.state.x}
+    onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
+  />
+</MapView>
+```
+
 
 ## Examples
 
@@ -203,6 +214,14 @@ default bubble.
 Markers can be customized by just using images, and specified using the `image` prop.
 
 ![](http://i.imgur.com/mzrOjTR.png)
+
+
+
+### Draggable Markers
+
+Markers are draggable, and emit continuous drag events to update other UI during drags.
+
+![](http://i.giphy.com/l2JImnZxdv1WbpQfC.gif) ![](http://i.giphy.com/l2JIhv4Jx6Ugx1EGI.gif)
 
 
 ## Component API

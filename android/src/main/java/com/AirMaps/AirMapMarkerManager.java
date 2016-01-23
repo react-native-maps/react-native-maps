@@ -111,6 +111,11 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         view.setFlat(flat);
     }
 
+    @ReactProp(name = "draggable", defaultBoolean = false)
+    public void setDraggable(AirMapMarker view, boolean draggable) {
+        view.setDraggable(draggable);
+    }
+
     @Override
     public void addView(AirMapMarker parent, View child, int index) {
         // if an <Callout /> component is a child, then it is a callout view, NOT part of the

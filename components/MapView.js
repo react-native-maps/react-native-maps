@@ -233,6 +233,22 @@ var MapView = React.createClass({
      */
     onCalloutPress: PropTypes.func,
 
+    /**
+     * Callback that is called when the user initiates a drag on a marker (if it is draggable)
+     */
+    onMarkerDragStart: PropTypes.func,
+
+    /**
+     * Callback called continuously as a marker is dragged
+     */
+    onMarkerDrag: PropTypes.func,
+
+    /**
+     * Callback that is called when a drag on a marker finishes. This is usually the point you
+     * will want to setState on the marker's coordinate again
+     */
+    onMarkerDragEnd: PropTypes.func,
+
   },
 
   getInitialState: function() {

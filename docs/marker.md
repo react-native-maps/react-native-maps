@@ -24,7 +24,9 @@
 | `onSelect` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user selects the marker, before the callout is shown.
 | `onDeselect` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the marker is deselected, before the callout is hidden.
 | `onCalloutPress` |  | Callback that is called when the user taps the callout view.
-
+| `onDragStart` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user initiates a drag on this marker (if it is draggable)
+| `onDrag` | `{ coordinate: LatLng, position: Point }` | Callback called continuously as the marker is dragged
+| `onDragEnd` | `{ coordinate: LatLng, position: Point }` | Callback that is called when a drag on this marker finishes. This is usually the point you will want to setState on the marker's coordinate again
 
 
 ## Methods

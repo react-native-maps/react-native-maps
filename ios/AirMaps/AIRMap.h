@@ -42,6 +42,9 @@ extern const CGFloat AIRMapZoomBoundBuffer;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerPress;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerSelect;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDeselect;
+@property (nonatomic, copy) RCTDirectEventBlock onMarkerDragStart;
+@property (nonatomic, copy) RCTDirectEventBlock onMarkerDrag;
+@property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 

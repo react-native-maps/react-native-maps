@@ -68,6 +68,7 @@
         // In this case, we want to render a platform "default" marker.
         MKPinAnnotationView *view = [MKPinAnnotationView new];
         view.annotation = self;
+        view.draggable = self.draggable;
 
         // TODO(lmr): Looks like this API was introduces in iOS 8. We may want to handle differently for earlier
         // versions. Right now it's just leaving it with the default color. People needing the colors are free to

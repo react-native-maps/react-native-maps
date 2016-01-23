@@ -34,7 +34,12 @@ import com.google.android.gms.maps.model.Polyline;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback
+public class AirMapView
+        extends MapView
+        implements
+        GoogleMap.InfoWindowAdapter,
+        GoogleMap.OnMarkerDragListener,
+        OnMapReadyCallback
 {
     public GoogleMap map;
 
@@ -101,6 +106,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter, 
     public void onMapReady(final GoogleMap map) {
         this.map = map;
         this.map.setInfoWindowAdapter(this);
+        this.map.setOnMarkerDragListener(this);
 
         manager.pushEvent(this, "onMapReady", new WritableNativeMap());
 
@@ -414,4 +420,33 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter, 
         }
     };
 
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+        WritableMap event = makeClickEventData(marker.getPosition());
+        manager.pushEvent(this, "onMarkerDragStart", event);
+
+        AirMapMarker markerView = markerMap.get(marker);
+        event = makeClickEventData(marker.getPosition());
+        manager.pushEvent(markerView, "onDragStart", event);
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        WritableMap event = makeClickEventData(marker.getPosition());
+        manager.pushEvent(this, "onMarkerDrag", event);
+
+        AirMapMarker markerView = markerMap.get(marker);
+        event = makeClickEventData(marker.getPosition());
+        manager.pushEvent(markerView, "onDrag", event);
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        WritableMap event = makeClickEventData(marker.getPosition());
+        manager.pushEvent(this, "onMarkerDragEnd", event);
+
+        AirMapMarker markerView = markerMap.get(marker);
+        event = makeClickEventData(marker.getPosition());
+        manager.pushEvent(markerView, "onDragEnd", event);
+    }
 }
