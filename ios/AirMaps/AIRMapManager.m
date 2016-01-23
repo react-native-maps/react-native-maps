@@ -210,55 +210,15 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
 - (void)mapView:(AIRMap *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
-    if (![view.annotation isKindOfClass:[AIRMapMarker class]]) return;
-    AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
-
-    id event = @{
-            @"action": @"marker-select",
-            @"id": marker.identifier ?: @"unknown",
-            @"coordinate": @{
-                    @"latitude": @(marker.coordinate.latitude),
-                    @"longitude": @(marker.coordinate.longitude)
-            }
-    };
-
-    if (mapView.onMarkerSelect) mapView.onMarkerSelect(event);
-    if (marker.onSelect) marker.onSelect(event);
-
-    if (![marker shouldShowCalloutView]) {
-        // no callout to show
-        return;
+    if ([view.annotation isKindOfClass:[AIRMapMarker class]]) {
+        [(AIRMapMarker *)view.annotation showCalloutView];
     }
-
-    [marker fillCalloutView:mapView.calloutView];
-
-    // This is where we present our custom callout view... MapKit's built-in callout doesn't have the flexibility
-    // we need, but a lot of work was done by Nick Farina to make this identical to MapKit's built-in.
-    [mapView.calloutView presentCalloutFromRect:view.bounds
-                                         inView:view
-                              constrainedToView:mapView
-                                       animated:YES];
 }
 
 - (void)mapView:(AIRMap *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
-    // hide the callout view
-    [mapView.calloutView dismissCalloutAnimated:YES];
-
-    if (![view.annotation isKindOfClass:[AIRMapMarker class]]) return;
-    AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
-
-    id event = @{
-            @"action": @"marker-deselect",
-            @"id": marker.identifier ?: @"unknown",
-            @"coordinate": @{
-                    @"latitude": @(marker.coordinate.latitude),
-                    @"longitude": @(marker.coordinate.longitude)
-            }
-    };
-
-    if (mapView.onMarkerDeselect) mapView.onMarkerDeselect(event);
-    if (marker.onDeselect) marker.onDeselect(event);
-
+    if ([view.annotation isKindOfClass:[AIRMapMarker class]]) {
+        [(AIRMapMarker *)view.annotation hideCalloutView];
+    }
 }
 
 - (MKAnnotationView *)mapView:(__unused AIRMap *)mapView viewForAnnotation:(AIRMapMarker *)marker
