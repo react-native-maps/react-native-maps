@@ -42,6 +42,16 @@
     [self update];
 }
 
+- (void)setLineDashPhase:(CGFloat)lineDashPhase {
+    _lineDashPhase = lineDashPhase;
+    [self update];
+}
+
+- (void)setLineDashPattern:(NSArray <NSNumber *> *)lineDashPattern {
+    _lineDashPattern = lineDashPattern;
+    [self update];
+}
+
 - (void)setRadius:(CLLocationDistance)radius {
     _radius = radius;
     _radiusSet = YES;
@@ -72,6 +82,8 @@
     _renderer.lineCap = _lineCap;
     _renderer.lineJoin = _lineJoin;
     _renderer.miterLimit = _miterLimit;
+    _renderer.lineDashPhase = _lineDashPhase;
+    _renderer.lineDashPattern = _lineDashPattern;
 
     if (_map == nil) return;
     [_map removeOverlay:self];
