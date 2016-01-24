@@ -293,9 +293,11 @@ var MapView = React.createClass({
   _onLayout: function(e) {
     const { region, initialRegion, onLayout } = this.props;
     const { isReady } = this.state;
-    if (region && isReady) {
+    if (region && isReady && !this.__layoutCalled) {
+      this.__layoutCalled = true;
       this.refs.map.setNativeProps({ region });
-    } else if (initialRegion && isReady) {
+    } else if (initialRegion && isReady && !this.__layoutCalled) {
+      this.__layoutCalled = true;
       this.refs.map.setNativeProps({ region: initialRegion });
     }
     onLayout && onLayout(e);
