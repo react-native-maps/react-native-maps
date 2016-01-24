@@ -84,3 +84,5 @@ or do it manually as described below:
       android:value="{{Your Google maps API Key Here}}"/>
 </application>
 ```
+
+5. Ensure that you have [Google Play Services installed](http://stackoverflow.com/a/20137324/1424349)
