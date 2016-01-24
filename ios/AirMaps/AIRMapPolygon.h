@@ -30,6 +30,8 @@
 @property (nonatomic, assign) CGFloat miterLimit;
 @property (nonatomic, assign) CGLineCap lineCap;
 @property (nonatomic, assign) CGLineJoin lineJoin;
+@property (nonatomic, assign) CGFloat lineDashPhase;
+@property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
 
 #pragma mark MKOverlay protocol
 

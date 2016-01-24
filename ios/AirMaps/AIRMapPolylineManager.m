@@ -39,6 +39,8 @@ RCT_EXPORT_VIEW_PROPERTY(strokeWidth, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(lineCap, CGLineCap)
 RCT_EXPORT_VIEW_PROPERTY(lineJoin, CGLineJoin)
 RCT_EXPORT_VIEW_PROPERTY(miterLimit, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(lineDashPhase, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(lineDashPattern, NSArray)
 
 // NOTE(lmr):
 // for now, onPress events for overlays will be left unimplemented. Seems it is possible with some work, but
