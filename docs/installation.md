@@ -70,7 +70,7 @@ or do it manually as described below:
        setContentView(mReactRootView);
    }
    ```
-4. specify your Google Maps API Key in your `AndroidManigest.xml`:
+4. specify your Google Maps API Key in your `AndroidManifest.xml`:
 
 ```xml
 <application
