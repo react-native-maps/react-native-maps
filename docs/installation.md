@@ -72,17 +72,17 @@ or do it manually as described below:
    ```
 4. specify your Google Maps API Key in your `AndroidManifest.xml`:
 
-```xml
-<application
-  android:allowBackup="true"
-  android:label="@string/app_name"
-  android:icon="@mipmap/ic_launcher"
-  android:theme="@style/AppTheme">
-    <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-    <meta-data
-      android:name="com.google.android.geo.API_KEY"
-      android:value="{{Your Google maps API Key Here}}"/>
-</application>
-```
+  ```xml
+  <application
+    android:allowBackup="true"
+    android:label="@string/app_name"
+    android:icon="@mipmap/ic_launcher"
+    android:theme="@style/AppTheme">
+      <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+      <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="{{Your Google maps API Key Here}}"/>
+  </application>
+  ```
 
 5. Ensure that you have [Google Play Services installed](http://stackoverflow.com/a/20137324/1424349)
