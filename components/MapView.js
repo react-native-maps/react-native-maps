@@ -372,7 +372,7 @@ var MapView = React.createClass({
     }
 
     return (
-      <AIRMap ref="map" {...props} />
+      <AIRMap style={this.props.style} ref="map" {...props} />
     );
   },
 });
