@@ -1,15 +1,21 @@
 package com.AirMaps;
 
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
@@ -42,11 +48,15 @@ public class AirMapView
         OnMapReadyCallback
 {
     public GoogleMap map;
+    public TextView mapLoadingTextView;
+    public ImageView cacheImageView;
+    private Boolean isMapLoaded = false;
 
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
     private boolean isTouchDown = false;
+    private boolean cacheEnabled = false;
 
     private ArrayList<AirMapFeature> features = new ArrayList<>();
     private HashMap<Marker, AirMapMarker> markerMap = new HashMap<>();
@@ -100,6 +110,22 @@ public class AirMapView
         });
 
         eventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
+
+        this.mapLoadingTextView = new TextView(context);
+        this.mapLoadingTextView.setText("Loading map...");
+        this.mapLoadingTextView.setBackgroundColor(Color.parseColor("#eeeeee"));
+        this.mapLoadingTextView.setGravity(Gravity.CENTER);
+        this.addView(this.mapLoadingTextView,
+            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        this.mapLoadingTextView.setAlpha(0.0f);
+
+        this.cacheImageView = new ImageView(context);
+        this.addView(this.cacheImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT));
+        this.cacheImageView.setAlpha(0.0f);
+
+        this.setAlpha(0.0f);
     }
 
     @Override
@@ -178,6 +204,13 @@ public class AirMapView
             }
         });
 
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override public void onMapLoaded() {
+                isMapLoaded = true;
+                AirMapView.this.cacheView();
+            }
+        });
+
         // We need to be sure to disable location-tracking when app enters background, in-case some other module
         // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
         // updating location constantly, killing the battery, even though some other location-mgmt module may
@@ -229,6 +262,11 @@ public class AirMapView
     public void setShowsUserLocation(boolean showUserLocation) {
         this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
         map.setMyLocationEnabled(showUserLocation);
+    }
+
+    public void setCacheEnabled(boolean cacheEnabled) {
+        this.cacheEnabled = cacheEnabled;
+        this.cacheView();
     }
 
     public void addFeature(View child, int index) {
@@ -448,5 +486,25 @@ public class AirMapView
         AirMapMarker markerView = markerMap.get(marker);
         event = makeClickEventData(marker.getPosition());
         manager.pushEvent(markerView, "onDragEnd", event);
+    }
+
+    private void cacheView() {
+        if (this.cacheEnabled) {
+            this.cacheImageView.setAlpha(0.0f);
+            this.mapLoadingTextView.setAlpha(1.0f);
+            if (this.isMapLoaded) {
+                this.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                    @Override public void onSnapshotReady(Bitmap bitmap) {
+                        AirMapView.this.cacheImageView.setImageBitmap(bitmap);
+                        AirMapView.this.cacheImageView.setAlpha(1.0f);
+                        AirMapView.this.mapLoadingTextView.setAlpha(0.0f);
+                    }
+                });
+            }
+        }
+        else {
+            this.cacheImageView.setAlpha(0.0f);
+            this.mapLoadingTextView.setAlpha(0.0f);
+        }
     }
 }

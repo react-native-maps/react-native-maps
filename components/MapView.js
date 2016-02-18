@@ -77,6 +77,13 @@ var MapView = React.createClass({
     rotateEnabled: PropTypes.bool,
 
     /**
+     * If `true` the map will be cached to an Image for performance
+     * Default value is `false`.
+     *
+     */
+    cacheEnabled: PropTypes.bool,
+
+    /**
      * If `false` the user won't be able to change the map region being displayed.
      * Default value is `true`.
      *

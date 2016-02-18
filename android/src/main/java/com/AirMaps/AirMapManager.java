@@ -1,9 +1,12 @@
 package com.AirMaps;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
@@ -137,6 +140,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @ReactProp(name="rotateEnabled", defaultBoolean = false)
     public void setRotateEnabled(AirMapView view, boolean rotateEnabled) {
         view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
+    }
+
+    @ReactProp(name="cacheEnabled", defaultBoolean = false)
+    public void setCacheEnabled(AirMapView view, boolean cacheEnabled) {
+        view.setCacheEnabled(cacheEnabled);
     }
 
     @Override
