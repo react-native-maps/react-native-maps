@@ -124,8 +124,6 @@ public class AirMapView
         this.addView(this.cacheImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT));
         this.cacheImageView.setAlpha(0.0f);
-
-        this.setAlpha(0.0f);
     }
 
     @Override
