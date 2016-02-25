@@ -140,8 +140,24 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
             AIRMap *mapView = (AIRMap *)view;
-            // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
-            [mapView showAnnotations:mapView.annotations animated:animated];
+
+            MKMapRect concatedMapRect = MKMapRectNull;
+            
+            for( id<MKOverlay>overlay  in mapView.overlays){
+                
+                concatedMapRect = MKMapRectUnion(concatedMapRect, [overlay boundingMapRect]);
+            }
+            
+            for( id<MKAnnotation>annot in mapView.annotations){
+                
+                MKMapPoint point = MKMapPointForCoordinate(annot.coordinate);
+                
+                concatedMapRect = MKMapRectUnion(concatedMapRect, MKMapRectMake(point.x, point.y, 1, 1));
+            }
+            
+            [mapView setVisibleMapRect:concatedMapRect
+                           edgePadding:UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f)
+                              animated:animated];
         }
     }];
 }
