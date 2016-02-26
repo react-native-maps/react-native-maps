@@ -44,8 +44,8 @@
 |---|---|---|
 | `animateToRegion` | `region: Region`, `duration: Number` | 
 | `animateToCoordinate` | `region: Coordinate`, `duration: Number` | 
-| `fitToElements` | `animated: Boolean` | 
-
+| `fitToElements` | `animated: Boolean` | Fits both markers and overlays on the map
+| `fitToMarkers` | `animated: Boolean` | Fits markers on the map
 
 
 ## Types

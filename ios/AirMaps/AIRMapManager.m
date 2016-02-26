@@ -104,9 +104,7 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            [AIRMap animateWithDuration:duration/1000 animations:^{
-                [(AIRMap *)view setRegion:region animated:YES];
-            }];
+            [(AIRMap *)view setRegion:region animated:YES];
         }
     }];
 }
@@ -124,9 +122,7 @@ RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
             MKCoordinateRegion region;
             region.span = mapView.region.span;
             region.center = latlng;
-            [AIRMap animateWithDuration:duration/1000 animations:^{
-                [mapView setRegion:region animated:YES];
-            }];
+            [mapView setRegion:region animated:YES];
         }
     }];
 }
@@ -140,7 +136,7 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
             AIRMap *mapView = (AIRMap *)view;
-
+            
             MKMapRect concatedMapRect = MKMapRectNull;
             
             for( id<MKOverlay>overlay  in mapView.overlays){
@@ -158,6 +154,22 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
             [mapView setVisibleMapRect:concatedMapRect
                            edgePadding:UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f)
                               animated:animated];
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(fitToMarkers:(nonnull NSNumber*)reactTag
+                  animated:(BOOL)animated)
+{
+    
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+            
+            [mapView showAnnotations:mapView.annotations animated:animated];
         }
     }];
 }
