@@ -79,21 +79,21 @@ var MapView = React.createClass({
 
     /**
      * If `true` the map will be cached to an Image for performance
-     * Default value is `false`.
+     * Default value is `false`. Only available in Android for now
      *
      */
     cacheEnabled: PropTypes.bool,
 
     /**
      * Loading background color while generating map cache image
-     * Default color is light gray.
+     * Default color is light gray. Only available in Android for now
      *
      */
     cacheLoadingBackgroundColor: ColorPropType,
 
     /**
      * Loading indicator color while generating map cache image
-     * Default color is default ProgressBar color.
+     * Default color is default ProgressBar color. Only available in Android for now
      *
      */
     cacheLoadingIndicatorColor: ColorPropType,
