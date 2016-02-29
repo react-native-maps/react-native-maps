@@ -15,6 +15,8 @@ import android.view.View;
 
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
@@ -48,7 +50,8 @@ public class AirMapView
         OnMapReadyCallback
 {
     public GoogleMap map;
-    public TextView mapLoadingTextView;
+    public ProgressBar mapLoadingProgressBar;
+    public RelativeLayout mapLoadingLayout;
     public ImageView cacheImageView;
     private Boolean isMapLoaded = false;
 
@@ -82,11 +85,11 @@ public class AirMapView
 
         final AirMapView view = this;
         scaleDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-//            @Override
-//            public boolean onScale(ScaleGestureDetector detector) {
-//                Log.d("AirMapView", "onScale");
-//                return false;
-//            }
+            //            @Override
+            //            public boolean onScale(ScaleGestureDetector detector) {
+            //                Log.d("AirMapView", "onScale");
+            //                return false;
+            //            }
 
             @Override
             public boolean onScaleBegin (ScaleGestureDetector detector) {
@@ -111,18 +114,24 @@ public class AirMapView
 
         eventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
 
-        this.mapLoadingTextView = new TextView(context);
-        this.mapLoadingTextView.setText("Loading map...");
-        this.mapLoadingTextView.setBackgroundColor(Color.parseColor("#eeeeee"));
-        this.mapLoadingTextView.setGravity(Gravity.CENTER);
-        this.addView(this.mapLoadingTextView,
-            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        this.mapLoadingTextView.setAlpha(0.0f);
+        this.mapLoadingLayout = new RelativeLayout(context);
+        this.mapLoadingLayout.setBackgroundColor(Color.LTGRAY);
+        this.addView(this.mapLoadingLayout,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+                        ViewGroup.LayoutParams.FILL_PARENT));
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        this.mapLoadingProgressBar = new ProgressBar(context);
+        this.mapLoadingProgressBar.setIndeterminate(true);
+        this.mapLoadingLayout.addView(this.mapLoadingProgressBar, params);
+
+        this.mapLoadingLayout.setVisibility(View.INVISIBLE);
+
 
         this.cacheImageView = new ImageView(context);
         this.addView(this.cacheImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT));
         this.cacheImageView.setAlpha(0.0f);
     }
 
@@ -489,20 +498,20 @@ public class AirMapView
     private void cacheView() {
         if (this.cacheEnabled) {
             this.cacheImageView.setAlpha(0.0f);
-            this.mapLoadingTextView.setAlpha(1.0f);
+            this.mapLoadingLayout.setVisibility(View.VISIBLE);
             if (this.isMapLoaded) {
                 this.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
                     @Override public void onSnapshotReady(Bitmap bitmap) {
                         AirMapView.this.cacheImageView.setImageBitmap(bitmap);
                         AirMapView.this.cacheImageView.setAlpha(1.0f);
-                        AirMapView.this.mapLoadingTextView.setAlpha(0.0f);
+                        AirMapView.this.mapLoadingLayout.setVisibility(View.INVISIBLE);
                     }
                 });
             }
         }
         else {
             this.cacheImageView.setAlpha(0.0f);
-            this.mapLoadingTextView.setAlpha(0.0f);
+            this.mapLoadingLayout.setVisibility(View.INVISIBLE);
         }
     }
 }
