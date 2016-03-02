@@ -68,7 +68,7 @@
     if ([self shouldUsePinView]) {
         // In this case, we want to render a platform "default" marker.
         if (_pinView == nil) {
-            _pinView = [MKPinAnnotationView new];
+            _pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
             _pinView.annotation = self;
         }
 
