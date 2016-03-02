@@ -57,6 +57,14 @@ var MarkerTypes = React.createClass({
           >
             <PriceMarker amount={99} />
           </MapView.Marker>
+          <MapView.Marker
+            coordinate={this.state.b}
+            onSelect={(e) => console.log('onSelect', e)}
+            onDrag={(e) => console.log('onDrag', e)}
+            onDragStart={(e) => console.log('onDragStart', e)}
+            onPress={(e) => console.log('onPress', e)}
+            draggable
+          />
         </MapView>
       </View>
     );
