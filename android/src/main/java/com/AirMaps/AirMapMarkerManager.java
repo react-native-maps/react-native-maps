@@ -157,10 +157,21 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
 
     @Override
     public @Nullable Map getExportedCustomDirectEventTypeConstants() {
-        return MapBuilder.of(
+        Map map = MapBuilder.of(
             "onPress", MapBuilder.of("registrationName", "onPress"),
-            "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
+            "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"),
+            "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
+            "onDrag", MapBuilder.of("registrationName", "onDrag"),
+            "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
         );
+
+        map.putAll(MapBuilder.of(
+            "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
+            "onDrag", MapBuilder.of("registrationName", "onDrag"),
+            "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
+        ));
+
+        return map;
     }
 
     @Override
