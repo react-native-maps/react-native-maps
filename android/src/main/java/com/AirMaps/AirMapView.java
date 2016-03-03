@@ -57,6 +57,7 @@ public class AirMapView
     private ScaleGestureDetector scaleDetector;
     private GestureDetectorCompat gestureDetector;
     private AirMapManager manager;
+    private LifecycleEventListener lifecycleListener;
 
     final EventDispatcher eventDispatcher;
 
@@ -182,24 +183,37 @@ public class AirMapView
         // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
         // updating location constantly, killing the battery, even though some other location-mgmt module may
         // desire to shut-down location-services.
-        LifecycleEventListener listener = new LifecycleEventListener() {
+        lifecycleListener = new LifecycleEventListener() {
             @Override
             public void onHostResume() {
                 map.setMyLocationEnabled(showUserLocation);
+                AirMapView.this.onResume();
             }
 
             @Override
             public void onHostPause() {
                 map.setMyLocationEnabled(false);
+                AirMapView.this.onPause();
             }
 
             @Override
             public void onHostDestroy() {
-
+                AirMapView.this.doDestroy();
             }
         };
 
-        ((ThemedReactContext) getContext()).addLifecycleEventListener(listener);
+        ((ThemedReactContext) getContext()).addLifecycleEventListener(lifecycleListener);
+    }
+
+    /*
+    onDestroy is final method so I can't override it.
+     */
+    public void doDestroy() {
+        if (lifecycleListener != null) {
+            ((ThemedReactContext) getContext()).removeLifecycleEventListener(lifecycleListener);
+            lifecycleListener = null;
+        }
+        onDestroy();
     }
 
     public void setRegion(ReadableMap region) {
