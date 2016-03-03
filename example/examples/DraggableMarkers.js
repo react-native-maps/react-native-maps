@@ -52,6 +52,7 @@ var MarkerTypes = React.createClass({
             onSelect={(e) => console.log('onSelect', e)}
             onDrag={(e) => console.log('onDrag', e)}
             onDragStart={(e) => console.log('onDragStart', e)}
+            onDragEnd={(e) => console.log('onDragEnd', e)}
             onPress={(e) => console.log('onPress', e)}
             draggable
           >
@@ -62,6 +63,7 @@ var MarkerTypes = React.createClass({
             onSelect={(e) => console.log('onSelect', e)}
             onDrag={(e) => console.log('onDrag', e)}
             onDragStart={(e) => console.log('onDragStart', e)}
+            onDragEnd={(e) => console.log('onDragEnd', e)}
             onPress={(e) => console.log('onPress', e)}
             draggable
           />
