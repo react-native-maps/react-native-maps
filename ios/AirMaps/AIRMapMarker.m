@@ -134,8 +134,6 @@
 {
     MKAnnotationView *annotationView = [self getAnnotationView];
 
-    [self setSelected:YES animated:NO];
-
     id event = @{
             @"action": @"marker-select",
             @"id": self.identifier ?: @"unknown",
@@ -167,8 +165,6 @@
 {
     // hide the callout view
     [self.map.calloutView dismissCalloutAnimated:YES];
-
-    [self setSelected:NO animated:NO];
 
     id event = @{
             @"action": @"marker-deselect",
