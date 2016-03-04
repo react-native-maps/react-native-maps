@@ -58,6 +58,7 @@ public class AirMapView
     private GestureDetectorCompat gestureDetector;
     private AirMapManager manager;
     private LifecycleEventListener lifecycleListener;
+    private boolean paused = false;
 
     final EventDispatcher eventDispatcher;
 
@@ -187,13 +188,19 @@ public class AirMapView
             @Override
             public void onHostResume() {
                 map.setMyLocationEnabled(showUserLocation);
-                AirMapView.this.onResume();
+                synchronized (AirMapView.this) {
+                    AirMapView.this.onResume();
+                    paused = false;
+                }
             }
 
             @Override
             public void onHostPause() {
                 map.setMyLocationEnabled(false);
-                AirMapView.this.onPause();
+                synchronized (AirMapView.this) {
+                    AirMapView.this.onPause();
+                    paused = true;
+                }
             }
 
             @Override
@@ -208,10 +215,13 @@ public class AirMapView
     /*
     onDestroy is final method so I can't override it.
      */
-    public void doDestroy() {
+    public synchronized  void doDestroy() {
         if (lifecycleListener != null) {
             ((ThemedReactContext) getContext()).removeLifecycleEventListener(lifecycleListener);
             lifecycleListener = null;
+        }
+        if(!paused) {
+            onPause();
         }
         onDestroy();
     }
