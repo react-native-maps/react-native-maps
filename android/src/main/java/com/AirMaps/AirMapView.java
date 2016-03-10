@@ -172,8 +172,9 @@ public class AirMapView
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+                LatLng center = position.target;
                 lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, isTouchDown));
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
                 view.stopMonitoringRegion();
             }
         });
@@ -412,8 +413,9 @@ public class AirMapView
 
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             if (lastBoundsEmitted == null || LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted)) {
+                LatLng center = map.getCameraPosition().target;
                 lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, true));
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));
             }
 
             timerHandler.postDelayed(this, 100);
