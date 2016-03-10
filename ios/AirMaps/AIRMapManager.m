@@ -104,7 +104,9 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            [(AIRMap *)view setRegion:region animated:YES];
+            [AIRMap animateWithDuration:duration/1000 animations:^{
+                [(AIRMap *)view setRegion:region animated:YES];
+            }];
         }
     }];
 }
@@ -122,7 +124,9 @@ RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
             MKCoordinateRegion region;
             region.span = mapView.region.span;
             region.center = latlng;
-            [mapView setRegion:region animated:YES];
+            [AIRMap animateWithDuration:duration/1000 animations:^{
+                [mapView setRegion:region animated:YES];
+            }];
         }
     }];
 }

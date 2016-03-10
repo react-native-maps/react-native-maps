@@ -22,9 +22,9 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "react-native": ">=0.19.0"
+    "react-native": "*"
   },
   "devDependencies": {
-    "react-native": "^0.19.0"
+    "react-native": "latest"
   }
 }
