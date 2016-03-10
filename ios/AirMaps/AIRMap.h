@@ -14,6 +14,8 @@
 #import "RCTComponent.h"
 #import "SMCalloutView.h"
 
+#import "FBClusteringManager.h"
+
 extern const CLLocationDegrees AIRMapDefaultSpan;
 extern const NSTimeInterval AIRMapRegionChangeObserveInterval;
 extern const CGFloat AIRMapZoomBoundBuffer;
@@ -21,6 +23,8 @@ extern const CGFloat AIRMapZoomBoundBuffer;
 @interface AIRMap: MKMapView<SMCalloutViewDelegate>
 
 @property (nonatomic, strong) SMCalloutView *calloutView;
+
+@property (nonatomic, strong) FBClusteringManager *clusteringManager;
 
 @property (nonatomic, assign) BOOL followUserLocation;
 @property (nonatomic, assign) BOOL hasStartedRendering;
@@ -35,6 +39,7 @@ extern const CGFloat AIRMapZoomBoundBuffer;
 
 
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
+@property (nonatomic, assign) BOOL clusterMarkers;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
@@ -47,5 +52,6 @@ extern const CGFloat AIRMapZoomBoundBuffer;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+
 
 @end

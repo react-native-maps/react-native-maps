@@ -67,6 +67,10 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         // be identical to the built-in callout view (which has a private API)
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
+        
+        // clusteringManager handles the clustering of markers.
+        // We init it here so that we can add markers to it, at the same time as we add them to the map
+        self.clusteringManager = [[FBClusteringManager alloc] init];
     }
     return self;
 }
@@ -81,6 +85,8 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     // This is where we intercept them and do the appropriate underlying mapview action.
     if ([subview isKindOfClass:[AIRMapMarker class]]) {
         [self addAnnotation:(id <MKAnnotation>) subview];
+        //also add annotations to the clustiner manager so we can determine if they should be clustered or not
+        [self.clusteringManager addAnnotations:@[(id <MKAnnotation>) subview]];
     } else if ([subview isKindOfClass:[AIRMapPolyline class]]) {
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapPolygon class]]) {
@@ -97,6 +103,8 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     // underlying mapview action here.
     if ([subview isKindOfClass:[AIRMapMarker class]]) {
         [self removeAnnotation:(id<MKAnnotation>)subview];
+        //also remove annotations from the clustiner manager
+        [self.clusteringManager removeAnnotations:@[(id <MKAnnotation>) subview]];
     } else if ([subview isKindOfClass:[AIRMapPolyline class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
     } else if ([subview isKindOfClass:[AIRMapPolygon class]]) {
