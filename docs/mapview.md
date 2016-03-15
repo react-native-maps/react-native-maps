@@ -17,6 +17,7 @@
 | `zoomEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/zoom the map.
 | `rotateEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/rotate the map.
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
+| `clusterMarkers` | `Boolean` | `false` | If `true` markers will cluster together at different zoom levels.
 
 
 
