@@ -9,11 +9,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 public class RegionChangeEvent extends Event<RegionChangeEvent> {
     private final LatLngBounds bounds;
+    private final LatLng center;
     private boolean continuous;
 
-    public RegionChangeEvent(int id, LatLngBounds bounds, boolean continuous) {
+    public RegionChangeEvent(int id, LatLngBounds bounds, LatLng center, boolean continuous) {
         super(id, System.currentTimeMillis());
         this.bounds = bounds;
+        this.center = center;
         this.continuous = continuous;
     }
 
@@ -34,7 +36,6 @@ public class RegionChangeEvent extends Event<RegionChangeEvent> {
         event.putBoolean("continuous", continuous);
 
         WritableMap region = new WritableNativeMap();
-        LatLng center = bounds.getCenter();
         region.putDouble("latitude", center.latitude);
         region.putDouble("longitude", center.longitude);
         region.putDouble("latitudeDelta", bounds.northeast.latitude - bounds.southwest.latitude);
