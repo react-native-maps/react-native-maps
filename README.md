@@ -31,8 +31,26 @@ declaratively controlling features on the map.
 
 ### Rendering a Map with an initial region
 
+When you render a MapView, this one need to be in absolute position with the top, left, right and bottom props set.
+If not you gonna have a blank view.
+
+## Styles
+```jsx
+const styles = StyleSheet.create({
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});
+```
+
+## MapView
 ```jsx
   <MapView 
+    style={ styles.map }
     initialRegion={{
       latitude: 37.78825,
       longitude: -122.4324,
