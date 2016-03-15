@@ -363,6 +363,9 @@ var MapView = React.createClass({
         onMapReady: this._onMapReady,
         onLayout: this._onLayout,
       };
+      if (Platform.OS === 'ios' && props.mapType === 'terrain') {
+        props.mapType = 'standard';
+      }
     } else {
       props = {
         region: null,
