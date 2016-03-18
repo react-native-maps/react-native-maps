@@ -6,6 +6,7 @@ import {
   Animated,
   requireNativeComponent,
   NativeModules,
+<<<<<<< 70a6c8a927b90df86e7092acc6e026df1a58331c
   ColorPropType,
   findNodeHandle,
 } from 'react-native';
@@ -14,6 +15,7 @@ import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
+import MapUrlTile './MapUrlTile';
 
 const viewConfig = {
   uiViewClassName: 'AIRMap',
@@ -176,6 +178,7 @@ const propTypes = {
     'satellite',
     'hybrid',
     'terrain',
+    'none',
   ]),
 
   /**
@@ -506,6 +509,7 @@ MapView.Marker = MapMarker;
 MapView.Polyline = MapPolyline;
 MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
+MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
