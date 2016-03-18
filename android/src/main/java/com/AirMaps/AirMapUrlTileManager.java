@@ -43,7 +43,7 @@ public class AirMapUrlTileManager extends ViewGroupManager<AirMapUrlTile> {
         view.setUrl(url);
     }
 
-    @ReactProp(name = "zIndex", defaultFloat = 1.0f)
+    @ReactProp(name = "zIndex", defaultFloat = -1.0f)
     public void setZIndex(AirMapUrlTile view, float zIndex) {
         view.setZIndex(zIndex);
     }
