@@ -23,7 +23,10 @@ public class AirMapUrlTile extends AirMapFeature {
         @Override
         public synchronized URL getTileUrl(int x, int y, int zoom) {
 
-            String s = String.format(Locale.US, this.url, zoom, x, y);
+            String s = this.url
+              .replace("{x}", Integer.toString(x))
+              .replace("{y}", Integer.toString(y))
+              .replace("{z}", Integer.toString(zoom));
             URL url = null;
             try {
                 url = new URL(s);
@@ -72,7 +75,7 @@ public class AirMapUrlTile extends AirMapFeature {
         }
         return tileOverlayOptions;
     }
-// http://a.tile.openstreetmap.org/${z}/${x}/${y}.png
+
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
