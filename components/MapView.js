@@ -17,6 +17,7 @@ var MapMarker = require('./MapMarker');
 var MapPolyline = require('./MapPolyline');
 var MapPolygon = require('./MapPolygon');
 var MapCircle = require('./MapCircle');
+var MapUrlTile = require('./MapUrlTile');
 var MapCallout = require('./MapCallout');
 
 var MapView = React.createClass({
@@ -119,6 +120,7 @@ var MapView = React.createClass({
      * - terrain: (Android only) topographic view
      */
     mapType: PropTypes.oneOf([
+      'none',
       'standard',
       'satellite',
       'hybrid',
@@ -393,6 +395,7 @@ MapView.Marker = MapMarker;
 MapView.Polyline = MapPolyline;
 MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
+MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);

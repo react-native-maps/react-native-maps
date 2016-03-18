@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.TileOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ public class AirMapView
     private HashMap<Polyline, AirMapPolyline> polylineMap = new HashMap<>();
     private HashMap<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
     private HashMap<Circle, AirMapCircle> circleMap = new HashMap<>();
+    private HashMap<TileOverlay, AirMapUrlTile> tileMap = new HashMap<>();
 
     private ScaleGestureDetector scaleDetector;
     private GestureDetectorCompat gestureDetector;
@@ -283,6 +285,12 @@ public class AirMapView
             features.add(index, circleView);
             Circle circle = (Circle)circleView.getFeature();
             circleMap.put(circle, circleView);
+        } else if (child instanceof AirMapUrlTile) {
+            AirMapUrlTile urlTileView = (AirMapUrlTile) child;
+            urlTileView.addToMap(map);
+            features.add(index, urlTileView);
+            TileOverlay tile = (TileOverlay)urlTileView.getFeature();
+            tileMap.put(tile, urlTileView);
         } else {
             // TODO(lmr): throw? User shouldn't be adding non-feature children.
         }
@@ -308,6 +316,8 @@ public class AirMapView
             polygonMap.remove(feature.getFeature());
         } else if (feature instanceof AirMapCircle) {
             circleMap.remove(feature.getFeature());
+        } else if (feature instanceof AirMapUrlTile) {
+            tileMap.remove(feature.getFeature());
         }
     }
 
