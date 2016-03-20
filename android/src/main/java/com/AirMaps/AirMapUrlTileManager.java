@@ -38,9 +38,9 @@ public class AirMapUrlTileManager extends ViewGroupManager<AirMapUrlTile> {
         return new AirMapUrlTile(context);
     }
 
-    @ReactProp(name = "url")
-    public void setCenter(AirMapUrlTile view, String url) {
-        view.setUrl(url);
+    @ReactProp(name = "urlTemplate")
+    public void setUrlTemplate(AirMapUrlTile view, String urlTemplate) {
+        view.setUrlTemplate(urlTemplate);
     }
 
     @ReactProp(name = "zIndex", defaultFloat = -1.0f)

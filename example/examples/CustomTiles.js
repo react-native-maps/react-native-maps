@@ -42,7 +42,7 @@ var Overlays = React.createClass({
           initialRegion={region}
         >
           <MapView.UrlTile
-            url="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
+            urlTemplate="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
             zIndex={-1}
           />
         </MapView>

@@ -118,13 +118,14 @@ var MapView = React.createClass({
      * - satellite: satellite view
      * - hybrid: satellite view with roads and points of interest overlayed
      * - terrain: (Android only) topographic view
+     * - none: (Android only) no base map. Use when rendering your own tiles with <MapView.UrlTile />
      */
     mapType: PropTypes.oneOf([
-      'none',
       'standard',
       'satellite',
       'hybrid',
       'terrain',
+      'none',
     ]),
 
     /**
