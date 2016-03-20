@@ -18,7 +18,7 @@ var MapUrlTile = React.createClass({
      * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
      * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
      */
-    url: PropTypes.string.isRequired,
+    urlTemplate: PropTypes.string.isRequired,
 
     /**
      * The order in which this tile overlay is drawn with respect to other overlays. An overlay

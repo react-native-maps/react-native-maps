@@ -15,6 +15,7 @@
 #import "AIRMapPolyline.h"
 #import "AIRMapPolygon.h"
 #import "AIRMapCircle.h"
+#import "AIRMapUrlTile.h"
 
 const CLLocationDegrees AIRMapDefaultSpan = 0.005;
 const NSTimeInterval AIRMapRegionChangeObserveInterval = 0.1;
@@ -88,6 +89,8 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
         [self addOverlay:(id<MKOverlay>)subview];
+    } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
+        [self addOverlay:(id<MKOverlay>)subview];
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
@@ -102,6 +105,8 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     } else if ([subview isKindOfClass:[AIRMapPolygon class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
+        [self removeOverlay:(id <MKOverlay>) subview];
+    } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
     }
     [_reactSubviews removeObject:(UIView *)subview];
