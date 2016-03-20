@@ -6,7 +6,6 @@ import {
   Animated,
   requireNativeComponent,
   NativeModules,
-<<<<<<< 70a6c8a927b90df86e7092acc6e026df1a58331c
   ColorPropType,
   findNodeHandle,
 } from 'react-native';
@@ -15,7 +14,7 @@ import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
-import MapUrlTile './MapUrlTile';
+import MapUrlTile from './MapUrlTile';
 
 const viewConfig = {
   uiViewClassName: 'AIRMap',

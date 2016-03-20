@@ -15,15 +15,15 @@ public class AirMapUrlTile extends AirMapFeature {
 
     class AIRMapUrlTileProvider extends UrlTileProvider
     {
-        private String url;
-        public AIRMapUrlTileProvider(int width, int height, String url) {
+        private String urlTemplate;
+        public AIRMapUrlTileProvider(int width, int height, String urlTemplate) {
             super(width, height);
-            this.url = url;
+            this.urlTemplate = urlTemplate;
         }
         @Override
         public synchronized URL getTileUrl(int x, int y, int zoom) {
 
-            String s = this.url
+            String s = this.urlTemplate
               .replace("{x}", Integer.toString(x))
               .replace("{y}", Integer.toString(y))
               .replace("{z}", Integer.toString(zoom));
@@ -36,8 +36,8 @@ public class AirMapUrlTile extends AirMapFeature {
             return url;
         }
 
-        public void setUrl(String url) {
-            this.url = url;
+        public void setUrlTemplate(String urlTemplate) {
+            this.urlTemplate = urlTemplate;
         }
     }
 
@@ -45,17 +45,17 @@ public class AirMapUrlTile extends AirMapFeature {
     private TileOverlay tileOverlay;
     private AIRMapUrlTileProvider tileProvider;
 
-    private String url;
+    private String urlTemplate;
     private float zIndex;
 
     public AirMapUrlTile(Context context) {
         super(context);
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrlTemplate(String urlTemplate) {
+        this.urlTemplate = urlTemplate;
         if (tileProvider != null) {
-            tileProvider.setUrl(url);
+            tileProvider.setUrlTemplate(urlTemplate);
         }
         if (tileOverlay != null) {
             tileOverlay.clearTileCache();
@@ -79,7 +79,7 @@ public class AirMapUrlTile extends AirMapFeature {
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
-        this.tileProvider = new AIRMapUrlTileProvider(256, 256, this.url);
+        this.tileProvider = new AIRMapUrlTileProvider(256, 256, this.urlTemplate);
         options.tileProvider(this.tileProvider);
         return options;
     }
