@@ -146,6 +146,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
 
+    @ReactProp(name="pitchEnabled", defaultBoolean = false)
+    public void setPitchEnabled(AirMapView view, boolean pitchEnabled) {
+        view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
+    }
+
     @Override
     public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
         Integer duration;

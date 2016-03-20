@@ -17,6 +17,7 @@
 | `zoomEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/zoom the map.
 | `rotateEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/rotate the map.
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
+| `pitchEnabled` | `Boolean` | `true` | If `false` the user won't be able to adjust the camera’s pitch angle.
 
 
 
