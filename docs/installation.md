@@ -67,7 +67,7 @@ or do it manually as described below:
      @Override
      protected List<ReactPackage> getPackages() {
        return Arrays.<ReactPackage>asList(
-         new MainReactPackage()
+         new MainReactPackage(),
          new AirPackage() // <---- and This!
        );
      }
