@@ -17,11 +17,11 @@ or do it manually as described below:
 ## iOS
 
 1. Open your project in XCode, right click on `Libraries` and click `Add
-   Files to "Your Project Name"` Look under `node_modules/react-native-maps` and add `AIRMaps.xcodeproj`.
+   Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
 2. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
 3. Click on `AIRMaps.xcodeproj` in `Libraries` and go the `Build
    Settings` tab. Double click the text to the right of `Header Search
-   Paths` and verify that it has `$(SRCROOT)/../react-native/React` as well as `$(SRCROOT)/../react-native/Libraries/Image` - if they
+   Paths` and verify that it has `$(SRCROOT)/../../react-native/React` as well as `$(SRCROOT)/../../react-native/Libraries/Image` - if they
    aren't, then add them. This is so XCode is able to find the headers that
    the `AIRMaps` source files are referring to by pointing to the
    header files installed within the `react-native` `node_modules`
@@ -67,7 +67,7 @@ or do it manually as described below:
      @Override
      protected List<ReactPackage> getPackages() {
        return Arrays.<ReactPackage>asList(
-         new MainReactPackage()
+         new MainReactPackage(),
          new AirPackage() // <---- and This!
        );
      }
