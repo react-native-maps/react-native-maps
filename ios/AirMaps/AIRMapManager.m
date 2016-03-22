@@ -56,6 +56,7 @@ RCT_EXPORT_MODULE()
     return map;
 }
 
+RCT_EXPORT_VIEW_PROPERTY(clusterMarkers, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsPointsOfInterest, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
@@ -227,6 +228,27 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
 - (MKAnnotationView *)mapView:(__unused AIRMap *)mapView viewForAnnotation:(AIRMapMarker *)marker
 {
+    // if the marker is a cluser, render a boring green circle with the number of markers in it.
+    // idealy, the user should be able to use a custom view or at least set the color/radius.
+    if ([marker isKindOfClass:[FBAnnotationCluster class]]) {
+        FBAnnotationCluster *cluster = (FBAnnotationCluster *)marker;
+        
+        MKAnnotationView *m = [[MKAnnotationView alloc] initWithAnnotation:marker reuseIdentifier:@"cluster"];
+        
+        UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(m.center.x, m.center.y, 40, 40)];
+        [labelView setBackgroundColor:[UIColor colorWithRed:0.7294 green:0.7843 blue:0.1921 alpha:1.0]];
+        
+        labelView.layer.cornerRadius = labelView.frame.size.width / 2;
+        labelView.clipsToBounds = YES;
+        [labelView setText:[NSString stringWithFormat:@"%lu", (unsigned long)cluster.annotations.count]];
+        [labelView setTextAlignment:NSTextAlignmentCenter];
+        [m addSubview:labelView];
+        
+        // Also set center offset for annotation
+        [m setCenterOffset:CGPointMake(-20, -20)];
+        return m;
+    }
+    
     if (![marker isKindOfClass:[AIRMapMarker class]]) {
         return nil;
     }
@@ -355,6 +377,17 @@ static int kDragCenterContext;
 
     mapView.pendingCenter = mapView.region.center;
     mapView.pendingSpan = mapView.region.span;
+    
+    // if we should be clustering markers, inform the clustering manager of the region change.
+    if (mapView.clusterMarkers) {
+        [[NSOperationQueue new] addOperationWithBlock:^{
+            double scale = mapView.bounds.size.width / mapView.visibleMapRect.size.width;
+            NSArray *annotations = [mapView.clusteringManager clusteredAnnotationsWithinMapRect:mapView.visibleMapRect withZoomScale:scale];
+            
+            [mapView.clusteringManager displayAnnotations:annotations onMapView:mapView];
+        }];
+    }
+
 }
 
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView

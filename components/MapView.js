@@ -84,6 +84,13 @@ var MapView = React.createClass({
     scrollEnabled: PropTypes.bool,
 
     /**
+     * If `true` markers are clustered together once they start to overlap.
+     * Default value is `false`.
+     *
+     */
+    clusterMarkers: PropTypes.bool,
+
+    /**
      * A Boolean indicating whether the map shows scale information.
      * Default value is `false`
      *
