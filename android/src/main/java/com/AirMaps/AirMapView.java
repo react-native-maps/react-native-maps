@@ -96,6 +96,7 @@ public class AirMapView
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                onPanDrag(e2);
                 view.startMonitoringRegion();
                 return false;
             }
@@ -474,5 +475,12 @@ public class AirMapView
         AirMapMarker markerView = markerMap.get(marker);
         event = makeClickEventData(marker.getPosition());
         manager.pushEvent(markerView, "onDragEnd", event);
+    }
+
+    public void onPanDrag(MotionEvent ev) {
+        Point point = new Point((int) ev.getX(), (int) ev.getY());
+        LatLng coords = this.map.getProjection().fromScreenLocation(point);
+        WritableMap event = makeClickEventData(coords);
+        manager.pushEvent(this, "onPanDrag", event);
     }
 }

@@ -229,6 +229,11 @@ var MapView = React.createClass({
     onLongPress: PropTypes.func,
 
     /**
+     * Callback that is called when user makes a "drag" somewhere on the map
+     */
+    onPanDrag: PropTypes.func,
+
+    /**
      * Callback that is called when a marker on the map is tapped by the user.
      */
     onMarkerPress: PropTypes.func,
