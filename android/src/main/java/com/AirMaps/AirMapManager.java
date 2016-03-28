@@ -1,5 +1,12 @@
 package com.AirMaps;
 
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.PorterDuff;
+import android.os.Build;
+import android.support.v7.internal.widget.ThemeUtils;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
