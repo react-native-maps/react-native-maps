@@ -145,6 +145,55 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     public void setRotateEnabled(AirMapView view, boolean rotateEnabled) {
         view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
+    
+    @ReactProp(name="cacheEnabled", defaultBoolean = false)
+    public void setCacheEnabled(AirMapView view, boolean cacheEnabled) {
+        view.setCacheEnabled(cacheEnabled);
+    }
+
+    @ReactProp(name="loadingEnabled", defaultBoolean = false)
+    public void setLoadingEnabled(AirMapView view, boolean loadingEnabled) {
+        view.enableMapLoading(loadingEnabled);
+    }
+
+    @ReactProp(name="loadingBackgroundColor", customType="Color")
+    public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer loadingBackgroundColor) {
+        if (loadingBackgroundColor == null) {
+            view.mapLoadingLayout.setBackgroundColor(Color.TRANSPARENT);
+        } else {
+            view.mapLoadingLayout.setBackgroundColor(loadingBackgroundColor);
+        }
+    }
+
+    @ReactProp(name="loadingIndicatorColor", customType="Color")
+    public void setLoadingIndicatorColor(AirMapView view, @Nullable Integer loadingIndicatorColor) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ColorStateList stateList = ColorStateList.valueOf(Color.TRANSPARENT);
+
+            if (loadingIndicatorColor != null) {
+                stateList = ColorStateList.valueOf(loadingIndicatorColor);
+            }
+
+            view.mapLoadingProgressBar.setProgressTintList(stateList);
+            view.mapLoadingProgressBar.setSecondaryProgressTintList(stateList);
+            view.mapLoadingProgressBar.setIndeterminateTintList(stateList);
+        } else {
+            int color = Color.TRANSPARENT;
+
+            if (loadingIndicatorColor != null) {
+                color = loadingIndicatorColor;
+            }
+
+            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                mode = PorterDuff.Mode.MULTIPLY;
+            }
+            if (view.mapLoadingProgressBar.getIndeterminateDrawable() != null)
+                view.mapLoadingProgressBar.getIndeterminateDrawable().setColorFilter(color, mode);
+            if (view.mapLoadingProgressBar.getProgressDrawable() != null)
+                view.mapLoadingProgressBar.getProgressDrawable().setColorFilter(color, mode);
+        }
+    }
 
     @Override
     public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
