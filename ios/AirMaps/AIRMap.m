@@ -204,4 +204,49 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     }
 }
 
+// Include properties of MKMapView which are only available on iOS 9+
+// and check if their selector is available before calling super method.
+
+- (void)setShowsCompass:(BOOL)showsCompass {
+    if ([MKMapView instancesRespondToSelector:@selector(setShowsCompass:)]) {
+        [super setShowsCompass:showsCompass];
+    }
+}
+
+- (BOOL)showsCompass {
+    if ([MKMapView instancesRespondToSelector:@selector(showsCompass)]) {
+        return [super showsCompass];
+    } else {
+        return NO;
+    }
+}
+
+- (void)setShowsScale:(BOOL)showsScale {
+    if ([MKMapView instancesRespondToSelector:@selector(setShowsScale:)]) {
+        [super setShowsScale:showsScale];
+    }
+}
+
+- (BOOL)showsScale {
+    if ([MKMapView instancesRespondToSelector:@selector(showsScale)]) {
+        return [super showsScale];
+    } else {
+        return NO;
+    }
+}
+
+- (void)setShowsTraffic:(BOOL)showsTraffic {
+    if ([MKMapView instancesRespondToSelector:@selector(setShowsTraffic:)]) {
+        [super setShowsTraffic:showsTraffic];
+    }
+}
+
+- (BOOL)showsTraffic {
+    if ([MKMapView instancesRespondToSelector:@selector(showsTraffic)]) {
+        return [super showsTraffic];
+    } else {
+        return NO;
+    }
+}
+
 @end

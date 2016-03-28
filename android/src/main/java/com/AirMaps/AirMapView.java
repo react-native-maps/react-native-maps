@@ -70,6 +70,8 @@ public class AirMapView
     private ScaleGestureDetector scaleDetector;
     private GestureDetectorCompat gestureDetector;
     private AirMapManager manager;
+    private LifecycleEventListener lifecycleListener;
+    private boolean paused = false;
 
     final EventDispatcher eventDispatcher;
 
@@ -205,8 +207,9 @@ public class AirMapView
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+                LatLng center = position.target;
                 lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, isTouchDown));
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
                 view.stopMonitoringRegion();
             }
         });
@@ -222,24 +225,46 @@ public class AirMapView
         // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
         // updating location constantly, killing the battery, even though some other location-mgmt module may
         // desire to shut-down location-services.
-        LifecycleEventListener listener = new LifecycleEventListener() {
+        lifecycleListener = new LifecycleEventListener() {
             @Override
             public void onHostResume() {
                 map.setMyLocationEnabled(showUserLocation);
+                synchronized (AirMapView.this) {
+                    AirMapView.this.onResume();
+                    paused = false;
+                }
             }
 
             @Override
             public void onHostPause() {
                 map.setMyLocationEnabled(false);
+                synchronized (AirMapView.this) {
+                    AirMapView.this.onPause();
+                    paused = true;
+                }
             }
 
             @Override
             public void onHostDestroy() {
-
+                AirMapView.this.doDestroy();
             }
         };
 
-        ((ThemedReactContext) getContext()).addLifecycleEventListener(listener);
+        ((ThemedReactContext) getContext()).addLifecycleEventListener(lifecycleListener);
+    }
+
+    /*
+    onDestroy is final method so I can't override it.
+     */
+    public synchronized  void doDestroy() {
+        if (lifecycleListener != null) {
+            ((ThemedReactContext) getContext()).removeLifecycleEventListener(lifecycleListener);
+            lifecycleListener = null;
+        }
+        if(!paused) {
+            onPause();
+        }
+        onDestroy();
     }
 
     public void setRegion(ReadableMap region) {
@@ -463,8 +488,9 @@ public class AirMapView
 
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             if (lastBoundsEmitted == null || LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted)) {
+                LatLng center = map.getCameraPosition().target;
                 lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, true));
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));
             }
 
             timerHandler.postDelayed(this, 100);
