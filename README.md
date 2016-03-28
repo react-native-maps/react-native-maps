@@ -338,7 +338,7 @@ Color of loading indicator and background can be customized via the `loadingIndi
 ```jsx
 render() {
   return (
-    <MapView loadingEnabled={true} loadingIndicatorColor="#666666" loadingBackgroundColor="#eeeeee" >
+    <MapView loadingEnabled={true} loadingIndicatorColor={"#666666"} loadingBackgroundColor={"#eeeeee"} >
     </MapView>
   );
 }
@@ -354,7 +354,7 @@ Note: `MapView` will not be interactable as the map displayed is actually an ima
 ```jsx
 render() {
   return (
-    <MapView cacheEnabled={true} loadingIndicatorColor="#666666" loadingBackgroundColor="#eeeeee" >
+    <MapView cacheEnabled={true} loadingIndicatorColor={"#666666"} loadingBackgroundColor={"#eeeeee"} >
     </MapView>
   );
 }
