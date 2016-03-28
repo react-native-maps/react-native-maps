@@ -329,5 +329,34 @@ render() {
 }
 ```
 
+### Loading indicator
 
+Loading indicator can be enabled by setting the prop `loadingEnabled` as `true`.
+Color of loading indicator and background can be customized via the `loadingIndicatorColor` and `loadingBackgroundColor` props
+**Currently only available for Android**
+
+```jsx
+render() {
+  return (
+    <MapView loadingEnabled={true} loadingIndicatorColor="#666666" loadingBackgroundColor="#eeeeee" >
+    </MapView>
+  );
+}
+```
+
+### Caching
+
+Caching map to image and displaying the cached image can be enabled by setting the prop `cacheEnabled` as `true`. 
+`loadingIndicatorColor` and `loadingBackgroundColor` props will be used for cache loading indicator and background.
+Note: `MapView` will not be interactable as the map displayed is actually an image.
+**Currently only available for Android**
+
+```jsx
+render() {
+  return (
+    <MapView cacheEnabled={true} loadingIndicatorColor="#666666" loadingBackgroundColor="#eeeeee" >
+    </MapView>
+  );
+}
+```
 
