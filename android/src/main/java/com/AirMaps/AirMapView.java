@@ -276,6 +276,12 @@ public class AirMapView
         this.cacheView();
     }
 
+    public void enableMapLoading(boolean loadingEnabled) {
+        if (loadingEnabled && !this.isMapLoaded) {
+            this.mapLoadingLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void addFeature(View child, int index) {
         // Our desired API is to pass up annotations/overlays as children to the mapview component.
         // This is where we intercept them and do the appropriate underlying mapview action.
@@ -511,7 +517,9 @@ public class AirMapView
         }
         else {
             this.cacheImageView.setAlpha(0.0f);
-            this.mapLoadingLayout.setVisibility(View.INVISIBLE);
+            if (this.isMapLoaded) {
+                this.mapLoadingLayout.setVisibility(View.INVISIBLE);
+            }
         }
     }
 }

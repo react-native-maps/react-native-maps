@@ -85,18 +85,25 @@ var MapView = React.createClass({
     cacheEnabled: PropTypes.bool,
 
     /**
-     * Loading background color while generating map cache image
+     * If `true` the map will be showing a loading indicator
+     * Default value is `false`. Only available in Android for now
+     *
+     */
+    loadingEnabled: PropTypes.bool,
+
+    /**
+     * Loading background color while generating map cache image or loading the map
      * Default color is light gray. Only available in Android for now
      *
      */
-    cacheLoadingBackgroundColor: ColorPropType,
+    loadingBackgroundColor: ColorPropType,
 
     /**
-     * Loading indicator color while generating map cache image
+     * Loading indicator color while generating map cache image or loading the map
      * Default color is default ProgressBar color. Only available in Android for now
      *
      */
-    cacheLoadingIndicatorColor: ColorPropType,
+    loadingIndicatorColor: ColorPropType,
 
     /**
      * If `false` the user won't be able to change the map region being displayed.

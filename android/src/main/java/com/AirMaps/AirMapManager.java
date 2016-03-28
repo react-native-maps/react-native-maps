@@ -152,22 +152,27 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.setCacheEnabled(cacheEnabled);
     }
 
-    @ReactProp(name="cacheLoadingBackgroundColor", customType="Color")
-    public void setCacheLoadingBackgroundColor(AirMapView view, @Nullable Integer cacheLoadingBackgroundColor) {
-        if (cacheLoadingBackgroundColor == null) {
+    @ReactProp(name="loadingEnabled", defaultBoolean = false)
+    public void setLoadingEnabled(AirMapView view, boolean loadingEnabled) {
+        view.enableMapLoading(loadingEnabled);
+    }
+
+    @ReactProp(name="loadingBackgroundColor", customType="Color")
+    public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer loadingBackgroundColor) {
+        if (loadingBackgroundColor == null) {
             view.mapLoadingLayout.setBackgroundColor(Color.TRANSPARENT);
         } else {
-            view.mapLoadingLayout.setBackgroundColor(cacheLoadingBackgroundColor);
+            view.mapLoadingLayout.setBackgroundColor(loadingBackgroundColor);
         }
     }
 
-    @ReactProp(name="cacheLoadingIndicatorColor", customType="Color")
-    public void setCacheLoadingIndicatorColor(AirMapView view, @Nullable Integer cacheLoadingIndicatorColor) {
+    @ReactProp(name="loadingIndicatorColor", customType="Color")
+    public void setLoadingIndicatorColor(AirMapView view, @Nullable Integer loadingIndicatorColor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ColorStateList stateList = ColorStateList.valueOf(Color.TRANSPARENT);
 
-            if (cacheLoadingIndicatorColor != null) {
-                stateList = ColorStateList.valueOf(cacheLoadingIndicatorColor);
+            if (loadingIndicatorColor != null) {
+                stateList = ColorStateList.valueOf(loadingIndicatorColor);
             }
 
             view.mapLoadingProgressBar.setProgressTintList(stateList);
@@ -176,8 +181,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         } else {
             int color = Color.TRANSPARENT;
 
-            if (cacheLoadingIndicatorColor != null) {
-                color = cacheLoadingIndicatorColor;
+            if (loadingIndicatorColor != null) {
+                color = loadingIndicatorColor;
             }
 
             PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
