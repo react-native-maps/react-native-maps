@@ -17,7 +17,8 @@ var AnimatedMarkers = require('./examples/AnimatedMarkers');
 var Callouts = require('./examples/Callouts');
 var Overlays = require('./examples/Overlays');
 var DefaultMarkers = require('./examples/DefaultMarkers');
-
+var CachedMap = require('./examples/CachedMap');
+var LoadingMap = require('./examples/LoadingMap');
 
 var App = React.createClass({
 
@@ -78,6 +79,8 @@ var App = React.createClass({
       [Callouts, 'Custom Callouts'],
       [Overlays, 'Circles, Polygons, and Polylines'],
       [DefaultMarkers, 'Default Markers'],
+      [CachedMap, 'Cached Map (Android Only)'],
+      [LoadingMap, 'Map with loading (Android Only)'],
     ]);
   },
 });
