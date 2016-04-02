@@ -19,8 +19,8 @@
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
 | `cacheEnabled` | `Boolean` | `false` | If `true` map will be cached and displayed as a image instead of being interactable, for performance usage.
 | `loadingEnabled` | `Boolean` | `false` | If `true` a loading indicator will show while the map is loading.
-| `loadingIndicatorColor` | `Color` | `null` | Sets loading indicator color if not null, null will be treated as transparent color.
-| `loadingBackgroundColor` | `Color` | `null` | Sets loading background color if not null, null will be treated as transparent color.
+| `loadingIndicatorColor` | `Color` | Gray (iOS), Theme Color (Android) | Sets loading indicator color, default to system color.
+| `loadingBackgroundColor` | `Color` | `white` | Sets loading background color
 
 
 
