@@ -79,8 +79,8 @@ var App = React.createClass({
       [Callouts, 'Custom Callouts'],
       [Overlays, 'Circles, Polygons, and Polylines'],
       [DefaultMarkers, 'Default Markers'],
-      [CachedMap, 'Cached Map (Android Only)'],
-      [LoadingMap, 'Map with loading (Android Only)'],
+      [CachedMap, 'Cached Map'],
+      [LoadingMap, 'Map with loading'],
     ]);
   },
 });

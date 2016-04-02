@@ -15,6 +15,7 @@
 #import "AIRMapPolyline.h"
 #import "AIRMapPolygon.h"
 #import "AIRMapCircle.h"
+#import <QuartzCore/QuartzCore.h>
 
 const CLLocationDegrees AIRMapDefaultSpan = 0.005;
 const NSTimeInterval AIRMapRegionChangeObserveInterval = 0.1;
@@ -28,6 +29,11 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 
 @end
 
+@interface AIRMap ()
+
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+
+@end
 
 @implementation AIRMap
 {
@@ -67,6 +73,23 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         // be identical to the built-in callout view (which has a private API)
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
+        
+        self.cacheImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        self.cacheImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        [self addSubview:self.cacheImageView];
+        self.cacheImageView.hidden = YES;
+        
+        self.loadingView = [[UIView alloc] initWithFrame:self.bounds];
+        self.loadingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.loadingView.backgroundColor = [UIColor whiteColor];
+        [self addSubview:self.loadingView];
+        self.loadingView.hidden = NO;
+        
+        self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [self.loadingView addSubview:self.activityIndicatorView];
+        self.activityIndicatorView.center = self.loadingView.center;
+        self.activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.activityIndicatorView startAnimating];
     }
     return self;
 }
@@ -204,6 +227,42 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     }
 }
 
+- (void)setCacheEnabled:(BOOL)cacheEnabled {
+    _cacheEnabled = cacheEnabled;
+    if (self.cacheEnabled && self.cacheImageView.image == nil) {
+        self.loadingView.hidden = NO;
+    }
+    else {
+        self.loadingView.hidden = YES;
+    }
+}
+
+- (void)setLoadingEnabled:(BOOL)loadingEnabled {
+    _loadingEnabled = loadingEnabled;
+    if (!self.hasShownInitialLoading) {
+        self.loadingView.hidden = !self.loadingEnabled;
+    }
+    else {
+        self.loadingView.hidden = YES;
+    }
+}
+
+- (UIColor *)loadingBackgroundColor {
+    return self.loadingView.backgroundColor;
+}
+
+- (void)setLoadingBackgroundColor:(UIColor *)loadingBackgroundColor {
+    self.loadingView.backgroundColor = loadingBackgroundColor;
+}
+
+- (UIColor *)loadingIndicatorColor {
+    return self.activityIndicatorView.color;
+}
+
+- (void)setLoadingIndicatorColor:(UIColor *)loadingIndicatorColor {
+    self.activityIndicatorView.color = loadingIndicatorColor;
+}
+
 // Include properties of MKMapView which are only available on iOS 9+
 // and check if their selector is available before calling super method.
 
@@ -247,6 +306,50 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     } else {
         return NO;
     }
+}
+
+- (void)cacheViewIfNeeded {
+    if (!self.cacheEnabled) {
+        self.cacheImageView.hidden = YES;
+        self.cacheImageView.image = nil;
+        for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+            gestureRecognizer.enabled = YES;
+        }
+        self.userInteractionEnabled = YES;
+    }
+    else {
+        self.cacheImageView.hidden = YES;
+        
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
+        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+        
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        
+        self.cacheImageView.image = image;
+        
+        self.cacheImageView.hidden = NO;
+        
+        for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+            gestureRecognizer.enabled = NO;
+        }
+        self.userInteractionEnabled = NO;
+    }
+}
+
+- (void)beginLoading {
+    if ((!self.hasShownInitialLoading && self.loadingEnabled) || (self.cacheEnabled && self.cacheImageView.image == nil)) {
+        self.loadingView.hidden = NO;
+    }
+    else {
+        self.loadingView.hidden = YES;
+    }
+}
+
+- (void)finishLoading {
+    self.hasShownInitialLoading = YES;
+    self.loadingView.hidden = YES;
 }
 
 @end
