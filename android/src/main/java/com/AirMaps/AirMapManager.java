@@ -166,7 +166,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @ReactProp(name="loadingBackgroundColor", customType="Color")
     public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer loadingBackgroundColor) {
         if (loadingBackgroundColor == null) {
-            view.mapLoadingLayout.setBackgroundColor(Color.TRANSPARENT);
+            view.mapLoadingLayout.setBackgroundColor(Color.White);
         } else {
             view.mapLoadingLayout.setBackgroundColor(loadingBackgroundColor);
         }
@@ -175,17 +175,21 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @ReactProp(name="loadingIndicatorColor", customType="Color")
     public void setLoadingIndicatorColor(AirMapView view, @Nullable Integer loadingIndicatorColor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ColorStateList stateList = ColorStateList.valueOf(Color.TRANSPARENT);
+            ColorStateList progressTintList = ThemeUtils.getThemeAttrColorStateList(view.getContext(), android.R.attr.progressTint);
+            ColorStateList secondaryProgressTintList = ThemeUtils.getThemeAttrColorStateList(view.getContext(), android.R.attr.secondaryProgressTint);
+            ColorStateList indeterminateTintList = ThemeUtils.getThemeAttrColorStateList(view.getContext(), android.R.attr.indeterminateTint);
 
             if (loadingIndicatorColor != null) {
-                stateList = ColorStateList.valueOf(loadingIndicatorColor);
+                progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+                secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+                indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
             }
 
-            view.mapLoadingProgressBar.setProgressTintList(stateList);
-            view.mapLoadingProgressBar.setSecondaryProgressTintList(stateList);
-            view.mapLoadingProgressBar.setIndeterminateTintList(stateList);
+            view.mapLoadingProgressBar.setProgressTintList(progressTintList);
+            view.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
+            view.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
         } else {
-            int color = Color.TRANSPARENT;
+            int color = ThemeUtils.getThemeAttrColor(view.getContext(), android.R.attr.color);
 
             if (loadingIndicatorColor != null) {
                 color = loadingIndicatorColor;
