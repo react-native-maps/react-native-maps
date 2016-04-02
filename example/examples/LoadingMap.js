@@ -66,7 +66,7 @@ var LoadingMap = React.createClass({
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>
-            <Text>Map with Loading (Android Only)</Text>
+            <Text>Map with Loading</Text>
           </View>
         </View>
       </View>

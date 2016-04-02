@@ -65,7 +65,7 @@ var CachedMap = React.createClass({
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>
-            <Text>Cached Map (Android Only)</Text>
+            <Text>Cached Map</Text>
           </View>
         </View>
       </View>
