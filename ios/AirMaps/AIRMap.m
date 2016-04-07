@@ -73,23 +73,6 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         // be identical to the built-in callout view (which has a private API)
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
-        
-        self.cacheImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        self.cacheImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        [self addSubview:self.cacheImageView];
-        self.cacheImageView.hidden = YES;
-        
-        self.loadingView = [[UIView alloc] initWithFrame:self.bounds];
-        self.loadingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        self.loadingView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:self.loadingView];
-        self.loadingView.hidden = NO;
-        
-        self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [self.loadingView addSubview:self.activityIndicatorView];
-        self.activityIndicatorView.center = self.loadingView.center;
-        self.activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        [self.activityIndicatorView startAnimating];
     }
     return self;
 }
@@ -232,9 +215,12 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     _cacheEnabled = cacheEnabled;
     if (self.cacheEnabled && self.cacheImageView.image == nil) {
         self.loadingView.hidden = NO;
+        [self.activityIndicatorView startAnimating];
     }
     else {
-        self.loadingView.hidden = YES;
+        if (_loadingView != nil) {
+            self.loadingView.hidden = YES;
+        }
     }
 }
 
@@ -244,7 +230,9 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         self.loadingView.hidden = !self.loadingEnabled;
     }
     else {
-        self.loadingView.hidden = YES;
+        if (_loadingView != nil) {
+            self.loadingView.hidden = YES;
+        }
     }
 }
 
@@ -311,8 +299,10 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 
 - (void)cacheViewIfNeeded {
     if (!self.cacheEnabled) {
-        self.cacheImageView.hidden = YES;
-        self.cacheImageView.image = nil;
+        if (_cacheImageView != nil) {
+            self.cacheImageView.hidden = YES;
+            self.cacheImageView.image = nil;
+        }
         for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
             gestureRecognizer.enabled = YES;
         }
@@ -342,15 +332,51 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 - (void)beginLoading {
     if ((!self.hasShownInitialLoading && self.loadingEnabled) || (self.cacheEnabled && self.cacheImageView.image == nil)) {
         self.loadingView.hidden = NO;
+        [self.activityIndicatorView startAnimating];
     }
     else {
-        self.loadingView.hidden = YES;
+        if (_loadingView != nil) {
+            self.loadingView.hidden = YES;
+        }
     }
 }
 
 - (void)finishLoading {
     self.hasShownInitialLoading = YES;
-    self.loadingView.hidden = YES;
+    if (_loadingView != nil) {
+        self.loadingView.hidden = YES;
+    }
+}
+
+- (UIActivityIndicatorView *)activityIndicatorView {
+    if (_activityIndicatorView == nil) {
+        _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _activityIndicatorView.center = self.loadingView.center;
+        _activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    }
+    [self.loadingView addSubview:_activityIndicatorView];
+    return _activityIndicatorView;
+}
+
+- (UIView *)loadingView {
+    if (_loadingView == nil) {
+        _loadingView = [[UIView alloc] initWithFrame:self.bounds];
+        _loadingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        _loadingView.backgroundColor = [UIColor whiteColor];
+        [self addSubview:_loadingView];
+        _loadingView.hidden = NO;
+    }
+    return _loadingView;
+}
+
+- (UIImageView *)cacheImageView {
+    if (_cacheImageView == nil) {
+        _cacheImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _cacheImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        [self addSubview:self.cacheImageView];
+        _cacheImageView.hidden = YES;
+    }
+    return _cacheImageView;
 }
 
 @end

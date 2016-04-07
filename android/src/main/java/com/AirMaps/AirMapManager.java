@@ -1,12 +1,7 @@
 package com.AirMaps;
 
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
-import android.os.Build;
-import android.support.v7.internal.widget.ThemeUtils;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
@@ -165,45 +160,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     @ReactProp(name="loadingBackgroundColor", customType="Color")
     public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer loadingBackgroundColor) {
-        if (loadingBackgroundColor == null) {
-            view.mapLoadingLayout.setBackgroundColor(Color.White);
-        } else {
-            view.mapLoadingLayout.setBackgroundColor(loadingBackgroundColor);
-        }
+        view.setLoadingBackgroundColor(loadingBackgroundColor);
     }
 
     @ReactProp(name="loadingIndicatorColor", customType="Color")
     public void setLoadingIndicatorColor(AirMapView view, @Nullable Integer loadingIndicatorColor) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ColorStateList progressTintList = ThemeUtils.getThemeAttrColorStateList(view.getContext(), android.R.attr.progressTint);
-            ColorStateList secondaryProgressTintList = ThemeUtils.getThemeAttrColorStateList(view.getContext(), android.R.attr.secondaryProgressTint);
-            ColorStateList indeterminateTintList = ThemeUtils.getThemeAttrColorStateList(view.getContext(), android.R.attr.indeterminateTint);
-
-            if (loadingIndicatorColor != null) {
-                progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-                secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-                indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
-            }
-
-            view.mapLoadingProgressBar.setProgressTintList(progressTintList);
-            view.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
-            view.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
-        } else {
-            int color = ThemeUtils.getThemeAttrColor(view.getContext(), android.R.attr.color);
-
-            if (loadingIndicatorColor != null) {
-                color = loadingIndicatorColor;
-            }
-
-            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-                mode = PorterDuff.Mode.MULTIPLY;
-            }
-            if (view.mapLoadingProgressBar.getIndeterminateDrawable() != null)
-                view.mapLoadingProgressBar.getIndeterminateDrawable().setColorFilter(color, mode);
-            if (view.mapLoadingProgressBar.getProgressDrawable() != null)
-                view.mapLoadingProgressBar.getProgressDrawable().setColorFilter(color, mode);
-        }
+        view.setLoadingIndicatorColor(loadingIndicatorColor);
     }
 
     @Override

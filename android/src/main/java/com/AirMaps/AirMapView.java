@@ -1,10 +1,13 @@
 package com.AirMaps;
 
-
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.support.v7.internal.widget.ThemeUtils;
 import android.os.Handler;
+import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.view.GestureDetector;
@@ -50,10 +53,12 @@ public class AirMapView
         OnMapReadyCallback
 {
     public GoogleMap map;
-    public ProgressBar mapLoadingProgressBar;
-    public RelativeLayout mapLoadingLayout;
-    public ImageView cacheImageView;
+    private ProgressBar mapLoadingProgressBar;
+    private RelativeLayout mapLoadingLayout;
+    private ImageView cacheImageView;
     private Boolean isMapLoaded = false;
+    private Integer loadingBackgroundColor = null;
+    private Integer loadingIndicatorColor = null;
 
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
@@ -115,26 +120,6 @@ public class AirMapView
         });
 
         eventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
-
-        this.mapLoadingLayout = new RelativeLayout(context);
-        this.mapLoadingLayout.setBackgroundColor(Color.LTGRAY);
-        this.addView(this.mapLoadingLayout,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                        ViewGroup.LayoutParams.FILL_PARENT));
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        this.mapLoadingProgressBar = new ProgressBar(context);
-        this.mapLoadingProgressBar.setIndeterminate(true);
-        this.mapLoadingLayout.addView(this.mapLoadingProgressBar, params);
-
-        this.mapLoadingLayout.setVisibility(View.INVISIBLE);
-
-
-        this.cacheImageView = new ImageView(context);
-        this.addView(this.cacheImageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        this.cacheImageView.setAlpha(0.0f);
     }
 
     @Override
@@ -303,7 +288,55 @@ public class AirMapView
 
     public void enableMapLoading(boolean loadingEnabled) {
         if (loadingEnabled && !this.isMapLoaded) {
-            this.mapLoadingLayout.setVisibility(View.VISIBLE);
+            this.getMapLoadingLayoutView().setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setLoadingBackgroundColor(Integer loadingBackgroundColor) {
+        this.loadingBackgroundColor = loadingBackgroundColor;
+
+        if (this.mapLoadingLayout != null) {
+            if (loadingBackgroundColor == null) {
+                this.mapLoadingLayout.setBackgroundColor(Color.WHITE);
+            } else {
+                this.mapLoadingLayout.setBackgroundColor(this.loadingBackgroundColor);
+            }
+        }
+    }
+
+    public void setLoadingIndicatorColor(Integer loadingIndicatorColor) {
+        this.loadingIndicatorColor = loadingIndicatorColor;
+        if (this.mapLoadingProgressBar != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ColorStateList progressTintList = ThemeUtils.getThemeAttrColorStateList(getContext(), android.R.attr.progressTint);
+                ColorStateList secondaryProgressTintList = ThemeUtils.getThemeAttrColorStateList(getContext(), android.R.attr.secondaryProgressTint);
+                ColorStateList indeterminateTintList = ThemeUtils.getThemeAttrColorStateList(getContext(), android.R.attr.indeterminateTint);
+
+                if (loadingIndicatorColor != null) {
+                    progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+                    secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+                    indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
+                }
+
+                this.mapLoadingProgressBar.setProgressTintList(progressTintList);
+                this.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
+                this.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
+            } else {
+                int color = ThemeUtils.getThemeAttrColor(getContext(), android.R.attr.color);
+
+                if (loadingIndicatorColor != null) {
+                    color = loadingIndicatorColor;
+                }
+
+                PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                    mode = PorterDuff.Mode.MULTIPLY;
+                }
+                if (this.mapLoadingProgressBar.getIndeterminateDrawable() != null)
+                    this.mapLoadingProgressBar.getIndeterminateDrawable().setColorFilter(color, mode);
+                if (this.mapLoadingProgressBar.getProgressDrawable() != null)
+                    this.mapLoadingProgressBar.getProgressDrawable().setColorFilter(color, mode);
+            }
         }
     }
 
@@ -527,25 +560,83 @@ public class AirMapView
         manager.pushEvent(markerView, "onDragEnd", event);
     }
 
+    private ProgressBar getMapLoadingProgressBar() {
+        if (this.mapLoadingProgressBar == null) {
+            this.mapLoadingProgressBar = new ProgressBar(getContext());
+            this.mapLoadingProgressBar.setIndeterminate(true);
+        }
+        this.setLoadingIndicatorColor(this.loadingIndicatorColor);
+        return this.mapLoadingProgressBar;
+    }
+
+    private RelativeLayout getMapLoadingLayoutView() {
+        if (this.mapLoadingLayout == null) {
+            this.mapLoadingLayout = new RelativeLayout(getContext());
+            this.mapLoadingLayout.setBackgroundColor(Color.LTGRAY);
+            this.addView(this.mapLoadingLayout,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            this.mapLoadingLayout.addView(this.getMapLoadingProgressBar(), params);
+
+            this.mapLoadingLayout.setVisibility(View.INVISIBLE);
+        }
+        this.setLoadingBackgroundColor(this.loadingBackgroundColor);
+        return this.mapLoadingLayout;
+    }
+    
+    private ImageView getCacheImageView() {
+        if (this.cacheImageView == null) {
+            this.cacheImageView = new ImageView(getContext());
+            this.addView(this.cacheImageView,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            this.cacheImageView.setVisibility(View.INVISIBLE);
+        }
+        return this.cacheImageView;
+    }
+
+    private void removeCacheImageView() {
+        if (this.cacheImageView != null) {
+            ((ViewGroup)this.cacheImageView.getParent()).removeView(this.cacheImageView);
+            this.cacheImageView = null;
+        }
+    }
+
+    private void removeMapLoadingProgressBar() {
+        if (this.mapLoadingProgressBar != null) {
+            ((ViewGroup)this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
+            this.mapLoadingProgressBar = null;
+        }
+    }
+
+    private void removeMapLoadingLayoutView() {
+        this.removeMapLoadingProgressBar();
+        if (this.mapLoadingLayout != null) {
+            ((ViewGroup)this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
+            this.mapLoadingLayout = null;
+        }
+    }
+
     private void cacheView() {
         if (this.cacheEnabled) {
-            this.cacheImageView.setAlpha(0.0f);
-            this.mapLoadingLayout.setVisibility(View.VISIBLE);
+            final ImageView cacheImageView = this.getCacheImageView();
+            final RelativeLayout mapLoadingLayout = this.getMapLoadingLayoutView();
+            cacheImageView.setVisibility(View.INVISIBLE);
+            mapLoadingLayout.setVisibility(View.VISIBLE);
             if (this.isMapLoaded) {
                 this.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
                     @Override public void onSnapshotReady(Bitmap bitmap) {
-                        AirMapView.this.cacheImageView.setImageBitmap(bitmap);
-                        AirMapView.this.cacheImageView.setAlpha(1.0f);
-                        AirMapView.this.mapLoadingLayout.setVisibility(View.INVISIBLE);
+                        cacheImageView.setImageBitmap(bitmap);
+                        cacheImageView.setVisibility(View.VISIBLE);
+                        mapLoadingLayout.setVisibility(View.INVISIBLE);
                     }
                 });
             }
         }
         else {
-            this.cacheImageView.setAlpha(0.0f);
-            if (this.isMapLoaded) {
-                this.mapLoadingLayout.setVisibility(View.INVISIBLE);
-            }
+            this.removeCacheImageView();
+            this.removeMapLoadingLayoutView();
         }
     }
 }
