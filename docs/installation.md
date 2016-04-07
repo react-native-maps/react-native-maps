@@ -37,11 +37,13 @@ or do it manually as described below:
      project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
    ```
 
-2. in `android/app/build.gradle` add:
+2. in `android/app/build.gradle` add the following lines. If your project requires a different version of the play services API, you may need to, for example, downgrade to 8.3.0.
    ```
    dependencies {
        ...
        compile project(':react-native-maps')
+       compile 'com.google.android.gms:play-services-base:8.4.0'
+       compile 'com.google.android.gms:play-services-maps:8.4.0'
    }
    ```
 
