@@ -21,9 +21,6 @@
     "mapkit"
   ],
   "dependencies": {},
-  "peerDependencies": {
-    "react-native": "*"
-  },
   "devDependencies": {
     "react-native": "latest"
   }
