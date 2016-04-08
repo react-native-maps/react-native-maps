@@ -84,6 +84,13 @@ var MapView = React.createClass({
     scrollEnabled: PropTypes.bool,
 
     /**
+     * If `false` the user won't be able to adjust the camera’s pitch angle.
+     * Default value is `true`.
+     *
+     */
+    pitchEnabled: PropTypes.bool,
+
+    /**
      * A Boolean indicating whether the map shows scale information.
      * Default value is `false`
      *
