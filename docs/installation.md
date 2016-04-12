@@ -16,6 +16,12 @@ or do it manually as described below:
 
 ## iOS
 
+### Cocoapods
+To install using Cocoapods, simply insert the following line into your `Podfile` and run `pod install`
+
+`pod 'react-native-maps', :path => '../node_modules/react-native-maps'`
+
+### Manually
 1. Open your project in XCode, right click on `Libraries` and click `Add
    Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
 2. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
