@@ -1,4 +1,3 @@
-
 # Installation
 
 First, download the library from npm:
@@ -121,3 +120,76 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
   ```
 
 5. Ensure that you have [Google Play Services installed](http://stackoverflow.com/a/20137324/1424349)
+
+**Troubleshooting**
+
+If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react-native-maps/issues/118), [#176](https://github.com/lelandrichardson/react-native-maps/issues/176)) try the following lines :
+
+**On iOS :**  
+
+ You have to link dependencies with rnpm and re-run the build :   
+1. `rnpm link`  
+2. `react-native run-ios`
+
+**On Android :**  
+
+1. Run "android" and make sure every packages is updated.
+2.  If not installed yet, you have to install the following packages :
+    - Extras / Google Play services
+    - Extras / Google Repository
+    - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 12
+3. Check that the following files contains this lines :
+   - In `android/settings.gradle` :  
+   ```
+   include ':app', ':react-native-maps'
+   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+   ```
+   
+   - In `android/app/build.gradle` :
+   ```
+   dependencies {
+      ...
+      compile project(':react-native-maps')
+   }
+   ```
+   
+   - In `android/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` :
+   ```
+   @Override
+   protected List<ReactPackage> getPackages() {
+     return Arrays.<ReactPackage>asList(
+       new MainReactPackage(),
+       new AirPackage() <-- THIS
+     );
+   }
+   ```
+4. Generate your SHA1 key :  
+   `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
+
+5. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&hl=fr&pli=1) and select your project, or create one.  
+In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
+Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
+
+6. Copy and paste your key generated before in `android/app/src/main/AndroidManifest.xml` between the `application` tag :
+   ```xml
+   <application
+     android:allowBackup="true"
+     android:label="@string/app_name"
+     android:icon="@mipmap/ic_launcher"
+     android:theme="@style/AppTheme">
+       <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+       <meta-data
+         android:name="com.google.android.geo.API_KEY"
+         android:value="{{Your Google maps API Key Here}}"/>
+   </application>
+   ```
+
+7. Clean the cache :   
+   `watchman watch-del-all`  
+   `npm cache clean`
+
+8. When starting emulator, make sure you have enabled `Wipe user data`.
+
+9. Run `react-native run-android`
+
+10. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&hl=fr&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
