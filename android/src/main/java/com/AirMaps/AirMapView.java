@@ -47,6 +47,7 @@ public class AirMapView
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
     private boolean isTouchDown = false;
+    private boolean handlePanDrag = false;
 
     private ArrayList<AirMapFeature> features = new ArrayList<>();
     private HashMap<Marker, AirMapMarker> markerMap = new HashMap<>();
@@ -96,7 +97,9 @@ public class AirMapView
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                onPanDrag(e2);
+                if (handlePanDrag) {
+                    onPanDrag(e2);
+                }
                 view.startMonitoringRegion();
                 return false;
             }
@@ -255,6 +258,10 @@ public class AirMapView
     public void setShowsUserLocation(boolean showUserLocation) {
         this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
         map.setMyLocationEnabled(showUserLocation);
+    }
+
+    public void setHandlePanDrag(boolean handlePanDrag) {
+        this.handlePanDrag = handlePanDrag;
     }
 
     public void addFeature(View child, int index) {
