@@ -166,7 +166,7 @@ If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react
 4. Generate your SHA1 key :  
    `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
 
-5. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&hl=fr&pli=1) and select your project, or create one.  
+5. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and select your project, or create one.  
 In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
 Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
 
@@ -192,4 +192,4 @@ Create a new key by clicking on `Create credentials -> API Key -> Android Key`, 
 
 9. Run `react-native run-android`
 
-10. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&hl=fr&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
+10. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
