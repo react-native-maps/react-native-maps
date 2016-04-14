@@ -190,7 +190,7 @@ public class AirMapMarker extends AirMapFeature {
         if (uri == null) {
             iconBitmapDescriptor = null;
             update();
-        } else if (uri.startsWith("http://") || uri.startsWith("https://")) {
+        } else if (uri.startsWith("http://") || uri.startsWith("https://") || uri.startsWith("file://")) {
             ImageRequest imageRequest = ImageRequestBuilder
                     .newBuilderWithSource(Uri.parse(uri))
                     .build();
