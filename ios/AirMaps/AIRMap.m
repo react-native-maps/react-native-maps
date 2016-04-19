@@ -88,6 +88,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         ((AIRMapPolygon *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
+        ((AIRMapCircle *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
