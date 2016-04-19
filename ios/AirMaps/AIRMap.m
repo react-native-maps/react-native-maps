@@ -298,34 +298,38 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 }
 
 - (void)cacheViewIfNeeded {
-    if (!self.cacheEnabled) {
-        if (_cacheImageView != nil) {
-            self.cacheImageView.hidden = YES;
+    if (self.hasShownInitialLoading) {
+        if (!self.cacheEnabled) {
+            if (_cacheImageView != nil) {
+                self.cacheImageView.hidden = YES;
+                self.cacheImageView.image = nil;
+            }
+            for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+                gestureRecognizer.enabled = YES;
+            }
+            self.userInteractionEnabled = YES;
+        }
+        else {
             self.cacheImageView.image = nil;
+            self.cacheImageView.hidden = YES;
+            
+            for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+                gestureRecognizer.enabled = NO;
+            }
+            self.userInteractionEnabled = NO;
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.cacheImageView.image = nil;
+                self.cacheImageView.hidden = YES;
+                UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
+                [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+                UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                
+                self.cacheImageView.image = image;
+                self.cacheImageView.hidden = NO;
+            });
         }
-        for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
-            gestureRecognizer.enabled = YES;
-        }
-        self.userInteractionEnabled = YES;
-    }
-    else {
-        self.cacheImageView.hidden = YES;
-        
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
-        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-        
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        
-        UIGraphicsEndImageContext();
-        
-        self.cacheImageView.image = image;
-        
-        self.cacheImageView.hidden = NO;
-        
-        for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
-            gestureRecognizer.enabled = NO;
-        }
-        self.userInteractionEnabled = NO;
     }
 }
 
@@ -346,6 +350,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     if (_loadingView != nil) {
         self.loadingView.hidden = YES;
     }
+    [self cacheViewIfNeeded];
 }
 
 - (UIActivityIndicatorView *)activityIndicatorView {
@@ -372,11 +377,17 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 - (UIImageView *)cacheImageView {
     if (_cacheImageView == nil) {
         _cacheImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _cacheImageView.contentMode = UIViewContentModeCenter;
         _cacheImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         [self addSubview:self.cacheImageView];
         _cacheImageView.hidden = YES;
     }
     return _cacheImageView;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self cacheViewIfNeeded];
 }
 
 @end

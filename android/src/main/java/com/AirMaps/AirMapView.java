@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.View.OnLayoutChangeListener;
 
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -77,6 +78,7 @@ public class AirMapView
     private AirMapManager manager;
     private LifecycleEventListener lifecycleListener;
     private boolean paused = false;
+    private OnLayoutChangeListener onLayoutChangeListener;
 
     final EventDispatcher eventDispatcher;
 
@@ -118,6 +120,16 @@ public class AirMapView
                 return false;
             }
         });
+
+        onLayoutChangeListener = new OnLayoutChangeListener() {
+            @Override public void onLayoutChange(View v, int left, int top, int right, int bottom,
+                int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (!AirMapView.this.paused) {
+                    AirMapView.this.cacheView();
+                }
+            }
+        };
+        this.addOnLayoutChangeListener(this.onLayoutChangeListener);
 
         eventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
