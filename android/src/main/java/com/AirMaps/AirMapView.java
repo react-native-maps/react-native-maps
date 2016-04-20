@@ -648,7 +648,9 @@ public class AirMapView
         }
         else {
             this.removeCacheImageView();
-            this.removeMapLoadingLayoutView();
+            if (this.isMapLoaded) {
+                this.removeMapLoadingLayoutView();
+            }
         }
     }
 }
