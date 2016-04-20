@@ -119,7 +119,9 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
   </application>
   ```
 
-5. Ensure that you have [Google Play Services installed](http://stackoverflow.com/a/20137324/1424349)
+5. Ensure that you have Google Play Services installed.  If you're using using Geny Motion there's help [here](http://stackoverflow.com/a/20137324/1424349).
+On a physical device you need to use the Google app and search for 'Google Play Services'. There will be a link that takes you to the play store and from there you'll
+see a button to update it (do not search within the Play Store!).
 
 **Troubleshooting**
 
