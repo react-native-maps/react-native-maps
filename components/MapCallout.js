@@ -1,12 +1,16 @@
 
-var React = require('react-native');
+var React = require('react');
+var {
+  PropTypes,
+} = React;
+
+var ReactNative = require('react-native');
 var {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
   StyleSheet,
-  PropTypes,
-} = React;
+} = ReactNative;
 
 var MapCallout = React.createClass({
   mixins: [NativeMethodsMixin],

@@ -1,6 +1,10 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var {
+  PropTypes,
+} = React;
+var ReactNative = require('react-native');
 var {
   EdgeInsetsPropType,
   NativeMethodsMixin,
@@ -10,8 +14,7 @@ var {
   Animated,
   requireNativeComponent,
   NativeModules,
-  PropTypes,
-} = React;
+} = ReactNative;
 
 var MapMarker = require('./MapMarker');
 var MapPolyline = require('./MapPolyline');
@@ -336,7 +339,7 @@ var MapView = React.createClass({
   },
 
   _getHandle: function() {
-    return React.findNodeHandle(this.refs.map);
+    return ReactNative.findNodeHandle(this.refs.map);
   },
 
   _runCommand: function (name, args) {
