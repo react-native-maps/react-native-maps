@@ -119,7 +119,9 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
   </application>
   ```
 
-5. Ensure that you have [Google Play Services installed](http://stackoverflow.com/a/20137324/1424349)
+5. ensure that you have Google Play Services installed:
+  * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).
+  * For a physical device you need to search on Google 'Google Play Services'. There will be a link that takes you to the play store and from there you will see a button to update it (do not search within the Play Store).
 
 **Troubleshooting**
 
