@@ -44,7 +44,7 @@
 | Method Name | Arguments | Notes
 |---|---|---|
 | `animateToRegion` | `region: Region`, `duration: Number` | 
-| `animateToCoordinate` | `region: Coordinate`, `duration: Number` | 
+| `animateToCoordinate` | `Coordinate` | 
 | `fitToElements` | `animated: Boolean` | 
 
 
