@@ -335,6 +335,10 @@ var MapView = React.createClass({
     this._runCommand('fitToElements', [animated]);
   },
 
+  fitToSuppliedMarkers: function(markers, animated) {
+    this._runCommand('fitToSuppliedMarkers', [markers, animated]);
+  },
+
   _getHandle: function() {
     return React.findNodeHandle(this.refs.map);
   },
