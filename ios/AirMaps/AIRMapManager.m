@@ -103,7 +103,6 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
     view.ignoreRegionChanges = originalIgnore;
 }
 
-
 #pragma mark exported MapView methods
 
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
@@ -157,6 +156,31 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
+                  markers:(nonnull NSArray *)markers
+                  animated:(BOOL)animated)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+            // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
+            id annotations = mapView.annotations;
+
+            NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                AIRMapMarker *marker = (AIRMapMarker *)evaluatedObject;
+                return [markers containsObject:marker.identifier];
+            }];
+
+            NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
+
+            [mapView showAnnotations:filteredMarkers animated:animated];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         withWidth:(nonnull NSNumber *)width
         withHeight:(nonnull NSNumber *)height
@@ -177,9 +201,7 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
 
             MKMapSnapshotter *snapshotter = [[MKMapSnapshotter alloc] initWithOptions:options];
 
-
             [self takeMapSnapshot:mapView withSnapshotter:snapshotter withCallback:callback];
-
         }
     }];
 }
@@ -194,47 +216,47 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
 
     [snapshotter startWithQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
               completionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
-                  if (error) {
-                      callback(@[error]);
-                      return;
-                  }
-                  MKAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
+        if (error) {
+            callback(@[error]);
+            return;
+        }
+        MKAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
 
-                  UIImage *image = snapshot.image;
-                  UIGraphicsBeginImageContextWithOptions(image.size, YES, image.scale);
-                  {
-                      [image drawAtPoint:CGPointMake(0.0f, 0.0f)];
+        UIImage *image = snapshot.image;
+        UIGraphicsBeginImageContextWithOptions(image.size, YES, image.scale);
+        {
+            [image drawAtPoint:CGPointMake(0.0f, 0.0f)];
 
-                      CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
+            CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
 
-                      for (id <MKAnnotation> annotation in mapView.annotations) {
-                          CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
+            for (id <MKAnnotation> annotation in mapView.annotations) {
+                CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
 
-                          MKAnnotationView* anView = [mapView viewForAnnotation: annotation];
+                MKAnnotationView* anView = [mapView viewForAnnotation: annotation];
 
-                          if (anView){
-                              pin = anView;
-                          }
+                if (anView){
+                    pin = anView;
+                }
 
-                          if (CGRectContainsPoint(rect, point)) {
-                              point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
-                              point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
-                              [pin.image drawAtPoint:point];
-                          }
-                      }
+                if (CGRectContainsPoint(rect, point)) {
+                    point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
+                    point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
+                    [pin.image drawAtPoint:point];
+                }
+            }
 
-                      UIImage *compositeImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIImage *compositeImage = UIGraphicsGetImageFromCurrentImageContext();
 
-                      NSData *data = UIImagePNGRepresentation(compositeImage);
-                      [data writeToFile:filePath atomically:YES];
-                      NSDictionary *snapshotData = @{
-                                                     @"uri": filePath,
-                                                     @"data": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]
-                                                     };
-                      callback(@[[NSNull null], snapshotData]);
-                  }
-                  UIGraphicsEndImageContext();
-              }];
+            NSData *data = UIImagePNGRepresentation(compositeImage);
+            [data writeToFile:filePath atomically:YES];
+            NSDictionary *snapshotData = @{
+                                           @"uri": filePath,
+                                           @"data": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]
+                                           };
+            callback(@[[NSNull null], snapshotData]);
+        }
+        UIGraphicsEndImageContext();
+    }];
 }
 
 #pragma mark Gesture Recognizer Handlers
@@ -278,7 +300,6 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
 
 }
 
-
 - (void)handleMapLongPress:(UITapGestureRecognizer *)recognizer {
 
     // NOTE: android only does the equivalent of "began", so we only send in this case
@@ -320,8 +341,6 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
 
 
 #pragma mark Annotation Stuff
-
-
 
 - (void)mapView:(AIRMap *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {

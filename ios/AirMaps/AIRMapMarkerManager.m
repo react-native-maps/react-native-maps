@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE()
     return marker;
 }
 
-//RCT_EXPORT_VIEW_PROPERTY(identifier, NSString)
+RCT_EXPORT_VIEW_PROPERTY(identifier, NSString)
 //RCT_EXPORT_VIEW_PROPERTY(reuseIdentifier, NSString)
 RCT_EXPORT_VIEW_PROPERTY(title, NSString)
 RCT_REMAP_VIEW_PROPERTY(description, subtitle, NSString)
