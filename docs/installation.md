@@ -50,7 +50,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
    }
    ```
 
-3. and finally, in `android/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
+3. and finally, in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
 
     **Newer versions of React Native**
       ```
