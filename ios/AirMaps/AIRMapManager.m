@@ -147,6 +147,92 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
+        withWidth:(nonnull NSNumber *)width
+        withHeight:(nonnull NSNumber *)height
+        withCenter:(CLLocationCoordinate2D)centerPoint
+        withCallback:(RCTResponseSenderBlock)callback)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+            MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
+            MKCoordinateRegion region = mapView.region;
+
+            if (CLLocationCoordinate2DIsValid(centerPoint)) {
+                region.center.latitude = centerPoint.latitude;
+                region.center.longitude = centerPoint.longitude;
+            }
+
+            options.region = region;
+            options.size = CGSizeMake([width floatValue], [height floatValue]);
+            options.scale = [[UIScreen mainScreen] scale];
+
+            MKMapSnapshotter *snapshotter = [[MKMapSnapshotter alloc] initWithOptions:options];
+
+
+            [self takeMapSnapshot:mapView withSnapshotter:snapshotter withCallback:callback];
+
+        }
+    }];
+}
+
+#pragma mark Take Snapshot
+- (void)takeMapSnapshot:(AIRMap *)mapView
+        withSnapshotter:(MKMapSnapshotter *) snapshotter
+        withCallback:(RCTResponseSenderBlock) callback {
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSString *pathComponent = [NSString stringWithFormat:@"Documents/snapshot-%.20lf.png", timeStamp];
+    NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent: pathComponent];
+
+    [snapshotter startWithQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+              completionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
+                  if (error) {
+                      callback(@[error]);
+                      return;
+                  }
+                  MKAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
+
+                  UIImage *image = snapshot.image;
+                  UIGraphicsBeginImageContextWithOptions(image.size, YES, image.scale);
+                  {
+                      [image drawAtPoint:CGPointMake(0.0f, 0.0f)];
+
+                      CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
+
+                      for (id <MKAnnotation> annotation in mapView.annotations) {
+                          CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
+
+                          MKAnnotationView* anView = [mapView viewForAnnotation: annotation];
+
+                          if (anView){
+                              pin = anView;
+                          }
+
+                          if (CGRectContainsPoint(rect, point)) {
+                              point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
+                              point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
+                              [pin.image drawAtPoint:point];
+                          }
+                      }
+
+                      UIImage *compositeImage = UIGraphicsGetImageFromCurrentImageContext();
+
+                      NSData *data = UIImagePNGRepresentation(compositeImage);
+                      [data writeToFile:filePath atomically:YES];
+                      NSDictionary *snapshotData = @{
+                                                     @"uri": filePath,
+                                                     @"data": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]
+                                                     };
+                      callback(@[[NSNull null], snapshotData]);
+                  }
+                  UIGraphicsEndImageContext();
+              }];
+}
+
 #pragma mark Gesture Recognizer Handlers
 
 - (void)handleMapTap:(UITapGestureRecognizer *)recognizer {
@@ -247,7 +333,7 @@ static int kDragCenterContext;
     AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
 
     BOOL isPinView = [view isKindOfClass:[MKPinAnnotationView class]];
-    
+
     id event = @{
                  @"id": marker.identifier ?: @"unknown",
                  @"coordinate": @{
@@ -255,7 +341,7 @@ static int kDragCenterContext;
                          @"longitude": @(marker.coordinate.longitude)
                          }
                  };
-    
+
     if (newState == MKAnnotationViewDragStateEnding || newState == MKAnnotationViewDragStateCanceling) {
         if (!isPinView) {
             [view setDragState:MKAnnotationViewDragStateNone animated:NO];
