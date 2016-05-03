@@ -150,7 +150,7 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         withWidth:(nonnull NSNumber *)width
         withHeight:(nonnull NSNumber *)height
-        withCenter:(CLLocationCoordinate2D)centerPoint
+        withRegion:(MKCoordinateRegion)region
         withCallback:(RCTResponseSenderBlock)callback)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -160,12 +160,6 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         } else {
             AIRMap *mapView = (AIRMap *)view;
             MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
-            MKCoordinateRegion region = mapView.region;
-
-            if (CLLocationCoordinate2DIsValid(centerPoint)) {
-                region.center.latitude = centerPoint.latitude;
-                region.center.longitude = centerPoint.longitude;
-            }
 
             options.region = region;
             options.size = CGSizeMake([width floatValue], [height floatValue]);

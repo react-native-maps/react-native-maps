@@ -29,7 +29,9 @@ var MarkerTypes = React.createClass({
   takeSnapshot() {
     this.refs.map.takeSnapshot(300, 300, {
       latitude: LATITUDE - SPACE,
-      longitude: LONGITUDE - SPACE
+      longitude: LONGITUDE - SPACE,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01 * ASPECT_RATIO
     }, (err, data) => {
       if (err) console.log(err)
       this.setState({ mapSnapshot: data })

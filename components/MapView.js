@@ -335,10 +335,11 @@ var MapView = React.createClass({
     this._runCommand('fitToElements', [animated]);
   },
 
-  takeSnapshot: function (width, height, centerPoint, callback) {
-    const region = this.props.region || this.props.initialRegion;
-    centerPoint = centerPoint || { latitude: region.latitude, longitude: region.longitude }
-    this._runCommand('takeSnapshot', [width, height, centerPoint, callback]);
+  takeSnapshot: function (width, height, region, callback) {
+    if (!region) {
+      region = this.props.region || this.props.initialRegion;
+    }
+    this._runCommand('takeSnapshot', [width, height, region, callback]);
   },
 
   _getHandle: function() {
