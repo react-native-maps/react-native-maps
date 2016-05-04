@@ -49,16 +49,16 @@ var FocusOnMarkers = React.createClass({
       },
     }
   },
-  focusMap(markers) {
+  focusMap(markers, animated) {
     console.log("Markers received to populate map: " + markers);
-    this.refs.map.fitToSuppliedMarkers(markers, true);
+    this.refs.map.fitToSuppliedMarkers(markers, animated);
   },
   focus1() {
     setTimeout(() => {
       this.focusMap([
         markerIDs[1],
         markerIDs[4]
-      ]);
+      ], true);
     }, timeout);
 
     setTimeout(this.focus2, timeout);
@@ -68,7 +68,7 @@ var FocusOnMarkers = React.createClass({
       this.focusMap([
         markerIDs[2],
         markerIDs[3]
-      ]);
+      ], false);
     }, timeout);
     setTimeout(this.focus3, timeout);
   },
@@ -77,13 +77,16 @@ var FocusOnMarkers = React.createClass({
       this.focusMap([
         markerIDs[1],
         markerIDs[2]
-      ]);
+      ], false);
     }, timeout);
     setTimeout(this.focus1, timeout);
   },
   componentDidMount() {
     setTimeout(() => {
-      this.focusMap([markerIDs[0], markerIDs[3]]);
+      this.focusMap([
+        markerIDs[0],
+        markerIDs[3]
+      ], true);
     }, timeout)
     setTimeout(this.focus1, timeout);
   },
