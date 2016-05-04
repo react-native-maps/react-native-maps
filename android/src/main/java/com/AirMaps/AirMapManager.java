@@ -31,6 +31,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     public static final int ANIMATE_TO_REGION = 1;
     public static final int ANIMATE_TO_COORDINATE = 2;
     public static final int FIT_TO_ELEMENTS = 3;
+    public static final int FIT_TO_SUPPLIED_MARKERS = 4;
 
     private Map<String, Integer> MAP_TYPES = MapBuilder.of(
         "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -78,12 +79,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
         return view;
     }
-    
+
     @Override
     public void onDropViewInstance(AirMapView view) {
         view.doDestroy();
         super.onDropViewInstance(view);
-    }    
+    }
 
     private void emitMapError (String message, String type) {
         WritableMap error = Arguments.createMap();
@@ -186,6 +187,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             case FIT_TO_ELEMENTS:
                 view.fitToElements(args.getBoolean(0));
                 break;
+
+            case FIT_TO_SUPPLIED_MARKERS:
+                view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
+                break;
         }
     }
 
@@ -215,7 +220,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         return MapBuilder.of(
             "animateToRegion", ANIMATE_TO_REGION,
             "animateToCoordinate", ANIMATE_TO_COORDINATE,
-            "fitToElements", FIT_TO_ELEMENTS
+            "fitToElements", FIT_TO_ELEMENTS,
+            "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS
         );
     }
 

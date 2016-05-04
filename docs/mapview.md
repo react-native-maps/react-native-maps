@@ -43,9 +43,10 @@
 
 | Method Name | Arguments | Notes
 |---|---|---|
-| `animateToRegion` | `region: Region`, `duration: Number` | 
-| `animateToCoordinate` | `region: Coordinate`, `duration: Number` | 
-| `fitToElements` | `animated: Boolean` | 
+| `animateToRegion` | `region: Region`, `duration: Number` |
+| `animateToCoordinate` | `region: Coordinate`, `duration: Number` |
+| `fitToElements` | `animated: Boolean` |
+| `fitToSpecifiedMarkers` | `markerIDs: String[]` |
 
 
 
