@@ -14,6 +14,7 @@
 | `anchor` | `Point` |  | Sets the anchor point for the marker.<br/><br/> The anchor specifies the point in the icon image that is anchored to the marker's position on the Earth's surface.<br/><br/> The anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0], where (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner. The anchoring point in a W x H image is the nearest discrete grid point in a (W + 1) x (H + 1) grid, obtained by scaling the then rounding. For example, in a 4 x 2 image, the anchor point (0.7, 0.6) resolves to the grid point at (3, 1).<br/><br/> For ios, see the `centerOffset` prop.
 | `calloutAnchor` | `Point` |  | Specifies the point in the marker image at which to anchor the callout when it is displayed. This is specified in the same coordinate system as the anchor. See the `anchor` prop for more details.<br/><br/> The default is the top middle of the image.<br/><br/> For ios, see the `calloutOffset` prop.
 | `flat` | `Boolean` |  | Sets whether this marker should be flat against the map true or a billboard facing the camera false.
+| `identifier` | `String` |  | An identifier used to reference this marker at a later date.
 
 
 ## Events

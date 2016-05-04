@@ -20,8 +20,7 @@ var Callouts = require('./examples/Callouts');
 var Overlays = require('./examples/Overlays');
 var DefaultMarkers = require('./examples/DefaultMarkers');
 var TakeSnapshot = require('./examples/TakeSnapshot');
-
-
+var FocusOnMarkers = require('./examples/FocusOnMarkers')
 var App = React.createClass({
 
   getInitialState() {
@@ -83,6 +82,7 @@ var App = React.createClass({
       [Overlays, 'Circles, Polygons, and Polylines'],
       [DefaultMarkers, 'Default Markers'],
       [TakeSnapshot, 'Take Snapshot'],
+      [FocusOnMarkers, 'Focus Map On Markers'],
     ]);
   },
 });

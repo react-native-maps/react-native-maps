@@ -40,6 +40,11 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         view.setCoordinate(map);
     }
 
+    @ReactProp(name = "identifier")
+    public void setIdentifier(AirMapMarker view, String identifier) {
+        view.setIdentifier(identifier);
+    }
+
     @ReactProp(name = "title")
     public void setTitle(AirMapMarker view, String title) {
         view.setTitle(title);

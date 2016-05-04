@@ -11,6 +11,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -396,6 +398,33 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 builder.include(marker.getPosition());
             }
             // TODO(lmr): may want to include shapes / etc.
+        }
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+        if (animated) {
+            startMonitoringRegion();
+            map.animateCamera(cu);
+        } else {
+            map.moveCamera(cu);
+        }
+    }
+
+    public void fitToSuppliedMarkers(ReadableArray markerIDsArray, boolean animated) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        String[] markerIDs = new String[markerIDsArray.size()];
+        for (int i = 0; i < markerIDsArray.size(); i++) {
+            markerIDs[i] = markerIDsArray.getString(i);
+        }
+
+        for (AirMapFeature feature : features) {
+            if (feature instanceof AirMapMarker) {
+                String identifier = ((AirMapMarker)feature).getIdentifier();
+                Marker marker = (Marker)feature.getFeature();
+                if (Arrays.asList(markerIDs).contains(identifier)) {
+                    builder.include(marker.getPosition());
+                }
+            }
         }
         LatLngBounds bounds = builder.build();
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);

@@ -241,6 +241,12 @@ Markers are draggable, and emit continuous drag events to update other UI during
 ![](http://i.giphy.com/l2JImnZxdv1WbpQfC.gif) ![](http://i.giphy.com/l2JIhv4Jx6Ugx1EGI.gif)
 
 
+### Zoom to Specified Markers
+
+Pass an array of marker identifiers to have the map re-focus.
+
+![](http://i.giphy.com/3o7qEbOQnO0yoXqKJ2.gif) ![](http://i.giphy.com/26FxDwUqWKglEcGZi.gif)
+
 ## Component API
 
 [`<MapView />` Component API](docs/mapview.md)
