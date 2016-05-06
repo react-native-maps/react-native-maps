@@ -14,6 +14,12 @@ our best to stay compatible with older versions as much that is practical, and t
 of this requirement is set to `"react-native": "*"` explicitly for this reason. If you are using 
 an older version of React Native with this module though, some features may be buggy.
 
+### Note about React requires
+
+Since react-native 0.25.0, `React` should be required from `node_modules`.
+React Native versions from 0.18 should be working out of the box, for lower
+versions you should add `react` as a dependency in your `package.json`.
+
 ## General Usage
 
 ```js
