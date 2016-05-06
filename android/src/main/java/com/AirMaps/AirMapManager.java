@@ -45,18 +45,21 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     private AirMapPolylineManager polylineManager;
     private AirMapPolygonManager polygonManager;
     private AirMapCircleManager circleManager;
+    private AirMapHeatmapManager heatmapManager;
 
     public AirMapManager(
         AirMapMarkerManager markerManager,
         AirMapPolylineManager polylineManager,
         AirMapPolygonManager polygonManager,
-        AirMapCircleManager circleManager
+        AirMapCircleManager circleManager,
+        AirMapHeatmapManager heatmapManager
     ) {
         super();
         this.markerManager = markerManager;
         this.polylineManager = polylineManager;
         this.polygonManager = polygonManager;
         this.circleManager = circleManager;
+        this.heatmapManager = heatmapManager;
     }
 
     @Override
@@ -78,12 +81,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
         return view;
     }
-    
+
     @Override
     public void onDropViewInstance(AirMapView view) {
         view.doDestroy();
         super.onDropViewInstance(view);
-    }    
+    }
 
     private void emitMapError (String message, String type) {
         WritableMap error = Arguments.createMap();

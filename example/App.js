@@ -18,7 +18,7 @@ var AnimatedMarkers = require('./examples/AnimatedMarkers');
 var Callouts = require('./examples/Callouts');
 var Overlays = require('./examples/Overlays');
 var DefaultMarkers = require('./examples/DefaultMarkers');
-
+var Heatmap = require('./examples/Heatmap');
 
 var App = React.createClass({
 
@@ -79,6 +79,7 @@ var App = React.createClass({
       [Callouts, 'Custom Callouts'],
       [Overlays, 'Circles, Polygons, and Polylines'],
       [DefaultMarkers, 'Default Markers'],
+      [Heatmap, 'Heat Map'],
     ]);
   },
 });

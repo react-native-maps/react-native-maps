@@ -65,10 +65,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/bundles" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/debug" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/coverage-instrumented-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/AirMapsExplorer/AirMaps/unspecified/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars" />
@@ -77,15 +80,21 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.facebook.fresco/fresco/0.8.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline-okhttp/0.8.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.facebook.fresco/imagepipeline/0.8.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.facebook.react/react-native/0.17.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.facebook.react/react-native/0.25.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.maps.android/android-maps-utils/0.4.3/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/org.webkit/android-jsc/r174650/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaResources" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/ndk" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
@@ -94,24 +103,22 @@
     <orderEntry type="library" exported="" name="okhttp-ws-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
-    <orderEntry type="library" exported="" name="stetho-okhttp-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="jsr305-3.0.0" level="project" />
-    <orderEntry type="library" exported="" name="stetho-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-core-2.2.3" level="project" />
     <orderEntry type="library" exported="" name="fbcore-0.8.1" level="project" />
-    <orderEntry type="library" exported="" name="commons-cli-1.2" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="imagepipeline-0.8.1" level="project" />
-    <orderEntry type="library" exported="" name="react-native-0.17.1" level="project" />
     <orderEntry type="library" exported="" name="android-jsc-r174650" level="project" />
     <orderEntry type="library" exported="" name="fresco-0.8.1" level="project" />
     <orderEntry type="library" exported="" name="imagepipeline-okhttp-0.8.1" level="project" />
+    <orderEntry type="library" exported="" name="android-maps-utils-0.4.3" level="project" />
+    <orderEntry type="library" exported="" name="react-native-0.25.1" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="drawee-0.8.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.0.1" level="project" />
-    <orderEntry type="module" module-name="AirMaps" exported="" />
+    <orderEntry type="library" exported="" name="AirMaps-unspecified" level="project" />
   </component>
 </module>
