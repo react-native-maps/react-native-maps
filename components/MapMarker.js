@@ -1,16 +1,20 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var {
+  PropTypes,
+} = React;
+
+var ReactNative = require('react-native');
 var {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
   StyleSheet,
-  PropTypes,
   Platform,
   NativeModules,
   Animated,
-} = React;
+} = ReactNative;
 
 var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
@@ -211,7 +215,7 @@ var MapMarker = React.createClass({
   },
 
   _getHandle: function() {
-    return React.findNodeHandle(this.refs.marker);
+    return ReactNative.findNodeHandle(this.refs.marker);
   },
 
   _runCommand: function (name, args) {
