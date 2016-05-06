@@ -51,6 +51,8 @@ var MapView = React.createClass({
      * If `true` the map will focus on the user's location. This only works if
      * `showsUserLocation` is true and the user has shared their location.
      * Default value is `false`.
+     *
+     * @platform ios
      */
     followsUserLocation: PropTypes.bool,
 
