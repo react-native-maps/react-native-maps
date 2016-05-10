@@ -390,9 +390,7 @@ var MapView = React.createClass({
       if (Platform.OS === 'ios' && props.mapType === 'terrain') {
         props.mapType = 'standard';
       }
-      if (Platform.OS === 'android') {
-        props.handlePanDrag = !!props.onPanDrag;
-      }
+      props.handlePanDrag = !!props.onPanDrag;
     } else {
       props = {
         region: null,

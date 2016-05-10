@@ -53,6 +53,9 @@ RCT_EXPORT_MODULE()
     tap.cancelsTouchesInView = NO;
     longPress.cancelsTouchesInView = NO;
 
+    // disable drag by default
+    drag.enabled = NO;
+
     [map addGestureRecognizer:tap];
     [map addGestureRecognizer:longPress];
     [map addGestureRecognizer:drag];
@@ -71,6 +74,7 @@ RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(minDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
