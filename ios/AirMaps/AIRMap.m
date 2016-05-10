@@ -305,19 +305,12 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
                 self.cacheImageView.hidden = YES;
                 self.cacheImageView.image = nil;
             }
-            for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
-                gestureRecognizer.enabled = YES;
-            }
-            self.userInteractionEnabled = YES;
+            self.scrollEnabled = YES;
         }
         else {
             self.cacheImageView.image = nil;
             self.cacheImageView.hidden = YES;
-            
-            for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
-                gestureRecognizer.enabled = NO;
-            }
-            self.userInteractionEnabled = NO;
+            self.scrollEnabled = NO;
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 self.cacheImageView.image = nil;
