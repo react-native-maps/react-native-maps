@@ -1,6 +1,10 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var {
+  PropTypes,
+} = React;
+var ReactNative = require('react-native');
 var {
   EdgeInsetsPropType,
   NativeMethodsMixin,
@@ -10,9 +14,8 @@ var {
   Animated,
   requireNativeComponent,
   NativeModules,
-  PropTypes,
   ColorPropType,
-} = React;
+} = ReactNative;
 
 var MapMarker = require('./MapMarker');
 var MapPolyline = require('./MapPolyline');
@@ -39,7 +42,7 @@ var MapView = React.createClass({
     style: View.propTypes.style,
 
     /**
-     * If `true` the app will ask for the user's location and focus on it.
+     * If `true` the app will ask for the user's location.
      * Default value is `false`.
      *
      * **NOTE**: You need to add NSLocationWhenInUseUsageDescription key in
@@ -47,6 +50,15 @@ var MapView = React.createClass({
      * to *fail silently*!
      */
     showsUserLocation: PropTypes.bool,
+
+    /**
+     * If `true` the map will focus on the user's location. This only works if
+     * `showsUserLocation` is true and the user has shared their location.
+     * Default value is `false`.
+     *
+     * @platform ios
+     */
+    followsUserLocation: PropTypes.bool,
 
     /**
      * If `false` points of interest won't be displayed on the map.
@@ -365,7 +377,7 @@ var MapView = React.createClass({
   },
 
   _getHandle: function() {
-    return React.findNodeHandle(this.refs.map);
+    return ReactNative.findNodeHandle(this.refs.map);
   },
 
   _runCommand: function (name, args) {
