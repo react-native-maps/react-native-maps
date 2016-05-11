@@ -354,6 +354,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         _activityIndicatorView.center = self.loadingView.center;
         _activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        _activityIndicatorView.color = [UIColor colorWithRed:96.f/255.f green:96.f/255.f blue:96.f/255.f alpha:1.f]; // defaults to #606060
     }
     [self.loadingView addSubview:_activityIndicatorView];
     return _activityIndicatorView;
@@ -363,7 +364,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     if (_loadingView == nil) {
         _loadingView = [[UIView alloc] initWithFrame:self.bounds];
         _loadingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        _loadingView.backgroundColor = [UIColor whiteColor];
+        _loadingView.backgroundColor = [UIColor whiteColor]; // defaults to #FFFFFF
         [self addSubview:_loadingView];
         _loadingView.hidden = NO;
     }

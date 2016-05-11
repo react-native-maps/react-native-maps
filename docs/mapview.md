@@ -21,8 +21,8 @@
 | `pitchEnabled` | `Boolean` | `true` | If `false` the user won't be able to adjust the camera’s pitch angle.
 | `cacheEnabled` | `Boolean` | `false` | If `true` map will be cached and displayed as a image instead of being interactable, for performance usage.
 | `loadingEnabled` | `Boolean` | `false` | If `true` a loading indicator will show while the map is loading.
-| `loadingIndicatorColor` | `Color` | Gray (iOS), Theme Color (Android) | Sets loading indicator color, default to system color.
-| `loadingBackgroundColor` | `Color` | `white` | Sets loading background color
+| `loadingIndicatorColor` | `Color` | `#606060` | Sets loading indicator color, default to `#606060`.
+| `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
 
 
 
