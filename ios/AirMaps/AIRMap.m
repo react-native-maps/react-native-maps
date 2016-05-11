@@ -32,6 +32,11 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 @interface AIRMap ()
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+@property (nonatomic, assign) BOOL shouldZoomEnabled;
+@property (nonatomic, assign) BOOL shouldScrollEnabled;
+
+- (void)updateScrollEnabled;
+- (void)updateZoomEnabled;
 
 @end
 
@@ -298,6 +303,34 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     }
 }
 
+- (void)setScrollEnabled:(BOOL)scrollEnabled {
+    self.shouldScrollEnabled = scrollEnabled;
+    [self updateScrollEnabled];
+}
+
+- (void)updateScrollEnabled {
+    if (self.cacheEnabled) {
+        [super setScrollEnabled:NO];
+    }
+    else {
+        [super setScrollEnabled:self.shouldScrollEnabled];
+    }
+}
+
+- (void)setZoomEnabled:(BOOL)zoomEnabled {
+    self.shouldZoomEnabled = zoomEnabled;
+    [self updateZoomEnabled];
+}
+
+- (void)updateZoomEnabled {
+    if (self.cacheEnabled) {
+        [super setZoomEnabled: NO];
+    }
+    else {
+        [super setZoomEnabled:self.shouldZoomEnabled];
+    }
+}
+
 - (void)cacheViewIfNeeded {
     if (self.hasShownInitialLoading) {
         if (!self.cacheEnabled) {
@@ -305,14 +338,10 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
                 self.cacheImageView.hidden = YES;
                 self.cacheImageView.image = nil;
             }
-            self.scrollEnabled = YES;
-            self.zoomEnabled = YES;
         }
         else {
             self.cacheImageView.image = nil;
             self.cacheImageView.hidden = YES;
-            self.scrollEnabled = NO;
-            self.zoomEnabled = NO;
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 self.cacheImageView.image = nil;
@@ -326,6 +355,9 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
                 self.cacheImageView.hidden = NO;
             });
         }
+        
+        [self updateScrollEnabled];
+        [self updateZoomEnabled];
     }
 }
 

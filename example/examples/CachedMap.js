@@ -5,6 +5,7 @@ var {
   Dimensions,
   StyleSheet,
   ListView,
+  TouchableOpacity,
 } = React;
 
 var MapView = require('react-native-maps');
@@ -17,53 +18,94 @@ var CachedMap = React.createClass({
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       dataSource: ds.cloneWithRows(COUNTRIES),
+      cache: true,
     };
+  },
+  
+  toggleCache() {
+    // a hack to force listview to reload with the same data
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows([]),
+    });
+    this.setState({
+      cache: !this.state.cache,
+      dataSource: this.state.dataSource.cloneWithRows(COUNTRIES),
+    });
   },
 
   render() {
     var { width, height } = Dimensions.get('window');
     return (
-      <ListView
-        style={styles.container}
-        dataSource={this.state.dataSource}
-        renderRow={(region) => {
-          return (
-            <View
-              style={styles.item}>
-              <Text>{region.name}</Text>
-              <MapView
-                style={{
-                  width: width - (HORIZONTAL_PADDING*2),
-                  height: width - (HORIZONTAL_PADDING*2),
-                }}
-                initialRegion={region}
-                cacheEnabled={true}
-                loadingIndicatorColor={"#666666"}
-                loadingBackgroundColor={"#eeeeee"}>
-                <MapView.Marker
-                  coordinate={region}
-                  centerOffset={{ x: -18, y: -60 }}
-                  anchor={{ x: 0.69, y: 1 }}
-                  image={require('./assets/flag-blue.png')}
-                />
-              </MapView>
-              <View style={styles.divider} />
-            </View>
-          );
-        }} />
+      <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={this.toggleCache} style={[styles.bubble, styles.button]}>
+            <Text style={styles.buttonText}>{this.state.cache ? "Cached" : "Not cached"}</Text>
+          </TouchableOpacity>
+        </View>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(region) => {
+            return (
+              <View
+                style={styles.item}>
+                <Text>{region.name}</Text>
+                <MapView
+                  style={{
+                    width: width - (HORIZONTAL_PADDING*2),
+                    height: width - (HORIZONTAL_PADDING*2),
+                  }}
+                  initialRegion={region}
+                  cacheEnabled={this.state.cache}
+                  zoomEnabled={true}
+                  scrollingEnabled={true}
+                  loadingIndicatorColor={"#666666"}
+                  loadingBackgroundColor={"#eeeeee"}>
+                  <MapView.Marker
+                    coordinate={region}
+                    centerOffset={{ x: -18, y: -60 }}
+                    anchor={{ x: 0.69, y: 1 }}
+                    image={require('./assets/flag-blue.png')}
+                  />
+                </MapView>
+                <View style={styles.divider} />
+              </View>
+            );
+          }} />
+      </View>
     );
   },
 });
 
 var styles = StyleSheet.create({
   container: {
-    paddingTop: 44,
+    flex: 1,
   },
   item: {
     backgroundColor: 'white',
     paddingHorizontal: HORIZONTAL_PADDING,
     paddingVertical: VERTICAL_PADDING,
   },
+  bubble: {
+    backgroundColor: 'rgba(0,128,255,1.0)',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  button: {
+    width: 100,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    backgroundColor: 'transparent',
+    justifyContent: 'flex-end',
+  },
+  buttonText: {
+    color: 'white'
+  }
 });
 
 const COUNTRIES = [
