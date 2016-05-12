@@ -24,6 +24,7 @@
 #import "AIRMapPolygon.h"
 #import "AIRMapCircle.h"
 #import "SMCalloutView.h"
+#import "AIRMapUrlTile.h"
 
 #import <MapKit/MapKit.h>
 
@@ -204,6 +205,8 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         return ((AIRMapPolygon *)overlay).renderer;
     } else if ([overlay isKindOfClass:[AIRMapCircle class]]) {
         return ((AIRMapCircle *)overlay).renderer;
+    } else if ([overlay isKindOfClass:[AIRMapUrlTile class]]) {
+        return ((AIRMapUrlTile *)overlay).renderer;
     } else {
         return nil;
     }
