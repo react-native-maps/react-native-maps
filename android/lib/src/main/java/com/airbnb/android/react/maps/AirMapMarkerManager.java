@@ -130,9 +130,8 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     }
 
     @Override
-    public
     @Nullable
-    Map<String, Integer> getCommandsMap() {
+    public Map<String, Integer> getCommandsMap() {
         return MapBuilder.of(
                 "showCallout", SHOW_INFO_WINDOW,
                 "hideCallout", HIDE_INFO_WINDOW
@@ -153,9 +152,8 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     }
 
     @Override
-    public
     @Nullable
-    Map getExportedCustomDirectEventTypeConstants() {
+    public Map getExportedCustomDirectEventTypeConstants() {
         Map map = MapBuilder.of(
                 "onPress", MapBuilder.of("registrationName", "onPress"),
                 "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"),
