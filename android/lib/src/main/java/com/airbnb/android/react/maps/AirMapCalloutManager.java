@@ -1,16 +1,11 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -33,9 +28,11 @@ public class AirMapCalloutManager extends ViewGroupManager<AirMapCallout> {
     }
 
     @Override
-    public @Nullable Map getExportedCustomDirectEventTypeConstants() {
+    public
+    @Nullable
+    Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
-            "onPress", MapBuilder.of("registrationName", "onPress")
+                "onPress", MapBuilder.of("registrationName", "onPress")
         );
     }
 
@@ -51,7 +48,8 @@ public class AirMapCalloutManager extends ViewGroupManager<AirMapCallout> {
     public void updateExtraData(AirMapCallout view, Object extraData) {
         // This method is called from the shadow node with the width/height of the rendered
         // marker view.
-        HashMap<String, Float> data = (HashMap<String, Float>)extraData;
+        //noinspection unchecked
+        Map<String, Float> data = (Map<String, Float>) extraData;
         float width = data.get("width");
         float height = data.get("height");
         view.width = (int) width;
