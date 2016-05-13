@@ -6,8 +6,8 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "react-native": "latest",
-    "react": "latest",
+    "react": "^0.14.8",
+    "react-native": "^0.25.1",
     "react-native-maps": "../"
   }
 }
