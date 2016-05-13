@@ -1,13 +1,10 @@
-package com.AirMaps;
-
+package com.airbnb.android.react.maps;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 public class LatLngBoundsUtils {
-
     public static boolean BoundsAreDifferent(LatLngBounds a, LatLngBounds b) {
-
         LatLng centerA = a.getCenter();
         double latA = centerA.latitude;
         double lngA = centerA.longitude;
@@ -24,14 +21,14 @@ public class LatLngBoundsUtils {
         double lngEps = LongitudeEpsilon(a, b);
 
         return
-            different(latA, latB, latEps) ||
-            different(lngA, lngB, lngEps) ||
-            different(latDeltaA, latDeltaB, latEps) ||
-            different(lngDeltaA, lngDeltaB, lngEps);
+                different(latA, latB, latEps) ||
+                        different(lngA, lngB, lngEps) ||
+                        different(latDeltaA, latDeltaB, latEps) ||
+                        different(lngDeltaA, lngDeltaB, lngEps);
     }
 
     private static boolean different(double a, double b, double epsilon) {
-        return Math.abs(a-b) > epsilon;
+        return Math.abs(a - b) > epsilon;
     }
 
     private static double LatitudeEpsilon(LatLngBounds a, LatLngBounds b) {
@@ -47,7 +44,4 @@ public class LatLngBoundsUtils {
         double size = Math.min(Math.abs(sizeA), Math.abs(sizeB));
         return size / 2560;
     }
-
-
-
 }
