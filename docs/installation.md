@@ -36,18 +36,9 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 ## Android
 
-1. in `android/settings.gradle`
+1. in `build.gradle`
    ```
-     include ':app', ':react-native-maps'
-     project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
-   ```
-
-2. in `android/app/build.gradle` add:
-   ```
-   dependencies {
-       ...
-       compile project(':react-native-maps')
-   }
+     compile 'com.airbnb.android:react-native-maps:0.0.1'
    ```
 
 3. and finally, in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
@@ -55,7 +46,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
     **Newer versions of React Native**
       ```
     ...
-    import com.AirMaps.AirPackage; // <--- This!
+    import com.airbnb.android.react.maps.MapsPackage; // <--- This!
     ...
     public class MainActivity extends ReactActivity {
 
@@ -73,7 +64,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
      protected List<ReactPackage> getPackages() {
        return Arrays.<ReactPackage>asList(
          new MainReactPackage(),
-         new AirPackage() // <---- and This!
+         new MapsPackage() // <---- and This!
        );
      }
    }
@@ -82,7 +73,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
     **Older versions of React Native**
    ```
    ...
-   import com.AirMaps.AirPackage; // <--- This!
+   import com.airbnb.android.react.maps.MapsPackage; // <--- This!
    ...
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +85,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
                .setBundleAssetName("index.android.bundle")
                .setJSMainModuleName("index.android")
                .addPackage(new MainReactPackage())
-               .addPackage(new AirPackage()) // <---- and This!
+               .addPackage(new MapsPackage()) // <---- and This!
                .setUseDeveloperSupport(BuildConfig.DEBUG)
                .setInitialLifecycleState(LifecycleState.RESUMED)
                .build();
@@ -141,27 +132,21 @@ If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 12
 3. Check that the following files contains this lines :
-   - In `android/settings.gradle` :  
-   ```
-   include ':app', ':react-native-maps'
-   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
-   ```
-   
    - In `android/app/build.gradle` :
    ```
    dependencies {
       ...
-      compile project(':react-native-maps')
+      compile 'com.airbnb.android:react-native-maps:0.0.1'
    }
    ```
-   
+
    - In `android/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` :
    ```
    @Override
    protected List<ReactPackage> getPackages() {
      return Arrays.<ReactPackage>asList(
        new MainReactPackage(),
-       new AirPackage() <-- THIS
+       new MapsPackage() <-- THIS
      );
    }
    ```

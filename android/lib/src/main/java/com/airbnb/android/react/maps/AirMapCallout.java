@@ -1,7 +1,6 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
-import android.view.ViewGroup;
 
 import com.facebook.react.views.view.ReactViewGroup;
 
@@ -21,5 +20,4 @@ public class AirMapCallout extends ReactViewGroup {
     public boolean getTooltip() {
         return this.tooltip;
     }
-
 }

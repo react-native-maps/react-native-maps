@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,13 +8,13 @@ import android.view.WindowManager;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.google.android.gms.maps.model.LatLng;
 
 public class AirMapCircleManager extends ViewGroupManager<AirMapCircle> {
-    private DisplayMetrics metrics;
+    private final DisplayMetrics metrics;
 
     public AirMapCircleManager(ReactApplicationContext reactContext) {
         super();

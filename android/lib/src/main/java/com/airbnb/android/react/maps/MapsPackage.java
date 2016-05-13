@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class AirPackage implements ReactPackage {
+public class MapsPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Collections.emptyList();
@@ -24,24 +24,24 @@ public class AirPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         AirMapCalloutManager calloutManager = new AirMapCalloutManager();
-        AirMapMarkerManager annotationManager = new AirMapMarkerManager(calloutManager);
+        AirMapMarkerManager annotationManager = new AirMapMarkerManager();
         AirMapPolylineManager polylineManager = new AirMapPolylineManager(reactContext);
         AirMapPolygonManager polygonManager = new AirMapPolygonManager(reactContext);
         AirMapCircleManager circleManager = new AirMapCircleManager(reactContext);
         AirMapManager mapManager = new AirMapManager(
-            annotationManager,
-            polylineManager,
-            polygonManager,
-            circleManager
+                annotationManager,
+                polylineManager,
+                polygonManager,
+                circleManager
         );
 
         return Arrays.<ViewManager>asList(
-            calloutManager,
-            annotationManager,
-            polylineManager,
-            polygonManager,
-            circleManager,
-            mapManager
+                calloutManager,
+                annotationManager,
+                polylineManager,
+                polygonManager,
+                circleManager,
+                mapManager
         );
     }
 }

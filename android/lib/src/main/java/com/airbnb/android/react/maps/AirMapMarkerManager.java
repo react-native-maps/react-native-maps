@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.graphics.Color;
 import android.view.View;
@@ -7,10 +7,9 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.views.image.ReactImageView;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.HashMap;
@@ -23,11 +22,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     public static final int SHOW_INFO_WINDOW = 1;
     public static final int HIDE_INFO_WINDOW = 2;
 
-    private AirMapCalloutManager calloutManager;
-
-    public AirMapMarkerManager(AirMapCalloutManager calloutManager) {
-        super();
-        this.calloutManager = calloutManager;
+    public AirMapMarkerManager() {
     }
 
     @Override
@@ -121,7 +116,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         // if an <Callout /> component is a child, then it is a callout view, NOT part of the
         // marker.
         if (child instanceof AirMapCallout) {
-            parent.setCalloutView((AirMapCallout)child);
+            parent.setCalloutView((AirMapCallout) child);
         } else {
             super.addView(parent, child, index);
             parent.update();
@@ -135,10 +130,12 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     }
 
     @Override
-    public @Nullable Map<String, Integer> getCommandsMap() {
+    public
+    @Nullable
+    Map<String, Integer> getCommandsMap() {
         return MapBuilder.of(
-            "showCallout", SHOW_INFO_WINDOW,
-            "hideCallout", HIDE_INFO_WINDOW
+                "showCallout", SHOW_INFO_WINDOW,
+                "hideCallout", HIDE_INFO_WINDOW
         );
     }
 
@@ -146,29 +143,31 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     public void receiveCommand(AirMapMarker view, int commandId, @Nullable ReadableArray args) {
         switch (commandId) {
             case SHOW_INFO_WINDOW:
-                ((Marker)view.getFeature()).showInfoWindow();
+                ((Marker) view.getFeature()).showInfoWindow();
                 break;
 
             case HIDE_INFO_WINDOW:
-                ((Marker)view.getFeature()).hideInfoWindow();
+                ((Marker) view.getFeature()).hideInfoWindow();
                 break;
         }
     }
 
     @Override
-    public @Nullable Map getExportedCustomDirectEventTypeConstants() {
+    public
+    @Nullable
+    Map getExportedCustomDirectEventTypeConstants() {
         Map map = MapBuilder.of(
-            "onPress", MapBuilder.of("registrationName", "onPress"),
-            "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"),
-            "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
-            "onDrag", MapBuilder.of("registrationName", "onDrag"),
-            "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
+                "onPress", MapBuilder.of("registrationName", "onPress"),
+                "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"),
+                "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
+                "onDrag", MapBuilder.of("registrationName", "onDrag"),
+                "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
         );
 
         map.putAll(MapBuilder.of(
-            "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
-            "onDrag", MapBuilder.of("registrationName", "onDrag"),
-            "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
+                "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
+                "onDrag", MapBuilder.of("registrationName", "onDrag"),
+                "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
         ));
 
         return map;
@@ -186,7 +185,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     public void updateExtraData(AirMapMarker view, Object extraData) {
         // This method is called from the shadow node with the width/height of the rendered
         // marker view.
-        HashMap<String, Float> data = (HashMap<String, Float>)extraData;
+        HashMap<String, Float> data = (HashMap<String, Float>) extraData;
         float width = data.get("width");
         float height = data.get("height");
         view.update((int) width, (int) height);
