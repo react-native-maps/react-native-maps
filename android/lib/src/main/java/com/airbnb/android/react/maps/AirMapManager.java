@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.view.View;
 
@@ -10,9 +10,9 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -23,7 +23,6 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-
 public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     public static final String REACT_CLASS = "AIRMap";
@@ -32,11 +31,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     public static final int ANIMATE_TO_COORDINATE = 2;
     public static final int FIT_TO_ELEMENTS = 3;
 
-    private Map<String, Integer> MAP_TYPES = MapBuilder.of(
-        "standard", GoogleMap.MAP_TYPE_NORMAL,
-        "satellite", GoogleMap.MAP_TYPE_SATELLITE,
-        "hybrid", GoogleMap.MAP_TYPE_HYBRID,
-        "terrain", GoogleMap.MAP_TYPE_TERRAIN
+    private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
+            "standard", GoogleMap.MAP_TYPE_NORMAL,
+            "satellite", GoogleMap.MAP_TYPE_SATELLITE,
+            "hybrid", GoogleMap.MAP_TYPE_HYBRID,
+            "terrain", GoogleMap.MAP_TYPE_TERRAIN
     );
 
     private ReactContext reactContext;
@@ -47,12 +46,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     private AirMapCircleManager circleManager;
 
     public AirMapManager(
-        AirMapMarkerManager markerManager,
-        AirMapPolylineManager polylineManager,
-        AirMapPolygonManager polygonManager,
-        AirMapCircleManager circleManager
-    ) {
-        super();
+            AirMapMarkerManager markerManager,
+            AirMapPolylineManager polylineManager,
+            AirMapPolygonManager polygonManager,
+            AirMapCircleManager circleManager) {
         this.markerManager = markerManager;
         this.polylineManager = polylineManager;
         this.polygonManager = polygonManager;
@@ -78,75 +75,75 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
         return view;
     }
-    
+
     @Override
     public void onDropViewInstance(AirMapView view) {
         view.doDestroy();
         super.onDropViewInstance(view);
-    }    
+    }
 
-    private void emitMapError (String message, String type) {
+    private void emitMapError(String message, String type) {
         WritableMap error = Arguments.createMap();
         error.putString("message", message);
         error.putString("type", type);
 
         reactContext
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .emit("onError", error);
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("onError", error);
     }
 
-    @ReactProp(name="region")
+    @ReactProp(name = "region")
     public void setRegion(AirMapView view, ReadableMap region) {
         view.setRegion(region);
     }
 
-    @ReactProp(name="mapType")
+    @ReactProp(name = "mapType")
     public void setMapType(AirMapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
         view.map.setMapType(typeId);
     }
 
-    @ReactProp(name="showsUserLocation", defaultBoolean = false)
+    @ReactProp(name = "showsUserLocation", defaultBoolean = false)
     public void setShowsUserLocation(AirMapView view, boolean showUserLocation) {
         view.setShowsUserLocation(showUserLocation);
     }
 
-    @ReactProp(name="showsTraffic", defaultBoolean = false)
+    @ReactProp(name = "showsTraffic", defaultBoolean = false)
     public void setShowTraffic(AirMapView view, boolean showTraffic) {
         view.map.setTrafficEnabled(showTraffic);
     }
 
-    @ReactProp(name="showsBuildings", defaultBoolean = false)
+    @ReactProp(name = "showsBuildings", defaultBoolean = false)
     public void setShowBuildings(AirMapView view, boolean showBuildings) {
         view.map.setBuildingsEnabled(showBuildings);
     }
 
-    @ReactProp(name="showsIndoors", defaultBoolean = false)
+    @ReactProp(name = "showsIndoors", defaultBoolean = false)
     public void setShowIndoors(AirMapView view, boolean showIndoors) {
         view.map.setIndoorEnabled(showIndoors);
     }
 
-    @ReactProp(name="showsCompass", defaultBoolean = false)
+    @ReactProp(name = "showsCompass", defaultBoolean = false)
     public void setShowsCompass(AirMapView view, boolean showsCompass) {
         view.map.getUiSettings().setCompassEnabled(showsCompass);
     }
 
-    @ReactProp(name="scrollEnabled", defaultBoolean = false)
+    @ReactProp(name = "scrollEnabled", defaultBoolean = false)
     public void setScrollEnabled(AirMapView view, boolean scrollEnabled) {
         view.map.getUiSettings().setScrollGesturesEnabled(scrollEnabled);
     }
 
-    @ReactProp(name="zoomEnabled", defaultBoolean = false)
+    @ReactProp(name = "zoomEnabled", defaultBoolean = false)
     public void setZoomEnabled(AirMapView view, boolean zoomEnabled) {
         view.map.getUiSettings().setZoomGesturesEnabled(zoomEnabled);
     }
 
-    @ReactProp(name="rotateEnabled", defaultBoolean = false)
+    @ReactProp(name = "rotateEnabled", defaultBoolean = false)
     public void setRotateEnabled(AirMapView view, boolean rotateEnabled) {
         view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
 
-    @ReactProp(name="pitchEnabled", defaultBoolean = false)
+    @ReactProp(name = "pitchEnabled", defaultBoolean = false)
     public void setPitchEnabled(AirMapView view, boolean pitchEnabled) {
         view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
     }
@@ -190,7 +187,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     }
 
     @Override
-    public @Nullable Map getExportedCustomDirectEventTypeConstants() {
+    @Nullable
+    public Map getExportedCustomDirectEventTypeConstants() {
         Map map = MapBuilder.of(
                 "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
                 "onPress", MapBuilder.of("registrationName", "onPress"),
@@ -211,11 +209,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     }
 
     @Override
-    public @Nullable Map<String, Integer> getCommandsMap() {
+    @Nullable
+    public Map<String, Integer> getCommandsMap() {
         return MapBuilder.of(
-            "animateToRegion", ANIMATE_TO_REGION,
-            "animateToCoordinate", ANIMATE_TO_COORDINATE,
-            "fitToElements", FIT_TO_ELEMENTS
+                "animateToRegion", ANIMATE_TO_REGION,
+                "animateToCoordinate", ANIMATE_TO_COORDINATE,
+                "fitToElements", FIT_TO_ELEMENTS
         );
     }
 

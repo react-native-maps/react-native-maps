@@ -1,0 +1,18 @@
+apply plugin: 'com.android.library'
+apply from: 'gradle-maven-push.gradle'
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "23.0.3"
+
+  defaultConfig {
+    minSdkVersion 16
+    targetSdkVersion 23
+  }
+}
+
+dependencies {
+  compile 'com.facebook.react:react-native:0.25.1'
+  compile "com.google.android.gms:play-services-base:8.4.0"
+  compile 'com.google.android.gms:play-services-maps:8.4.0'
+}
