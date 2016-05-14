@@ -1,5 +1,6 @@
 package com.airbnb.android.react.maps;
 
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
@@ -35,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
     public GoogleMap map;
@@ -43,6 +46,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
     private boolean isTouchDown = false;
+    private static final String[] PERMISSIONS = new String[] {
+            "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
     private final List<AirMapFeature> features = new ArrayList<>();
     private final Map<Marker, AirMapMarker> markerMap = new HashMap<>();
@@ -188,7 +193,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         lifecycleListener = new LifecycleEventListener() {
             @Override
             public void onHostResume() {
-                map.setMyLocationEnabled(showUserLocation);
+                if (hasPermissions()) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(showUserLocation);
+                }
                 synchronized (AirMapView.this) {
                     AirMapView.this.onResume();
                     paused = false;
@@ -197,7 +205,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
             @Override
             public void onHostPause() {
-                map.setMyLocationEnabled(false);
+                if (hasPermissions()) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(false);
+                }
                 synchronized (AirMapView.this) {
                     AirMapView.this.onPause();
                     paused = true;
@@ -211,6 +222,11 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         };
 
         ((ThemedReactContext) getContext()).addLifecycleEventListener(lifecycleListener);
+    }
+
+    private boolean hasPermissions() {
+        return checkSelfPermission(getContext(), PERMISSIONS[0]) == PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(getContext(), PERMISSIONS[1]) == PackageManager.PERMISSION_GRANTED;
     }
 
     /*
@@ -253,7 +269,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     public void setShowsUserLocation(boolean showUserLocation) {
         this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
-        map.setMyLocationEnabled(showUserLocation);
+        if (hasPermissions()) {
+            //noinspection MissingPermission
+            map.setMyLocationEnabled(showUserLocation);
+        }
     }
 
     public void addFeature(View child, int index) {
