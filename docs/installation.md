@@ -38,43 +38,27 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 1. in `build.gradle`
    ```
-     compile 'com.airbnb.android:react-native-maps:0.0.1'
+     compile 'com.airbnb.android:react-native-maps:0.5.0'
    ```
 
 3. and finally, in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
 
     **Newer versions of React Native**
-      ```
-    ...
-    import com.airbnb.android.react.maps.MapsPackage; // <--- This!
-    ...
+      ```java
     public class MainActivity extends ReactActivity {
-
-     @Override
-     protected String getMainComponentName() {
-         return "sample";
-     }
-
-     @Override
-     protected boolean getUseDeveloperSupport() {
-         return BuildConfig.DEBUG;
-     }
 
      @Override
      protected List<ReactPackage> getPackages() {
        return Arrays.<ReactPackage>asList(
          new MainReactPackage(),
-         new MapsPackage() // <---- and This!
+         new MapsPackage() //  <-- add this
        );
      }
    }
    ```
 
     **Older versions of React Native**
-   ```
-   ...
-   import com.airbnb.android.react.maps.MapsPackage; // <--- This!
-   ...
+   ```java
    @Override
    protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
