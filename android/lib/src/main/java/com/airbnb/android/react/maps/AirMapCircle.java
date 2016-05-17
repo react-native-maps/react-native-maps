@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
 

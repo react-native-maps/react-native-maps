@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 public class RegionChangeEvent extends Event<RegionChangeEvent> {
     private final LatLngBounds bounds;
     private final LatLng center;
-    private boolean continuous;
+    private final boolean continuous;
 
     public RegionChangeEvent(int id, LatLngBounds bounds, LatLng center, boolean continuous) {
         super(id, System.currentTimeMillis());

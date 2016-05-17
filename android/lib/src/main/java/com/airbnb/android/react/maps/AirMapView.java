@@ -1,6 +1,6 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
-
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
@@ -21,8 +21,8 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
@@ -33,14 +33,13 @@ import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class AirMapView
-        extends MapView
-        implements
-        GoogleMap.InfoWindowAdapter,
-        GoogleMap.OnMarkerDragListener,
-        OnMapReadyCallback
-{
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+
+public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
+        GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
     public GoogleMap map;
 
     private LatLngBounds boundsToMove;
@@ -49,21 +48,22 @@ public class AirMapView
     private boolean isTouchDown = false;
     private boolean handlePanDrag = false;
 
-    private ArrayList<AirMapFeature> features = new ArrayList<>();
-    private HashMap<Marker, AirMapMarker> markerMap = new HashMap<>();
-    private HashMap<Polyline, AirMapPolyline> polylineMap = new HashMap<>();
-    private HashMap<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
-    private HashMap<Circle, AirMapCircle> circleMap = new HashMap<>();
+    private static final String[] PERMISSIONS = new String[] {
+            "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
-    private ScaleGestureDetector scaleDetector;
-    private GestureDetectorCompat gestureDetector;
-    private AirMapManager manager;
+    private final List<AirMapFeature> features = new ArrayList<>();
+    private final Map<Marker, AirMapMarker> markerMap = new HashMap<>();
+    private final Map<Polyline, AirMapPolyline> polylineMap = new HashMap<>();
+    private final Map<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
+    private final Map<Circle, AirMapCircle> circleMap = new HashMap<>();
+
+    private final ScaleGestureDetector scaleDetector;
+    private final GestureDetectorCompat gestureDetector;
+    private final AirMapManager manager;
     private LifecycleEventListener lifecycleListener;
     private boolean paused = false;
 
     final EventDispatcher eventDispatcher;
-
-
 
     public AirMapView(ThemedReactContext context, AirMapManager manager) {
         super(context);
@@ -74,36 +74,39 @@ public class AirMapView
         super.getMapAsync(this);
 
         final AirMapView view = this;
-        scaleDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        scaleDetector =
+                new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 //            @Override
 //            public boolean onScale(ScaleGestureDetector detector) {
 //                Log.d("AirMapView", "onScale");
 //                return false;
 //            }
 
-            @Override
-            public boolean onScaleBegin (ScaleGestureDetector detector) {
-                view.startMonitoringRegion();
-                return true; // stop recording this gesture. let mapview handle it.
-            }
+                    @Override
+                    public boolean onScaleBegin(ScaleGestureDetector detector) {
+                        view.startMonitoringRegion();
+                        return true; // stop recording this gesture. let mapview handle it.
+                    }
         });
 
-        gestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                view.startMonitoringRegion();
-                return false;
-            }
+        gestureDetector =
+                new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        view.startMonitoringRegion();
+                        return false;
+                    }
 
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                if (handlePanDrag) {
-                    onPanDrag(e2);
-                }
-                view.startMonitoringRegion();
-                return false;
-            }
-        });
+                    @Override
+                    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+                                            float distanceY) {
+                        if (handlePanDrag) {
+                            onPanDrag(e2);
+                        }
+                        view.startMonitoringRegion();
+                        return false;
+                    }
+                });
 
         eventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
@@ -185,14 +188,20 @@ public class AirMapView
             }
         });
 
-        // We need to be sure to disable location-tracking when app enters background, in-case some other module
-        // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
-        // updating location constantly, killing the battery, even though some other location-mgmt module may
+        // We need to be sure to disable location-tracking when app enters background, in-case some
+        // other module
+        // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager
+        // will be left
+        // updating location constantly, killing the battery, even though some other location-mgmt
+        // module may
         // desire to shut-down location-services.
         lifecycleListener = new LifecycleEventListener() {
             @Override
             public void onHostResume() {
-                map.setMyLocationEnabled(showUserLocation);
+                if (hasPermissions()) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(showUserLocation);
+                }
                 synchronized (AirMapView.this) {
                     AirMapView.this.onResume();
                     paused = false;
@@ -201,7 +210,10 @@ public class AirMapView
 
             @Override
             public void onHostPause() {
-                map.setMyLocationEnabled(false);
+                if (hasPermissions()) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(false);
+                }
                 synchronized (AirMapView.this) {
                     AirMapView.this.onPause();
                     paused = true;
@@ -217,15 +229,20 @@ public class AirMapView
         ((ThemedReactContext) getContext()).addLifecycleEventListener(lifecycleListener);
     }
 
+    private boolean hasPermissions() {
+        return checkSelfPermission(getContext(), PERMISSIONS[0]) == PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(getContext(), PERMISSIONS[1]) == PackageManager.PERMISSION_GRANTED;
+    }
+
     /*
     onDestroy is final method so I can't override it.
      */
-    public synchronized  void doDestroy() {
+    public synchronized void doDestroy() {
         if (lifecycleListener != null) {
             ((ThemedReactContext) getContext()).removeLifecycleEventListener(lifecycleListener);
             lifecycleListener = null;
         }
-        if(!paused) {
+        if (!paused) {
             onPause();
         }
         onDestroy();
@@ -257,7 +274,10 @@ public class AirMapView
 
     public void setShowsUserLocation(boolean showUserLocation) {
         this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
-        map.setMyLocationEnabled(showUserLocation);
+        if (hasPermissions()) {
+            //noinspection MissingPermission
+            map.setMyLocationEnabled(showUserLocation);
+        }
     }
 
     public void setHandlePanDrag(boolean handlePanDrag) {
@@ -271,25 +291,25 @@ public class AirMapView
             AirMapMarker annotation = (AirMapMarker) child;
             annotation.addToMap(map);
             features.add(index, annotation);
-            Marker marker = (Marker)annotation.getFeature();
+            Marker marker = (Marker) annotation.getFeature();
             markerMap.put(marker, annotation);
         } else if (child instanceof AirMapPolyline) {
             AirMapPolyline polylineView = (AirMapPolyline) child;
             polylineView.addToMap(map);
             features.add(index, polylineView);
-            Polyline polyline = (Polyline)polylineView.getFeature();
+            Polyline polyline = (Polyline) polylineView.getFeature();
             polylineMap.put(polyline, polylineView);
         } else if (child instanceof AirMapPolygon) {
             AirMapPolygon polygonView = (AirMapPolygon) child;
             polygonView.addToMap(map);
             features.add(index, polygonView);
-            Polygon polygon = (Polygon)polygonView.getFeature();
+            Polygon polygon = (Polygon) polygonView.getFeature();
             polygonMap.put(polygon, polygonView);
         } else if (child instanceof AirMapCircle) {
             AirMapCircle circleView = (AirMapCircle) child;
             circleView.addToMap(map);
             features.add(index, circleView);
-            Circle circle = (Circle)circleView.getFeature();
+            Circle circle = (Circle) circleView.getFeature();
             circleMap.put(circle, circleView);
         } else {
             // TODO(lmr): throw? User shouldn't be adding non-feature children.
@@ -342,14 +362,14 @@ public class AirMapView
         // if boundsToMove is not null, we now have the MapView's width/height, so we can apply
         // a proper camera move
         if (boundsToMove != null) {
-            HashMap<String, Float> data = (HashMap<String, Float>)extraData;
+            HashMap<String, Float> data = (HashMap<String, Float>) extraData;
             float width = data.get("width");
             float height = data.get("height");
             map.moveCamera(
                     CameraUpdateFactory.newLatLngBounds(
                             boundsToMove,
-                            (int)width,
-                            (int)height,
+                            (int) width,
+                            (int) height,
                             0
                     )
             );
@@ -371,7 +391,7 @@ public class AirMapView
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (AirMapFeature feature : features) {
             if (feature instanceof AirMapMarker) {
-                Marker marker = (Marker)feature.getFeature();
+                Marker marker = (Marker) feature.getFeature();
                 builder.include(marker.getPosition());
             }
             // TODO(lmr): may want to include shapes / etc.
@@ -407,7 +427,7 @@ public class AirMapView
 
         int action = MotionEventCompat.getActionMasked(ev);
 
-        switch(action) {
+        switch (action) {
             case (MotionEvent.ACTION_DOWN):
                 isTouchDown = true;
                 break;
@@ -444,7 +464,8 @@ public class AirMapView
         public void run() {
 
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            if (lastBoundsEmitted == null || LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted)) {
+            if (lastBoundsEmitted == null ||
+                    LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted)) {
                 LatLng center = map.getCameraPosition().target;
                 lastBoundsEmitted = bounds;
                 eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));

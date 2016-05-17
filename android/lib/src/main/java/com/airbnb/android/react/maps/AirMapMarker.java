@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -51,7 +51,7 @@ public class AirMapMarker extends AirMapFeature {
 
     private AirMapCallout calloutView;
     private View wrappedCalloutView;
-    private Context context;
+    private final Context context;
 
     private float markerHue = 0.0f; // should be between 0 and 360
     private BitmapDescriptor iconBitmapDescriptor;
@@ -168,8 +168,8 @@ public class AirMapMarker extends AirMapFeature {
 
     public void setAnchor(double x, double y) {
         anchorIsSet = true;
-        anchorX = (float)x;
-        anchorY = (float)y;
+        anchorX = (float) x;
+        anchorY = (float) y;
         if (marker != null) {
             marker.setAnchor(anchorX, anchorY);
         }
@@ -178,8 +178,8 @@ public class AirMapMarker extends AirMapFeature {
 
     public void setCalloutAnchor(double x, double y) {
         calloutAnchorIsSet = true;
-        calloutAnchorX = (float)x;
-        calloutAnchorY = (float)y;
+        calloutAnchorX = (float) x;
+        calloutAnchorY = (float) y;
         if (marker != null) {
             marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
         }
@@ -190,7 +190,8 @@ public class AirMapMarker extends AirMapFeature {
         if (uri == null) {
             iconBitmapDescriptor = null;
             update();
-        } else if (uri.startsWith("http://") || uri.startsWith("https://") || uri.startsWith("file://")) {
+        } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
+                uri.startsWith("file://")) {
             ImageRequest imageRequest = ImageRequestBuilder
                     .newBuilderWithSource(Uri.parse(uri))
                     .build();

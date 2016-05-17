@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
 
@@ -10,13 +10,14 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AirMapPolygon extends AirMapFeature {
 
     private PolygonOptions polygonOptions;
     private Polygon polygon;
 
-    private ArrayList<LatLng> coordinates;
+    private List<LatLng> coordinates;
     private int strokeColor;
     private int fillColor;
     private float strokeWidth;
@@ -33,7 +34,7 @@ public class AirMapPolygon extends AirMapFeature {
         for (int i = 0; i < coordinates.size(); i++) {
             ReadableMap coordinate = coordinates.getMap(i);
             this.coordinates.add(i,
-                new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
+                    new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
         }
         if (polygon != null) {
             polygon.setPoints(this.coordinates);

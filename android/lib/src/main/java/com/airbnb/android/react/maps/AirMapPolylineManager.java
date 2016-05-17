@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,14 +8,14 @@ import android.view.WindowManager;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
-public class AirMapPolygonManager extends ViewGroupManager<AirMapPolygon> {
-    private DisplayMetrics metrics;
+public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
+    private final DisplayMetrics metrics;
 
-    public AirMapPolygonManager(ReactApplicationContext reactContext) {
+    public AirMapPolylineManager(ReactApplicationContext reactContext) {
         super();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             metrics = new DisplayMetrics();
@@ -29,42 +29,37 @@ public class AirMapPolygonManager extends ViewGroupManager<AirMapPolygon> {
 
     @Override
     public String getName() {
-        return "AIRMapPolygon";
+        return "AIRMapPolyline";
     }
 
     @Override
-    public AirMapPolygon createViewInstance(ThemedReactContext context) {
-        return new AirMapPolygon(context);
+    public AirMapPolyline createViewInstance(ThemedReactContext context) {
+        return new AirMapPolyline(context);
     }
 
     @ReactProp(name = "coordinates")
-    public void setCoordinate(AirMapPolygon view, ReadableArray coordinates) {
+    public void setCoordinate(AirMapPolyline view, ReadableArray coordinates) {
         view.setCoordinates(coordinates);
     }
 
     @ReactProp(name = "strokeWidth", defaultFloat = 1f)
-     public void setStrokeWidth(AirMapPolygon view, float widthInPoints) {
+    public void setStrokeWidth(AirMapPolyline view, float widthInPoints) {
         float widthInScreenPx = metrics.density * widthInPoints; // done for parity with iOS
-        view.setStrokeWidth(widthInScreenPx);
-    }
-
-    @ReactProp(name = "fillColor", defaultInt = Color.RED, customType = "Color")
-    public void setFillColor(AirMapPolygon view, int color) {
-        view.setFillColor(color);
+        view.setWidth(widthInScreenPx);
     }
 
     @ReactProp(name = "strokeColor", defaultInt = Color.RED, customType = "Color")
-    public void setStrokeColor(AirMapPolygon view, int color) {
-        view.setStrokeColor(color);
+    public void setStrokeColor(AirMapPolyline view, int color) {
+        view.setColor(color);
     }
 
     @ReactProp(name = "geodesic", defaultBoolean = false)
-    public void setGeodesic(AirMapPolygon view, boolean geodesic) {
+    public void setGeodesic(AirMapPolyline view, boolean geodesic) {
         view.setGeodesic(geodesic);
     }
 
     @ReactProp(name = "zIndex", defaultFloat = 1.0f)
-    public void setZIndex(AirMapPolygon view, float zIndex) {
+    public void setZIndex(AirMapPolyline view, float zIndex) {
         view.setZIndex(zIndex);
     }
 }
