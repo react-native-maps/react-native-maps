@@ -134,16 +134,63 @@ If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react
 
 **On Android :**  
 
-1. Run "android" and make sure every packages is updated.
-2.  If not installed yet, you have to install the following packages :
+1. Set this Stylesheet in your map component
+```
+...
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});
+
+module.exports = React.createClass({
+
+    render: function () {
+        const { region } = this.props;
+        console.log(region);
+
+        return (
+            <View style ={styles.container}>
+                <MapView
+                    style={styles.map}
+                    region={
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.015,
+                        longitudeDelta: 0.0121,
+                    }
+                    >
+                </MapView>
+            </View>
+        )
+    }
+})
+```
+2. Run "android" and make sure every packages is updated.
+3.  If not installed yet, you have to install the following packages :
     - Extras / Google Play services
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 13
-3. Check manual installation steps
-4. Generate your SHA1 key :  
+4. Check manual installation steps
+5. Generate your SHA1 key :  
    `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
 
-5. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and select your project, or create one.  
+6. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and select your project, or create one.  
 In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
 Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
 Check installation step 4.
