@@ -13,6 +13,8 @@ add native dependencies automatically:
 
 Go to step 4 to configure Google Maps API KEY in Android.
 
+>This installation should work in physical devices. For Genymotion, please check installation step 5
+
 or do it manually as described below:
 
 ## iOS
