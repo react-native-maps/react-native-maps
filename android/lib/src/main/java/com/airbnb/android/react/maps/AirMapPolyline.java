@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
 
@@ -10,13 +10,14 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AirMapPolyline extends AirMapFeature {
 
     private PolylineOptions polylineOptions;
     private Polyline polyline;
 
-    private ArrayList<LatLng> coordinates;
+    private List<LatLng> coordinates;
     private int color;
     private float width;
     private boolean geodesic;
@@ -27,11 +28,11 @@ public class AirMapPolyline extends AirMapFeature {
     }
 
     public void setCoordinates(ReadableArray coordinates) {
-        this.coordinates = new ArrayList<LatLng>(coordinates.size());
+        this.coordinates = new ArrayList<>(coordinates.size());
         for (int i = 0; i < coordinates.size(); i++) {
             ReadableMap coordinate = coordinates.getMap(i);
             this.coordinates.add(i,
-                new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
+                    new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
         }
         if (polyline != null) {
             polyline.setPoints(this.coordinates);

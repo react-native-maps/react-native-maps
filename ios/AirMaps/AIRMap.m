@@ -88,7 +88,6 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         ((AIRMapPolygon *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
-        ((AIRMapCircle *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
@@ -173,11 +172,12 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
             }
         }
         super.showsUserLocation = showsUserLocation;
-
-        // If it needs to show user location, force map view centered
-        // on user's current location on user location updates
-        _followUserLocation = showsUserLocation;
     }
+}
+
+- (void)setFollowsUserLocation:(BOOL)followsUserLocation
+{
+    _followUserLocation = followsUserLocation;
 }
 
 - (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated
