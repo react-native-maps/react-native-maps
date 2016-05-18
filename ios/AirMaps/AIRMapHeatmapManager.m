@@ -14,7 +14,6 @@
 #import "RCTConvert+CoreLocation.h"
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
-#import "AIRMapMarker.h"
 #import "RCTViewManager.h"
 #import "AIRMapHeatmap.h"
 
@@ -32,11 +31,6 @@ RCT_EXPORT_MODULE()
     return heatmap;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(points, AIRMapWeightedPointsArray)
-
-// NOTE(lmr):
-// for now, onPress events for overlays will be left unimplemented. Seems it is possible with some work, but
-// it is difficult to achieve in both ios and android so I decided to leave it out.
-//RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(points, AIRMapWeightedPointArray)
 
 @end

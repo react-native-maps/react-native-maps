@@ -36,41 +36,27 @@
 - (void) update
 {
     if (!_renderer) return;
-//    _renderer.fillColor = _fillColor;
-//    _renderer.strokeColor = _strokeColor;
-//    _renderer.lineWidth = _strokeWidth;
-//    _renderer.lineCap = _lineCap;
-//    _renderer.lineJoin = _lineJoin;
-//    _renderer.miterLimit = _miterLimit;
-//    _renderer.lineDashPhase = _lineDashPhase;
-//    _renderer.lineDashPattern = _lineDashPattern;
 
     if (_map == nil) return;
     [_map removeOverlay:self];
     [_map addOverlay:self];
 }
 
-//#pragma mark MKOverlay implementation
-//
-//- (CLLocationCoordinate2D) coordinate
-//{
-//    return self.polygon.coordinate;
-//}
-//
-//- (MKMapRect) boundingMapRect
-//{
-//    return self.polygon.boundingMapRect;
-//}
-//
-//- (BOOL)intersectsMapRect:(MKMapRect)mapRect
-//{
-//    BOOL answer = [self.polygon intersectsMapRect:mapRect];
-//    return answer;
-//}
-//
-//- (BOOL)canReplaceMapContent
-//{
-//    return NO;
-//}
+#pragma mark MKOverlay implementation
+
+- (CLLocationCoordinate2D) coordinate
+{
+    return self.heatmap.coordinate;
+}
+
+- (MKMapRect) boundingMapRect
+{
+    return self.heatmap.boundingMapRect;
+}
+
+- (BOOL)canReplaceMapContent
+{
+    return NO;
+}
 
 @end

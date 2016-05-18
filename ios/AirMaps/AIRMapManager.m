@@ -23,6 +23,7 @@
 #import "AIRMapPolyline.h"
 #import "AIRMapPolygon.h"
 #import "AIRMapCircle.h"
+#import "AIRMapHeatmap.h"
 #import "SMCalloutView.h"
 
 #import <MapKit/MapKit.h>
@@ -204,6 +205,8 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         return ((AIRMapPolygon *)overlay).renderer;
     } else if ([overlay isKindOfClass:[AIRMapCircle class]]) {
         return ((AIRMapCircle *)overlay).renderer;
+    } else if ([overlay isKindOfClass:[AIRMapHeatmap class]]) {
+        return ((AIRMapHeatmap *)overlay).renderer;
     } else {
         return nil;
     }
@@ -248,7 +251,7 @@ static int kDragCenterContext;
     AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
 
     BOOL isPinView = [view isKindOfClass:[MKPinAnnotationView class]];
-    
+
     id event = @{
                  @"id": marker.identifier ?: @"unknown",
                  @"coordinate": @{
@@ -256,7 +259,7 @@ static int kDragCenterContext;
                          @"longitude": @(marker.coordinate.longitude)
                          }
                  };
-    
+
     if (newState == MKAnnotationViewDragStateEnding || newState == MKAnnotationViewDragStateCanceling) {
         if (!isPinView) {
             [view setDragState:MKAnnotationViewDragStateNone animated:NO];

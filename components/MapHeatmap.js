@@ -39,7 +39,7 @@ var MapHeatmap = React.createClass({
     return this.props.points.map(function(point) {
       return {weight: 1, ...point};
     });
-  }
+  },
 
   render: function() {
     return (

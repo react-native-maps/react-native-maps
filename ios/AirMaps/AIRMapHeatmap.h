@@ -29,12 +29,10 @@
 @property (nonatomic, strong) MKOverlayRenderer *renderer;
 @property (nonatomic, strong) NSArray<AIRMapWeightedPoint *> *points;
 
-//#pragma mark MKOverlay protocol
-//
-//@property(nonatomic, readonly) CLLocationCoordinate2D coordinate;
-//@property(nonatomic, readonly) MKMapRect boundingMapRect;
-//- (BOOL)intersectsMapRect:(MKMapRect)mapRect;
-//- (BOOL)canReplaceMapContent;
+#pragma mark MKOverlay protocol
 
+@property(nonatomic, readonly) CLLocationCoordinate2D coordinate;
+@property(nonatomic, readonly) MKMapRect boundingMapRect;
+- (BOOL)canReplaceMapContent;
 
 @end

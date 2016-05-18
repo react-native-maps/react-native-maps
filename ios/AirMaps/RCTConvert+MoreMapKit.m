@@ -29,7 +29,7 @@ RCT_ARRAY_CONVERTER(AIRMapCoordinate)
 {
     AIRMapWeightedPoint *point = [AIRMapWeightedPoint new];
     point.coordinate = [self CLLocationCoordinate2D:json];
-    point.weight     = [self double:json];
+    point.weight     = [self double:json[@"weight"]];
     return point;
 }
 

@@ -20,11 +20,15 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-function getHeatMapPoints(size) {
+function getHeatMapPoints(size, withWeight = false) {
   let points = [];
 
   for (i = 0; i < size; i++) {
-    points.push({latitude: LATITUDE + Math.random() / 50, longitude: LONGITUDE + Math.random() / 50})
+    let pointData = {latitude: LATITUDE + Math.random() / 50, longitude: LONGITUDE + Math.random() / 50};
+    if (withWeight) {
+      pointData.weight = Math.round(Math.random() * 10 + 1);
+    }
+    points.push(pointData);
   }
 
   return points;
@@ -34,11 +38,17 @@ var Heatmap = React.createClass({
   getInitialState() {
     return {
       points: getHeatMapPoints(50),
+      weightEnabled: false,
     }
   },
 
   changeHeatmap() {
-    this.setState({points: getHeatMapPoints(50)});
+    this.setState({points: getHeatMapPoints(50, this.state.weightEnabled)});
+  },
+
+  toggleWeightEnabled() {
+    this.setState({weightEnabled: !this.state.weightEnabled});
+    this.changeHeatmap();
   },
 
   render() {
@@ -61,6 +71,9 @@ var Heatmap = React.createClass({
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={this.changeHeatmap} style={[styles.bubble, styles.button]}>
             <Text>Update</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.toggleWeightEnabled} style={[styles.bubble, styles.button]}>
+            <Text>{this.state.weightEnabled ? "With weight" : 'Without weight'}</Text>
           </TouchableOpacity>
         </View>
       </View>

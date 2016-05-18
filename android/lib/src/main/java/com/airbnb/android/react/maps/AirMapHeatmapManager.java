@@ -43,16 +43,4 @@ public class AirMapHeatmapManager extends ViewGroupManager<AirMapHeatmap> {
     public void setPoints(AirMapHeatmap view, ReadableArray points) {
         view.setPoints(points);
     }
-
-//    TODO colors
-//    @ReactProp(name = "title")
-//    public void setTitle(AirMapMarker view, String title) {
-//        view.setTitle(title);
-//    }
-//
-//    @ReactProp(name = "description")
-//    public void setDescription(AirMapMarker view, String description) {
-//        view.setSnippet(description);
-//    }
-
 }
