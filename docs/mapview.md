@@ -19,6 +19,7 @@
 | `rotateEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/rotate the map.
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
 | `pitchEnabled` | `Boolean` | `true` | If `false` the user won't be able to adjust the camera’s pitch angle.
+| `innerPadding` | `Array<Number>` |  | Adds padding around the edges of the map with an array of values. The map will continue to fill the entire container, but text and control positioning, map gestures, and camera movements will behave as if it has been placed in a smaller space. <br/> <br/> `[left, top, right, bottom]`
 
 
 
