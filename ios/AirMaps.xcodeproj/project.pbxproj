@@ -29,8 +29,6 @@
 		B6861BA61CE26637001E23CE /* AIRMapHeatmapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B9C1CE26637001E23CE /* AIRMapHeatmapManager.m */; };
 		B6861BA71CE26637001E23CE /* AIRMapHeatmap.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B9E1CE26637001E23CE /* AIRMapHeatmap.m */; };
 		B6861BA81CE26637001E23CE /* AIRMapWeightedPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861BA01CE26637001E23CE /* AIRMapWeightedPoint.m */; };
-		B6861BA91CE26637001E23CE /* AIRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861BA21CE26637001E23CE /* AIRMap.m */; };
-		B6861BAA1CE26637001E23CE /* AIRMapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861BA31CE26637001E23CE /* AIRMapManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -91,9 +89,6 @@
 		B6861B9F1CE26637001E23CE /* AIRMapWeightedPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRMapWeightedPoint.h; sourceTree = "<group>"; };
 		B6861BA01CE26637001E23CE /* AIRMapWeightedPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRMapWeightedPoint.m; sourceTree = "<group>"; };
 		B6861BA11CE26637001E23CE /* AIRMapHeatmapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRMapHeatmapManager.h; sourceTree = "<group>"; };
-		B6861BA21CE26637001E23CE /* AIRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRMap.m; sourceTree = "<group>"; };
-		B6861BA31CE26637001E23CE /* AIRMapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRMapManager.m; sourceTree = "<group>"; };
-		B6861BA41CE26637001E23CE /* AIRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRMap.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,9 +158,6 @@
 				B6861B9E1CE26637001E23CE /* AIRMapHeatmap.m */,
 				B6861B9F1CE26637001E23CE /* AIRMapWeightedPoint.h */,
 				B6861BA01CE26637001E23CE /* AIRMapWeightedPoint.m */,
-				B6861BA21CE26637001E23CE /* AIRMap.m */,
-				B6861BA31CE26637001E23CE /* AIRMapManager.m */,
-				B6861BA41CE26637001E23CE /* AIRMap.h */,
 			);
 			path = AirMaps;
 			sourceTree = "<group>";
@@ -264,7 +256,6 @@
 				1125B2E41C4AD3DA007D0023 /* AIRMapPolygonManager.m in Sources */,
 				1125B2DB1C4AD3DA007D0023 /* AIRMapCallout.m in Sources */,
 				B6861B991CE265DF001E23CE /* DTMHeatmapRenderer.m in Sources */,
-				B6861BA91CE26637001E23CE /* AIRMap.m in Sources */,
 				1125B2E01C4AD3DA007D0023 /* AIRMapManager.m in Sources */,
 				1125B2E61C4AD3DA007D0023 /* AIRMapPolylineManager.m in Sources */,
 				1125B2DD1C4AD3DA007D0023 /* AIRMapCircle.m in Sources */,
@@ -279,7 +270,6 @@
 				1125B2E11C4AD3DA007D0023 /* AIRMapMarker.m in Sources */,
 				B6861B971CE265DF001E23CE /* DTMColorProvider.m in Sources */,
 				1125B2E21C4AD3DA007D0023 /* AIRMapMarkerManager.m in Sources */,
-				B6861BAA1CE26637001E23CE /* AIRMapManager.m in Sources */,
 				1125B2DE1C4AD3DA007D0023 /* AIRMapCircleManager.m in Sources */,
 				B6861B981CE265DF001E23CE /* DTMDiffColorProvider.m in Sources */,
 				1125B2DC1C4AD3DA007D0023 /* AIRMapCalloutManager.m in Sources */,
