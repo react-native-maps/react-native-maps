@@ -209,6 +209,15 @@ var MapView = React.createClass({
     legalLabelInsets: EdgeInsetsPropType,
 
     /**
+     * Adds padding around the edges of the map using the GoogleMap.setPadding() method. 
+     * The map will continue to fill the entire container, but text and control positioning, map gestures,
+     * and camera movements will behave as if it has been placed in a smaller space.
+     *
+     * @platform android
+     */
+    innerPadding: PropTypes.arrayOf(PropTypes.number),
+
+    /**
      * Callback that is called continuously when the user is dragging the map.
      */
     onRegionChange: PropTypes.func,

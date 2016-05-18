@@ -5,6 +5,7 @@ import android.view.View;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -146,6 +147,30 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @ReactProp(name = "pitchEnabled", defaultBoolean = false)
     public void setPitchEnabled(AirMapView view, boolean pitchEnabled) {
         view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
+    }
+
+    @ReactProp(name="innerPadding")
+    public void setInnerPadding(AirMapView view, ReadableArray values) {
+        int density = (int) view.getResources().getDisplayMetrics().density;
+
+        int left = getIntAtPosition(values, 0) * density;
+        int top = getIntAtPosition(values, 1) * density;
+        int right = getIntAtPosition(values, 2) * density;
+        int bottom = getIntAtPosition(values, 3) * density;
+
+        view.map.setPadding(left, top, right, bottom);
+    }
+
+    private int getIntAtPosition(ReadableArray array, int position) {
+        try {
+            if (array.getType(position) != ReadableType.Number) {
+                return 0;
+            }
+
+            return array.getInt(position);
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
+        }
     }
 
     @Override
