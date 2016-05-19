@@ -417,22 +417,28 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             markerIDs[i] = markerIDsArray.getString(i);
         }
 
+        boolean addedPosition = false;
+
         for (AirMapFeature feature : features) {
             if (feature instanceof AirMapMarker) {
                 String identifier = ((AirMapMarker)feature).getIdentifier();
                 Marker marker = (Marker)feature.getFeature();
                 if (Arrays.asList(markerIDs).contains(identifier)) {
                     builder.include(marker.getPosition());
+                    addedPosition = true;
                 }
             }
         }
-        LatLngBounds bounds = builder.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
-        if (animated) {
-            startMonitoringRegion();
-            map.animateCamera(cu);
-        } else {
-            map.moveCamera(cu);
+
+        if (addedPosition) {
+            LatLngBounds bounds = builder.build();
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            if (animated) {
+                startMonitoringRegion();
+                map.animateCamera(cu);
+            } else {
+                map.moveCamera(cu);
+            }
         }
     }
 
