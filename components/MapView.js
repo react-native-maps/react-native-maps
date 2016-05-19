@@ -297,10 +297,6 @@ var MapView = React.createClass({
   },
 
   componentWillUpdate: function(nextProps) {
-    if (JSON.stringify(this.props.innerPadding) !== nextProps.innerPadding) {
-      this.refs.map.setNativeProps({innerPadding: nextProps.innerPadding})
-    }
-    
     var a = this.__lastRegion;
     var b = nextProps.region;
     if (!a || !b) return;
