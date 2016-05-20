@@ -1,6 +1,10 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var {
+  PropTypes,
+} = React;
+var ReactNative = require('react-native');
 var {
   EdgeInsetsPropType,
   NativeMethodsMixin,
@@ -10,8 +14,7 @@ var {
   Animated,
   requireNativeComponent,
   NativeModules,
-  PropTypes,
-} = React;
+} = ReactNative;
 
 var MapMarker = require('./MapMarker');
 var MapPolyline = require('./MapPolyline');
@@ -38,7 +41,7 @@ var MapView = React.createClass({
     style: View.propTypes.style,
 
     /**
-     * If `true` the app will ask for the user's location and focus on it.
+     * If `true` the app will ask for the user's location.
      * Default value is `false`.
      *
      * **NOTE**: You need to add NSLocationWhenInUseUsageDescription key in
@@ -46,6 +49,15 @@ var MapView = React.createClass({
      * to *fail silently*!
      */
     showsUserLocation: PropTypes.bool,
+
+    /**
+     * If `true` the map will focus on the user's location. This only works if
+     * `showsUserLocation` is true and the user has shared their location.
+     * Default value is `false`.
+     *
+     * @platform ios
+     */
+    followsUserLocation: PropTypes.bool,
 
     /**
      * If `false` points of interest won't be displayed on the map.
@@ -84,6 +96,13 @@ var MapView = React.createClass({
     scrollEnabled: PropTypes.bool,
 
     /**
+     * If `false` the user won't be able to adjust the camera’s pitch angle.
+     * Default value is `true`.
+     *
+     */
+    pitchEnabled: PropTypes.bool,
+
+    /**
      * A Boolean indicating whether the map shows scale information.
      * Default value is `false`
      *
@@ -116,11 +135,13 @@ var MapView = React.createClass({
      * - standard: standard road map (default)
      * - satellite: satellite view
      * - hybrid: satellite view with roads and points of interest overlayed
+     * - terrain: (Android only) topographic view
      */
     mapType: PropTypes.oneOf([
       'standard',
       'satellite',
       'hybrid',
+      'terrain',
     ]),
 
     /**
@@ -327,7 +348,7 @@ var MapView = React.createClass({
   },
 
   _getHandle: function() {
-    return React.findNodeHandle(this.refs.map);
+    return ReactNative.findNodeHandle(this.refs.map);
   },
 
   _runCommand: function (name, args) {
@@ -361,6 +382,9 @@ var MapView = React.createClass({
         onMapReady: this._onMapReady,
         onLayout: this._onLayout,
       };
+      if (Platform.OS === 'ios' && props.mapType === 'terrain') {
+        props.mapType = 'standard';
+      }
     } else {
       props = {
         region: null,

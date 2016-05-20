@@ -82,18 +82,18 @@ var Overlays = React.createClass({
           <MapView.Circle
             center={circle.center}
             radius={circle.radius}
-            fillColor="rgba(200, 0, 0, 0.5"
-            strokeColor="rgba(0,0,0,0.5"
+            fillColor="rgba(200, 0, 0, 0.5)"
+            strokeColor="rgba(0,0,0,0.5)"
           />
           <MapView.Polygon
             coordinates={polygon}
-            fillColor="rgba(0, 200, 0, 0.5"
-            strokeColor="rgba(0,0,0,0.5"
+            fillColor="rgba(0, 200, 0, 0.5)"
+            strokeColor="rgba(0,0,0,0.5)"
             strokeWidth={2}
           />
           <MapView.Polyline
             coordinates={polyline}
-            strokeColor="rgba(0,0,200,0.5"
+            strokeColor="rgba(0,0,200,0.5)"
             strokeWidth={3}
             lineDashPattern={[5, 2, 3, 2]}
           />

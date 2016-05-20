@@ -1,22 +1,17 @@
-apply plugin: 'com.android.library'
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-    }
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:2.1.0'
+  }
 }
 
-dependencies {
-    compile 'com.facebook.react:react-native:0.19.+'
-    compile "com.google.android.gms:play-services-base:8.4.0"
-    compile 'com.google.android.gms:play-services-maps:8.4.0'
+allprojects {
+  repositories {
+    jcenter()
+    maven { url "$projectDir/../../node_modules/react-native/android" }
+  }
 }

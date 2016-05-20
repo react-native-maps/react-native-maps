@@ -56,6 +56,7 @@ var DisplayLatLng = React.createClass({
       <View style={styles.container}>
         <MapView
           ref="map"
+          mapType="terrain"
           style={styles.map}
           region={this.state.region}
           onRegionChange={this.onRegionChange}

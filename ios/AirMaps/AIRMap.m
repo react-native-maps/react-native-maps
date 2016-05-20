@@ -82,6 +82,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     if ([subview isKindOfClass:[AIRMapMarker class]]) {
         [self addAnnotation:(id <MKAnnotation>) subview];
     } else if ([subview isKindOfClass:[AIRMapPolyline class]]) {
+        ((AIRMapPolyline *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapPolygon class]]) {
         ((AIRMapPolygon *)subview).map = self;
@@ -171,11 +172,12 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
             }
         }
         super.showsUserLocation = showsUserLocation;
-
-        // If it needs to show user location, force map view centered
-        // on user's current location on user location updates
-        _followUserLocation = showsUserLocation;
     }
+}
+
+- (void)setFollowsUserLocation:(BOOL)followsUserLocation
+{
+    _followUserLocation = followsUserLocation;
 }
 
 - (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated
@@ -201,6 +203,51 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     if (!_initialRegionSet) {
         _initialRegionSet = YES;
         [self setRegion:initialRegion animated:NO];
+    }
+}
+
+// Include properties of MKMapView which are only available on iOS 9+
+// and check if their selector is available before calling super method.
+
+- (void)setShowsCompass:(BOOL)showsCompass {
+    if ([MKMapView instancesRespondToSelector:@selector(setShowsCompass:)]) {
+        [super setShowsCompass:showsCompass];
+    }
+}
+
+- (BOOL)showsCompass {
+    if ([MKMapView instancesRespondToSelector:@selector(showsCompass)]) {
+        return [super showsCompass];
+    } else {
+        return NO;
+    }
+}
+
+- (void)setShowsScale:(BOOL)showsScale {
+    if ([MKMapView instancesRespondToSelector:@selector(setShowsScale:)]) {
+        [super setShowsScale:showsScale];
+    }
+}
+
+- (BOOL)showsScale {
+    if ([MKMapView instancesRespondToSelector:@selector(showsScale)]) {
+        return [super showsScale];
+    } else {
+        return NO;
+    }
+}
+
+- (void)setShowsTraffic:(BOOL)showsTraffic {
+    if ([MKMapView instancesRespondToSelector:@selector(setShowsTraffic:)]) {
+        [super setShowsTraffic:showsTraffic];
+    }
+}
+
+- (BOOL)showsTraffic {
+    if ([MKMapView instancesRespondToSelector:@selector(showsTraffic)]) {
+        return [super showsTraffic];
+    } else {
+        return NO;
     }
 }
 
