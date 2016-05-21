@@ -20,8 +20,15 @@
 		1125B2E41C4AD3DA007D0023 /* AIRMapPolygonManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1125B2D21C4AD3DA007D0023 /* AIRMapPolygonManager.m */; };
 		1125B2E51C4AD3DA007D0023 /* AIRMapPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 1125B2D41C4AD3DA007D0023 /* AIRMapPolyline.m */; };
 		1125B2E61C4AD3DA007D0023 /* AIRMapPolylineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1125B2D61C4AD3DA007D0023 /* AIRMapPolylineManager.m */; };
-		1125B2E71C4AD3DA007D0023 /* RCTConvert+MoreMapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 1125B2D91C4AD3DA007D0023 /* RCTConvert+MoreMapKit.m */; };
 		1125B2F21C4AD445007D0023 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1125B2F11C4AD445007D0023 /* SMCalloutView.m */; };
+		B6861B971CE265DF001E23CE /* DTMColorProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B8F1CE265DF001E23CE /* DTMColorProvider.m */; };
+		B6861B981CE265DF001E23CE /* DTMDiffColorProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B911CE265DF001E23CE /* DTMDiffColorProvider.m */; };
+		B6861B991CE265DF001E23CE /* DTMHeatmapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B931CE265DF001E23CE /* DTMHeatmapRenderer.m */; };
+		B6861B9A1CE265DF001E23CE /* DTMHeatmap.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B961CE265DF001E23CE /* DTMHeatmap.m */; };
+		B6861BA51CE26637001E23CE /* RCTConvert+MoreMapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B9B1CE26637001E23CE /* RCTConvert+MoreMapKit.m */; };
+		B6861BA61CE26637001E23CE /* AIRMapHeatmapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B9C1CE26637001E23CE /* AIRMapHeatmapManager.m */; };
+		B6861BA71CE26637001E23CE /* AIRMapHeatmap.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861B9E1CE26637001E23CE /* AIRMapHeatmap.m */; };
+		B6861BA81CE26637001E23CE /* AIRMapWeightedPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = B6861BA01CE26637001E23CE /* AIRMapWeightedPoint.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,10 +71,24 @@
 		1125B2D51C4AD3DA007D0023 /* AIRMapPolylineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIRMapPolylineManager.h; path = AirMaps/AIRMapPolylineManager.h; sourceTree = SOURCE_ROOT; };
 		1125B2D61C4AD3DA007D0023 /* AIRMapPolylineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AIRMapPolylineManager.m; path = AirMaps/AIRMapPolylineManager.m; sourceTree = SOURCE_ROOT; };
 		1125B2D81C4AD3DA007D0023 /* RCTConvert+MoreMapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RCTConvert+MoreMapKit.h"; path = "AirMaps/RCTConvert+MoreMapKit.h"; sourceTree = SOURCE_ROOT; };
-		1125B2D91C4AD3DA007D0023 /* RCTConvert+MoreMapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RCTConvert+MoreMapKit.m"; path = "AirMaps/RCTConvert+MoreMapKit.m"; sourceTree = SOURCE_ROOT; };
 		1125B2F01C4AD445007D0023 /* SMCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMCalloutView.h; path = AirMaps/Callout/SMCalloutView.h; sourceTree = SOURCE_ROOT; };
 		1125B2F11C4AD445007D0023 /* SMCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMCalloutView.m; path = AirMaps/Callout/SMCalloutView.m; sourceTree = SOURCE_ROOT; };
 		11FA5C511C4A1296003AC2EE /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirMaps.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6861B8E1CE265DF001E23CE /* DTMColorProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTMColorProvider.h; sourceTree = "<group>"; };
+		B6861B8F1CE265DF001E23CE /* DTMColorProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTMColorProvider.m; sourceTree = "<group>"; };
+		B6861B901CE265DF001E23CE /* DTMDiffColorProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTMDiffColorProvider.h; sourceTree = "<group>"; };
+		B6861B911CE265DF001E23CE /* DTMDiffColorProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTMDiffColorProvider.m; sourceTree = "<group>"; };
+		B6861B921CE265DF001E23CE /* DTMHeatmapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DTMHeatmapRenderer.h; path = DTMHeatmap/DTMHeatmapRenderer.h; sourceTree = "<group>"; };
+		B6861B931CE265DF001E23CE /* DTMHeatmapRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DTMHeatmapRenderer.m; path = DTMHeatmap/DTMHeatmapRenderer.m; sourceTree = "<group>"; };
+		B6861B951CE265DF001E23CE /* DTMHeatmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTMHeatmap.h; sourceTree = "<group>"; };
+		B6861B961CE265DF001E23CE /* DTMHeatmap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTMHeatmap.m; sourceTree = "<group>"; };
+		B6861B9B1CE26637001E23CE /* RCTConvert+MoreMapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+MoreMapKit.m"; sourceTree = "<group>"; };
+		B6861B9C1CE26637001E23CE /* AIRMapHeatmapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRMapHeatmapManager.m; sourceTree = "<group>"; };
+		B6861B9D1CE26637001E23CE /* AIRMapHeatmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRMapHeatmap.h; sourceTree = "<group>"; };
+		B6861B9E1CE26637001E23CE /* AIRMapHeatmap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRMapHeatmap.m; sourceTree = "<group>"; };
+		B6861B9F1CE26637001E23CE /* AIRMapWeightedPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRMapWeightedPoint.h; sourceTree = "<group>"; };
+		B6861BA01CE26637001E23CE /* AIRMapWeightedPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRMapWeightedPoint.m; sourceTree = "<group>"; };
+		B6861BA11CE26637001E23CE /* AIRMapHeatmapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRMapHeatmapManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +121,7 @@
 		11FA5C531C4A1296003AC2EE /* AirMaps */ = {
 			isa = PBXGroup;
 			children = (
+				B6861B871CE2658B001E23CE /* DTMHeatmap */,
 				1125B2BD1C4AD3DA007D0023 /* AIRMap.h */,
 				1125B2BE1C4AD3DA007D0023 /* AIRMap.m */,
 				1125B2BF1C4AD3DA007D0023 /* AIRMapCallout.h */,
@@ -129,9 +151,48 @@
 				1125B2F01C4AD445007D0023 /* SMCalloutView.h */,
 				1125B2F11C4AD445007D0023 /* SMCalloutView.m */,
 				1125B2D81C4AD3DA007D0023 /* RCTConvert+MoreMapKit.h */,
-				1125B2D91C4AD3DA007D0023 /* RCTConvert+MoreMapKit.m */,
+				B6861B9B1CE26637001E23CE /* RCTConvert+MoreMapKit.m */,
+				B6861BA11CE26637001E23CE /* AIRMapHeatmapManager.h */,
+				B6861B9C1CE26637001E23CE /* AIRMapHeatmapManager.m */,
+				B6861B9D1CE26637001E23CE /* AIRMapHeatmap.h */,
+				B6861B9E1CE26637001E23CE /* AIRMapHeatmap.m */,
+				B6861B9F1CE26637001E23CE /* AIRMapWeightedPoint.h */,
+				B6861BA01CE26637001E23CE /* AIRMapWeightedPoint.m */,
 			);
 			path = AirMaps;
+			sourceTree = "<group>";
+		};
+		B6861B871CE2658B001E23CE /* DTMHeatmap */ = {
+			isa = PBXGroup;
+			children = (
+				B6861B8D1CE265DF001E23CE /* Color Providers */,
+				B6861B921CE265DF001E23CE /* DTMHeatmapRenderer.h */,
+				B6861B931CE265DF001E23CE /* DTMHeatmapRenderer.m */,
+				B6861B941CE265DF001E23CE /* Heatmaps */,
+			);
+			name = DTMHeatmap;
+			sourceTree = "<group>";
+		};
+		B6861B8D1CE265DF001E23CE /* Color Providers */ = {
+			isa = PBXGroup;
+			children = (
+				B6861B8E1CE265DF001E23CE /* DTMColorProvider.h */,
+				B6861B8F1CE265DF001E23CE /* DTMColorProvider.m */,
+				B6861B901CE265DF001E23CE /* DTMDiffColorProvider.h */,
+				B6861B911CE265DF001E23CE /* DTMDiffColorProvider.m */,
+			);
+			name = "Color Providers";
+			path = "DTMHeatmap/Color Providers";
+			sourceTree = "<group>";
+		};
+		B6861B941CE265DF001E23CE /* Heatmaps */ = {
+			isa = PBXGroup;
+			children = (
+				B6861B951CE265DF001E23CE /* DTMHeatmap.h */,
+				B6861B961CE265DF001E23CE /* DTMHeatmap.m */,
+			);
+			name = Heatmaps;
+			path = DTMHeatmap/Heatmaps;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -190,20 +251,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6861B9A1CE265DF001E23CE /* DTMHeatmap.m in Sources */,
 				1125B2E31C4AD3DA007D0023 /* AIRMapPolygon.m in Sources */,
 				1125B2E41C4AD3DA007D0023 /* AIRMapPolygonManager.m in Sources */,
 				1125B2DB1C4AD3DA007D0023 /* AIRMapCallout.m in Sources */,
+				B6861B991CE265DF001E23CE /* DTMHeatmapRenderer.m in Sources */,
 				1125B2E01C4AD3DA007D0023 /* AIRMapManager.m in Sources */,
 				1125B2E61C4AD3DA007D0023 /* AIRMapPolylineManager.m in Sources */,
 				1125B2DD1C4AD3DA007D0023 /* AIRMapCircle.m in Sources */,
 				1125B2E51C4AD3DA007D0023 /* AIRMapPolyline.m in Sources */,
+				B6861BA61CE26637001E23CE /* AIRMapHeatmapManager.m in Sources */,
 				1125B2DA1C4AD3DA007D0023 /* AIRMap.m in Sources */,
-				1125B2E71C4AD3DA007D0023 /* RCTConvert+MoreMapKit.m in Sources */,
 				1125B2DF1C4AD3DA007D0023 /* AIRMapCoordinate.m in Sources */,
+				B6861BA51CE26637001E23CE /* RCTConvert+MoreMapKit.m in Sources */,
+				B6861BA81CE26637001E23CE /* AIRMapWeightedPoint.m in Sources */,
+				B6861BA71CE26637001E23CE /* AIRMapHeatmap.m in Sources */,
 				1125B2F21C4AD445007D0023 /* SMCalloutView.m in Sources */,
 				1125B2E11C4AD3DA007D0023 /* AIRMapMarker.m in Sources */,
+				B6861B971CE265DF001E23CE /* DTMColorProvider.m in Sources */,
 				1125B2E21C4AD3DA007D0023 /* AIRMapMarkerManager.m in Sources */,
 				1125B2DE1C4AD3DA007D0023 /* AIRMapCircleManager.m in Sources */,
+				B6861B981CE265DF001E23CE /* DTMDiffColorProvider.m in Sources */,
 				1125B2DC1C4AD3DA007D0023 /* AIRMapCalloutManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

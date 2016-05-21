@@ -5,6 +5,7 @@
 
 #import "RCTConvert+MoreMapKit.h"
 #import "AIRMapCoordinate.h"
+#import "AIRMapWeightedPoint.h"
 #import "RCTConvert+CoreLocation.h"
 
 
@@ -23,5 +24,15 @@
 }
 
 RCT_ARRAY_CONVERTER(AIRMapCoordinate)
+
++ (AIRMapWeightedPoint *)AIRMapWeightedPoint:(id)json
+{
+    AIRMapWeightedPoint *point = [AIRMapWeightedPoint new];
+    point.coordinate = [self CLLocationCoordinate2D:json];
+    point.weight     = [self double:json[@"weight"]];
+    return point;
+}
+
+RCT_ARRAY_CONVERTER(AIRMapWeightedPoint)
 
 @end

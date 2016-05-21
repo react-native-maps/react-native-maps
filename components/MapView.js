@@ -21,6 +21,7 @@ var MapPolyline = require('./MapPolyline');
 var MapPolygon = require('./MapPolygon');
 var MapCircle = require('./MapCircle');
 var MapCallout = require('./MapCallout');
+var MapHeatmap = require('./MapHeatmap');
 
 var MapView = React.createClass({
   mixins: [NativeMethodsMixin],
@@ -413,6 +414,7 @@ MapView.Polyline = MapPolyline;
 MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
 MapView.Callout = MapCallout;
+MapView.Heatmap = MapHeatmap;
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
 
