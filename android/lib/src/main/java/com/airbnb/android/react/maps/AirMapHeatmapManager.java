@@ -24,9 +24,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 public class AirMapHeatmapManager extends ViewGroupManager<AirMapHeatmap> {
-    public AirMapHeatmapManager(ReactApplicationContext reactContext) {
-        super();
-    }
 
     @Override
     public String getName() {

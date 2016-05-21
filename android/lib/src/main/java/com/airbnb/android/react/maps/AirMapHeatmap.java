@@ -19,7 +19,7 @@ public class AirMapHeatmap extends AirMapFeature {
     private TileOverlay heatmap;
     private HeatmapTileProvider heatmapTileProvider;
 
-    private ArrayList<WeightedLatLng> points;
+    private List<WeightedLatLng> points;
 
     public AirMapHeatmap(Context context) {
         super(context);
