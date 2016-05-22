@@ -45,7 +45,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
    ...
      dependencies {
      ...
-    compile project(':react-native-maps') // <-- Add this!
+    compile 'com.airbnb.android:react-native-maps:0.5.0' // <-- Add this!
     }
    ```
 
@@ -62,7 +62,7 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
     **Newer versions of React Native**
       ```
     ...
-    import com.AirMaps.AirPackage; // <--- Add this!
+    import com.airbnb.android.react.maps.MapsPackage; // <--- Add this!
     ...
     
     public class MainActivity extends ReactActivity {
@@ -71,7 +71,7 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
-                new AirPackage()    // <-- Add this!
+                new MapsPackage()    // <-- Add this!
             );
         }
    }
@@ -206,3 +206,4 @@ Check installation step 4.
 9. Run `react-native run-android`
 
 10. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
+q
