@@ -131,6 +131,7 @@ var MapViewTest = React.createClass({
           onRegionChange={this.onRegionChange}
           onRegionChangeComplete={(e) => console.log("Map::onRegionChangeComplete", e.nativeEvent)}
           onPress={(e) => console.log("Map::onPress", e.nativeEvent)}
+          onPanDrag={(e) => console.log("Map::onPanDrag", e.nativeEvent)}
           onLongPress={(e) => console.log("Map::onLongPress", e.nativeEvent)}
           onMarkerPress={(e) => console.log("Map::onMarkerPress", e.nativeEvent)}
           onMarkerSelect={(e) => console.log("Map::onMarkerSelect", e.nativeEvent)}

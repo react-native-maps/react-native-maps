@@ -46,12 +46,19 @@ RCT_EXPORT_MODULE()
     // MKMapView doesn't report tap events, so we attach gesture recognizers to it
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapLongPress:)];
+    UIPanGestureRecognizer *drag = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
+    [drag setMinimumNumberOfTouches:1];
+    [drag setMaximumNumberOfTouches:1];
     // setting this to NO allows the parent MapView to continue receiving marker selection events
     tap.cancelsTouchesInView = NO;
     longPress.cancelsTouchesInView = NO;
 
+    // disable drag by default
+    drag.enabled = NO;
+
     [map addGestureRecognizer:tap];
     [map addGestureRecognizer:longPress];
+    [map addGestureRecognizer:drag];
 
     return map;
 }
@@ -67,11 +74,13 @@ RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(minDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
@@ -170,6 +179,26 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
 }
 
+- (void)handleMapDrag:(UIPanGestureRecognizer*)recognizer {
+    AIRMap *map = (AIRMap *)recognizer.view;
+    if (!map.onPanDrag) return;
+
+    CGPoint touchPoint = [recognizer locationInView:map];
+    CLLocationCoordinate2D coord = [map convertPoint:touchPoint toCoordinateFromView:map];
+    map.onPanDrag(@{
+                  @"coordinate": @{
+                          @"latitude": @(coord.latitude),
+                          @"longitude": @(coord.longitude),
+                          },
+                  @"position": @{
+                          @"x": @(touchPoint.x),
+                          @"y": @(touchPoint.y),
+                          },
+                  });
+
+}
+
+
 - (void)handleMapLongPress:(UITapGestureRecognizer *)recognizer {
 
     // NOTE: android only does the equivalent of "began", so we only send in this case
@@ -248,7 +277,7 @@ static int kDragCenterContext;
     AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
 
     BOOL isPinView = [view isKindOfClass:[MKPinAnnotationView class]];
-    
+
     id event = @{
                  @"id": marker.identifier ?: @"unknown",
                  @"coordinate": @{
@@ -256,7 +285,7 @@ static int kDragCenterContext;
                          @"longitude": @(marker.coordinate.longitude)
                          }
                  };
-    
+
     if (newState == MKAnnotationViewDragStateEnding || newState == MKAnnotationViewDragStateCanceling) {
         if (!isPinView) {
             [view setDragState:MKAnnotationViewDragStateNone animated:NO];
