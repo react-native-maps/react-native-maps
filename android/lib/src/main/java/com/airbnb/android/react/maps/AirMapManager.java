@@ -108,6 +108,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.setShowsUserLocation(showUserLocation);
     }
 
+    // This is a private prop to improve performance of panDrag by disabling it when the callback is not set
+    @ReactProp(name = "handlePanDrag", defaultBoolean = false)
+    public void setHandlePanDrag(AirMapView view, boolean handlePanDrag) {
+        view.setHandlePanDrag(handlePanDrag);
+    }
+
     @ReactProp(name = "showsTraffic", defaultBoolean = false)
     public void setShowTraffic(AirMapView view, boolean showTraffic) {
         view.map.setTrafficEnabled(showTraffic);
@@ -202,7 +208,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         map.putAll(MapBuilder.of(
                 "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
                 "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
-                "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd")
+                "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
+                "onPanDrag", MapBuilder.of("registrationName", "onPanDrag")
         ));
 
         return map;

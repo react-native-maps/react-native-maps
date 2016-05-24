@@ -180,6 +180,15 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     _followUserLocation = followsUserLocation;
 }
 
+- (void)setHandlePanDrag:(BOOL)handleMapDrag {
+    for (UIGestureRecognizer *recognizer in [self gestureRecognizers]) {
+        if ([recognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+            recognizer.enabled = handleMapDrag;
+            break;
+        }
+    }
+}
+
 - (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated
 {
     // If location is invalid, abort
