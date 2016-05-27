@@ -21,8 +21,8 @@
 | Event Name | Returns | Notes
 |---|---|---|
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user presses on the marker
-| `onSelect` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user selects the marker, before the callout is shown.
-| `onDeselect` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the marker is deselected, before the callout is hidden.
+| `onSelect` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user selects the marker, before the callout is shown. **Note**: iOS only.
+| `onDeselect` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the marker is deselected, before the callout is hidden. **Note**: iOS only.
 | `onCalloutPress` |  | Callback that is called when the user taps the callout view.
 | `onDragStart` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user initiates a drag on this marker (if it is draggable)
 | `onDrag` | `{ coordinate: LatLng, position: Point }` | Callback called continuously as the marker is dragged
