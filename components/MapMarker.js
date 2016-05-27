@@ -180,6 +180,8 @@ var MapMarker = React.createClass({
 
     /**
      * Callback that is called when the marker is deselected, before the callout is hidden.
+     *
+     * @platform ios
      */
     onDeselect: PropTypes.func,
 
