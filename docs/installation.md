@@ -102,7 +102,7 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
        setContentView(mReactRootView);
    }
    ```
-4. specify your Google Maps API Key:
+4. Specify your Google Maps API Key:
     > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
 Add your Api key in  `android/app/src/main/AndroidManifest.xml`:
@@ -192,7 +192,7 @@ module.exports = React.createClass({
 5. Generate your SHA1 key :  
    `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
 
-6. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and select your project, or create one.  
+6. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
 In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
 Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
 Check installation step 4.
