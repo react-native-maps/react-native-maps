@@ -352,6 +352,13 @@ var MapView = React.createClass({
     this._runCommand('fitToElements', [animated]);
   },
 
+  takeSnapshot: function (width, height, region, callback) {
+    if (!region) {
+      region = this.props.region || this.props.initialRegion;
+    }
+    this._runCommand('takeSnapshot', [width, height, region, callback]);
+  },
+
   _getHandle: function() {
     return ReactNative.findNodeHandle(this.refs.map);
   },
