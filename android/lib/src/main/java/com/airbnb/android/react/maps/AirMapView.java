@@ -326,7 +326,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     public void removeFeatureAt(int index) {
         AirMapFeature feature = features.remove(index);
-        feature.removeFromMap(map);
+        
 
         if (feature instanceof AirMapMarker) {
             markerMap.remove(feature.getFeature());
@@ -337,6 +337,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         } else if (feature instanceof AirMapCircle) {
             circleMap.remove(feature.getFeature());
         }
+        feature.removeFromMap(map);
     }
 
     public WritableMap makeClickEventData(LatLng point) {
