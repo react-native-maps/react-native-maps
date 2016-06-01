@@ -45,6 +45,8 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
     **Newer versions of React Native**
       ```java
+    import com.airbnb.android.react.maps.MapsPackage;//  <-- add this
+
     public class MainActivity extends ReactActivity {
 
      @Override
@@ -104,7 +106,7 @@ If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react
 
 **On iOS :**  
 
- You have to link dependencies with rnpm and re-run the build :   
+ You have to link dependencies with rnpm and re-run the build :
 1. `rnpm link`  
 2. `react-native run-ios`
 
@@ -120,12 +122,13 @@ If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react
    ```
    dependencies {
       ...
-      compile 'com.airbnb.android:react-native-maps:0.0.1'
+      compile 'com.airbnb.android:react-native-maps:0.5.0'
    }
    ```
 
    - In `android/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` :
    ```
+   import com.airbnb.android.react.maps.MapsPackage;//  <-- add this
    @Override
    protected List<ReactPackage> getPackages() {
      return Arrays.<ReactPackage>asList(
@@ -155,7 +158,7 @@ Create a new key by clicking on `Create credentials -> API Key -> Android Key`, 
    </application>
    ```
 
-7. Clean the cache :   
+7. Clean the cache :
    `watchman watch-del-all`  
    `npm cache clean`
 
