@@ -202,4 +202,3 @@ Check installation step 4.
 9. Run `react-native run-android`
 
 10. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
-q
