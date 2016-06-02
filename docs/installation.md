@@ -59,7 +59,6 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
 
 3. in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
 
-    **Newer versions of React Native**
       ```
     ...
     import com.airbnb.android.react.maps.MapsPackage; // <--- Add this!
@@ -78,10 +77,7 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
    ```
 
     **Older versions of React Native**
-   ```
-   ...
-   import com.airbnb.android.react.maps.MapsPackage; // <--- This!
-   ...
+   ```java
    @Override
    protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);

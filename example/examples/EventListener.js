@@ -79,6 +79,7 @@ var DisplayLatLng = React.createClass({
           onRegionChange={this.recordEvent('Map::onRegionChange')}
           onRegionChangeComplete={this.recordEvent('Map::onRegionChangeComplete')}
           onPress={this.recordEvent('Map::onPress')}
+          onPanDrag={this.recordEvent('Map::onPanDrag')}
           onLongPress={this.recordEvent('Map::onLongPress')}
           onMarkerPress={this.recordEvent('Map::onMarkerPress')}
           onMarkerSelect={this.recordEvent('Map::onMarkerSelect')}

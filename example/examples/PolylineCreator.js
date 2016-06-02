@@ -20,7 +20,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 var id = 0;
 
-var DisplayLatLng = React.createClass({
+var PolylineCreator = React.createClass({
   getInitialState() {
     return {
       region: {
@@ -42,7 +42,7 @@ var DisplayLatLng = React.createClass({
     });
   },
 
-  onPress(e) {
+  onPanDrag(e) {
     var { editing } = this.state;
     if (!editing) {
       this.setState({
@@ -65,25 +65,16 @@ var DisplayLatLng = React.createClass({
   },
 
   render() {
-    var mapOptions = {
-      scrollEnabled: true,
-    };
-
-    if (this.state.editing) {
-      mapOptions.scrollEnabled = false;
-      mapOptions.onPanDrag     = this.onPress;
-    }
-
     return (
       <View style={styles.container}>
         <MapView
           style={styles.map}
           initialRegion={this.state.region}
-          onPress={this.onPress}
-          {...mapOptions}
+          scrollEnabled={false}
+          onPanDrag={this.onPanDrag}
         >
           {this.state.polygons.map(polygon => (
-            <MapView.Polygon
+            <MapView.Polyline
               key={polygon.id}
               coordinates={polygon.coordinates}
               strokeColor="#F00"
@@ -92,9 +83,10 @@ var DisplayLatLng = React.createClass({
             />
           ))}
           {this.state.editing && (
-            <MapView.Polygon
+            <MapView.Polyline
+              key={'editingPolyline'}
               coordinates={this.state.editing.coordinates}
-              strokeColor="#000"
+              strokeColor="#F00"
               fillColor="rgba(255,0,0,0.5)"
               strokeWidth={1}
             />
@@ -152,4 +144,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = DisplayLatLng;
+module.exports = PolylineCreator;

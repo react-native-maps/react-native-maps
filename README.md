@@ -320,6 +320,42 @@ render() {
 }
 ```
 
+### Take Snapshot of map
+currently only for ios, android implementation WIP
+
+```jsx
+getInitialState() {
+  return {
+    coordinate: {
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
+    },
+  };
+}
+
+takeSnapshot () {
+  // arguments to 'takeSnapshot' are width, height, coordinates and callback
+  this.refs.map.takeSnapshot(300, 300, this.state.coordinate, (err, snapshot) => {
+    // snapshot contains image 'uri' - full path to image and 'data' - base64 encoded image
+    this.setState({ mapSnapshot: snapshot })
+  })
+}
+
+render() {
+  return (
+    <View>
+      <MapView initialRegion={...} ref="map">
+        <MapView.Marker coordinate={this.state.coordinate} />
+      </MapView>
+      <Image source={{ uri: this.state.mapSnapshot.uri }} />
+      <TouchableOpacity onPress={this.takeSnapshot}>
+        Take Snapshot
+      </TouchableOpacity>
+    </View>
+  );
+}
+```
+
 ### Troubleshooting
 
 #### My map is blank

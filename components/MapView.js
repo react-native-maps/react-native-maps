@@ -229,6 +229,11 @@ var MapView = React.createClass({
     onLongPress: PropTypes.func,
 
     /**
+     * Callback that is called when user makes a "drag" somewhere on the map
+     */
+    onPanDrag: PropTypes.func,
+
+    /**
      * Callback that is called when a marker on the map is tapped by the user.
      */
     onMarkerPress: PropTypes.func,
@@ -347,6 +352,13 @@ var MapView = React.createClass({
     this._runCommand('fitToElements', [animated]);
   },
 
+  takeSnapshot: function (width, height, region, callback) {
+    if (!region) {
+      region = this.props.region || this.props.initialRegion;
+    }
+    this._runCommand('takeSnapshot', [width, height, region, callback]);
+  },
+
   _getHandle: function() {
     return ReactNative.findNodeHandle(this.refs.map);
   },
@@ -385,6 +397,7 @@ var MapView = React.createClass({
       if (Platform.OS === 'ios' && props.mapType === 'terrain') {
         props.mapType = 'standard';
       }
+      props.handlePanDrag = !!props.onPanDrag;
     } else {
       props = {
         region: null,
@@ -405,6 +418,7 @@ var AIRMap = requireNativeComponent('AIRMap', MapView, {
   nativeOnly: {
     onChange: true,
     onMapReady: true,
+    handlePanDrag: true,
   },
 });
 

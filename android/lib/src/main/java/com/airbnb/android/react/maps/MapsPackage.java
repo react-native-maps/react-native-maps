@@ -32,8 +32,7 @@ public class MapsPackage implements ReactPackage {
                 annotationManager,
                 polylineManager,
                 polygonManager,
-                circleManager
-        );
+                circleManager);
 
         return Arrays.<ViewManager>asList(
                 calloutManager,
@@ -41,7 +40,6 @@ public class MapsPackage implements ReactPackage {
                 polylineManager,
                 polygonManager,
                 circleManager,
-                mapManager
-        );
+                mapManager);
     }
 }
