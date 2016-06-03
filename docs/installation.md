@@ -41,25 +41,24 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 ## Android
 
 1. in `android/app/build.gradle` add:
-   ```
-   ...
-     dependencies {
-     ...
-    compile 'com.airbnb.android:react-native-maps:0.5.0' // <-- Add this!
+  ```
+  ...
+    dependencies {
+    ...
+      compile 'com.airbnb.android:react-native-maps:0.5.0' // <-- Add this!
     }
-   ```
+  ```
 
 2. in `android/settings.gradle` add:
-```
-include ':react-native-maps'
-project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+  ```
+  include ':react-native-maps'
+  project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
 
-```
-
+  ```
 
 3. in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
 
-      ```
+  ```
     ...
     import com.airbnb.android.react.maps.MapsPackage; // <--- Add this!
     ...
@@ -73,35 +72,35 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
                 new MapsPackage()    // <-- Add this!
             );
         }
-   }
-   ```
+    }
+  ```
 
-    **Older versions of React Native**
-   ```java
-   @Override
-   protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       mReactRootView = new ReactRootView(this);
+  **Older versions of React Native**
+  ```java
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      mReactRootView = new ReactRootView(this);
 
-       mReactInstanceManager = ReactInstanceManager.builder()
-               .setApplication(getApplication())
-               .setBundleAssetName("index.android.bundle")
-               .setJSMainModuleName("index.android")
-               .addPackage(new MainReactPackage())
-               .addPackage(new MapsPackage()) // <---- and This!
-               .setUseDeveloperSupport(BuildConfig.DEBUG)
-               .setInitialLifecycleState(LifecycleState.RESUMED)
-               .build();
+      mReactInstanceManager = ReactInstanceManager.builder()
+              .setApplication(getApplication())
+              .setBundleAssetName("index.android.bundle")
+              .setJSMainModuleName("index.android")
+              .addPackage(new MainReactPackage())
+              .addPackage(new MapsPackage()) // <---- and This!
+              .setUseDeveloperSupport(BuildConfig.DEBUG)
+              .setInitialLifecycleState(LifecycleState.RESUMED)
+              .build();
 
-       mReactRootView.startReactApplication(mReactInstanceManager, "MyApp", null);
+      mReactRootView.startReactApplication(mReactInstanceManager, "MyApp", null);
 
-       setContentView(mReactRootView);
+      setContentView(mReactRootView);
    }
    ```
 4. Specify your Google Maps API Key:
-    > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+  > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-Add your Api key in  `android/app/src/main/AndroidManifest.xml`:
+  Add your Api key in  `android/app/src/main/AndroidManifest.xml`:
 
   ```xml
   <application
@@ -116,7 +115,7 @@ Add your Api key in  `android/app/src/main/AndroidManifest.xml`:
   </application>
   ```
 
-5. ensure that you have Google Play Services installed:
+5. Ensure that you have Google Play Services installed:
   * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).
   * For a physical device you need to search on Google 'Google Play Services'. There will be a link that takes you to the play store and from there you will see a button to update it (do not search within the Play Store).
 
@@ -133,52 +132,52 @@ If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react
 **On Android :**  
 
 1. Set this Stylesheet in your map component
-```
-...
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 400,
-    width: 400,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-});
+  ```
+  ...
+  const styles = StyleSheet.create({
+    container: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: 400,
+      width: 400,
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    map: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    },
+  });
 
-module.exports = React.createClass({
+  module.exports = React.createClass({
 
-    render: function () {
-        const { region } = this.props;
-        console.log(region);
+      render: function () {
+          const { region } = this.props;
+          console.log(region);
 
-        return (
-            <View style ={styles.container}>
-                <MapView
-                    style={styles.map}
-                    region={
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.015,
-                        longitudeDelta: 0.0121,
-                    }
-                    >
-                </MapView>
-            </View>
-        )
-    }
-})
-```
+          return (
+              <View style ={styles.container}>
+                  <MapView
+                      style={styles.map}
+                      region={
+                          latitude: 37.78825,
+                          longitude: -122.4324,
+                          latitudeDelta: 0.015,
+                          longitudeDelta: 0.0121,
+                      }
+                      >
+                  </MapView>
+              </View>
+          )
+      }
+  })
+  ```
 2. Run "android" and make sure every packages is updated.
 3.  If not installed yet, you have to install the following packages :
     - Extras / Google Play services
@@ -186,16 +185,16 @@ module.exports = React.createClass({
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 13
 4. Check manual installation steps
 5. Generate your SHA1 key :  
-   `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
+  `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
 
 6. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
-In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
-Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
-Check installation step 4.
+  In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
+  Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
+  Check installation step 4.
 
 7. Clean the cache :   
-   `watchman watch-del-all`  
-   `npm cache clean`
+  `watchman watch-del-all`  
+  `npm cache clean`
 
 8. When starting emulator, make sure you have enabled `Wipe user data`.
 
