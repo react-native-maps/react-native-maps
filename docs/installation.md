@@ -11,6 +11,10 @@ add native dependencies automatically:
 
 `$ rnpm link`
 
+Go to step 4 to configure Google Maps API KEY in Android.
+
+>This installation should work in physical devices. For Genymotion, please check installation step 5
+
 or do it manually as described below:
 
 ## iOS
@@ -36,24 +40,39 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 ## Android
 
-1. in `build.gradle`
+1. in `android/app/build.gradle` add:
    ```
-     compile 'com.airbnb.android:react-native-maps:0.5.0'
+   ...
+     dependencies {
+     ...
+    compile 'com.airbnb.android:react-native-maps:0.5.0' // <-- Add this!
+    }
    ```
 
-3. and finally, in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
+2. in `android/settings.gradle` add:
+```
+include ':react-native-maps'
+project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
 
-    **Newer versions of React Native**
-      ```java
+```
+
+
+3. in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
+
+      ```
+    ...
+    import com.airbnb.android.react.maps.MapsPackage; // <--- Add this!
+    ...
+    
     public class MainActivity extends ReactActivity {
-
-     @Override
-     protected List<ReactPackage> getPackages() {
-       return Arrays.<ReactPackage>asList(
-         new MainReactPackage(),
-         new MapsPackage() //  <-- add this
-       );
-     }
+    ...
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                new MapsPackage()    // <-- Add this!
+            );
+        }
    }
    ```
 
@@ -79,7 +98,10 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
        setContentView(mReactRootView);
    }
    ```
-4. specify your Google Maps API Key in your `AndroidManifest.xml`:
+4. Specify your Google Maps API Key:
+    > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+
+Add your Api key in  `android/app/src/main/AndroidManifest.xml`:
 
   ```xml
   <application
@@ -110,50 +132,66 @@ If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react
 
 **On Android :**  
 
-1. Run "android" and make sure every packages is updated.
-2.  If not installed yet, you have to install the following packages :
+1. Set this Stylesheet in your map component
+```
+...
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});
+
+module.exports = React.createClass({
+
+    render: function () {
+        const { region } = this.props;
+        console.log(region);
+
+        return (
+            <View style ={styles.container}>
+                <MapView
+                    style={styles.map}
+                    region={
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.015,
+                        longitudeDelta: 0.0121,
+                    }
+                    >
+                </MapView>
+            </View>
+        )
+    }
+})
+```
+2. Run "android" and make sure every packages is updated.
+3.  If not installed yet, you have to install the following packages :
     - Extras / Google Play services
     - Extras / Google Repository
-    - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 12
-3. Check that the following files contains this lines :
-   - In `android/app/build.gradle` :
-   ```
-   dependencies {
-      ...
-      compile 'com.airbnb.android:react-native-maps:0.0.1'
-   }
-   ```
-
-   - In `android/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` :
-   ```
-   @Override
-   protected List<ReactPackage> getPackages() {
-     return Arrays.<ReactPackage>asList(
-       new MainReactPackage(),
-       new MapsPackage() <-- THIS
-     );
-   }
-   ```
-4. Generate your SHA1 key :  
+    - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 13
+4. Check manual installation steps
+5. Generate your SHA1 key :  
    `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
 
-5. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and select your project, or create one.  
+6. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
 In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
 Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
-
-6. Copy and paste your key generated before in `android/app/src/main/AndroidManifest.xml` between the `application` tag :
-   ```xml
-   <application
-     android:allowBackup="true"
-     android:label="@string/app_name"
-     android:icon="@mipmap/ic_launcher"
-     android:theme="@style/AppTheme">
-       <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-       <meta-data
-         android:name="com.google.android.geo.API_KEY"
-         android:value="{{Your Google maps API Key Here}}"/>
-   </application>
-   ```
+Check installation step 4.
 
 7. Clean the cache :   
    `watchman watch-del-all`  
