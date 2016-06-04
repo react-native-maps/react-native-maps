@@ -73,7 +73,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
      protected List<ReactPackage> getPackages() {
        return Arrays.<ReactPackage>asList(
          new MainReactPackage(),
-         new AirPackage() // <---- and This!
+         new AirPackage(this) // <---- and This!
        );
      }
    }

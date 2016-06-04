@@ -1,5 +1,7 @@
 package com.AirMaps;
 
+import android.app.Activity;
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -11,6 +13,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class AirPackage implements ReactPackage {
+    private Activity reactActivity = null;
+
+    public AirPackage(Activity activity) {
+        reactActivity = activity;
+    }
+
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Collections.emptyList();
@@ -29,6 +37,7 @@ public class AirPackage implements ReactPackage {
         AirMapPolygonManager polygonManager = new AirMapPolygonManager(reactContext);
         AirMapCircleManager circleManager = new AirMapCircleManager(reactContext);
         AirMapManager mapManager = new AirMapManager(
+            reactActivity,
             annotationManager,
             polylineManager,
             polygonManager,
