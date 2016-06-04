@@ -102,6 +102,11 @@ RCT_EXPORT_METHOD(hideCallout:(nonnull NSNumber *)reactTag)
     // the actual marker got clicked
     id event = @{
             @"action": @"marker-press",
+            @"id": marker.identifier ?: @"unknown",
+            @"coordinate": @{
+                    @"latitude": @(marker.coordinate.latitude),
+                    @"longitude": @(marker.coordinate.longitude)
+            }
     };
 
     if (marker.onPress) marker.onPress(event);
