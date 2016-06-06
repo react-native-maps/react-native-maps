@@ -1,16 +1,14 @@
-var React = require('react-native');
-var {
+import React, { Component } from 'react';
+import {
   StyleSheet,
   View,
   Text,
-} = React;
+} from 'react-native';
 
-var PriceMarker = React.createClass({
-  getDefaultProps() {
-    return {
+class PriceMarker extends Component {
+  defaultProps = {
       fontSize: 13,
-    };
-  },
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -22,10 +20,10 @@ var PriceMarker = React.createClass({
         <View style={styles.arrow} />
       </View>
     );
-  },
-});
+  }
+}
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignSelf: 'flex-start',
