@@ -20,6 +20,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
@@ -65,8 +66,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     final EventDispatcher eventDispatcher;
 
-    public AirMapView(ThemedReactContext context, AirMapManager manager) {
-        super(context);
+    public AirMapView(ThemedReactContext context, AirMapManager manager, GoogleMapOptions googleMapOptions) {
+        super(context, googleMapOptions);
         this.manager = manager;
 
         super.onCreate(null);
@@ -326,7 +327,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     public void removeFeatureAt(int index) {
         AirMapFeature feature = features.remove(index);
-        
+
 
         if (feature instanceof AirMapMarker) {
             markerMap.remove(feature.getFeature());

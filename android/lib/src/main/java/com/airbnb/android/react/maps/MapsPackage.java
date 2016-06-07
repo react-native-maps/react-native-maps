@@ -34,12 +34,19 @@ public class MapsPackage implements ReactPackage {
                 polygonManager,
                 circleManager);
 
+        AirMapLiteManager mapLiteManager = new AirMapLiteManager(
+                annotationManager,
+                polylineManager,
+                polygonManager,
+                circleManager);
+
         return Arrays.<ViewManager>asList(
                 calloutManager,
                 annotationManager,
                 polylineManager,
                 polygonManager,
                 circleManager,
-                mapManager);
+                mapManager,
+                mapLiteManager);
     }
 }
