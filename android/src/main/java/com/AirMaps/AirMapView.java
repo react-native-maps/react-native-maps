@@ -1,6 +1,6 @@
 package com.AirMaps;
 
-
+import android.app.Activity;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
@@ -60,13 +60,16 @@ public class AirMapView
     private LifecycleEventListener lifecycleListener;
     private boolean paused = false;
 
+    private ThemedReactContext context;
+    
     final EventDispatcher eventDispatcher;
 
 
 
-    public AirMapView(ThemedReactContext context, AirMapManager manager) {
-        super(context);
+    public AirMapView(ThemedReactContext context, Activity activity, AirMapManager manager) {
+        super(activity);
         this.manager = manager;
+        this.context = context;
 
         super.onCreate(null);
         super.onResume();
@@ -210,7 +213,7 @@ public class AirMapView
             }
         };
 
-        ((ThemedReactContext) getContext()).addLifecycleEventListener(lifecycleListener);
+        context.addLifecycleEventListener(lifecycleListener);
     }
 
     /*
@@ -218,7 +221,7 @@ public class AirMapView
      */
     public synchronized  void doDestroy() {
         if (lifecycleListener != null) {
-            ((ThemedReactContext) getContext()).removeLifecycleEventListener(lifecycleListener);
+            context.removeLifecycleEventListener(lifecycleListener);
             lifecycleListener = null;
         }
         if(!paused) {
