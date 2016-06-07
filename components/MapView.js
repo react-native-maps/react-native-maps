@@ -130,6 +130,14 @@ var MapView = React.createClass({
     showsIndoors: PropTypes.bool,
 
     /**
+     * A Boolean indicating whether to use liteMode for android
+     * Default value is `false`
+     *
+     * @platform android
+     */
+    liteMode: PropTypes.bool,
+
+    /**
      * The map type to be displayed.
      *
      * - standard: standard road map (default)
@@ -408,6 +416,12 @@ var MapView = React.createClass({
       };
     }
 
+    if (Platform.OS === 'android') {
+      if (this.props.liteMode) {
+        return <AIRMapLite ref="map" {...props} />;
+      }
+    }
+
     return (
       <AIRMap ref="map" {...props} />
     );
@@ -419,6 +433,14 @@ var AIRMap = requireNativeComponent('AIRMap', MapView, {
     onChange: true,
     onMapReady: true,
     handlePanDrag: true,
+  },
+});
+
+var AIRMapLite = requireNativeComponent('AIRMapLite', MapView, {
+  nativeOnly: {
+    onChange: true,
+    onMapReady: true,
+    handlePanDrag: true
   },
 });
 
