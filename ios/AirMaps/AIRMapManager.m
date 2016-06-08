@@ -181,6 +181,7 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
     }];
 }
 
+<<<<<<< HEAD
 RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         withWidth:(nonnull NSNumber *)width
         withHeight:(nonnull NSNumber *)height
@@ -259,6 +260,8 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
     }];
 }
 
+=======
+>>>>>>> origin/master
 #pragma mark Gesture Recognizer Handlers
 
 - (void)handleMapTap:(UITapGestureRecognizer *)recognizer {

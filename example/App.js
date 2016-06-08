@@ -19,8 +19,13 @@ var AnimatedMarkers = require('./examples/AnimatedMarkers');
 var Callouts = require('./examples/Callouts');
 var Overlays = require('./examples/Overlays');
 var DefaultMarkers = require('./examples/DefaultMarkers');
+<<<<<<< HEAD
 var TakeSnapshot = require('./examples/TakeSnapshot');
 var FocusOnMarkers = require('./examples/FocusOnMarkers')
+=======
+var FocusOnMarkers = require('./examples/FocusOnMarkers')
+
+>>>>>>> origin/master
 var App = React.createClass({
 
   getInitialState() {
@@ -81,7 +86,10 @@ var App = React.createClass({
       [Callouts, 'Custom Callouts'],
       [Overlays, 'Circles, Polygons, and Polylines'],
       [DefaultMarkers, 'Default Markers'],
+<<<<<<< HEAD
       [TakeSnapshot, 'Take Snapshot'],
+=======
+>>>>>>> origin/master
       [FocusOnMarkers, 'Focus Map On Markers'],
     ]);
   },
