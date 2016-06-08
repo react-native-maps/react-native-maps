@@ -1,5 +1,5 @@
-var React = require('react-native');
-var {
+import React, { Component } from 'react';
+import {
   StyleSheet,
   PropTypes,
   View,
@@ -8,11 +8,11 @@ var {
   TouchableOpacity,
   Animated,
   Platform,
-} = React;
+} from 'react-native';
 
-var MapView = require('react-native-maps');
-var PanController = require('./PanController');
-var PriceMarker = require('./AnimatedPriceMarker');
+import MapView from 'react-native-maps';
+import PanController from './PanController';
+import PriceMarker = from './AnimatedPriceMarker';
 
 var screen = Dimensions.get('window');
 
@@ -33,7 +33,7 @@ var BREAKPOINT2 = 350;
 
 const ANDROID = Platform.OS === 'android';
 
-var AnimatedViews = React.createClass({
+class AnimatedViews extends Component {
   getInitialState() {
     const panX = new Animated.Value(0);
     const panY = new Animated.Value(0);
@@ -200,7 +200,7 @@ var AnimatedViews = React.createClass({
         longitudeDelta: LONGITUDE_DELTA,
       }),
     };
-  },
+  }
 
   componentDidMount() {
     var { region, panX, panY, scrollX, markers } = this.state;
@@ -220,7 +220,7 @@ var AnimatedViews = React.createClass({
       }),
       duration: 0,
     }).start();
-  },
+  }
 
   onStartShouldSetPanResponder(e) {
     // we only want to move the view if they are starting the gesture on top
@@ -232,7 +232,7 @@ var AnimatedViews = React.createClass({
     var topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  },
+  }
 
   onMoveShouldSetPanResponder(e) {
     var { panY } = this.state;
@@ -241,7 +241,7 @@ var AnimatedViews = React.createClass({
     var topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  },
+  }
 
   onPanXChange({ value }) {
     var { index, region, panX, markers } = this.state;
@@ -249,7 +249,7 @@ var AnimatedViews = React.createClass({
     if (index !== newIndex) {
       this.setState({ index: newIndex });
     }
-  },
+  }
 
   onPanYChange({ value }) {
     var { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
@@ -292,11 +292,11 @@ var AnimatedViews = React.createClass({
         }).start();
       }
     }
-  },
+  }
 
   onRegionChange(region) {
     //this.state.region.setValue(region);
-  },
+  }
 
   render() {
     const {
@@ -383,7 +383,7 @@ var AnimatedViews = React.createClass({
       </View>
     );
   },
-});
+}
 
 
 
