@@ -13,6 +13,7 @@ var EventListener = require('./examples/EventListener');
 var MarkerTypes = require('./examples/MarkerTypes');
 var DraggableMarkers = require('./examples/DraggableMarkers');
 var PolygonCreator = require('./examples/PolygonCreator');
+var PolylineCreator = require('./examples/PolylineCreator');
 var AnimatedViews = require('./examples/AnimatedViews');
 var AnimatedMarkers = require('./examples/AnimatedMarkers');
 var Callouts = require('./examples/Callouts');
@@ -20,6 +21,7 @@ var Overlays = require('./examples/Overlays');
 var DefaultMarkers = require('./examples/DefaultMarkers');
 var CachedMap = require('./examples/CachedMap');
 var LoadingMap = require('./examples/LoadingMap');
+var TakeSnapshot = require('./examples/TakeSnapshot');
 
 var App = React.createClass({
 
@@ -75,6 +77,7 @@ var App = React.createClass({
       [MarkerTypes, 'Image Based Markers'],
       [DraggableMarkers, 'Draggable Markers'],
       [PolygonCreator, 'Polygon Creator'],
+      [PolylineCreator, 'Polyline Creator'],
       [AnimatedViews, 'Animating with MapViews'],
       [AnimatedMarkers, 'Animated Marker Position'],
       [Callouts, 'Custom Callouts'],
@@ -82,6 +85,7 @@ var App = React.createClass({
       [DefaultMarkers, 'Default Markers'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
+      [TakeSnapshot, 'Take Snapshot'],
     ]);
   },
 });

@@ -65,12 +65,22 @@ var DisplayLatLng = React.createClass({
   },
 
   render() {
+    var mapOptions = {
+      scrollEnabled: true,
+    };
+
+    if (this.state.editing) {
+      mapOptions.scrollEnabled = false;
+      mapOptions.onPanDrag     = this.onPress;
+    }
+
     return (
       <View style={styles.container}>
         <MapView
           style={styles.map}
           initialRegion={this.state.region}
           onPress={this.onPress}
+          {...mapOptions}
         >
           {this.state.polygons.map(polygon => (
             <MapView.Polygon
