@@ -36,7 +36,7 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new AirPackage()
+            new AirPackage(this)
         );
     }
 }
