@@ -36,6 +36,6 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.asList(
             new MainReactPackage(),
-            new MapsPackage());
+            new MapsPackage(this));
     }
 }

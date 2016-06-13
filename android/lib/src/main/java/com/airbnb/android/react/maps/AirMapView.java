@@ -1,5 +1,6 @@
 package com.airbnb.android.react.maps;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Handler;
@@ -62,12 +63,14 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final AirMapManager manager;
     private LifecycleEventListener lifecycleListener;
     private boolean paused = false;
+    private ThemedReactContext context;
 
     final EventDispatcher eventDispatcher;
 
-    public AirMapView(ThemedReactContext context, AirMapManager manager) {
-        super(context);
+    public AirMapView(ThemedReactContext context, Activity activity, AirMapManager manager) {
+        super(activity);
         this.manager = manager;
+        this.context = context;
 
         super.onCreate(null);
         super.onResume();
@@ -226,7 +229,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
         };
 
-        ((ThemedReactContext) getContext()).addLifecycleEventListener(lifecycleListener);
+        context.addLifecycleEventListener(lifecycleListener);
     }
 
     private boolean hasPermissions() {
@@ -239,7 +242,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
      */
     public synchronized void doDestroy() {
         if (lifecycleListener != null) {
-            ((ThemedReactContext) getContext()).removeLifecycleEventListener(lifecycleListener);
+            context.removeLifecycleEventListener(lifecycleListener);
             lifecycleListener = null;
         }
         if (!paused) {
@@ -326,7 +329,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     public void removeFeatureAt(int index) {
         AirMapFeature feature = features.remove(index);
-        
+
 
         if (feature instanceof AirMapMarker) {
             markerMap.remove(feature.getFeature());
