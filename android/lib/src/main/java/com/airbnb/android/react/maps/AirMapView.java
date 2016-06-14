@@ -1,15 +1,26 @@
 package com.airbnb.android.react.maps;
 
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.os.Handler;
+import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.View.OnLayoutChangeListener;
 
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
@@ -42,11 +53,20 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
     public GoogleMap map;
 
+    private ProgressBar mapLoadingProgressBar;
+    private RelativeLayout mapLoadingLayout;
+    private ImageView cacheImageView;
+    private Boolean isMapLoaded = false;
+    private Integer loadingBackgroundColor = null;
+    private Integer loadingIndicatorColor = null;
+
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
     private boolean isTouchDown = false;
     private boolean handlePanDrag = false;
+    private boolean cacheEnabled = false;
+    private boolean loadingEnabled = false;
 
     private static final String[] PERMISSIONS = new String[] {
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
@@ -61,6 +81,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final GestureDetectorCompat gestureDetector;
     private final AirMapManager manager;
     private LifecycleEventListener lifecycleListener;
+    private OnLayoutChangeListener onLayoutChangeListener;
     private boolean paused = false;
 
     final EventDispatcher eventDispatcher;
@@ -107,6 +128,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                         return false;
                     }
                 });
+
+        onLayoutChangeListener = new OnLayoutChangeListener() {
+            @Override public void onLayoutChange(View v, int left, int top, int right, int bottom,
+                int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (!AirMapView.this.paused) {
+                    AirMapView.this.cacheView();
+                }
+            }
+        };
+        this.addOnLayoutChangeListener(this.onLayoutChangeListener);
 
         eventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
@@ -185,6 +216,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 lastBoundsEmitted = bounds;
                 eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
                 view.stopMonitoringRegion();
+            }
+        });
+
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override public void onMapLoaded() {
+                isMapLoaded = true;
+                AirMapView.this.cacheView();
             }
         });
 
@@ -280,6 +318,58 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
     }
 
+    public void setCacheEnabled(boolean cacheEnabled) {
+        this.cacheEnabled = cacheEnabled;
+        this.cacheView();
+    }
+
+    public void enableMapLoading(boolean loadingEnabled) {
+        if (loadingEnabled && !this.isMapLoaded) {
+            this.getMapLoadingLayoutView().setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setLoadingBackgroundColor(Integer loadingBackgroundColor) {
+        this.loadingBackgroundColor = loadingBackgroundColor;
+
+        if (this.mapLoadingLayout != null) {
+            if (loadingBackgroundColor == null) {
+                this.mapLoadingLayout.setBackgroundColor(Color.WHITE);
+            } else {
+                this.mapLoadingLayout.setBackgroundColor(this.loadingBackgroundColor);
+            }
+        }
+    }
+
+    public void setLoadingIndicatorColor(Integer loadingIndicatorColor) {
+        this.loadingIndicatorColor = loadingIndicatorColor;
+        if (this.mapLoadingProgressBar != null) {
+            Integer color = loadingIndicatorColor;
+            if (color == null) {
+                color = Color.parseColor("#606060");
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ColorStateList progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+                ColorStateList secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+                ColorStateList indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
+
+                this.mapLoadingProgressBar.setProgressTintList(progressTintList);
+                this.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
+                this.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
+            } else {
+                PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                    mode = PorterDuff.Mode.MULTIPLY;
+                }
+                if (this.mapLoadingProgressBar.getIndeterminateDrawable() != null)
+                    this.mapLoadingProgressBar.getIndeterminateDrawable().setColorFilter(color, mode);
+                if (this.mapLoadingProgressBar.getProgressDrawable() != null)
+                    this.mapLoadingProgressBar.getProgressDrawable().setColorFilter(color, mode);
+            }
+        }
+    }
+
     public void setHandlePanDrag(boolean handlePanDrag) {
         this.handlePanDrag = handlePanDrag;
     }
@@ -326,7 +416,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     public void removeFeatureAt(int index) {
         AirMapFeature feature = features.remove(index);
-        
+
 
         if (feature instanceof AirMapMarker) {
             markerMap.remove(feature.getFeature());
@@ -504,6 +594,88 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         AirMapMarker markerView = markerMap.get(marker);
         event = makeClickEventData(marker.getPosition());
         manager.pushEvent(markerView, "onDragEnd", event);
+    }
+
+    private ProgressBar getMapLoadingProgressBar() {
+        if (this.mapLoadingProgressBar == null) {
+            this.mapLoadingProgressBar = new ProgressBar(getContext());
+            this.mapLoadingProgressBar.setIndeterminate(true);
+        }
+        this.setLoadingIndicatorColor(this.loadingIndicatorColor);
+        return this.mapLoadingProgressBar;
+    }
+
+    private RelativeLayout getMapLoadingLayoutView() {
+        if (this.mapLoadingLayout == null) {
+            this.mapLoadingLayout = new RelativeLayout(getContext());
+            this.mapLoadingLayout.setBackgroundColor(Color.LTGRAY);
+            this.addView(this.mapLoadingLayout,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            this.mapLoadingLayout.addView(this.getMapLoadingProgressBar(), params);
+
+            this.mapLoadingLayout.setVisibility(View.INVISIBLE);
+        }
+        this.setLoadingBackgroundColor(this.loadingBackgroundColor);
+        return this.mapLoadingLayout;
+    }
+
+    private ImageView getCacheImageView() {
+        if (this.cacheImageView == null) {
+            this.cacheImageView = new ImageView(getContext());
+            this.addView(this.cacheImageView,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            this.cacheImageView.setVisibility(View.INVISIBLE);
+        }
+        return this.cacheImageView;
+    }
+
+    private void removeCacheImageView() {
+        if (this.cacheImageView != null) {
+            ((ViewGroup)this.cacheImageView.getParent()).removeView(this.cacheImageView);
+            this.cacheImageView = null;
+        }
+    }
+
+    private void removeMapLoadingProgressBar() {
+        if (this.mapLoadingProgressBar != null) {
+            ((ViewGroup)this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
+            this.mapLoadingProgressBar = null;
+        }
+    }
+
+    private void removeMapLoadingLayoutView() {
+        this.removeMapLoadingProgressBar();
+        if (this.mapLoadingLayout != null) {
+            ((ViewGroup)this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
+            this.mapLoadingLayout = null;
+        }
+    }
+
+    private void cacheView() {
+        if (this.cacheEnabled) {
+            final ImageView cacheImageView = this.getCacheImageView();
+            final RelativeLayout mapLoadingLayout = this.getMapLoadingLayoutView();
+            cacheImageView.setVisibility(View.INVISIBLE);
+            mapLoadingLayout.setVisibility(View.VISIBLE);
+            if (this.isMapLoaded) {
+                this.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                    @Override public void onSnapshotReady(Bitmap bitmap) {
+                        cacheImageView.setImageBitmap(bitmap);
+                        cacheImageView.setVisibility(View.VISIBLE);
+                        mapLoadingLayout.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+        }
+        else {
+            this.removeCacheImageView();
+            if (this.isMapLoaded) {
+                this.removeMapLoadingLayoutView();
+            }
+        }
     }
 
     public void onPanDrag(MotionEvent ev) {

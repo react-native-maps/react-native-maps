@@ -74,6 +74,10 @@ RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(cacheEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(loadingEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(loadingBackgroundColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(loadingIndicatorColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(minDelta, CGFloat)
@@ -471,7 +475,14 @@ static int kDragCenterContext;
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView
 {
     mapView.hasStartedRendering = YES;
+    [mapView beginLoading];
     [self _emitRegionChangeEvent:mapView continuous:NO];
+}
+
+- (void)mapViewDidFinishRenderingMap:(AIRMap *)mapView fullyRendered:(BOOL)fullyRendered
+{
+    [mapView finishLoading];
+    [mapView cacheViewIfNeeded];
 }
 
 #pragma mark Private
