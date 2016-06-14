@@ -63,14 +63,14 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
     ...
     import com.airbnb.android.react.maps.MapsPackage; // <--- Add this!
     ...
-    
+
     public class MainActivity extends ReactActivity {
     ...
         @Override
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
-                new MapsPackage()    // <-- Add this!
+                new MapsPackage(this)    // <-- Add this!
             );
         }
    }
@@ -88,7 +88,7 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
                .setBundleAssetName("index.android.bundle")
                .setJSMainModuleName("index.android")
                .addPackage(new MainReactPackage())
-               .addPackage(new MapsPackage()) // <---- and This!
+               .addPackage(new MapsPackage(this)) // <---- and This!
                .setUseDeveloperSupport(BuildConfig.DEBUG)
                .setInitialLifecycleState(LifecycleState.RESUMED)
                .build();
