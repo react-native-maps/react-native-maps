@@ -149,6 +149,26 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
 
+    @ReactProp(name="cacheEnabled", defaultBoolean = false)
+    public void setCacheEnabled(AirMapView view, boolean cacheEnabled) {
+        view.setCacheEnabled(cacheEnabled);
+    }
+
+    @ReactProp(name="loadingEnabled", defaultBoolean = false)
+    public void setLoadingEnabled(AirMapView view, boolean loadingEnabled) {
+        view.enableMapLoading(loadingEnabled);
+    }
+
+    @ReactProp(name="loadingBackgroundColor", customType="Color")
+    public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer loadingBackgroundColor) {
+        view.setLoadingBackgroundColor(loadingBackgroundColor);
+    }
+
+    @ReactProp(name="loadingIndicatorColor", customType="Color")
+    public void setLoadingIndicatorColor(AirMapView view, @Nullable Integer loadingIndicatorColor) {
+        view.setLoadingIndicatorColor(loadingIndicatorColor);
+    }
+
     @ReactProp(name = "pitchEnabled", defaultBoolean = false)
     public void setPitchEnabled(AirMapView view, boolean pitchEnabled) {
         view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
