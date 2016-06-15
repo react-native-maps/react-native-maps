@@ -32,8 +32,8 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 @interface AIRMap ()
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
-@property (nonatomic, assign) BOOL shouldZoomEnabled;
-@property (nonatomic, assign) BOOL shouldScrollEnabled;
+@property (nonatomic, assign) NSNumber *shouldZoomEnabled;
+@property (nonatomic, assign) NSNumber *shouldScrollEnabled;
 
 - (void)updateScrollEnabled;
 - (void)updateZoomEnabled;
@@ -313,7 +313,7 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 }
 
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
-    self.shouldScrollEnabled = scrollEnabled;
+    self.shouldScrollEnabled = [NSNumber numberWithBool:scrollEnabled];
     [self updateScrollEnabled];
 }
 
@@ -321,13 +321,13 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     if (self.cacheEnabled) {
         [super setScrollEnabled:NO];
     }
-    else {
-        [super setScrollEnabled:self.shouldScrollEnabled];
+    else if (self.shouldScrollEnabled != nil) {
+        [super setScrollEnabled:[self.shouldScrollEnabled boolValue]];
     }
 }
 
 - (void)setZoomEnabled:(BOOL)zoomEnabled {
-    self.shouldZoomEnabled = zoomEnabled;
+    self.shouldZoomEnabled = [NSNumber numberWithBool:zoomEnabled];
     [self updateZoomEnabled];
 }
 
@@ -335,8 +335,8 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     if (self.cacheEnabled) {
         [super setZoomEnabled: NO];
     }
-    else {
-        [super setZoomEnabled:self.shouldZoomEnabled];
+    else if (self.shouldZoomEnabled != nil) {
+        [super setZoomEnabled:[self.shouldZoomEnabled boolValue]];
     }
 }
 
