@@ -21,9 +21,16 @@ extern const CGFloat AIRMapZoomBoundBuffer;
 @interface AIRMap: MKMapView<SMCalloutViewDelegate>
 
 @property (nonatomic, strong) SMCalloutView *calloutView;
+@property (nonatomic, strong) UIImageView *cacheImageView;
+@property (nonatomic, strong) UIView *loadingView;
 
 @property (nonatomic, assign) BOOL followUserLocation;
 @property (nonatomic, assign) BOOL hasStartedRendering;
+@property (nonatomic, assign) BOOL cacheEnabled;
+@property (nonatomic, assign) BOOL loadingEnabled;
+@property (nonatomic, strong) UIColor *loadingBackgroundColor;
+@property (nonatomic, strong) UIColor *loadingIndicatorColor;
+@property (nonatomic, assign) BOOL hasShownInitialLoading;
 @property (nonatomic, assign) CGFloat minDelta;
 @property (nonatomic, assign) CGFloat maxDelta;
 @property (nonatomic, assign) UIEdgeInsets legalLabelInsets;
@@ -48,5 +55,9 @@ extern const CGFloat AIRMapZoomBoundBuffer;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+
+- (void)cacheViewIfNeeded;
+- (void)beginLoading;
+- (void)finishLoading;
 
 @end
