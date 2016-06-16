@@ -275,6 +275,18 @@ public class AirMapMarker extends AirMapFeature {
         }
 
         marker.setIcon(getIcon());
+        
+        if (anchorIsSet) {
+            marker.setAnchor(anchorX, anchorY);
+        } else {
+            marker.setAnchor(0.5f, 1.0f);
+        }
+        
+        if (calloutAnchorIsSet) {
+            marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
+        } else {
+            marker.setInfoWindowAnchor(0.5f, 0);
+        }
     }
 
     public void update(int width, int height) {
