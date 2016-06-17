@@ -20,7 +20,7 @@ var Callouts = require('./examples/Callouts');
 var Overlays = require('./examples/Overlays');
 var DefaultMarkers = require('./examples/DefaultMarkers');
 var TakeSnapshot = require('./examples/TakeSnapshot');
-
+var Heatmap = require('./examples/Heatmap');
 
 var App = React.createClass({
 
@@ -83,6 +83,7 @@ var App = React.createClass({
       [Overlays, 'Circles, Polygons, and Polylines'],
       [DefaultMarkers, 'Default Markers'],
       [TakeSnapshot, 'Take Snapshot'],
+      [Heatmap, 'Heat Map'],
     ]);
   },
 });
