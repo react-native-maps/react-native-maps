@@ -9,6 +9,7 @@
 
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
+#import <React/RCTComponent.h>
 
 #import "RCTConvert+MapKit.h"
 #import "RCTComponent.h"
