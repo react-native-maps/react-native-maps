@@ -132,10 +132,10 @@ var MapView = React.createClass({
     pitchEnabled: PropTypes.bool,
 
     /**
-     * `Android only`
      * If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
      * Default value is `true`.
      *
+     * @platform android
      */
     toolbarEnabled: PropTypes.bool,
 
