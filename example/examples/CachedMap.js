@@ -1,4 +1,5 @@
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var {
   Text,
   View,
@@ -6,7 +7,7 @@ var {
   StyleSheet,
   ListView,
   TouchableOpacity,
-} = React;
+} = ReactNative;
 
 var MapView = require('react-native-maps');
 
