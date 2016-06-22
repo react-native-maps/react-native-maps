@@ -1,10 +1,13 @@
-import React, {
+var React = require('react');
+var ReactNative = require('react-native');
+var {
   StyleSheet,
   PropTypes,
   View,
   Text,
   Animated,
-} from 'react-native';
+} = ReactNative;
+var PropTypes = require('ReactPropTypes');
 
 const PriceMarker = ({ amount, selected, style }) => {
 
