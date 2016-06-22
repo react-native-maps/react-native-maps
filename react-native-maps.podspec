@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "react-native-maps"
-  s.version      = "0.3.1"
+  s.version      = "0.5.0"
   s.summary      = "React Native Mapview component for iOS + Android"
 
   s.authors      = { "intelligibabble" => "leland.m.richardson@gmail.com" }
