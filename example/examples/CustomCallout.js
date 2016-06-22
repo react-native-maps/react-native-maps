@@ -1,9 +1,10 @@
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var {
   StyleSheet,
   View,
   Text,
-} = React;
+} = ReactNative;
 
 var CustomCallout = React.createClass({
   render() {

@@ -22,6 +22,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "react-native": "latest"
+    "react": "15.1.0",
+    "react-native": "0.27.2"
   }
 }
