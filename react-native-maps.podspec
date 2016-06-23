@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "react-native-maps"
-  s.version      = "0.5.0"
+  s.version      = "0.6.0"
   s.summary      = "React Native Mapview component for iOS + Android"
 
   s.authors      = { "intelligibabble" => "leland.m.richardson@gmail.com" }
@@ -11,4 +11,3 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/lelandrichardson/react-native-maps.git" }
   s.source_files  = "ios/AirMaps/**/*.{h,m}"
 end
-
