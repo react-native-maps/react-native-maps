@@ -610,7 +610,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             this.mapLoadingProgressBar = new ProgressBar(getContext());
             this.mapLoadingProgressBar.setIndeterminate(true);
         }
-        this.setLoadingIndicatorColor(this.loadingIndicatorColor);
+        if (this.loadingIndicatorColor != null) {
+            this.setLoadingIndicatorColor(this.loadingIndicatorColor);
+        }
         return this.mapLoadingProgressBar;
     }
 
