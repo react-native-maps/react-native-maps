@@ -55,6 +55,7 @@ public class AirMapMarker extends AirMapFeature {
 
     private float markerHue = 0.0f; // should be between 0 and 360
     private BitmapDescriptor iconBitmapDescriptor;
+    private Bitmap iconBitmap;
 
     private float rotation = 0.0f;
     private boolean flat = false;
@@ -85,6 +86,7 @@ public class AirMapMarker extends AirMapFeature {
                                 Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
                                 if (bitmap != null) {
                                     bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                                    iconBitmap = bitmap;
                                     iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
                                 }
                             }
@@ -246,7 +248,18 @@ public class AirMapMarker extends AirMapFeature {
     private BitmapDescriptor getIcon() {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
-            return BitmapDescriptorFactory.fromBitmap(createDrawable());
+            if (iconBitmapDescriptor != null) {
+                Bitmap viewBitmap = createDrawable();
+                int width = Math.max(iconBitmap.getWidth(), viewBitmap.getWidth());
+                int height = Math.max(iconBitmap.getHeight(), viewBitmap.getHeight());
+                Bitmap combinedBitmap = Bitmap.createBitmap(width, height, iconBitmap.getConfig());
+                Canvas canvas = new Canvas(combinedBitmap);
+                canvas.drawBitmap(iconBitmap, 0, 0, null);
+                canvas.drawBitmap(viewBitmap, 0, 0, null);
+                return BitmapDescriptorFactory.fromBitmap(combinedBitmap);
+            } else {
+                return BitmapDescriptorFactory.fromBitmap(createDrawable());
+            }
         } else if (iconBitmapDescriptor != null) {
             // use local image as a marker
             return iconBitmapDescriptor;
