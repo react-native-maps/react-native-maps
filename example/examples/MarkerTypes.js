@@ -44,7 +44,9 @@ var MarkerTypes = React.createClass({
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
             image={require('./assets/flag-blue.png')}
-            />
+          >
+            <Text style={styles.marker}>X</Text>
+          </MapView.Marker>
           <MapView.Marker
             coordinate={{
               latitude: LATITUDE - SPACE,
@@ -77,6 +79,11 @@ var styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  marker: {
+    marginLeft: 33,
+    marginTop: 18,
+    fontWeight: 'bold',
+  }
 });
 
 module.exports = MarkerTypes;
