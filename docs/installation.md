@@ -43,18 +43,18 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 1. in `android/app/build.gradle` add:
    ```
    ...
-     dependencies {
+   dependencies {
      ...
-    compile 'com.airbnb.android:react-native-maps:0.6.0' // <-- Add this!
-    }
+     compile project(':react-native-maps') // <-- Add this!
+   }
    ```
 
 2. in `android/settings.gradle` add:
-```
-include ':react-native-maps'
-project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+   ```
+   include ':react-native-maps'
+   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android/lib')
 
-```
+   ```
 
 
 3. in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
