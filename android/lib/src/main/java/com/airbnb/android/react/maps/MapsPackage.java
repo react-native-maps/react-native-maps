@@ -13,11 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class MapsPackage implements ReactPackage {
-    private Activity reactActivity = null;
-
-    public MapsPackage(Activity activity) {
-        reactActivity = activity;
-    }
+    public MapsPackage(Activity activity) { } // backwards compatability
+    public MapsPackage() { }
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
@@ -37,7 +34,7 @@ public class MapsPackage implements ReactPackage {
         AirMapPolygonManager polygonManager = new AirMapPolygonManager(reactContext);
         AirMapCircleManager circleManager = new AirMapCircleManager(reactContext);
         AirMapManager mapManager = new AirMapManager(
-                reactActivity,
+                reactContext.getBaseContext(),
                 annotationManager,
                 polylineManager,
                 polygonManager,

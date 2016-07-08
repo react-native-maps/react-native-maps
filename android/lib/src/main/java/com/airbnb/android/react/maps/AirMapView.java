@@ -1,6 +1,5 @@
 package com.airbnb.android.react.maps;
 
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -16,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnLayoutChangeListener;
+import android.content.Context;
 
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -88,8 +88,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     final EventDispatcher eventDispatcher;
 
-    public AirMapView(ThemedReactContext context, Activity activity, AirMapManager manager) {
-        super(activity);
+    public AirMapView(ThemedReactContext context, Context appContext, AirMapManager manager) {
+        super(appContext);
         this.manager = manager;
         this.context = context;
 

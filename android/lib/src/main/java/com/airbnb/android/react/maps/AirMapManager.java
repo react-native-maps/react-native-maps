@@ -1,7 +1,7 @@
 package com.airbnb.android.react.maps;
 
 import android.view.View;
-import android.app.Activity;
+import android.content.Context;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -41,19 +41,19 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     private ReactContext reactContext;
 
-    private Activity reactActivity;
+    private Context appContext;
     private AirMapMarkerManager markerManager;
     private AirMapPolylineManager polylineManager;
     private AirMapPolygonManager polygonManager;
     private AirMapCircleManager circleManager;
 
     public AirMapManager(
-            Activity activity,
+            Context context,
             AirMapMarkerManager markerManager,
             AirMapPolylineManager polylineManager,
             AirMapPolygonManager polygonManager,
             AirMapCircleManager circleManager) {
-        this.reactActivity = activity;
+        this.appContext = context;
         this.markerManager = markerManager;
         this.polylineManager = polylineManager;
         this.polygonManager = polygonManager;
@@ -70,12 +70,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         reactContext = context;
 
         try {
-            MapsInitializer.initialize(reactActivity);
+            MapsInitializer.initialize(this.appContext);
         } catch (Exception e) {
             e.printStackTrace();
             emitMapError("Map initialize error", "map_init_error");
         }
-        AirMapView view = new AirMapView(context, reactActivity, this);
+        AirMapView view = new AirMapView(context, this.appContext, this);
 
         return view;
     }

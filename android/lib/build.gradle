@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply from: 'gradle-maven-push.gradle'
 
 android {
   compileSdkVersion 23
@@ -16,7 +15,7 @@ android {
 }
 
 dependencies {
-  compile 'com.facebook.react:react-native:0.27.2'
+  compile 'com.facebook.react:react-native:+'
   compile "com.google.android.gms:play-services-base:8.4.0"
   compile 'com.google.android.gms:play-services-maps:8.4.0'
 }

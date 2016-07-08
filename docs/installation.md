@@ -70,7 +70,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
-                new MapsPackage(this)    // <-- Add this!
+                new MapsPackage()    // <-- Add this!
             );
         }
    }
@@ -88,7 +88,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
                .setBundleAssetName("index.android.bundle")
                .setJSMainModuleName("index.android")
                .addPackage(new MainReactPackage())
-               .addPackage(new MapsPackage(this)) // <---- and This!
+               .addPackage(new MapsPackage()) // <---- and This!
                .setUseDeveloperSupport(BuildConfig.DEBUG)
                .setInitialLifecycleState(LifecycleState.RESUMED)
                .build();
