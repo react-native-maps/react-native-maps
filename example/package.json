@@ -3,11 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start"
+    "start": "react-native start",
+    "watch": "node ./scripts/watch-and-copy-src.js",
+    "packager": "sh ./node_modules/react-native/packager/packager.sh --root ./node_modules/react-native-maps",
+    "dev": "concurrently 'npm run watch' 'npm run packager'"
   },
   "dependencies": {
-    "react": "15.1.0",
-    "react-native": "0.27.2",
+    "react": "15.2.0",
+    "react-native": "0.29.0",
     "react-native-maps": "../"
   }
 }

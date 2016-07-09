@@ -33,12 +33,7 @@ public class MapsPackage implements ReactPackage {
         AirMapPolylineManager polylineManager = new AirMapPolylineManager(reactContext);
         AirMapPolygonManager polygonManager = new AirMapPolygonManager(reactContext);
         AirMapCircleManager circleManager = new AirMapCircleManager(reactContext);
-        AirMapManager mapManager = new AirMapManager(
-                reactContext.getBaseContext(),
-                annotationManager,
-                polylineManager,
-                polygonManager,
-                circleManager);
+        AirMapManager mapManager = new AirMapManager(reactContext.getBaseContext());
 
         return Arrays.<ViewManager>asList(
                 calloutManager,

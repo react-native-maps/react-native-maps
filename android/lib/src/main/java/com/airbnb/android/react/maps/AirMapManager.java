@@ -26,11 +26,10 @@ import javax.annotation.Nullable;
 
 public class AirMapManager extends ViewGroupManager<AirMapView> {
 
-    public static final String REACT_CLASS = "AIRMap";
-
-    public static final int ANIMATE_TO_REGION = 1;
-    public static final int ANIMATE_TO_COORDINATE = 2;
-    public static final int FIT_TO_ELEMENTS = 3;
+    private static final String REACT_CLASS = "AIRMap";
+    private static final int ANIMATE_TO_REGION = 1;
+    private static final int ANIMATE_TO_COORDINATE = 2;
+    private static final int FIT_TO_ELEMENTS = 3;
 
     private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
             "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -41,23 +40,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     private ReactContext reactContext;
 
-    private Context appContext;
-    private AirMapMarkerManager markerManager;
-    private AirMapPolylineManager polylineManager;
-    private AirMapPolygonManager polygonManager;
-    private AirMapCircleManager circleManager;
+    private final Context appContext;
 
-    public AirMapManager(
-            Context context,
-            AirMapMarkerManager markerManager,
-            AirMapPolylineManager polylineManager,
-            AirMapPolygonManager polygonManager,
-            AirMapCircleManager circleManager) {
+    public AirMapManager(Context context) {
         this.appContext = context;
-        this.markerManager = markerManager;
-        this.polylineManager = polylineManager;
-        this.polygonManager = polygonManager;
-        this.circleManager = circleManager;
     }
 
     @Override
@@ -71,13 +57,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
         try {
             MapsInitializer.initialize(this.appContext);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
             emitMapError("Map initialize error", "map_init_error");
         }
-        AirMapView view = new AirMapView(context, this.appContext, this);
 
-        return view;
+        return new AirMapView(context, this.appContext, this);
     }
 
     @Override
@@ -224,7 +209,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @Override
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
-        Map map = MapBuilder.of(
+        Map<String, Map<String, String>> map = MapBuilder.of(
                 "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
                 "onPress", MapBuilder.of("registrationName", "onPress"),
                 "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
@@ -286,7 +271,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.updateExtraData(extraData);
     }
 
-    public void pushEvent(View view, String name, WritableMap data) {
+    void pushEvent(View view, String name, WritableMap data) {
         reactContext.getJSModule(RCTEventEmitter.class)
                 .receiveEvent(view.getId(), name, data);
     }
