@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.7.1 (July 9, 2016)
+
+### Patches
+
+- Fix iOS CocoaPods Issue ([#308](https://github.com/lelandrichardson/react-native-maps/pull/308))
+
+
+
 ## 0.7.0 (July 9, 2016)
 
 ### Breaking Changes
