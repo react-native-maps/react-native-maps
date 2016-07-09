@@ -198,7 +198,7 @@
 
 - (BOOL)shouldUsePinView
 {
-    return self.subviews.count == 0 && !self.imageSrc;
+    return self.reactSubviews.count == 0 && !self.imageSrc;
 }
 
 - (void)setImageSrc:(NSString *)imageSrc
