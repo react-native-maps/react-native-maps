@@ -40,6 +40,8 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 ## Android
 
+For React Native v0.29.0 or above:
+
 1. in your `build.gradle` add:
  ```
  ...
@@ -64,6 +66,29 @@ public class MyApplication extends Application implements ReactApplication {
   @Override public ReactNativeHost getReactNativeHost() {
     return reactNativeHost;
   }
+}
+```
+
+For older versions of React Native:
+
+```java
+@Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    mReactRootView = new ReactRootView(this);
+
+    mReactInstanceManager = ReactInstanceManager.builder()
+            .setApplication(getApplication())
+            .setBundleAssetName("index.android.bundle")
+            .setJSMainModuleName("index.android")
+            .addPackage(new MainReactPackage())
+            .addPackage(new MapsPackage()) // <---- and This!
+            .setUseDeveloperSupport(BuildConfig.DEBUG)
+            .setInitialLifecycleState(LifecycleState.RESUMED)
+            .build();
+
+    mReactRootView.startReactApplication(mReactInstanceManager, "MyApp", null);
+
+    setContentView(mReactRootView);
 }
 ```
 
