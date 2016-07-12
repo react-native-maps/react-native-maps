@@ -209,20 +209,22 @@
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
     }
-    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithTag:_imageSrc
-                                                                     size:self.bounds.size
-                                                                    scale:RCTScreenScale()
-                                                               resizeMode:UIViewContentModeCenter
-                                                            progressBlock:nil
-                                                          completionBlock:^(NSError *error, UIImage *image) {
-                                                              if (error) {
-                                                                  // TODO(lmr): do something with the error?
-                                                                  NSLog(@"%@", error);
-                                                              }
-                                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                                self.image = image;
-                                                              });
-                                                          }];
+    NSURL *imageURLRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:imageSrc]];
+    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:imageURLRequest
+                                                                            size:self.bounds.size
+                                                                           scale:RCTScreenScale()
+                                                                         clipped:YES
+                                                                      resizeMode:UIViewContentModeCenter
+                                                                   progressBlock:nil
+                                                                 completionBlock:^(NSError *error, UIImage *image) {
+                                                                     if (error) {
+                                                                         // TODO(lmr): do something with the error?
+                                                                         NSLog(@"%@", error);
+                                                                     }
+                                                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                                                       self.image = image;
+                                                                     });
+                                                                 }];
 }
 
 - (void)setPinColor:(UIColor *)pinColor
