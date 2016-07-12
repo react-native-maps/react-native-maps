@@ -356,6 +356,12 @@ render() {
 }
 ```
 
+### Zoom to Specified Markers
+
+Pass an array of marker identifiers to have the map re-focus.
+
+![](http://i.giphy.com/3o7qEbOQnO0yoXqKJ2.gif) ![](http://i.giphy.com/26FxDwUqWKglEcGZi.gif)
+
 ### Troubleshooting
 
 #### My map is blank

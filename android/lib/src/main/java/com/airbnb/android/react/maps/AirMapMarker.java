@@ -40,6 +40,7 @@ public class AirMapMarker extends AirMapFeature {
     private Marker marker;
     private int width;
     private int height;
+    private String identifier;
 
     private LatLng position;
     private String title;
@@ -121,6 +122,15 @@ public class AirMapMarker extends AirMapFeature {
             marker.setPosition(position);
         }
         update();
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+        update();
+    }
+
+    public String getIdentifier() {
+        return this.identifier;
     }
 
     public void setTitle(String title) {
@@ -288,13 +298,13 @@ public class AirMapMarker extends AirMapFeature {
         }
 
         marker.setIcon(getIcon());
-        
+
         if (anchorIsSet) {
             marker.setAnchor(anchorX, anchorY);
         } else {
             marker.setAnchor(0.5f, 1.0f);
         }
-        
+
         if (calloutAnchorIsSet) {
             marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
         } else {

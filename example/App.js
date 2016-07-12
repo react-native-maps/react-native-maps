@@ -22,7 +22,7 @@ var DefaultMarkers = require('./examples/DefaultMarkers');
 var CachedMap = require('./examples/CachedMap');
 var LoadingMap = require('./examples/LoadingMap');
 var TakeSnapshot = require('./examples/TakeSnapshot');
-
+var FocusOnMarkers = require('./examples/FocusOnMarkers');
 
 var App = React.createClass({
 
@@ -87,6 +87,7 @@ var App = React.createClass({
       [TakeSnapshot, 'Take Snapshot'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
+      [FocusOnMarkers, 'Focus Map On Markers'],
     ]);
   },
 });

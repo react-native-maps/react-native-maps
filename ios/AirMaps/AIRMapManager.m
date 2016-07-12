@@ -161,6 +161,31 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
+                  markers:(nonnull NSArray *)markers
+                  animated:(BOOL)animated)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+            // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
+            id annotations = mapView.annotations;
+
+            NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                AIRMapMarker *marker = (AIRMapMarker *)evaluatedObject;
+                return [markers containsObject:marker.identifier];
+            }];
+
+            NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
+
+            [mapView showAnnotations:filteredMarkers animated:animated];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         withWidth:(nonnull NSNumber *)width
         withHeight:(nonnull NSNumber *)height

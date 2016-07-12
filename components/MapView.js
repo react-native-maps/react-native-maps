@@ -389,6 +389,10 @@ var MapView = React.createClass({
     this._runCommand('fitToElements', [animated]);
   },
 
+  fitToSuppliedMarkers: function(markers, animated) {
+    this._runCommand('fitToSuppliedMarkers', [markers, animated]);
+  },
+
   takeSnapshot: function (width, height, region, callback) {
     if (!region) {
       region = this.props.region || this.props.initialRegion;
