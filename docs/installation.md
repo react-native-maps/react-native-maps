@@ -40,81 +40,46 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 ## Android
 
-1. in `android/app/build.gradle` add:
-   ```
+1. in your `build.gradle` add:
+ ```
+ ...
+ dependencies {
    ...
-   dependencies {
-     ...
-     compile project(':react-native-maps') // <-- Add this!
-   }
-   ```
+   compile 'com.airbnb.android:react-native-maps:0.7.1'
+ }
+ ```
 
-2. in `android/settings.gradle` add:
-   ```
-   include ':react-native-maps'
-   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android/lib')
+3. in your application object, add:
 
-   ```
+```java
+public class MyApplication extends Application implements ReactApplication {
+  private final ReactNativeHost reactNativeHost = new ReactNativeHost(this) {
+    @Override protected List<ReactPackage> getPackages() {
+      return Arrays.asList(
+          new MainReactPackage(),
+          new MapsPackage());
+    }
+  };
 
+  @Override public ReactNativeHost getReactNativeHost() {
+    return reactNativeHost;
+  }
+}
+```
 
-3. in `android/app/src/main/java/com/{YOUR_APP_NAME}/MainActivity.java` add:
-
-      ```
-    ...
-    import com.airbnb.android.react.maps.MapsPackage; // <--- Add this!
-    ...
-
-    public class MainActivity extends ReactActivity {
-    ...
-        @Override
-        protected List<ReactPackage> getPackages() {
-            return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new MapsPackage()    // <-- Add this!
-            );
-        }
-   }
-   ```
-
-    **Older versions of React Native**
-   ```java
-   @Override
-   protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       mReactRootView = new ReactRootView(this);
-
-       mReactInstanceManager = ReactInstanceManager.builder()
-               .setApplication(getApplication())
-               .setBundleAssetName("index.android.bundle")
-               .setJSMainModuleName("index.android")
-               .addPackage(new MainReactPackage())
-               .addPackage(new MapsPackage()) // <---- and This!
-               .setUseDeveloperSupport(BuildConfig.DEBUG)
-               .setInitialLifecycleState(LifecycleState.RESUMED)
-               .build();
-
-       mReactRootView.startReactApplication(mReactInstanceManager, "MyApp", null);
-
-       setContentView(mReactRootView);
-   }
-   ```
 4. Specify your Google Maps API Key:
     > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-Add your Api key in  `android/app/src/main/AndroidManifest.xml`:
+Add your API key to your manifest file:
 
-  ```xml
-  <application
-    android:allowBackup="true"
-    android:label="@string/app_name"
-    android:icon="@mipmap/ic_launcher"
-    android:theme="@style/AppTheme">
-      <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-      <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="{{Your Google maps API Key Here}}"/>
-  </application>
-  ```
+```xml
+<application>
+    <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+    <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="{{Your Google maps API Key Here}}"/>
+</application>
+```
 
 5. ensure that you have Google Play Services installed:
   * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).

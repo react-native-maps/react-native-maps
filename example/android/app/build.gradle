@@ -99,7 +99,5 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:23.4.0"
-    compile "com.facebook.react:react-native:0.29.0"  // From node_modules
     compile project(':react-native-maps')
 }
