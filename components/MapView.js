@@ -52,6 +52,14 @@ var MapView = React.createClass({
     showsUserLocation: PropTypes.bool,
 
     /**
+     * If `false` hide the button to move map to the current user's location.
+     * Default value is `true`.
+     *
+     * @platform android
+     */
+    showsMyLocationButton: PropTypes.bool,
+
+    /**
      * If `true` the map will focus on the user's location. This only works if
      * `showsUserLocation` is true and the user has shared their location.
      * Default value is `false`.
