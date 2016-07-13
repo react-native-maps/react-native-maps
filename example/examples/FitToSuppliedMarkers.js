@@ -1,4 +1,5 @@
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var {
   StyleSheet,
   PropTypes,
@@ -7,7 +8,7 @@ var {
   Dimensions,
   TouchableOpacity,
   Image,
-} = React;
+} = ReactNative;
 
 var MapView = require('react-native-maps');
 var PriceMarker = require('./PriceMarker');
@@ -23,6 +24,7 @@ const SPACE = 0.01;
 
 var markerIDs = ['Marker1', 'Marker2', 'Marker3', 'Marker4', 'Marker5'];
 var timeout = 4000;
+var animationTimeout;
 
 var FocusOnMarkers = React.createClass({
   getInitialState() {
@@ -54,41 +56,54 @@ var FocusOnMarkers = React.createClass({
     this.refs.map.fitToSuppliedMarkers(markers, animated);
   },
   focus1() {
-    setTimeout(() => {
+    animationTimeout = setTimeout(() => {
       this.focusMap([
         markerIDs[1],
         markerIDs[4]
       ], true);
-    }, timeout);
 
-    setTimeout(this.focus2, timeout);
+      this.focus2();
+    }, timeout);
   },
   focus2() {
-    setTimeout(() => {
+    animationTimeout = setTimeout(() => {
       this.focusMap([
         markerIDs[2],
         markerIDs[3]
       ], false);
+
+      this.focus3()
     }, timeout);
-    setTimeout(this.focus3, timeout);
   },
   focus3() {
-    setTimeout(() => {
+    animationTimeout = setTimeout(() => {
       this.focusMap([
         markerIDs[1],
         markerIDs[2]
       ], false);
+
+      this.focus4();
     }, timeout);
-    setTimeout(this.focus1, timeout);
   },
-  componentDidMount() {
-    setTimeout(() => {
+  focus4() {
+    animationTimeout = setTimeout(() => {
       this.focusMap([
         markerIDs[0],
         markerIDs[3]
       ], true);
+
+      this.focus1();
     }, timeout)
-    setTimeout(this.focus1, timeout);
+  },
+  componentDidMount() {
+    animationTimeout = setTimeout(() => {
+      this.focus1();
+    }, timeout)
+  },
+  componentWillUnmount() {
+    if (animationTimeout) {
+      clearTimeout(animationTimeout);
+    }
   },
   render() {
     return (
