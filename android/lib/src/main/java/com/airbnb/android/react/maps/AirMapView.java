@@ -518,11 +518,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         boolean addedPosition = false;
 
+        List<String> markerIDList = Arrays.asList(markerIDs);
+
         for (AirMapFeature feature : features) {
             if (feature instanceof AirMapMarker) {
                 String identifier = ((AirMapMarker)feature).getIdentifier();
                 Marker marker = (Marker)feature.getFeature();
-                if (Arrays.asList(markerIDs).contains(identifier)) {
+                if (markerIDList.contains(identifier)) {
                     builder.include(marker.getPosition());
                     addedPosition = true;
                 }
