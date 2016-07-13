@@ -438,7 +438,7 @@ static int kDragCenterContext;
         [mapView setRegion:region animated:YES];
 
         // Move to user location only for the first time it loads up.
-        mapView.followUserLocation = NO;
+        // mapView.followUserLocation = NO;
     }
 }
 
