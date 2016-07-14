@@ -171,6 +171,19 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     return kSMCalloutViewRepositionDelayForUIScrollView;
 }
 
+- (void)calloutViewClicked:(SMCalloutView *)calloutView {
+    self.onCalloutPress(@{
+                          @"coordinate": @{
+                            @"latitude": @(calloutView.coordinate.latitude),
+                            @"longitude": @(calloutView.coordinate.longitude),
+                        },
+//                        @"position": @{
+//                                @"x": @(touchPoint.x),
+//                                @"y": @(touchPoint.y),
+//                        },
+    });
+}
+
 #pragma mark Accessors
 
 - (void)setShowsUserLocation:(BOOL)showsUserLocation

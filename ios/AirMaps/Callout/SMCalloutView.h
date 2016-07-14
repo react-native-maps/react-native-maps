@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
 
 /*
@@ -42,6 +43,7 @@ extern NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView;
 
 @interface SMCalloutView : UIView
 
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, weak, nullable) id<SMCalloutViewDelegate> delegate;
 /// title/titleView relationship mimics UINavigationBar.
 @property (nonatomic, copy, nullable) NSString *title;
