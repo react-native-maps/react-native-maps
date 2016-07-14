@@ -40,8 +40,6 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 ## Android
 
-For React Native v0.29.0 or above:
-
 1. in your `build.gradle` add:
 ```groovy
 ...
@@ -51,7 +49,9 @@ dependencies {
 }
 ```
 
-3. in your application object, add:
+For React Native v0.29.0 or above:
+
+2. in your application object, add:
 
 ```java
 public class MyApplication extends Application implements ReactApplication {
