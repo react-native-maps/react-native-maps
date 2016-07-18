@@ -22,10 +22,10 @@
   ],
   "dependencies": {
     "react": "15.2.0",
-    "react-native": "^0.30.0-rc"
+    "react-native": "^0.29.2"
   },
   "devDependencies": {
     "react": "15.2.0",
-    "react-native": "^0.30.0-rc"
+    "react-native": "^0.29.2"
   }
 }
