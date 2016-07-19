@@ -1,12 +1,13 @@
 var React = require('react');
 var ReactNative = require('react-native');
 var {
+  PropTypes,
+} = React;
+var {
   View,
   Animated,
-  PropTypes,
   PanResponder,
 } = ReactNative;
-var PropTypes = require('ReactPropTypes');
 
 var ModePropType = PropTypes.oneOf(["decay", "snap", "spring-origin"]);
 var OvershootPropType = PropTypes.oneOf(["spring", "clamp"]);
