@@ -67,7 +67,7 @@ public class AirMapMarker extends AirMapFeature {
 
     private boolean hasCustomMarkerView = false;
 
-    private final DraweeHolder mLogoHolder;
+    private final DraweeHolder<?> logoHolder;
     private DataSource<CloseableReference<CloseableImage>> dataSource;
     private final ControllerListener<ImageInfo> mLogoControllerListener =
             new BaseControllerListener<ImageInfo>() {
@@ -104,8 +104,8 @@ public class AirMapMarker extends AirMapFeature {
     public AirMapMarker(Context context) {
         super(context);
         this.context = context;
-        mLogoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
-        mLogoHolder.onAttach();
+        logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
+        logoHolder.onAttach();
     }
 
     private GenericDraweeHierarchy createDraweeHierarchy() {
@@ -203,9 +203,9 @@ public class AirMapMarker extends AirMapFeature {
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setImageRequest(imageRequest)
                     .setControllerListener(mLogoControllerListener)
-                    .setOldController(mLogoHolder.getController())
+                    .setOldController(logoHolder.getController())
                     .build();
-            mLogoHolder.setController(controller);
+            logoHolder.setController(controller);
         } else {
             iconBitmapDescriptor = getBitmapDescriptorByName(uri);
             update();
