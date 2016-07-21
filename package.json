@@ -27,5 +27,10 @@
   "devDependencies": {
     "react": "15.2.0",
     "react-native": "^0.29.2"
+  },
+  "rnpm": {
+    "android": {
+      "sourceDir": "./android/lib"
+    }
   }
 }
