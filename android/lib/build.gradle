@@ -17,6 +17,6 @@ android {
 
 dependencies {
   compile 'com.facebook.react:react-native:+'
-  compile "com.google.android.gms:play-services-base:9.2.0"
-  compile 'com.google.android.gms:play-services-maps:9.2.0'
+  compile "com.google.android.gms:play-services-base:8.4.0"
+  compile 'com.google.android.gms:play-services-maps:8.4.0'
 }
