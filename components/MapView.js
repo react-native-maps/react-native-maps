@@ -449,6 +449,7 @@ var MapView = React.createClass({
       props.handlePanDrag = !!props.onPanDrag;
     } else {
       props = {
+        style: this.props.style,
         region: null,
         initialRegion: null,
         onChange: this._onChange,
