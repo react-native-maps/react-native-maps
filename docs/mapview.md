@@ -53,6 +53,7 @@
 | `animateToRegion` | `region: Region`, `duration: Number` |
 | `animateToCoordinate` | `region: Coordinate`, `duration: Number` |
 | `fitToElements` | `animated: Boolean` |
+| `fitToSuppliedMarkers` | `markerIDs: String[]` |
 
 
 
