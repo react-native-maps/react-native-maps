@@ -110,6 +110,7 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
 
 #pragma mark exported MapView methods
 
+
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
         withRegion:(MKCoordinateRegion)region
         withDuration:(CGFloat)duration)
@@ -182,6 +183,20 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
             NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
 
             [mapView showAnnotations:filteredMarkers animated:animated];
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(setMapType:(nonnull NSNumber *)reactTag
+                  mapType:(MKMapType)mapType)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+            mapView.mapType = mapType;
         }
     }];
 }
