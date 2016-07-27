@@ -401,6 +401,10 @@ var MapView = React.createClass({
     this._runCommand('fitToSuppliedMarkers', [markers, animated]);
   },
 
+  setMapType: function(mapType) {
+    this._runCommand('setMapType', [mapType]);
+  },
+
   takeSnapshot: function (width, height, region, callback) {
     if (!region) {
       region = this.props.region || this.props.initialRegion;
