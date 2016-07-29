@@ -54,6 +54,8 @@ For React Native v0.29.0 or above:
 2. in your application object, add:
 
 ```java
+import com.airbnb.android.react.maps.MapsPackage;
+
 public class MyApplication extends Application implements ReactApplication {
   private final ReactNativeHost reactNativeHost = new ReactNativeHost(this) {
     @Override protected List<ReactPackage> getPackages() {
