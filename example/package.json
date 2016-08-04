@@ -12,5 +12,11 @@
     "react": "15.2.0",
     "react-native": "^0.29.2",
     "react-native-maps": "../"
+  },
+  "devDependencies": {
+    "concurrently": "^2.2.0",
+    "fs-extra": "^0.30.0",
+    "node-watch": "^0.4.0",
+    "rimraf": "^2.5.4"
   }
 }

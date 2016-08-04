@@ -10,10 +10,6 @@ rimraf(`node_modules/${packageName}`, () => {
   console.log(`Copying ${packageName}`);
   fs.copy(packagePath, `node_modules/${packageName}`, (err) => {
     if (err) return console.error(err);
-
-    // Remove conflicting node_modules from `airbnb-dls`.
-    //['react-native', 'react'].forEach(moduleName =>
-    //  rimraf(`node_modules/${packageName}/node_modules/${moduleName}`, () => {}));
   });
 
   console.log(`Watching ${packageName}`);
