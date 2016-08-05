@@ -16,6 +16,7 @@
   "devDependencies": {
     "concurrently": "^2.2.0",
     "fs-extra": "^0.30.0",
+    "minimatch": "^3.0.2",
     "node-watch": "^0.4.0",
     "rimraf": "^2.5.4"
   }
