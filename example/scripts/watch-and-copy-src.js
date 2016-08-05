@@ -1,24 +1,51 @@
+const path = require('path');
 const fs = require('fs-extra');
 const watch = require('node-watch');
 const rimraf = require('rimraf');
+const minimatch = require('minimatch');
 
-const packageName = 'react-native-maps/components';
-const packagePath = '../components';
+function copyAndWatch(source, destination, fileGlob) {
+  console.log(`Cleaning "${destination}"`);
+  rimraf(destination, () => {
+    console.log(`Copying "${source}" to "${destination}"`);
+    fs.copy(source, destination, (err) => {
+      if (err) console.error(err);
+    });
 
-console.log(`Cleaning node_modules/${packageName}`);
-rimraf(`node_modules/${packageName}`, () => {
-  console.log(`Copying ${packageName}`);
-  fs.copy(packagePath, `node_modules/${packageName}`, (err) => {
-    if (err) return console.error(err);
-  });
-
-  console.log(`Watching ${packageName}`);
-  watch(packagePath, (filename) => {
-    const localPath = filename.split(packagePath).pop();
-    const destination = `node_modules/${packageName}${localPath}`;
-    console.log(`Copying ${filename} to ${destination}`);
-    fs.copy(filename, destination, (err) => {
-      if (err) return console.error(err);
+    console.log(`Watching "${source}"`);
+    watch(source, (filename) => {
+      const localPath = filename.split(source).pop();
+      if (matchesFile(localPath, fileGlob)) {
+        const destinationPath = `${destination}${localPath}`;
+        console.log(`Copying "${filename}" to "${destinationPath}"`);
+        fs.copy(filename, destinationPath, (err) => {
+          if (err) console.error(err);
+        });
+      }
     });
   });
-});
+}
+
+function matchesFile(filename, fileGlob) {
+  if (fileGlob == null) return true;
+  return minimatch(path.basename(filename), fileGlob);
+}
+
+// JavaScript
+copyAndWatch(
+  '../components',
+  'node_modules/react-native-maps/components'
+);
+
+// Android
+copyAndWatch(
+  '../android',
+  'node_modules/react-native-maps/android'
+);
+
+// iOS
+copyAndWatch(
+  '../ios',
+  'node_modules/react-native-maps/ios',
+  '{*.m,*.h,*.swift}'
+);
