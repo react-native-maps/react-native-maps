@@ -209,10 +209,12 @@
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
     }
-    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageSrc]];
+    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:request
                                                                             size:self.bounds.size
                                                                            scale:RCTScreenScale()
-                                                                         clipped:YES
+                                                                         clipped:NO
                                                                       resizeMode:UIViewContentModeCenter
                                                                    progressBlock:nil
                                                                  completionBlock:^(NSError *error, UIImage *image) {
@@ -221,7 +223,7 @@
                                                                          NSLog(@"%@", error);
                                                                      }
                                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                                         self.image = image;
+                                                                       self.image = image;
                                                                      });
                                                                  }];
 }
@@ -229,7 +231,7 @@
 - (void)setPinColor:(UIColor *)pinColor
 {
     _pinColor = pinColor;
-    
+
     if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
         _pinView.pinTintColor = _pinColor;
     }
