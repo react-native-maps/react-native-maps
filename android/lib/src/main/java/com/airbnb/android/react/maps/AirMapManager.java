@@ -33,6 +33,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     private static final int FIT_TO_SUPPLIED_MARKERS = 4;
 
     private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
+            "none", GoogleMap.MAP_TYPE_NONE,
             "standard", GoogleMap.MAP_TYPE_NORMAL,
             "satellite", GoogleMap.MAP_TYPE_SATELLITE,
             "hybrid", GoogleMap.MAP_TYPE_HYBRID,
@@ -87,6 +88,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.setRegion(region);
     }
 
+    @ReactProp(name = "maxZoom")
+    public void setMaxZoom(AirMapView view, Float maxZoom) {
+        view.setMaxZoomPreference(maxZoom);
+    }
+
+    @ReactProp(name = "minZoom")
+    public void setMinZoom(AirMapView view, Float minZoom) {
+        view.setMinZoomPreference(minZoom);
+    }
+
     @ReactProp(name = "mapType")
     public void setMapType(AirMapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
@@ -98,9 +109,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.setShowsUserLocation(showUserLocation);
     }
 
-    @ReactProp(name = "showsMyLocationButton", defaultBoolean = true)
-    public void setShowsMyLocationButton(AirMapView view, boolean showMyLocationButton) {
-        view.setShowsMyLocationButton(showMyLocationButton);
+    @ReactProp(name = "showsUserLocationButton", defaultBoolean = false)
+    public void setShowsUserLocationButton(AirMapView view, boolean showUserLocationButton) {
+        view.setShowsUserLocationButton(showUserLocationButton);
     }
 
     @ReactProp(name = "toolbarEnabled", defaultBoolean = true)
