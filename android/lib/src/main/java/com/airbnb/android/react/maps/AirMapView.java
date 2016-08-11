@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.TileOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,6 +66,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
+    private boolean showUserLocationButton = false;
     private boolean isMonitoringRegion = false;
     private boolean isTouchDown = false;
     private boolean handlePanDrag = false;
@@ -79,6 +81,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final Map<Polyline, AirMapPolyline> polylineMap = new HashMap<>();
     private final Map<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
     private final Map<Circle, AirMapCircle> circleMap = new HashMap<>();
+    private final HashMap<TileOverlay, AirMapUrlTile> tileMap = new HashMap<>();
 
     private final ScaleGestureDetector scaleDetector;
     private final GestureDetectorCompat gestureDetector;
@@ -152,6 +155,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.map = map;
         this.map.setInfoWindowAdapter(this);
         this.map.setOnMarkerDragListener(this);
+        this.map.setMinZoomPreference(9.0f);
+        this.map.setMaxZoomPreference(18.0f);
 
         manager.pushEvent(this, "onMapReady", new WritableNativeMap());
 
@@ -213,11 +218,24 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
         });
 
+        // deprecated, but map works incorrectly without this method
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
                 LatLng center = position.target;
+                lastBoundsEmitted = bounds;
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
+                view.stopMonitoringRegion();
+            }
+        });
+
+        // must be used instead of setOnCameraChangeListener, but map will render without markers if we remove deprecated method
+        map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+                LatLng center = map.getCameraPosition().target;
                 lastBoundsEmitted = bounds;
                 eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
                 view.stopMonitoringRegion();
@@ -244,6 +262,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 if (hasPermissions()) {
                     //noinspection MissingPermission
                     map.setMyLocationEnabled(showUserLocation);
+                    map.getUiSettings().setMyLocationButtonEnabled(showUserLocationButton);
                 }
                 synchronized (AirMapView.this) {
                     AirMapView.this.onResume();
@@ -256,6 +275,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 if (hasPermissions()) {
                     //noinspection MissingPermission
                     map.setMyLocationEnabled(false);
+                    map.getUiSettings().setMyLocationButtonEnabled(false);
                 }
                 synchronized (AirMapView.this) {
                     AirMapView.this.onPause();
@@ -323,9 +343,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
     }
 
-    public void setShowsMyLocationButton(boolean showMyLocationButton) {
+    public void setShowsUserLocationButton(boolean showUserLocationButton) {
         if (hasPermissions()) {
-            map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
+            map.getUiSettings().setMyLocationButtonEnabled(showUserLocationButton);
         }
     }
 
@@ -418,9 +438,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             features.add(index, circleView);
             Circle circle = (Circle) circleView.getFeature();
             circleMap.put(circle, circleView);
+        } else if (child instanceof AirMapUrlTile) {
+            AirMapUrlTile urlTileView = (AirMapUrlTile) child;
+            urlTileView.addToMap(map);
+            features.add(index, urlTileView);
+            TileOverlay tile = (TileOverlay)urlTileView.getFeature();
+            tileMap.put(tile, urlTileView);
         } else {
             // TODO(lmr): throw? User shouldn't be adding non-feature children.
         }
+
     }
 
     public int getFeatureCount() {
@@ -443,6 +470,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             polygonMap.remove(feature.getFeature());
         } else if (feature instanceof AirMapCircle) {
             circleMap.remove(feature.getFeature());
+        } else if (feature instanceof AirMapUrlTile) {
+             tileMap.remove(feature.getFeature());
         }
         feature.removeFromMap(map);
     }
