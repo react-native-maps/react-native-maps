@@ -155,8 +155,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.map = map;
         this.map.setInfoWindowAdapter(this);
         this.map.setOnMarkerDragListener(this);
-        this.map.setMinZoomPreference(9.0f);
-        this.map.setMaxZoomPreference(18.0f);
 
         manager.pushEvent(this, "onMapReady", new WritableNativeMap());
 

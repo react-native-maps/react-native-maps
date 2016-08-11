@@ -252,6 +252,20 @@ var MapView = React.createClass({
     minDelta: PropTypes.number,
 
     /**
+     * Maximum zoom.
+     *
+     * @platform android
+     */
+    maxZoom: PropTypes.number,
+
+    /**
+     * Minimum zoom.
+     *
+     * @platform android
+     */
+    minZoom: PropTypes.number,
+
+    /**
      * Insets for the map's legal label, originally at bottom left of the map.
      * See `EdgeInsetsPropType.js` for more information.
      */
