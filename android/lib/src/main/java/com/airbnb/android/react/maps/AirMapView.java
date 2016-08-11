@@ -72,8 +72,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private boolean handlePanDrag = false;
     private boolean cacheEnabled = false;
     private boolean loadingEnabled = false;
-    private Float maxZoom;
-    private Float minZoom;
+    private Double maxZoom;
+    private Double minZoom;
 
     private static final String[] PERMISSIONS = new String[] {
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
@@ -337,11 +337,11 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
     }
 
-    public void setMaxZoom(Float maxZoom) {
+    public void setMaxZoom(Double maxZoom) {
         map.setMaxZoomPreference(maxZoom);
     }
 
-    public void setMinZoom(Float minZoom) {
+    public void setMinZoom(Double minZoom) {
         map.setMinZoomPreference(minZoom);
     }
 
