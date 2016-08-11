@@ -485,12 +485,6 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
-    if( [mapView zoomLevel] < 8 )
-    {
-        [mapView setCenterCoordinate:mapView.centerCoordinate
-                           zoomLevel:8
-                            animated:NO];
-    }
     [mapView.regionChangeObserveTimer invalidate];
     mapView.regionChangeObserveTimer = nil;
 

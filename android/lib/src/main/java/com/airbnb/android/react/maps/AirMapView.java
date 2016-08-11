@@ -231,16 +231,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         });
 
         // must be used instead of setOnCameraChangeListener, but map will render without markers if we remove deprecated method
-        map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
-            @Override
-            public void onCameraMove() {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-                LatLng center = map.getCameraPosition().target;
-                lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
-                view.stopMonitoringRegion();
-            }
-        });
+        // map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+        //     @Override
+        //     public void onCameraMove() {
+        //         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+        //         LatLng center = map.getCameraPosition().target;
+        //         lastBoundsEmitted = bounds;
+        //         eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
+        //         view.stopMonitoringRegion();
+        //     }
+        // });
 
         map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override public void onMapLoaded() {
@@ -344,6 +344,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
 
     public void setShowsUserLocationButton(boolean showUserLocationButton) {
+        this.showsUserLocationButton = showsUserLocationButton; // hold onto this for lifecycle handling
         if (hasPermissions()) {
             map.getUiSettings().setMyLocationButtonEnabled(showUserLocationButton);
         }
