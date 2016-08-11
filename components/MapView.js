@@ -53,11 +53,11 @@ var MapView = React.createClass({
     showsUserLocation: PropTypes.bool,
 
     /**
-     **NOTE**: Android only.
      * If `true` the user location button will be shown in the right corner of the map.
      * Default value is `false`. This only works if
      * `showsUserLocation` is true and the user has shared their location.
      *
+     * @platform android
      */
     showsUserLocationButton: PropTypes.bool,
 

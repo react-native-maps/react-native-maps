@@ -230,7 +230,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
         });
 
-        // must be used instead of setOnCameraChangeListener, but map rendered without markers is remove deprecated method
+        // must be used instead of setOnCameraChangeListener, but map will render without markers if we remove deprecated method
         map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
