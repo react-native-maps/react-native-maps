@@ -72,6 +72,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private boolean handlePanDrag = false;
     private boolean cacheEnabled = false;
     private boolean loadingEnabled = false;
+    private Float maxZoom;
+    private Float minZoom;
 
     private static final String[] PERMISSIONS = new String[] {
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
@@ -155,6 +157,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.map = map;
         this.map.setInfoWindowAdapter(this);
         this.map.setOnMarkerDragListener(this);
+        setMaxZoom(maxZoom);
+        setMinZoom(minZoom);
 
         manager.pushEvent(this, "onMapReady", new WritableNativeMap());
 
@@ -331,6 +335,14 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
             boundsToMove = null;
         }
+    }
+
+    public void setMaxZoom(Float maxZoom) {
+        map.setMaxZoomPreference(maxZoom);
+    }
+
+    public void setMinZoom(Float minZoom) {
+        map.setMinZoomPreference(minZoom);
     }
 
     public void setShowsUserLocation(boolean showUserLocation) {
