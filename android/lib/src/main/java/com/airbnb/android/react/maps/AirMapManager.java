@@ -109,7 +109,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.setShowsUserLocation(showUserLocation);
     }
 
-    @ReactProp(name = "showsUserLocationButton", defaultBoolean = false)
+    @ReactProp(name = "showsUserLocationButton", defaultBoolean = true)
     public void setShowsUserLocationButton(AirMapView view, boolean showUserLocationButton) {
         view.setShowsUserLocationButton(showUserLocationButton);
     }
