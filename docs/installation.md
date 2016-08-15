@@ -40,7 +40,7 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 ## Android
 
-1. in your `build.gradle` add:
+1. in your `android/app/build.gradle` add:
 ```groovy
 ...
 dependencies {
