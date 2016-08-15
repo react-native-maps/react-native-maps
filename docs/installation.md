@@ -95,7 +95,7 @@ For older versions of React Native:
 4. Specify your Google Maps API Key:
     > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-Add your API key to your manifest file:
+Add your **Browser** API key to your manifest file:
 
 ```xml
 <application>
@@ -103,6 +103,18 @@ Add your API key to your manifest file:
     <meta-data
       android:name="com.google.android.geo.API_KEY"
       android:value="{{Your Google maps API Key Here}}"/>
+</application>
+```
+    > If that doesn't work try using an ***Android Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+
+Add your **Android** API key to your manifest file:
+
+```xml
+<application>
+    <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+    <meta-data
+        android:name="com.google.android.maps.v2.API_KEY"
+        android:value="{{@string/ANDROID_GOOGLE_MAPS_API_KEY}}"/>
 </application>
 ```
 
