@@ -1,21 +1,20 @@
 'use strict';
 
 var React = require('react');
-var {
-  PropTypes,
-} = React;
 var ReactNative = require('react-native');
 var {
-  EdgeInsetsPropType,
-  NativeMethodsMixin,
-  Platform,
-  ReactNativeViewAttributes,
   View,
-  Animated,
-  requireNativeComponent,
   NativeModules,
-  ColorPropType,
 } = ReactNative;
+
+var Animated = require('Animated');
+var EdgeInsetsPropType = require('EdgeInsetsPropType');
+var Platform = require('Platform');
+var ReactNativeViewAttributes = require('ReactNativeViewAttributes');
+var ColorPropType = require('ColorPropType');
+var requireNativeComponent = require('requireNativeComponent');
+var PropTypes = require('react/lib/ReactPropTypes');
+var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
 
 var MapMarker = require('./MapMarker');
 var MapPolyline = require('./MapPolyline');
