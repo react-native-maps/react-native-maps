@@ -54,12 +54,19 @@ For React Native v0.29.0 or above:
 2. in your application object, add:
 
 ```java
+
+import com.airbnb.android.react.maps.MapsPackage; <--- Add code
+
+import java.util.Arrays;
+import java.util.List;
+
 public class MyApplication extends Application implements ReactApplication {
   private final ReactNativeHost reactNativeHost = new ReactNativeHost(this) {
     @Override protected List<ReactPackage> getPackages() {
       return Arrays.asList(
           new MainReactPackage(),
-          new MapsPackage());
+          new MapsPackage() <--- Add code
+      );
     }
   };
 
@@ -102,7 +109,7 @@ Add your **Browser** API key to your manifest file:
     <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
     <meta-data
       android:name="com.google.android.geo.API_KEY"
-      android:value="{{Your Google maps API Key Here}}"/>
+      android:value="Your Google maps API Key Here"/>
 </application>
 ```
     > If that doesn't work try using an ***Android Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
