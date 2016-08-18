@@ -1,14 +1,15 @@
 var React = require('react');
+var {
+  PropTypes,
+} = React;
 
 var ReactNative = require('react-native');
 var {
   View,
+  NativeMethodsMixin,
+  requireNativeComponent,
   StyleSheet,
 } = ReactNative;
-
-var requireNativeComponent = require('requireNativeComponent');
-var PropTypes = require('react/lib/ReactPropTypes');
-var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
 
 var MapPolyline = React.createClass({
   mixins: [NativeMethodsMixin],

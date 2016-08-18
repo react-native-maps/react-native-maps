@@ -1,21 +1,22 @@
 'use strict';
 
 var React = require('react');
+var {
+  PropTypes,
+} = React;
 
 var ReactNative = require('react-native');
 var {
   View,
+  NativeMethodsMixin,
+  requireNativeComponent,
   StyleSheet,
+  Platform,
   NativeModules,
+  Animated,
 } = ReactNative;
 
-var Animated = require('Animated');
-var Platform = require('Platform');
-var requireNativeComponent = require('requireNativeComponent');
-var PropTypes = require('react/lib/ReactPropTypes');
-var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
-
-var resolveAssetSource = require('resolveAssetSource');
+var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 var MapMarker = React.createClass({
   mixins: [NativeMethodsMixin],
