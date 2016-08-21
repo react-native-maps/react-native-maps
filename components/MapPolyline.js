@@ -6,10 +6,11 @@ var {
 var ReactNative = require('react-native');
 var {
   View,
-  NativeMethodsMixin,
   requireNativeComponent,
   StyleSheet,
 } = ReactNative;
+
+var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
 
 var MapPolyline = React.createClass({
   mixins: [NativeMethodsMixin],

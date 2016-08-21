@@ -4,18 +4,20 @@ var React = require('react');
 var {
   PropTypes,
 } = React;
+
 var ReactNative = require('react-native');
 var {
-  EdgeInsetsPropType,
-  NativeMethodsMixin,
   Platform,
-  ReactNativeViewAttributes,
   View,
   Animated,
   requireNativeComponent,
   NativeModules,
-  ColorPropType,
 } = ReactNative;
+
+var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
+var ReactNativeViewAttributes = require('ReactNativeViewAttributes');
+var ColorPropType = require('ColorPropType');
+var EdgeInsetsPropType = require('EdgeInsetsPropType');
 
 var MapMarker = require('./MapMarker');
 var MapPolyline = require('./MapPolyline');
