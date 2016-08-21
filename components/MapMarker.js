@@ -13,6 +13,7 @@ var {
   Platform,
   NativeModules,
   Animated,
+  requireNativeComponent,
 } = ReactNative;
 
 var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
