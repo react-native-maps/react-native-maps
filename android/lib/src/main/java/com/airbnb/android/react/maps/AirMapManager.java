@@ -1,5 +1,7 @@
 package com.airbnb.android.react.maps;
 
+import android.app.Activity;
+import android.app.Application;
 import android.view.View;
 import android.content.Context;
 
@@ -30,6 +32,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     private static final int ANIMATE_TO_REGION = 1;
     private static final int ANIMATE_TO_COORDINATE = 2;
     private static final int FIT_TO_ELEMENTS = 3;
+    private static final int FIT_TO_SUPPLIED_MARKERS = 4;
 
     private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
             "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -40,10 +43,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     private ReactContext reactContext;
 
-    private final Context appContext;
-
-    public AirMapManager(Context context) {
-        this.appContext = context;
+    public AirMapManager() {
     }
 
     @Override
@@ -56,13 +56,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         reactContext = context;
 
         try {
-            MapsInitializer.initialize(this.appContext);
+            MapsInitializer.initialize(ActivityManager.getInstance().getActivity());
         } catch (RuntimeException e) {
             e.printStackTrace();
             emitMapError("Map initialize error", "map_init_error");
         }
 
-        return new AirMapView(context, this.appContext, this);
+        return new AirMapView(context, ActivityManager.getInstance().getActivity(), this);
     }
 
     @Override
@@ -208,6 +208,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             case FIT_TO_ELEMENTS:
                 view.fitToElements(args.getBoolean(0));
                 break;
+
+            case FIT_TO_SUPPLIED_MARKERS:
+                view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
+                break;
         }
     }
 
@@ -240,7 +244,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         return MapBuilder.of(
                 "animateToRegion", ANIMATE_TO_REGION,
                 "animateToCoordinate", ANIMATE_TO_COORDINATE,
-                "fitToElements", FIT_TO_ELEMENTS
+                "fitToElements", FIT_TO_ELEMENTS,
+                "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS
         );
     }
 

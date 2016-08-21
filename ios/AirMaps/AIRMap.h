@@ -9,7 +9,6 @@
 
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
-#import <RCTComponent.h>
 
 #import "RCTConvert+MapKit.h"
 #import "RCTComponent.h"

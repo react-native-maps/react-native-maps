@@ -45,6 +45,11 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         view.setTitle(title);
     }
 
+    @ReactProp(name = "identifier")
+    public void setIdentifier(AirMapMarker view, String identifier) {
+        view.setIdentifier(identifier);
+    }
+
     @ReactProp(name = "description")
     public void setDescription(AirMapMarker view, String description) {
         view.setSnippet(description);

@@ -40,6 +40,7 @@ public class AirMapMarker extends AirMapFeature {
     private Marker marker;
     private int width;
     private int height;
+    private String identifier;
 
     private LatLng position;
     private String title;
@@ -67,7 +68,7 @@ public class AirMapMarker extends AirMapFeature {
 
     private boolean hasCustomMarkerView = false;
 
-    private final DraweeHolder mLogoHolder;
+    private final DraweeHolder<?> logoHolder;
     private DataSource<CloseableReference<CloseableImage>> dataSource;
     private final ControllerListener<ImageInfo> mLogoControllerListener =
             new BaseControllerListener<ImageInfo>() {
@@ -104,8 +105,8 @@ public class AirMapMarker extends AirMapFeature {
     public AirMapMarker(Context context) {
         super(context);
         this.context = context;
-        mLogoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
-        mLogoHolder.onAttach();
+        logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
+        logoHolder.onAttach();
     }
 
     private GenericDraweeHierarchy createDraweeHierarchy() {
@@ -121,6 +122,15 @@ public class AirMapMarker extends AirMapFeature {
             marker.setPosition(position);
         }
         update();
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+        update();
+    }
+
+    public String getIdentifier() {
+        return this.identifier;
     }
 
     public void setTitle(String title) {
@@ -203,9 +213,9 @@ public class AirMapMarker extends AirMapFeature {
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setImageRequest(imageRequest)
                     .setControllerListener(mLogoControllerListener)
-                    .setOldController(mLogoHolder.getController())
+                    .setOldController(logoHolder.getController())
                     .build();
-            mLogoHolder.setController(controller);
+            logoHolder.setController(controller);
         } else {
             iconBitmapDescriptor = getBitmapDescriptorByName(uri);
             update();
@@ -288,13 +298,13 @@ public class AirMapMarker extends AirMapFeature {
         }
 
         marker.setIcon(getIcon());
-        
+
         if (anchorIsSet) {
             marker.setAnchor(anchorX, anchorY);
         } else {
             marker.setAnchor(0.5f, 1.0f);
         }
-        
+
         if (calloutAnchorIsSet) {
             marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
         } else {
