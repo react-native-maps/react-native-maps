@@ -1,17 +1,11 @@
-
-let React = require('react');
-const {
-  PropTypes,
-} = React;
-
-const ReactNative = require('react-native');
-let {
+import React, { PropTypes } from 'react';
+import {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
-  StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
+// eslint-disable-next-line react/prefer-es6-class
 const MapCircle = React.createClass({
   mixins: [NativeMethodsMixin],
 
@@ -135,7 +129,9 @@ const MapCircle = React.createClass({
   },
 
   _onPress(e) {
-    this.props.onPress && this.props.onPress(e);
+    if (this.props.onPress) {
+      this.props.onPress(e);
+    }
   },
 
   render() {
@@ -148,6 +144,6 @@ const MapCircle = React.createClass({
   },
 });
 
-let AIRMapCircle = requireNativeComponent('AIRMapCircle', MapCircle);
+const AIRMapCircle = requireNativeComponent('AIRMapCircle', MapCircle);
 
 module.exports = MapCircle;

@@ -1,16 +1,11 @@
-let React = require('react');
-const {
-  PropTypes,
-} = React;
-
-const ReactNative = require('react-native');
-let {
+import React, { PropTypes } from 'react';
+import {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
-  StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
+// eslint-disable-next-line react/prefer-es6-class
 const MapPolyline = React.createClass({
   mixins: [NativeMethodsMixin],
 
@@ -140,14 +135,6 @@ const MapPolyline = React.createClass({
   },
 });
 
-const styles = StyleSheet.create({
-  polyline: {
-    position: 'absolute',
-    width: 0,
-    height: 0,
-  },
-});
-
-let AIRMapPolyline = requireNativeComponent('AIRMapPolyline', MapPolyline);
+const AIRMapPolyline = requireNativeComponent('AIRMapPolyline', MapPolyline);
 
 module.exports = MapPolyline;

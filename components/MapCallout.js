@@ -1,17 +1,12 @@
-
-let React = require('react');
-const {
-  PropTypes,
-} = React;
-
-const ReactNative = require('react-native');
-let {
+import React, { PropTypes } from 'react';
+import {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
   StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
+// eslint-disable-next-line react/prefer-es6-class
 const MapCallout = React.createClass({
   mixins: [NativeMethodsMixin],
 
@@ -32,14 +27,12 @@ const MapCallout = React.createClass({
   },
 });
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   callout: {
     position: 'absolute',
-    //flex: 0,
-    //backgroundColor: 'transparent',
   },
 });
 
-let AIRMapCallout = requireNativeComponent('AIRMapCallout', MapCallout);
+const AIRMapCallout = requireNativeComponent('AIRMapCallout', MapCallout);
 
 module.exports = MapCallout;

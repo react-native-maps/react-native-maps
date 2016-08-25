@@ -1,16 +1,11 @@
-let React = require('react');
-const {
-  PropTypes,
-} = React;
-
-const ReactNative = require('react-native');
-let {
+import React, { PropTypes } from 'react';
+import {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
-  StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
+// eslint-disable-next-line react/prefer-es6-class
 const MapPolygon = React.createClass({
   mixins: [NativeMethodsMixin],
 
@@ -139,7 +134,9 @@ const MapPolygon = React.createClass({
   },
 
   _onPress(e) {
-    this.props.onPress && this.props.onPress(e);
+    if (this.props.onPress) {
+      this.props.onPress(e);
+    }
   },
 
   render() {
@@ -152,14 +149,6 @@ const MapPolygon = React.createClass({
   },
 });
 
-const styles = StyleSheet.create({
-  polyline: {
-    position: 'absolute',
-    width: 0,
-    height: 0,
-  },
-});
-
-let AIRMapPolygon = requireNativeComponent('AIRMapPolygon', MapPolygon);
+const AIRMapPolygon = requireNativeComponent('AIRMapPolygon', MapPolygon);
 
 module.exports = MapPolygon;
