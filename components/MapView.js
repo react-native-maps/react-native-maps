@@ -52,6 +52,14 @@ var MapView = React.createClass({
     showsUserLocation: PropTypes.bool,
 
     /**
+     * If `false` hide the button to move map to the current user's location.
+     * Default value is `true`.
+     *
+     * @platform android
+     */
+    showsMyLocationButton: PropTypes.bool,
+
+    /**
      * If `true` the map will focus on the user's location. This only works if
      * `showsUserLocation` is true and the user has shared their location.
      * Default value is `false`.
@@ -389,6 +397,10 @@ var MapView = React.createClass({
     this._runCommand('fitToElements', [animated]);
   },
 
+  fitToSuppliedMarkers: function(markers, animated) {
+    this._runCommand('fitToSuppliedMarkers', [markers, animated]);
+  },
+
   takeSnapshot: function (width, height, region, callback) {
     if (!region) {
       region = this.props.region || this.props.initialRegion;
@@ -437,6 +449,7 @@ var MapView = React.createClass({
       props.handlePanDrag = !!props.onPanDrag;
     } else {
       props = {
+        style: this.props.style,
         region: null,
         initialRegion: null,
         onChange: this._onChange,
