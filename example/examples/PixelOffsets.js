@@ -18,9 +18,10 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const OFFSETS = [
-  { x: 0, y: 100 },
-  { x: 100, y: 100 },
-  { x: 100, y: 0 },
+  { x: 0, y: height / 4 },
+  { x: width / 4, y: 0 },
+  { x: 0, y: height / -4 },
+  { x: width / -4, y: 0 },
 ];
 
 var PixelOffsetsDemo = React.createClass({
@@ -36,27 +37,27 @@ var PixelOffsetsDemo = React.createClass({
         x: 0,
         y: 0
       },
-      offsetIndex: 0
+      offsetIndex: -1
     };
   },
 
   componentDidMount () {
     this.interval = setInterval(function () {
-      let nextIndex = this.state.offsetIndex + 1
+      let nextIndex = this.state.offsetIndex + 1;
       if (nextIndex >= OFFSETS.length) { nextIndex = 0 }
       this.setState({
         offsetIndex: nextIndex,
         offset: OFFSETS[nextIndex]
-      })
+      });
     }.bind(this), 1000);
   },
 
   componentWillUnmount () {
-    clearInterval(this.interval)
+    clearInterval(this.interval);
   },
 
   componentWillUpdate () {
-    this.refs.map.animateToRegion(this.state.region, 400, this.state.offset)
+    this.refs.map.animateToRegion(this.state.region, 400, this.state.offset);
   },
 
   render() {
@@ -84,7 +85,7 @@ var PixelOffsetsDemo = React.createClass({
         }} />
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>
-            <Text>Map with Loading</Text>
+            <Text>Animating with pixel offsets</Text>
           </View>
         </View>
       </View>

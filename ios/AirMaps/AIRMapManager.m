@@ -113,15 +113,22 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
 
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
         withRegion:(MKCoordinateRegion)region
-        withDuration:(CGFloat)duration)
+        withDuration:(CGFloat)duration
+        withOffset:(NSDictionary *)offset)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         id view = viewRegistry[reactTag];
         if (![view isKindOfClass:[AIRMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
+            CGPoint center = [view convertCoordinate:region.center toPointToView:view];
+            center.x += [RCTConvert CGFloat:offset[@"x"]];
+            center.y += [RCTConvert CGFloat:offset[@"y"]];
+            CLLocationCoordinate2D offsetCenter = [view convertPoint:center toCoordinateFromView:view];
+            MKCoordinateRegion offsetRegion = { offsetCenter, region.span };
+
             [AIRMap animateWithDuration:duration/1000 animations:^{
-                [(AIRMap *)view setRegion:region animated:YES];
+                [(AIRMap *)view setRegion:offsetRegion animated:YES];
             }];
         }
     }];
