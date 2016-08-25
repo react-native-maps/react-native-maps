@@ -1,28 +1,22 @@
-'use strict';
-
-let React = require('react');
-const {
-  PropTypes,
-} = React;
-const ReactNative = require('react-native');
-let {
+import React, { PropTypes } from 'react';
+import {
   EdgeInsetsPropType,
   NativeMethodsMixin,
   Platform,
-  ReactNativeViewAttributes,
   View,
   Animated,
   requireNativeComponent,
   NativeModules,
   ColorPropType,
-} = ReactNative;
+  findNodeHandle,
+} from 'react-native';
+import MapMarker from './MapMarker';
+import MapPolyline from './MapPolyline';
+import MapPolygon from './MapPolygon';
+import MapCircle from './MapCircle';
+import MapCallout from './MapCallout';
 
-const MapMarker = require('./MapMarker');
-const MapPolyline = require('./MapPolyline');
-const MapPolygon = require('./MapPolygon');
-const MapCircle = require('./MapCircle');
-const MapCallout = require('./MapCallout');
-
+// eslint-disable-next-line react/prefer-es6-class
 const MapView = React.createClass({
   mixins: [NativeMethodsMixin],
 
@@ -409,7 +403,7 @@ const MapView = React.createClass({
   },
 
   _getHandle() {
-    return ReactNative.findNodeHandle(this.refs.map);
+    return findNodeHandle(this.refs.map);
   },
 
   _runCommand(name, args) {

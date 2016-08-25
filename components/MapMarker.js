@@ -1,12 +1,5 @@
-'use strict';
-
-let React = require('react');
-const {
-  PropTypes,
-} = React;
-
-const ReactNative = require('react-native');
-let {
+import React, { PropTypes } from 'react';
+import {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
@@ -14,10 +7,12 @@ let {
   Platform,
   NativeModules,
   Animated,
-} = ReactNative;
+  findNodeHandle,
+} from 'react-native';
 
 const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
+// eslint-disable-next-line react/prefer-es6-class
 const MapMarker = React.createClass({
   mixins: [NativeMethodsMixin],
 
@@ -217,7 +212,7 @@ const MapMarker = React.createClass({
   },
 
   _getHandle() {
-    return ReactNative.findNodeHandle(this.refs.marker);
+    return findNodeHandle(this.refs.marker);
   },
 
   _runCommand(name, args) {
@@ -240,11 +235,13 @@ const MapMarker = React.createClass({
   },
 
   _onPress(e) {
-    this.props.onPress && this.props.onPress(e);
+    if (this.props.onPress) {
+      this.props.onPress(e);
+    }
   },
 
   render() {
-    let image = undefined;
+    let image;
     if (this.props.image) {
       image = resolveAssetSource(this.props.image) || {};
       image = image.uri;
@@ -262,14 +259,14 @@ const MapMarker = React.createClass({
   },
 });
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   marker: {
     position: 'absolute',
     backgroundColor: 'transparent',
   },
 });
 
-let AIRMapMarker = requireNativeComponent('AIRMapMarker', MapMarker);
+const AIRMapMarker = requireNativeComponent('AIRMapMarker', MapMarker);
 
 MapMarker.Animated = Animated.createAnimatedComponent(MapMarker);
 
