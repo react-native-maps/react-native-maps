@@ -1,12 +1,12 @@
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   View,
   Text,
 } = ReactNative;
 
-var CustomCallout = React.createClass({
+const CustomCallout = React.createClass({
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
@@ -22,7 +22,7 @@ var CustomCallout = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignSelf: 'flex-start',
@@ -40,8 +40,8 @@ var styles = StyleSheet.create({
   },
   dollar: {
 
-    //color: '#FFFFFF',
-    //fontSize: 10,
+    // color: '#FFFFFF',
+    // fontSize: 10,
   },
   amount: {
     flex: 1,

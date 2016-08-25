@@ -1,15 +1,15 @@
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   Text,
   View,
   Dimensions,
   StyleSheet,
 } = ReactNative;
 
-var MapView = require('react-native-maps');
+let MapView = require('react-native-maps');
 
-var { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -18,7 +18,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-var LoadingMap = React.createClass({
+const LoadingMap = React.createClass({
   getInitialState() {
     return {
       region: {
@@ -37,7 +37,7 @@ var LoadingMap = React.createClass({
           style={styles.map}
           initialRegion={this.state.region}
           onPress={this.onMapPress}
-          loadingEnabled={true}
+          loadingEnabled
           loadingIndicatorColor={"#666666"}
           loadingBackgroundColor={"#eeeeee"}
         >
@@ -75,7 +75,7 @@ var LoadingMap = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,

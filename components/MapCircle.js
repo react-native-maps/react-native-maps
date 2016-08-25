@@ -1,18 +1,18 @@
 
-var React = require('react');
-var {
+let React = require('react');
+const {
   PropTypes,
 } = React;
 
-var ReactNative = require('react-native');
-var {
+const ReactNative = require('react-native');
+let {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
   StyleSheet,
 } = ReactNative;
 
-var MapCircle = React.createClass({
+const MapCircle = React.createClass({
   mixins: [NativeMethodsMixin],
 
   propTypes: {
@@ -127,18 +127,18 @@ var MapCircle = React.createClass({
     lineDashPattern: PropTypes.arrayOf(PropTypes.number),
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       strokeColor: '#000',
       strokeWidth: 1,
     };
   },
 
-  _onPress: function(e) {
+  _onPress(e) {
     this.props.onPress && this.props.onPress(e);
   },
 
-  render: function() {
+  render() {
     return (
       <AIRMapCircle
         {...this.props}
@@ -148,6 +148,6 @@ var MapCircle = React.createClass({
   },
 });
 
-var AIRMapCircle = requireNativeComponent('AIRMapCircle', MapCircle);
+let AIRMapCircle = requireNativeComponent('AIRMapCircle', MapCircle);
 
 module.exports = MapCircle;

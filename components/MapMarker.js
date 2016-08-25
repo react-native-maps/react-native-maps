@@ -1,12 +1,12 @@
 'use strict';
 
-var React = require('react');
-var {
+let React = require('react');
+const {
   PropTypes,
 } = React;
 
-var ReactNative = require('react-native');
-var {
+const ReactNative = require('react-native');
+let {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
@@ -16,9 +16,9 @@ var {
   Animated,
 } = ReactNative;
 
-var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
-var MapMarker = React.createClass({
+const MapMarker = React.createClass({
   mixins: [NativeMethodsMixin],
 
   viewConfig: {
@@ -208,19 +208,19 @@ var MapMarker = React.createClass({
 
   },
 
-  showCallout: function() {
+  showCallout() {
     this._runCommand('showCallout', []);
   },
 
-  hideCallout: function() {
+  hideCallout() {
     this._runCommand('hideCallout', []);
   },
 
-  _getHandle: function() {
+  _getHandle() {
     return ReactNative.findNodeHandle(this.refs.marker);
   },
 
-  _runCommand: function (name, args) {
+  _runCommand(name, args) {
     switch (Platform.OS) {
       case 'android':
         NativeModules.UIManager.dispatchViewManagerCommand(
@@ -239,12 +239,12 @@ var MapMarker = React.createClass({
     }
   },
 
-  _onPress: function(e) {
+  _onPress(e) {
     this.props.onPress && this.props.onPress(e);
   },
 
-  render: function() {
-    var image = undefined;
+  render() {
+    let image = undefined;
     if (this.props.image) {
       image = resolveAssetSource(this.props.image) || {};
       image = image.uri;
@@ -262,14 +262,14 @@ var MapMarker = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   marker: {
     position: 'absolute',
     backgroundColor: 'transparent',
   },
 });
 
-var AIRMapMarker = requireNativeComponent('AIRMapMarker', MapMarker);
+let AIRMapMarker = requireNativeComponent('AIRMapMarker', MapMarker);
 
 MapMarker.Animated = Animated.createAnimatedComponent(MapMarker);
 
