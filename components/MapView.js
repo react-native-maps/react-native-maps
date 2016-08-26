@@ -17,8 +17,6 @@ var {
   ColorPropType,
 } = ReactNative;
 
-var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
-
 var MapMarker = require('./MapMarker');
 var MapPolyline = require('./MapPolyline');
 var MapPolygon = require('./MapPolygon');
@@ -27,8 +25,6 @@ var MapUrlTile = require('./MapUrlTile');
 var MapCallout = require('./MapCallout');
 
 var MapView = React.createClass({
-  mixins: [NativeMethodsMixin],
-
   viewConfig: {
     uiViewClassName: 'AIRMap',
     validAttributes: {

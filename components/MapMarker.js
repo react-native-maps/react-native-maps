@@ -8,7 +8,6 @@ var {
 var ReactNative = require('react-native');
 var {
   View,
-  NativeMethodsMixin,
   StyleSheet,
   Platform,
   NativeModules,
@@ -16,12 +15,9 @@ var {
   requireNativeComponent,
 } = ReactNative;
 
-var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
 var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 var MapMarker = React.createClass({
-  mixins: [NativeMethodsMixin],
-
   viewConfig: {
     uiViewClassName: 'AIRMapMarker',
     validAttributes: {
