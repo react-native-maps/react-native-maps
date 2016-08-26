@@ -11,7 +11,11 @@ var {
   StyleSheet,
 } = ReactNative;
 
+var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
+
 var MapCircle = React.createClass({
+  mixins: [NativeMethodsMixin],
+
   propTypes: {
     ...View.propTypes,
 

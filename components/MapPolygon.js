@@ -10,7 +10,11 @@ var {
   StyleSheet,
 } = ReactNative;
 
+var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
+
 var MapPolygon = React.createClass({
+  mixins: [NativeMethodsMixin],
+  
   propTypes: {
     ...View.propTypes,
 

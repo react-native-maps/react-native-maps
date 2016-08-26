@@ -15,9 +15,12 @@ var {
   requireNativeComponent,
 } = ReactNative;
 
+var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
 var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 var MapMarker = React.createClass({
+  mixins: [NativeMethodsMixin],
+
   viewConfig: {
     uiViewClassName: 'AIRMapMarker',
     validAttributes: {
