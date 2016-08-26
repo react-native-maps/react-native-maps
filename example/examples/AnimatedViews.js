@@ -1,6 +1,6 @@
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   PropTypes,
   View,
@@ -11,11 +11,11 @@ var {
   Platform,
 } = ReactNative;
 
-var MapView = require('react-native-maps');
-var PanController = require('./PanController');
-var PriceMarker = require('./AnimatedPriceMarker');
+let MapView = require('react-native-maps');
+let PanController = require('./PanController');
+let PriceMarker = require('./AnimatedPriceMarker');
 
-var screen = Dimensions.get('window');
+const screen = Dimensions.get('window');
 
 const ASPECT_RATIO = screen.width / screen.height;
 const LATITUDE = 37.78825;
@@ -23,18 +23,18 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-var ITEM_SPACING = 10;
-var ITEM_PREVIEW = 10;
-var ITEM_WIDTH = screen.width - 2 * ITEM_SPACING - 2 * ITEM_PREVIEW;
-var SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
-var ITEM_PREVIEW_HEIGHT = 150;
-var SCALE_END = screen.width / ITEM_WIDTH;
-var BREAKPOINT1 = 246;
-var BREAKPOINT2 = 350;
+const ITEM_SPACING = 10;
+const ITEM_PREVIEW = 10;
+const ITEM_WIDTH = screen.width - 2 * ITEM_SPACING - 2 * ITEM_PREVIEW;
+let SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
+const ITEM_PREVIEW_HEIGHT = 150;
+const SCALE_END = screen.width / ITEM_WIDTH;
+const BREAKPOINT1 = 246;
+const BREAKPOINT2 = 350;
 
 const ANDROID = Platform.OS === 'android';
 
-var AnimatedViews = React.createClass({
+const AnimatedViews = React.createClass({
   getInitialState() {
     const panX = new Animated.Value(0);
     const panY = new Animated.Value(0);
@@ -90,19 +90,19 @@ var AnimatedViews = React.createClass({
       },
     ];
 
-    const animations = markers.map((m, i)  => {
-      const xLeft = -SNAP_WIDTH * i + SNAP_WIDTH/2;
-      const xRight = -SNAP_WIDTH * i - SNAP_WIDTH/2;
+    const animations = markers.map((m, i) => {
+      const xLeft = -SNAP_WIDTH * i + SNAP_WIDTH / 2;
+      const xRight = -SNAP_WIDTH * i - SNAP_WIDTH / 2;
       const xPos = -SNAP_WIDTH * i;
 
       const isIndex = panX.interpolate({
-        inputRange: [xRight - 1, xRight, xLeft, xLeft+1],
+        inputRange: [xRight - 1, xRight, xLeft, xLeft + 1],
         outputRange: [0, 1, 1, 0],
         extrapolate: 'clamp',
       });
 
       const isNotIndex = panX.interpolate({
-        inputRange: [xRight - 1, xRight, xLeft, xLeft+1],
+        inputRange: [xRight - 1, xRight, xLeft, xLeft + 1],
         outputRange: [1, 0, 0, 1],
         extrapolate: 'clamp',
       });
@@ -131,12 +131,12 @@ var AnimatedViews = React.createClass({
 
       const scale = Animated.add(ONE, Animated.multiply(isIndex, scrollY.interpolate({
         inputRange: [BREAKPOINT1, BREAKPOINT2],
-        outputRange: [0, SCALE_END-1],
+        outputRange: [0, SCALE_END - 1],
         extrapolate: 'clamp',
       })));
 
       // [0 => 1]
-      var opacity = scrollY.interpolate({
+      let opacity = scrollY.interpolate({
         inputRange: [BREAKPOINT1, BREAKPOINT2],
         outputRange: [0, 1],
         extrapolate: 'clamp',
@@ -154,7 +154,7 @@ var AnimatedViews = React.createClass({
         outputRange: [1, 0],
       });
 
-      var markerOpacity = scrollY.interpolate({
+      let markerOpacity = scrollY.interpolate({
         inputRange: [0, BREAKPOINT1],
         outputRange: [0, 1],
         extrapolate: 'clamp',
@@ -165,7 +165,7 @@ var AnimatedViews = React.createClass({
         outputRange: [1, 0],
       });
 
-      var markerScale = selected.interpolate({
+      const markerScale = selected.interpolate({
         inputRange: [0, 1],
         outputRange: [1, 1.2],
       });
@@ -204,7 +204,7 @@ var AnimatedViews = React.createClass({
   },
 
   componentDidMount() {
-    var { region, panX, panY, scrollX, markers } = this.state;
+    let { region, panX, panY, scrollX, markers } = this.state;
 
     panX.addListener(this.onPanXChange);
     panY.addListener(this.onPanYChange);
@@ -227,38 +227,38 @@ var AnimatedViews = React.createClass({
     // we only want to move the view if they are starting the gesture on top
     // of the view, so this calculates that and returns true if so. If we return
     // false, the gesture should get passed to the map view appropriately.
-    var { panY } = this.state;
-    var { pageY } = e.nativeEvent;
-    var topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
-    var topOfTap = screen.height - pageY;
+    const { panY } = this.state;
+    const { pageY } = e.nativeEvent;
+    const topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
+    const topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
   },
 
   onMoveShouldSetPanResponder(e) {
-    var { panY } = this.state;
-    var { pageY } = e.nativeEvent;
-    var topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
-    var topOfTap = screen.height - pageY;
+    const { panY } = this.state;
+    const { pageY } = e.nativeEvent;
+    const topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
+    const topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
   },
 
   onPanXChange({ value }) {
-    var { index, region, panX, markers } = this.state;
-    var newIndex = Math.floor((-1 * value + SNAP_WIDTH / 2) / SNAP_WIDTH);
+    let { index, region, panX, markers } = this.state;
+    const newIndex = Math.floor((-1 * value + SNAP_WIDTH / 2) / SNAP_WIDTH);
     if (index !== newIndex) {
       this.setState({ index: newIndex });
     }
   },
 
   onPanYChange({ value }) {
-    var { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
-    var shouldBeMovable = Math.abs(value) < 2;
+    let { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
+    const shouldBeMovable = Math.abs(value) < 2;
     if (shouldBeMovable !== canMoveHorizontal) {
       this.setState({ canMoveHorizontal: shouldBeMovable });
       if (!shouldBeMovable) {
-        var { coordinate } = markers[index];
+        const { coordinate } = markers[index];
         region.stopAnimation();
         region.timing({
           latitude: scrollY.interpolate({
@@ -296,7 +296,7 @@ var AnimatedViews = React.createClass({
   },
 
   onRegionChange(region) {
-    //this.state.region.setValue(region);
+    // this.state.region.setValue(region);
   },
 
   render() {
@@ -318,7 +318,7 @@ var AnimatedViews = React.createClass({
           xMode="snap"
           snapSpacingX={SNAP_WIDTH}
           yBounds={[-1 * screen.height, 0]}
-          xBounds={[-screen.width * (markers.length-1), 0]}
+          xBounds={[-screen.width * (markers.length - 1), 0]}
           panY={panY}
           panX={panX}
           onStartShouldSetPanResponder={this.onStartShouldSetPanResponder}
@@ -387,8 +387,7 @@ var AnimatedViews = React.createClass({
 });
 
 
-
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
@@ -401,7 +400,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: ITEM_SPACING / 2 + ITEM_PREVIEW,
     position: 'absolute',
-    //top: screen.height - ITEM_PREVIEW_HEIGHT - 64,
+    // top: screen.height - ITEM_PREVIEW_HEIGHT - 64,
     paddingTop: screen.height - ITEM_PREVIEW_HEIGHT - 64,
     //paddingTop: !ANDROID ? 0 : screen.height - ITEM_PREVIEW_HEIGHT - 64,
   },
