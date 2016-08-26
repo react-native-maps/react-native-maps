@@ -8,14 +8,14 @@ var {
 var ReactNative = require('react-native');
 var {
   View,
-  NativeMethodsMixin,
-  requireNativeComponent,
   StyleSheet,
   Platform,
   NativeModules,
   Animated,
+  requireNativeComponent,
 } = ReactNative;
 
+var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
 var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 var MapMarker = React.createClass({
