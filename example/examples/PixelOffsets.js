@@ -1,15 +1,16 @@
 var React = require('react');
 var ReactNative = require('react-native');
 var {
+  Dimensions,
+  Platform,
+  StyleSheet,
   Text,
   View,
-  Dimensions,
-  StyleSheet,
 } = ReactNative;
 
 var MapView = require('react-native-maps');
 
-var { width, height } = Dimensions.get('window');
+var { width, height, scale } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -17,11 +18,15 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
+const OFFSET_AMOUNT = Platform.OS == 'ios'
+  ? Math.floor(height / 4)
+  : Math.floor(height * scale / 4);
+
 const OFFSETS = [
-  { x: 0, y: height / 4 },
-  { x: width / 4, y: 0 },
-  { x: 0, y: height / -4 },
-  { x: width / -4, y: 0 },
+  { x: 0, y: 0 },
+  { x: 0, y: OFFSET_AMOUNT },
+  { x: 0, y: 0 },
+  { x: 0, y: -OFFSET_AMOUNT },
 ];
 
 var PixelOffsetsDemo = React.createClass({
@@ -33,10 +38,6 @@ var PixelOffsetsDemo = React.createClass({
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      offset: {
-        x: 0,
-        y: 0
-      },
       offsetIndex: -1
     };
   },
@@ -45,19 +46,15 @@ var PixelOffsetsDemo = React.createClass({
     this.interval = setInterval(function () {
       let nextIndex = this.state.offsetIndex + 1;
       if (nextIndex >= OFFSETS.length) { nextIndex = 0 }
-      this.setState({
-        offsetIndex: nextIndex,
-        offset: OFFSETS[nextIndex]
-      });
+
+      this.refs.map.animateToRegion(this.state.region, 400, OFFSETS[nextIndex]);
+
+      this.setState({ offsetIndex: nextIndex });
     }.bind(this), 1000);
   },
 
   componentWillUnmount () {
     clearInterval(this.interval);
-  },
-
-  componentWillUpdate () {
-    this.refs.map.animateToRegion(this.state.region, 400, this.state.offset);
   },
 
   render() {
@@ -80,12 +77,19 @@ var PixelOffsetsDemo = React.createClass({
             }}
           />
         </MapView>
+        <View style={{ borderWidth: 1, width }} flex={1} />
+        <View style={{ borderWidth: 1, width }} flex={1} />
+        <View style={{ borderWidth: 1, width }} flex={1} />
         <View style={{
-
-        }} />
-        <View style={styles.buttonContainer}>
-          <View style={styles.bubble}>
-            <Text>Animating with pixel offsets</Text>
+          borderWidth: 1,
+          width,
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }} flex={1}>
+          <View style={styles.buttonContainer}>
+            <View style={styles.bubble}>
+              <Text>Animating with pixel offsets</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -100,8 +104,6 @@ var styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
   },
   map: {
     position: 'absolute',
