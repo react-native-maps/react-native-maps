@@ -8,7 +8,7 @@ buildscript {
       mavenLocal()
       jcenter()
       maven {
-          url "$projectDir/../../../react-native/android"
+          url "$projectDir/../../react-native/android"
       }
   }
   dependencies {
