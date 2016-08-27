@@ -1,12 +1,12 @@
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   View,
   Text,
 } = ReactNative;
 
-var PriceMarker = React.createClass({
+const PriceMarker = React.createClass({
   getDefaultProps() {
     return {
       fontSize: 13,
@@ -26,7 +26,7 @@ var PriceMarker = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignSelf: 'flex-start',

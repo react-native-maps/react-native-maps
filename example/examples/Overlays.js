@@ -1,6 +1,6 @@
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   PropTypes,
   View,
@@ -10,9 +10,9 @@ var {
   Image,
 } = ReactNative;
 
-var MapView = require('react-native-maps');
+let MapView = require('react-native-maps');
 
-var { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,7 +21,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-var Overlays = React.createClass({
+const Overlays = React.createClass({
   getInitialState() {
     return {
       region: {
@@ -109,7 +109,7 @@ var Overlays = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,

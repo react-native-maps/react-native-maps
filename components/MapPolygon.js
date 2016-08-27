@@ -1,17 +1,12 @@
-var React = require('react');
-var {
-  PropTypes,
-} = React;
-
-var ReactNative = require('react-native');
-var {
+import React, { PropTypes } from 'react';
+import {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
-  StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
-var MapPolygon = React.createClass({
+// eslint-disable-next-line react/prefer-es6-class
+const MapPolygon = React.createClass({
   mixins: [NativeMethodsMixin],
 
   propTypes: {
@@ -131,18 +126,20 @@ var MapPolygon = React.createClass({
     lineDashPattern: PropTypes.arrayOf(PropTypes.number),
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       strokeColor: '#000',
       strokeWidth: 1,
     };
   },
 
-  _onPress: function(e) {
-    this.props.onPress && this.props.onPress(e);
+  _onPress(e) {
+    if (this.props.onPress) {
+      this.props.onPress(e);
+    }
   },
 
-  render: function() {
+  render() {
     return (
       <AIRMapPolygon
         {...this.props}
@@ -152,14 +149,6 @@ var MapPolygon = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
-  polyline: {
-    position: 'absolute',
-    width: 0,
-    height: 0,
-  },
-});
-
-var AIRMapPolygon = requireNativeComponent('AIRMapPolygon', MapPolygon);
+const AIRMapPolygon = requireNativeComponent('AIRMapPolygon', MapPolygon);
 
 module.exports = MapPolygon;
