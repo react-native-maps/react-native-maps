@@ -1,14 +1,14 @@
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+const {
   AppRegistry,
 } = ReactNative;
 
-var App = require('./App');
+let App = require('./App');
 
-var AirMapsExplorer = React.createClass({
+const AirMapsExplorer = React.createClass({
   render() {
-    return <App />
+    return <App />;
   },
 });
 

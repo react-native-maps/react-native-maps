@@ -1,17 +1,12 @@
-var React = require('react');
-var {
-  PropTypes,
-} = React;
-
-var ReactNative = require('react-native');
-var {
+import React, { PropTypes } from 'react';
+import {
   View,
   NativeMethodsMixin,
   requireNativeComponent,
-  StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
-var MapPolyline = React.createClass({
+// eslint-disable-next-line react/prefer-es6-class
+const MapPolyline = React.createClass({
   mixins: [NativeMethodsMixin],
 
   propTypes: {
@@ -126,28 +121,20 @@ var MapPolyline = React.createClass({
     lineDashPattern: PropTypes.arrayOf(PropTypes.number),
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       strokeColor: '#000',
       strokeWidth: 1,
     };
   },
 
-  render: function() {
+  render() {
     return (
       <AIRMapPolyline {...this.props} />
     );
   },
 });
 
-var styles = StyleSheet.create({
-  polyline: {
-    position: 'absolute',
-    width: 0,
-    height: 0,
-  },
-});
-
-var AIRMapPolyline = requireNativeComponent('AIRMapPolyline', MapPolyline);
+const AIRMapPolyline = requireNativeComponent('AIRMapPolyline', MapPolyline);
 
 module.exports = MapPolyline;

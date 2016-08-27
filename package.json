@@ -5,7 +5,8 @@
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "version": "0.8.0",
   "scripts": {
-    "start": "react-native start"
+    "start": "react-native start",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -25,8 +26,13 @@
     "react-native": ">=0.32.0"
   },
   "devDependencies": {
-    "react": "15.2.0",
-    "react-native": "^0.32.0"
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.3.1",
+    "eslint-config-airbnb": "^10.0.1",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.1.0",
+    "eslint-plugin-prefer-object-spread": "^1.1.0",
+    "eslint-plugin-react": "^6.1.2"
   },
   "rnpm": {
     "android": {

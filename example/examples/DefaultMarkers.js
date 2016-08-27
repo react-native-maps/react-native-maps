@@ -1,6 +1,6 @@
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   PropTypes,
   View,
@@ -9,9 +9,9 @@ var {
   TouchableOpacity,
 } = ReactNative;
 
-var MapView = require('react-native-maps');
+let MapView = require('react-native-maps');
 
-var { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,10 +21,10 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
 function randomColor() {
-  return '#'+Math.floor(Math.random()*16777215).toString(16);
+  return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
-var DefaultMarkers = React.createClass({
+const DefaultMarkers = React.createClass({
   getInitialState() {
     return {
       region: {
@@ -76,7 +76,7 @@ var DefaultMarkers = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
