@@ -18,17 +18,6 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const OFFSET_AMOUNT = Platform.OS == 'ios'
-  ? Math.floor(height / 4)
-  : Math.floor(height * scale / 4);
-
-const OFFSETS = [
-  { x: 0, y: 0 },
-  { x: 0, y: OFFSET_AMOUNT },
-  { x: 0, y: 0 },
-  { x: 0, y: -OFFSET_AMOUNT },
-];
-
 var PixelOffsetsDemo = React.createClass({
   getInitialState() {
     return {
@@ -38,18 +27,18 @@ var PixelOffsetsDemo = React.createClass({
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      offsetIndex: -1
+      insetBottom: 0
     };
   },
 
   componentDidMount () {
     this.interval = setInterval(function () {
-      let nextIndex = this.state.offsetIndex + 1;
-      if (nextIndex >= OFFSETS.length) { nextIndex = 0 }
-
-      this.refs.map.animateToRegion(this.state.region, 400, OFFSETS[nextIndex]);
-
-      this.setState({ offsetIndex: nextIndex });
+      if (this.state.insetBottom === 0) {
+        this.setState({ insetBottom: height / 2 })
+      } else {
+        this.setState({ insetBottom: 0 })
+      }
+      this.refs.map.animateToRegion(this.state.region, 400);
     }.bind(this), 1000);
   },
 
@@ -61,6 +50,7 @@ var PixelOffsetsDemo = React.createClass({
     return (
       <View style={styles.container}>
         <MapView
+          insetBottom={this.state.insetBottom}
           ref='map'
           style={styles.map}
           initialRegion={this.state.region}
@@ -77,11 +67,7 @@ var PixelOffsetsDemo = React.createClass({
             }}
           />
         </MapView>
-        <View style={{ borderWidth: 1, width }} flex={1} />
-        <View style={{ borderWidth: 1, width }} flex={1} />
-        <View style={{ borderWidth: 1, width }} flex={1} />
         <View style={{
-          borderWidth: 1,
           width,
           justifyContent: 'flex-end',
           alignItems: 'center'
