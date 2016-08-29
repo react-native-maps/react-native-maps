@@ -186,6 +186,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
     }
 
+    @ReactProp(name = "insetTop")
+    public void setInsetTop(AirMapView view, double insetTop) {
+        view.insetTop = (int) insetTop;
+    }
+
+    @ReactProp(name = "insetBottom")
+    public void setInsetBottom(AirMapView view, double insetBottom) {
+        view.insetBottom = (int) insetBottom;
+    }
+
     @Override
     public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
         Integer duration;
@@ -200,7 +210,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             case ANIMATE_TO_REGION:
                 region = args.getMap(0);
                 duration = args.getInt(1);
-                offset = args.getMap(2);
                 lng = region.getDouble("longitude");
                 lat = region.getDouble("latitude");
                 lngDelta = region.getDouble("longitudeDelta");
@@ -209,7 +218,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                         new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
                         new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
                 );
-                view.animateToRegion(bounds, duration, (int) offset.getDouble("x"), (int) offset.getDouble("y"));
+                view.animateToRegion(bounds, duration);
                 break;
 
             case ANIMATE_TO_COORDINATE:

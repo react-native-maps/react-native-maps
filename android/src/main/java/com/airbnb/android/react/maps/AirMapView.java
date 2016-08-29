@@ -69,6 +69,11 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private boolean moveOnMarkerPress = true;
     private boolean cacheEnabled = false;
 
+    public int insetTop;
+    public int insetBottom;
+    public int insetLeft;
+    public int insetRight;
+
     private static final String[] PERMISSIONS = new String[] {
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
@@ -484,27 +489,23 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
     }
 
-    public void animateToRegion(LatLngBounds bounds, int duration, int offsetX, int offsetY) {
-        if (map == null) return
+    public void animateToRegion(LatLngBounds bounds, int duration) {
+        if (map == null) return;
 
         Projection projection = map.getProjection();
-        Point center = projection.toScreenLocation(bounds.getCenter());
-        center.offset(offsetX, offsetY);
-        LatLng offsetCenter = projection.fromScreenLocation(center);
+        Point northeast = projection.toScreenLocation(bounds.northeast);
+        Point southwest = projection.toScreenLocation(bounds.southwest);
 
-        // take the new and subtract the old
-        LatLng offsetSouthWest = new LatLng(
-                bounds.southwest.latitude - (offsetCenter.latitude - bounds.getCenter().latitude),
-                bounds.southwest.longitude - (offsetCenter.longitude - bounds.getCenter().longitude)
-        );
-        LatLng offsetNorthEast = new LatLng(
-                bounds.northeast.latitude - (offsetCenter.latitude - bounds.getCenter().latitude),
-                bounds.northeast.longitude - (offsetCenter.longitude - bounds.getCenter().longitude)
-        );
-        LatLngBounds offsetBounds = new LatLngBounds(offsetSouthWest, offsetNorthEast);
+        northeast.offset(-this.insetRight, -this.insetTop);
+        southwest.offset(this.insetLeft, this.insetBottom);
+
+        LatLng insetNorthEast = projection.fromScreenLocation(northeast);
+        LatLng insetSouthWest = projection.fromScreenLocation(southwest);
+
+        LatLngBounds insetBounds = new LatLngBounds(insetSouthWest, insetNorthEast);
 
         startMonitoringRegion();
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(offsetBounds, 0), duration, null);
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(insetBounds, 0), duration, null);
     }
 
     public void animateToCoordinate(LatLng coordinate, int duration) {
