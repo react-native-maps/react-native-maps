@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import {
   EdgeInsetsPropType,
-  NativeMethodsMixin,
   Platform,
   View,
   Animated,
@@ -18,8 +17,6 @@ import MapCallout from './MapCallout';
 
 // eslint-disable-next-line react/prefer-es6-class
 const MapView = React.createClass({
-  mixins: [NativeMethodsMixin],
-
   viewConfig: {
     uiViewClassName: 'AIRMap',
     validAttributes: {
