@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 const ReactNative = require('react-native');
 let {
   StyleSheet,
@@ -9,7 +9,7 @@ let {
   TouchableOpacity,
 } = ReactNative;
 
-let MapView = require('react-native-maps');
+const MapView = require('react-native-maps');
 
 let { width, height } = Dimensions.get('window');
 
@@ -61,8 +61,7 @@ const DisplayLatLng = React.createClass({
           style={styles.map}
           region={this.state.region}
           onRegionChange={this.onRegionChange}
-        >
-        </MapView>
+        />
         <View style={[styles.bubble, styles.latlng]}>
           <Text style={{ textAlign: 'center' }}>
             {`${this.state.region.latitude.toPrecision(7)}, ${this.state.region.longitude.toPrecision(7)}`}

@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 const ReactNative = require('react-native');
 let {
   Text,
@@ -9,7 +9,7 @@ let {
   TouchableOpacity,
 } = ReactNative;
 
-let MapView = require('react-native-maps');
+const MapView = require('react-native-maps');
 
 const HORIZONTAL_PADDING = 12;
 const VERTICAL_PADDING = 6;

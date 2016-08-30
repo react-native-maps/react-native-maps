@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 const ReactNative = require('react-native');
 let {
   StyleSheet,
@@ -10,9 +10,9 @@ let {
   Image,
 } = ReactNative;
 
-let MapView = require('react-native-maps');
+const MapView = require('react-native-maps');
 const PriceMarker = require('./PriceMarker');
-let CustomCallout = require('./CustomCallout');
+const CustomCallout = require('./CustomCallout');
 
 let { width, height } = Dimensions.get('window');
 

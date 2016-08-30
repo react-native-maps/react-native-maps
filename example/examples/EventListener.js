@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 const ReactNative = require('react-native');
 let {
   StyleSheet,
@@ -10,8 +10,8 @@ let {
   ScrollView,
 } = ReactNative;
 
-let MapView = require('react-native-maps');
-let PriceMarker = require('./PriceMarker');
+const MapView = require('react-native-maps');
+const PriceMarker = require('./PriceMarker');
 
 let { width, height } = Dimensions.get('window');
 
@@ -22,7 +22,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
-let Event = React.createClass({
+const Event = React.createClass({
   shouldComponentUpdate(nextProps) {
     return this.props.event.id !== nextProps.event.id;
   },
