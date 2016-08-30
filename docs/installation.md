@@ -6,10 +6,10 @@ First, download the library from npm:
 npm install react-native-maps --save
 ```
 
-Then you must install the native dependencies. You can use [`rnpm`](https://github.com/rnpm/rnpm) to
+Then you must install the native dependencies. You can use `rnpm` (now part of `react-native` core) to
 add native dependencies automatically:
 
-`$ rnpm link`
+`$ react-native link`
 
 Go to step 4 to configure Google Maps API KEY in Android.
 
@@ -45,13 +45,20 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 ...
 dependencies {
   ...
-  compile 'com.airbnb.android:react-native-maps:0.7.1'
+  compile project(':react-native-maps')
 }
 ```
 
-For React Native v0.29.0 or above:
+2. in your `android/settings.gradle` add:
+```groovy
+...
+include ':react-native-maps'
+project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+```
 
-2. in your application object, add:
+3. in your application object, add:
+
+For React Native v0.29.0 or above:
 
 ```java
 public class MyApplication extends Application implements ReactApplication {
