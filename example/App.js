@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 const ReactNative = require('react-native');
 let {
   View,
@@ -54,7 +54,7 @@ const App = React.createClass({
   },
 
   renderExamples(examples) {
-    let { Component } = this.state;
+    const { Component } = this.state;
     return (
       <View style={styles.container}>
         {Component && <Component />}

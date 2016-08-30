@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 const ReactNative = require('react-native');
 let {
   Text,
@@ -7,7 +7,7 @@ let {
   StyleSheet,
 } = ReactNative;
 
-let MapView = require('react-native-maps');
+const MapView = require('react-native-maps');
 
 let { width, height } = Dimensions.get('window');
 
