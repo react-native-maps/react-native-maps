@@ -159,28 +159,27 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = React.createClass({
+module.exports = class MyApp extends React.Component {
+  render() {
+    const { region } = this.props;
+    console.log(region);
 
-    render: function () {
-        const { region } = this.props;
-        console.log(region);
-
-        return (
-            <View style ={styles.container}>
-                <MapView
-                    style={styles.map}
-                    region={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.015,
-                        longitudeDelta: 0.0121,
-                    }}
-                    >
-                </MapView>
-            </View>
-        )
-    }
-})
+    return (
+      <View style ={styles.container}>
+        <MapView
+          style={styles.map}
+          region={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}
+        >
+        </MapView>
+      </View>
+    );
+  }
+}
 ```
 2. Run "android" and make sure every packages is updated.
 3.  If not installed yet, you have to install the following packages :

@@ -21,23 +21,25 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const AnimatedMarkers = React.createClass({
-  getInitialState() {
-    return {
+class AnimatedMarkers extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       coordinate: new Animated.Region({
         latitude: LATITUDE,
         longitude: LONGITUDE,
       }),
     };
-  },
+  }
 
   animate() {
     const { coordinate } = this.state;
     coordinate.timing({
-      latitude: LATITUDE + (Math.random() - 0.5) * LATITUDE_DELTA / 2,
-      longitude: LONGITUDE + (Math.random() - 0.5) * LONGITUDE_DELTA / 2,
+      latitude: LATITUDE + ((Math.random() - 0.5) * (LATITUDE_DELTA / 2)),
+      longitude: LONGITUDE + ((Math.random() - 0.5) * (LONGITUDE_DELTA / 2)),
     }).start();
-  },
+  }
 
   render() {
     return (
@@ -56,17 +58,19 @@ const AnimatedMarkers = React.createClass({
           />
         </MapView>
         <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={this.animate} style={[styles.bubble, styles.button]}>
-              <Text>Animate</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.animate}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text>Animate</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

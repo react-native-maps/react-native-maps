@@ -12,7 +12,7 @@ let {
 
 const MapView = require('react-native-maps');
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,9 +21,11 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-const Overlays = React.createClass({
-  getInitialState() {
-    return {
+class Overlays extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -57,20 +59,20 @@ const Overlays = React.createClass({
           longitude: LONGITUDE - SPACE,
         },
         {
-          latitude: LATITUDE - 2 * SPACE,
-          longitude: LONGITUDE + 2 * SPACE,
+          latitude: LATITUDE - (2 * SPACE),
+          longitude: LONGITUDE + (2 * SPACE),
         },
         {
           latitude: LATITUDE - SPACE,
           longitude: LONGITUDE - SPACE,
         },
         {
-          latitude: LATITUDE - 2 * SPACE,
+          latitude: LATITUDE - (2 * SPACE),
           longitude: LONGITUDE - SPACE,
         },
       ],
     };
-  },
+  }
 
   render() {
     const { region, circle, polygon, polyline } = this.state;
@@ -106,10 +108,10 @@ const Overlays = React.createClass({
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

@@ -11,9 +11,8 @@ let {
 } = ReactNative;
 
 const MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -22,10 +21,13 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-const MarkerTypes = React.createClass({
-  getInitialState() {
-    return { mapSnapshot: null };
-  },
+class MarkerTypes extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mapSnapshot: null,
+    };
+  }
 
   takeSnapshot() {
     this.refs.map.takeSnapshot(300, 300, {
@@ -37,7 +39,7 @@ const MarkerTypes = React.createClass({
       if (err) console.log(err);
       this.setState({ mapSnapshot: data });
     });
-  },
+  }
 
   render() {
     return (
@@ -73,27 +75,30 @@ const MarkerTypes = React.createClass({
         </MapView>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this.takeSnapshot} style={[styles.bubble, styles.button]}>
+          <TouchableOpacity
+            onPress={() => this.takeSnapshot()}
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Take snapshot</Text>
           </TouchableOpacity>
         </View>
-        {this.state.mapSnapshot
-          ? <TouchableOpacity
+        {this.state.mapSnapshot &&
+          <TouchableOpacity
             style={[styles.container, styles.overlay]}
             onPress={() => this.setState({ mapSnapshot: null })}
           >
-              <Image
-                source={{ uri: this.state.mapSnapshot.uri }}
-                style={{ width: 300, height: 300 }}
-              />
-            </TouchableOpacity>
-            : null}
+            <Image
+              source={{ uri: this.state.mapSnapshot.uri }}
+              style={{ width: 300, height: 300 }}
+            />
+          </TouchableOpacity>
+        }
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
