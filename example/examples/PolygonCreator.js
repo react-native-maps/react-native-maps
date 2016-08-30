@@ -10,9 +10,8 @@ let {
 } = ReactNative;
 
 const MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,9 +20,11 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
-const DisplayLatLng = React.createClass({
-  getInitialState() {
-    return {
+class DisplayLatLng extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -33,15 +34,15 @@ const DisplayLatLng = React.createClass({
       polygons: [],
       editing: null,
     };
-  },
+  }
 
   finish() {
-    let { polygons, editing } = this.state;
+    const { polygons, editing } = this.state;
     this.setState({
       polygons: [...polygons, editing],
       editing: null,
     });
-  },
+  }
 
   onPress(e) {
     const { editing } = this.state;
@@ -63,7 +64,7 @@ const DisplayLatLng = React.createClass({
         },
       });
     }
-  },
+  }
 
   render() {
     const mapOptions = {
@@ -80,7 +81,7 @@ const DisplayLatLng = React.createClass({
         <MapView
           style={styles.map}
           initialRegion={this.state.region}
-          onPress={this.onPress}
+          onPress={e => this.onPress(e)}
           {...mapOptions}
         >
           {this.state.polygons.map(polygon => (
@@ -103,17 +104,20 @@ const DisplayLatLng = React.createClass({
         </MapView>
         <View style={styles.buttonContainer}>
           {this.state.editing && (
-            <TouchableOpacity onPress={this.finish} style={[styles.bubble, styles.button]}>
+            <TouchableOpacity
+              onPress={() => this.finish()}
+              style={[styles.bubble, styles.button]}
+            >
               <Text>Finish</Text>
             </TouchableOpacity>
           )}
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

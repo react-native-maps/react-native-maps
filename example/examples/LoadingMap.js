@@ -9,7 +9,7 @@ let {
 
 const MapView = require('react-native-maps');
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -18,9 +18,11 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-const LoadingMap = React.createClass({
-  getInitialState() {
-    return {
+class LoadingMap extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -28,7 +30,7 @@ const LoadingMap = React.createClass({
         longitudeDelta: LONGITUDE_DELTA,
       },
     };
-  },
+  }
 
   render() {
     return (
@@ -72,10 +74,10 @@ const LoadingMap = React.createClass({
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

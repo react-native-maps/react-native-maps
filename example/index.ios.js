@@ -6,10 +6,10 @@ const {
 
 const App = require('./App');
 
-const AirMapsExplorer = React.createClass({
+class AirMapsExplorer extends React.Component {
   render() {
     return <App />;
-  },
-});
+  }
+}
 
 AppRegistry.registerComponent('AirMapsExplorer', () => AirMapsExplorer);

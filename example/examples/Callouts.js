@@ -11,10 +11,9 @@ let {
 } = ReactNative;
 
 const MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
 const CustomCallout = require('./CustomCallout');
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -23,9 +22,11 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-const Callouts = React.createClass({
-  getInitialState() {
-    return {
+class Callouts extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -53,15 +54,15 @@ const Callouts = React.createClass({
         },
       ],
     };
-  },
+  }
 
   show() {
     this.refs.m1.showCallout();
-  },
+  }
 
   hide() {
     this.refs.m1.hideCallout();
-  },
+  }
 
   render() {
     const { region, markers } = this.state;
@@ -77,7 +78,10 @@ const Callouts = React.createClass({
             title="This is a title"
             description="This is a description"
           />
-          <MapView.Marker ref="m2" coordinate={markers[1].coordinate}>
+          <MapView.Marker
+            ref="m2"
+            coordinate={markers[1].coordinate}
+          >
             <MapView.Callout>
               <View>
                 <Text>This is a plain view</Text>
@@ -103,19 +107,19 @@ const Callouts = React.createClass({
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this.show} style={[styles.bubble, styles.button]}>
+          <TouchableOpacity onPress={() => this.show()} style={[styles.bubble, styles.button]}>
             <Text>Show</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this.hide} style={[styles.bubble, styles.button]}>
+          <TouchableOpacity onPress={() => this.hide()} style={[styles.bubble, styles.button]}>
             <Text>Hide</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

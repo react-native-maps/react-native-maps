@@ -25,17 +25,17 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const ITEM_SPACING = 10;
 const ITEM_PREVIEW = 10;
-const ITEM_WIDTH = screen.width - 2 * ITEM_SPACING - 2 * ITEM_PREVIEW;
+const ITEM_WIDTH = screen.width - (2 * ITEM_SPACING) - (2 * ITEM_PREVIEW);
 const SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
 const ITEM_PREVIEW_HEIGHT = 150;
 const SCALE_END = screen.width / ITEM_WIDTH;
 const BREAKPOINT1 = 246;
 const BREAKPOINT2 = 350;
 
-const ANDROID = Platform.OS === 'android';
+class AnimatedViews extends React.Component {
+  constructor(props) {
+    super(props);
 
-const AnimatedViews = React.createClass({
-  getInitialState() {
     const panX = new Animated.Value(0);
     const panY = new Animated.Value(0);
 
@@ -183,7 +183,7 @@ const AnimatedViews = React.createClass({
       };
     });
 
-    return {
+    this.state = {
       panX,
       panY,
       animations,
@@ -201,10 +201,10 @@ const AnimatedViews = React.createClass({
         longitudeDelta: LONGITUDE_DELTA,
       }),
     };
-  },
+  }
 
   componentDidMount() {
-    let { region, panX, panY, scrollX, markers } = this.state;
+    const { region, panX, panY, scrollX, markers } = this.state;
 
     panX.addListener(this.onPanXChange);
     panY.addListener(this.onPanYChange);
@@ -221,7 +221,7 @@ const AnimatedViews = React.createClass({
       }),
       duration: 0,
     }).start();
-  },
+  }
 
   onStartShouldSetPanResponder(e) {
     // we only want to move the view if they are starting the gesture on top
@@ -233,7 +233,7 @@ const AnimatedViews = React.createClass({
     const topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  },
+  }
 
   onMoveShouldSetPanResponder(e) {
     const { panY } = this.state;
@@ -242,7 +242,7 @@ const AnimatedViews = React.createClass({
     const topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  },
+  }
 
   onPanXChange({ value }) {
     let { index, region, panX, markers } = this.state;
@@ -250,7 +250,7 @@ const AnimatedViews = React.createClass({
     if (index !== newIndex) {
       this.setState({ index: newIndex });
     }
-  },
+  }
 
   onPanYChange({ value }) {
     let { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
@@ -293,11 +293,11 @@ const AnimatedViews = React.createClass({
         }).start();
       }
     }
-  },
+  }
 
   onRegionChange(region) {
     // this.state.region.setValue(region);
-  },
+  }
 
   render() {
     const {
@@ -382,18 +382,17 @@ const AnimatedViews = React.createClass({
         </PanController>
       </View>
     );
-  },
-});
+  }
+}
 
-
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
   },
   itemContainer: {
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    paddingHorizontal: ITEM_SPACING / 2 + ITEM_PREVIEW,
+    paddingHorizontal: (ITEM_SPACING / 2) + ITEM_PREVIEW,
     position: 'absolute',
     // top: screen.height - ITEM_PREVIEW_HEIGHT - 64,
     paddingTop: screen.height - ITEM_PREVIEW_HEIGHT - 64,
@@ -405,7 +404,7 @@ let styles = StyleSheet.create({
   },
   item: {
     width: ITEM_WIDTH,
-    height: screen.height + 2 * ITEM_PREVIEW_HEIGHT,
+    height: screen.height + (2 * ITEM_PREVIEW_HEIGHT),
     backgroundColor: 'red',
     marginHorizontal: ITEM_SPACING / 2,
     overflow: 'hidden',

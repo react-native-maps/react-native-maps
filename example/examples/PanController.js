@@ -13,6 +13,7 @@ const ModePropType = PropTypes.oneOf(['decay', 'snap', 'spring-origin']);
 const OvershootPropType = PropTypes.oneOf(['spring', 'clamp']);
 const AnimatedPropType = PropTypes.any;
 
+// eslint-disable-next-line react/prefer-es6-class
 const PanController = React.createClass({
 
   propTypes: {

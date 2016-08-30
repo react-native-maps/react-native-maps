@@ -1,8 +1,7 @@
-const React = require('react');
+import React, { PropTypes } from 'react';
 const ReactNative = require('react-native');
 let {
   StyleSheet,
-  PropTypes,
   View,
   Text,
   Dimensions,
@@ -13,7 +12,7 @@ let {
 const MapView = require('react-native-maps');
 const PriceMarker = require('./PriceMarker');
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -22,10 +21,11 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
-const Event = React.createClass({
+class Event extends React.Component {
   shouldComponentUpdate(nextProps) {
     return this.props.event.id !== nextProps.event.id;
-  },
+  }
+
   render() {
     const { event } = this.props;
     return (
@@ -34,12 +34,20 @@ const Event = React.createClass({
         <Text style={styles.eventData}>{JSON.stringify(event.data, null, 2)}</Text>
       </View>
     );
-  },
-});
+  }
+}
 
-const DisplayLatLng = React.createClass({
-  getInitialState() {
-    return {
+Event.propTypes = {
+  event: PropTypes.object,
+};
+
+
+// eslint-disable-next-line react/no-multi-comp
+class DisplayLatLng extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -48,7 +56,7 @@ const DisplayLatLng = React.createClass({
       },
       events: [],
     };
-  },
+  }
 
   makeEvent(e, name) {
     return {
@@ -56,7 +64,7 @@ const DisplayLatLng = React.createClass({
       name,
       data: e.nativeEvent ? e.nativeEvent : e,
     };
-  },
+  }
 
   recordEvent(name) {
     return e => {
@@ -68,7 +76,7 @@ const DisplayLatLng = React.createClass({
         ],
       });
     };
-  },
+  }
 
   render() {
     return (
@@ -112,10 +120,10 @@ const DisplayLatLng = React.createClass({
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
