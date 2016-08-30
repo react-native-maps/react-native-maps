@@ -1,2 +1,2 @@
-include ':app', ':react-native-maps'
-project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../../android/lib')
+include ':react-native-maps'
+project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
