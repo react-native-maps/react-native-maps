@@ -1,14 +1,11 @@
 import React, { PropTypes } from 'react';
 import {
   View,
-  NativeMethodsMixin,
   requireNativeComponent,
 } from 'react-native';
 
 // eslint-disable-next-line react/prefer-es6-class
 const MapPolygon = React.createClass({
-  mixins: [NativeMethodsMixin],
-
   propTypes: {
     ...View.propTypes,
 

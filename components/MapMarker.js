@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import {
   View,
-  NativeMethodsMixin,
   requireNativeComponent,
   StyleSheet,
   Platform,
@@ -14,8 +13,6 @@ const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSou
 
 // eslint-disable-next-line react/prefer-es6-class
 const MapMarker = React.createClass({
-  mixins: [NativeMethodsMixin],
-
   viewConfig: {
     uiViewClassName: 'AIRMapMarker',
     validAttributes: {

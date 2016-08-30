@@ -1,15 +1,12 @@
 import React, { PropTypes } from 'react';
 import {
   View,
-  NativeMethodsMixin,
   requireNativeComponent,
   StyleSheet,
 } from 'react-native';
 
 // eslint-disable-next-line react/prefer-es6-class
 const MapCallout = React.createClass({
-  mixins: [NativeMethodsMixin],
-
   propTypes: {
     ...View.propTypes,
     tooltip: PropTypes.bool,
