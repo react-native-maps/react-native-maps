@@ -8,7 +8,7 @@ buildscript {
       mavenLocal()
       jcenter()
       maven {
-          url "$projectDir/../../react-native/android"
+          url "$projectDir/../node_modules/react-native/android"
       }
   }
   dependencies {
@@ -23,7 +23,7 @@ allprojects {
     maven {
         // Refer to the local install of react-native in the node_modules folder
         // react-native should be installed since it's a peer dependency
-        url "$projectDir/../../react-native/android"
+        url "$projectDir/../node_modules/react-native/android"
     }
   }
 }
@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-  compile 'com.facebook.react:react-native:+'
+  compile 'com.facebook.react:react-native:0.32.0'
   compile "com.google.android.gms:play-services-base:8.4.0"
   compile 'com.google.android.gms:play-services-maps:8.4.0'
 }
