@@ -61,6 +61,8 @@ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../
 For React Native v0.29.0 or above:
 
 ```java
+import com.airbnb.android.react.maps.MapsPackage;
+
 public class MyApplication extends Application implements ReactApplication {
   private final ReactNativeHost reactNativeHost = new ReactNativeHost(this) {
     @Override protected List<ReactPackage> getPackages() {
