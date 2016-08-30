@@ -8,7 +8,7 @@ buildscript {
       mavenLocal()
       jcenter()
       maven {
-          url "$projectDir/../node_modules/react-native/android"
+          url "$projectDir/../../react-native/android"
       }
   }
   dependencies {
@@ -23,7 +23,7 @@ allprojects {
     maven {
         // Refer to the local install of react-native in the node_modules folder
         // react-native should be installed since it's a peer dependency
-        url "$projectDir/../node_modules/react-native/android"
+        url "$projectDir/../../react-native/android"
     }
   }
 }
