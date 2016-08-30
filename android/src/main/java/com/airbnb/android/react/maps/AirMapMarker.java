@@ -40,6 +40,7 @@ public class AirMapMarker extends AirMapFeature {
     private Marker marker;
     private int width;
     private int height;
+    private String identifier;
 
     private LatLng position;
     private String title;
@@ -55,6 +56,7 @@ public class AirMapMarker extends AirMapFeature {
 
     private float markerHue = 0.0f; // should be between 0 and 360
     private BitmapDescriptor iconBitmapDescriptor;
+    private Bitmap iconBitmap;
 
     private float rotation = 0.0f;
     private boolean flat = false;
@@ -66,7 +68,7 @@ public class AirMapMarker extends AirMapFeature {
 
     private boolean hasCustomMarkerView = false;
 
-    private final DraweeHolder mLogoHolder;
+    private final DraweeHolder<?> logoHolder;
     private DataSource<CloseableReference<CloseableImage>> dataSource;
     private final ControllerListener<ImageInfo> mLogoControllerListener =
             new BaseControllerListener<ImageInfo>() {
@@ -85,6 +87,7 @@ public class AirMapMarker extends AirMapFeature {
                                 Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
                                 if (bitmap != null) {
                                     bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                                    iconBitmap = bitmap;
                                     iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
                                 }
                             }
@@ -102,8 +105,8 @@ public class AirMapMarker extends AirMapFeature {
     public AirMapMarker(Context context) {
         super(context);
         this.context = context;
-        mLogoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
-        mLogoHolder.onAttach();
+        logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
+        logoHolder.onAttach();
     }
 
     private GenericDraweeHierarchy createDraweeHierarchy() {
@@ -119,6 +122,15 @@ public class AirMapMarker extends AirMapFeature {
             marker.setPosition(position);
         }
         update();
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+        update();
+    }
+
+    public String getIdentifier() {
+        return this.identifier;
     }
 
     public void setTitle(String title) {
@@ -201,9 +213,9 @@ public class AirMapMarker extends AirMapFeature {
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setImageRequest(imageRequest)
                     .setControllerListener(mLogoControllerListener)
-                    .setOldController(mLogoHolder.getController())
+                    .setOldController(logoHolder.getController())
                     .build();
-            mLogoHolder.setController(controller);
+            logoHolder.setController(controller);
         } else {
             iconBitmapDescriptor = getBitmapDescriptorByName(uri);
             update();
@@ -246,7 +258,18 @@ public class AirMapMarker extends AirMapFeature {
     private BitmapDescriptor getIcon() {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
-            return BitmapDescriptorFactory.fromBitmap(createDrawable());
+            if (iconBitmapDescriptor != null) {
+                Bitmap viewBitmap = createDrawable();
+                int width = Math.max(iconBitmap.getWidth(), viewBitmap.getWidth());
+                int height = Math.max(iconBitmap.getHeight(), viewBitmap.getHeight());
+                Bitmap combinedBitmap = Bitmap.createBitmap(width, height, iconBitmap.getConfig());
+                Canvas canvas = new Canvas(combinedBitmap);
+                canvas.drawBitmap(iconBitmap, 0, 0, null);
+                canvas.drawBitmap(viewBitmap, 0, 0, null);
+                return BitmapDescriptorFactory.fromBitmap(combinedBitmap);
+            } else {
+                return BitmapDescriptorFactory.fromBitmap(createDrawable());
+            }
         } else if (iconBitmapDescriptor != null) {
             // use local image as a marker
             return iconBitmapDescriptor;
@@ -275,6 +298,18 @@ public class AirMapMarker extends AirMapFeature {
         }
 
         marker.setIcon(getIcon());
+
+        if (anchorIsSet) {
+            marker.setAnchor(anchorX, anchorY);
+        } else {
+            marker.setAnchor(0.5f, 1.0f);
+        }
+
+        if (calloutAnchorIsSet) {
+            marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
+        } else {
+            marker.setInfoWindowAnchor(0.5f, 0);
+        }
     }
 
     public void update(int width, int height) {

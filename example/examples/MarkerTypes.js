@@ -1,5 +1,6 @@
-var React = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   PropTypes,
   View,
@@ -7,12 +8,12 @@ var {
   Dimensions,
   TouchableOpacity,
   Image,
-} = React;
+} = ReactNative;
 
-var MapView = require('react-native-maps');
-var PriceMarker = require('./PriceMarker');
+let MapView = require('react-native-maps');
+const PriceMarker = require('./PriceMarker');
 
-var { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,7 +22,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-var MarkerTypes = React.createClass({
+const MarkerTypes = React.createClass({
   render() {
     return (
       <View style={styles.container}>
@@ -34,7 +35,7 @@ var MarkerTypes = React.createClass({
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}
-          >
+        >
           <MapView.Marker
             coordinate={{
               latitude: LATITUDE + SPACE,
@@ -43,7 +44,9 @@ var MarkerTypes = React.createClass({
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
             image={require('./assets/flag-blue.png')}
-            />
+          >
+            <Text style={styles.marker}>X</Text>
+          </MapView.Marker>
           <MapView.Marker
             coordinate={{
               latitude: LATITUDE - SPACE,
@@ -52,29 +55,26 @@ var MarkerTypes = React.createClass({
             centerOffset={{ x: -42, y: -60 }}
             anchor={{ x: 0.84, y: 1 }}
             image={require('./assets/flag-pink.png')}
-            />
+          />
         </MapView>
       </View>
     );
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
+  },
+  marker: {
+    marginLeft: 33,
+    marginTop: 18,
+    fontWeight: 'bold',
   },
 });
 

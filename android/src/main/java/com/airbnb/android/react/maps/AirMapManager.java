@@ -1,6 +1,7 @@
 package com.airbnb.android.react.maps;
 
 import android.view.View;
+import android.content.Context;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -25,11 +26,11 @@ import javax.annotation.Nullable;
 
 public class AirMapManager extends ViewGroupManager<AirMapView> {
 
-    public static final String REACT_CLASS = "AIRMap";
-
-    public static final int ANIMATE_TO_REGION = 1;
-    public static final int ANIMATE_TO_COORDINATE = 2;
-    public static final int FIT_TO_ELEMENTS = 3;
+    private static final String REACT_CLASS = "AIRMap";
+    private static final int ANIMATE_TO_REGION = 1;
+    private static final int ANIMATE_TO_COORDINATE = 2;
+    private static final int FIT_TO_ELEMENTS = 3;
+    private static final int FIT_TO_SUPPLIED_MARKERS = 4;
 
     private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
             "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -40,20 +41,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     private ReactContext reactContext;
 
-    private AirMapMarkerManager markerManager;
-    private AirMapPolylineManager polylineManager;
-    private AirMapPolygonManager polygonManager;
-    private AirMapCircleManager circleManager;
+    private final Context appContext;
 
-    public AirMapManager(
-            AirMapMarkerManager markerManager,
-            AirMapPolylineManager polylineManager,
-            AirMapPolygonManager polygonManager,
-            AirMapCircleManager circleManager) {
-        this.markerManager = markerManager;
-        this.polylineManager = polylineManager;
-        this.polygonManager = polygonManager;
-        this.circleManager = circleManager;
+    public AirMapManager(Context context) {
+        this.appContext = context;
     }
 
     @Override
@@ -64,16 +55,15 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @Override
     protected AirMapView createViewInstance(ThemedReactContext context) {
         reactContext = context;
-        AirMapView view = new AirMapView(context, this);
 
         try {
-            MapsInitializer.initialize(context.getApplicationContext());
-        } catch (Exception e) {
+            MapsInitializer.initialize(this.appContext);
+        } catch (RuntimeException e) {
             e.printStackTrace();
             emitMapError("Map initialize error", "map_init_error");
         }
 
-        return view;
+        return new AirMapView(context, this.appContext, this);
     }
 
     @Override
@@ -106,6 +96,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)
     public void setShowsUserLocation(AirMapView view, boolean showUserLocation) {
         view.setShowsUserLocation(showUserLocation);
+    }
+
+    @ReactProp(name = "showsMyLocationButton", defaultBoolean = true)
+    public void setShowsMyLocationButton(AirMapView view, boolean showMyLocationButton) {
+        view.setShowsMyLocationButton(showMyLocationButton);
+    }
+
+    @ReactProp(name = "toolbarEnabled", defaultBoolean = true)
+    public void setToolbarEnabled(AirMapView view, boolean toolbarEnabled) {
+        view.setToolbarEnabled(toolbarEnabled);
     }
 
     // This is a private prop to improve performance of panDrag by disabling it when the callback is not set
@@ -149,6 +149,26 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
 
+    @ReactProp(name="cacheEnabled", defaultBoolean = false)
+    public void setCacheEnabled(AirMapView view, boolean cacheEnabled) {
+        view.setCacheEnabled(cacheEnabled);
+    }
+
+    @ReactProp(name="loadingEnabled", defaultBoolean = false)
+    public void setLoadingEnabled(AirMapView view, boolean loadingEnabled) {
+        view.enableMapLoading(loadingEnabled);
+    }
+
+    @ReactProp(name="loadingBackgroundColor", customType="Color")
+    public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer loadingBackgroundColor) {
+        view.setLoadingBackgroundColor(loadingBackgroundColor);
+    }
+
+    @ReactProp(name="loadingIndicatorColor", customType="Color")
+    public void setLoadingIndicatorColor(AirMapView view, @Nullable Integer loadingIndicatorColor) {
+        view.setLoadingIndicatorColor(loadingIndicatorColor);
+    }
+
     @ReactProp(name = "pitchEnabled", defaultBoolean = false)
     public void setPitchEnabled(AirMapView view, boolean pitchEnabled) {
         view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
@@ -189,13 +209,17 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             case FIT_TO_ELEMENTS:
                 view.fitToElements(args.getBoolean(0));
                 break;
+
+            case FIT_TO_SUPPLIED_MARKERS:
+                view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
+                break;
         }
     }
 
     @Override
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
-        Map map = MapBuilder.of(
+        Map<String, Map<String, String>> map = MapBuilder.of(
                 "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
                 "onPress", MapBuilder.of("registrationName", "onPress"),
                 "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
@@ -221,7 +245,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         return MapBuilder.of(
                 "animateToRegion", ANIMATE_TO_REGION,
                 "animateToCoordinate", ANIMATE_TO_COORDINATE,
-                "fitToElements", FIT_TO_ELEMENTS
+                "fitToElements", FIT_TO_ELEMENTS,
+                "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS
         );
     }
 
@@ -257,8 +282,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.updateExtraData(extraData);
     }
 
-    public void pushEvent(View view, String name, WritableMap data) {
-        ReactContext reactContext = (ReactContext) view.getContext();
+    void pushEvent(View view, String name, WritableMap data) {
         reactContext.getJSModule(RCTEventEmitter.class)
                 .receiveEvent(view.getId(), name, data);
     }

@@ -1,26 +1,27 @@
-var React = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   PropTypes,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
-} = React;
+} = ReactNative;
 
-var MapView = require('react-native-maps');
-var PriceMarker = require('./PriceMarker');
+let MapView = require('react-native-maps');
+const PriceMarker = require('./PriceMarker');
 
-var { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-var id = 0;
+let id = 0;
 
-var PolylineCreator = React.createClass({
+const PolylineCreator = React.createClass({
   getInitialState() {
     return {
       region: {
@@ -35,7 +36,7 @@ var PolylineCreator = React.createClass({
   },
 
   finish() {
-    var { polygons, editing } = this.state;
+    let { polygons, editing } = this.state;
     this.setState({
       polygons: [...polygons, editing],
       editing: null,
@@ -43,7 +44,7 @@ var PolylineCreator = React.createClass({
   },
 
   onPanDrag(e) {
-    var { editing } = this.state;
+    const { editing } = this.state;
     if (!editing) {
       this.setState({
         editing: {
@@ -104,22 +105,14 @@ var PolylineCreator = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
   },
   bubble: {
     backgroundColor: 'rgba(255,255,255,0.7)',

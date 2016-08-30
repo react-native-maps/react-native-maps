@@ -26,7 +26,9 @@
 
 - (void)reactSetFrame:(CGRect)frame
 {
-    CGRect bounds = {CGPointZero, frame.size};
+    // Make sure we use the image size when available
+    CGSize size = self.image ? self.image.size : frame.size;
+    CGRect bounds = {CGPointZero, size};
 
     // The MapView is basically in charge of figuring out the center position of the marker view. If the view changed in
     // height though, we need to compensate in such a way that the bottom of the marker stays at the same spot on the
@@ -196,7 +198,7 @@
 
 - (BOOL)shouldUsePinView
 {
-    return self.subviews.count == 0 && !self.imageSrc;
+    return self.reactSubviews.count == 0 && !self.imageSrc;
 }
 
 - (void)setImageSrc:(NSString *)imageSrc
@@ -207,20 +209,21 @@
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
     }
-    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithTag:_imageSrc
-                                                                     size:self.bounds.size
-                                                                    scale:RCTScreenScale()
-                                                               resizeMode:UIViewContentModeCenter
-                                                            progressBlock:nil
-                                                          completionBlock:^(NSError *error, UIImage *image) {
-                                                              if (error) {
-                                                                  // TODO(lmr): do something with the error?
-                                                                  NSLog(@"%@", error);
-                                                              }
-                                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                                self.image = image;
-                                                              });
-                                                          }];
+    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+                                                                            size:self.bounds.size
+                                                                           scale:RCTScreenScale()
+                                                                         clipped:YES
+                                                                      resizeMode:UIViewContentModeCenter
+                                                                   progressBlock:nil
+                                                                 completionBlock:^(NSError *error, UIImage *image) {
+                                                                     if (error) {
+                                                                         // TODO(lmr): do something with the error?
+                                                                         NSLog(@"%@", error);
+                                                                     }
+                                                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                                                         self.image = image;
+                                                                     });
+                                                                 }];
 }
 
 - (void)setPinColor:(UIColor *)pinColor

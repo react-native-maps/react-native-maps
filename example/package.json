@@ -3,11 +3,21 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start"
+    "start": "react-native start",
+    "watch": "node ./scripts/watch-and-copy-src.js",
+    "packager": "sh ./node_modules/react-native/packager/packager.sh --root ./node_modules/react-native-maps",
+    "dev": "concurrently 'npm run watch' 'npm run packager'"
   },
   "dependencies": {
-    "react": "^0.14.8",
-    "react-native": "^0.25.1",
+    "react": "15.3.0",
+    "react-native": "^0.32.0",
     "react-native-maps": "../"
+  },
+  "devDependencies": {
+    "concurrently": "^2.2.0",
+    "fs-extra": "^0.30.0",
+    "minimatch": "^3.0.2",
+    "node-watch": "^0.4.0",
+    "rimraf": "^2.5.4"
   }
 }

@@ -1,19 +1,23 @@
-import React, {
-  StyleSheet,
+let React = require('react');
+const ReactNative = require('react-native');
+const {
   PropTypes,
+} = React;
+
+let {
+  StyleSheet,
   View,
   Text,
   Animated,
-} from 'react-native';
+} = ReactNative;
 
 const PriceMarker = ({ amount, selected, style }) => {
-
-  var background = selected.interpolate({
+  const background = selected.interpolate({
     inputRange: [0, 1],
     outputRange: ['#FF5A5F', '#4da2ab'],
   });
 
-  var border = selected.interpolate({
+  const border = selected.interpolate({
     inputRange: [0, 1],
     outputRange: ['#D23F44', '#007a87'],
   });
@@ -21,19 +25,18 @@ const PriceMarker = ({ amount, selected, style }) => {
   return (
     <Animated.View style={[styles.container, style]}>
       <Animated.View style={[styles.bubble, {
-          backgroundColor: background,
-          borderColor: border,
-        }]}
-        >
+        backgroundColor: background,
+        borderColor: border,
+      }]}>
         <Text style={styles.dollar}>$</Text>
         <Text style={styles.amount}>{amount}</Text>
       </Animated.View>
       <Animated.View style={[styles.arrowBorder, {
-          borderTopColor: border,
-        }]} />
+        borderTopColor: border,
+      }]} />
       <Animated.View style={[styles.arrow, {
-          borderTopColor: background,
-        }]} />
+        borderTopColor: background,
+      }]} />
     </Animated.View>
   );
 };

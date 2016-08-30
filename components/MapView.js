@@ -1,30 +1,22 @@
-'use strict';
-
-var React = require('react');
-var {
-  PropTypes,
-} = React;
-var ReactNative = require('react-native');
-var {
+import React, { PropTypes } from 'react';
+import {
   EdgeInsetsPropType,
-  NativeMethodsMixin,
   Platform,
-  ReactNativeViewAttributes,
   View,
   Animated,
   requireNativeComponent,
   NativeModules,
-} = ReactNative;
+  ColorPropType,
+  findNodeHandle,
+} from 'react-native';
+import MapMarker from './MapMarker';
+import MapPolyline from './MapPolyline';
+import MapPolygon from './MapPolygon';
+import MapCircle from './MapCircle';
+import MapCallout from './MapCallout';
 
-var MapMarker = require('./MapMarker');
-var MapPolyline = require('./MapPolyline');
-var MapPolygon = require('./MapPolygon');
-var MapCircle = require('./MapCircle');
-var MapCallout = require('./MapCallout');
-
-var MapView = React.createClass({
-  mixins: [NativeMethodsMixin],
-
+// eslint-disable-next-line react/prefer-es6-class
+const MapView = React.createClass({
   viewConfig: {
     uiViewClassName: 'AIRMap',
     validAttributes: {
@@ -49,6 +41,14 @@ var MapView = React.createClass({
      * to *fail silently*!
      */
     showsUserLocation: PropTypes.bool,
+
+    /**
+     * If `false` hide the button to move map to the current user's location.
+     * Default value is `true`.
+     *
+     * @platform android
+     */
+    showsMyLocationButton: PropTypes.bool,
 
     /**
      * If `true` the map will focus on the user's location. This only works if
@@ -89,6 +89,34 @@ var MapView = React.createClass({
     rotateEnabled: PropTypes.bool,
 
     /**
+     * If `true` the map will be cached to an Image for performance
+     * Default value is `false`.
+     *
+     */
+    cacheEnabled: PropTypes.bool,
+
+    /**
+     * If `true` the map will be showing a loading indicator
+     * Default value is `false`.
+     *
+     */
+    loadingEnabled: PropTypes.bool,
+
+    /**
+     * Loading background color while generating map cache image or loading the map
+     * Default color is light gray.
+     *
+     */
+    loadingBackgroundColor: ColorPropType,
+
+    /**
+     * Loading indicator color while generating map cache image or loading the map
+     * Default color is gray color for iOS, theme color for Android.
+     *
+     */
+    loadingIndicatorColor: ColorPropType,
+
+    /**
      * If `false` the user won't be able to change the map region being displayed.
      * Default value is `true`.
      *
@@ -101,6 +129,14 @@ var MapView = React.createClass({
      *
      */
     pitchEnabled: PropTypes.bool,
+
+    /**
+     * If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
+     * Default value is `true`.
+     *
+     * @platform android
+     */
+    toolbarEnabled: PropTypes.bool,
 
     /**
      * A Boolean indicating whether the map shows scale information.
@@ -277,13 +313,13 @@ var MapView = React.createClass({
 
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       isReady: Platform.OS === 'ios',
     };
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     const { region, initialRegion } = this.props;
     if (region && this.state.isReady) {
       this.refs.map.setNativeProps({ region });
@@ -292,9 +328,9 @@ var MapView = React.createClass({
     }
   },
 
-  componentWillUpdate: function(nextProps) {
-    var a = this.__lastRegion;
-    var b = nextProps.region;
+  componentWillUpdate(nextProps) {
+    const a = this.__lastRegion;
+    const b = nextProps.region;
     if (!a || !b) return;
     if (
       a.latitude !== b.latitude ||
@@ -306,7 +342,7 @@ var MapView = React.createClass({
     }
   },
 
-  _onMapReady: function() {
+  _onMapReady() {
     const { region, initialRegion } = this.props;
     if (region) {
       this.refs.map.setNativeProps({ region });
@@ -316,7 +352,7 @@ var MapView = React.createClass({
     this.setState({ isReady: true });
   },
 
-  _onLayout: function(e) {
+  _onLayout(e) {
     const { region, initialRegion, onLayout } = this.props;
     const { isReady } = this.state;
     if (region && isReady && !this.__layoutCalled) {
@@ -329,7 +365,7 @@ var MapView = React.createClass({
     onLayout && onLayout(e);
   },
 
-  _onChange: function(event: Event) {
+  _onChange(event: Event) {
     this.__lastRegion = event.nativeEvent.region;
     if (event.nativeEvent.continuous) {
       this.props.onRegionChange &&
@@ -340,30 +376,34 @@ var MapView = React.createClass({
     }
   },
 
-  animateToRegion: function (region, duration) {
+  animateToRegion(region, duration) {
     this._runCommand('animateToRegion', [region, duration || 500]);
   },
 
-  animateToCoordinate: function (latLng, duration) {
+  animateToCoordinate(latLng, duration) {
     this._runCommand('animateToCoordinate', [latLng, duration || 500]);
   },
 
-  fitToElements: function(animated) {
+  fitToElements(animated) {
     this._runCommand('fitToElements', [animated]);
   },
 
-  takeSnapshot: function (width, height, region, callback) {
+  fitToSuppliedMarkers(markers, animated) {
+    this._runCommand('fitToSuppliedMarkers', [markers, animated]);
+  },
+
+  takeSnapshot(width, height, region, callback) {
     if (!region) {
       region = this.props.region || this.props.initialRegion;
     }
     this._runCommand('takeSnapshot', [width, height, region, callback]);
   },
 
-  _getHandle: function() {
-    return ReactNative.findNodeHandle(this.refs.map);
+  _getHandle() {
+    return findNodeHandle(this.refs.map);
   },
 
-  _runCommand: function (name, args) {
+  _runCommand(name, args) {
     switch (Platform.OS) {
       case 'android':
         NativeModules.UIManager.dispatchViewManagerCommand(
@@ -382,7 +422,7 @@ var MapView = React.createClass({
     }
   },
 
-  render: function() {
+  render() {
     let props;
 
     if (this.state.isReady) {
@@ -400,6 +440,7 @@ var MapView = React.createClass({
       props.handlePanDrag = !!props.onPanDrag;
     } else {
       props = {
+        style: this.props.style,
         region: null,
         initialRegion: null,
         onChange: this._onChange,
@@ -414,7 +455,7 @@ var MapView = React.createClass({
   },
 });
 
-var AIRMap = requireNativeComponent('AIRMap', MapView, {
+let AIRMap = requireNativeComponent('AIRMap', MapView, {
   nativeOnly: {
     onChange: true,
     onMapReady: true,

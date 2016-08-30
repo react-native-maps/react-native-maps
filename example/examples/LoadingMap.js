@@ -1,17 +1,13 @@
 let React = require('react');
 const ReactNative = require('react-native');
 let {
-  StyleSheet,
-  PropTypes,
-  View,
   Text,
+  View,
   Dimensions,
-  TouchableOpacity,
-  Image,
+  StyleSheet,
 } = ReactNative;
 
 let MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
 
 let { width, height } = Dimensions.get('window');
 
@@ -22,35 +18,28 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-const MarkerTypes = React.createClass({
+const LoadingMap = React.createClass({
   getInitialState() {
-    return { mapSnapshot: null };
-  },
-
-  takeSnapshot() {
-    this.refs.map.takeSnapshot(300, 300, {
-      latitude: LATITUDE - SPACE,
-      longitude: LONGITUDE - SPACE,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01 * ASPECT_RATIO,
-    }, (err, data) => {
-      if (err) console.log(err);
-      this.setState({ mapSnapshot: data });
-    });
+    return {
+      region: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
+    };
   },
 
   render() {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
           style={styles.map}
-          initialRegion={{
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
+          initialRegion={this.state.region}
+          onPress={this.onMapPress}
+          loadingEnabled
+          loadingIndicatorColor={"#666666"}
+          loadingBackgroundColor={"#eeeeee"}
         >
           <MapView.Marker
             coordinate={{
@@ -68,26 +57,19 @@ const MarkerTypes = React.createClass({
             }}
             centerOffset={{ x: -42, y: -60 }}
             anchor={{ x: 0.84, y: 1 }}
-            image={require('./assets/flag-pink.png')}
-          />
-        </MapView>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this.takeSnapshot} style={[styles.bubble, styles.button]}>
-            <Text>Take snapshot</Text>
-          </TouchableOpacity>
-        </View>
-        {this.state.mapSnapshot
-          ? <TouchableOpacity
-            style={[styles.container, styles.overlay]}
-            onPress={() => this.setState({ mapSnapshot: null })}
           >
-              <Image
-                source={{ uri: this.state.mapSnapshot.uri }}
-                style={{ width: 300, height: 300 }}
-              />
-            </TouchableOpacity>
-            : null}
+            <MapView.Callout>
+              <View>
+                <Text>This is a plain view</Text>
+              </View>
+            </MapView.Callout>
+          </MapView.Marker>
+        </MapView>
+        <View style={styles.buttonContainer}>
+          <View style={styles.bubble}>
+            <Text>Map with Loading</Text>
+          </View>
+        </View>
       </View>
     );
   },
@@ -108,21 +90,11 @@ let styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 20,
   },
-  button: {
-    width: 140,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
   buttonContainer: {
     flexDirection: 'row',
     marginVertical: 20,
     backgroundColor: 'transparent',
   },
-  overlay: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-  },
 });
 
-module.exports = MarkerTypes;
+module.exports = LoadingMap;

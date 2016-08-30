@@ -1,5 +1,6 @@
-var React = require('react-native');
-var {
+let React = require('react');
+const ReactNative = require('react-native');
+let {
   StyleSheet,
   PropTypes,
   View,
@@ -7,13 +8,13 @@ var {
   Dimensions,
   TouchableOpacity,
   Image,
-} = React;
+} = ReactNative;
 
-var MapView = require('react-native-maps');
-var PriceMarker = require('./PriceMarker');
-var CustomCallout = require('./CustomCallout');
+let MapView = require('react-native-maps');
+const PriceMarker = require('./PriceMarker');
+let CustomCallout = require('./CustomCallout');
 
-var { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -22,7 +23,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-var Callouts = React.createClass({
+const Callouts = React.createClass({
   getInitialState() {
     return {
       region: {
@@ -114,22 +115,14 @@ var Callouts = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
   },
   bubble: {
     flex: 1,

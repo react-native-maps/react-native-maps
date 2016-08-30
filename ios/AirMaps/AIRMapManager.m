@@ -74,6 +74,10 @@ RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(cacheEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(loadingEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(loadingBackgroundColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(loadingIndicatorColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(minDelta, CGFloat)
@@ -153,6 +157,31 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
             AIRMap *mapView = (AIRMap *)view;
             // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
             [mapView showAnnotations:mapView.annotations animated:animated];
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
+                  markers:(nonnull NSArray *)markers
+                  animated:(BOOL)animated)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+            // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
+            id annotations = mapView.annotations;
+
+            NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                AIRMapMarker *marker = (AIRMapMarker *)evaluatedObject;
+                return [markers containsObject:marker.identifier];
+            }];
+
+            NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
+
+            [mapView showAnnotations:filteredMarkers animated:animated];
         }
     }];
 }
@@ -434,7 +463,7 @@ static int kDragCenterContext;
         [mapView setRegion:region animated:YES];
 
         // Move to user location only for the first time it loads up.
-        mapView.followUserLocation = NO;
+        // mapView.followUserLocation = NO;
     }
 }
 
@@ -471,7 +500,14 @@ static int kDragCenterContext;
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView
 {
     mapView.hasStartedRendering = YES;
+    [mapView beginLoading];
     [self _emitRegionChangeEvent:mapView continuous:NO];
+}
+
+- (void)mapViewDidFinishRenderingMap:(AIRMap *)mapView fullyRendered:(BOOL)fullyRendered
+{
+    [mapView finishLoading];
+    [mapView cacheViewIfNeeded];
 }
 
 #pragma mark Private
