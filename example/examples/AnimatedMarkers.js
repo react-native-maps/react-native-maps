@@ -1,6 +1,5 @@
-let React = require('react');
-const ReactNative = require('react-native');
-let {
+import React, { Component } from 'react';
+import {
   StyleSheet,
   PropTypes,
   View,
@@ -9,9 +8,9 @@ let {
   TouchableOpacity,
   Animated,
   Platform,
-} = ReactNative;
+} from 'react-native';
 
-let MapView = require('react-native-maps');
+import MapView from 'react-native-maps';
 
 const screen = Dimensions.get('window');
 
@@ -21,15 +20,16 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const AnimatedMarkers = React.createClass({
-  getInitialState() {
-    return {
+class AnimatedMarkers extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       coordinate: new Animated.Region({
         latitude: LATITUDE,
         longitude: LONGITUDE,
       }),
     };
-  },
+  }
 
   animate() {
     const { coordinate } = this.state;
@@ -37,7 +37,7 @@ const AnimatedMarkers = React.createClass({
       latitude: LATITUDE + (Math.random() - 0.5) * LATITUDE_DELTA / 2,
       longitude: LONGITUDE + (Math.random() - 0.5) * LONGITUDE_DELTA / 2,
     }).start();
-  },
+  }
 
   render() {
     return (
@@ -62,18 +62,28 @@ const AnimatedMarkers = React.createClass({
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
 
-let styles = StyleSheet.create({
+
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   bubble: {
     flex: 1,

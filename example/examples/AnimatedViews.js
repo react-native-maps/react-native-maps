@@ -1,6 +1,5 @@
-let React = require('react');
-const ReactNative = require('react-native');
-let {
+import React, { Component } from 'react';
+import {
   StyleSheet,
   PropTypes,
   View,
@@ -9,13 +8,13 @@ let {
   TouchableOpacity,
   Animated,
   Platform,
-} = ReactNative;
+} from 'react-native';
 
-let MapView = require('react-native-maps');
-let PanController = require('./PanController');
-let PriceMarker = require('./AnimatedPriceMarker');
+import MapView from 'react-native-maps';
+import PanController from './PanController';
+import PriceMarker = from './AnimatedPriceMarker';
 
-const screen = Dimensions.get('window');
+var screen = Dimensions.get('window');
 
 const ASPECT_RATIO = screen.width / screen.height;
 const LATITUDE = 37.78825;
@@ -23,18 +22,18 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const ITEM_SPACING = 10;
-const ITEM_PREVIEW = 10;
-const ITEM_WIDTH = screen.width - 2 * ITEM_SPACING - 2 * ITEM_PREVIEW;
-let SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
-const ITEM_PREVIEW_HEIGHT = 150;
-const SCALE_END = screen.width / ITEM_WIDTH;
-const BREAKPOINT1 = 246;
-const BREAKPOINT2 = 350;
+var ITEM_SPACING = 10;
+var ITEM_PREVIEW = 10;
+var ITEM_WIDTH = screen.width - 2 * ITEM_SPACING - 2 * ITEM_PREVIEW;
+var SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
+var ITEM_PREVIEW_HEIGHT = 150;
+var SCALE_END = screen.width / ITEM_WIDTH;
+var BREAKPOINT1 = 246;
+var BREAKPOINT2 = 350;
 
 const ANDROID = Platform.OS === 'android';
 
-const AnimatedViews = React.createClass({
+class AnimatedViews extends Component {
   getInitialState() {
     const panX = new Animated.Value(0);
     const panY = new Animated.Value(0);
@@ -136,7 +135,7 @@ const AnimatedViews = React.createClass({
       })));
 
       // [0 => 1]
-      let opacity = scrollY.interpolate({
+      var opacity = scrollY.interpolate({
         inputRange: [BREAKPOINT1, BREAKPOINT2],
         outputRange: [0, 1],
         extrapolate: 'clamp',
@@ -154,7 +153,7 @@ const AnimatedViews = React.createClass({
         outputRange: [1, 0],
       });
 
-      let markerOpacity = scrollY.interpolate({
+      var markerOpacity = scrollY.interpolate({
         inputRange: [0, BREAKPOINT1],
         outputRange: [0, 1],
         extrapolate: 'clamp',
@@ -165,7 +164,7 @@ const AnimatedViews = React.createClass({
         outputRange: [1, 0],
       });
 
-      const markerScale = selected.interpolate({
+      var markerScale = selected.interpolate({
         inputRange: [0, 1],
         outputRange: [1, 1.2],
       });
@@ -201,10 +200,10 @@ const AnimatedViews = React.createClass({
         longitudeDelta: LONGITUDE_DELTA,
       }),
     };
-  },
+  }
 
   componentDidMount() {
-    let { region, panX, panY, scrollX, markers } = this.state;
+    var { region, panX, panY, scrollX, markers } = this.state;
 
     panX.addListener(this.onPanXChange);
     panY.addListener(this.onPanYChange);
@@ -221,44 +220,44 @@ const AnimatedViews = React.createClass({
       }),
       duration: 0,
     }).start();
-  },
+  }
 
   onStartShouldSetPanResponder(e) {
     // we only want to move the view if they are starting the gesture on top
     // of the view, so this calculates that and returns true if so. If we return
     // false, the gesture should get passed to the map view appropriately.
-    const { panY } = this.state;
-    const { pageY } = e.nativeEvent;
-    const topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
-    const topOfTap = screen.height - pageY;
+    var { panY } = this.state;
+    var { pageY } = e.nativeEvent;
+    var topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
+    var topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  },
+  }
 
   onMoveShouldSetPanResponder(e) {
-    const { panY } = this.state;
-    const { pageY } = e.nativeEvent;
-    const topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
-    const topOfTap = screen.height - pageY;
+    var { panY } = this.state;
+    var { pageY } = e.nativeEvent;
+    var topOfMainWindow = ITEM_PREVIEW_HEIGHT + 1 * panY.__getValue();
+    var topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  },
+  }
 
   onPanXChange({ value }) {
-    let { index, region, panX, markers } = this.state;
-    const newIndex = Math.floor((-1 * value + SNAP_WIDTH / 2) / SNAP_WIDTH);
+    var { index, region, panX, markers } = this.state;
+    var newIndex = Math.floor((-1 * value + SNAP_WIDTH / 2) / SNAP_WIDTH);
     if (index !== newIndex) {
       this.setState({ index: newIndex });
     }
-  },
+  }
 
   onPanYChange({ value }) {
-    let { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
-    const shouldBeMovable = Math.abs(value) < 2;
+    var { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
+    var shouldBeMovable = Math.abs(value) < 2;
     if (shouldBeMovable !== canMoveHorizontal) {
       this.setState({ canMoveHorizontal: shouldBeMovable });
       if (!shouldBeMovable) {
-        const { coordinate } = markers[index];
+        var { coordinate } = markers[index];
         region.stopAnimation();
         region.timing({
           latitude: scrollY.interpolate({
@@ -293,11 +292,11 @@ const AnimatedViews = React.createClass({
         }).start();
       }
     }
-  },
+  }
 
   onRegionChange(region) {
-    // this.state.region.setValue(region);
-  },
+    //this.state.region.setValue(region);
+  }
 
   render() {
     const {
@@ -384,25 +383,34 @@ const AnimatedViews = React.createClass({
       </View>
     );
   },
-});
+}
 
 
-let styles = StyleSheet.create({
+
+var styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   itemContainer: {
     backgroundColor: 'transparent',
     flexDirection: 'row',
     paddingHorizontal: ITEM_SPACING / 2 + ITEM_PREVIEW,
     position: 'absolute',
-    // top: screen.height - ITEM_PREVIEW_HEIGHT - 64,
+    //top: screen.height - ITEM_PREVIEW_HEIGHT - 64,
     paddingTop: screen.height - ITEM_PREVIEW_HEIGHT - 64,
     //paddingTop: !ANDROID ? 0 : screen.height - ITEM_PREVIEW_HEIGHT - 64,
   },
   map: {
     backgroundColor: 'transparent',
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
   item: {
     width: ITEM_WIDTH,
