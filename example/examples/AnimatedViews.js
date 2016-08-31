@@ -89,19 +89,19 @@ class AnimatedViews extends Component {
       },
     ];
 
-    const animations = markers.map((m, i)  => {
-      const xLeft = -SNAP_WIDTH * i + SNAP_WIDTH/2;
-      const xRight = -SNAP_WIDTH * i - SNAP_WIDTH/2;
+    const animations = markers.map((m, i) => {
+      const xLeft = -SNAP_WIDTH * i + SNAP_WIDTH / 2;
+      const xRight = -SNAP_WIDTH * i - SNAP_WIDTH / 2;
       const xPos = -SNAP_WIDTH * i;
 
       const isIndex = panX.interpolate({
-        inputRange: [xRight - 1, xRight, xLeft, xLeft+1],
+        inputRange: [xRight - 1, xRight, xLeft, xLeft + 1],
         outputRange: [0, 1, 1, 0],
         extrapolate: 'clamp',
       });
 
       const isNotIndex = panX.interpolate({
-        inputRange: [xRight - 1, xRight, xLeft, xLeft+1],
+        inputRange: [xRight - 1, xRight, xLeft, xLeft + 1],
         outputRange: [1, 0, 0, 1],
         extrapolate: 'clamp',
       });
@@ -130,7 +130,7 @@ class AnimatedViews extends Component {
 
       const scale = Animated.add(ONE, Animated.multiply(isIndex, scrollY.interpolate({
         inputRange: [BREAKPOINT1, BREAKPOINT2],
-        outputRange: [0, SCALE_END-1],
+        outputRange: [0, SCALE_END - 1],
         extrapolate: 'clamp',
       })));
 
@@ -317,7 +317,7 @@ class AnimatedViews extends Component {
           xMode="snap"
           snapSpacingX={SNAP_WIDTH}
           yBounds={[-1 * screen.height, 0]}
-          xBounds={[-screen.width * (markers.length-1), 0]}
+          xBounds={[-screen.width * (markers.length - 1), 0]}
           panY={panY}
           panX={panX}
           onStartShouldSetPanResponder={this.onStartShouldSetPanResponder}
