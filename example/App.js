@@ -61,6 +61,7 @@ const App = React.createClass({
         {Component && this.renderBackButton()}
         {!Component && (
           <ScrollView
+            style={StyleSheet.absoluteFill}
             contentContainerStyle={styles.scrollview}
             showsVerticalScrollIndicator={false}
           >
