@@ -1,19 +1,16 @@
-let React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
-  Image,
-} = ReactNative;
+} from 'react-native';
 
-let MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
+import MapView from 'react-native-maps';
+import flagBlueImg from './assets/flag-blue.png';
+import flagPinkImg from './assets/flag-pink.png';
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -22,12 +19,11 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-const MarkerTypes = React.createClass({
+class MarkerTypes extends React.Component {
   render() {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -43,7 +39,7 @@ const MarkerTypes = React.createClass({
             }}
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
-            image={require('./assets/flag-blue.png')}
+            image={flagBlueImg}
           >
             <Text style={styles.marker}>X</Text>
           </MapView.Marker>
@@ -54,15 +50,15 @@ const MarkerTypes = React.createClass({
             }}
             centerOffset={{ x: -42, y: -60 }}
             anchor={{ x: 0.84, y: 1 }}
-            image={require('./assets/flag-pink.png')}
+            image={flagPinkImg}
           />
         </MapView>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

@@ -1,18 +1,15 @@
-let React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
-} = ReactNative;
+} from 'react-native';
 
-let MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
+import MapView from 'react-native-maps';
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,27 +18,29 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
-const PolylineCreator = React.createClass({
-  getInitialState() {
-    return {
+class PolylineCreator extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      polygons: [],
+      polylines: [],
       editing: null,
     };
-  },
+  }
 
   finish() {
-    let { polygons, editing } = this.state;
+    const { polylines, editing } = this.state;
     this.setState({
-      polygons: [...polygons, editing],
+      polylines: [...polylines, editing],
       editing: null,
     });
-  },
+  }
 
   onPanDrag(e) {
     const { editing } = this.state;
@@ -63,7 +62,7 @@ const PolylineCreator = React.createClass({
         },
       });
     }
-  },
+  }
 
   render() {
     return (
@@ -72,40 +71,43 @@ const PolylineCreator = React.createClass({
           style={styles.map}
           initialRegion={this.state.region}
           scrollEnabled={false}
-          onPanDrag={this.onPanDrag}
+          onPanDrag={e => this.onPanDrag(e)}
         >
-          {this.state.polygons.map(polygon => (
+          {this.state.polylines.map(polyline => (
             <MapView.Polyline
-              key={polygon.id}
-              coordinates={polygon.coordinates}
-              strokeColor="#F00"
+              key={polyline.id}
+              coordinates={polyline.coordinates}
+              strokeColor="#000"
               fillColor="rgba(255,0,0,0.5)"
               strokeWidth={1}
             />
           ))}
-          {this.state.editing && (
+          {this.state.editing &&
             <MapView.Polyline
-              key={'editingPolyline'}
+              key="editingPolyline"
               coordinates={this.state.editing.coordinates}
               strokeColor="#F00"
               fillColor="rgba(255,0,0,0.5)"
               strokeWidth={1}
             />
-          )}
+          }
         </MapView>
         <View style={styles.buttonContainer}>
           {this.state.editing && (
-            <TouchableOpacity onPress={this.finish} style={[styles.bubble, styles.button]}>
+            <TouchableOpacity
+              onPress={() => this.finish()}
+              style={[styles.bubble, styles.button]}
+            >
               <Text>Finish</Text>
             </TouchableOpacity>
           )}
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
