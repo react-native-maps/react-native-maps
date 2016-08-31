@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     // top: screen.height - ITEM_PREVIEW_HEIGHT - 64,
     paddingTop: screen.height - ITEM_PREVIEW_HEIGHT - 64,
-    //paddingTop: !ANDROID ? 0 : screen.height - ITEM_PREVIEW_HEIGHT - 64,
+    // paddingTop: !ANDROID ? 0 : screen.height - ITEM_PREVIEW_HEIGHT - 64,
   },
   map: {
     backgroundColor: 'transparent',
