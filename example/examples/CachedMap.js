@@ -1,15 +1,14 @@
-const React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   Text,
   View,
   Dimensions,
   StyleSheet,
   ListView,
   TouchableOpacity,
-} = ReactNative;
+} from 'react-native';
 
-const MapView = require('react-native-maps');
+import MapView from 'react-native-maps';
 
 const HORIZONTAL_PADDING = 12;
 const VERTICAL_PADDING = 6;

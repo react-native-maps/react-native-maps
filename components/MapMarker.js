@@ -9,7 +9,7 @@ import {
   findNodeHandle,
 } from 'react-native';
 
-const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 const viewConfig = {
   uiViewClassName: 'AIRMapMarker',

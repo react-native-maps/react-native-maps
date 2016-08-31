@@ -1,28 +1,28 @@
-const React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   View,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   Text,
-} = ReactNative;
-const DisplayLatLng = require('./examples/DisplayLatLng');
-const ViewsAsMarkers = require('./examples/ViewsAsMarkers');
-const EventListener = require('./examples/EventListener');
-const MarkerTypes = require('./examples/MarkerTypes');
-const DraggableMarkers = require('./examples/DraggableMarkers');
-const PolygonCreator = require('./examples/PolygonCreator');
-const PolylineCreator = require('./examples/PolylineCreator');
-const AnimatedViews = require('./examples/AnimatedViews');
-const AnimatedMarkers = require('./examples/AnimatedMarkers');
-const Callouts = require('./examples/Callouts');
-const Overlays = require('./examples/Overlays');
-const DefaultMarkers = require('./examples/DefaultMarkers');
-const CachedMap = require('./examples/CachedMap');
-const LoadingMap = require('./examples/LoadingMap');
-const TakeSnapshot = require('./examples/TakeSnapshot');
-const FitToSuppliedMarkers = require('./examples/FitToSuppliedMarkers');
+} from 'react-native';
+
+import DisplayLatLng from './examples/DisplayLatLng';
+import ViewsAsMarkers from './examples/ViewsAsMarkers';
+import EventListener from './examples/EventListener';
+import MarkerTypes from './examples/MarkerTypes';
+import DraggableMarkers from './examples/DraggableMarkers';
+import PolygonCreator from './examples/PolygonCreator';
+import PolylineCreator from './examples/PolylineCreator';
+import AnimatedViews from './examples/AnimatedViews';
+import AnimatedMarkers from './examples/AnimatedMarkers';
+import Callouts from './examples/Callouts';
+import Overlays from './examples/Overlays';
+import DefaultMarkers from './examples/DefaultMarkers';
+import CachedMap from './examples/CachedMap';
+import LoadingMap from './examples/LoadingMap';
+import TakeSnapshot from './examples/TakeSnapshot';
+import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 
 class App extends React.Component {
   constructor(props) {

@@ -1,13 +1,12 @@
-const React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   Text,
   View,
   Dimensions,
   StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
-const MapView = require('react-native-maps');
+import MapView from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
