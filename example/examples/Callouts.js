@@ -1,17 +1,14 @@
-const React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
-  Image,
-} = ReactNative;
+} from 'react-native';
 
-const MapView = require('react-native-maps');
-const CustomCallout = require('./CustomCallout');
+import MapView from 'react-native-maps';
+import CustomCallout from './CustomCallout';
 
 const { width, height } = Dimensions.get('window');
 

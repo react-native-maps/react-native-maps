@@ -1,14 +1,12 @@
-const React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
   Image,
-} = ReactNative;
+} from 'react-native';
 
 const MapView = require('react-native-maps');
 

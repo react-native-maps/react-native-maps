@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react';
-const ReactNative = require('react-native');
-let {
+import {
   StyleSheet,
   View,
-  Text,
-} = ReactNative;
+} from 'react-native';
 
 const propTypes = {
   children: PropTypes.node.isRequired,

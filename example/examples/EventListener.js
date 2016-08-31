@@ -1,16 +1,14 @@
 import React, { PropTypes } from 'react';
-const ReactNative = require('react-native');
-let {
+import {
   StyleSheet,
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
   ScrollView,
-} = ReactNative;
+} from 'react-native';
 
-const MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
+import MapView from 'react-native-maps';
+import PriceMarker from './PriceMarker';
 
 const { width, height } = Dimensions.get('window');
 

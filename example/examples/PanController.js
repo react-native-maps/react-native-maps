@@ -1,19 +1,16 @@
-const React = require('react');
-const ReactNative = require('react-native');
-const {
-  PropTypes,
-} = React;
-let {
+/* eslint-disable */
+
+import React, { PropTypes } from 'react';
+import {
   View,
   Animated,
   PanResponder,
-} = ReactNative;
+} from 'react-native';
 
 const ModePropType = PropTypes.oneOf(['decay', 'snap', 'spring-origin']);
 const OvershootPropType = PropTypes.oneOf(['spring', 'clamp']);
 const AnimatedPropType = PropTypes.any;
 
-// eslint-disable-next-line react/prefer-es6-class
 const PanController = React.createClass({
 
   propTypes: {

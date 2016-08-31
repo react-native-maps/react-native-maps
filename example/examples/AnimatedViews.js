@@ -1,19 +1,14 @@
-const React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
-  Text,
   Dimensions,
-  TouchableOpacity,
   Animated,
-  Platform,
-} = ReactNative;
+} from 'react-native';
 
-const MapView = require('react-native-maps');
-const PanController = require('./PanController');
-const PriceMarker = require('./AnimatedPriceMarker');
+import MapView from 'react-native-maps';
+import PanController from './PanController';
+import PriceMarker from './AnimatedPriceMarker';
 
 const screen = Dimensions.get('window');
 
