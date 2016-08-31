@@ -10,6 +10,7 @@
     "react/prefer-stateless-function": 0,
     "react/sort-comp": 0,
     "no-use-before-define": 0,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "import/no-unresolved": [2, { "ignore": ["react"] }]
   }
 }
