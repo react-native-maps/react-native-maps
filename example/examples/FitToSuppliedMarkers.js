@@ -62,7 +62,7 @@ class FocusOnMarkers extends React.Component {
 
   focusMap(markers, animated) {
     console.log(`Markers received to populate map: ${markers}`);
-    this.refs.map.fitToSuppliedMarkers(markers, animated);
+    this.map.fitToSuppliedMarkers(markers, animated);
   }
 
   focus1() {
@@ -113,7 +113,7 @@ class FocusOnMarkers extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
+          ref={ref => { this.map = ref; }}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,

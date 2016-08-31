@@ -54,11 +54,11 @@ class Callouts extends React.Component {
   }
 
   show() {
-    this.refs.m1.showCallout();
+    this.marker1.showCallout();
   }
 
   hide() {
-    this.refs.m1.hideCallout();
+    this.marker1.hideCallout();
   }
 
   render() {
@@ -70,13 +70,12 @@ class Callouts extends React.Component {
           initialRegion={region}
         >
           <MapView.Marker
-            ref="m1"
+            ref={ref => { this.marker1 = ref; }}
             coordinate={markers[0].coordinate}
             title="This is a title"
             description="This is a description"
           />
           <MapView.Marker
-            ref="m2"
             coordinate={markers[1].coordinate}
           >
             <MapView.Callout>
@@ -86,7 +85,6 @@ class Callouts extends React.Component {
             </MapView.Callout>
           </MapView.Marker>
           <MapView.Marker
-            ref="m3"
             coordinate={markers[2].coordinate}
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}

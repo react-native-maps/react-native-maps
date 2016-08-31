@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import MapView from 'react-native-maps';
+import flagImg from './assets/flag-blue.png';
 
 const HORIZONTAL_PADDING = 12;
 const VERTICAL_PADDING = 6;
@@ -71,7 +72,7 @@ class CachedMap extends React.Component {
                   coordinate={region}
                   centerOffset={{ x: -18, y: -60 }}
                   anchor={{ x: 0.69, y: 1 }}
-                  image={require('./assets/flag-blue.png')}
+                  image={flagImg}
                 />
               </MapView>
               <View style={styles.divider} />

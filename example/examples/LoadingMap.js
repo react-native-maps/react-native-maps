@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 import MapView from 'react-native-maps';
+import flagImg from './assets/flag-blue.png';
 
 const { width, height } = Dimensions.get('window');
 
@@ -49,7 +50,7 @@ class LoadingMap extends React.Component {
             }}
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
-            image={require('./assets/flag-blue.png')}
+            image={flagImg}
           />
           <MapView.Marker
             coordinate={{
