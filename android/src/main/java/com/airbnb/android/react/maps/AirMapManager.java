@@ -4,6 +4,7 @@ import android.view.View;
 import android.content.Context;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -41,9 +42,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     private ReactContext reactContext;
 
-    private final Context appContext;
+    private final ReactApplicationContext appContext;
 
-    public AirMapManager(Context context) {
+    public AirMapManager(ReactApplicationContext context) {
         this.appContext = context;
     }
 
@@ -57,7 +58,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         reactContext = context;
 
         try {
-            MapsInitializer.initialize(this.appContext);
+            MapsInitializer.initialize(new AirMapModule(this.appContext).getActivity());
         } catch (RuntimeException e) {
             e.printStackTrace();
             emitMapError("Map initialize error", "map_init_error");
