@@ -71,7 +71,7 @@ class DisplayLatLng extends React.Component {
 
     if (this.state.editing) {
       mapOptions.scrollEnabled = false;
-      mapOptions.onPanDrag = this.onPress;
+      mapOptions.onPanDrag = e => this.onPress(e);
     }
 
     return (
