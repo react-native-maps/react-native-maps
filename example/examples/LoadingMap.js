@@ -1,15 +1,15 @@
-let React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   Text,
   View,
   Dimensions,
   StyleSheet,
-} = ReactNative;
+} from 'react-native';
 
-let MapView = require('react-native-maps');
+import MapView from 'react-native-maps';
+import flagImg from './assets/flag-blue.png';
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -18,9 +18,11 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-const LoadingMap = React.createClass({
-  getInitialState() {
-    return {
+class LoadingMap extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -28,7 +30,7 @@ const LoadingMap = React.createClass({
         longitudeDelta: LONGITUDE_DELTA,
       },
     };
-  },
+  }
 
   render() {
     return (
@@ -48,7 +50,7 @@ const LoadingMap = React.createClass({
             }}
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
-            image={require('./assets/flag-blue.png')}
+            image={flagImg}
           />
           <MapView.Marker
             coordinate={{
@@ -72,10 +74,10 @@ const LoadingMap = React.createClass({
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

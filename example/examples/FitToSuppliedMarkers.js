@@ -1,19 +1,13 @@
-let React = require('react');
-const ReactNative = require('react-native');
-let {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
-  Text,
   Dimensions,
-  TouchableOpacity,
-  Image,
-} = ReactNative;
+} from 'react-native';
 
-let MapView = require('react-native-maps');
-const PriceMarker = require('./PriceMarker');
+import MapView from 'react-native-maps';
 
-let { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -26,9 +20,11 @@ const markerIDs = ['Marker1', 'Marker2', 'Marker3', 'Marker4', 'Marker5'];
 const timeout = 4000;
 let animationTimeout;
 
-const FocusOnMarkers = React.createClass({
-  getInitialState() {
-    return {
+class FocusOnMarkers extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       a: {
         latitude: LATITUDE + SPACE,
         longitude: LONGITUDE + SPACE,
@@ -50,11 +46,25 @@ const FocusOnMarkers = React.createClass({
         longitude: LONGITUDE - (SPACE * 4),
       },
     };
-  },
+  }
+
+  componentDidMount() {
+    animationTimeout = setTimeout(() => {
+      this.focus1();
+    }, timeout);
+  }
+
+  componentWillUnmount() {
+    if (animationTimeout) {
+      clearTimeout(animationTimeout);
+    }
+  }
+
   focusMap(markers, animated) {
-    console.log('Markers received to populate map: ' + markers);
-    this.refs.map.fitToSuppliedMarkers(markers, animated);
-  },
+    console.log(`Markers received to populate map: ${markers}`);
+    this.map.fitToSuppliedMarkers(markers, animated);
+  }
+
   focus1() {
     animationTimeout = setTimeout(() => {
       this.focusMap([
@@ -64,7 +74,8 @@ const FocusOnMarkers = React.createClass({
 
       this.focus2();
     }, timeout);
-  },
+  }
+
   focus2() {
     animationTimeout = setTimeout(() => {
       this.focusMap([
@@ -74,7 +85,8 @@ const FocusOnMarkers = React.createClass({
 
       this.focus3();
     }, timeout);
-  },
+  }
+
   focus3() {
     animationTimeout = setTimeout(() => {
       this.focusMap([
@@ -84,7 +96,8 @@ const FocusOnMarkers = React.createClass({
 
       this.focus4();
     }, timeout);
-  },
+  }
+
   focus4() {
     animationTimeout = setTimeout(() => {
       this.focusMap([
@@ -94,22 +107,13 @@ const FocusOnMarkers = React.createClass({
 
       this.focus1();
     }, timeout);
-  },
-  componentDidMount() {
-    animationTimeout = setTimeout(() => {
-      this.focus1();
-    }, timeout);
-  },
-  componentWillUnmount() {
-    if (animationTimeout) {
-      clearTimeout(animationTimeout);
-    }
-  },
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
+          ref={ref => { this.map = ref; }}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -119,32 +123,32 @@ const FocusOnMarkers = React.createClass({
           }}
         >
           <MapView.Marker
-            identifier={'Marker1'}
+            identifier="Marker1"
             coordinate={this.state.a}
           />
           <MapView.Marker
-            identifier={'Marker2'}
+            identifier="Marker2"
             coordinate={this.state.b}
           />
           <MapView.Marker
-            identifier={'Marker3'}
+            identifier="Marker3"
             coordinate={this.state.c}
           />
           <MapView.Marker
-            identifier={'Marker4'}
+            identifier="Marker4"
             coordinate={this.state.d}
           />
           <MapView.Marker
-            identifier={'Marker5'}
+            identifier="Marker5"
             coordinate={this.state.e}
           />
         </MapView>
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

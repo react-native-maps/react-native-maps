@@ -1,32 +1,39 @@
-let React = require('react');
-const ReactNative = require('react-native');
-let {
+import React, { PropTypes } from 'react';
+import {
   StyleSheet,
   View,
   Text,
-} = ReactNative;
+} from 'react-native';
 
-const PriceMarker = React.createClass({
-  getDefaultProps() {
-    return {
-      fontSize: 13,
-    };
-  },
+const propTypes = {
+  amount: PropTypes.number.isRequired,
+  fontSize: PropTypes.number,
+};
+
+const defaultProps = {
+  fontSize: 13,
+};
+
+class PriceMarker extends React.Component {
   render() {
+    const { fontSize, amount } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.bubble}>
           <Text style={styles.dollar}>$</Text>
-          <Text style={[styles.amount, { fontSize: this.props.fontSize }]}>{this.props.amount}</Text>
+          <Text style={[styles.amount, { fontSize }]}>{amount}</Text>
         </View>
         <View style={styles.arrowBorder} />
         <View style={styles.arrow} />
       </View>
     );
-  },
-});
+  }
+}
 
-let styles = StyleSheet.create({
+PriceMarker.propTypes = propTypes;
+PriceMarker.defaultProps = defaultProps;
+
+const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignSelf: 'flex-start',
