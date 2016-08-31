@@ -37,7 +37,6 @@ class MarkerTypes extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,

@@ -218,7 +218,7 @@ class MapMarker extends React.Component {
   }
 
   _getHandle() {
-    return findNodeHandle(this.refs.marker);
+    return findNodeHandle(this.marker);
   }
 
   _runCommand(name, args) {
@@ -252,7 +252,7 @@ class MapMarker extends React.Component {
 
     return (
       <AIRMapMarker
-        ref="marker"
+        ref={ref => { this.marker = ref; }}
         {...this.props}
         image={image}
         style={[styles.marker, this.props.style]}

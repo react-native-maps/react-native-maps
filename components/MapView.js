@@ -327,9 +327,9 @@ class MapView extends React.Component {
   componentDidMount() {
     const { region, initialRegion } = this.props;
     if (region && this.state.isReady) {
-      this.refs.map.setNativeProps({ region });
+      this.map.setNativeProps({ region });
     } else if (initialRegion && this.state.isReady) {
-      this.refs.map.setNativeProps({ region: initialRegion });
+      this.map.setNativeProps({ region: initialRegion });
     }
   }
 
@@ -343,16 +343,16 @@ class MapView extends React.Component {
       a.latitudeDelta !== b.latitudeDelta ||
       a.longitudeDelta !== b.longitudeDelta
     ) {
-      this.refs.map.setNativeProps({ region: b });
+      this.map.setNativeProps({ region: b });
     }
   }
 
   _onMapReady() {
     const { region, initialRegion } = this.props;
     if (region) {
-      this.refs.map.setNativeProps({ region });
+      this.map.setNativeProps({ region });
     } else if (initialRegion) {
-      this.refs.map.setNativeProps({ region: initialRegion });
+      this.map.setNativeProps({ region: initialRegion });
     }
     this.setState({ isReady: true });
   }
@@ -362,10 +362,10 @@ class MapView extends React.Component {
     const { isReady } = this.state;
     if (region && isReady && !this.__layoutCalled) {
       this.__layoutCalled = true;
-      this.refs.map.setNativeProps({ region });
+      this.map.setNativeProps({ region });
     } else if (initialRegion && isReady && !this.__layoutCalled) {
       this.__layoutCalled = true;
-      this.refs.map.setNativeProps({ region: initialRegion });
+      this.map.setNativeProps({ region: initialRegion });
     }
     if (onLayout) {
       onLayout(e);
@@ -405,7 +405,7 @@ class MapView extends React.Component {
   }
 
   _getHandle() {
-    return findNodeHandle(this.refs.map);
+    return findNodeHandle(this.map);
   }
 
   _runCommand(name, args) {
@@ -458,7 +458,10 @@ class MapView extends React.Component {
     }
 
     return (
-      <AIRMap ref="map" {...props} />
+      <AIRMap
+        ref={ref => { this.map = ref; }}
+        {...props}
+      />
     );
   }
 }

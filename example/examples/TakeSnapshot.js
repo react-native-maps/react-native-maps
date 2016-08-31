@@ -30,7 +30,7 @@ class MarkerTypes extends React.Component {
   }
 
   takeSnapshot() {
-    this.refs.map.takeSnapshot(300, 300, {
+    this.map.takeSnapshot(300, 300, {
       latitude: LATITUDE - SPACE,
       longitude: LONGITUDE - SPACE,
       latitudeDelta: 0.01,
@@ -45,7 +45,7 @@ class MarkerTypes extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
+          ref={ref => { this.map = ref; }}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,

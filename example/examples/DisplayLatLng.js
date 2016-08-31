@@ -40,7 +40,7 @@ class DisplayLatLng extends React.Component {
   }
 
   animateRandom() {
-    this.refs.map.animateToRegion(this.randomRegion());
+    this.map.animateToRegion(this.randomRegion());
   }
 
   randomRegion() {
@@ -56,7 +56,7 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
+          ref={ref => { this.map = ref; }}
           mapType="terrain"
           style={styles.map}
           region={this.state.region}
