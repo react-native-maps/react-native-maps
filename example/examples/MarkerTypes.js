@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 
 import MapView from 'react-native-maps';
+import flagBlueImg from './assets/flag-blue.png';
+import flagPinkImg from './assets/flag-pink.png';
 
 const { width, height } = Dimensions.get('window');
 
@@ -38,7 +40,7 @@ class MarkerTypes extends React.Component {
             }}
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
-            image={require('./assets/flag-blue.png')}
+            image={flagBlueImg}
           >
             <Text style={styles.marker}>X</Text>
           </MapView.Marker>
@@ -49,7 +51,7 @@ class MarkerTypes extends React.Component {
             }}
             centerOffset={{ x: -42, y: -60 }}
             anchor={{ x: 0.84, y: 1 }}
-            image={require('./assets/flag-pink.png')}
+            image={flagPinkImg}
           />
         </MapView>
       </View>

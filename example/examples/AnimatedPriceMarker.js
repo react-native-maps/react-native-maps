@@ -21,19 +21,24 @@ class AnimatedPriceMarker extends React.Component {
 
     return (
       <Animated.View style={[styles.container, style]}>
-        <Animated.View style={[styles.bubble, {
-          backgroundColor: background,
-          borderColor: border,
-        }]}>
+        <Animated.View
+          style={[
+            styles.bubble,
+            {
+              backgroundColor: background,
+              borderColor: border,
+            },
+          ]}
+        >
           <Text style={styles.dollar}>$</Text>
           <Text style={styles.amount}>{amount}</Text>
         </Animated.View>
-        <Animated.View style={[styles.arrowBorder, {
-          borderTopColor: border,
-        }]} />
-        <Animated.View style={[styles.arrow, {
-          borderTopColor: background,
-        }]} />
+        <Animated.View
+          style={[styles.arrowBorder, { borderTopColor: border }]}
+        />
+        <Animated.View
+          style={[styles.arrow, { borderTopColor: background }]}
+        />
       </Animated.View>
     );
   }

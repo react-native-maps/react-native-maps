@@ -237,6 +237,9 @@ class MapMarker extends React.Component {
           [this._getHandle(), ...args]
         );
         break;
+
+      default:
+        break;
     }
   }
 

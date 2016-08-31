@@ -367,16 +367,18 @@ class MapView extends React.Component {
       this.__layoutCalled = true;
       this.refs.map.setNativeProps({ region: initialRegion });
     }
-    onLayout && onLayout(e);
+    if (onLayout) {
+      onLayout(e);
+    }
   }
 
   _onChange(event) {
     this.__lastRegion = event.nativeEvent.region;
     if (event.nativeEvent.continuous) {
-      this.props.onRegionChange &&
-      this.props.onRegionChange(event.nativeEvent.region);
-    } else {
-      this.props.onRegionChangeComplete &&
+      if (this.props.onRegionChange) {
+        this.props.onRegionChange(event.nativeEvent.region);
+      }
+    } else if (this.props.onRegionChangeComplete) {
       this.props.onRegionChangeComplete(event.nativeEvent.region);
     }
   }
@@ -398,10 +400,8 @@ class MapView extends React.Component {
   }
 
   takeSnapshot(width, height, region, callback) {
-    if (!region) {
-      region = this.props.region || this.props.initialRegion;
-    }
-    this._runCommand('takeSnapshot', [width, height, region, callback]);
+    const finalRegion = region || this.props.region || this.props.initialRegion;
+    this._runCommand('takeSnapshot', [width, height, finalRegion, callback]);
   }
 
   _getHandle() {
@@ -423,6 +423,9 @@ class MapView extends React.Component {
           NativeModules.AIRMapManager[name],
           [this._getHandle(), ...args]
         );
+        break;
+
+      default:
         break;
     }
   }
