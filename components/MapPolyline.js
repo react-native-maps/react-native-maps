@@ -10,11 +10,7 @@ var {
   StyleSheet,
 } = ReactNative;
 
-var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
-
 var MapPolyline = React.createClass({
-  mixins: [NativeMethodsMixin],
-  
   propTypes: {
     ...View.propTypes,
 

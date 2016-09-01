@@ -11,11 +11,7 @@ var {
   StyleSheet,
 } = ReactNative;
 
-var NativeMethodsMixin = require('react/lib/NativeMethodsMixin');
-
 var MapCallout = React.createClass({
-  mixins: [NativeMethodsMixin],
-
   propTypes: {
     ...View.propTypes,
     tooltip: PropTypes.bool,
