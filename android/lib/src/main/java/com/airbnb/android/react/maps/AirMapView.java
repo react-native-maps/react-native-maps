@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.view.GestureDetector;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -310,7 +311,11 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if (!paused) {
             onPause();
         }
-        onDestroy();
+        try {
+            onDestroy();
+        } catch (Exception e) {
+            Log.e("AirMapView", e.getMessage());
+        }
     }
 
     public void setRegion(ReadableMap region) {
