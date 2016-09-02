@@ -8,6 +8,15 @@ buildscript {
       mavenLocal()
       jcenter()
       maven {
+          // For developing the library outside the context of the example app, expect `react-native`
+          // to be installed at `./android/node_modules`.
+          url "$projectDir/../node_modules/react-native/android"
+      }
+      maven {
+          // For developing the example app, expect this library to be installed as a node module
+          // inside of the example app. So traverse from `./android/example/node_modules/react-native-maps/android`
+          // to `./android/example/node_modules/react-native/android`.
+          // react-native should be installed since it's a peer dependency
           url "$projectDir/../../react-native/android"
       }
   }
@@ -20,8 +29,15 @@ allprojects {
   repositories {
     mavenLocal()
     jcenter()
+      maven {
+          // For developing the library outside the context of the example app, expect `react-native`
+          // to be installed at `./android/node_modules`.
+          url "$projectDir/../node_modules/react-native/android"
+      }
     maven {
-        // Refer to the local install of react-native in the node_modules folder
+        // For developing the example app, expect this library to be installed as a node module
+        // inside of the example app. So traverse from `./android/example/node_modules/react-native-maps/android`
+        // to `./android/example/node_modules/react-native/android`.
         // react-native should be installed since it's a peer dependency
         url "$projectDir/../../react-native/android"
     }
