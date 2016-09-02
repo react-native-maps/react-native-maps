@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {
   Text,
   View,
@@ -36,6 +36,7 @@ class LoadingMap extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
           onPress={this.onMapPress}
@@ -76,6 +77,10 @@ class LoadingMap extends React.Component {
     );
   }
 }
+
+LoadingMap.propTypes = {
+  provider: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
   container: {

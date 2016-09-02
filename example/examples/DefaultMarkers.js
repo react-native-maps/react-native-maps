@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {
   StyleSheet,
   View,
@@ -53,6 +53,7 @@ class DefaultMarkers extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
           onPress={(e) => this.onMapPress(e)}
@@ -74,6 +75,10 @@ class DefaultMarkers extends React.Component {
     );
   }
 }
+
+DefaultMarkers.propTypes = {
+  provider: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {
   StyleSheet,
   View,
@@ -68,6 +68,7 @@ class PolylineCreator extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
           scrollEnabled={false}
@@ -106,6 +107,10 @@ class PolylineCreator extends React.Component {
     );
   }
 }
+
+PolylineCreator.propTypes = {
+  provider: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {
   StyleSheet,
   View,
@@ -56,10 +56,11 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           ref={ref => { this.map = ref; }}
           mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
-          region={this.state.region}
+          initialRegion={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
         />
         <View style={[styles.bubble, styles.latlng]}>
@@ -86,6 +87,10 @@ class DisplayLatLng extends React.Component {
     );
   }
 }
+
+DisplayLatLng.propTypes = {
+  provider: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
   container: {

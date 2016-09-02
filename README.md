@@ -6,6 +6,8 @@ React Native Map components for iOS + Android
 
 See [Installation Instructions](docs/installation.md).
 
+See [Setup Instructions for the Included Example Project](docs/examples-setup.md).
+
 ## Compatibility
 
 Due to the rapid changes being made in the React Native ecosystem, we are not officially going to

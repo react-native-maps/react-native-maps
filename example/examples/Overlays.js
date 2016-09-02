@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {
   StyleSheet,
   View,
@@ -75,6 +75,7 @@ class Overlays extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={region}
         >
@@ -106,6 +107,10 @@ class Overlays extends React.Component {
     );
   }
 }
+
+Overlays.propTypes = {
+  provider: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
   container: {

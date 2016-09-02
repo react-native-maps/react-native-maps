@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {
   StyleSheet,
   View,
@@ -325,6 +325,7 @@ class AnimatedViews extends React.Component {
           onMoveShouldSetPanResponder={this.onMoveShouldSetPanResponder}
         >
           <MapView.Animated
+            provider={this.props.provider}
             style={styles.map}
             region={region}
             onRegionChange={this.onRegionChange}
@@ -384,6 +385,10 @@ class AnimatedViews extends React.Component {
     );
   }
 }
+
+AnimatedViews.propTypes = {
+  provider: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
   container: {
