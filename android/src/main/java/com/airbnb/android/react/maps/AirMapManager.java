@@ -1,7 +1,6 @@
 package com.airbnb.android.react.maps;
 
 import android.view.View;
-import android.content.Context;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
