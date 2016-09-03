@@ -3,6 +3,7 @@ import {
   View,
   requireNativeComponent,
 } from 'react-native';
+import NativeMethodsMixin from 'react/lib/NativeMethodsMixin';
 
 const propTypes = {
   ...View.propTypes,
@@ -136,6 +137,8 @@ class MapPolygon extends React.Component {
 
 MapPolygon.propTypes = propTypes;
 MapPolygon.defaultProps = defaultProps;
+
+Object.assign(MapPolygon.prototype, NativeMethodsMixin);
 
 const AIRMapPolygon = requireNativeComponent('AIRMapPolygon', MapPolygon);
 

@@ -3,6 +3,7 @@ import {
   View,
   requireNativeComponent,
 } from 'react-native';
+import NativeMethodsMixin from 'react/lib/NativeMethodsMixin';
 
 const propTypes = {
   ...View.propTypes,
@@ -131,6 +132,8 @@ class MapCircle extends React.Component {
 
 MapCircle.propTypes = propTypes;
 MapCircle.defaultProps = defaultProps;
+
+Object.assign(MapCircle.prototype, NativeMethodsMixin);
 
 const AIRMapCircle = requireNativeComponent('AIRMapCircle', MapCircle);
 
