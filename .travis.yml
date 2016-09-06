@@ -8,4 +8,4 @@ cache:
     - node_modules
     - example/node_modules
 
-script: npm install && npm run lint
+script: npm run lint
