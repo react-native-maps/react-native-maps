@@ -436,6 +436,10 @@ class MapView extends React.Component {
     this._runCommand('fitToSuppliedMarkers', [markers, animated]);
   }
 
+  fitToCoordinates(coordinates, edgePadding, animated) {
+    this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
+  }
+
   takeSnapshot(width, height, region, callback) {
     const finalRegion = region || this.props.region || this.props.initialRegion;
     this._runCommand('takeSnapshot', [width, height, finalRegion, callback]);
