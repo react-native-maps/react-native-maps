@@ -57,6 +57,7 @@
 | `animateToCoordinate` | `region: Coordinate`, `duration: Number` |
 | `fitToElements` | `animated: Boolean` |
 | `fitToSuppliedMarkers` | `markerIDs: String[]` |
+| `fitToCoordinates` | `coordinates: Array<LatLng>, edgePadding: EdgePadding, animated: Boolean` |
 
 
 
@@ -91,5 +92,14 @@ enum MapType : String {
   "satellite",
   "hybrid",
   "terrain" //Android only
+}
+```
+
+```
+type EdgePadding {
+  top: Number,
+  right: Number,
+  bottom: Number,
+  left: Number
 }
 ```
