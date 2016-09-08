@@ -19,6 +19,8 @@ This error is caused by a @providesModule declaration with the same name accross
 
 ## 0.8.1 (September 8, 2016) *[DEPRECATED]*
 
+#### *NOTE: 0.8.1 has been unpublished from NPM beacuse it was faulty. Please use 0.8.2.*
+
 ### Patches
 
 - [Android] Use latest available (wildcard version) of RN to build Android ([PR #547](https://github.com/lelandrichardson/react-native-maps/pull/547))
