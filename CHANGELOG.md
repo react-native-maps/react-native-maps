@@ -1,5 +1,7 @@
 # Change Log
 
+## 0.8.1 (September 8, 2016)
+
 ### Patches
 
 - Use latest available (wildcard version) of RN to build Android ([PR #547](https://github.com/lelandrichardson/react-native-maps/pull/547))
