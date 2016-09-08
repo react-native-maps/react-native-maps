@@ -4,7 +4,13 @@
 
 ### Patches
 
-- Use latest available (wildcard version) of RN to build Android ([PR #547](https://github.com/lelandrichardson/react-native-maps/pull/547))
+- [Android] Use latest available (wildcard version) of RN to build Android ([PR #547](https://github.com/lelandrichardson/react-native-maps/pull/547))
+- [Android] Use `Activity` to call `MapsInitialier.initialize()` ([PR #449](https://github.com/lelandrichardson/react-native-maps/pull/449))
+- [Android] Fix file path for `AirMapModule` ([PR #526](https://github.com/lelandrichardson/react-native-maps/pull/526))
+- [Android] Fix path to React Native in `node_modules` ([PR #527](https://github.com/lelandrichardson/react-native-maps/pull/527))
+- [Android] Bump Google Play Services dependency to `9.4.0` ([PR #533](https://github.com/lelandrichardson/react-native-maps/pull/533))
+- [iOS] Fix a few warnings ([PR #534](https://github.com/lelandrichardson/react-native-maps/pull/534))
+- [JS] Fix ESLint violations ([PR #515](https://github.com/lelandrichardson/react-native-maps/pull/515))
 
 ## 0.8.0 (August 30, 2016)
 
