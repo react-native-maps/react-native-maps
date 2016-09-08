@@ -1,6 +1,23 @@
 # Change Log
 
-## 0.8.1 (September 8, 2016)
+## 0.8.2 (September 8, 2016)
+
+We realized immediately after publishing 0.8.1 that the NPM package contained
+some test code in the `example2/` directory that contained a copy of the
+`react-native` package, causing this packager error:
+
+```
+Failed to build DependencyGraph: @providesModule naming collision:
+  Duplicate module name: String.prototype.es6
+  Paths: /Users/<path to project>/node_modules/react-native-maps/example2/node_modules/react-native/packager/react-packager/src/Resolver/polyfills/String.prototype.es6.js collides with /Users/<path to project>/node_modules/react-native/packager/react-packager/src/Resolver/polyfills/String.prototype.es6.js
+
+This error is caused by a @providesModule declaration with the same name accross two different files.
+```
+
+0.8.2 is identical to 0.8.1, except with the offending code removed from the NPM package.
+
+
+## 0.8.1 (September 8, 2016) *[DEPRECATED]*
 
 ### Patches
 
