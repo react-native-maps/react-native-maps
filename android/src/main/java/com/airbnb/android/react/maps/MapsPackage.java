@@ -13,8 +13,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class MapsPackage implements ReactPackage {
-    public MapsPackage(Activity activity) { } // backwards compatability
-    public MapsPackage() { }
+    public MapsPackage(Activity activity) {
+    } // backwards compatability
+
+    public MapsPackage() {
+    }
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
