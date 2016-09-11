@@ -497,20 +497,27 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     public void fitToElements(boolean animated) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        boolean addedPosition = false;
+
         for (AirMapFeature feature : features) {
             if (feature instanceof AirMapMarker) {
                 Marker marker = (Marker) feature.getFeature();
                 builder.include(marker.getPosition());
+                addedPosition = true;
             }
             // TODO(lmr): may want to include shapes / etc.
         }
-        LatLngBounds bounds = builder.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
-        if (animated) {
-            startMonitoringRegion();
-            map.animateCamera(cu);
-        } else {
-            map.moveCamera(cu);
+
+        if (addedPosition) {
+            LatLngBounds bounds = builder.build();
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            if (animated) {
+                startMonitoringRegion();
+                map.animateCamera(cu);
+            } else {
+                map.moveCamera(cu);
+            }
         }
     }
 
