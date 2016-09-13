@@ -32,6 +32,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     private static final int ANIMATE_TO_COORDINATE = 2;
     private static final int FIT_TO_ELEMENTS = 3;
     private static final int FIT_TO_SUPPLIED_MARKERS = 4;
+    private static final int FIT_TO_COORDINATES = 5;
 
     private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
             "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -218,6 +219,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             case FIT_TO_SUPPLIED_MARKERS:
                 view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
                 break;
+            case FIT_TO_COORDINATES:
+                view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
+                break;
         }
     }
 
@@ -251,7 +255,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                 "animateToRegion", ANIMATE_TO_REGION,
                 "animateToCoordinate", ANIMATE_TO_COORDINATE,
                 "fitToElements", FIT_TO_ELEMENTS,
-                "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS
+                "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
+                "fitToCoordinates", FIT_TO_COORDINATES
         );
     }
 
