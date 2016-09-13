@@ -417,7 +417,7 @@ License
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
 
-        https://raw.githubusercontent.com/lelandrichardson/react-native-maps/master/LICENSE
+        https://raw.githubusercontent.com/airbnb/react-native-maps/master/LICENSE
 
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,
