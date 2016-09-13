@@ -58,6 +58,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private Boolean isMapLoaded = false;
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
+    private final int baseMapPadding = 50;
+
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
@@ -488,10 +490,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
             // TODO(lmr): may want to include shapes / etc.
         }
-
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
             if (animated) {
                 startMonitoringRegion();
                 map.animateCamera(cu);
@@ -526,7 +527,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
             if (animated) {
                 startMonitoringRegion();
                 map.animateCamera(cu);
@@ -537,7 +538,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
 
     public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding, boolean animated) {
-        //Log.d("AirMapView", "running thru the 6 with my woes");
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         for (int i = 0; i < coordinatesArray.size(); i++) {
@@ -548,9 +548,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
 
         LatLngBounds bounds = builder.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
 
-        if(edgePadding != null) {
+        if (edgePadding != null) {
             map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
         }
 
