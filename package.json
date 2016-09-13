@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lelandrichardson/react-native-maps"
+    "url": "https://github.com/airbnb/react-native-maps"
   },
   "keywords": [
     "react",

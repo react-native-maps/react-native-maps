@@ -133,7 +133,7 @@ Add your **Android** API key to your manifest file:
 
 **Troubleshooting**
 
-If you have a blank map issue, ([#118](https://github.com/lelandrichardson/react-native-maps/issues/118), [#176](https://github.com/lelandrichardson/react-native-maps/issues/176)) try the following lines :
+If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-maps/issues/118), [#176](https://github.com/airbnb/react-native-maps/issues/176)) try the following lines :
 
 **On iOS :**  
 
