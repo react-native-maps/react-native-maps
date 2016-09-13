@@ -536,6 +536,33 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
     }
 
+    public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding, boolean animated) {
+        //Log.d("AirMapView", "running thru the 6 with my woes");
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (int i = 0; i < coordinatesArray.size(); i++) {
+            ReadableMap latLng = coordinatesArray.getMap(i);
+            Double lat = latLng.getDouble("latitude");
+            Double lng = latLng.getDouble("longitude");
+            builder.include(new LatLng(lat, lng));
+        }
+
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+
+        if(edgePadding != null) {
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        if (animated) {
+            startMonitoringRegion();
+            map.animateCamera(cu);
+        } else {
+            map.moveCamera(cu);
+        }
+        map.setPadding(0, 0, 0, 0); // Without this, the Google logo is moved up by the value of edgePadding.bottom
+    }
+
     // InfoWindowAdapter interface
 
     @Override
