@@ -262,7 +262,7 @@ Markers are draggable, and emit continuous drag events to update other UI during
 The API of this Map has been built with the intention of it being able to utilize the [Animated API](https://facebook.github.io/react-native/docs/animated.html).
 
 In order to get this to work, you will need to modify the `AnimatedImplementation.js` file in the
-source of react-native with [this one](https://gist.github.com/airbnb/c0d938e02301f9294465).
+source of react-native with [this one](https://gist.github.com/lelandrichardson/c0d938e02301f9294465).
 
 Ideally this will be possible in the near future without this modification.
 
