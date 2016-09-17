@@ -369,6 +369,12 @@ Pass an array of marker identifiers to have the map re-focus.
 
 ![](http://i.giphy.com/3o7qEbOQnO0yoXqKJ2.gif) ![](http://i.giphy.com/l41YdrQZ7m6Dz4h0c.gif)
 
+### Zoom to Specified Coordinates
+
+Pass an array of coordinates to focus a map region on said coordinates.
+
+![](https://cloud.githubusercontent.com/assets/1627824/18609960/da5d9e06-7cdc-11e6-811e-34e255093df9.gif)
+
 ### Troubleshooting
 
 #### My map is blank
