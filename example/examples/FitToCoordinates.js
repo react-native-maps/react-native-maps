@@ -32,11 +32,21 @@ const MARKERS = [
   createMarker(4),
 ];
 
+const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
+
 class FitToCoordinates extends React.Component {
+  fitPadding() {
+    this.map.fitToCoordinates(
+      [MARKERS[2], MARKERS[3]],
+      { top: 100, right: 100, bottom: 100, left: 100 },
+      true
+    );
+  }
+
   fitBottomTwoMarkers() {
     this.map.fitToCoordinates(
       [MARKERS[2], MARKERS[3]],
-      { top: 40, right: 40, bottom: 40, left: 40 },
+      DEFAULT_PADDING,
       true
     );
   }
@@ -44,7 +54,7 @@ class FitToCoordinates extends React.Component {
   fitAllMarkers() {
     this.map.fitToCoordinates(
       MARKERS,
-      { top: 40, right: 40, bottom: 40, left: 40 },
+      DEFAULT_PADDING,
       true
     );
   }
@@ -70,6 +80,12 @@ class FitToCoordinates extends React.Component {
           ))}
         </MapView>
         <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => this.fitPadding()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text>Fit Bottom Two Markers with Padding</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.fitBottomTwoMarkers()}
             style={[styles.bubble, styles.button]}
