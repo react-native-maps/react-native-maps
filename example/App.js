@@ -23,6 +23,7 @@ import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
 import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
+import LiteMapView from './examples/LiteMapView';
 
 class App extends React.Component {
   constructor(props) {
@@ -93,6 +94,7 @@ class App extends React.Component {
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
       [FitToSuppliedMarkers, 'Focus Map On Markers'],
+      [LiteMapView, 'Android Lite MapView'],
     ]);
   }
 }
