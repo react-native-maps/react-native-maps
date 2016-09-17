@@ -240,6 +240,11 @@ Markers are draggable, and emit continuous drag events to update other UI during
 
 ![](http://i.giphy.com/l2JImnZxdv1WbpQfC.gif) ![](http://i.giphy.com/l2JIhv4Jx6Ugx1EGI.gif)
 
+### Lite Mode ( Android )
+
+Enable lite mode on Android with `liteMode` prop. Ideal when having multiple maps in a View or ScrollView.
+
+![](http://i.giphy.com/qZ2lAf18s89na.gif)
 
 ## Component API
 
