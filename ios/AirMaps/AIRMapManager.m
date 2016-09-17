@@ -189,8 +189,8 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
 
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
                   coordinates:(nonnull NSArray<AIRMapCoordinate *> *)coordinates
-                  edgePadding:(NSDictionary *)edgePadding
-                  animated:(BOOL)animated)
+                  edgePadding:(nonnull NSDictionary *)edgePadding
+                  animated:(nonnull BOOL)animated)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         id view = viewRegistry[reactTag];
@@ -208,16 +208,12 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
             MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordinates.count];
 
             // Set Map viewport
-            if (!edgePadding) {
-                [mapView setVisibleMapRect:[polyline boundingMapRect] animated:animated];
-            } else {
-                CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-                CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-                CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-                CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
 
-                [mapView setVisibleMapRect:[polyline boundingMapRect] edgePadding:UIEdgeInsetsMake(top, left, bottom, right) animated:animated];
-            }
+            [mapView setVisibleMapRect:[polyline boundingMapRect] edgePadding:UIEdgeInsetsMake(top, left, bottom, right) animated:animated];
 
         }
     }];
