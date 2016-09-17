@@ -436,7 +436,11 @@ class MapView extends React.Component {
     this._runCommand('fitToSuppliedMarkers', [markers, animated]);
   }
 
-  fitToCoordinates(coordinates, edgePadding, animated) {
+  fitToCoordinates(
+    coordinates = [],
+    edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+    animated = true
+  ) {
     this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
   }
 
