@@ -62,13 +62,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         reactContext = context;
 
         try {
-            MapsInitializer.initialize(new AirMapModule(this.appContext).getActivity());
+            MapsInitializer.initialize(this.appContext);
         } catch (RuntimeException e) {
             e.printStackTrace();
             emitMapError("Map initialize error", "map_init_error");
         }
 
-        return new AirMapView(context, this.appContext, this, this.googleMapOptions);
+        return new AirMapView(context, this.appContext.getCurrentActivity(), this, this.googleMapOptions);
     }
 
     @Override
