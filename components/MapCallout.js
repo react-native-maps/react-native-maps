@@ -4,6 +4,7 @@ import {
   requireNativeComponent,
   StyleSheet,
 } from 'react-native';
+import NativeMethodsMixin from 'react/lib/NativeMethodsMixin';
 
 const propTypes = {
   ...View.propTypes,
@@ -23,6 +24,8 @@ class MapCallout extends React.Component {
 
 MapCallout.propTypes = propTypes;
 MapCallout.defaultProps = defaultProps;
+
+Object.assign(MapCallout.prototype, NativeMethodsMixin);
 
 const styles = StyleSheet.create({
   callout: {

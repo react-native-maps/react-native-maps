@@ -9,6 +9,7 @@ import {
   ColorPropType,
   findNodeHandle,
 } from 'react-native';
+import NativeMethodsMixin from 'react/lib/NativeMethodsMixin';
 import MapMarker from './MapMarker';
 import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
@@ -485,6 +486,8 @@ class MapView extends React.Component {
 
 MapView.propTypes = propTypes;
 MapView.viewConfig = viewConfig;
+
+Object.assign(MapView.prototype, NativeMethodsMixin);
 
 const AIRMap = requireNativeComponent('AIRMap', MapView, {
   nativeOnly: {

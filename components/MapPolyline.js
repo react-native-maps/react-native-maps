@@ -3,6 +3,7 @@ import {
   View,
   requireNativeComponent,
 } from 'react-native';
+import NativeMethodsMixin from 'react/lib/NativeMethodsMixin';
 
 const propTypes = {
   ...View.propTypes,
@@ -131,6 +132,8 @@ class MapPolyline extends React.Component {
 
 MapPolyline.propTypes = propTypes;
 MapPolyline.defaultProps = defaultProps;
+
+Object.assign(MapPolyline.prototype, NativeMethodsMixin);
 
 const AIRMapPolyline = requireNativeComponent('AIRMapPolyline', MapPolyline);
 

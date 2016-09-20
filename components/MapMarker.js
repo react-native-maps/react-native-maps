@@ -8,6 +8,7 @@ import {
   Animated,
   findNodeHandle,
 } from 'react-native';
+import NativeMethodsMixin from 'react/lib/NativeMethodsMixin';
 
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
@@ -264,6 +265,8 @@ class MapMarker extends React.Component {
 MapMarker.propTypes = propTypes;
 MapMarker.defaultProps = defaultProps;
 MapMarker.viewConfig = viewConfig;
+
+Object.assign(MapMarker.prototype, NativeMethodsMixin);
 
 const styles = StyleSheet.create({
   marker: {
