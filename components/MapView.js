@@ -14,6 +14,7 @@ import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
+import AnimatedRegion from './AnimatedRegion';
 
 const viewConfig = {
   uiViewClassName: 'AIRMap',
@@ -507,6 +508,7 @@ MapView.Polyline = MapPolyline;
 MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
 MapView.Callout = MapCallout;
+MapView.AnimatedRegion = AnimatedRegion;
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
 
