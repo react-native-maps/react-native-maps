@@ -223,6 +223,14 @@ const propTypes = {
   }),
 
   /**
+   * A Boolean indicating whether to use liteMode for android
+   * Default value is `false`
+   *
+   * @platform android
+   */
+  liteMode: PropTypes.bool,
+
+  /**
    * Maximum size of area that can be displayed.
    *
    * @platform ios
@@ -457,6 +465,15 @@ class MapView extends React.Component {
       };
     }
 
+    if (Platform.OS === 'android' && this.props.liteMode) {
+      return (
+        <AIRMapLite
+          ref={ref => { this.map = ref; }}
+          {...props}
+        />
+      );
+    }
+
     return (
       <AIRMap
         ref={ref => { this.map = ref; }}
@@ -470,6 +487,14 @@ MapView.propTypes = propTypes;
 MapView.viewConfig = viewConfig;
 
 const AIRMap = requireNativeComponent('AIRMap', MapView, {
+  nativeOnly: {
+    onChange: true,
+    onMapReady: true,
+    handlePanDrag: true,
+  },
+});
+
+const AIRMapLite = requireNativeComponent('AIRMapLite', MapView, {
   nativeOnly: {
     onChange: true,
     onMapReady: true,
