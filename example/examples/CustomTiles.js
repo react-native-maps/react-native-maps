@@ -6,7 +6,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { MAP_TYPES } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -35,7 +35,7 @@ class CustomTiles extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
-          mapType="none"
+          mapType={MAP_TYPES.NONE}
           style={styles.map}
           initialRegion={region}
         >
