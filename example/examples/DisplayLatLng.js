@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { MAP_TYPES } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -57,7 +57,7 @@ class DisplayLatLng extends React.Component {
       <View style={styles.container}>
         <MapView
           ref={ref => { this.map = ref; }}
-          mapType="terrain"
+          mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
           region={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
