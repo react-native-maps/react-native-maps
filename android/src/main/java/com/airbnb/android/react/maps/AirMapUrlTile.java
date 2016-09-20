@@ -1,4 +1,4 @@
-package com.AirMaps;
+package com.airbnb.android.react.maps;
 
 import android.content.Context;
 
@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.UrlTileProvider;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Locale;
 
 public class AirMapUrlTile extends AirMapFeature {
 

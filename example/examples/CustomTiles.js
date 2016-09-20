@@ -1,28 +1,26 @@
-var React = require('react-native');
-var {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
-  Image,
-  } = React;
+} from 'react-native';
 
-var MapView = require('react-native-maps');
+import MapView from 'react-native-maps';
 
-var { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
 
-var Overlays = React.createClass({
-  getInitialState() {
-    return {
+class CustomTiles extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -30,10 +28,10 @@ var Overlays = React.createClass({
         longitudeDelta: LONGITUDE_DELTA,
       },
     };
-  },
+  }
 
   render() {
-    const { region, circle, polygon, polyline } = this.state;
+    const { region } = this.state;
     return (
       <View style={styles.container}>
         <MapView
@@ -53,10 +51,10 @@ var Overlays = React.createClass({
         </View>
       </View>
     );
-  },
-});
+  }
+}
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
@@ -97,4 +95,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = Overlays;
+module.exports = CustomTiles;
