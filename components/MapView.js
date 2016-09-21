@@ -14,6 +14,20 @@ import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
+import MapUrlTile from './MapUrlTile';
+
+const MAP_TYPES = {
+  STANDARD: 'standard',
+  SATELLITE: 'satellite',
+  HYBRID: 'hybrid',
+  TERRAIN: 'terrain',
+  NONE: 'none',
+};
+
+const ANDROID_ONLY_MAP_TYPES = [
+  MAP_TYPES.TERRAIN,
+  MAP_TYPES.NONE,
+];
 
 const viewConfig = {
   uiViewClassName: 'AIRMap',
@@ -171,12 +185,7 @@ const propTypes = {
    * - hybrid: satellite view with roads and points of interest overlayed
    * - terrain: (Android only) topographic view
    */
-  mapType: PropTypes.oneOf([
-    'standard',
-    'satellite',
-    'hybrid',
-    'terrain',
-  ]),
+  mapType: PropTypes.oneOf(Object.values(MAP_TYPES)),
 
   /**
    * The region to be displayed by the map.
@@ -450,8 +459,8 @@ class MapView extends React.Component {
         onMapReady: this._onMapReady,
         onLayout: this._onLayout,
       };
-      if (Platform.OS === 'ios' && props.mapType === 'terrain') {
-        props.mapType = 'standard';
+      if (Platform.OS === 'ios' && ANDROID_ONLY_MAP_TYPES.includes(props.mapType)) {
+        props.mapType = MAP_TYPES.STANDARD;
       }
       props.handlePanDrag = !!props.onPanDrag;
     } else {
@@ -486,6 +495,8 @@ class MapView extends React.Component {
 MapView.propTypes = propTypes;
 MapView.viewConfig = viewConfig;
 
+MapView.MAP_TYPES = MAP_TYPES;
+
 const AIRMap = requireNativeComponent('AIRMap', MapView, {
   nativeOnly: {
     onChange: true,
@@ -506,6 +517,7 @@ MapView.Marker = MapMarker;
 MapView.Polyline = MapPolyline;
 MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
+MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);

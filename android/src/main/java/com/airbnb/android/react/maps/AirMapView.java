@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.TileOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,6 +68,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private static final String[] PERMISSIONS = new String[] {
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
+    // TODO: don't need tileMap at all???
+    private HashMap<TileOverlay, AirMapUrlTile> tileMap = new HashMap<>();
     private final List<AirMapFeature> features = new ArrayList<>();
     private final Map<Marker, AirMapMarker> markerMap = new HashMap<>();
     private final ScaleGestureDetector scaleDetector;
@@ -393,6 +396,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             AirMapCircle circleView = (AirMapCircle) child;
             circleView.addToMap(map);
             features.add(index, circleView);
+        } else if (child instanceof AirMapUrlTile) {
+            AirMapUrlTile urlTileView = (AirMapUrlTile) child;
+            urlTileView.addToMap(map);
+            features.add(index, urlTileView);
+            TileOverlay tile = (TileOverlay)urlTileView.getFeature();
+            // TODO: don't need tileMap at all???
+            tileMap.put(tile, urlTileView);
         } else {
             // TODO(lmr): throw? User shouldn't be adding non-feature children.
         }
@@ -410,6 +420,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         AirMapFeature feature = features.remove(index);
         if (feature instanceof AirMapMarker) {
             markerMap.remove(feature.getFeature());
+        } else if (feature instanceof AirMapUrlTile) {
+            // TODO: don't need tileMap at all???
+            tileMap.remove(feature.getFeature());
         }
         feature.removeFromMap(map);
     }
