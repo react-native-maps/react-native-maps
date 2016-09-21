@@ -8,7 +8,6 @@ import {
 const propTypes = {
   amount: PropTypes.number.isRequired,
   fontSize: PropTypes.number,
-  provider: MapView.ProviderPropType,
 };
 
 const defaultProps = {
