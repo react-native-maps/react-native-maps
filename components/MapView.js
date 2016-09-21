@@ -543,13 +543,14 @@ if (Platform.OS === 'android') {
 }
 const getAirMapComponent = provider => airMaps[provider || 'default'];
 
-const AIRMapLite = requireNativeComponent('AIRMapLite', MapView, {
-  nativeOnly: {
-    onChange: true,
-    onMapReady: true,
-    handlePanDrag: true,
-  },
-});
+const AIRMapLite = NativeModules.UIManager.AIRMapLite &&
+  requireNativeComponent('AIRMapLite', MapView, {
+    nativeOnly: {
+      onChange: true,
+      onMapReady: true,
+      handlePanDrag: true,
+    },
+  });
 
 MapView.Marker = MapMarker;
 MapView.Polyline = MapPolyline;
