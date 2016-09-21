@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { PropTypes } from 'react';
 import {
   requireNativeComponent,
@@ -29,7 +27,7 @@ export const contextTypes = {
 };
 
 export const createNotSupportedComponent = message => () => {
-  console.error(message);
+  console.error(message); // eslint-disable-line no-console
   return null;
 };
 
@@ -38,23 +36,24 @@ export const googleMapIsInstalled = !!NativeModules.UIManager[getAirMapName(PROV
 export default function decorateMapComponent(Component, { componentType, providers }) {
   const components = {};
 
-  const getDefaultComponent = () => requireNativeComponent(getAirComponentName(null, componentType), Component);
+  const getDefaultComponent = () =>
+    requireNativeComponent(getAirComponentName(null, componentType), Component);
 
-  Component.contextTypes = contextTypes;
-  Component.prototype.getAirComponent = function() {
+  Component.contextTypes = contextTypes; // eslint-disable-line no-param-reassign
+  Component.prototype.getAirComponent = function getAirComponent() { // eslint-disable-line no-param-reassign,max-len
     const provider = this.context.provider || PROVIDER_DEFAULT;
     if (components[provider]) return components[provider];
 
     if (provider === PROVIDER_DEFAULT) {
       components.default = getDefaultComponent();
-      return components.default
+      return components.default;
     }
 
     const providerInfo = providers[provider];
     const platformSupport = providerInfo[Platform.OS];
     const componentName = getAirComponentName(provider, componentType);
     if (platformSupport === NOT_SUPPORTED) {
-      components[provider] = createNotSupportedComponent(`react-native-maps: ${componentName} is not supported on ${Platform.OS}`);
+      components[provider] = createNotSupportedComponent(`react-native-maps: ${componentName} is not supported on ${Platform.OS}`); // eslint-disable-line max-len
     } else if (platformSupport === SUPPORTED) {
       if (provider !== PROVIDER_GOOGLE || (Platform.OS === 'ios' && googleMapIsInstalled)) {
         components[provider] = requireNativeComponent(componentName, Component);
@@ -67,12 +66,12 @@ export default function decorateMapComponent(Component, { componentType, provide
     return components[provider];
   };
 
-  Component.prototype.getUIManagerCommand = function(name) {
+  Component.prototype.getUIManagerCommand = function getUIManagerCommand(name) {  // eslint-disable-line no-param-reassign,max-len
     return NativeModules.UIManager[getAirComponentName(this.context.provider, componentType)]
       .Commands[name];
   };
 
-  Component.prototype.getMapManagerCommand = function(name) {
+  Component.prototype.getMapManagerCommand = function getMapManagerCommand(name) { // eslint-disable-line no-param-reassign,max-len
     const airComponentName = `${getAirComponentName(this.context.provider, componentType)}Manager`;
     return NativeModules[airComponentName][name];
   };
