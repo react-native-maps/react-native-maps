@@ -33,8 +33,8 @@
 
 | Event Name | Returns | Notes
 |---|---|---|
-| `onRegionChange` | `Region` | Fired when the map ends panning or zooming.
-| `onRegionChangeComplete` | `Region` | Fired when the map ends panning or zooming.
+| `onRegionChange` | `Region` | Callback that is called continuously when the user is dragging the map.
+| `onRegionChangeComplete` | `Region` | Callback that is called once, when the user is done moving the map.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
 | `onPanDrag` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user presses and drags the map. **NOTE**: for iOS `scrollEnabled` should be set to false to trigger the event
 | `onLongPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user makes a "long press" somewhere on the map.
