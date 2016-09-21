@@ -77,7 +77,7 @@ class DefaultMarkers extends React.Component {
 }
 
 DefaultMarkers.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

@@ -150,7 +150,7 @@ class FocusOnMarkers extends React.Component {
 }
 
 FocusOnMarkers.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

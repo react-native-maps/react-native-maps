@@ -135,7 +135,7 @@ class EventListener extends React.Component {
 }
 
 EventListener.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

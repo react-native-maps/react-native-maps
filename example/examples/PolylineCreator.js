@@ -109,7 +109,7 @@ class PolylineCreator extends React.Component {
 }
 
 PolylineCreator.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

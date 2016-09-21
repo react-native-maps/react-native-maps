@@ -69,7 +69,7 @@ class AnimatedMarkers extends React.Component {
 }
 
 AnimatedMarkers.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

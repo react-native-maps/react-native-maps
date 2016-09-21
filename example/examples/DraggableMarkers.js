@@ -77,7 +77,7 @@ class MarkerTypes extends React.Component {
 }
 
 MarkerTypes.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

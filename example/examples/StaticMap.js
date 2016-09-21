@@ -96,7 +96,7 @@ class StaticMap extends React.Component {
 }
 
 StaticMap.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

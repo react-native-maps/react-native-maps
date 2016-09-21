@@ -558,6 +558,7 @@ MapView.Circle = MapCircle;
 MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
 Object.assign(MapView, ProviderConstants);
+MapView.ProviderPropType = PropTypes.oneOf(Object.values(ProviderConstants));
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
 

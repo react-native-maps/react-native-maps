@@ -116,7 +116,7 @@ class Callouts extends React.Component {
 }
 
 Callouts.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

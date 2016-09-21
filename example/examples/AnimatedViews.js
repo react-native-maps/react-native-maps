@@ -387,7 +387,7 @@ class AnimatedViews extends React.Component {
 }
 
 AnimatedViews.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

@@ -79,7 +79,7 @@ class LoadingMap extends React.Component {
 }
 
 LoadingMap.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

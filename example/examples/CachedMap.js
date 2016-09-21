@@ -86,7 +86,7 @@ class CachedMap extends React.Component {
 }
 
 CachedMap.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({

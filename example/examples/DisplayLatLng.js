@@ -89,7 +89,7 @@ class DisplayLatLng extends React.Component {
 }
 
 DisplayLatLng.propTypes = {
-  provider: PropTypes.string,
+  provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({
