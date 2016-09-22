@@ -36,27 +36,24 @@ const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
 
 class FitToCoordinates extends React.Component {
   fitPadding() {
-    this.map.fitToCoordinates(
-      [MARKERS[2], MARKERS[3]],
-      { top: 100, right: 100, bottom: 100, left: 100 },
-      true
-    );
+    this.map.fitToCoordinates([MARKERS[2], MARKERS[3]], {
+      edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+      animated: true,
+    });
   }
 
   fitBottomTwoMarkers() {
-    this.map.fitToCoordinates(
-      [MARKERS[2], MARKERS[3]],
-      DEFAULT_PADDING,
-      true
-    );
+    this.map.fitToCoordinates([MARKERS[2], MARKERS[3]], {
+      edgePadding: DEFAULT_PADDING,
+      animated: true,
+    });
   }
 
   fitAllMarkers() {
-    this.map.fitToCoordinates(
-      MARKERS,
-      DEFAULT_PADDING,
-      true
-    );
+    this.map.fitToCoordinates(MARKERS, {
+      edgePadding: DEFAULT_PADDING,
+      animated: true,
+    });
   }
 
   render() {
