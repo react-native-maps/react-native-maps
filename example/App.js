@@ -29,6 +29,9 @@ import LiteMapView from './examples/LiteMapView';
 import CustomTiles from './examples/CustomTiles';
 import StaticMap from './examples/StaticMap';
 
+const IOS = Platform.OS === 'ios';
+const ANDROID = Platform.OS === 'android';
+
 function makeExampleMapper(useGoogleMaps) {
   if (useGoogleMaps) {
     return example => [
@@ -45,8 +48,7 @@ class App extends React.Component {
 
     this.state = {
       Component: null,
-      showGoogleMapsSwitch: Platform.OS === 'ios',
-      useGoogleMaps: Platform.OS === 'android',
+      useGoogleMaps: ANDROID,
     };
   }
 
@@ -89,7 +91,6 @@ class App extends React.Component {
   renderExamples(examples) {
     const {
       Component,
-      showGoogleMapsSwitch,
       useGoogleMaps,
     } = this.state;
 
@@ -103,7 +104,7 @@ class App extends React.Component {
             contentContainerStyle={styles.scrollview}
             showsVerticalScrollIndicator={false}
           >
-            {showGoogleMapsSwitch && this.renderGoogleSwitch()}
+            {IOS && this.renderGoogleSwitch()}
             {examples.map(example => this.renderExample(example))}
           </ScrollView>
         }
@@ -113,7 +114,7 @@ class App extends React.Component {
 
   render() {
     return this.renderExamples([
-    // [<component>, <component description>, <Google compatible>, <Google add'l description>]
+      // [<component>, <component description>, <Google compatible>, <Google add'l description>]
       [StaticMap, 'StaticMap', true],
       [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
       [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
@@ -134,8 +135,9 @@ class App extends React.Component {
       [LiteMapView, 'Android Lite MapView'],
       [CustomTiles, 'Custom Tiles'],
     ]
-    .filter(example => example[2] || !this.state.useGoogleMaps)
-    .map(makeExampleMapper(this.state.useGoogleMaps))
+    // Filter out examples that are not yet supported for Google Maps on iOS.
+    .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
+    .map(makeExampleMapper(IOS && this.state.useGoogleMaps))
     );
   }
 }
