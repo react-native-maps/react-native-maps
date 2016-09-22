@@ -6,7 +6,6 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-
 import MapView from 'react-native-maps';
 import CustomCallout from './CustomCallout';
 
@@ -66,19 +65,21 @@ class Callouts extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={region}
         >
           <MapView.Marker
             ref={ref => { this.marker1 = ref; }}
             coordinate={markers[0].coordinate}
-            title="This is a title"
-            description="This is a description"
+            title="This is a native view"
+            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation" // eslint-disable-line max-len
           />
           <MapView.Marker
             coordinate={markers[1].coordinate}
           >
-            <MapView.Callout>
+            <MapView.Callout style={styles.plainView}>
+
               <View>
                 <Text>This is a plain view</Text>
               </View>
@@ -89,9 +90,9 @@ class Callouts extends React.Component {
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}
           >
-            <MapView.Callout tooltip>
+            <MapView.Callout tooltip style={styles.customView}>
               <CustomCallout>
-                <Text style={{ color: '#fff' }}>This is a custom callout bubble view</Text>
+                <Text>This is a custom callout bubble view</Text>
               </CustomCallout>
             </MapView.Callout>
           </MapView.Marker>
@@ -114,7 +115,18 @@ class Callouts extends React.Component {
   }
 }
 
+Callouts.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
 const styles = StyleSheet.create({
+  customView: {
+    width: 140,
+    height: 100,
+  },
+  plainView: {
+    width: 60,
+  },
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',

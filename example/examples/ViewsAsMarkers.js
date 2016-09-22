@@ -6,7 +6,6 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-
 import MapView from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
@@ -18,7 +17,7 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class DisplayLatLng extends React.Component {
+class ViewsAsMarkers extends React.Component {
   constructor(props) {
     super(props);
 
@@ -49,6 +48,7 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
         >
@@ -74,6 +74,10 @@ class DisplayLatLng extends React.Component {
     );
   }
 }
+
+ViewsAsMarkers.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -107,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DisplayLatLng;
+module.exports = ViewsAsMarkers;

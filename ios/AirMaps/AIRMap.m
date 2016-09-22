@@ -88,6 +88,8 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     [_regionChangeObserveTimer invalidate];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
     // Our desired API is to pass up markers/overlays as children to the mapview component.
     // This is where we intercept them and do the appropriate underlying mapview action.
@@ -106,7 +108,10 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
+#pragma clang diagnostic pop
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
 - (void)removeReactSubview:(id<RCTComponent>)subview {
     // similarly, when the children are being removed we have to do the appropriate
     // underlying mapview action here.
@@ -123,10 +128,14 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     }
     [_reactSubviews removeObject:(UIView *)subview];
 }
+#pragma clang diagnostic pop
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
 - (NSArray<id<RCTComponent>> *)reactSubviews {
-    return _reactSubviews;
+  return _reactSubviews;
 }
+#pragma clang diagnostic pop
 
 #pragma mark Overrides for Callout behavior
 

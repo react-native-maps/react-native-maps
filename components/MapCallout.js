@@ -1,9 +1,12 @@
 import React, { PropTypes } from 'react';
 import {
   View,
-  requireNativeComponent,
   StyleSheet,
 } from 'react-native';
+import decorateMapComponent, {
+  SUPPORTED,
+  USES_DEFAULT_IMPLEMENTATION,
+} from './decorateMapComponent';
 
 const propTypes = {
   ...View.propTypes,
@@ -17,6 +20,7 @@ const defaultProps = {
 
 class MapCallout extends React.Component {
   render() {
+    const AIRMapCallout = this.getAirComponent();
     return <AIRMapCallout {...this.props} style={[styles.callout, this.props.style]} />;
   }
 }
@@ -30,6 +34,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const AIRMapCallout = requireNativeComponent('AIRMapCallout', MapCallout);
-
-module.exports = MapCallout;
+module.exports = decorateMapComponent(MapCallout, {
+  componentType: 'Callout',
+  providers: {
+    google: {
+      ios: SUPPORTED,
+      android: USES_DEFAULT_IMPLEMENTATION,
+    },
+  },
+});

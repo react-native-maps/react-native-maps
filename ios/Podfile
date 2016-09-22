@@ -1,0 +1,21 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '8.0'
+# Uncomment this line if you're using Swift
+# use_frameworks!
+
+target 'AirMaps' do
+  pod 'React', path: '../example/node_modules/react-native', :subspecs => [
+      'Core',
+      'RCTActionSheet',
+      'RCTGeolocation',
+      'RCTImage',
+      'RCTLinkingIOS',
+      'RCTNetwork',
+      'RCTSettings',
+      'RCTText',
+      'RCTVibration',
+      'RCTWebSocket'
+    ]
+
+  pod 'GoogleMaps'
+end

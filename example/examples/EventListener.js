@@ -6,7 +6,6 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-
 import MapView from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
@@ -41,7 +40,7 @@ Event.propTypes = {
 
 
 // eslint-disable-next-line react/no-multi-comp
-class DisplayLatLng extends React.Component {
+class EventListener extends React.Component {
   constructor(props) {
     super(props);
 
@@ -80,6 +79,7 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
           onRegionChange={this.recordEvent('Map::onRegionChange')}
@@ -93,6 +93,20 @@ class DisplayLatLng extends React.Component {
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
         >
           <MapView.Marker
+            coordinate={{
+              latitude: LATITUDE + (LATITUDE_DELTA / 2),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
+            }}
+          />
+          <MapView.Marker
+            coordinate={{
+              latitude: LATITUDE - (LATITUDE_DELTA / 2),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
+            }}
+          />
+          <MapView.Marker
+            title="This is a title"
+            description="This is a description"
             coordinate={this.state.region}
             onPress={this.recordEvent('Marker::onPress')}
             onSelect={this.recordEvent('Marker::onSelect')}
@@ -120,7 +134,14 @@ class DisplayLatLng extends React.Component {
   }
 }
 
+EventListener.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
 const styles = StyleSheet.create({
+  callout: {
+    width: 60,
+  },
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
@@ -178,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DisplayLatLng;
+module.exports = EventListener;
