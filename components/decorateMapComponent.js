@@ -40,7 +40,9 @@ export default function decorateMapComponent(Component, { componentType, provide
     requireNativeComponent(getAirComponentName(null, componentType), Component);
 
   Component.contextTypes = contextTypes; // eslint-disable-line no-param-reassign
-  Component.prototype.getAirComponent = function getAirComponent() { // eslint-disable-line no-param-reassign,max-len
+
+  // eslint-disable-next-line no-param-reassign
+  Component.prototype.getAirComponent = function getAirComponent() {
     const provider = this.context.provider || PROVIDER_DEFAULT;
     if (components[provider]) return components[provider];
 
