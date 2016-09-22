@@ -19,12 +19,35 @@ or do it manually as described below:
 
 ## iOS
 
-### Cocoapods
-To install using Cocoapods, simply insert the following line into your `Podfile` and run `pod install`
+### Option 1: Cocoapods - Same as the included AirMapsExplorer example
 
-`pod 'react-native-maps', :path => '../node_modules/react-native-maps'`
+1. Setup your `Podfile` like the included `example/ios/Podfile` then run `pod install`.
+   (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
+2. Open your in xCode workspace
+3. Drag the following folder into your project:
+    - `node_modules/react-native-maps/ios/AirMaps/`
+4. If you need `GoogleMaps` support also drag this folder into your project:
+    - `node_modules/react-native-maps/ios/AirGoogleMaps/`
 
-### Manually
+### Option 2: Cocoapods -- Untested Way
+NOTE: If you actually get this to work, please open an issue to let us know.
+This is now considered the **old way** because it is untested and if it does work at all, it
+will only work if you **don't** have `use_frameworks!` in your `Podfile`
+
+To install using Cocoapods, simply insert the following line into your `Podfile`:
+
+    pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
+If you need `GoogleMaps` support in iOS also add this line:
+
+    pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'
+
+Now if you need `GoogleMaps` support you will also have to add a bunch of other stuff to your
+`Podfile`. See the **comments* in the included `example/ios/Podfile` which explain the rest.
+
+After your `Podfile` is setup properly, run `pod install`.
+
+### Option3: Manually
 1. Open your project in XCode, right click on `Libraries` and click `Add
    Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
 2. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.

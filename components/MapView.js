@@ -15,6 +15,13 @@ import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
 import MapUrlTile from './MapUrlTile';
+import {
+  contextTypes as childContextTypes,
+  getAirMapName,
+  googleMapIsInstalled,
+  createNotSupportedComponent,
+} from './decorateMapComponent';
+import * as ProviderConstants from './ProviderConstants';
 
 const MAP_TYPES = {
   STANDARD: 'standard',
@@ -30,7 +37,7 @@ const ANDROID_ONLY_MAP_TYPES = [
 ];
 
 const viewConfig = {
-  uiViewClassName: 'AIRMap',
+  uiViewClassName: 'AIR<provider>Map',
   validAttributes: {
     region: true,
   },
@@ -38,6 +45,15 @@ const viewConfig = {
 
 const propTypes = {
   ...View.propTypes,
+  /**
+   * When provider is "google", we will use GoogleMaps.
+   * Any value other than "google" will default to using
+   * MapKit in iOS or GoogleMaps in android as the map provider.
+   */
+  provider: PropTypes.oneOf([
+    'google',
+  ]),
+
   /**
    * Used to style and layout the `MapView`.  See `StyleSheet.js` and
    * `ViewStylePropTypes.js` for more info.
@@ -341,6 +357,10 @@ class MapView extends React.Component {
     this._onLayout = this._onLayout.bind(this);
   }
 
+  getChildContext() {
+    return { provider: this.props.provider };
+  }
+
   componentDidMount() {
     const { region, initialRegion } = this.props;
     if (region && this.state.isReady) {
@@ -421,6 +441,14 @@ class MapView extends React.Component {
     this._runCommand('takeSnapshot', [width, height, finalRegion, callback]);
   }
 
+  _uiManagerCommand(name) {
+    return NativeModules.UIManager[getAirMapName(this.props.provider)].Commands[name];
+  }
+
+  _mapManagerCommand(name) {
+    return NativeModules[`${getAirMapName(this.props.provider)}Manager`][name];
+  }
+
   _getHandle() {
     return findNodeHandle(this.map);
   }
@@ -430,16 +458,13 @@ class MapView extends React.Component {
       case 'android':
         NativeModules.UIManager.dispatchViewManagerCommand(
           this._getHandle(),
-          NativeModules.UIManager.AIRMap.Commands[name],
+          this._uiManagerCommand(name),
           args
         );
         break;
 
       case 'ios':
-        NativeModules.AIRMapManager[name].apply(
-          NativeModules.AIRMapManager[name],
-          [this._getHandle(), ...args]
-        );
+        this._mapManagerCommand(name)(this._getHandle(), ...args);
         break;
 
       default:
@@ -483,6 +508,8 @@ class MapView extends React.Component {
       );
     }
 
+    const AIRMap = getAirMapComponent(this.props.provider);
+
     return (
       <AIRMap
         ref={ref => { this.map = ref; }}
@@ -494,24 +521,36 @@ class MapView extends React.Component {
 
 MapView.propTypes = propTypes;
 MapView.viewConfig = viewConfig;
+MapView.childContextTypes = childContextTypes;
 
 MapView.MAP_TYPES = MAP_TYPES;
 
-const AIRMap = requireNativeComponent('AIRMap', MapView, {
+const nativeComponent = Component => requireNativeComponent(Component, MapView, {
   nativeOnly: {
     onChange: true,
     onMapReady: true,
     handlePanDrag: true,
   },
 });
+const airMaps = {
+  default: nativeComponent('AIRMap'),
+};
+if (Platform.OS === 'android') {
+  airMaps.google = airMaps.default;
+} else {
+  airMaps.google = googleMapIsInstalled ? nativeComponent('AIRGoogleMap') :
+    createNotSupportedComponent('react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.'); // eslint-disable-line max-len
+}
+const getAirMapComponent = provider => airMaps[provider || 'default'];
 
-const AIRMapLite = requireNativeComponent('AIRMapLite', MapView, {
-  nativeOnly: {
-    onChange: true,
-    onMapReady: true,
-    handlePanDrag: true,
-  },
-});
+const AIRMapLite = NativeModules.UIManager.AIRMapLite &&
+  requireNativeComponent('AIRMapLite', MapView, {
+    nativeOnly: {
+      onChange: true,
+      onMapReady: true,
+      handlePanDrag: true,
+    },
+  });
 
 MapView.Marker = MapMarker;
 MapView.Polyline = MapPolyline;
@@ -519,6 +558,8 @@ MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
 MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
+Object.assign(MapView, ProviderConstants);
+MapView.ProviderPropType = PropTypes.oneOf(Object.values(ProviderConstants));
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
 

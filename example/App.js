@@ -1,12 +1,14 @@
 import React from 'react';
 import {
+  Platform,
   View,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   Text,
+  Switch,
 } from 'react-native';
-
+import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import DisplayLatLng from './examples/DisplayLatLng';
 import ViewsAsMarkers from './examples/ViewsAsMarkers';
 import EventListener from './examples/EventListener';
@@ -25,6 +27,17 @@ import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 import LiteMapView from './examples/LiteMapView';
 import CustomTiles from './examples/CustomTiles';
+import StaticMap from './examples/StaticMap';
+
+function makeExampleMapper(useGoogleMaps) {
+  if (useGoogleMaps) {
+    return example => [
+      example[0],
+      [example[1], example[3]].filter(Boolean).join(' '),
+    ];
+  }
+  return example => example;
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -32,6 +45,8 @@ class App extends React.Component {
 
     this.state = {
       Component: null,
+      showGoogleMapsSwitch: Platform.OS === 'ios',
+      useGoogleMaps: Platform.OS === 'android',
     };
   }
 
@@ -58,11 +73,29 @@ class App extends React.Component {
     );
   }
 
+  renderGoogleSwitch() {
+    return (
+      <View>
+        <Text>Use GoogleMaps?</Text>
+        <Switch
+          onValueChange={(value) => this.setState({ useGoogleMaps: value })}
+          style={{ marginBottom: 10 }}
+          value={this.state.useGoogleMaps}
+        />
+      </View>
+    );
+  }
+
   renderExamples(examples) {
-    const { Component } = this.state;
+    const {
+      Component,
+      showGoogleMapsSwitch,
+      useGoogleMaps,
+    } = this.state;
+
     return (
       <View style={styles.container}>
-        {Component && <Component />}
+        {Component && <Component provider={useGoogleMaps ? PROVIDER_GOOGLE : PROVIDER_DEFAULT} />}
         {Component && this.renderBackButton()}
         {!Component &&
           <ScrollView
@@ -70,6 +103,7 @@ class App extends React.Component {
             contentContainerStyle={styles.scrollview}
             showsVerticalScrollIndicator={false}
           >
+            {showGoogleMapsSwitch && this.renderGoogleSwitch()}
             {examples.map(example => this.renderExample(example))}
           </ScrollView>
         }
@@ -79,25 +113,30 @@ class App extends React.Component {
 
   render() {
     return this.renderExamples([
-      [DisplayLatLng, 'Tracking Position'],
-      [ViewsAsMarkers, 'Arbitrary Views as Markers'],
-      [EventListener, 'Events'],
-      [MarkerTypes, 'Image Based Markers'],
-      [DraggableMarkers, 'Draggable Markers'],
+    // [<component>, <component description>, <Google compatible>, <Google add'l description>]
+      [StaticMap, 'StaticMap', true],
+      [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
+      [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
+      [EventListener, 'Events', true, '(incomplete)'],
+      [MarkerTypes, 'Image Based Markers', true],
+      [DraggableMarkers, 'Draggable Markers', true],
       [PolygonCreator, 'Polygon Creator'],
       [PolylineCreator, 'Polyline Creator'],
       [AnimatedViews, 'Animating with MapViews'],
       [AnimatedMarkers, 'Animated Marker Position'],
-      [Callouts, 'Custom Callouts'],
-      [Overlays, 'Circles, Polygons, and Polylines'],
-      [DefaultMarkers, 'Default Markers'],
-      [TakeSnapshot, 'Take Snapshot'],
+      [Callouts, 'Custom Callouts', true],
+      [Overlays, 'Circles, Polygons, and Polylines', true, '(ios error)'],
+      [DefaultMarkers, 'Default Markers', true],
+      [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
       [FitToSuppliedMarkers, 'Focus Map On Markers'],
       [LiteMapView, 'Android Lite MapView'],
       [CustomTiles, 'Custom Tiles'],
-    ]);
+    ]
+    .filter(example => example[2] || !this.state.useGoogleMaps)
+    .map(makeExampleMapper(this.state.useGoogleMaps))
+    );
   }
 }
 

@@ -1,0 +1,50 @@
+# You Podfile should look similar to this file. Whether you use_frameworks! or not, the following configuration should work.
+#
+# However if you DO NOT use_frameworks! and you prefer to install pods instead of
+# dragging the AirMaps directory into your project, refer to the comments below (steps 1~4)
+
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '8.0'
+use_frameworks!
+
+target 'AirMapsExplorer' do
+  pod 'React', path: '../node_modules/react-native', :subspecs => [
+    'Core',
+    'RCTActionSheet',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket'
+  ]
+
+# when not using frameworks  we can do this instead of including the source files in our project (1/4):
+# pod 'react-native-maps', path: '../../'
+#	pod 'react-native-google-maps', path: '../../'  # <~~ if you need GoogleMaps support on iOS
+
+# when not using frameworks  we can remove this line (2/4):
+  pod 'GoogleMaps'  # <~~ remove this line if you do not want to support GoogleMaps on iOS
+end
+
+# when not using frameworks this might be necessary, but try without it first and see if `pod install` works (3/4):
+# THIS IS ONLY NECESSARY IF YOU NEED GoogleMaps SUPPORT
+# pre_install do |installer|
+  # # copied from https://github.com/CocoaPods/CocoaPods/issues/2926
+  # # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+  # def installer.verify_no_static_framework_transitive_dependencies; end
+# end
+
+# when not using frameworks (4/4):
+# THIS IS ONLY NECESSARY IF YOU NEED GoogleMaps SUPPORT
+# #Crud, this shouldn't be necessary, but https://github.com/CocoaPods/CocoaPods/issues/5429
+# post_install do |installer|
+#   	installer.pods_project.targets.each do |target|
+# 		target.build_configurations.each do |config|
+#       		config.build_settings['CLANG_ENABLE_MODULES'] = 'NO'
+#     	end
+#   	end
+# end
