@@ -1,21 +1,24 @@
 # Examples Setup
-
-## iOS
-
-1. Install dependencies and open the workspace:
+Install dependencies for iOS and Android
 
     cd example
     npm install
+
+## iOS
+1. Install dependencies and open the workspace:
+
+    ```
     cd ios
     pod install
     open AirMapsExplorer.xcworkspace
+    ```
+1. Make sure the `AirMapsExplorer` target is selected and click `Run`
 
-2. Make sure the `AirMapsExplorer` target is selected and click `Run`
-
-## android
-
+## Android
 1. Start your emulator
+1. Install via Gradle:
 
-2. Install via gradle:
-
-     ./example/android/gradlew installDebug
+    ```
+    react-native run-android
+    ./example/android/gradlew installDebug
+    ```
