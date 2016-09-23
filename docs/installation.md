@@ -11,12 +11,6 @@ add native dependencies automatically:
 
 `$ react-native link`
 
-Go to step 4 to configure Google Maps API KEY in Android.
-
->This installation should work in physical devices. For Genymotion, please check installation step 5
-
-or do it manually as described below:
-
 ## iOS
 
 ### Option 1: Cocoapods - Same as the included AirMapsExplorer example
@@ -63,23 +57,25 @@ After your `Podfile` is setup properly, run `pod install`.
 
 ## Android
 
-1. in your `android/app/build.gradle` add:
+In your `android/app/build.gradle` add:
 ```groovy
 ...
 dependencies {
   ...
-  compile project(':react-native-maps')
+  compile 'com.airbnb.android:react-native-maps:0.8.0'
 }
 ```
 
-2. in your `android/settings.gradle` add:
+In your `android/settings.gradle` add:
 ```groovy
 ...
 include ':react-native-maps'
 project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+include ':react-native-maps'
+project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android/lib')
 ```
 
-3. in your application object, add:
+In your application object, add:
 
 For React Native v0.29.0 or above:
 
@@ -124,10 +120,9 @@ For older versions of React Native:
 }
 ```
 
-4. Specify your Google Maps API Key:
-    > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+Specify your Google Maps API Key:
 
-Add your **Browser** API key to your manifest file:
+To develop is recommended a ***Browser Key*** without refer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials. Add your **Browser** API key to your manifest file:
 
 ```xml
 <application>
@@ -137,9 +132,8 @@ Add your **Browser** API key to your manifest file:
       android:value="{{Your Google maps API Key Here}}"/>
 </application>
 ```
-    > If that doesn't work try using an ***Android Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-Add your **Android** API key to your manifest file:
+If that doesn't work try using an ***Android Key*** without refer restriction:
 
 ```xml
 <application>
@@ -150,7 +144,7 @@ Add your **Android** API key to your manifest file:
 </application>
 ```
 
-5. ensure that you have Google Play Services installed:
+ Ensure that you have Google Play Services installed:
   * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).
   * For a physical device you need to search on Google 'Google Play Services'. There will be a link that takes you to the play store and from there you will see a button to update it (do not search within the Play Store).
 
@@ -166,7 +160,7 @@ If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-ma
 
 **On Android :**  
 
-1. Set this Stylesheet in your map component
+* Set this Stylesheet in your map component
 ```
 ...
 const styles = StyleSheet.create({
@@ -204,26 +198,23 @@ module.exports = class MyApp extends React.Component {
   }
 }
 ```
-2. Run "android" and make sure every packages is updated.
-3.  If not installed yet, you have to install the following packages :
+*  If not installed yet, you have to install the following packages :
     - Extras / Google Play services
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 13
-4. Check manual installation steps
-5. Generate your SHA1 key :  
+* Generate your SHA1 key :  
    `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
 
-6. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
+* Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
 In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
 Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
-Check installation step 4.
 
-7. Clean the cache :   
+* Clean the cache :   
    `watchman watch-del-all`  
    `npm cache clean`
 
-8. When starting emulator, make sure you have enabled `Wipe user data`.
+* When starting emulator, make sure you have enabled `Wipe user data`.
 
-9. Run `react-native run-android`
+* Run `react-native run-android`
 
-10. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
+At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key`
