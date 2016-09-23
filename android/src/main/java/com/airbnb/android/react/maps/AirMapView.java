@@ -58,6 +58,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private Boolean isMapLoaded = false;
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
+    private final int baseMapPadding = 50;
+
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
@@ -488,10 +490,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
             // TODO(lmr): may want to include shapes / etc.
         }
-
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
             if (animated) {
                 startMonitoringRegion();
                 map.animateCamera(cu);
@@ -526,7 +527,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
             if (animated) {
                 startMonitoringRegion();
                 map.animateCamera(cu);
@@ -534,6 +535,32 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 map.moveCamera(cu);
             }
         }
+    }
+
+    public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding, boolean animated) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (int i = 0; i < coordinatesArray.size(); i++) {
+            ReadableMap latLng = coordinatesArray.getMap(i);
+            Double lat = latLng.getDouble("latitude");
+            Double lng = latLng.getDouble("longitude");
+            builder.include(new LatLng(lat, lng));
+        }
+
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+
+        if (edgePadding != null) {
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        if (animated) {
+            startMonitoringRegion();
+            map.animateCamera(cu);
+        } else {
+            map.moveCamera(cu);
+        }
+        map.setPadding(0, 0, 0, 0); // Without this, the Google logo is moved up by the value of edgePadding.bottom
     }
 
     // InfoWindowAdapter interface

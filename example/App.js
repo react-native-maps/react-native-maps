@@ -25,6 +25,7 @@ import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
 import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
+import FitToCoordinates from './examples/FitToCoordinates';
 import LiteMapView from './examples/LiteMapView';
 import CustomTiles from './examples/CustomTiles';
 import StaticMap from './examples/StaticMap';
@@ -132,6 +133,7 @@ class App extends React.Component {
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
       [FitToSuppliedMarkers, 'Focus Map On Markers'],
+      [FitToCoordinates, 'Fit Map To Coordinates'],
       [LiteMapView, 'Android Lite MapView'],
       [CustomTiles, 'Custom Tiles'],
     ]
