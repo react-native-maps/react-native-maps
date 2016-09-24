@@ -23,7 +23,7 @@ or do it manually as described below:
 
 1. Setup your `Podfile` like the included `example/ios/Podfile` then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
-2. Open your in xCode workspace
+2. Open your project in xCode workspace
 3. Drag the following folder into your project:
     - `node_modules/react-native-maps/ios/AirMaps/`
 4. If you need `GoogleMaps` support also drag this folder into your project:
