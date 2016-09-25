@@ -2,7 +2,9 @@
 import {Animated} from 'react-native';
 
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
-if (AnimatedWithChildren.name !== 'AnimatedWithChildren') console.error('AnimatedRegion could not obtain AnimatedWithChildren base class');
+if (__DEV__) {
+  if (AnimatedWithChildren.name !== 'AnimatedWithChildren') console.error('AnimatedRegion could not obtain AnimatedWithChildren base class');
+}
 // const __Animated = Object.getPrototypeOf(AnimatedWithChildren);
 // if (__Animated.name !== 'Animated') console.error('AnimatedRegion could not obtain Animated base class');
 
