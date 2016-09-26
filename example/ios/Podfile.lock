@@ -1,0 +1,51 @@
+PODS:
+  - GoogleMaps (2.0.1):
+    - GoogleMaps/Maps (= 2.0.1)
+  - GoogleMaps/Base (2.0.1)
+  - GoogleMaps/Maps (2.0.1):
+    - GoogleMaps/Base (= 2.0.1)
+  - React/Core (0.32.0):
+    - React/CSSLayout
+  - React/CSSLayout (0.32.0)
+  - React/RCTActionSheet (0.32.0):
+    - React/Core
+  - React/RCTGeolocation (0.32.0):
+    - React/Core
+  - React/RCTImage (0.32.0):
+    - React/Core
+    - React/RCTNetwork
+  - React/RCTLinkingIOS (0.32.0):
+    - React/Core
+  - React/RCTNetwork (0.32.0):
+    - React/Core
+  - React/RCTSettings (0.32.0):
+    - React/Core
+  - React/RCTText (0.32.0):
+    - React/Core
+  - React/RCTVibration (0.32.0):
+    - React/Core
+  - React/RCTWebSocket (0.32.0):
+    - React/Core
+
+DEPENDENCIES:
+  - GoogleMaps
+  - React/Core (from `../node_modules/react-native`)
+  - React/RCTActionSheet (from `../node_modules/react-native`)
+  - React/RCTGeolocation (from `../node_modules/react-native`)
+  - React/RCTImage (from `../node_modules/react-native`)
+  - React/RCTLinkingIOS (from `../node_modules/react-native`)
+  - React/RCTNetwork (from `../node_modules/react-native`)
+  - React/RCTSettings (from `../node_modules/react-native`)
+  - React/RCTText (from `../node_modules/react-native`)
+  - React/RCTVibration (from `../node_modules/react-native`)
+  - React/RCTWebSocket (from `../node_modules/react-native`)
+
+EXTERNAL SOURCES:
+  React:
+    :path: "../node_modules/react-native"
+
+SPEC CHECKSUMS:
+  GoogleMaps: f09da64fc987c1aa29394567c3cab5a3df83c402
+  React: 0245b401173a94a5fba0f440aab3fb2f79b738f3
+
+COCOAPODS: 0.39.0

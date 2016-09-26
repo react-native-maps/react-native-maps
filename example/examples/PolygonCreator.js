@@ -18,7 +18,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
-class DisplayLatLng extends React.Component {
+class PolygonCreator extends React.Component {
   constructor(props) {
     super(props);
 
@@ -77,6 +77,7 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
           onPress={e => this.onPress(e)}
@@ -115,6 +116,10 @@ class DisplayLatLng extends React.Component {
   }
 }
 
+PolygonCreator.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -147,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DisplayLatLng;
+module.exports = PolygonCreator;

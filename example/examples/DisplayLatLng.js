@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { MAP_TYPES } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -56,10 +56,11 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           ref={ref => { this.map = ref; }}
-          mapType="terrain"
+          mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
-          region={this.state.region}
+          initialRegion={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
         />
         <View style={[styles.bubble, styles.latlng]}>
@@ -86,6 +87,10 @@ class DisplayLatLng extends React.Component {
     );
   }
 }
+
+DisplayLatLng.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {
