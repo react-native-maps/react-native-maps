@@ -284,6 +284,12 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
                               [pin.image drawAtPoint:point];
                           }
                       }
+                      
+                      for (id <AIRMapSnapshot> overlay in mapView.overlays) {
+                          if ([overlay respondsToSelector:@selector(drawToSnapshot:context:)]) {
+                                  [overlay drawToSnapshot:snapshot context:UIGraphicsGetCurrentContext()];
+                          }
+                      }
 
                       UIImage *compositeImage = UIGraphicsGetImageFromCurrentImageContext();
 
