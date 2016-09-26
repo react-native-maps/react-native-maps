@@ -6,6 +6,8 @@ React Native Map components for iOS + Android
 
 See [Installation Instructions](docs/installation.md).
 
+See [Setup Instructions for the Included Example Project](docs/examples-setup.md).
+
 ## Compatibility
 
 Due to the rapid changes being made in the React Native ecosystem, we are not officially going to
@@ -240,6 +242,11 @@ Markers are draggable, and emit continuous drag events to update other UI during
 
 ![](http://i.giphy.com/l2JImnZxdv1WbpQfC.gif) ![](http://i.giphy.com/l2JIhv4Jx6Ugx1EGI.gif)
 
+### Lite Mode ( Android )
+
+Enable lite mode on Android with `liteMode` prop. Ideal when having multiple maps in a View or ScrollView.
+
+![](http://i.giphy.com/qZ2lAf18s89na.gif)
 
 ## Component API
 
@@ -362,6 +369,12 @@ Pass an array of marker identifiers to have the map re-focus.
 
 ![](http://i.giphy.com/3o7qEbOQnO0yoXqKJ2.gif) ![](http://i.giphy.com/l41YdrQZ7m6Dz4h0c.gif)
 
+### Zoom to Specified Coordinates
+
+Pass an array of coordinates to focus a map region on said coordinates.
+
+![](https://cloud.githubusercontent.com/assets/1627824/18609960/da5d9e06-7cdc-11e6-811e-34e255093df9.gif)
+
 ### Troubleshooting
 
 #### My map is blank
@@ -417,7 +430,7 @@ License
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
 
-        https://raw.githubusercontent.com/lelandrichardson/react-native-maps/master/LICENSE
+        https://raw.githubusercontent.com/airbnb/react-native-maps/master/LICENSE
 
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,

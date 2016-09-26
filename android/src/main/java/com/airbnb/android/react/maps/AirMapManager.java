@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -31,20 +32,25 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     private static final int ANIMATE_TO_COORDINATE = 2;
     private static final int FIT_TO_ELEMENTS = 3;
     private static final int FIT_TO_SUPPLIED_MARKERS = 4;
+    private static final int FIT_TO_COORDINATES = 5;
 
     private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
             "standard", GoogleMap.MAP_TYPE_NORMAL,
             "satellite", GoogleMap.MAP_TYPE_SATELLITE,
             "hybrid", GoogleMap.MAP_TYPE_HYBRID,
-            "terrain", GoogleMap.MAP_TYPE_TERRAIN
+            "terrain", GoogleMap.MAP_TYPE_TERRAIN,
+            "none", GoogleMap.MAP_TYPE_NONE
     );
 
     private ReactContext reactContext;
 
     private final ReactApplicationContext appContext;
 
+    protected GoogleMapOptions googleMapOptions;
+
     public AirMapManager(ReactApplicationContext context) {
         this.appContext = context;
+        this.googleMapOptions = new GoogleMapOptions();
     }
 
     @Override
@@ -57,13 +63,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         reactContext = context;
 
         try {
-            MapsInitializer.initialize(new AirMapModule(this.appContext).getActivity());
+            MapsInitializer.initialize(this.appContext);
         } catch (RuntimeException e) {
             e.printStackTrace();
             emitMapError("Map initialize error", "map_init_error");
         }
 
-        return new AirMapView(context, this.appContext, this);
+        return new AirMapView(context, this.appContext.getCurrentActivity(), this, this.googleMapOptions);
     }
 
     @Override
@@ -213,6 +219,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             case FIT_TO_SUPPLIED_MARKERS:
                 view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
                 break;
+            case FIT_TO_COORDINATES:
+                view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
+                break;
         }
     }
 
@@ -246,7 +255,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                 "animateToRegion", ANIMATE_TO_REGION,
                 "animateToCoordinate", ANIMATE_TO_COORDINATE,
                 "fitToElements", FIT_TO_ELEMENTS,
-                "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS
+                "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
+                "fitToCoordinates", FIT_TO_COORDINATES
         );
     }
 

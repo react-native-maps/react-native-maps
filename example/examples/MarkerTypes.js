@@ -5,7 +5,6 @@ import {
   Text,
   Dimensions,
 } from 'react-native';
-
 import MapView from 'react-native-maps';
 import flagBlueImg from './assets/flag-blue.png';
 import flagPinkImg from './assets/flag-pink.png';
@@ -20,10 +19,19 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
 class MarkerTypes extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      marker1: true,
+      marker2: false,
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -33,30 +41,36 @@ class MarkerTypes extends React.Component {
           }}
         >
           <MapView.Marker
+            onPress={() => this.setState({ marker1: !this.state.marker1 })}
             coordinate={{
               latitude: LATITUDE + SPACE,
               longitude: LONGITUDE + SPACE,
             }}
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
-            image={flagBlueImg}
+            image={this.state.marker1 ? flagBlueImg : flagPinkImg}
           >
             <Text style={styles.marker}>X</Text>
           </MapView.Marker>
           <MapView.Marker
+            onPress={() => this.setState({ marker2: !this.state.marker2 })}
             coordinate={{
               latitude: LATITUDE - SPACE,
               longitude: LONGITUDE - SPACE,
             }}
             centerOffset={{ x: -42, y: -60 }}
             anchor={{ x: 0.84, y: 1 }}
-            image={flagPinkImg}
+            image={this.state.marker2 ? flagBlueImg : flagPinkImg}
           />
         </MapView>
       </View>
     );
   }
 }
+
+MarkerTypes.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -68,8 +82,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   marker: {
-    marginLeft: 33,
-    marginTop: 18,
+    marginLeft: 46,
+    marginTop: 33,
     fontWeight: 'bold',
   },
 });

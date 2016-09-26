@@ -33,3 +33,5 @@ local.properties
 #
 node_modules/
 npm-debug.log
+Pods/
+AirMapsExplorer.xcworkspace/

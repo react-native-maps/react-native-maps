@@ -31,6 +31,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.TileOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +58,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private Boolean isMapLoaded = false;
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
+    private final int baseMapPadding = 50;
+
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
     private boolean isMonitoringRegion = false;
@@ -66,6 +70,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private static final String[] PERMISSIONS = new String[] {
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
+    // TODO: don't need tileMap at all???
+    private HashMap<TileOverlay, AirMapUrlTile> tileMap = new HashMap<>();
     private final List<AirMapFeature> features = new ArrayList<>();
     private final Map<Marker, AirMapMarker> markerMap = new HashMap<>();
     private final ScaleGestureDetector scaleDetector;
@@ -76,8 +82,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
 
-    public AirMapView(ThemedReactContext context, Context appContext, AirMapManager manager) {
-        super(appContext);
+    public AirMapView(ThemedReactContext context, Context appContext, AirMapManager manager, GoogleMapOptions googleMapOptions) {
+        super(appContext, googleMapOptions);
+
         this.manager = manager;
         this.context = context;
 
@@ -391,6 +398,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             AirMapCircle circleView = (AirMapCircle) child;
             circleView.addToMap(map);
             features.add(index, circleView);
+        } else if (child instanceof AirMapUrlTile) {
+            AirMapUrlTile urlTileView = (AirMapUrlTile) child;
+            urlTileView.addToMap(map);
+            features.add(index, urlTileView);
+            TileOverlay tile = (TileOverlay)urlTileView.getFeature();
+            // TODO: don't need tileMap at all???
+            tileMap.put(tile, urlTileView);
         } else {
             // TODO(lmr): throw? User shouldn't be adding non-feature children.
         }
@@ -408,6 +422,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         AirMapFeature feature = features.remove(index);
         if (feature instanceof AirMapMarker) {
             markerMap.remove(feature.getFeature());
+        } else if (feature instanceof AirMapUrlTile) {
+            // TODO: don't need tileMap at all???
+            tileMap.remove(feature.getFeature());
         }
         feature.removeFromMap(map);
     }
@@ -473,10 +490,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
             // TODO(lmr): may want to include shapes / etc.
         }
-
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
             if (animated) {
                 startMonitoringRegion();
                 map.animateCamera(cu);
@@ -511,7 +527,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
             if (animated) {
                 startMonitoringRegion();
                 map.animateCamera(cu);
@@ -519,6 +535,32 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 map.moveCamera(cu);
             }
         }
+    }
+
+    public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding, boolean animated) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (int i = 0; i < coordinatesArray.size(); i++) {
+            ReadableMap latLng = coordinatesArray.getMap(i);
+            Double lat = latLng.getDouble("latitude");
+            Double lng = latLng.getDouble("longitude");
+            builder.include(new LatLng(lat, lng));
+        }
+
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+
+        if (edgePadding != null) {
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        if (animated) {
+            startMonitoringRegion();
+            map.animateCamera(cu);
+        } else {
+            map.moveCamera(cu);
+        }
+        map.setPadding(0, 0, 0, 0); // Without this, the Google logo is moved up by the value of edgePadding.bottom
     }
 
     // InfoWindowAdapter interface

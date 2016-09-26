@@ -42,6 +42,7 @@ class AnimatedMarkers extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -66,6 +67,10 @@ class AnimatedMarkers extends React.Component {
     );
   }
 }
+
+AnimatedMarkers.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {

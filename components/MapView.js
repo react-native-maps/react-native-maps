@@ -14,9 +14,30 @@ import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
+import MapUrlTile from './MapUrlTile';
+import {
+  contextTypes as childContextTypes,
+  getAirMapName,
+  googleMapIsInstalled,
+  createNotSupportedComponent,
+} from './decorateMapComponent';
+import * as ProviderConstants from './ProviderConstants';
+
+const MAP_TYPES = {
+  STANDARD: 'standard',
+  SATELLITE: 'satellite',
+  HYBRID: 'hybrid',
+  TERRAIN: 'terrain',
+  NONE: 'none',
+};
+
+const ANDROID_ONLY_MAP_TYPES = [
+  MAP_TYPES.TERRAIN,
+  MAP_TYPES.NONE,
+];
 
 const viewConfig = {
-  uiViewClassName: 'AIRMap',
+  uiViewClassName: 'AIR<provider>Map',
   validAttributes: {
     region: true,
   },
@@ -24,6 +45,15 @@ const viewConfig = {
 
 const propTypes = {
   ...View.propTypes,
+  /**
+   * When provider is "google", we will use GoogleMaps.
+   * Any value other than "google" will default to using
+   * MapKit in iOS or GoogleMaps in android as the map provider.
+   */
+  provider: PropTypes.oneOf([
+    'google',
+  ]),
+
   /**
    * Used to style and layout the `MapView`.  See `StyleSheet.js` and
    * `ViewStylePropTypes.js` for more info.
@@ -171,12 +201,7 @@ const propTypes = {
    * - hybrid: satellite view with roads and points of interest overlayed
    * - terrain: (Android only) topographic view
    */
-  mapType: PropTypes.oneOf([
-    'standard',
-    'satellite',
-    'hybrid',
-    'terrain',
-  ]),
+  mapType: PropTypes.oneOf(Object.values(MAP_TYPES)),
 
   /**
    * The region to be displayed by the map.
@@ -221,6 +246,14 @@ const propTypes = {
     latitudeDelta: PropTypes.number.isRequired,
     longitudeDelta: PropTypes.number.isRequired,
   }),
+
+  /**
+   * A Boolean indicating whether to use liteMode for android
+   * Default value is `false`
+   *
+   * @platform android
+   */
+  liteMode: PropTypes.bool,
 
   /**
    * Maximum size of area that can be displayed.
@@ -324,6 +357,10 @@ class MapView extends React.Component {
     this._onLayout = this._onLayout.bind(this);
   }
 
+  getChildContext() {
+    return { provider: this.props.provider };
+  }
+
   componentDidMount() {
     const { region, initialRegion } = this.props;
     if (region && this.state.isReady) {
@@ -399,9 +436,26 @@ class MapView extends React.Component {
     this._runCommand('fitToSuppliedMarkers', [markers, animated]);
   }
 
+  fitToCoordinates(coordinates = [], options) {
+    const {
+      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+      animated = true,
+    } = options;
+
+    this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
+  }
+
   takeSnapshot(width, height, region, callback) {
     const finalRegion = region || this.props.region || this.props.initialRegion;
     this._runCommand('takeSnapshot', [width, height, finalRegion, callback]);
+  }
+
+  _uiManagerCommand(name) {
+    return NativeModules.UIManager[getAirMapName(this.props.provider)].Commands[name];
+  }
+
+  _mapManagerCommand(name) {
+    return NativeModules[`${getAirMapName(this.props.provider)}Manager`][name];
   }
 
   _getHandle() {
@@ -413,16 +467,13 @@ class MapView extends React.Component {
       case 'android':
         NativeModules.UIManager.dispatchViewManagerCommand(
           this._getHandle(),
-          NativeModules.UIManager.AIRMap.Commands[name],
+          this._uiManagerCommand(name),
           args
         );
         break;
 
       case 'ios':
-        NativeModules.AIRMapManager[name].apply(
-          NativeModules.AIRMapManager[name],
-          [this._getHandle(), ...args]
-        );
+        this._mapManagerCommand(name)(this._getHandle(), ...args);
         break;
 
       default:
@@ -442,8 +493,8 @@ class MapView extends React.Component {
         onMapReady: this._onMapReady,
         onLayout: this._onLayout,
       };
-      if (Platform.OS === 'ios' && props.mapType === 'terrain') {
-        props.mapType = 'standard';
+      if (Platform.OS === 'ios' && ANDROID_ONLY_MAP_TYPES.includes(props.mapType)) {
+        props.mapType = MAP_TYPES.STANDARD;
       }
       props.handlePanDrag = !!props.onPanDrag;
     } else {
@@ -457,6 +508,17 @@ class MapView extends React.Component {
       };
     }
 
+    if (Platform.OS === 'android' && this.props.liteMode) {
+      return (
+        <AIRMapLite
+          ref={ref => { this.map = ref; }}
+          {...props}
+        />
+      );
+    }
+
+    const AIRMap = getAirMapComponent(this.props.provider);
+
     return (
       <AIRMap
         ref={ref => { this.map = ref; }}
@@ -468,20 +530,45 @@ class MapView extends React.Component {
 
 MapView.propTypes = propTypes;
 MapView.viewConfig = viewConfig;
+MapView.childContextTypes = childContextTypes;
 
-const AIRMap = requireNativeComponent('AIRMap', MapView, {
+MapView.MAP_TYPES = MAP_TYPES;
+
+const nativeComponent = Component => requireNativeComponent(Component, MapView, {
   nativeOnly: {
     onChange: true,
     onMapReady: true,
     handlePanDrag: true,
   },
 });
+const airMaps = {
+  default: nativeComponent('AIRMap'),
+};
+if (Platform.OS === 'android') {
+  airMaps.google = airMaps.default;
+} else {
+  airMaps.google = googleMapIsInstalled ? nativeComponent('AIRGoogleMap') :
+    createNotSupportedComponent('react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.'); // eslint-disable-line max-len
+}
+const getAirMapComponent = provider => airMaps[provider || 'default'];
+
+const AIRMapLite = NativeModules.UIManager.AIRMapLite &&
+  requireNativeComponent('AIRMapLite', MapView, {
+    nativeOnly: {
+      onChange: true,
+      onMapReady: true,
+      handlePanDrag: true,
+    },
+  });
 
 MapView.Marker = MapMarker;
 MapView.Polyline = MapPolyline;
 MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
+MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
+Object.assign(MapView, ProviderConstants);
+MapView.ProviderPropType = PropTypes.oneOf(Object.values(ProviderConstants));
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
 
