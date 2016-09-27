@@ -190,7 +190,7 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
                   coordinates:(nonnull NSArray<AIRMapCoordinate *> *)coordinates
                   edgePadding:(nonnull NSDictionary *)edgePadding
-                  animated:(nonnull BOOL)animated)
+                  animated:(BOOL)animated)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         id view = viewRegistry[reactTag];
