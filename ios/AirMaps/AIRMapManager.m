@@ -25,6 +25,7 @@
 #import "AIRMapCircle.h"
 #import "SMCalloutView.h"
 #import "AIRMapUrlTile.h"
+#import "AIRMapSnapshot.h"
 
 #import <MapKit/MapKit.h>
 
