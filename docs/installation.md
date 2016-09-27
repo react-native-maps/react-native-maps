@@ -21,7 +21,7 @@ or do it manually as described below:
 
 ### Option 1: Cocoapods - Same as the included AirMapsExplorer example
 
-1. Setup your `Podfile` like the included `example/ios/Podfile` then run `pod install`.
+1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile)  then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 2. Open your project in xCode workspace
 3. Drag the following folder into your project:
@@ -43,7 +43,7 @@ If you need `GoogleMaps` support in iOS also add this line:
     pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'
 
 Now if you need `GoogleMaps` support you will also have to add a bunch of other stuff to your
-`Podfile`. See the **comments* in the included `example/ios/Podfile` which explain the rest.
+`Podfile`. See the **comments* in the included [example/ios/Podfile](../example/ios/Podfile) which explain the rest.
 
 After your `Podfile` is setup properly, run `pod install`.
 
