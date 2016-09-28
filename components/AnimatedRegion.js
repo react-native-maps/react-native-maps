@@ -1,45 +1,40 @@
 /* eslint-disable */
+import {Animated} from 'react-native';
 
-class AnimatedRegion extends AnimatedWithChildren {
-  // latitude: AnimatedValue;
-  // longitude: AnimatedValue;
-  // latitudeDelta: AnimatedValue;
-  // longitudeDelta: AnimatedValue;
-  // _listeners: {[key: string]: {
-  //  latitude: string,
-  //  longitude: string,
-  //  latitudeDelta: string;
-  //  longitudeDelta: string,
-  // }};
+const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
+if (__DEV__) {
+  if (AnimatedWithChildren.name !== 'AnimatedWithChildren') console.error('AnimatedRegion could not obtain AnimatedWithChildren base class');
+}
+// const __Animated = Object.getPrototypeOf(AnimatedWithChildren);
+// if (__Animated.name !== 'Animated') console.error('AnimatedRegion could not obtain Animated base class');
 
+var _uniqueId = 1;
+
+export default class AnimatedMapRegion extends AnimatedWithChildren {
   constructor(valueIn) {
     super();
-    const value = valueIn || { // probably want to come up with better defaults
+    var value = valueIn || { // probably want to come up with better defaults
       latitude: 0,
       longitude: 0,
       latitudeDelta: 0,
-      longitudeDelta: 0,
+      longitudeDelta: 0
     };
-    this.latitude = value.latitude instanceof Animated
+    this.latitude = value.latitude instanceof Animated.Value
       ? value.latitude
-      : new AnimatedValue(value.latitude);
-    this.longitude = value.longitude instanceof Animated
+      : new Animated.Value(value.latitude);
+    this.longitude = value.longitude instanceof Animated.Value
       ? value.longitude
-      : new AnimatedValue(value.longitude);
-    this.latitudeDelta = value.latitudeDelta instanceof Animated
+      : new Animated.Value(value.longitude);
+    this.latitudeDelta = value.latitudeDelta instanceof Animated.Value
       ? value.latitudeDelta
-      : new AnimatedValue(value.latitudeDelta);
-    this.longitudeDelta = value.longitudeDelta instanceof Animated
+      : new Animated.Value(value.latitudeDelta);
+    this.longitudeDelta = value.longitudeDelta instanceof Animated.Value
       ? value.longitudeDelta
-      : new AnimatedValue(value.longitudeDelta);
+      : new Animated.Value(value.longitudeDelta);
     this._listeners = {};
   }
 
   setValue(value) {
-    // this.latitude.setValue(value.latitude);
-    // this.longitude.setValue(value.longitude);
-    // this.latitudeDelta.setValue(value.latitudeDelta);
-    // this.longitudeDelta.setValue(value.longitudeDelta);
     this.latitude._value = value.latitude;
     this.longitude._value = value.longitude;
     this.latitudeDelta._value = value.latitudeDelta;
@@ -65,7 +60,7 @@ class AnimatedRegion extends AnimatedWithChildren {
       latitude: this.latitude.__getValue(),
       longitude: this.longitude.__getValue(),
       latitudeDelta: this.latitudeDelta.__getValue(),
-      longitudeDelta: this.longitudeDelta.__getValue(),
+      longitudeDelta: this.longitudeDelta.__getValue()
     };
   }
 
@@ -92,15 +87,15 @@ class AnimatedRegion extends AnimatedWithChildren {
   }
 
   addListener(callback) {
-    const id = String(_uniqueId++);
-    const jointCallback = ({ value: number }) => {
+    var id = String(_uniqueId++);
+    var jointCallback = (/*{value}*/) => {
       callback(this.__getValue());
     };
     this._listeners[id] = {
       latitude: this.latitude.addListener(jointCallback),
       longitude: this.longitude.addListener(jointCallback),
       latitudeDelta: this.latitudeDelta.addListener(jointCallback),
-      longitudeDelta: this.longitudeDelta.addListener(jointCallback),
+      longitudeDelta: this.longitudeDelta.addListener(jointCallback)
     };
     return id;
   }
@@ -114,60 +109,60 @@ class AnimatedRegion extends AnimatedWithChildren {
   }
 
   spring(config) {
-    const animations = [];
+    var animations = [];
     config.hasOwnProperty('latitude') &&
-    animations.push(timing(this.latitude, {
+    animations.push(Animated.timing(this.latitude, {
       ...config,
-      toValue: config.latitude,
+      toValue: config.latitude
     }));
 
     config.hasOwnProperty('longitude') &&
-    animations.push(timing(this.longitude, {
+    animations.push(Animated.timing(this.longitude, {
       ...config,
-      toValue: config.longitude,
+      toValue: config.longitude
     }));
 
     config.hasOwnProperty('latitudeDelta') &&
-    animations.push(timing(this.latitudeDelta, {
+    animations.push(Animated.timing(this.latitudeDelta, {
       ...config,
-      toValue: config.latitudeDelta,
+      toValue: config.latitudeDelta
     }));
 
     config.hasOwnProperty('longitudeDelta') &&
-    animations.push(timing(this.longitudeDelta, {
+    animations.push(Animated.timing(this.longitudeDelta, {
       ...config,
-      toValue: config.longitudeDelta,
+      toValue: config.longitudeDelta
     }));
 
-    return parallel(animations);
+    return Animated.parallel(animations);
   }
 
   timing(config) {
-    const animations = [];
+    var animations = [];
     config.hasOwnProperty('latitude') &&
-    animations.push(timing(this.latitude, {
+    animations.push(Animated.timing(this.latitude, {
       ...config,
-      toValue: config.latitude,
+      toValue: config.latitude
     }));
 
     config.hasOwnProperty('longitude') &&
-    animations.push(timing(this.longitude, {
+    animations.push(Animated.timing(this.longitude, {
       ...config,
-      toValue: config.longitude,
+      toValue: config.longitude
     }));
 
     config.hasOwnProperty('latitudeDelta') &&
-    animations.push(timing(this.latitudeDelta, {
+    animations.push(Animated.timing(this.latitudeDelta, {
       ...config,
-      toValue: config.latitudeDelta,
+      toValue: config.latitudeDelta
     }));
 
     config.hasOwnProperty('longitudeDelta') &&
-    animations.push(timing(this.longitudeDelta, {
+    animations.push(Animated.timing(this.longitudeDelta, {
       ...config,
-      toValue: config.longitudeDelta,
+      toValue: config.longitudeDelta
     }));
 
-    return parallel(animations);
+    return Animated.parallel(animations);
   }
 }
