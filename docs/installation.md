@@ -6,16 +6,12 @@ First, download the library from npm:
 npm install react-native-maps --save
 ```
 
-Then you must install the native dependencies. You can use `rnpm` (now part of `react-native` core) to
-add native dependencies automatically:
+Then you must install the native dependencies: You can use `rnpm` (now part of `react-native` core) to
+add native dependencies automatically then continue the directions below depending on your target OS.
 
-`$ react-native link`
+   `$ react-native link`
 
-Go to step 4 to configure Google Maps API KEY in Android.
-
->This installation should work in physical devices. For Genymotion, please check installation step 5
-
-or do it manually as described below:
+   >This installation should work in physical devices. For Genymotion, be sure to check Android installation about Google Play Services
 
 ## iOS
 
@@ -23,10 +19,10 @@ or do it manually as described below:
 
 1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile)  then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
-2. Open your project in xCode workspace
-3. Drag the following folder into your project:
+1. Open your project in xCode workspace
+1. Drag the following folder into your project:
     - `node_modules/react-native-maps/ios/AirMaps/`
-4. If you need `GoogleMaps` support also drag this folder into your project:
+1. If you need `GoogleMaps` support also drag this folder into your project:
     - `node_modules/react-native-maps/ios/AirGoogleMaps/`
 
 ### Option 2: Cocoapods -- Untested Way
@@ -47,183 +43,139 @@ Now if you need `GoogleMaps` support you will also have to add a bunch of other 
 
 After your `Podfile` is setup properly, run `pod install`.
 
-### Option3: Manually
+### Option 3: Manually
 1. Open your project in XCode, right click on `Libraries` and click `Add
    Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
-2. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
-3. Click on `AIRMaps.xcodeproj` in `Libraries` and go the `Build
+1. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
+1. Click on `AIRMaps.xcodeproj` in `Libraries` and go the `Build
    Settings` tab. Double click the text to the right of `Header Search
    Paths` and verify that it has `$(SRCROOT)/../../react-native/React` as well as `$(SRCROOT)/../../react-native/Libraries/Image` - if they
    aren't, then add them. This is so XCode is able to find the headers that
    the `AIRMaps` source files are referring to by pointing to the
    header files installed within the `react-native` `node_modules`
    directory.
-4. Whenever you want to use it within React code now you can: `var MapView =
+1. Whenever you want to use it within React code now you can: `var MapView =
    require('react-native-maps');`
 
 ## Android
 
-1. in your `android/app/build.gradle` add:
-```groovy
-...
-dependencies {
-  ...
-  compile project(':react-native-maps')
-}
-```
+1. In your `android/app/build.gradle` add:
+   ```groovy
+   ...
+   dependencies {
+     ...
+     compile project(':react-native-maps')
+   }
+   ```
 
-2. in your `android/settings.gradle` add:
-```groovy
-...
-include ':react-native-maps'
-project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
-```
+1. In your `android/settings.gradle` add:
+   ```groovy
+   ...
+   include ':react-native-maps'
+   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+   ```
 
-3. in your application object, add:
-
-For React Native v0.29.0 or above:
-
-```java
-import com.airbnb.android.react.maps.MapsPackage;
-
-public class MyApplication extends Application implements ReactApplication {
-  private final ReactNativeHost reactNativeHost = new ReactNativeHost(this) {
-    @Override protected List<ReactPackage> getPackages() {
-      return Arrays.asList(
-          new MainReactPackage(),
-          new MapsPackage());
-    }
-  };
-
-  @Override public ReactNativeHost getReactNativeHost() {
-    return reactNativeHost;
-  }
-}
-```
-
-For older versions of React Native:
-
-```java
-@Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    mReactRootView = new ReactRootView(this);
-
-    mReactInstanceManager = ReactInstanceManager.builder()
-            .setApplication(getApplication())
-            .setBundleAssetName("index.android.bundle")
-            .setJSMainModuleName("index.android")
-            .addPackage(new MainReactPackage())
-            .addPackage(new MapsPackage()) // <---- and This!
-            .setUseDeveloperSupport(BuildConfig.DEBUG)
-            .setInitialLifecycleState(LifecycleState.RESUMED)
-            .build();
-
-    mReactRootView.startReactApplication(mReactInstanceManager, "MyApp", null);
-
-    setContentView(mReactRootView);
-}
-```
-
-4. Specify your Google Maps API Key:
+1. Specify your Google Maps API Key:
     > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-Add your **Browser** API key to your manifest file:
+   Add your **Browser** API key to your manifest file (`android\app\src\main\AndroidManifest.xml`):
 
-```xml
-<application>
-    <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-    <meta-data
-      android:name="com.google.android.geo.API_KEY"
-      android:value="{{Your Google maps API Key Here}}"/>
-</application>
-```
+   ```xml
+   <application>
+       <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+       <meta-data
+         android:name="com.google.android.geo.API_KEY"
+         android:value="{{Your Google maps API Key Here}}"/>
+   </application>
+   ```
     > If that doesn't work try using an ***Android Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-Add your **Android** API key to your manifest file:
+   Add your **Android** API key to your manifest file:
 
-```xml
-<application>
-    <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-    <meta-data
-        android:name="com.google.android.maps.v2.API_KEY"
-        android:value="{{@string/ANDROID_GOOGLE_MAPS_API_KEY}}"/>
-</application>
-```
+   ```xml
+   <application>
+       <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+       <meta-data
+           android:name="com.google.android.maps.v2.API_KEY"
+           android:value="{{@string/ANDROID_GOOGLE_MAPS_API_KEY}}"/>
+   </application>
+   ```
 
-5. ensure that you have Google Play Services installed:
+1. Ensure that you have Google Play Services installed:
   * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).
-  * For a physical device you need to search on Google 'Google Play Services'. There will be a link that takes you to the play store and from there you will see a button to update it (do not search within the Play Store).
+  * For a physical device you need to search on Google for 'Google Play Services'. There will be a link that takes you to the Play Store and from there you will see a button to update it (do not search within the Play Store).
 
-**Troubleshooting**
+## Troubleshooting
 
 If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-maps/issues/118), [#176](https://github.com/airbnb/react-native-maps/issues/176)) try the following lines :
 
-**On iOS :**  
+### On iOS:
 
- You have to link dependencies with rnpm and re-run the build :   
-1. `rnpm link`  
-2. `react-native run-ios`
+You have to link dependencies with rnpm and re-run the build:
 
-**On Android :**  
+1. `rnpm link`
+1. `react-native run-ios`
+
+### On Android:
 
 1. Set this Stylesheet in your map component
-```
-...
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    height: 400,
-    width: 400,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-});
+   ```
+   ...
+   const styles = StyleSheet.create({
+     container: {
+       ...StyleSheet.absoluteFillObject,
+       height: 400,
+       width: 400,
+       justifyContent: 'flex-end',
+       alignItems: 'center',
+     },
+     map: {
+       ...StyleSheet.absoluteFillObject,
+     },
+   });
 
-module.exports = class MyApp extends React.Component {
-  render() {
-    const { region } = this.props;
-    console.log(region);
+   module.exports = class MyApp extends React.Component {
+     render() {
+       const { region } = this.props;
+       console.log(region);
 
-    return (
-      <View style ={styles.container}>
-        <MapView
-          style={styles.map}
-          region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}
-        >
-        </MapView>
-      </View>
-    );
-  }
-}
-```
-2. Run "android" and make sure every packages is updated.
-3.  If not installed yet, you have to install the following packages :
+       return (
+         <View style ={styles.container}>
+           <MapView
+             style={styles.map}
+             region={{
+               latitude: 37.78825,
+               longitude: -122.4324,
+               latitudeDelta: 0.015,
+               longitudeDelta: 0.0121,
+             }}
+           >
+           </MapView>
+         </View>
+       );
+     }
+   }
+   ```
+1. Run "android" and make sure every packages is updated.
+1.  If not installed yet, you have to install the following packages :
     - Extras / Google Play services
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 13
-4. Check manual installation steps
-5. Generate your SHA1 key :  
+1. Check manual installation steps
+1. Generate your SHA1 key :  
    `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
 
-6. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
+1. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
 In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
 Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
 Check installation step 4.
 
-7. Clean the cache :   
+1. Clean the cache :   
    `watchman watch-del-all`  
    `npm cache clean`
 
-8. When starting emulator, make sure you have enabled `Wipe user data`.
+1. When starting emulator, make sure you have enabled `Wipe user data`.
 
-9. Run `react-native run-android`
+1. Run `react-native run-android`
 
-10. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
+1. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
