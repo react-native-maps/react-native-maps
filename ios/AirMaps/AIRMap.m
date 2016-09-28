@@ -155,7 +155,16 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     UIView *calloutMaybe = [self.calloutView hitTest:[self.calloutView convertPoint:point fromView:self] withEvent:event];
     if (calloutMaybe) return calloutMaybe;
 
-    return [super hitTest:point withEvent:event];
+    // If it's not a callout, then always return the MKNewAnnotationContainerView which will handle pinch & zoom properly
+    // - MKMapView
+    // - - UIView
+    // - - - MKBasicMapView
+    // - - - - _MKMapLayerHostingView
+    // - - - MKScrollContainerView
+    // - - - - MKOverlayContainerView
+    // - - - MKNewAnnotationContainerView
+    // - - MKAttributionLabel
+    return ((UIView *)[((UIView *)[self.subviews objectAtIndex:0]).subviews objectAtIndex:2]);
 }
 
 #pragma mark SMCalloutViewDelegate
