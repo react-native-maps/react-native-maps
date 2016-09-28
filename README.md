@@ -263,25 +263,16 @@ Enable lite mode on Android with `liteMode` prop. Ideal when having multiple map
 [`<MapView.Circle />` Component API](docs/circle.md)
 
 
-
-## Using with the Animated API
-
-The API of this Map has been built with the intention of it being able to utilize the [Animated API](https://facebook.github.io/react-native/docs/animated.html).
-
-In order to get this to work, you will need to modify the `AnimatedImplementation.js` file in the
-source of react-native with [this one](https://gist.github.com/lelandrichardson/c0d938e02301f9294465).
-
-Ideally this will be possible in the near future without this modification.
-
 ### Animated Region
 
-The MapView can accept an `Animated.Region` value as its `region` prop. This allows you to utilize
-the Animated API to control the map's center and zoom.
+The MapView can accept an `MapView.AnimatedRegion` value as its `region` prop. This allows you to utilize the Animated API to control the map's center and zoom.
 
 ```jsx
+import MapView from 'react-native-maps';
+
 getInitialState() {
   return {
-    region: new Animated.Region({
+    region: new MapView.AnimatedRegion({
       latitude: LATITUDE,
       longitude: LONGITUDE,
       latitudeDelta: LATITUDE_DELTA,
@@ -306,16 +297,25 @@ render() {
 
 ### Animated Marker Position
 
-Markers can also accept an `Animated.Region` value as a coordinate.
+Markers can also accept an `AnimatedRegion` value as a coordinate.
 
 ```jsx
 getInitialState() {
   return {
-    coordinate: new Animated.Region({
+    coordinate: new MapView.AnimatedRegion({
       latitude: LATITUDE,
       longitude: LONGITUDE,
     }),
   };
+}
+
+componentWillReceiveProps(nextProps) {
+  if (this.props.coordinate !== nextProps.coordinate) {
+    this.state.coordinate.timing({
+      ...nextProps.coordinate,
+      duration: 500
+    }).start();
+  }
 }
 
 render() {
