@@ -1,5 +1,68 @@
 # Change Log
 
+## 0.9.0 (September 28, 2016)
+
+As of this release, this repository has moved from
+`lelandrichardson/react-native-maps` to `airbnb/react-native-maps`.
+
+### Breaking Changes
+
+* [iOS] Support Google Maps on iOS
+  [#548](https://github.com/airbnb/react-native-maps/pull/548)
+  (@gilbox)
+
+### Patches
+
+* Added support for AnimatedRegion without modifying the AnimatedImplementation.js of react-native
+  [#608](https://github.com/airbnb/react-native-maps/pull/608)
+  (@IjzerenHein)
+* [iOS] Remove pod stuff. Fix AirMaps.xcodeproj related to missing pod stuff
+  [#620](https://github.com/airbnb/react-native-maps/pull/620)
+  (@gilbox)
+* [iOS] Fix import of AIRMapSnapshot
+  [#622](https://github.com/airbnb/react-native-maps/pull/622)
+  (@spikebrehm)
+* [iOS] Fix nullability issue
+  [#614](https://github.com/airbnb/react-native-maps/pull/614)
+  (@simonmitchell)
+* [iOS] Added support for drawing polylines on snapshots on iOS
+  [#615](https://github.com/airbnb/react-native-maps/pull/615)
+  (@IjzerenHein)
+* Add `fitToCoordinates` method
+  [#545](https://github.com/airbnb/react-native-maps/pull/545)
+  (@naoufal)
+* [Android] Fix list of examples on Android
+  [#597](https://github.com/airbnb/react-native-maps/pull/597)
+  (@spikebrehm)
+* [Android] Fix overlapping map issue
+  [#589](https://github.com/airbnb/react-native-maps/pull/589)
+  (@fdnhkj)
+* Add tile overlay support
+  [#595](https://github.com/airbnb/react-native-maps/pull/595)
+  (@cascadian, @spikebrehm)
+* [Android] Support Android LiteMode
+  [#546](https://github.com/airbnb/react-native-maps/pull/546)
+  (@rops)
+* s/lelandrichardson/airbnb/
+  [#573](https://github.com/airbnb/react-native-maps/pull/573)
+  (@spikebrehm)
+* [Android] Don't fit to elements if no positions added
+  [#567](https://github.com/airbnb/react-native-maps/pull/567)
+  (@ryankask)
+* [iOS] Add class prefix to EmptyCalloutBackgroundView
+  [#563](https://github.com/airbnb/react-native-maps/pull/563)
+  (@terribleben)
+* [Android] Minor code cleanup
+  [#564](https://github.com/airbnb/react-native-maps/pull/564)
+  (@felipecsl)
+* Documentation updates
+  [#566](https://github.com/airbnb/react-native-maps/pull/566),
+  [#591](https://github.com/airbnb/react-native-maps/pull/591),
+  [#601](https://github.com/airbnb/react-native-maps/pull/601),
+  [#602](https://github.com/airbnb/react-native-maps/pull/602),
+  [#624](https://github.com/airbnb/react-native-maps/pull/624)
+  (@felipecsl, @Alastairm, @Keksike, @bbodenmiller)
+
 ## 0.8.2 (September 8, 2016)
 
 We realized immediately after publishing 0.8.1 that the NPM package contained
@@ -19,7 +82,7 @@ This error is caused by a @providesModule declaration with the same name accross
 
 ## 0.8.1 (September 8, 2016) *[DEPRECATED]*
 
-#### *NOTE: 0.8.1 has been unpublished from NPM beacuse it was faulty. Please use 0.8.2.*
+#### *NOTE: 0.8.1 has been unpublished from NPM because it was faulty. Please use 0.8.2.*
 
 ### Patches
 
