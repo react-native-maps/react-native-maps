@@ -12,13 +12,36 @@
 #import "RCTConvert+MapKit.h"
 #import "UIView+React.h"
 
-id cameraPositionAsJSON(GMSCameraPosition *position) {
-  // todo: convert zoom to delta lat/lng
+id regionAsJSON(MKCoordinateRegion region) {
   return @{
-           @"latitude": [NSNumber numberWithDouble:position.target.latitude],
-           @"longitude": [NSNumber numberWithDouble:position.target.longitude],
-           @"zoom": [NSNumber numberWithDouble:position.zoom],
+           @"latitude": [NSNumber numberWithDouble:region.center.latitude],
+           @"longitude": [NSNumber numberWithDouble:region.center.longitude],
+           @"latitudeDelta": [NSNumber numberWithDouble:region.span.latitudeDelta],
+           @"longitudeDelta": [NSNumber numberWithDouble:region.span.longitudeDelta],
            };
+}
+
+MKCoordinateRegion makeMKCoordinateRegionFromGMSCameraPositionOfMap(GMSMapView *map, GMSCameraPosition *position) {
+  // solution from here: http://stackoverflow.com/a/16587735/1102215
+  GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
+  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion: visibleRegion];
+  CLLocationCoordinate2D center;
+  CLLocationDegrees longitudeDelta;
+  CLLocationDegrees latitudeDelta = bounds.northEast.latitude - bounds.southWest.latitude;
+
+  if(bounds.northEast.longitude >= bounds.southWest.longitude) {
+    //Standard case
+    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
+                                        (bounds.southWest.longitude + bounds.northEast.longitude) / 2);
+    longitudeDelta = bounds.northEast.longitude - bounds.southWest.longitude;
+  } else {
+    //Region spans the international dateline
+    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
+                                        (bounds.southWest.longitude + bounds.northEast.longitude + 360) / 2);
+    longitudeDelta = bounds.northEast.longitude + 360 - bounds.southWest.longitude;
+  }
+  MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
+  return MKCoordinateRegionMake(center, span);
 }
 
 GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *map, MKCoordinateRegion region) {
@@ -137,14 +160,15 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position {
   id event = @{@"continuous": @YES,
-               @"region": cameraPositionAsJSON(position),
+               @"region": regionAsJSON(makeMKCoordinateRegionFromGMSCameraPositionOfMap(self, position)),
                };
+
   if (self.onChange) self.onChange(event);
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position {
   id event = @{@"continuous": @NO,
-               @"region": cameraPositionAsJSON(position),
+               @"region": regionAsJSON(makeMKCoordinateRegionFromGMSCameraPositionOfMap(self, position)),
                };
   if (self.onChange) self.onChange(event);  // complete
 }
