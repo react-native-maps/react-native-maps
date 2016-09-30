@@ -122,6 +122,13 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 }
 #pragma clang diagnostic pop
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
+- (NSArray<id<RCTComponent>> *)reactSubviews {
+  return _reactSubviews;
+}
+#pragma clang diagnostic pop
+
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
   if (_initialRegionSet) return;
   _initialRegionSet = true;
