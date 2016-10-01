@@ -445,46 +445,79 @@ class MapView extends React.Component {
     this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
   }
 
-  takeSnapshot(width, height, region, callback) {
-    return new Promise((resolve, reject) => {
-      let options;
-      if (typeof width === 'object') {
-        options = width;
-      } else {
-        options = {
-          width,
-          height,
-          region: region || this.props.region || this.props.initialRegion,
-        };
-      }
-      if (Platform.OS === 'android') {
-        NativeModules.AirMapModule.takeSnapshot(this._getHandle(), options).then((snapshot) => {
-          if (callback) {
-            callback(undefined, {
-              uri: snapshot,
-            });
-          }
-          resolve(snapshot);
-        }, (err) => {
-          if (callback) callback(err);
-          reject(err);
-        });
-      } else {
+  /**
+   * Takes a snapshot of the map and saves it to a picture
+   * file or returns the image as a base64 encoded string.
+   *
+   * @param config Configuration options
+   * @param [config.width] Width of the rendered map-view (when omitted actual view width is used).
+   * @param [config.height] Height of the rendered map-view (when omitted actual height is used).
+   * @param [config.region] Region to render (Only supported on iOS).
+   * @param [config.format] Encoding format ('png', 'jpg') (default: 'png').
+   * @param [config.quality] Compression quality (only used for jpg) (default: 1.0).
+   * @param [config.result] Result format ('file', 'base64') (default: 'file').
+   *
+   * @return Promise Promise with either the file-uri or base64 encoded string
+   */
+  takeSnapshot(args) {
+    // For the time being we support the legacy API on iOS.
+    // This will be removed in a future release and only the
+    // new Promise style API shall be supported.
+    if (Platform.OS === 'ios' && (arguments.length === 4)) {
+      console.warn('Old takeSnapshot API has been deprecated; will be removed in the near future'); //eslint-disable-line
+      const width = arguments[0]; // eslint-disable-line
+      const height = arguments[1]; // eslint-disable-line
+      const region = arguments[2]; // eslint-disable-line
+      const callback = arguments[3]; // eslint-disable-line
+      this._runCommand('takeSnapshot', [
+        width || 0,
+        height || 0,
+        region || {},
+        'png',
+        1,
+        'legacy',
+        callback,
+      ]);
+      return undefined;
+    }
+
+    // Sanitize inputs
+    const config = {
+      width: args.width || 0,
+      height: args.height || 0,
+      region: args.region || {},
+      format: args.format || 'png',
+      quality: args.quality || 1.0,
+      result: args.result || 'file',
+    };
+    if ((config.format !== 'png') &&
+        (config.format !== 'jpg')) throw new Error('Invalid format specified');
+    if ((config.result !== 'file') &&
+        (config.result !== 'base64')) throw new Error('Invalid result specified');
+
+    // Call native function
+    if (Platform.OS === 'android') {
+      return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
+    } else if (Platform.OS === 'ios') {
+      return new Promise((resolve, reject) => {
         this._runCommand('takeSnapshot', [
-          options.width,
-          options.height,
-          options.region,
+          config.width,
+          config.height,
+          config.region,
+          config.format,
+          config.quality,
+          config.result,
           (err, snapshot) => {
-            if (callback) callback(err, snapshot);
             if (err) {
               reject(err);
             } else {
-              resolve(snapshot.uri);
+              resolve(snapshot);
             }
           },
         ]);
-      }
-    });
+      });
+    }
+    return Promise.reject('takeSnapshot not supported on this platform');
   }
 
   _uiManagerCommand(name) {
