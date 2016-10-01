@@ -24,8 +24,12 @@ import com.facebook.react.uimanager.NativeViewHierarchyManager;
 
 import com.google.android.gms.maps.GoogleMap;
 
-
 public class AirMapModule extends ReactContextBaseJavaModule {
+
+    private static final String SNAPSHOT_RESULT_FILE = "file";
+    private static final String SNAPSHOT_RESULT_BASE64 = "base64";
+    private static final String SNAPSHOT_FORMAT_PNG = "png";
+    private static final String SNAPSHOT_FORMAT_JPG = "jpg";
 
     public AirMapModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -47,12 +51,8 @@ public class AirMapModule extends ReactContextBaseJavaModule {
         final ReactApplicationContext context = getReactApplicationContext();
         final String format = options.hasKey("format") ? options.getString("format") : "png";
         final Bitmap.CompressFormat compressFormat =
-            format.equals("png") ? Bitmap.CompressFormat.PNG :
-            format.equals("jpg") ? Bitmap.CompressFormat.JPEG : null;
-        if (compressFormat == null) {
-            promise.reject("AIRMap.takeSnapshot", "Unsupported image format: " + format + ". Try one of: png | jpg | jpeg");
-            return;
-        }
+            format.equals(SNAPSHOT_FORMAT_PNG) ? Bitmap.CompressFormat.PNG :
+            format.equals(SNAPSHOT_FORMAT_JPG) ? Bitmap.CompressFormat.JPEG : null;
         final double quality = options.hasKey("quality") ? options.getDouble("quality") : 1.0;
         final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         final Integer width = options.hasKey("width") ? (int)(displayMetrics.density * options.getDouble("width")) : 0;
@@ -87,7 +87,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
                         // Save the snapshot to disk
                         OutputStream outputStream = null;
                         try {
-                            if ("file".equals(result)) {
+                            if (result.equals(SNAPSHOT_RESULT_FILE)) {
                                 File tempFile = File.createTempFile("AirMapSnapshot", "." + format, context.getCacheDir());
                                 outputStream = new FileOutputStream(tempFile);
                                 snapshot.compress(compressFormat, (int)(100.0 * quality), outputStream);
@@ -96,7 +96,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
                                 String uri = Uri.fromFile(tempFile).toString();
                                 promise.resolve(uri);
                             }
-                            else if ("base64".equals(result)) {
+                            else if (result.equals(SNAPSHOT_RESULT_BASE64)) {
                                 outputStream = new ByteArrayOutputStream();
                                 snapshot.compress(compressFormat, (int)(100.0 * quality), outputStream);
                                 outputStream.close();
