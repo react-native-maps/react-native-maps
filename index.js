@@ -1,3 +1,3 @@
 import MapView from './components/MapView';
 
-module.exports = MapView;
+export default Mapview;
