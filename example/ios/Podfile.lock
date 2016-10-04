@@ -1,9 +1,9 @@
 PODS:
-  - GoogleMaps (2.0.1):
-    - GoogleMaps/Maps (= 2.0.1)
-  - GoogleMaps/Base (2.0.1)
-  - GoogleMaps/Maps (2.0.1):
-    - GoogleMaps/Base (= 2.0.1)
+  - GoogleMaps (2.1.0):
+    - GoogleMaps/Maps (= 2.1.0)
+  - GoogleMaps/Base (2.1.0)
+  - GoogleMaps/Maps (2.1.0):
+    - GoogleMaps/Base (= 2.1.0)
   - React/Core (0.32.0):
     - React/CSSLayout
   - React/CSSLayout (0.32.0)
@@ -45,7 +45,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
 
 SPEC CHECKSUMS:
-  GoogleMaps: f09da64fc987c1aa29394567c3cab5a3df83c402
+  GoogleMaps: 06589b9a38097bce0cd6e90f0fd9b5e4b4a9344c
   React: 0245b401173a94a5fba0f440aab3fb2f79b738f3
 
 COCOAPODS: 0.39.0
