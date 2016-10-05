@@ -21,6 +21,7 @@ import AnimatedMarkers from './examples/AnimatedMarkers';
 import Callouts from './examples/Callouts';
 import Overlays from './examples/Overlays';
 import DefaultMarkers from './examples/DefaultMarkers';
+import CustomMarkers from './examples/CustomMarkers';
 import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
 import TakeSnapshot from './examples/TakeSnapshot';
@@ -129,6 +130,7 @@ class App extends React.Component {
       [Callouts, 'Custom Callouts', true],
       [Overlays, 'Circles, Polygons, and Polylines', true, '(ios error)'],
       [DefaultMarkers, 'Default Markers', true],
+      [CustomMarkers, 'Custom Markers', true],
       [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
