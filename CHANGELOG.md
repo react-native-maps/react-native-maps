@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.10.0 (October 5, 2016)
+
+### Breaking Changes
+
+* Upgrade to `react-native@0.33.0`
+
 ## 0.9.0 (September 28, 2016)
 
 As of this release, this repository has moved from
