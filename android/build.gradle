@@ -2,23 +2,22 @@
 
 apply plugin: 'com.android.library'
 apply from: 'gradle-maven-push.gradle'
-
 buildscript {
   repositories {
-      mavenLocal()
-      jcenter()
-      maven {
-          // For developing the library outside the context of the example app, expect `react-native`
-          // to be installed at `./android/node_modules`.
-          url "$projectDir/../node_modules/react-native/android"
-      }
       maven {
           // For developing the example app, expect this library to be installed as a node module
           // inside of the example app. So traverse from `./android/example/node_modules/react-native-maps/android`
           // to `./android/example/node_modules/react-native/android`.
           // react-native should be installed since it's a peer dependency
-          url "$projectDir/../../react-native/android"
+          url "$projectDir/../example/node_modules/react-native/android"
       }
+      maven {
+          // For developing the library outside the context of the example app, expect `react-native`
+          // to be installed at `./android/node_modules`.
+          url "$projectDir/../node_modules/react-native/android"
+      }
+      mavenLocal()
+      jcenter()
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.1.0'
@@ -27,20 +26,20 @@ buildscript {
 
 allprojects {
   repositories {
-    mavenLocal()
-    jcenter()
+      maven {
+          // For developing the example app, expect this library to be installed as a node module
+          // inside of the example app. So traverse from `./android/example/node_modules/react-native-maps/android`
+          // to `./android/example/node_modules/react-native/android`.
+          // react-native should be installed since it's a peer dependency
+          url "$projectDir/../example/node_modules/react-native/android"
+      }
       maven {
           // For developing the library outside the context of the example app, expect `react-native`
           // to be installed at `./android/node_modules`.
           url "$projectDir/../node_modules/react-native/android"
       }
-    maven {
-        // For developing the example app, expect this library to be installed as a node module
-        // inside of the example app. So traverse from `./android/example/node_modules/react-native-maps/android`
-        // to `./android/example/node_modules/react-native/android`.
-        // react-native should be installed since it's a peer dependency
-        url "$projectDir/../../react-native/android"
-    }
+      mavenLocal()
+      jcenter()
   }
 }
 
