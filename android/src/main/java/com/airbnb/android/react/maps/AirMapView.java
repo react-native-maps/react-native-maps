@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.util.Log;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableArray;
@@ -272,7 +273,11 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if (!paused) {
             onPause();
         }
-        onDestroy();
+        try {
+            onDestroy();
+        } catch (Exception e) {
+            Log.e("AirMapView", e.getMessage() != null ? e.getMessage() : "Error calling onDestroy", e);
+        }
     }
 
     public void setRegion(ReadableMap region) {
