@@ -236,4 +236,12 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 - (BOOL)showsCompass {
   return self.settings.compassButton;
 }
+
+- (void)setMapStyle:(NSString)mapStyle {
+  self.settings.mapStyle = mapStyle;
+}
+
+- (NSString)mapStyle {
+  return self.settings.mapStyle;
+}
 @end
