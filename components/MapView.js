@@ -56,6 +56,13 @@ const propTypes = {
   ]),
 
   /**
+   * A json string (we probably should make this a json object and convert internally)
+   * https://developers.google.com/maps/documentation/ios-sdk/styling#use_a_string_resource
+   * https://developers.google.com/maps/documentation/android-api/styling
+   */
+  mapStyle: PropTypes.string,
+
+  /**
    * Used to style and layout the `MapView`.  See `StyleSheet.js` and
    * `ViewStylePropTypes.js` for more info.
    */
@@ -386,11 +393,14 @@ class MapView extends React.Component {
   }
 
   _onMapReady() {
-    const { region, initialRegion } = this.props;
+    const { region, initialRegion, mapStyle } = this.props;
     if (region) {
       this.map.setNativeProps({ region });
     } else if (initialRegion) {
       this.map.setNativeProps({ region: initialRegion });
+    }
+    if (mapStyle) {
+      this.map.setNativeProps({ mapStyle });
     }
     this.setState({ isReady: true });
   }
