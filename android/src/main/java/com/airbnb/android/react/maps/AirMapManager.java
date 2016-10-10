@@ -96,10 +96,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.setRegion(region);
     }
 
-    @ReactProp(name = "mapStyle")
-    public void setMapStyle(AirMapView view, @Nullable String mapStyles) {
-        Log.d(mapStyles, "mapstyle");
-        view.map.setMapStyle(new MapStyleOptions(mapStyles));
+    @ReactProp(name = "customMapStyle")
+    public void setCustomMapStyle(AirMapView view, @Nullable String mapStyle) {
+        view.map.setMapStyle(new MapStyleOptions(mapStyle));
     }
 
     @ReactProp(name = "mapType")

@@ -24,6 +24,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
 @property (nonatomic, strong) NSMutableArray *markers;
+@property (nonatomic, assign) NSString *customMapStyle;
 
 @property (nonatomic, assign) BOOL showsBuildings;
 @property (nonatomic, assign) BOOL showsTraffic;

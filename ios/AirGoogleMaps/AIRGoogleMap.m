@@ -237,11 +237,43 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
   return self.settings.compassButton;
 }
 
-- (void)setMapStyle:(NSString *)mapStyle {
-//  self.settings.mapStyle = mapStyle;
+- (void)setCustomMapStyle:(NSString *)customMapStyle {
+  
+//  self.customMapStyle = customMapStyle;
+  
+  NSError *error;
+  
+  NSLog(@"%@", customMapStyle);
+  
+//  NSString *mapStyleAlt = @" [\n"
+//  "  {\n"
+//  "  \"featureType\": \"poi.business\",\n"
+//  "  \"elementType\": \"all\",\n"
+//  "  \"stylers\": [\n"
+//  "              {\n"
+//  "              \"visibility\": \"off\"\n"
+//  "              }\n"
+//  "              ]\n"
+//  "  },\n"
+//  "  {\n"
+//  "  \"featureType\": \"transit\",\n"
+//  "  \"elementType\": \"all\",\n"
+//  "  \"stylers\": [\n"
+//  "              {\n"
+//  "              \"visibility\": \"off\"\n"
+//  "              }\n"
+//  "              ]\n"
+//  "  }\n"
+//  "  ]";
+
+
+  GMSMapStyle *style = [GMSMapStyle styleWithJSONString:customMapStyle error:&error];
+  
+  if (!style) {
+    NSLog(@"The style definition could not be loaded: %@", error);
+  }
+  
+  self.mapStyle = style;
 }
-//
-//- (NSString)mapStyle {
-//  return self.settings.mapStyle;
-//}
+
 @end
