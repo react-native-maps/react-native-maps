@@ -15,6 +15,7 @@ import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
 import MapUrlTile from './MapUrlTile';
+import AnimatedRegion from './AnimatedRegion';
 import {
   contextTypes as childContextTypes,
   getAirMapName,
@@ -571,5 +572,6 @@ Object.assign(MapView, ProviderConstants);
 MapView.ProviderPropType = PropTypes.oneOf(Object.values(ProviderConstants));
 
 MapView.Animated = Animated.createAnimatedComponent(MapView);
+MapView.AnimatedRegion = AnimatedRegion;
 
 module.exports = MapView;

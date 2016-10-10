@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import MapView from 'react-native-maps';
+import flagPinkImg from './assets/flag-pink.png';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,11 +19,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
-function randomColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-}
-
-class DefaultMarkers extends React.Component {
+class CustomMarkers extends React.Component {
   constructor(props) {
     super(props);
 
@@ -35,6 +32,8 @@ class DefaultMarkers extends React.Component {
       },
       markers: [],
     };
+
+    this.onMapPress = this.onMapPress.bind(this);
   }
 
   onMapPress(e) {
@@ -43,8 +42,7 @@ class DefaultMarkers extends React.Component {
         ...this.state.markers,
         {
           coordinate: e.nativeEvent.coordinate,
-          key: id++,
-          color: randomColor(),
+          key: `foo${id++}`,
         },
       ],
     });
@@ -57,13 +55,14 @@ class DefaultMarkers extends React.Component {
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
-          onPress={(e) => this.onMapPress(e)}
+          onPress={this.onMapPress}
         >
           {this.state.markers.map(marker => (
             <MapView.Marker
+              title={marker.key}
+              image={flagPinkImg}
               key={marker.key}
               coordinate={marker.coordinate}
-              pinColor={marker.color}
             />
           ))}
         </MapView>
@@ -80,7 +79,7 @@ class DefaultMarkers extends React.Component {
   }
 }
 
-DefaultMarkers.propTypes = {
+CustomMarkers.propTypes = {
   provider: MapView.ProviderPropType,
 };
 
@@ -116,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DefaultMarkers;
+module.exports = CustomMarkers;
