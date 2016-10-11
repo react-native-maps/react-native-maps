@@ -116,6 +116,12 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         view.setDraggable(draggable);
     }
 
+    @ReactProp(name = "zIndex", defaultFloat = 0.0f)
+    public void setZIndex(AirMapMarker view, float zIndex) {
+      int integerZIndex = Math.round(zIndex);
+      view.setZIndex(integerZIndex);
+    }
+
     @Override
     public void addView(AirMapMarker parent, View child, int index) {
         // if an <Callout /> component is a child, then it is a callout view, NOT part of the
