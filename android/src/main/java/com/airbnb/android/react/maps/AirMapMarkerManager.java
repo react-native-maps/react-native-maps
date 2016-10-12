@@ -116,8 +116,10 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         view.setDraggable(draggable);
     }
 
+    @Override
     @ReactProp(name = "zIndex", defaultFloat = 0.0f)
     public void setZIndex(AirMapMarker view, float zIndex) {
+      super.setZIndex(view, zIndex);
       int integerZIndex = Math.round(zIndex);
       view.setZIndex(integerZIndex);
     }
