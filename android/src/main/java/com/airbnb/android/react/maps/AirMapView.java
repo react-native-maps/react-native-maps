@@ -65,6 +65,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private boolean isMonitoringRegion = false;
     private boolean isTouchDown = false;
     private boolean handlePanDrag = false;
+    private boolean moveOnMarkerPress = true;
     private boolean cacheEnabled = false;
 
     private static final String[] PERMISSIONS = new String[] {
@@ -154,7 +155,14 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 event.putString("action", "marker-press");
                 manager.pushEvent(markerMap.get(marker), "onPress", event);
 
-                return false; // returning false opens the callout window, if possible
+                // Return false to open the callout info window and center on the marker
+                // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMarkerClickListener
+                if (view.moveOnMarkerPress) {
+                  return false;
+                } else {
+                  marker.showInfoWindow();
+                  return true;
+                }
             }
         });
 
@@ -328,6 +336,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if (loadingEnabled && !this.isMapLoaded) {
             this.getMapLoadingLayoutView().setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setMoveOnMarkerPress(boolean moveOnPress) {
+        this.moveOnMarkerPress = moveOnPress;
     }
 
     public void setLoadingBackgroundColor(Integer loadingBackgroundColor) {
