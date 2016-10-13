@@ -41,8 +41,8 @@ class LoadingMap extends React.Component {
           initialRegion={this.state.region}
           onPress={this.onMapPress}
           loadingEnabled
-          loadingIndicatorColor={"#666666"}
-          loadingBackgroundColor={"#eeeeee"}
+          loadingIndicatorColor={'#666666'}
+          loadingBackgroundColor={'#eeeeee'}
         >
           <MapView.Marker
             coordinate={{
