@@ -66,8 +66,8 @@ class CachedMap extends React.Component {
                 cacheEnabled={this.state.cache}
                 zoomEnabled
                 scrollingEnabled
-                loadingIndicatorColor={"#666666"}
-                loadingBackgroundColor={"#eeeeee"}
+                loadingIndicatorColor="#666666"
+                loadingBackgroundColor="#eeeeee"
               >
                 <MapView.Marker
                   coordinate={region}
