@@ -252,6 +252,12 @@ CGRect unionRect(CGRect a, CGRect b) {
   _realMarker.icon = [GMSMarker markerImageWithColor:pinColor];
 }
 
+- (void)setZIndex:(NSInteger)zIndex
+{
+  _zIndex = zIndex;
+  _realMarker.zIndex = (int)zIndex;
+}
+
 - (void)setDraggable:(BOOL)draggable {
   _realMarker.draggable = draggable;
 }
