@@ -24,28 +24,28 @@ class ZIndexMarkers extends React.Component {
   constructor(props) {
     super(props);
 
-    let markerInfo = [];
+    const markerInfo = [];
     for (let i = 1; i < NUM_MARKERS; i++) {
       markerInfo.push({
-        latitude: (Math.random() * 2 - 1) * MARKERS_LATITUDE_DELTA + LATITUDE,
-        longitude: (Math.random() * 2 - 1) * MARKERS_LONGITUDE_DELTA + LONGITUDE,
+        latitude: (((Math.random() * 2) - 1) * MARKERS_LATITUDE_DELTA) + LATITUDE,
+        longitude: (((Math.random() * 2) - 1) * MARKERS_LONGITUDE_DELTA) + LONGITUDE,
         isSpecial: Math.random() < PERCENT_SPECIAL_MARKERS,
         id: i,
       });
     }
 
     this.state = {
-      markerInfo
+      markerInfo,
     };
   }
 
   render() {
-    let markers = this.state.markerInfo.map((markerInfo) => {
+    const markers = this.state.markerInfo.map((markerInfo) => {
       return (
         <MapView.Marker
           coordinate={markerInfo}
           key={markerInfo.id}
-          pinColor={markerInfo.isSpecial ? "#c5a620" : null}
+          pinColor={markerInfo.isSpecial ? '#c5a620' : null}
           style={markerInfo.isSpecial ? styles.specialMarker : null}
         />
       );
