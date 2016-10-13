@@ -40,16 +40,14 @@ class ZIndexMarkers extends React.Component {
   }
 
   render() {
-    const markers = this.state.markerInfo.map((markerInfo) => {
-      return (
-        <MapView.Marker
-          coordinate={markerInfo}
-          key={markerInfo.id}
-          pinColor={markerInfo.isSpecial ? '#c5a620' : null}
-          style={markerInfo.isSpecial ? styles.specialMarker : null}
-        />
-      );
-    });
+    const markers = this.state.markerInfo.map((markerInfo) =>
+      <MapView.Marker
+        coordinate={markerInfo}
+        key={markerInfo.id}
+        pinColor={markerInfo.isSpecial ? '#c5a620' : null}
+        style={markerInfo.isSpecial ? styles.specialMarker : null}
+      />
+    );
 
     return (
       <View style={styles.container}>
