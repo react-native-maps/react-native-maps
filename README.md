@@ -135,6 +135,22 @@ render() {
 </MapView>
 ```
 
+### Using a custom Tile Overlay
+
+```jsx
+<MapView 
+  region={this.state.region}
+  onRegionChange={this.onRegionChange}
+>
+  <MapView.UrlTile
+   /**
+   * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
+   * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
+   */
+    urlTemplate={this.state.urlTemplate}
+  />
+</MapView>
+```
 
 ## Examples
 
