@@ -4,27 +4,25 @@ PODS:
   - GoogleMaps/Base (2.1.0)
   - GoogleMaps/Maps (2.1.0):
     - GoogleMaps/Base (= 2.1.0)
-  - React/Core (0.33.0):
-    - React/CSSLayout
-  - React/CSSLayout (0.33.0)
-  - React/RCTActionSheet (0.33.0):
+  - React/Core (0.35.0)
+  - React/RCTActionSheet (0.35.0):
     - React/Core
-  - React/RCTGeolocation (0.33.0):
+  - React/RCTGeolocation (0.35.0):
     - React/Core
-  - React/RCTImage (0.33.0):
+  - React/RCTImage (0.35.0):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.33.0):
+  - React/RCTLinkingIOS (0.35.0):
     - React/Core
-  - React/RCTNetwork (0.33.0):
+  - React/RCTNetwork (0.35.0):
     - React/Core
-  - React/RCTSettings (0.33.0):
+  - React/RCTSettings (0.35.0):
     - React/Core
-  - React/RCTText (0.33.0):
+  - React/RCTText (0.35.0):
     - React/Core
-  - React/RCTVibration (0.33.0):
+  - React/RCTVibration (0.35.0):
     - React/Core
-  - React/RCTWebSocket (0.33.0):
+  - React/RCTWebSocket (0.35.0):
     - React/Core
 
 DEPENDENCIES:
@@ -46,6 +44,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   GoogleMaps: 06589b9a38097bce0cd6e90f0fd9b5e4b4a9344c
-  React: 46edc166689ba71b0b6cf11e64dbdb258d177089
+  React: d80af5410aa500d0cb1bce2cc4493a584cf2ec92
 
 COCOAPODS: 0.39.0
