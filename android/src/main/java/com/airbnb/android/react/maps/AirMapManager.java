@@ -72,12 +72,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         return new AirMapView(context, this.appContext.getCurrentActivity(), this, this.googleMapOptions);
     }
 
-    @Override
-    public void onDropViewInstance(AirMapView view) {
-        view.doDestroy();
-        super.onDropViewInstance(view);
-    }
-
     private void emitMapError(String message, String type) {
         WritableMap error = Arguments.createMap();
         error.putString("message", message);
