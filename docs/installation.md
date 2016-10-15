@@ -76,7 +76,7 @@ After your `Podfile` is setup properly, run `pod install`.
    ```
 
 1. Specify your Google Maps API Key:
-    > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+    > For development, it is recommended to use a ***Browser Key*** without referrer restrictions. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
    Add your **Browser** API key to your manifest file (`android\app\src\main\AndroidManifest.xml`):
 
@@ -88,7 +88,7 @@ After your `Podfile` is setup properly, run `pod install`.
          android:value="{{Your Google maps API Key Here}}"/>
    </application>
    ```
-    > If that doesn't work try using an ***Android Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+    > If that doesn't work, try using an ***Android Key*** without referrer restrictions. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
    Add your **Android** API key to your manifest file:
 
