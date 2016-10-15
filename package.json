@@ -1,50 +1,30 @@
 {
-  "_args": [
-    [
-      "react-native-maps@git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-      "/Users/aaron/dev/DataHunt"
-    ]
-  ],
-  "_from": "git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-  "_id": "react-native-maps@0.10.0",
-  "_inCache": true,
-  "_installable": true,
-  "_location": "/react-native-maps",
-  "_phantomChildren": {},
-  "_requested": {
-    "hosted": {
-      "directUrl": "https://raw.githubusercontent.com/airbnb/react-native-maps/69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9/package.json",
-      "gitUrl": "git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-      "httpsUrl": "git+https://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-      "shortcut": "github:airbnb/react-native-maps#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-      "ssh": "git@github.com:airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-      "sshUrl": "git+ssh://git@github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-      "type": "github"
-    },
-    "name": "react-native-maps",
-    "raw": "react-native-maps@git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-    "rawSpec": "git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-    "scope": null,
-    "spec": "git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-    "type": "hosted"
-  },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-  "_shasum": "93ca4f73476a8480ef4769787211b437b5fd34dc",
-  "_shrinkwrap": null,
-  "_spec": "react-native-maps@git://github.com/airbnb/react-native-maps.git#69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-  "_where": "/Users/aaron/dev/DataHunt",
-  "author": {
-    "email": "leland.m.richardson@gmail.com",
-    "name": "Leland Richardson"
-  },
-  "bugs": {
-    "url": "https://github.com/airbnb/react-native-maps/issues"
-  },
-  "dependencies": {},
+  "name": "react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
+  "main": "index.js",
+  "author": "Leland Richardson <leland.m.richardson@gmail.com>",
+  "version": "0.10.1",
+  "scripts": {
+    "start": "react-native start",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/airbnb/react-native-maps"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "map",
+    "mapview",
+    "google-maps",
+    "mapkit"
+  ],
+  "peerDependencies": {
+    "react": ">=15.3.1",
+    "react-native": ">=0.35"
+  },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
     "eslint": "^3.3.1",
@@ -54,38 +34,9 @@
     "eslint-plugin-prefer-object-spread": "^1.1.0",
     "eslint-plugin-react": "^6.1.2"
   },
-  "gitHead": "69a32aa3bf6b3d6b2e8a2fa29163e0de6e086ed9",
-  "homepage": "https://github.com/airbnb/react-native-maps#readme",
-  "keywords": [
-    "google-maps",
-    "map",
-    "mapkit",
-    "mapview",
-    "react",
-    "react-component",
-    "react-native"
-  ],
-  "main": "index.js",
-  "name": "react-native-maps",
-  "optionalDependencies": {},
-  "peerDependencies": {
-    "react": ">=15.3.0",
-    "react-native": ">=0.33.0"
-  },
-  "readme": "# react-native-maps [![npm version](https://img.shields.io/npm/v/react-native-maps.svg?style=flat)](https://www.npmjs.com/package/react-native-maps)\n\nReact Native Map components for iOS + Android\n\n## Installation\n\nSee [Installation Instructions](docs/installation.md).\n\nSee [Setup Instructions for the Included Example Project](docs/examples-setup.md).\n\n## Compatibility\n\nDue to the rapid changes being made in the React Native ecosystem, we are not officially going to\nsupport this module on anything but the latest version of React Native. With that said, we will do\nour best to stay compatible with older versions as much that is practical, and the peer dependency\nof this requirement is set to `\"react-native\": \"*\"` explicitly for this reason. If you are using\nan older version of React Native with this module though, some features may be buggy.\n\n### Note about React requires\n\nSince react-native 0.25.0, `React` should be required from `node_modules`.\nReact Native versions from 0.18 should be working out of the box, for lower\nversions you should add `react` as a dependency in your `package.json`.\n\n## General Usage\n\n```js\nimport MapView from 'react-native-maps';\n```\nor\n\n```js\nvar MapView = require('react-native-maps');\n```\n\nThis MapView component is built so that features on the map (such as Markers, Polygons, etc.) are\nspecified as children of the MapView itself. This provides an intuitive and react-like API for\ndeclaratively controlling features on the map.\n\n### Rendering a Map with an initial region\n\n## MapView\n```jsx\n  <MapView\n    initialRegion={{\n      latitude: 37.78825,\n      longitude: -122.4324,\n      latitudeDelta: 0.0922,\n      longitudeDelta: 0.0421,\n    }}\n  />\n```\n\n### Using a MapView while controlling the region as state\n\n```jsx\ngetInitialState() {\n  return {\n    region: {\n      latitude: 37.78825,\n      longitude: -122.4324,\n      latitudeDelta: 0.0922,\n      longitudeDelta: 0.0421,\n    },\n  };\n}\n\nonRegionChange(region) {\n  this.setState({ region });\n}\n\nrender() {\n  return (\n    <MapView\n      region={this.state.region}\n      onRegionChange={this.onRegionChange}\n    />\n  );\n}\n```\n\n### Rendering a list of markers on a map\n\n```jsx\n<MapView\n  region={this.state.region}\n  onRegionChange={this.onRegionChange}\n>\n  {this.state.markers.map(marker => (\n    <MapView.Marker\n      coordinate={marker.latlng}\n      title={marker.title}\n      description={marker.description}\n    />\n  ))}\n</MapView>\n```\n\n### Rendering a Marker with a custom view\n\n```jsx\n<MapView.Marker coordinate={marker.latlng}>\n  <MyCustomMarkerView {...marker} />\n</MapView.Marker>\n```\n\n### Rendering a Marker with a custom image\n\n```jsx\n<MapView.Marker\n  coordinate={marker.latlng}\n  image={require('../assets/pin.png')}\n/>\n```\n\n### Rendering a custom Marker with a custom Callout\n\n```jsx\n<MapView.Marker coordinate={marker.latlng}>\n  <MyCustomMarkerView {...marker} />\n  <MapView.Callout>\n    <MyCustomCalloutView {...marker} />\n  </MapView.Callout>\n</MapView.Marker>\n```\n\n### Draggable Markers\n\n```jsx\n<MapView initialRegion={...}>\n  <MapView.Marker draggable\n    coordinate={this.state.x}\n    onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}\n  />\n</MapView>\n```\n\n\n## Examples\n\n### MapView Events\n\nThe `<MapView />` component and its child components have several events that you can subscribe to.\nThis example displays some of them in a log as a demonstration.\n\n![](http://i.giphy.com/3o6UBpncYQASu2WTW8.gif) ![](http://i.giphy.com/xT77YdviLqtjaecRYA.gif)\n\n\n\n### Tracking Region / Location\n\n![](http://i.giphy.com/3o6UBoPSLlIKQ2dv7q.gif) ![](http://i.giphy.com/xT77XWjqECvdgjx9oA.gif)\n\n\n\n\n### Programmatically Changing Region\n\nOne can change the mapview's position using refs and component methods, or by passing in an updated\n`region` prop.  The component methods will allow one to animate to a given position like the native\nAPI could.\n\n![](http://i.giphy.com/3o6UB7poyB6YJ0KPWU.gif) ![](http://i.giphy.com/xT77Yc4wK3pzZusEbm.gif)\n\n\n\n### Arbitrary React Views as Markers\n\n![](http://i.giphy.com/3o6UBcsCLoLQtksJxe.gif) ![](http://i.giphy.com/3o6UB1qGEM9jYni3KM.gif)\n\n\n\n### Using the MapView with the Animated API\n\nThe `<MapView />` component can be made to work with the Animated API, having the entire `region` prop\nbe declared as an animated value. This allows one to animate the zoom and position of the MapView along\nwith other gestures, giving a nice feel.\n\nFurther, Marker views can use the animated API to enhance the effect.\n\n![](http://i.giphy.com/xT77XMw9IwS6QAv0nC.gif) ![](http://i.giphy.com/3o6UBdGQdM1GmVoIdq.gif)\n\nIssue: Since android needs to render its marker views as a bitmap, the animations APIs may not be\ncompatible with the Marker views. Not sure if this can be worked around yet or not.\n\nMarkers' coordinates can also be animated, as shown in this example:\n\n![](http://i.giphy.com/xTcnTelp1OwGPu1Wh2.gif) ![](http://i.giphy.com/xTcnT6WVpwlCiQnFW8.gif)\n\n\n\n### Polygon Creator\n\n![](http://i.giphy.com/3o6UAZWqQBkOzs8HE4.gif) ![](http://i.giphy.com/xT77XVBRErNZl3zyWQ.gif)\n\n\n\n### Other Overlays\n\nSo far, `<Circle />`, `<Polygon />`, and `<Polyline />` are available to pass in as children to the\n`<MapView />` component.\n\n![](http://i.giphy.com/xT77XZCH8JpEhzVcNG.gif) ![](http://i.giphy.com/xT77XZyA0aYeOX5jsA.gif)\n\n\n\n### Default Markers\n\nDefault markers will be rendered unless a custom marker is specified. One can optionally adjust the\ncolor of the default marker by using the `pinColor` prop.\n\n![](http://i.giphy.com/xT77Y0pWKmUUnguHK0.gif) ![](http://i.giphy.com/3o6UBfk3I58VIwZjVe.gif)\n\n\n\n### Custom Callouts\n\nCallouts to markers can be completely arbitrary react views, similar to markers.  As a result, they\ncan be interacted with like any other view.\n\nAdditionally, you can fall back to the standard behavior of just having a title/description through\nthe `<Marker />`'s `title` and `description` props.\n\nCustom callout views can be the entire tooltip bubble, or just the content inside of the system\ndefault bubble.\n\n![](http://i.giphy.com/xT77XNePGnMIIDpbnq.gif) ![](http://i.giphy.com/xT77YdU0HXryvoRqaQ.gif)\n\n\n\n### Image-based Markers\n\nMarkers can be customized by just using images, and specified using the `image` prop.\n\n![](http://i.imgur.com/mzrOjTR.png)\n\n\n\n### Draggable Markers\n\nMarkers are draggable, and emit continuous drag events to update other UI during drags.\n\n![](http://i.giphy.com/l2JImnZxdv1WbpQfC.gif) ![](http://i.giphy.com/l2JIhv4Jx6Ugx1EGI.gif)\n\n### Lite Mode ( Android )\n\nEnable lite mode on Android with `liteMode` prop. Ideal when having multiple maps in a View or ScrollView.\n\n![](http://i.giphy.com/qZ2lAf18s89na.gif)\n\n## Component API\n\n[`<MapView />` Component API](docs/mapview.md)\n\n[`<MapView.Marker />` Component API](docs/marker.md)\n\n[`<MapView.Callout />` Component API](docs/callout.md)\n\n[`<MapView.Polygon />` Component API](docs/polygon.md)\n\n[`<MapView.Polyline />` Component API](docs/polyline.md)\n\n[`<MapView.Circle />` Component API](docs/circle.md)\n\n\n### Animated Region\n\nThe MapView can accept an `MapView.AnimatedRegion` value as its `region` prop. This allows you to utilize the Animated API to control the map's center and zoom.\n\n```jsx\nimport MapView from 'react-native-maps';\n\ngetInitialState() {\n  return {\n    region: new MapView.AnimatedRegion({\n      latitude: LATITUDE,\n      longitude: LONGITUDE,\n      latitudeDelta: LATITUDE_DELTA,\n      longitudeDelta: LONGITUDE_DELTA,\n    }),\n  };\n}\n\nonRegionChange(region) {\n  this.state.region.setValue(region);\n}\n\nrender() {\n  return (\n    <MapView.Animated\n      region={this.state.region}\n      onRegionChange={this.onRegionChange}\n    />\n  );\n}\n```\n\n### Animated Marker Position\n\nMarkers can also accept an `AnimatedRegion` value as a coordinate.\n\n```jsx\ngetInitialState() {\n  return {\n    coordinate: new MapView.AnimatedRegion({\n      latitude: LATITUDE,\n      longitude: LONGITUDE,\n    }),\n  };\n}\n\ncomponentWillReceiveProps(nextProps) {\n  if (this.props.coordinate !== nextProps.coordinate) {\n    this.state.coordinate.timing({\n      ...nextProps.coordinate,\n      duration: 500\n    }).start();\n  }\n}\n\nrender() {\n  return (\n    <MapView initialRegion={...}>\n      <MapView.Marker.Animated coordinate={this.state.coordinate} />\n    </MapView>\n  );\n}\n```\n\n### Take Snapshot of map\ncurrently only for ios, android implementation WIP\n\n```jsx\ngetInitialState() {\n  return {\n    coordinate: {\n      latitude: LATITUDE,\n      longitude: LONGITUDE,\n    },\n  };\n}\n\ntakeSnapshot () {\n  // arguments to 'takeSnapshot' are width, height, coordinates and callback\n  this.refs.map.takeSnapshot(300, 300, this.state.coordinate, (err, snapshot) => {\n    // snapshot contains image 'uri' - full path to image and 'data' - base64 encoded image\n    this.setState({ mapSnapshot: snapshot })\n  })\n}\n\nrender() {\n  return (\n    <View>\n      <MapView initialRegion={...} ref=\"map\">\n        <MapView.Marker coordinate={this.state.coordinate} />\n      </MapView>\n      <Image source={{ uri: this.state.mapSnapshot.uri }} />\n      <TouchableOpacity onPress={this.takeSnapshot}>\n        Take Snapshot\n      </TouchableOpacity>\n    </View>\n  );\n}\n```\n\n### Zoom to Specified Markers\n\nPass an array of marker identifiers to have the map re-focus.\n\n![](http://i.giphy.com/3o7qEbOQnO0yoXqKJ2.gif) ![](http://i.giphy.com/l41YdrQZ7m6Dz4h0c.gif)\n\n### Zoom to Specified Coordinates\n\nPass an array of coordinates to focus a map region on said coordinates.\n\n![](https://cloud.githubusercontent.com/assets/1627824/18609960/da5d9e06-7cdc-11e6-811e-34e255093df9.gif)\n\n### Troubleshooting\n\n#### My map is blank\n\n* Make sure that you have [properly installed](docs/installation.md) react-native-maps.\n* Check in the logs if there is more informations about the issue.\n* Try setting the style of the MapView to an absolute position with top, left, right and bottom values set.\n\n```javascript\nconst styles = StyleSheet.create({\n  map: {\n    ...StyleSheet.absoluteFillObject,\n  },\n});\n```\n\n```jsx\n<MapView\n  style={styles.map}\n  // other props\n/>\n```\n\n#### Inputs don't focus\n\n* When inputs don't focus or elements don't respond to tap, look at the order of the view hierarchy, sometimes the issue could be due to ordering of rendered components, prefer putting MapView as the first component.\n\nBad:\n\n```jsx\n<View>\n  <TextInput/>\n  <MapView/>\n</View>\n```\n\nGood:\n\n```jsx\n<View>\n  <MapView/>\n  <TextInput/>\n</View>\n```\n\n\nLicense\n--------\n\n     Copyright (c) 2015 Leland Richardson\n\n     Licensed under the The MIT License (MIT) (the \"License\");\n     you may not use this file except in compliance with the License.\n     You may obtain a copy of the License at\n\n        https://raw.githubusercontent.com/airbnb/react-native-maps/master/LICENSE\n\n     Unless required by applicable law or agreed to in writing, software\n     distributed under the License is distributed on an \"AS IS\" BASIS,\n     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n     See the License for the specific language governing permissions and\n     limitations under the License.\n",
-  "readmeFilename": "README.md",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/airbnb/react-native-maps.git"
-  },
   "rnpm": {
     "android": {
       "sourceDir": "./android"
     }
-  },
-  "scripts": {
-    "lint": "eslint .",
-    "start": "react-native start"
-  },
-  "version": "0.10.0"
+  }
 }
