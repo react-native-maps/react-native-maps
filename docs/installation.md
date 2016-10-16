@@ -100,6 +100,8 @@ After your `Podfile` is setup properly, run `pod install`.
            android:value="{{@string/ANDROID_GOOGLE_MAPS_API_KEY}}"/>
    </application>
    ```
+   > Note: As shown above, com.google.android.geo.API_KEY is the recommended metadata name for the API key. A key with this name can be used to authenticate to multiple Google Maps-based APIs on the Android platform, including the Google Maps Android API. For backwards compatibility, the API also supports the name com.google.android.maps.v2.API_KEY. This legacy name allows authentication to the Android Maps API v2 only. An application can specify only one of the API key metadata names. If both are specified, the API throws an exception.
+Source: https://developers.google.com/maps/documentation/android-api/signup
 
 1. Ensure that you have Google Play Services installed:
   * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).
