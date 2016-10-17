@@ -188,6 +188,7 @@ CGRect unionRect(CGRect a, CGRect b) {
                                                                        clipped:YES
                                                                     resizeMode:RCTResizeModeCenter
                                                                  progressBlock:nil
+                                                              partialLoadBlock:nil
                                                                completionBlock:^(NSError *error, UIImage *image) {
                                                                  if (error) {
                                                                    // TODO(lmr): do something with the error?
@@ -250,6 +251,12 @@ CGRect unionRect(CGRect a, CGRect b) {
 - (void)setPinColor:(UIColor *)pinColor {
   _pinColor = pinColor;
   _realMarker.icon = [GMSMarker markerImageWithColor:pinColor];
+}
+
+- (void)setZIndex:(NSInteger)zIndex
+{
+  _zIndex = zIndex;
+  _realMarker.zIndex = (int)zIndex;
 }
 
 - (void)setDraggable:(BOOL)draggable {

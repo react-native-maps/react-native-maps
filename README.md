@@ -135,6 +135,30 @@ render() {
 </MapView>
 ```
 
+### Using a custom Tile Overlay
+
+```jsx
+<MapView 
+  region={this.state.region}
+  onRegionChange={this.onRegionChange}
+>
+  <MapView.UrlTile
+   /**
+   * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
+   * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
+   */
+    urlTemplate={this.state.urlTemplate}
+  />
+</MapView>
+```
+
+For Android: add the following line in your AndroidManifest.xml
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
+
+
 
 ## Examples
 
