@@ -1,5 +1,53 @@
 # Change Log
 
+## 0.11.0 (October 16, 2016)
+
+### Breaking Changes
+
+* Update example app for RN 0.35, fix Gmaps bug for 0.35
+  [#695](https://github.com/airbnb/react-native-maps/pull/695)
+  (@spikebrehm)
+* Upgraded to RN 0.35
+  [#680](https://github.com/airbnb/react-native-maps/pull/680)
+  (@eugenehp)
+
+### Patches
+
+* Update installation.md
+  [#696](https://github.com/airbnb/react-native-maps/pull/696)
+  (@securingsincity)
+* [android] Fixes crash during Activity onPause()
+  [#694](https://github.com/airbnb/react-native-maps/pull/694)
+  (@felipecsl)
+* Included MapUrlTile usage in README.md
+  [#687](https://github.com/airbnb/react-native-maps/pull/687)
+  (@ochanje210)
+* [android] Add parameter to disable the moving on marker press
+  [#676](https://github.com/airbnb/react-native-maps/pull/676)
+  (@mlanter)
+* Add support for setting zIndex on markers
+  [#675](https://github.com/airbnb/react-native-maps/pull/675)
+  (@mlanter)
+
+
+## 0.10.1 (October 10, 2016)
+
+### Patches
+
+* [android] fix gradle build setup for explorer, bump to gradle 2.2.0
+  [#666](https://github.com/airbnb/react-native-maps/pull/666)
+  (@gilbox)
+* [android] fix getAirMapName to fix ref-based commands
+  [#665](https://github.com/airbnb/react-native-maps/pull/665)
+  (@gilbox)
+* Hopefully this release will fix issue [#656](https://github.com/airbnb/react-native-maps/issues/656)
+
+## 0.10.0 (October 5, 2016)
+
+### Breaking Changes
+
+* Upgrade to `react-native@0.33.0`
+
 ## 0.9.0 (September 28, 2016)
 
 As of this release, this repository has moved from
