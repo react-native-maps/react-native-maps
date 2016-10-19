@@ -21,6 +21,7 @@ import AnimatedMarkers from './examples/AnimatedMarkers';
 import Callouts from './examples/Callouts';
 import Overlays from './examples/Overlays';
 import DefaultMarkers from './examples/DefaultMarkers';
+import CustomMarkers from './examples/CustomMarkers';
 import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
 import TakeSnapshot from './examples/TakeSnapshot';
@@ -28,6 +29,7 @@ import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 import FitToCoordinates from './examples/FitToCoordinates';
 import LiteMapView from './examples/LiteMapView';
 import CustomTiles from './examples/CustomTiles';
+import ZIndexMarkers from './examples/ZIndexMarkers';
 import StaticMap from './examples/StaticMap';
 
 const IOS = Platform.OS === 'ios';
@@ -129,6 +131,7 @@ class App extends React.Component {
       [Callouts, 'Custom Callouts', true],
       [Overlays, 'Circles, Polygons, and Polylines', true, '(ios error)'],
       [DefaultMarkers, 'Default Markers', true],
+      [CustomMarkers, 'Custom Markers', true],
       [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
@@ -136,6 +139,7 @@ class App extends React.Component {
       [FitToCoordinates, 'Fit Map To Coordinates'],
       [LiteMapView, 'Android Lite MapView'],
       [CustomTiles, 'Custom Tiles'],
+      [ZIndexMarkers, 'Position Markers with Z-index', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))

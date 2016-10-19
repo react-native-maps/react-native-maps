@@ -14,6 +14,7 @@ export const USES_DEFAULT_IMPLEMENTATION = 'USES_DEFAULT_IMPLEMENTATION';
 export const NOT_SUPPORTED = 'NOT_SUPPORTED';
 
 export function getAirMapName(provider) {
+  if (Platform.OS === 'android') return 'AIRMap';
   if (provider === PROVIDER_GOOGLE) return 'AIRGoogleMap';
   return 'AIRMap';
 }
