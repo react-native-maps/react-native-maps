@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-  Text,
-  View,
-  Dimensions,
   StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
-import flagImg from './assets/flag-blue.png';
+import flagPinkImg from './assets/flag-pink.png';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,9 +17,9 @@ const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
+let id = 0;
 
-class LoadingMap extends React.Component {
+class CustomMarkers extends React.Component {
   constructor(props) {
     super(props);
 
@@ -29,7 +30,22 @@ class LoadingMap extends React.Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
+      markers: [],
     };
+
+    this.onMapPress = this.onMapPress.bind(this);
+  }
+
+  onMapPress(e) {
+    this.setState({
+      markers: [
+        ...this.state.markers,
+        {
+          coordinate: e.nativeEvent.coordinate,
+          key: `foo${id++}`,
+        },
+      ],
+    });
   }
 
   render() {
@@ -40,45 +56,30 @@ class LoadingMap extends React.Component {
           style={styles.map}
           initialRegion={this.state.region}
           onPress={this.onMapPress}
-          loadingEnabled
-          loadingIndicatorColor="#666666"
-          loadingBackgroundColor="#eeeeee"
         >
-          <MapView.Marker
-            coordinate={{
-              latitude: LATITUDE + SPACE,
-              longitude: LONGITUDE + SPACE,
-            }}
-            centerOffset={{ x: -18, y: -60 }}
-            anchor={{ x: 0.69, y: 1 }}
-            image={flagImg}
-          />
-          <MapView.Marker
-            coordinate={{
-              latitude: LATITUDE - SPACE,
-              longitude: LONGITUDE - SPACE,
-            }}
-            centerOffset={{ x: -42, y: -60 }}
-            anchor={{ x: 0.84, y: 1 }}
-          >
-            <MapView.Callout>
-              <View>
-                <Text>This is a plain view</Text>
-              </View>
-            </MapView.Callout>
-          </MapView.Marker>
+          {this.state.markers.map(marker => (
+            <MapView.Marker
+              title={marker.key}
+              image={flagPinkImg}
+              key={marker.key}
+              coordinate={marker.coordinate}
+            />
+          ))}
         </MapView>
         <View style={styles.buttonContainer}>
-          <View style={styles.bubble}>
-            <Text>Map with Loading</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => this.setState({ markers: [] })}
+            style={styles.bubble}
+          >
+            <Text>Tap to create a marker of random color</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
 
-LoadingMap.propTypes = {
+CustomMarkers.propTypes = {
   provider: MapView.ProviderPropType,
 };
 
@@ -97,6 +98,16 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 20,
   },
+  latlng: {
+    width: 200,
+    alignItems: 'stretch',
+  },
+  button: {
+    width: 80,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
   buttonContainer: {
     flexDirection: 'row',
     marginVertical: 20,
@@ -104,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = LoadingMap;
+module.exports = CustomMarkers;
