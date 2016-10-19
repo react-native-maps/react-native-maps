@@ -22,6 +22,20 @@ Since react-native 0.25.0, `React` should be required from `node_modules`.
 React Native versions from 0.18 should be working out of the box, for lower
 versions you should add `react` as a dependency in your `package.json`.
 
+## Component API
+
+[`<MapView />` Component API](docs/mapview.md)
+
+[`<MapView.Marker />` Component API](docs/marker.md)
+
+[`<MapView.Callout />` Component API](docs/callout.md)
+
+[`<MapView.Polygon />` Component API](docs/polygon.md)
+
+[`<MapView.Polyline />` Component API](docs/polyline.md)
+
+[`<MapView.Circle />` Component API](docs/circle.md)
+
 ## General Usage
 
 ```js
@@ -271,21 +285,6 @@ Markers are draggable, and emit continuous drag events to update other UI during
 Enable lite mode on Android with `liteMode` prop. Ideal when having multiple maps in a View or ScrollView.
 
 ![](http://i.giphy.com/qZ2lAf18s89na.gif)
-
-## Component API
-
-[`<MapView />` Component API](docs/mapview.md)
-
-[`<MapView.Marker />` Component API](docs/marker.md)
-
-[`<MapView.Callout />` Component API](docs/callout.md)
-
-[`<MapView.Polygon />` Component API](docs/polygon.md)
-
-[`<MapView.Polyline />` Component API](docs/polyline.md)
-
-[`<MapView.Circle />` Component API](docs/circle.md)
-
 
 ### Animated Region
 
