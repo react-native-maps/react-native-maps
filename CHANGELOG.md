@@ -32,6 +32,8 @@
 
 ## 0.10.1 (October 10, 2016)
 
+This release fixes issue [#656](https://github.com/airbnb/react-native-maps/issues/656)
+
 ### Patches
 
 * [android] fix gradle build setup for explorer, bump to gradle 2.2.0
@@ -40,7 +42,6 @@
 * [android] fix getAirMapName to fix ref-based commands
   [#665](https://github.com/airbnb/react-native-maps/pull/665)
   (@gilbox)
-* Hopefully this release will fix issue [#656](https://github.com/airbnb/react-native-maps/issues/656)
 
 ## 0.10.0 (October 5, 2016)
 
