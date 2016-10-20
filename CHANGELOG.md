@@ -1,6 +1,14 @@
 # Change Log
 
-## 0.10.0 (October 10, 2016)
+## 0.10.2 (October 19, 2016)
+
+### Patches
+
+* [android] Fixes crash during Activity onPause() (fixes #414)
+  [#694](https://github.com/airbnb/react-native-maps/pull/694)
+  (@felipecsl)
+
+## 0.10.1 (October 10, 2016)
 
 ### Patches
 
