@@ -32,6 +32,7 @@
 @property (nonatomic, assign) BOOL zoomEnabled;
 @property (nonatomic, assign) BOOL rotateEnabled;
 @property (nonatomic, assign) BOOL pitchEnabled;
+@property (nonatomic, assign) BOOL showsUserLocation;
 
 - (BOOL)didTapMarker:(GMSMarker *)marker;
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate;
