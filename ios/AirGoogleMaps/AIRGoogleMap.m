@@ -238,10 +238,10 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 }
 
 - (void)setShowsUserLocation:(BOOL)showsUserLocation {
-    self.myLocationEnabled = showsUserLocation;
+  self.myLocationEnabled = showsUserLocation;
 }
 
 - (BOOL)showsUserLocation {
-    return self.myLocationEnabled;
+  return self.myLocationEnabled;
 }
 @end
