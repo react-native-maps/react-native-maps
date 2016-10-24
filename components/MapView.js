@@ -32,6 +32,11 @@ const MAP_TYPES = {
   NONE: 'none',
 };
 
+const GOOGLE_MAPS_ONLY_TYPES = [
+  MAP_TYPES.TERRAIN,
+  MAP_TYPES.NONE,
+];
+
 const viewConfig = {
   uiViewClassName: 'AIR<provider>Map',
   validAttributes: {
@@ -498,6 +503,10 @@ class MapView extends React.Component {
         onMapReady: this._onMapReady,
         onLayout: this._onLayout,
       };
+      if (Platform.OS === 'ios' && props.provider === ProviderConstants.PROVIDER_DEFAULT
+        && GOOGLE_MAPS_ONLY_TYPES.includes(props.mapType)) {
+        props.mapType = MAP_TYPES.standard;
+      }
       props.handlePanDrag = !!props.onPanDrag;
     } else {
       props = {
