@@ -236,4 +236,12 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 - (BOOL)showsCompass {
   return self.settings.compassButton;
 }
+
+- (void)setShowsUserLocation:(BOOL)showsUserLocation {
+  self.myLocationEnabled = showsUserLocation;
+}
+
+- (BOOL)showsUserLocation {
+  return self.myLocationEnabled;
+}
 @end
