@@ -1,11 +1,32 @@
-language: node_js
-
-node_js:
-  - "6"
+language: objective-c
+osx_image: xcode8
+xcode_sdk: iphonesimulator10.0
 
 cache:
   directories:
     - node_modules
     - example/node_modules
+    - ~/.nvm
 
-script: npm run lint
+before_install:
+  - mkdir -p ~/.nvm
+  - which nvm || [ -f ~/.nvm/nvm.sh ] || (git clone https://github.com/creationix/nvm.git ~/.nvm && cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`)
+  - export NVM_DIR=~/.nvm
+  - cd ~/
+  - source ~/.bashrc
+  - cd $TRAVIS_BUILD_DIR
+  - nvm install 6.6.0
+  - npm install
+  - if [[ "$TEST_TYPE" = appium ]]; then . ./cli/travis_before_install_appium.sh; fi
+
+before_script:
+  - if [[ "$TEST_TYPE" = appium ]]; then npm run compile:test-ios; fi
+
+env:
+  matrix:
+    - TEST_TYPE=lint
+    - TEST_TYPE=appium
+
+script:
+  - if [[ "$TEST_TYPE" = lint ]]; then npm run lint; fi
+  - if [[ "$TEST_TYPE" = appium ]]; then npm run mocha:test-ios; fi
