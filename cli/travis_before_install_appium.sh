@@ -10,7 +10,7 @@ else
   gem install xcpretty
   cd example
   npm install
-  cd example/ios
+  cd ios
   pod install
   cd $TRAVIS_BUILD_DIR
 fi
