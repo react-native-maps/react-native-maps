@@ -8,6 +8,7 @@ else
   brew reinstall xctool
   brew reinstall watchman
   gem install xcpretty
+  gem install cocoapods --version=1.1.1
   cd example
   npm install
   cd ios
