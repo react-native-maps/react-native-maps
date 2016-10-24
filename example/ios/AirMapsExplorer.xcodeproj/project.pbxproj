@@ -40,7 +40,7 @@
 		21E6570C1D77591A00B75EE5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */; };
 		21E6570E1D77591F00B75EE5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570D1D77591F00B75EE5 /* MapKit.framework */; };
 		21E657101D77594C00B75EE5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570F1D77594C00B75EE5 /* AudioToolbox.framework */; };
-		C27EBA2BED74D74958F60ABC /* Pods_AirMapsExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C91D72410F775D78CACEBA8 /* Pods_AirMapsExplorer.framework */; };
+		4FE1436792B6623D5F1B690A /* Pods_AirMapsExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82DBFE6B34824F3092820E7 /* Pods_AirMapsExplorer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,9 +122,9 @@
 		21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		21E6570D1D77591F00B75EE5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		21E6570F1D77594C00B75EE5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		2451EE03458E9BDA5F49B446 /* Pods-AirMapsExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.debug.xcconfig"; sourceTree = "<group>"; };
-		39293F18DE5A673E1BD8D397 /* Pods-AirMapsExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.release.xcconfig"; sourceTree = "<group>"; };
-		7C91D72410F775D78CACEBA8 /* Pods_AirMapsExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirMapsExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE3333BCD74F17BD22030A7D /* Pods-AirMapsExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.debug.xcconfig"; sourceTree = "<group>"; };
+		C82DBFE6B34824F3092820E7 /* Pods_AirMapsExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirMapsExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCC0728832F779D6047167EB /* Pods-AirMapsExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +143,7 @@
 				21E6570E1D77591F00B75EE5 /* MapKit.framework in Frameworks */,
 				21E6570C1D77591A00B75EE5 /* MobileCoreServices.framework in Frameworks */,
 				21E6570A1D77591400B75EE5 /* SystemConfiguration.framework in Frameworks */,
-				C27EBA2BED74D74958F60ABC /* Pods_AirMapsExplorer.framework in Frameworks */,
+				4FE1436792B6623D5F1B690A /* Pods_AirMapsExplorer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,7 +162,7 @@
 				21E6570D1D77591F00B75EE5 /* MapKit.framework */,
 				21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */,
 				21E657091D77591400B75EE5 /* SystemConfiguration.framework */,
-				7C91D72410F775D78CACEBA8 /* Pods_AirMapsExplorer.framework */,
+				C82DBFE6B34824F3092820E7 /* Pods_AirMapsExplorer.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -255,15 +255,6 @@
 			path = Callout;
 			sourceTree = "<group>";
 		};
-		76083FA9A1B0F1AEF4D2FCE7 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				2451EE03458E9BDA5F49B446 /* Pods-AirMapsExplorer.debug.xcconfig */,
-				39293F18DE5A673E1BD8D397 /* Pods-AirMapsExplorer.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
@@ -271,8 +262,8 @@
 				2166AAFA1D82EC56007538D7 /* AirMaps */,
 				13B07FAE1A68108700A75B9A /* AirMapsExplorer */,
 				83CBBA001A601CBA00E9B192 /* Products */,
-				76083FA9A1B0F1AEF4D2FCE7 /* Pods */,
 				051AB288C799B62BE091B88A /* Frameworks */,
+				8FE46B7E28861F89325B3B53 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -285,6 +276,15 @@
 				00E356EE1AD99517003FC87E /* AirMapsExplorerTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8FE46B7E28861F89325B3B53 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BE3333BCD74F17BD22030A7D /* Pods-AirMapsExplorer.debug.xcconfig */,
+				DCC0728832F779D6047167EB /* Pods-AirMapsExplorer.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -312,16 +312,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AirMapsExplorer" */;
 			buildPhases = (
-				DEE1DC9F05F890EC3C87C39A /* Check Pods Manifest.lock */,
-				53BB7F61AC8C3BE47A838FC0 /* 📦 Check Pods Manifest.lock */,
+				E4988FECDC18FE929EA50BF1 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				D71F7E633EDE287637BD0861 /* 📦 Embed Pods Frameworks */,
-				1ED7E90E82F1447B3BDF7F89 /* 📦 Copy Pods Resources */,
-				39894B48A7C87B9F345BABA2 /* Embed Pods Frameworks */,
-				82539956530080D9C27BC6A0 /* Copy Pods Resources */,
+				4FFF792161858E5CCCD00539 /* [CP] Embed Pods Frameworks */,
+				DDB75AFE56046553EAF230A6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -400,29 +397,14 @@
 			shellPath = /bin/sh;
 			shellScript = "../node_modules/react-native/packager/react-native-xcode.sh";
 		};
-		1ED7E90E82F1447B3BDF7F89 /* 📦 Copy Pods Resources */ = {
+		4FFF792161858E5CCCD00539 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		39894B48A7C87B9F345BABA2 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -430,29 +412,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		53BB7F61AC8C3BE47A838FC0 /* 📦 Check Pods Manifest.lock */ = {
+		DDB75AFE56046553EAF230A6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		82539956530080D9C27BC6A0 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -460,34 +427,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D71F7E633EDE287637BD0861 /* 📦 Embed Pods Frameworks */ = {
+		E4988FECDC18FE929EA50BF1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DEE1DC9F05F890EC3C87C39A /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -598,7 +550,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2451EE03458E9BDA5F49B446 /* Pods-AirMapsExplorer.debug.xcconfig */;
+			baseConfigurationReference = BE3333BCD74F17BD22030A7D /* Pods-AirMapsExplorer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEAD_CODE_STRIPPING = NO;
@@ -621,7 +573,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39293F18DE5A673E1BD8D397 /* Pods-AirMapsExplorer.release.xcconfig */;
+			baseConfigurationReference = DCC0728832F779D6047167EB /* Pods-AirMapsExplorer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
