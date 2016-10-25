@@ -254,4 +254,7 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
   self.mapStyle = style;
 }
 
+- (BOOL)showsUserLocation {
+  return self.myLocationEnabled;
+}
 @end
