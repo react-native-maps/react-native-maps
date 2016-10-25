@@ -48,7 +48,7 @@ export default function decorateMapComponent(Component, { componentType, provide
     if (components[provider]) return components[provider];
 
     if (provider === PROVIDER_DEFAULT) {
-      components.default = getDefaultComponent();
+      if (!components.default) components.default = getDefaultComponent();
       return components.default;
     }
 
