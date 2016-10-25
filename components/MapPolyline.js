@@ -27,6 +27,11 @@ const propTypes = {
   onPress: PropTypes.func,
 
   /**
+   * The fill color to use for the path.
+   */
+  fillColor: PropTypes.string,
+
+  /**
    * The stroke width to use for the path.
    */
   strokeWidth: PropTypes.number,
