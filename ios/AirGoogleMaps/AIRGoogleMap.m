@@ -66,7 +66,7 @@ int zoomForRegionWithDelta(GMSMapView *map, CGFloat longitudeDelta) {
   CGFloat mapWidthInPixels = width * 2; // 2 is for retina display
   double zoomScale = longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * mapWidthInPixels);
   double zoomer = MAX_GOOGLE_LEVELS - log2(zoomScale);
-  NSLog(@"Zoomer: %f ZoomScale: %f delta: %f width: %f", zoomer, zoomScale, longitudeDelta, mapWidthInPixels);
+  // NSLog(@"Zoomer: %f ZoomScale: %f delta: %f width: %f", zoomer, zoomScale, longitudeDelta, mapWidthInPixels);
   if (zoomer < 0) zoomer = 0;
   zoomer = round(zoomer);
   return (int) zoomer;
