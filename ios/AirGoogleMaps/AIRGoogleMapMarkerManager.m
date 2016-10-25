@@ -39,6 +39,11 @@ RCT_EXPORT_VIEW_PROPERTY(onDragStart, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDragEnd, RCTDirectEventBlock)
 
+RCT_CUSTOM_VIEW_PROPERTY(anchor, CGPoint, AIRGoogleMapMarker)
+{
+  [view setAnchor:[RCTConvert CGPoint:json]];
+}
+
 RCT_EXPORT_METHOD(showCallout:(nonnull NSNumber *)reactTag)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
