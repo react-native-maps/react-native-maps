@@ -129,7 +129,7 @@ class App extends React.Component {
       [AnimatedViews, 'Animating with MapViews'],
       [AnimatedMarkers, 'Animated Marker Position'],
       [Callouts, 'Custom Callouts', true],
-      [Overlays, 'Circles, Polygons, and Polylines', true, '(ios error)'],
+      [Overlays, 'Circles, Polygons, and Polylines', true],
       [DefaultMarkers, 'Default Markers', true],
       [CustomMarkers, 'Custom Markers', true],
       [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
