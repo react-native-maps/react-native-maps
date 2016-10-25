@@ -12,6 +12,10 @@
 #import "RCTConvert+MapKit.h"
 #import "UIView+React.h"
 
+#define MERCATOR_OFFSET 268435456 /* (total pixels at zoom level 20) / 2 */
+#define MERCATOR_RADIUS 85445659.44705395 /* MERCATOR_OFFSET / pi */
+#define MAX_GOOGLE_LEVELS 20
+
 id regionAsJSON(MKCoordinateRegion region) {
   return @{
            @"latitude": [NSNumber numberWithDouble:region.center.latitude],
@@ -56,6 +60,18 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
 }
 
+// calculates the zoom level from a delta
+int zoomForRegionWithDelta(GMSMapView *map, CGFloat longitudeDelta) {
+  CGFloat width = map.bounds.size.width <= 0 ? 320.0 : map.bounds.size.width;
+  CGFloat mapWidthInPixels = width * 2; // 2 is for retina display
+  double zoomScale = longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * mapWidthInPixels);
+  double zoomer = MAX_GOOGLE_LEVELS - log2(zoomScale);
+  NSLog(@"Zoomer: %f ZoomScale: %f delta: %f width: %f", zoomer, zoomScale, longitudeDelta, mapWidthInPixels);
+  if (zoomer < 0) zoomer = 0;
+  zoomer = round(zoomer);
+  return (int) zoomer;
+}
+
 @interface AIRGoogleMap ()
 
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate;
@@ -74,6 +90,8 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
     _initialRegionSet = false;
+    self.maxDelta = 0.0;
+    self.minDelta = 0.0;
   }
   return self;
 }
@@ -128,6 +146,7 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
   return _reactSubviews;
 }
 #pragma clang diagnostic pop
+
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
   if (_initialRegionSet) return;
@@ -241,6 +260,26 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
   self.myLocationEnabled = showsUserLocation;
 }
 
+- (void)applyMaxDelta {
+  int minZoom = zoomForRegionWithDelta(self, self.maxDelta);
+  int maxZoom = self.maxZoom < minZoom ? minZoom : self.maxZoom;
+  [self setMinZoom:minZoom maxZoom:maxZoom];
+}
+
+- (void)applyMinDelta {
+  int maxZoom = zoomForRegionWithDelta(self, self.minDelta);
+  int minZoom = self.minZoom > maxZoom ? maxZoom : self.minZoom;
+  [self setMinZoom:minZoom maxZoom:maxZoom];
+}
+
+// layout subviewviews might not be the best place to run this code,
+// but we need a view width and it's not there at the time setMaxDelta et. al are fired
+-(void)layoutSubviews {
+  if (self.minDelta > 0) [self applyMaxDelta];
+  if (self.maxDelta > 0) [self applyMinDelta];
+  [super layoutSubviews];
+}
+
 - (void)setCustomMapStyle:(NSString *)customMapStyle {
 
   NSError *error;
@@ -254,7 +293,4 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
   self.mapStyle = style;
 }
 
-- (BOOL)showsUserLocation {
-  return self.myLocationEnabled;
-}
 @end
