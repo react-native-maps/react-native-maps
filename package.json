@@ -1,8 +1,8 @@
 {
-  "name": "react-native-maps",
+  "name": "@moduscreate/react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
   "main": "index.js",
-  "author": "Leland Richardson <leland.m.richardson@gmail.com>",
+  "author": "Leland Richardson <leland.m.richardson@gmail.com>. This fork maintained by the @ModusCreate team.",
   "version": "0.11.0",
   "scripts": {
     "start": "react-native start",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/airbnb/react-native-maps"
+    "url": "https://github.com/moduscreate/react-native-maps"
   },
   "keywords": [
     "react",
