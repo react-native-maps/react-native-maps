@@ -224,9 +224,6 @@ CGRect unionRect(CGRect a, CGRect b) {
 
                                                                    _iconImageView = imageView;
                                                                    [self iconViewInsertSubview:imageView atIndex:0];
-
-                                                                   // TODO: This could be a prop
-                                                                   //_realMarker.groundAnchor = CGPointMake(0.75, 1);
                                                                  });
                                                                }];
 }
@@ -250,6 +247,18 @@ CGRect unionRect(CGRect a, CGRect b) {
 - (void)setPinColor:(UIColor *)pinColor {
   _pinColor = pinColor;
   _realMarker.icon = [GMSMarker markerImageWithColor:pinColor];
+}
+
+- (void)setAnchor:(CGPoint)anchor {
+  _anchor = anchor;
+  _realMarker.groundAnchor = anchor;
+}
+
+
+- (void)setZIndex:(NSInteger)zIndex
+{
+  _zIndex = zIndex;
+  _realMarker.zIndex = (int)zIndex;
 }
 
 - (void)setDraggable:(BOOL)draggable {
