@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
-  NOT_SUPPORTED,
+  SUPPORTED,
 } from './decorateMapComponent';
 
 const propTypes = {
@@ -25,6 +25,11 @@ const propTypes = {
    * Callback that is called when the user presses on the polyline
    */
   onPress: PropTypes.func,
+
+  /**
+   * The fill color to use for the path.
+   */
+  fillColor: PropTypes.string,
 
   /**
    * The stroke width to use for the path.
@@ -140,7 +145,7 @@ module.exports = decorateMapComponent(MapPolyline, {
   componentType: 'Polyline',
   providers: {
     google: {
-      ios: NOT_SUPPORTED,
+      ios: SUPPORTED,
       android: USES_DEFAULT_IMPLEMENTATION,
     },
   },
