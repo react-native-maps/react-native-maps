@@ -182,6 +182,11 @@ CGRect unionRect(CGRect a, CGRect b) {
     _reloadImageCancellationBlock = nil;
   }
 
+  if (!_imageSrc) {
+    if (_iconImageView) [_iconImageView removeFromSuperview];
+    return;
+  }
+  
   _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                           size:self.bounds.size
                                                                          scale:RCTScreenScale()
