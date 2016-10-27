@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "8.0"
 
   s.source       = { :git => "https://github.com/airbnb/react-native-maps.git" }
-  s.source_files  = "ios/AirMaps/**/*.{h,m}"
+  s.source_files  = "ios/AirGoogleMaps/**/*.{h,m}"
 
   s.dependency 'React'
   s.dependency 'GoogleMaps', '2.0.1'

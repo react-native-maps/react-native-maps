@@ -7,6 +7,9 @@
 
 #import "AIRGoogleMap.h"
 #import "AIRGoogleMapMarker.h"
+#import "AIRGoogleMapPolygon.h"
+#import "AIRGoogleMapPolyline.h"
+#import "AIRGoogleMapCircle.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "RCTConvert+MapKit.h"
@@ -73,6 +76,9 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
   if ((self = [super init])) {
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
+    _polygons = [NSMutableArray array];
+    _polylines = [NSMutableArray array];
+    _circles = [NSMutableArray array];
     _initialRegionSet = false;
   }
   return self;
@@ -102,6 +108,18 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker*)subview;
     marker.realMarker.map = self;
     [self.markers addObject:marker];
+  } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
+    AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
+    polygon.polygon.map = self;
+    [self.polygons addObject:polygon];
+  } else if ([subview isKindOfClass:[AIRGoogleMapPolyline class]]) {
+    AIRGoogleMapPolyline *polyline = (AIRGoogleMapPolyline*)subview;
+    polyline.polyline.map = self;
+    [self.polylines addObject:polyline];
+  } else if ([subview isKindOfClass:[AIRGoogleMapCircle class]]) {
+    AIRGoogleMapCircle *circle = (AIRGoogleMapCircle*)subview;
+    circle.circle.map = self;
+    [self.circles addObject:circle];
   }
   [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
@@ -117,6 +135,18 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker*)subview;
     marker.realMarker.map = nil;
     [self.markers removeObject:marker];
+  } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
+    AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
+    polygon.polygon.map = nil;
+    [self.polygons removeObject:polygon];
+  } else if ([subview isKindOfClass:[AIRGoogleMapPolyline class]]) {
+    AIRGoogleMapPolyline *polyline = (AIRGoogleMapPolyline*)subview;
+    polyline.polyline.map = nil;
+    [self.polylines removeObject:polyline];
+  } else if ([subview isKindOfClass:[AIRGoogleMapCircle class]]) {
+    AIRGoogleMapCircle *circle = (AIRGoogleMapCircle*)subview;
+    circle.circle.map = nil;
+    [self.circles removeObject:circle];
   }
   [_reactSubviews removeObject:(UIView *)subview];
 }
@@ -244,4 +274,5 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 - (BOOL)showsUserLocation {
   return self.myLocationEnabled;
 }
+
 @end

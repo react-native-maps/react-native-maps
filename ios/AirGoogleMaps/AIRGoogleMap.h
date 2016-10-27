@@ -24,6 +24,9 @@
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
 @property (nonatomic, strong) NSMutableArray *markers;
+@property (nonatomic, strong) NSMutableArray *polygons;
+@property (nonatomic, strong) NSMutableArray *polylines;
+@property (nonatomic, strong) NSMutableArray *circles;
 
 @property (nonatomic, assign) BOOL showsBuildings;
 @property (nonatomic, assign) BOOL showsTraffic;
