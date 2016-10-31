@@ -182,6 +182,18 @@ CGRect unionRect(CGRect a, CGRect b) {
     _reloadImageCancellationBlock = nil;
   }
 
+  if (!_imageSrc) {
+    if (_iconImageView) [_iconImageView removeFromSuperview];
+    return;
+  }
+  
+  if (!_iconImageView) {
+    // prevent glitch with marker (cf. https://github.com/airbnb/react-native-maps/issues/738)
+    UIImageView *empyImageView = [[UIImageView alloc] init];
+    _iconImageView = empyImageView;
+    [self iconViewInsertSubview:_iconImageView atIndex:0];
+  }
+  
   _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                           size:self.bounds.size
                                                                          scale:RCTScreenScale()
