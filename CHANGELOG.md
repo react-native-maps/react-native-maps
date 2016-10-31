@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.10.4 (October 31, 2016)
+
+### Patches
+
+* [iOS] implement fitToSuppliedMarkers and fitToCoordinates for google maps
+  [#750](https://github.com/airbnb/react-native-maps/pull/750)
+  (@gilbox)
+* [android] If we've disabled scrolling within the map, then don't capture the touch events
+  [#664](https://github.com/airbnb/react-native-maps/pull/664)
+  (@mikelambert)
+* [iOS] Fix Anchor point on Google Maps iOS
+  [#734](https://github.com/airbnb/react-native-maps/pull/734)
+  (@btoueg)
+* [iOS] Added showsUserLocation property support for Google Maps
+  [#721](https://github.com/airbnb/react-native-maps/pull/721)
+  (@julien-rodrigues)
+* [iOS][android] Add support for setting zIndex on markers
+  [#675](https://github.com/airbnb/react-native-maps/pull/675)
+  (@mlanter)
+* [android] Add parameter to disable the moving on marker press
+  [#676](https://github.com/airbnb/react-native-maps/pull/676)
+  (@mlanter)
+* NOTE: v0.10.3 was not published
+
 ## 0.10.2 (October 19, 2016)
 
 ### Patches
