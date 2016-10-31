@@ -79,6 +79,7 @@ class PolygonCreator extends React.Component {
         <MapView
           provider={this.props.provider}
           style={styles.map}
+          mapType={MapView.MAP_TYPES.HYBRID}
           initialRegion={this.state.region}
           onPress={e => this.onPress(e)}
           {...mapOptions}

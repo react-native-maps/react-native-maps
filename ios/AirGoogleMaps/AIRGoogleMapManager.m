@@ -12,6 +12,7 @@
 #import "RCTUIManager.h"
 #import "RCTConvert+CoreLocation.h"
 #import "RCTConvert+MapKit.h"
+#import "RCTConvert+GMSMapViewType.h"
 #import "RCTEventDispatcher.h"
 #import "AIRGoogleMap.h"
 #import "UIView+React.h"
@@ -54,12 +55,14 @@ RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
 
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
                   animated:(BOOL)animated)
