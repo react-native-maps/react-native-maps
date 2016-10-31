@@ -85,7 +85,7 @@ After your `Podfile` is setup properly, run `pod install`.
        <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
        <meta-data
          android:name="com.google.android.geo.API_KEY"
-         android:value="{{Your Google maps API Key Here}}"/>
+         android:value="Your Google maps API Key Here"/>
    </application>
    ```
     > If that doesn't work, try using an ***Android Key*** without referrer restrictions. Go to https://console.developers.google.com/apis/credentials to check your credentials.
