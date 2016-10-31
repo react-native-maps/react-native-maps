@@ -578,9 +578,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         switch (action) {
             case (MotionEvent.ACTION_DOWN):
-                if (map != null && map.getUiSettings().isScrollGesturesEnabled()) {
-                    this.getParent().requestDisallowInterceptTouchEvent(true);
-                }
+                this.getParent().requestDisallowInterceptTouchEvent(
+                        map != null && map.getUiSettings().isScrollGesturesEnabled());
                 isTouchDown = true;
                 break;
             case (MotionEvent.ACTION_MOVE):
