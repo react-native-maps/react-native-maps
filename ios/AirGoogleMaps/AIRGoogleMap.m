@@ -304,7 +304,7 @@ int zoomForRegionWithDelta(GMSMapView *map, CGFloat longitudeDelta) {
 
 // layout subviewviews might not be the best place to run this code,
 // but we need a view width and it's not there at the time setMaxDelta et. al are fired
--(void)layoutSubviews {
+- (void)layoutSubviews {
   if (self.minDelta > 0) [self applyMaxDelta];
   if (self.maxDelta > 0) [self applyMinDelta];
   [super layoutSubviews];
