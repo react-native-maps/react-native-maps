@@ -68,23 +68,22 @@ RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
 
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
-        withRegion:(MKCoordinateRegion)region
-        withDuration:(CGFloat)duration)
+                  withRegion:(MKCoordinateRegion)region
+                  withDuration:(CGFloat)duration)
 {
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[AIRGoogleMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
-        } else {
-            // ensure we have the correct obj
-            AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
 
-            // [AIRMap animateWithDuration:duration/1000 animations:^{
-            //     [(AIRMap *)view setRegion:region animated:YES];
-            // }];
-            [mapView setRegion:region];
-        }
-    }];
+      // ensure we have the correct obj
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+
+      // fire the animation
+      [mapView animateToRegion:region withDuration:duration];
+    }
+  }];
 }
 
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag

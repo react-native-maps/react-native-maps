@@ -46,5 +46,6 @@
 - (void)didLongPressAtCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position;
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position;
+- (void)animateToRegion:(MKCoordinateRegion)region withDuration:(CGFloat)duration;
 
 @end

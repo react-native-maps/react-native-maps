@@ -189,6 +189,14 @@ int zoomForRegionWithDelta(GMSMapView *map, CGFloat longitudeDelta) {
   self.camera = makeGMSCameraPositionFromMKCoordinateRegionOfMap(self, region);
 }
 
+- (void)animateToRegion:(MKCoordinateRegion)region
+           withDuration:(CGFloat)duration {
+  [CATransaction begin];
+  [CATransaction setValue:[NSNumber numberWithFloat: duration / 1000] forKey:kCATransactionAnimationDuration];
+  [self animateToCameraPosition: makeGMSCameraPositionFromMKCoordinateRegionOfMap(self, region)];
+  [CATransaction commit];
+}
+
 - (BOOL)didTapMarker:(GMSMarker *)marker {
   AIRGMSMarker *airMarker = (AIRGMSMarker *)marker;
 
@@ -304,7 +312,7 @@ int zoomForRegionWithDelta(GMSMapView *map, CGFloat longitudeDelta) {
 
 // layout subviewviews might not be the best place to run this code,
 // but we need a view width and it's not there at the time setMaxDelta et. al are fired
-- (void)layoutSubviews {
+-(void)layoutSubviews {
   if (self.minDelta > 0) [self applyMaxDelta];
   if (self.maxDelta > 0) [self applyMinDelta];
   [super layoutSubviews];
