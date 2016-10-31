@@ -134,8 +134,8 @@ class App extends React.Component {
       [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
-      [FitToSuppliedMarkers, 'Focus Map On Markers'],
-      [FitToCoordinates, 'Fit Map To Coordinates'],
+      [FitToSuppliedMarkers, 'Focus Map On Markers', true],
+      [FitToCoordinates, 'Fit Map To Coordinates', true],
       [LiteMapView, 'Android Lite MapView'],
       [CustomTiles, 'Custom Tiles'],
     ]
