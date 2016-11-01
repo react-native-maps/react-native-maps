@@ -12,6 +12,9 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Closeable;
+
+import javax.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -44,6 +47,14 @@ public class AirMapModule extends ReactContextBaseJavaModule {
         return getCurrentActivity();
     }
 
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable == null) return;
+        try {
+            closeable.close();
+        } catch (IOException ignored) {
+        }
+    }
+
     @ReactMethod
     public void takeSnapshot(final int tag, final ReadableMap options, final Promise promise) {
 
@@ -73,50 +84,41 @@ public class AirMapModule extends ReactContextBaseJavaModule {
                     return;
                 }
                 view.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                    public void onSnapshotReady(Bitmap snapshot) {
+                    public void onSnapshotReady(@Nullable Bitmap snapshot) {
 
                         // Convert image to requested width/height if neccesary
-                        if (snapshot != null && width != 0 && height != 0 && (width != snapshot.getWidth() || height != snapshot.getHeight())) {
-                            snapshot = Bitmap.createScaledBitmap(snapshot, width, height, true);
-                        }
                         if (snapshot == null) {
-                            promise.reject("Failed to generate bitmap");
+                            promise.reject("Failed to generate bitmap, snapshot = null");
                             return;
+                        }
+                        if ((width != 0) && (height != 0) && (width != snapshot.getWidth() || height != snapshot.getHeight())) {
+                            snapshot = Bitmap.createScaledBitmap(snapshot, width, height, true);
                         }
 
                         // Save the snapshot to disk
-                        OutputStream outputStream = null;
-                        try {
-                            if (result.equals(SNAPSHOT_RESULT_FILE)) {
-                                File tempFile = File.createTempFile("AirMapSnapshot", "." + format, context.getCacheDir());
+                        if (result.equals(SNAPSHOT_RESULT_FILE)) {
+                            File tempFile;
+                            FileOutputStream outputStream;
+                            try {
+                                tempFile = File.createTempFile("AirMapSnapshot", "." + format, context.getCacheDir());
                                 outputStream = new FileOutputStream(tempFile);
-                                snapshot.compress(compressFormat, (int)(100.0 * quality), outputStream);
-                                outputStream.close();
-                                outputStream = null;
-                                String uri = Uri.fromFile(tempFile).toString();
-                                promise.resolve(uri);
                             }
-                            else if (result.equals(SNAPSHOT_RESULT_BASE64)) {
-                                outputStream = new ByteArrayOutputStream();
-                                snapshot.compress(compressFormat, (int)(100.0 * quality), outputStream);
-                                outputStream.close();
-                                outputStream = null;
-                                byte[] bytes = ((ByteArrayOutputStream) outputStream).toByteArray();
-                                String data = Base64.encodeToString(bytes, Base64.NO_WRAP);
-                                promise.resolve(data);
+                            catch (Exception e) {
+                                promise.reject(e);
+                                return;
                             }
+                            snapshot.compress(compressFormat, (int)(100.0 * quality), outputStream);
+                            closeQuietly(outputStream);
+                            String uri = Uri.fromFile(tempFile).toString();
+                            promise.resolve(uri);
                         }
-                        catch (Exception e) {
-                            promise.reject(e);
-                        }
-                        finally {
-                            if (outputStream != null) {
-                                try {
-                                    outputStream.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                        else if (result.equals(SNAPSHOT_RESULT_BASE64)) {
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            snapshot.compress(compressFormat, (int)(100.0 * quality), outputStream);
+                            closeQuietly(outputStream);
+                            byte[] bytes = outputStream.toByteArray();
+                            String data = Base64.encodeToString(bytes, Base64.NO_WRAP);
+                            promise.resolve(data);
                         }
                     }
                 });
