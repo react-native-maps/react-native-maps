@@ -76,9 +76,8 @@ public class AirMapPolygonManager extends ViewGroupManager<AirMapPolygon> {
     @Override
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
-        Map map = MapBuilder.of(
+        return MapBuilder.of(
             "onPress", MapBuilder.of("registrationName", "onPress")
         );
-        return map;
     }
 }
