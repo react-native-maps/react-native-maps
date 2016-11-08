@@ -24,41 +24,6 @@ id regionAsJSON(MKCoordinateRegion region) {
            };
 }
 
-MKCoordinateRegion makeMKCoordinateRegionFromGMSCameraPositionOfMap(GMSMapView *map, GMSCameraPosition *position) {
-  // solution from here: http://stackoverflow.com/a/16587735/1102215
-  GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
-  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion: visibleRegion];
-  CLLocationCoordinate2D center;
-  CLLocationDegrees longitudeDelta;
-  CLLocationDegrees latitudeDelta = bounds.northEast.latitude - bounds.southWest.latitude;
-
-  if(bounds.northEast.longitude >= bounds.southWest.longitude) {
-    //Standard case
-    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
-                                        (bounds.southWest.longitude + bounds.northEast.longitude) / 2);
-    longitudeDelta = bounds.northEast.longitude - bounds.southWest.longitude;
-  } else {
-    //Region spans the international dateline
-    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
-                                        (bounds.southWest.longitude + bounds.northEast.longitude + 360) / 2);
-    longitudeDelta = bounds.northEast.longitude + 360 - bounds.southWest.longitude;
-  }
-  MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
-  return MKCoordinateRegionMake(center, span);
-}
-
-GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *map, MKCoordinateRegion region) {
-  float latitudeDelta = region.span.latitudeDelta * 0.5;
-  float longitudeDelta = region.span.longitudeDelta * 0.5;
-
-  CLLocationCoordinate2D a = CLLocationCoordinate2DMake(region.center.latitude + latitudeDelta,
-                                                        region.center.longitude + longitudeDelta);
-  CLLocationCoordinate2D b = CLLocationCoordinate2DMake(region.center.latitude - latitudeDelta,
-                                                        region.center.longitude - longitudeDelta);
-  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
-  return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
-}
-
 @interface AIRGoogleMap ()
 
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate;
@@ -162,12 +127,12 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
   if (_initialRegionSet) return;
   _initialRegionSet = true;
-  self.camera = makeGMSCameraPositionFromMKCoordinateRegionOfMap(self, initialRegion);
+  self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
 }
 
 - (void)setRegion:(MKCoordinateRegion)region {
   // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
-  self.camera = makeGMSCameraPositionFromMKCoordinateRegionOfMap(self, region);
+  self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
 }
 
 - (BOOL)didTapMarker:(GMSMarker *)marker {
@@ -197,7 +162,7 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position {
   id event = @{@"continuous": @YES,
-               @"region": regionAsJSON(makeMKCoordinateRegionFromGMSCameraPositionOfMap(self, position)),
+               @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                };
 
   if (self.onChange) self.onChange(event);
@@ -205,7 +170,7 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position {
   id event = @{@"continuous": @NO,
-               @"region": regionAsJSON(makeMKCoordinateRegionFromGMSCameraPositionOfMap(self, position)),
+               @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                };
   if (self.onChange) self.onChange(event);  // complete
 }
@@ -273,6 +238,41 @@ GMSCameraPosition* makeGMSCameraPositionFromMKCoordinateRegionOfMap(GMSMapView *
 
 - (BOOL)showsUserLocation {
   return self.myLocationEnabled;
+}
+
++ (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
+  // solution from here: http://stackoverflow.com/a/16587735/1102215
+  GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
+  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion: visibleRegion];
+  CLLocationCoordinate2D center;
+  CLLocationDegrees longitudeDelta;
+  CLLocationDegrees latitudeDelta = bounds.northEast.latitude - bounds.southWest.latitude;
+
+  if(bounds.northEast.longitude >= bounds.southWest.longitude) {
+    //Standard case
+    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
+                                        (bounds.southWest.longitude + bounds.northEast.longitude) / 2);
+    longitudeDelta = bounds.northEast.longitude - bounds.southWest.longitude;
+  } else {
+    //Region spans the international dateline
+    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
+                                        (bounds.southWest.longitude + bounds.northEast.longitude + 360) / 2);
+    longitudeDelta = bounds.northEast.longitude + 360 - bounds.southWest.longitude;
+  }
+  MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
+  return MKCoordinateRegionMake(center, span);
+}
+
++ (GMSCameraPosition*) makeGMSCameraPositionFromMap:(GMSMapView *)map andMKCoordinateRegion:(MKCoordinateRegion)region {
+  float latitudeDelta = region.span.latitudeDelta * 0.5;
+  float longitudeDelta = region.span.longitudeDelta * 0.5;
+
+  CLLocationCoordinate2D a = CLLocationCoordinate2DMake(region.center.latitude + latitudeDelta,
+                                                        region.center.longitude + longitudeDelta);
+  CLLocationCoordinate2D b = CLLocationCoordinate2DMake(region.center.latitude - latitudeDelta,
+                                                        region.center.longitude - longitudeDelta);
+  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
+  return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
 }
 
 @end
