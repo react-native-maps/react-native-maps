@@ -43,4 +43,7 @@
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position;
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position;
 
++ (MKCoordinateRegion)makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position;
++ (GMSCameraPosition*)makeGMSCameraPositionFromMap:(GMSMapView *)map andMKCoordinateRegion:(MKCoordinateRegion)region;
+
 @end
