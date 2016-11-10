@@ -15,17 +15,17 @@ add native dependencies automatically then continue the directions below dependi
 
 ## iOS
 
-### Option 1: Cocoapods - Same as the included AirMapsExplorer example
+### Option 1: CocoaPods - Same as the included AirMapsExplorer example
 
 1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile)  then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
-1. Open your project in xCode workspace
+1. Open your project in Xcode workspace
 1. Drag the following folder into your project:
     - `node_modules/react-native-maps/ios/AirMaps/`
 1. If you need `GoogleMaps` support also drag this folder into your project:
     - `node_modules/react-native-maps/ios/AirGoogleMaps/`
 
-### Option 2: Cocoapods -- Untested Way
+### Option 2: CocoaPods -- Untested Way
 NOTE: If you actually get this to work, please open an issue to let us know.
 This is now considered the **old way** because it is untested and if it does work at all, it
 will only work if you **don't** have `use_frameworks!` in your `Podfile`
@@ -44,13 +44,13 @@ Now if you need `GoogleMaps` support you will also have to add a bunch of other 
 After your `Podfile` is setup properly, run `pod install`.
 
 ### Option 3: Manually
-1. Open your project in XCode, right click on `Libraries` and click `Add
+1. Open your project in Xcode, right click on `Libraries` and click `Add
    Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
 1. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
 1. Click on `AIRMaps.xcodeproj` in `Libraries` and go the `Build
    Settings` tab. Double click the text to the right of `Header Search
    Paths` and verify that it has `$(SRCROOT)/../../react-native/React` as well as `$(SRCROOT)/../../react-native/Libraries/Image` - if they
-   aren't, then add them. This is so XCode is able to find the headers that
+   aren't, then add them. This is so Xcode is able to find the headers that
    the `AIRMaps` source files are referring to by pointing to the
    header files installed within the `react-native` `node_modules`
    directory.
