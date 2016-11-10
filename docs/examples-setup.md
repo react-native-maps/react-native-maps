@@ -2,17 +2,24 @@
 
 ## iOS
 
-1. Install dependencies and open the workspace:
+1. If you don't have bundler gem installed:
+
+```
+gem install bundler
+```
+
+2. Install dependencies and open the workspace:
 
 ```
 cd example
 npm install
 cd ios
-pod install
+bundle install
+bundle exec pod install
 open AirMapsExplorer.xcworkspace
 ```
 
-2. Make sure the `AirMapsExplorer` target is selected and click `Run`
+3. Make sure the `AirMapsExplorer` target is selected and click `Run`
 
 ## android
 
