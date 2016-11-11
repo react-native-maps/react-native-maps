@@ -1,8 +1,13 @@
 import React, { PropTypes } from 'react';
+
 import {
   View,
-  requireNativeComponent,
 } from 'react-native';
+
+import decorateMapComponent, {
+  USES_DEFAULT_IMPLEMENTATION,
+  SUPPORTED,
+} from './decorateMapComponent';
 
 const propTypes = {
   ...View.propTypes,
@@ -25,6 +30,7 @@ const propTypes = {
 
 class MapUrlTile extends React.Component {
   render() {
+    const AIRMapUrlTile = this.getAirComponent();
     return (
       <AIRMapUrlTile
         {...this.props}
@@ -35,6 +41,12 @@ class MapUrlTile extends React.Component {
 
 MapUrlTile.propTypes = propTypes;
 
-const AIRMapUrlTile = requireNativeComponent('AIRMapUrlTile', MapUrlTile);
-
-module.exports = MapUrlTile;
+module.exports = decorateMapComponent(MapUrlTile, {
+  componentType: 'UrlTile',
+  providers: {
+    google: {
+      ios: SUPPORTED,
+      android: USES_DEFAULT_IMPLEMENTATION,
+    },
+  },
+});

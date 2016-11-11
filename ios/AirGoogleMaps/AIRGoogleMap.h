@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSMutableArray *polygons;
 @property (nonatomic, strong) NSMutableArray *polylines;
 @property (nonatomic, strong) NSMutableArray *circles;
+@property (nonatomic, strong) NSMutableArray *tiles;
 
 @property (nonatomic, assign) BOOL showsBuildings;
 @property (nonatomic, assign) BOOL showsTraffic;

@@ -138,7 +138,7 @@ class App extends React.Component {
       [FitToSuppliedMarkers, 'Focus Map On Markers', true],
       [FitToCoordinates, 'Fit Map To Coordinates', true],
       [LiteMapView, 'Android Lite MapView'],
-      [CustomTiles, 'Custom Tiles'],
+      [CustomTiles, 'Custom Tiles', true],
       [ZIndexMarkers, 'Position Markers with Z-index', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
