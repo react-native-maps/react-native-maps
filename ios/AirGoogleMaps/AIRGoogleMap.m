@@ -10,6 +10,7 @@
 #import "AIRGoogleMapPolygon.h"
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGoogleMapCircle.h"
+#import "AIRGoogleMapUrlTile.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "RCTConvert+MapKit.h"
@@ -44,6 +45,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _polygons = [NSMutableArray array];
     _polylines = [NSMutableArray array];
     _circles = [NSMutableArray array];
+    _tiles = [NSMutableArray array];
     _initialRegionSet = false;
   }
   return self;
@@ -85,6 +87,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapCircle *circle = (AIRGoogleMapCircle*)subview;
     circle.circle.map = self;
     [self.circles addObject:circle];
+  } else if ([subview isKindOfClass:[AIRGoogleMapUrlTile class]]) {
+    AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
+    tile.tileLayer.map = self;
+    [self.tiles addObject:tile];
   }
   [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
@@ -112,6 +118,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapCircle *circle = (AIRGoogleMapCircle*)subview;
     circle.circle.map = nil;
     [self.circles removeObject:circle];
+  } else if ([subview isKindOfClass:[AIRGoogleMapUrlTile class]]) {
+    AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
+    tile.tileLayer.map = nil;
+    [self.tiles removeObject:tile];
   }
   [_reactSubviews removeObject:(UIView *)subview];
 }
