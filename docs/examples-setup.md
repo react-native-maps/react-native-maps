@@ -21,5 +21,6 @@ open AirMapsExplorer.xcworkspace
 2. Install via gradle:
 
 ```
+# from the example/ dir:
 react-native run-android
 ```
