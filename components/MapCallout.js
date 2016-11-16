@@ -30,7 +30,7 @@ MapCallout.defaultProps = defaultProps;
 
 const styles = StyleSheet.create({
   callout: {
-    position: 'absolute',
+    position: 'relative',
   },
 });
 
