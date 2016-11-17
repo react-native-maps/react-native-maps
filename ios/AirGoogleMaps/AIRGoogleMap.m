@@ -330,7 +330,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 // calculates the zoom level from a delta
-+ (int) zoomForMap:(GMSMapView *)map, withDelta:(CGFloat)longitudeDelta {
++ (int) zoomForMap:(GMSMapView *)map withDelta:(CGFloat)longitudeDelta {
   CGFloat width = map.bounds.size.width <= 0 ? 320.0 : map.bounds.size.width;
   CGFloat mapWidthInPixels = width * 2; // 2 is for retina display
   double zoomScale = longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * mapWidthInPixels);
