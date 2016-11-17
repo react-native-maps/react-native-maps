@@ -82,6 +82,13 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
 
       // fire the animation
       [mapView animateToRegion:region withDuration:duration];
+
+      // upstream conflicting change
+      //   [AIRGoogleMap animateWithDuration:duration/1000 animations:^{
+      //     GMSCameraPosition* camera = [AIRGoogleMap makeGMSCameraPositionFromMap:(AIRGoogleMap *)view andMKCoordinateRegion:region];
+      //     [(AIRGoogleMap *)view animateToCameraPosition:camera];
+      //   }];
+
     }
   }];
 }
