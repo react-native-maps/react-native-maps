@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
@@ -79,49 +80,70 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
 
-    public AirMapView(ThemedReactContext reactContext, Context appContext, AirMapManager manager,
-            GoogleMapOptions googleMapOptions) {
+    public AirMapView(
+        ThemedReactContext reactContext,
+        Context appContext,
+        AirMapManager manager,
+        GoogleMapOptions googleMapOptions
+    ) {
         super(appContext, googleMapOptions);
 
         this.manager = manager;
         this.context = reactContext;
 
-        super.onCreate(null);
+        super.onCreate(new Bundle());
         super.onResume();
+
         super.getMapAsync(this);
 
         final AirMapView view = this;
-        scaleDetector =
-                new ScaleGestureDetector(reactContext, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-                    @Override
-                    public boolean onScaleBegin(ScaleGestureDetector detector) {
-                        view.startMonitoringRegion();
-                        return true; // stop recording this gesture. let mapview handle it.
-                    }
-        });
 
-        gestureDetector =
-                new GestureDetectorCompat(reactContext, new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onDoubleTap(MotionEvent e) {
-                        view.startMonitoringRegion();
-                        return false;
-                    }
+        scaleDetector = new ScaleGestureDetector(
+            reactContext,
+            new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
-                    @Override
-                    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                                            float distanceY) {
-                        if (handlePanDrag) {
-                            onPanDrag(e2);
-                        }
-                        view.startMonitoringRegion();
-                        return false;
+                @Override
+                public boolean onScaleBegin(ScaleGestureDetector detector) {
+                    view.startMonitoringRegion();
+                    return true; // stop recording this gesture. let mapview handle it.
+                }
+            }
+        );
+
+        gestureDetector = new GestureDetectorCompat(
+            reactContext,
+            new GestureDetector.SimpleOnGestureListener() {
+
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    view.startMonitoringRegion();
+                    return false;
+                }
+
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    if (handlePanDrag) {
+                        onPanDrag(e2);
                     }
-                });
+                    view.startMonitoringRegion();
+                    return false;
+                }
+            }
+        );
 
         this.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-            @Override public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            @Override
+            public void onLayoutChange(
+                View v,
+                int left,
+                int top,
+                int right,
+                int bottom,
+                int oldLeft,
+                int oldTop,
+                int oldRight,
+                int oldBottom
+            ) {
                 if (!paused) {
                     AirMapView.this.cacheView();
                 }
