@@ -709,8 +709,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private ImageView getCacheImageView() {
         if (this.cacheImageView == null) {
             this.cacheImageView = new ImageView(getContext());
-            this.addView(this.cacheImageView,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            this.addView(
+                this.cacheImageView,
+                new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            );
             this.cacheImageView.setVisibility(View.INVISIBLE);
         }
         return this.cacheImageView;
