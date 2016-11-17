@@ -149,14 +149,14 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setRegion:(MKCoordinateRegion)region {
   // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
-  self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
+  self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:region];
 }
 
 - (void)animateToRegion:(MKCoordinateRegion)region
            withDuration:(CGFloat)duration {
   [CATransaction begin];
   [CATransaction setValue:[NSNumber numberWithFloat: duration / 1000] forKey:kCATransactionAnimationDuration];
-  [self animateToCameraPosition: [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
+  [self animateToCameraPosition: [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:region];
   [CATransaction commit];
 }
 
