@@ -156,7 +156,7 @@ id regionAsJSON(MKCoordinateRegion region) {
            withDuration:(CGFloat)duration {
   [CATransaction begin];
   [CATransaction setValue:[NSNumber numberWithFloat: duration / 1000] forKey:kCATransactionAnimationDuration];
-  [self animateToCameraPosition: makeGMSCameraPositionFromMKCoordinateRegionOfMap(self, region)];
+  [self animateToCameraPosition: [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
   [CATransaction commit];
 }
 
