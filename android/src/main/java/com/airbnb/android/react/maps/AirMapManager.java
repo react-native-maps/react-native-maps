@@ -99,6 +99,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.setMapType(typeId);
     }
 
+    @ReactProp(name = "minDelta")
+    public void setMinDelta(AirMapView view, @Nullable float minDelta) {
+        view.setMinDelta(minDelta);
+    }
+
+    @ReactProp(name = "maxDelta")
+    public void setMaxDelta(AirMapView view, @Nullable float maxDelta) {
+        view.setMaxDelta(maxDelta);
+    }
+
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)
     public void setShowsUserLocation(AirMapView view, boolean showUserLocation) {
         view.setShowsUserLocation(showUserLocation);
