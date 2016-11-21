@@ -172,7 +172,24 @@ For Android: add the following line in your AndroidManifest.xml
 ```
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
 
+### Customizing the map style
 
+Create the json object, or download a generated one from the [google style generator](https://mapstyle.withgoogle.com/).
+
+```jsx
+// The generated json object
+mapStyle = [ ... ]
+
+render() {
+  return (
+    <MapView
+      region={this.state.region}
+      onRegionChange={this.onRegionChange}
+      customMapStyle={mapStyle}
+    />
+  );
+}
+```
 
 ## Examples
 
@@ -199,6 +216,11 @@ One can change the mapview's position using refs and component methods, or by pa
 API could.
 
 ![](http://i.giphy.com/3o6UB7poyB6YJ0KPWU.gif) ![](http://i.giphy.com/xT77Yc4wK3pzZusEbm.gif)
+
+
+### Changing the style of the map
+
+![](http://i.imgur.com/a9WqCL6.png)
 
 
 

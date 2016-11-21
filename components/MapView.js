@@ -62,6 +62,21 @@ const propTypes = {
   style: View.propTypes.style,
 
   /**
+   * A json object that describes the style of the map. This is transformed to a string
+   * and saved in mayStyleString to be sent to android and ios
+   * https://developers.google.com/maps/documentation/ios-sdk/styling#use_a_string_resource
+   * https://developers.google.com/maps/documentation/android-api/styling
+   */
+  customMapStyle: PropTypes.array,
+
+  /**
+   * A json string that describes the style of the map
+   * https://developers.google.com/maps/documentation/ios-sdk/styling#use_a_string_resource
+   * https://developers.google.com/maps/documentation/android-api/styling
+   */
+  customMapStyleString: PropTypes.string,
+
+  /**
    * If `true` the app will ask for the user's location.
    * Default value is `false`.
    *
@@ -386,11 +401,14 @@ class MapView extends React.Component {
   }
 
   _onMapReady() {
-    const { region, initialRegion } = this.props;
+    const { region, initialRegion, customMapStyle } = this.props;
     if (region) {
       this.map.setNativeProps({ region });
     } else if (initialRegion) {
       this.map.setNativeProps({ region: initialRegion });
+    }
+    if (customMapStyle) {
+      this.map.setNativeProps({ customMapStyleString: JSON.stringify(customMapStyle) });
     }
     this.setState({ isReady: true });
   }
