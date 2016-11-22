@@ -41,6 +41,10 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)layoutSubviews {
+
+  // UIVIew
+  // ------
+
   float width = 0;
   float height = 0;
 
@@ -54,6 +58,27 @@ CGRect unionRect(CGRect a, CGRect b) {
   }
 
   [_iconView setFrame:CGRectMake(0, 0, width, height)];
+
+  // UIImageView
+  // -----------
+
+  // get container dims (style props)
+  float w = self.bounds.size.width;
+  float h = self.bounds.size.height;
+
+  // if they are 0 then use the image dims
+  if (w == 0.0f && h == 0.0f) {
+    float density = 1; // 2 for retina
+    w = _iconImageView.image.size.width / density;
+    h = _iconImageView.image.size.height / density;
+  }
+
+  // DEBUG
+  // NSLog(@"layout Bounds w: %f h: %f", w, h);
+
+  //  make bounds
+  CGRect bounds = CGRectMake(0, 0, w, h);
+  [_iconImageView setFrame:bounds];
 }
 
 - (id)eventFromMarker:(AIRGMSMarker*)marker {
@@ -186,14 +211,14 @@ CGRect unionRect(CGRect a, CGRect b) {
     if (_iconImageView) [_iconImageView removeFromSuperview];
     return;
   }
-  
+
   if (!_iconImageView) {
     // prevent glitch with marker (cf. https://github.com/airbnb/react-native-maps/issues/738)
     UIImageView *empyImageView = [[UIImageView alloc] init];
     _iconImageView = empyImageView;
     [self iconViewInsertSubview:_iconImageView atIndex:0];
   }
-  
+
   _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                           size:self.bounds.size
                                                                          scale:RCTScreenScale()
@@ -202,42 +227,69 @@ CGRect unionRect(CGRect a, CGRect b) {
                                                                  progressBlock:nil
                                                               partialLoadBlock:nil
                                                                completionBlock:^(NSError *error, UIImage *image) {
-                                                                 if (error) {
-                                                                   // TODO(lmr): do something with the error?
-                                                                   NSLog(@"%@", error);
-                                                                 }
-                                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                                  if (error) {
+                                                                    // TODO(lmr): do something with the error?
+                                                                    NSLog(@"%@", error);
+                                                                  }
+                                                                  dispatch_async(dispatch_get_main_queue(), ^{
 
-                                                                   // TODO(gil): This way allows different image sizes
-                                                                   if (_iconImageView) [_iconImageView removeFromSuperview];
+                                                                    // TODO(gil): This way allows different image sizes
+                                                                    if (_iconImageView) [_iconImageView removeFromSuperview];
 
-                                                                   // ... but this way is more efficient?
-//                                                                   if (_iconImageView) {
-//                                                                     [_iconImageView setImage:image];
-//                                                                     return;
-//                                                                   }
+                                                                    // // ... but this way is more efficient?
+                                                                    // if (_iconImageView) {
+                                                                    //   [_iconImageView setImage:image];
+                                                                    //   return;
+                                                                    // }
 
-                                                                   UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+                                                                    // create and configure the image view
+                                                                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+                                                                    imageView.contentMode = UIViewContentModeScaleAspectFit;
 
-                                                                   // TODO: w,h or pixel density could be a prop.
-                                                                   float density = 1;
-                                                                   float w = image.size.width/density;
-                                                                   float h = image.size.height/density;
-                                                                   CGRect bounds = CGRectMake(0, 0, w, h);
+                                                                    // init the dims at the same size as the parent
+                                                                    // so the style prop can be used
+                                                                    float w = self.bounds.size.width;
+                                                                    float h = self.bounds.size.height;
 
-                                                                   imageView.contentMode = UIViewContentModeScaleAspectFit;
-                                                                   [imageView setFrame:bounds];
+                                                                    // DEBUG
+                                                                    // NSLog(@"init Bounds w: %f h: %f", w, h);
 
-                                                                   // NOTE: sizeToFit doesn't work instead. Not sure why.
-                                                                   // TODO: Doing it this way is not ideal because it causes things to reshuffle
-                                                                   //       when the image loads IF the image is larger than the UIView.
-                                                                   //       Shouldn't required images have size info automatically via RN?
-                                                                   CGRect selfBounds = unionRect(bounds, self.bounds);
-                                                                   [self setFrame:selfBounds];
+                                                                    // if they are 0 then use the image dims
+                                                                    if (w == 0.0f && h == 0.0f) {
+                                                                      float density = 1; // 2 for retina
+                                                                      w = image.size.width / density;
+                                                                      h = image.size.height / density;
+                                                                    }
 
-                                                                   _iconImageView = imageView;
-                                                                   [self iconViewInsertSubview:imageView atIndex:0];
-                                                                 });
+                                                                    // DEBUG
+                                                                    // NSLog(@"init Image w: %f h: %f", image.size.width, image.size.height);
+                                                                    // NSLog(@"init UIImageView w: %f h: %f", w, h);
+
+                                                                    // create some bounds
+                                                                    CGRect bounds = CGRectMake(0, 0, w, h);
+
+                                                                    //
+                                                                    [imageView setFrame:bounds];
+
+                                                                    // NOTE: sizeToFit doesn't work instead. Not sure why.
+                                                                    // TODO: Doing it this way is not ideal because it causes things to reshuffle
+                                                                    //       when the image loads IF the image is larger than the UIView.
+                                                                    //       Shouldn't required images have size info automatically via RN?
+                                                                    CGRect selfBounds = unionRect(bounds, self.bounds);
+                                                                    [self setFrame:selfBounds];
+
+                                                                    // update the attached mage view
+                                                                    _iconImageView = imageView;
+                                                                    [self iconViewInsertSubview:imageView atIndex:0];
+
+                                                                    // force layout
+                                                                    [self setNeedsLayout];
+                                                                    [self layoutIfNeeded];
+
+                                                                    // DEBUG
+                                                                    // NSLog(@"init Wrapper w: %f h: %f", self.bounds.size.width, self.bounds.size.height);
+
+                                                                  });
                                                                }];
 }
 
