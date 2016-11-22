@@ -82,8 +82,10 @@ class Overlays extends React.Component {
           <MapView.Circle
             center={circle.center}
             radius={circle.radius}
-            fillColor="rgba(200, 0, 0, 0.5)"
+            fillColor="rgba(255, 255, 255, 1)"
             strokeColor="rgba(0,0,0,0.5)"
+            zIndex={2}
+            strokeWidth={2}
           />
           <MapView.Polygon
             coordinates={polygon}

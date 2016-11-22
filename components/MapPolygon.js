@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
-  NOT_SUPPORTED,
+  SUPPORTED,
 } from './decorateMapComponent';
 
 const propTypes = {
@@ -92,7 +92,6 @@ const propTypes = {
    * points on the Earth's surface. The geodesic curve is constructed assuming the Earth is
    * a sphere.
    *
-   * @platform android
    */
   geodesic: PropTypes.bool,
 
@@ -145,7 +144,7 @@ module.exports = decorateMapComponent(MapPolygon, {
   componentType: 'Polygon',
   providers: {
     google: {
-      ios: NOT_SUPPORTED,
+      ios: SUPPORTED,
       android: USES_DEFAULT_IMPLEMENTATION,
     },
   },

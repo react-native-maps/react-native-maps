@@ -6,7 +6,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import MapView, { MAP_TYPES } from 'react-native-maps';
+import MapView, { MAP_TYPES, PROVIDER_DEFAULT } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -30,12 +30,19 @@ class CustomTiles extends React.Component {
     };
   }
 
+  get mapType() {
+    // MapKit does not support 'none' as a base map
+    return this.props.provider === PROVIDER_DEFAULT ?
+      MAP_TYPES.STANDARD : MAP_TYPES.NONE;
+  }
+
   render() {
     const { region } = this.state;
     return (
       <View style={styles.container}>
         <MapView
-          mapType={MAP_TYPES.NONE}
+          provider={this.props.provider}
+          mapType={this.mapType}
           style={styles.map}
           initialRegion={region}
         >
@@ -53,6 +60,10 @@ class CustomTiles extends React.Component {
     );
   }
 }
+
+CustomTiles.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {
