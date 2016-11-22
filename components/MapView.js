@@ -400,16 +400,26 @@ class MapView extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { isReady } = this.state;
+    if (isReady) {
+      this._updateStyle();
+    }
+  }
+
+  _updateStyle() {
+    const { customMapStyle } = this.props;
+    this.map.setNativeProps({ customMapStyleString: JSON.stringify(customMapStyle) });
+  }
+
   _onMapReady() {
-    const { region, initialRegion, customMapStyle } = this.props;
+    const { region, initialRegion } = this.props;
     if (region) {
       this.map.setNativeProps({ region });
     } else if (initialRegion) {
       this.map.setNativeProps({ region: initialRegion });
     }
-    if (customMapStyle) {
-      this.map.setNativeProps({ customMapStyleString: JSON.stringify(customMapStyle) });
-    }
+    this._updateStyle();
     this.setState({ isReady: true });
   }
 
