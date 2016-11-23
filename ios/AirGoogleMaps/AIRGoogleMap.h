@@ -17,6 +17,7 @@
 // TODO: don't use MK region?
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
 @property (nonatomic, assign) MKCoordinateRegion region;
+@property (nonatomic, assign) NSString *customMapStyleString;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;
