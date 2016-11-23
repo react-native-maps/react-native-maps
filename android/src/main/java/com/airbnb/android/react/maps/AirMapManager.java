@@ -88,17 +88,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.setRegion(region);
     }
 
-    @ReactProp(name = "customMapStyle")
-    public void setCustomMapStyle(AirMapView view, @Nullable String mapStyle) {
-        view.map.setMapStyle(new MapStyleOptions(mapStyle));
-    }
-
     @ReactProp(name = "mapType")
     public void setMapType(AirMapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
         view.map.setMapType(typeId);
     }
-    
+
     @ReactProp(name = "customMapStyleString")
     public void setMapStyle(AirMapView view, @Nullable String customMapStyleString) {
         view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
