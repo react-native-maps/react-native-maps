@@ -381,11 +381,11 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 
         [self updateScrollEnabled];
         [self updateZoomEnabled];
-        [self updateLegalLabelInset];
+        [self updateLegalLabelInsets];
     }
 }
 
-- (void)updateLegalLabelInset {
+- (void)updateLegalLabelInsets {
     if (_legalLabel) {
         dispatch_async(dispatch_get_main_queue(), ^{
             CGRect frame = self->_legalLabel.frame;
