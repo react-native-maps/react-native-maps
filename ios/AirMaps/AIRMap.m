@@ -388,18 +388,18 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 - (void)updateLegalLabelInsets {
     if (_legalLabel) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            CGRect frame = self->_legalLabel.frame;
-            if (self->_legalLabelInsets.left) {
-                frame.origin.x = self->_legalLabelInsets.left;
-            } else if (self->_legalLabelInsets.right) {
-                frame.origin.x = self.frame.size.width - self->_legalLabelInsets.right - frame.size.width;
+            CGRect frame = _legalLabel.frame;
+            if (_legalLabelInsets.left) {
+                frame.origin.x = _legalLabelInsets.left;
+            } else if (_legalLabelInsets.right) {
+                frame.origin.x = self.frame.size.width - _legalLabelInsets.right - frame.size.width;
             }
-            if (self->_legalLabelInsets.top) {
-                frame.origin.y = self->_legalLabelInsets.top;
-            } else if (self->_legalLabelInsets.bottom) {
-                frame.origin.y = self.frame.size.height - self->_legalLabelInsets.bottom - frame.size.height;
+            if (_legalLabelInsets.top) {
+                frame.origin.y = _legalLabelInsets.top;
+            } else if (_legalLabelInsets.bottom) {
+                frame.origin.y = self.frame.size.height - _legalLabelInsets.bottom - frame.size.height;
             }
-            self->_legalLabel.frame = frame;
+            _legalLabel.frame = frame;
         });
     }
 }
