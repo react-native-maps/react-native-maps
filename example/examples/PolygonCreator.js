@@ -45,7 +45,7 @@ class PolygonCreator extends React.Component {
   }
 
   createHole() {
-    const { polygons, editing, creatingHole } = this.state;
+    const { editing, creatingHole } = this.state;
     if (!creatingHole) {
       this.setState({
         creatingHole: true,
@@ -53,19 +53,19 @@ class PolygonCreator extends React.Component {
           ...editing,
           holes: [
             ...editing.holes,
-            []
-          ]
+            [],
+          ],
         },
       });
     } else {
-      let holes = [...editing.holes];
+      const holes = [...editing.holes];
       if (holes[holes.length - 1].length === 0) {
         holes.pop();
         this.setState({
           editing: {
             ...editing,
-            holes: holes,
-          }
+            holes,
+          },
         });
       }
       this.setState({ creatingHole: false });
@@ -82,34 +82,32 @@ class PolygonCreator extends React.Component {
           holes: [],
         },
       });
+    } else if (!creatingHole) {
+      this.setState({
+        editing: {
+          ...editing,
+          coordinates: [
+            ...editing.coordinates,
+            e.nativeEvent.coordinate,
+          ],
+        },
+      });
     } else {
-      if (!creatingHole) {
-        this.setState({
-          editing: {
-            ...editing,
-            coordinates: [
-              ...editing.coordinates,
-              e.nativeEvent.coordinate,
-            ],
-          },
-        });
-      } else {
-        let holes = [...editing.holes];
-        holes[holes.length - 1] = [
-          ...holes[holes.length - 1],
-          e.nativeEvent.coordinate,
-        ];
-        this.setState({
-          editing: {
-            ...editing,
-            id: id++, // keep incrementing id to trigger display refresh
-            coordinates: [
-              ...editing.coordinates,
-            ],
-            holes: holes,
-          },
-        });
-      }
+      const holes = [...editing.holes];
+      holes[holes.length - 1] = [
+        ...holes[holes.length - 1],
+        e.nativeEvent.coordinate,
+      ];
+      this.setState({
+        editing: {
+          ...editing,
+          id: id++, // keep incrementing id to trigger display refresh
+          coordinates: [
+            ...editing.coordinates,
+          ],
+          holes,
+        },
+      });
     }
   }
 
