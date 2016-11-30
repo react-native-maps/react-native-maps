@@ -24,4 +24,9 @@
 
 RCT_ARRAY_CONVERTER(AIRMapCoordinate)
 
++ (NSArray<NSArray<AIRMapCoordinate *> *> *)AIRMapCoordinateArrayArray:(id)json
+{
+    return RCTConvertArrayValue(@selector(AIRMapCoordinateArray:), json);
+}
+
 @end
