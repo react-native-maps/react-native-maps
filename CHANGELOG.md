@@ -1,6 +1,12 @@
 # Change Log
 
+## 0.12.1 (December 6, 2016)
+
+This release only corrects the version in package.json.
+
 ## 0.12.0 (December 6, 2016)
+
+NOTE: This version was not published because package.json was not properly updated
 
 ### Breaking Changes
 
