@@ -27,7 +27,7 @@
 | `loadingEnabled` | `Boolean` | `false` | If `true` a loading indicator will show while the map is loading.
 | `loadingIndicatorColor` | `Color` | `#606060` | Sets loading indicator color, default to `#606060`.
 | `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
-
+| `moveOnMarkerPress` | `Boolean` | `true` | `Android only` If `false` the map won't move when a marker is pressed.
 
 
 ## Events
