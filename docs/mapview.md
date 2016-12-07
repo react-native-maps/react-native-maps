@@ -57,7 +57,7 @@
 | `animateToCoordinate` | `region: Coordinate`, `duration: Number` |
 | `fitToElements` | `animated: Boolean` |
 | `fitToSuppliedMarkers` | `markerIDs: String[]` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
-| `fitToCoordinates` | `coordinates: Array<LatLng>, edgePadding: EdgePadding, animated: Boolean` |
+| `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` |
 
 
 
