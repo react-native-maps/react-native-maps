@@ -23,7 +23,7 @@ class LegalLabel extends React.Component {
   }
 
   componentDidMount() {
-    this.state._legalLabelPositionY.addListener(({value}) => {
+    this.state._legalLabelPositionY.addListener(({ value }) => {
       this.setState({
         legalLabelPositionY: value,
       });
