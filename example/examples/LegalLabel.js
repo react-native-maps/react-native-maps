@@ -3,7 +3,9 @@ import {
   StyleSheet,
   View,
   Text,
+  Animated,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -13,6 +15,34 @@ const screen = Dimensions.get('window');
 class LegalLabel extends React.Component {
   static propTypes = {
     provider: MapView.ProviderPropType,
+  }
+
+  state = {
+    _legalLabelPositionY: new Animated.Value(10),
+    legalLabelPositionY: 10,
+  }
+
+  componentDidMount() {
+    this.state._legalLabelPositionY.addListener(({ value }) => {
+      this.setState({
+        legalLabelPositionY: value,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.state._legalLabelPositionY.removeAllListeners();
+  }
+
+  onPressAnimate = () => {
+    Animated.sequence([
+      Animated.spring(this.state._legalLabelPositionY, {
+        toValue: 100,
+      }),
+      Animated.spring(this.state._legalLabelPositionY, {
+        toValue: 10,
+      }),
+    ]).start();
   }
 
   render() {
@@ -30,7 +60,7 @@ class LegalLabel extends React.Component {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          legalLabelInsets={{ bottom: 10, right: 10 }}
+          legalLabelInsets={{ bottom: this.state.legalLabelPositionY, right: 10 }}
           initialRegion={{
             ...latlng,
             latitudeDelta: LATITUDE_DELTA,
@@ -41,7 +71,9 @@ class LegalLabel extends React.Component {
         </MapView>
 
         <View style={styles.username}>
-          <Text style={styles.usernameText}>Username</Text>
+          <TouchableOpacity onPress={this.onPressAnimate}>
+            <Text style={styles.usernameText}>Animate</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.bio}>
@@ -84,6 +116,8 @@ const styles = StyleSheet.create({
   usernameText: {
     fontSize: 36,
     lineHeight: 36,
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
   photo: {
     padding: 2,

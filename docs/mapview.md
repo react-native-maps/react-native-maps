@@ -28,6 +28,7 @@
 | `loadingIndicatorColor` | `Color` | `#606060` | Sets loading indicator color, default to `#606060`.
 | `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
 | `moveOnMarkerPress` | `Boolean` | `true` | `Android only` If `false` the map won't move when a marker is pressed.
+| `legalLabelInsets` | `EdgeInsets` | | If set, changes the position of the "Legal" label link from the OS default. **Note:** iOS only.
 
 
 ## Events
@@ -101,5 +102,14 @@ type EdgePadding {
   right: Number,
   bottom: Number,
   left: Number
+}
+```
+
+```
+type EdgeInsets {
+  top: Number,
+  left: Number,
+  bottom: Number,
+  right: Number
 }
 ```
