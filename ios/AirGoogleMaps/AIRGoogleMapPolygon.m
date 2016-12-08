@@ -31,6 +31,27 @@
   _polygon.path = path;
 }
 
+- (void)setHoles:(NSArray<NSArray<AIRMapCoordinate *> *> *)holes
+{
+  _holes = holes;
+
+  if (holes.count)
+  {
+    NSMutableArray<GMSMutablePath *> *interiorPolygons = [NSMutableArray array];
+    for(int h = 0; h < holes.count; h++)
+    {
+      GMSMutablePath *path = [GMSMutablePath path];
+      for(int i = 0; i < holes[h].count; i++)
+      {
+        [path addCoordinate:holes[h][i].coordinate];
+      }
+      [interiorPolygons addObject:path];
+    }
+
+    _polygon.holes = interiorPolygons;
+  }
+}
+
 -(void)setFillColor:(UIColor *)fillColor
 {
   _fillColor = fillColor;

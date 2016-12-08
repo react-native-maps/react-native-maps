@@ -109,7 +109,7 @@ Source: https://developers.google.com/maps/documentation/android-api/signup
 
 ## Troubleshooting
 
-If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-maps/issues/118), [#176](https://github.com/airbnb/react-native-maps/issues/176)) try the following lines :
+If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-maps/issues/118), [#176](https://github.com/airbnb/react-native-maps/issues/176), [#684](https://github.com/airbnb/react-native-maps/issues/684)), try the following lines :
 
 ### On iOS:
 
@@ -119,6 +119,19 @@ You have to link dependencies with rnpm and re-run the build:
 1. `react-native run-ios`
 
 ### On Android:
+
+1. Be sure to have `new MapsPackage()` in your `MainApplication.java` :
+   ```
+   import com.airbnb.android.react.maps.MapsPackage;
+   ...
+   @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                    new MainReactPackage(),
+                    new MapsPackage()
+            );
+        }
+   ```
 
 1. Set this Stylesheet in your map component
    ```

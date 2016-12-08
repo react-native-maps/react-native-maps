@@ -29,6 +29,7 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(coordinates, AIRMapCoordinateArray)
+RCT_EXPORT_VIEW_PROPERTY(holes, AIRMapCoordinateArrayArray)
 RCT_EXPORT_VIEW_PROPERTY(fillColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeWidth, double)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
