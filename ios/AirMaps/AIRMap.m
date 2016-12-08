@@ -404,6 +404,12 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     }
 }
 
+
+- (void)setLegalLabelInsets:(UIEdgeInsets)legalLabelInsets {
+  _legalLabelInsets = legalLabelInsets;
+  [self updateLegalLabelInsets];
+}
+
 - (void)beginLoading {
     if ((!self.hasShownInitialLoading && self.loadingEnabled) || (self.cacheEnabled && self.cacheImageView.image == nil)) {
         self.loadingView.hidden = NO;
