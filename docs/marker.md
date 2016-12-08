@@ -15,6 +15,7 @@
 | `calloutAnchor` | `Point` |  | Specifies the point in the marker image at which to anchor the callout when it is displayed. This is specified in the same coordinate system as the anchor. See the `anchor` prop for more details.<br/><br/> The default is the top middle of the image.<br/><br/> For ios, see the `calloutOffset` prop.
 | `flat` | `Boolean` |  | Sets whether this marker should be flat against the map true or a billboard facing the camera false.
 | `identifier` | `String` |  | An identifier used to reference this marker at a later date.
+| `rotation` | `Float` |  | A float number indicating marker's rotation angle.
 
 ## Events
 
