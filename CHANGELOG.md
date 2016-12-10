@@ -2,6 +2,8 @@
 
 ## 0.12.2 (December 9, 2016)
 
+### Patches
+
 * [Android] Added support for taking snapshots on Android
   [#625](https://github.com/airbnb/react-native-maps/pull/625)
   (@IjzerenHein)
@@ -9,7 +11,7 @@
   [#873](https://github.com/airbnb/react-native-maps/pull/873)
   (@scarlac)
 * Added rotation attribute documentation
-  [#](https://github.com/airbnb/react-native-maps/pull/)
+  [#871](https://github.com/airbnb/react-native-maps/pull/871)
   (@Arman92)
 * Update mapview.md documentation
   [#866](https://github.com/airbnb/react-native-maps/pull/866)
