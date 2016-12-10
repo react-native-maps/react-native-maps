@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.12.2 (December 9, 2016)
+
+* [Android] Added support for taking snapshots on Android
+  [#625](https://github.com/airbnb/react-native-maps/pull/625)
+  (@IjzerenHein)
+* [iOS] Allow legalLabelInsets to be changed and animated
+  [#873](https://github.com/airbnb/react-native-maps/pull/873)
+  (@scarlac)
+* Added rotation attribute documentation
+  [#](https://github.com/airbnb/react-native-maps/pull/)
+  (@Arman92)
+* Update mapview.md documentation
+  [#866](https://github.com/airbnb/react-native-maps/pull/866)
+  (@dccarmo)
+
+
 ## 0.12.1 (December 6, 2016)
 
 This release only corrects the version in package.json.
