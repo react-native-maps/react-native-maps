@@ -6,10 +6,12 @@ First, download the library from npm:
 npm install react-native-maps --save
 ```
 
-Then you must install the native dependencies: You can use `rnpm` (now part of `react-native` core) to
+Second, install the native dependencies: You can use `rnpm` (now part of `react-native` core via `link`) to
 add native dependencies automatically then continue the directions below depending on your target OS.
 
-   `$ react-native link`
+```
+react-native link
+```
 
    >This installation should work in physical devices. For Genymotion, be sure to check Android installation about Google Play Services
 
@@ -17,7 +19,7 @@ add native dependencies automatically then continue the directions below dependi
 
 ### Option 1: CocoaPods - Same as the included AirMapsExplorer example
 
-1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile)  then run `pod install`.
+1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile), replace all references to `AirMapExplorer` with your project name, and then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
 1. Drag the following folder into your project:
@@ -44,6 +46,8 @@ Now if you need `GoogleMaps` support you will also have to add a bunch of other 
 After your `Podfile` is setup properly, run `pod install`.
 
 ### Option 3: Manually
+  >This was already done for you if you ran "react-native link"
+
 1. Open your project in Xcode, right click on `Libraries` and click `Add
    Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
 1. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
@@ -60,6 +64,8 @@ After your `Podfile` is setup properly, run `pod install`.
 ## Android
 
 1. In your `android/app/build.gradle` add:
+   >This step is not necessary if you ran "react-native link"
+
    ```groovy
    ...
    dependencies {
@@ -69,6 +75,8 @@ After your `Podfile` is setup properly, run `pod install`.
    ```
 
 1. In your `android/settings.gradle` add:
+   >This step is not necessary if you ran "react-native link"
+
    ```groovy
    ...
    include ':react-native-maps'
@@ -76,9 +84,9 @@ After your `Podfile` is setup properly, run `pod install`.
    ```
 
 1. Specify your Google Maps API Key:
-    > For development, it is recommended to use a ***Browser Key*** without referrer restrictions. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+    > For development, you need to get a ***API Key***. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-   Add your **Browser** API key to your manifest file (`android\app\src\main\AndroidManifest.xml`):
+   Add your API key to your manifest file (`android\app\src\main\AndroidManifest.xml`):
 
    ```xml
    <application>
@@ -86,18 +94,6 @@ After your `Podfile` is setup properly, run `pod install`.
        <meta-data
          android:name="com.google.android.geo.API_KEY"
          android:value="Your Google maps API Key Here"/>
-   </application>
-   ```
-    > If that doesn't work, try using an ***Android Key*** without referrer restrictions. Go to https://console.developers.google.com/apis/credentials to check your credentials.
-
-   Add your **Android** API key to your manifest file:
-
-   ```xml
-   <application>
-       <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-       <meta-data
-           android:name="com.google.android.maps.v2.API_KEY"
-           android:value="{{@string/ANDROID_GOOGLE_MAPS_API_KEY}}"/>
    </application>
    ```
    > Note: As shown above, com.google.android.geo.API_KEY is the recommended metadata name for the API key. A key with this name can be used to authenticate to multiple Google Maps-based APIs on the Android platform, including the Google Maps Android API. For backwards compatibility, the API also supports the name com.google.android.maps.v2.API_KEY. This legacy name allows authentication to the Android Maps API v2 only. An application can specify only one of the API key metadata names. If both are specified, the API throws an exception.
@@ -115,12 +111,14 @@ If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-ma
 
 You have to link dependencies with rnpm and re-run the build:
 
-1. `rnpm link`
+1. `react-native link`
 1. `react-native run-ios`
 
 ### On Android:
 
 1. Be sure to have `new MapsPackage()` in your `MainApplication.java` :
+   >This step is not necessary if you ran "react-native link"
+
    ```
    import com.airbnb.android.react.maps.MapsPackage;
    ...
@@ -135,6 +133,7 @@ You have to link dependencies with rnpm and re-run the build:
 
 1. Set this Stylesheet in your map component
    ```
+   import MapView from 'react-native-maps';
    ...
    const styles = StyleSheet.create({
      container: {
@@ -171,26 +170,30 @@ You have to link dependencies with rnpm and re-run the build:
      }
    }
    ```
-1. Run "android" and make sure every packages is updated.
+1. Run "android" and make sure all packages are up-to-date.
 1.  If not installed yet, you have to install the following packages :
     - Extras / Google Play services
     - Extras / Google Repository
-    - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 13
-1. Check manual installation steps
-1. Generate your SHA1 key :  
-   `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`
+    - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 19
+1. Check manual installation steps if you didn't run "react-native link"
+1. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.
+Then, once enabled, select `Go to credentials`.
+Select `Google Maps Android API` and create a new key.
+Enter the name of the API key and create it.
 
-1. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.  
-In `Overview -> Google Maps API -> Google Maps Android API ` -> Check if it's enabled  
-Create a new key by clicking on `Create credentials -> API Key -> Android Key`, enter the name of the API key and your SHA1 key, generated before, and create it.
-Check installation step 4.
-
-1. Clean the cache :   
-   `watchman watch-del-all`  
-   `npm cache clean`
+1. Clean the cache :
+  ```
+   watchman watch-del-all
+   npm cache clean
+  ```
 
 1. When starting emulator, make sure you have enabled `Wipe user data`.
 
 1. Run `react-native run-android`
 
-1. At this step it should work, but if not, go to your [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&pli=1) and create a `Browser key` instead of a `Android key` and go to step 6.
+1. If you encounter `com.android.dex.DexException: Multiple dex files define Landroid/support/v7/appcompat/R$anim`, then clear build folder.
+  ```
+   cd android
+   gradlew clean
+   cd ..
+  ```
