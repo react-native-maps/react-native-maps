@@ -73,6 +73,21 @@ After your `Podfile` is setup properly, run `pod install`.
      compile project(':react-native-maps')
    }
    ```
+   
+   If you have a different play serivces than the one included in this library, use the following instead:
+   
+   ```groovy
+   ...
+   dependencies {
+     ...
+     compile project(':react-native-maps'){
+       exclude group: 'com.google.android.gms', module: 'play-services-base'
+       exclude group: 'com.google.android.gms', module: 'play-services-maps'
+     }
+     compile 'com.google.android.gms:play-services-base:<Your play-services version>'
+     compile 'com.google.android.gms:play-services-maps:<Your play services version>'
+   }
+   ```
 
 1. In your `android/settings.gradle` add:
    >This step is not necessary if you ran "react-native link"
