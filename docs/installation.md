@@ -74,18 +74,18 @@ After your `Podfile` is setup properly, run `pod install`.
    }
    ```
    
-   If you have a different play serivces than the one included in this library, use the following instead:
+   If you have a different play serivces than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
    
    ```groovy
    ...
    dependencies {
-     ...
-     compile project(':react-native-maps'){
-       exclude group: 'com.google.android.gms', module: 'play-services-base'
-       exclude group: 'com.google.android.gms', module: 'play-services-maps'
-     }
-     compile 'com.google.android.gms:play-services-base:<Your play-services version>'
-     compile 'com.google.android.gms:play-services-maps:<Your play services version>'
+       ...
+       compile(project(':react-native-maps')){
+           exclude group: 'com.google.android.gms', module: 'play-services-base'
+           exclude group: 'com.google.android.gms', module: 'play-services-maps'
+       }
+       compile 'com.google.android.gms:play-services-base:10.0.1'
+       compile 'com.google.android.gms:play-services-maps:10.0.1'
    }
    ```
 
