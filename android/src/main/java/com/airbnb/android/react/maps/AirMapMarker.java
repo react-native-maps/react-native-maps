@@ -3,9 +3,11 @@ package com.airbnb.android.react.maps;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.view.View;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.facebook.common.references.CloseableReference;
@@ -56,7 +58,10 @@ public class AirMapMarker extends AirMapFeature {
 
     private float markerHue = 0.0f; // should be between 0 and 360
     private BitmapDescriptor iconBitmapDescriptor;
+    private float iconBitmapH = 0.0f;
+    private float iconBitmapW = 0.0f;
     private Bitmap iconBitmap;
+    private String iconBitmapUri;
 
     private float rotation = 0.0f;
     private boolean flat = false;
@@ -71,37 +76,36 @@ public class AirMapMarker extends AirMapFeature {
 
     private final DraweeHolder<?> logoHolder;
     private DataSource<CloseableReference<CloseableImage>> dataSource;
-    private final ControllerListener<ImageInfo> mLogoControllerListener =
-            new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onFinalImageSet(
-                        String id,
-                        @Nullable final ImageInfo imageInfo,
-                        @Nullable Animatable animatable) {
-                    CloseableReference<CloseableImage> imageReference = null;
-                    try {
-                        imageReference = dataSource.getResult();
-                        if (imageReference != null) {
-                            CloseableImage image = imageReference.get();
-                            if (image != null && image instanceof CloseableStaticBitmap) {
-                                CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
-                                Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
-                                if (bitmap != null) {
-                                    bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                                    iconBitmap = bitmap;
-                                    iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-                                }
-                            }
-                        }
-                    } finally {
-                        dataSource.close();
-                        if (imageReference != null) {
-                            CloseableReference.closeSafely(imageReference);
+    private final ControllerListener<ImageInfo> mLogoControllerListener = new BaseControllerListener<ImageInfo>() {
+        @Override
+        public void onFinalImageSet(
+                String id,
+                @Nullable final ImageInfo imageInfo,
+                @Nullable Animatable animatable) {
+            CloseableReference<CloseableImage> imageReference = null;
+            try {
+                imageReference = dataSource.getResult();
+                if (imageReference != null) {
+                    CloseableImage image = imageReference.get();
+                    if (image != null && image instanceof CloseableStaticBitmap) {
+                        CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
+                        Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
+                        if (bitmap != null) {
+                            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                            iconBitmap = bitmap;
+                            iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
                         }
                     }
-                    update();
                 }
-            };
+            } finally {
+                dataSource.close();
+                if (imageReference != null) {
+                    CloseableReference.closeSafely(imageReference);
+                }
+            }
+            update();
+        }
+    };
 
     public AirMapMarker(Context context) {
         super(context);
@@ -208,11 +212,24 @@ public class AirMapMarker extends AirMapFeature {
     }
 
     public void setImage(String uri) {
+
+        // store the raw uri
+        iconBitmapUri = uri;
+
+        // unset bitmap descriptor if we got nothing
         if (uri == null) {
+
             iconBitmapDescriptor = null;
             update();
-        } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
-                uri.startsWith("file://")) {
+        }
+
+        // request
+        else if (
+            uri.startsWith("http://") ||
+            uri.startsWith("https://") ||
+            uri.startsWith("file://")
+        ) {
+
             ImageRequest imageRequest = ImageRequestBuilder
                     .newBuilderWithSource(Uri.parse(uri))
                     .build();
@@ -224,9 +241,21 @@ public class AirMapMarker extends AirMapFeature {
                     .setControllerListener(mLogoControllerListener)
                     .setOldController(logoHolder.getController())
                     .build();
+
             logoHolder.setController(controller);
-        } else {
+
+        }
+
+        // resource
+        else {
+
+            // update the icon descriptor
             iconBitmapDescriptor = getBitmapDescriptorByName(uri);
+
+            // make sure it scales
+            scaleBitmap();
+
+            // trigger an update
             update();
         }
     }
@@ -265,6 +294,7 @@ public class AirMapMarker extends AirMapFeature {
     }
 
     private BitmapDescriptor getIcon() {
+
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
             if (iconBitmapDescriptor != null) {
@@ -280,9 +310,11 @@ public class AirMapMarker extends AirMapFeature {
                 return BitmapDescriptorFactory.fromBitmap(createDrawable());
             }
         } else if (iconBitmapDescriptor != null) {
+
             // use local image as a marker
             return iconBitmapDescriptor;
         } else {
+
             // render the default marker pin
             return BitmapDescriptorFactory.defaultMarker(this.markerHue);
         }
@@ -323,12 +355,20 @@ public class AirMapMarker extends AirMapFeature {
     }
 
     public void update(int width, int height) {
+
+        // set the dims
         this.width = width;
         this.height = height;
+
+        // scale the bitmap
+        scaleBitmap();
+
+        // trigger
         update();
     }
 
     private Bitmap createDrawable() {
+
         int width = this.width <= 0 ? 100 : this.width;
         int height = this.height <= 0 ? 100 : this.height;
         this.buildDrawingCache();
@@ -417,4 +457,43 @@ public class AirMapMarker extends AirMapFeature {
         return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
     }
 
+    private void scaleBitmap() {
+
+        if (this.width > 0 && iconBitmapW != this.width) {
+
+            Bitmap bitmap = null;
+
+            // from uri
+            if (iconBitmapUri != null) {
+
+                // get the drawable an analyse it
+                Drawable drawable = getResources().getDrawable(getDrawableResourceByName(iconBitmapUri));
+                iconBitmapW = drawable.getIntrinsicWidth();
+                iconBitmapH = drawable.getIntrinsicHeight();
+
+                // convert to bitmap
+                Canvas canvas = new Canvas();
+                bitmap = Bitmap.createBitmap(Math.round(iconBitmapW), Math.round(iconBitmapH), Bitmap.Config.ARGB_8888);
+                canvas.setBitmap(bitmap);
+                drawable.setBounds(0, 0, Math.round(iconBitmapW), Math.round(iconBitmapH));
+                drawable.draw(canvas);
+            }
+
+            // from bitmap
+            else if (iconBitmap != null) {
+                iconBitmapW = iconBitmap.getWidth();
+                iconBitmapH = iconBitmap.getHeight();
+                bitmap = iconBitmap;
+            }
+
+            if (bitmap != null) {
+
+                // scale
+                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, this.width, this.height, true);
+
+                // set the icon bitmap descriptor
+                iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(scaled);
+            }
+        }
+    }
 }

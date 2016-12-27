@@ -413,13 +413,17 @@ class MapView extends React.Component {
   }
 
   _onMapReady() {
+
     const { region, initialRegion } = this.props;
+
     if (region) {
       this.map.setNativeProps({ region });
     } else if (initialRegion) {
       this.map.setNativeProps({ region: initialRegion });
     }
+
     this._updateStyle();
+
     this.setState({ isReady: true });
   }
 

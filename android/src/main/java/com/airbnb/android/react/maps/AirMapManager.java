@@ -93,10 +93,20 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         int typeId = MAP_TYPES.get(mapType);
         view.map.setMapType(typeId);
     }
-    
+
     @ReactProp(name = "customMapStyleString")
     public void setMapStyle(AirMapView view, @Nullable String customMapStyleString) {
         view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
+    }
+
+    @ReactProp(name = "minDelta")
+    public void setMinDelta(AirMapView view, @Nullable float minDelta) {
+        view.setMinDelta(minDelta);
+    }
+
+    @ReactProp(name = "maxDelta")
+    public void setMaxDelta(AirMapView view, @Nullable float maxDelta) {
+        view.setMaxDelta(maxDelta);
     }
 
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)

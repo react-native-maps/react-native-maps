@@ -8,9 +8,11 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -47,6 +49,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.Math;
+import java.lang.Float;
+
+import javax.annotation.Nullable;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
@@ -83,49 +89,74 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
 
-    public AirMapView(ThemedReactContext reactContext, Context appContext, AirMapManager manager,
-            GoogleMapOptions googleMapOptions) {
+    protected static int MERCATOR_OFFSET = 268435456; // (total pixels at zoom level 20) / 2
+    protected static double MERCATOR_RADIUS = 85445659.44705395; // MERCATOR_OFFSET / pi
+    protected static int MAX_GOOGLE_LEVELS = 20;
+
+    public AirMapView(
+        ThemedReactContext reactContext,
+        Context appContext,
+        AirMapManager manager,
+        GoogleMapOptions googleMapOptions
+    ) {
         super(appContext, googleMapOptions);
 
         this.manager = manager;
         this.context = reactContext;
 
-        super.onCreate(null);
+        super.onCreate(new Bundle());
         super.onResume();
+
         super.getMapAsync(this);
 
         final AirMapView view = this;
-        scaleDetector =
-                new ScaleGestureDetector(reactContext, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-                    @Override
-                    public boolean onScaleBegin(ScaleGestureDetector detector) {
-                        view.startMonitoringRegion();
-                        return true; // stop recording this gesture. let mapview handle it.
-                    }
-        });
 
-        gestureDetector =
-                new GestureDetectorCompat(reactContext, new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onDoubleTap(MotionEvent e) {
-                        view.startMonitoringRegion();
-                        return false;
-                    }
+        scaleDetector = new ScaleGestureDetector(
+            reactContext,
+            new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
-                    @Override
-                    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                                            float distanceY) {
-                        if (handlePanDrag) {
-                            onPanDrag(e2);
-                        }
-                        view.startMonitoringRegion();
-                        return false;
+                @Override
+                public boolean onScaleBegin(ScaleGestureDetector detector) {
+                    view.startMonitoringRegion();
+                    return true; // stop recording this gesture. let mapview handle it.
+                }
+            }
+        );
+
+        gestureDetector = new GestureDetectorCompat(
+            reactContext,
+            new GestureDetector.SimpleOnGestureListener() {
+
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    view.startMonitoringRegion();
+                    return false;
+                }
+
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    if (handlePanDrag) {
+                        onPanDrag(e2);
                     }
-                });
+                    view.startMonitoringRegion();
+                    return false;
+                }
+            }
+        );
 
         this.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-            @Override public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            @Override
+            public void onLayoutChange(
+                View v,
+                int left,
+                int top,
+                int right,
+                int bottom,
+                int oldLeft,
+                int oldTop,
+                int oldRight,
+                int oldBottom
+            ) {
                 if (!paused) {
                     AirMapView.this.cacheView();
                 }
@@ -251,42 +282,46 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         // updating location constantly, killing the battery, even though some other location-mgmt
         // module may
         // desire to shut-down location-services.
-      LifecycleEventListener lifecycleListener = new LifecycleEventListener() {
-        @Override
-        public void onHostResume() {
-          if (hasPermissions()) {
-            //noinspection MissingPermission
-            map.setMyLocationEnabled(showUserLocation);
-          }
-          synchronized (AirMapView.this) {
-            AirMapView.this.onResume();
-            paused = false;
-          }
-        }
+        LifecycleEventListener lifecycleListener = new LifecycleEventListener() {
 
-        @Override
-        public void onHostPause() {
-          if (hasPermissions()) {
-            //noinspection MissingPermission
-            map.setMyLocationEnabled(false);
-          }
-          paused = true;
-        }
+            @Override
+            public void onHostResume() {
+                if (hasPermissions()) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(showUserLocation);
+                }
+                synchronized (AirMapView.this) {
+                    AirMapView.this.onResume();
+                    paused = false;
+                }
+            }
 
-        @Override
-        public void onHostDestroy() {
-        }
-      };
+            @Override
+            public void onHostPause() {
+                if (hasPermissions()) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(false);
+                }
+                paused = true;
+            }
+
+            @Override
+            public void onHostDestroy() {
+            }
+        };
 
         context.addLifecycleEventListener(lifecycleListener);
     }
 
     private boolean hasPermissions() {
-        return checkSelfPermission(getContext(), PERMISSIONS[0]) == PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(getContext(), PERMISSIONS[1]) == PackageManager.PERMISSION_GRANTED;
+        return (
+            checkSelfPermission(getContext(), PERMISSIONS[0]) == PackageManager.PERMISSION_GRANTED ||
+            checkSelfPermission(getContext(), PERMISSIONS[1]) == PackageManager.PERMISSION_GRANTED
+        );
     }
 
     public void setRegion(ReadableMap region) {
+
         if (region == null) return;
 
         Double lng = region.getDouble("longitude");
@@ -294,9 +329,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         Double lngDelta = region.getDouble("longitudeDelta");
         Double latDelta = region.getDouble("latitudeDelta");
         LatLngBounds bounds = new LatLngBounds(
-                new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-                new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
         );
+
         if (super.getHeight() <= 0 || super.getWidth() <= 0) {
             // in this case, our map has not been laid out yet, so we save the bounds in a local
             // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
@@ -307,6 +343,31 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         } else {
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
             boundsToMove = null;
+        }
+    }
+
+    public static double log2(double n) {
+        return (Math.log(n) / Math.log(2));
+    }
+
+    protected int zoomFromDelta(float longitudeDelta) {
+        float mapWidthInPixels = this.getWidth();
+        double zoomScale = longitudeDelta * AirMapView.MERCATOR_RADIUS * Math.PI / (180.0 * mapWidthInPixels);
+        double zoomer = AirMapView.MAX_GOOGLE_LEVELS - AirMapView.log2(zoomScale);
+        if (zoomer < 0) zoomer = 0;
+        zoomer = Math.round(zoomer);
+        return (int) zoomer;
+    }
+
+    public void setMinDelta(float minDelta) {
+        if (minDelta > 0.0f) {
+            map.setMaxZoomPreference(this.zoomFromDelta(minDelta));
+        }
+    }
+
+    public void setMaxDelta(float maxDelta) {
+        if (maxDelta > 0.0f) {
+            map.setMinZoomPreference(this.zoomFromDelta(maxDelta));
         }
     }
 
@@ -480,7 +541,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     public void animateToRegion(LatLngBounds bounds, int duration) {
         startMonitoringRegion();
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+        if (map != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+        }
     }
 
     public void animateToCoordinate(LatLng coordinate, int duration) {
@@ -711,8 +774,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private ImageView getCacheImageView() {
         if (this.cacheImageView == null) {
             this.cacheImageView = new ImageView(getContext());
-            this.addView(this.cacheImageView,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            this.addView(
+                this.cacheImageView,
+                new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            );
             this.cacheImageView.setVisibility(View.INVISIBLE);
         }
         return this.cacheImageView;
