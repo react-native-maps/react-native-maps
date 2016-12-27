@@ -27,10 +27,9 @@ react-native link
 1. If you need `GoogleMaps` support also drag this folder into your project:
     - `node_modules/react-native-maps/ios/AirGoogleMaps/`
 
-### Option 2: CocoaPods -- Untested Way
-NOTE: If you actually get this to work, please open an issue to let us know.
-This is now considered the **old way** because it is untested and if it does work at all, it
-will only work if you **don't** have `use_frameworks!` in your `Podfile`
+### Option 2: CocoaPods
+This is now considered the **old way** because it will only work if you **don't** have
+`use_frameworks!` in your `Podfile`.
 
 To install using Cocoapods, simply insert the following line into your `Podfile`:
 
