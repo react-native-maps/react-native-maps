@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import "RCTConvert.h"
+#import <React/RCTConvert.h>
 
 @interface RCTConvert (GMSMapViewType)
 

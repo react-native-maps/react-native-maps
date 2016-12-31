@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 #import "AIRGoogleMapCircle.h"
 #import <GoogleMaps/GoogleMaps.h>
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 @implementation AIRGoogleMapCircle
 

@@ -8,8 +8,8 @@
 #import "AIRGoogleMapMarkerManager.h"
 #import "AIRGoogleMapMarker.h"
 #import <MapKit/MapKit.h>
-#import "RCTConvert+MapKit.h"
-#import "RCTUIManager.h"
+#import <React/RCTConvert+MapKit.h>
+#import <React/RCTUIManager.h>
 
 @implementation AIRGoogleMapMarkerManager
 

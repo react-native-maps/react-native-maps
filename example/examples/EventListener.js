@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import SyntheticEvent from 'react/lib/SyntheticEvent';
 import {
   StyleSheet,
   View,
@@ -7,6 +6,8 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
+// eslint-disable-next-line max-len
+import SyntheticEvent from 'react-native/Libraries/Renderer/src/renderers/shared/stack/event/SyntheticEvent';
 import MapView from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
