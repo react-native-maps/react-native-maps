@@ -212,6 +212,10 @@ class MapMarker extends React.Component {
     this.hideCallout = this.hideCallout.bind(this);
   }
 
+  setNativeProps(props) {
+    this.marker.setNativeProps(props);
+  }
+
   showCallout() {
     this._runCommand('showCallout', []);
   }
