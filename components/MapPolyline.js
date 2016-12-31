@@ -130,10 +130,14 @@ const defaultProps = {
 };
 
 class MapPolyline extends React.Component {
+  setNativeProps(props) {
+    this.polyline.setNativeProps(props);
+  }
+
   render() {
     const AIRMapPolyline = this.getAirComponent();
     return (
-      <AIRMapPolyline {...this.props} />
+      <AIRMapPolyline {...this.props} ref={ref => { this.polyline = ref; }} />
     );
   }
 }
