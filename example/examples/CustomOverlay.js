@@ -1,0 +1,116 @@
+import React, { PropTypes } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+
+import MapView from 'react-native-maps';
+
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE = 37.78825;
+const LONGITUDE = -122.4324;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const SPACE = 0.01;
+
+class XMarksTheSpot extends React.Component {
+  render() {
+    return (
+      <View>
+        <MapView.Polygon
+          coordinates={this.props.coordinates}
+          strokeColor="rgba(0, 0, 0, 1)"
+          strokeWidth={3}
+        />
+        <MapView.Polyline
+          coordinates={[this.props.coordinates[0], this.props.coordinates[2]]}
+        />
+        <MapView.Polyline
+          coordinates={[this.props.coordinates[1], this.props.coordinates[3]]}
+        />
+        <MapView.Marker
+          coordinate={this.props.center}
+        />
+      </View>
+    );
+  }
+}
+
+XMarksTheSpot.propTypes = {
+  coordinates: PropTypes.array,
+  center: PropTypes.object,
+  zIndex: PropTypes.number,
+};
+
+class CustomOverlay extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      region: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
+      coordinates: [
+        {
+          longitude: -122.442753,
+          latitude: 37.798790,
+        },
+        {
+          longitude: -122.424728,
+          latitude: 37.801232,
+        },
+        {
+          longitude: -122.422497,
+          latitude: 37.790651,
+        },
+        {
+          longitude: -122.440693,
+          latitude: 37.788209,
+        },
+      ],
+      center: {
+        longitude: -122.4326648935676,
+        latitude: 37.79418561114521,
+      },
+    };
+  }
+
+  render() {
+    const { coordinates, center, region } = this.state;
+    return (
+      <View style={styles.container}>
+        <MapView
+          provider={this.props.provider}
+          style={styles.map}
+          initialRegion={region}
+        >
+          <XMarksTheSpot coordinates={coordinates} center={center}/>
+        </MapView>
+      </View>
+    );
+  }
+}
+
+CustomOverlay.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+});
+
+module.exports = CustomOverlay;

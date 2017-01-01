@@ -105,6 +105,11 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
         [self addOverlay:(id<MKOverlay>)subview];
+    } else {
+        NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+        for (int i = 0; i < childSubviews.count; i++) {
+          [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
+        }
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
@@ -125,6 +130,11 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self removeOverlay:(id <MKOverlay>) subview];
     } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
+    } else {
+        NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+        for (int i = 0; i < childSubviews.count; i++) {
+          [self removeReactSubview:(UIView *)childSubviews[i]];
+        }
     }
     [_reactSubviews removeObject:(UIView *)subview];
 }
