@@ -34,6 +34,7 @@ import StaticMap from './examples/StaticMap';
 import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
+import CustomOverlay from './examples/CustomOverlay';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -146,6 +147,7 @@ class App extends React.Component {
       [MapStyle, 'Customize the style of the map', true],
       [LegalLabel, 'Reposition the legal label', true],
       [SetNativePropsOverlays, 'Update native props', true],
+      [CustomOverlay, 'Custom Overlay Component', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
