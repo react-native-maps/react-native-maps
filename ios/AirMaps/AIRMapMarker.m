@@ -203,6 +203,11 @@
     return self.reactSubviews.count == 0 && !self.imageSrc;
 }
 
+- (void)setOpacity:(double)opacity
+{
+  [self setAlpha:opacity];
+}
+
 - (void)setImageSrc:(NSString *)imageSrc
 {
     _imageSrc = imageSrc;
