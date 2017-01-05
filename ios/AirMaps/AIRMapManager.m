@@ -158,7 +158,9 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         } else {
             AIRMap *mapView = (AIRMap *)view;
             // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
-            [mapView showAnnotations:mapView.annotations animated:animated];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [mapView showAnnotations:mapView.annotations animated:animated];
+            });
         }
     }];
 }
