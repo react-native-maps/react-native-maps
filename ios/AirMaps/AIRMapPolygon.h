@@ -22,8 +22,10 @@
 
 @property (nonatomic, strong) MKPolygon *polygon;
 @property (nonatomic, strong) MKPolygonRenderer *renderer;
+@property (nonatomic, strong) NSArray<MKPolygon *> *interiorPolygons;
 
 @property (nonatomic, strong) NSArray<AIRMapCoordinate *> *coordinates;
+@property (nonatomic, strong) NSArray<NSArray<AIRMapCoordinate *> *> *holes;
 @property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, strong) UIColor *strokeColor;
 @property (nonatomic, assign) CGFloat strokeWidth;
@@ -32,6 +34,7 @@
 @property (nonatomic, assign) CGLineJoin lineJoin;
 @property (nonatomic, assign) CGFloat lineDashPhase;
 @property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
 #pragma mark MKOverlay protocol
 

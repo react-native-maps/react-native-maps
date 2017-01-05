@@ -8,6 +8,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
+# Change 'AirMapsExplorer' to match the target in your Xcode project.
 target 'AirMapsExplorer' do
   pod 'React', path: '../node_modules/react-native', :subspecs => [
     'Core',

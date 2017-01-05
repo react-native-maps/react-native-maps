@@ -27,15 +27,16 @@
 | `loadingEnabled` | `Boolean` | `false` | If `true` a loading indicator will show while the map is loading.
 | `loadingIndicatorColor` | `Color` | `#606060` | Sets loading indicator color, default to `#606060`.
 | `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
-
+| `moveOnMarkerPress` | `Boolean` | `true` | `Android only` If `false` the map won't move when a marker is pressed.
+| `legalLabelInsets` | `EdgeInsets` | | If set, changes the position of the "Legal" label link from the OS default. **Note:** iOS only.
 
 
 ## Events
 
 | Event Name | Returns | Notes
 |---|---|---|
-| `onRegionChange` | `Region` | Callback that is called continuously when the user is dragging the map.
-| `onRegionChangeComplete` | `Region` | Callback that is called once, when the user is done moving the map.
+| `onRegionChange` | `Region` | Callback that is called continuously when the region changes, such as when a user is dragging the map.
+| `onRegionChangeComplete` | `Region` | Callback that is called once when the region changes, such as when the user is done moving the map.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
 | `onPanDrag` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user presses and drags the map. **NOTE**: for iOS `scrollEnabled` should be set to false to trigger the event
 | `onLongPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user makes a "long press" somewhere on the map.
@@ -57,7 +58,7 @@
 | `animateToCoordinate` | `region: Coordinate`, `duration: Number` |
 | `fitToElements` | `animated: Boolean` |
 | `fitToSuppliedMarkers` | `markerIDs: String[]` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
-| `fitToCoordinates` | `coordinates: Array<LatLng>, edgePadding: EdgePadding, animated: Boolean` |
+| `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` |
 
 
 
@@ -101,5 +102,14 @@ type EdgePadding {
   right: Number,
   bottom: Number,
   left: Number
+}
+```
+
+```
+type EdgeInsets {
+  top: Number,
+  left: Number,
+  bottom: Number,
+  right: Number
 }
 ```

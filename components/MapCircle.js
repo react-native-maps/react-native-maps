@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
-  NOT_SUPPORTED,
+  SUPPORTED,
 } from './decorateMapComponent';
 
 const propTypes = {
@@ -140,7 +140,7 @@ module.exports = decorateMapComponent(MapCircle, {
   componentType: 'Circle',
   providers: {
     google: {
-      ios: NOT_SUPPORTED,
+      ios: SUPPORTED,
       android: USES_DEFAULT_IMPLEMENTATION,
     },
   },

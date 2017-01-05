@@ -2,8 +2,8 @@
   "name": "@moduscreate/react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
   "main": "index.js",
-  "author": "Leland Richardson <leland.m.richardson@gmail.com>. This fork maintained by the @ModusCreate team.",
-  "version": "0.11.0",
+  "author": "Leland Richardson <leland.m.richardson@gmail.com>",
+  "version": "0.12.2",
   "scripts": {
     "start": "react-native start",
     "lint": "eslint ."

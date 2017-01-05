@@ -32,7 +32,7 @@ const MAP_TYPES = {
   NONE: 'none',
 };
 
-const ANDROID_ONLY_MAP_TYPES = [
+const GOOGLE_MAPS_ONLY_TYPES = [
   MAP_TYPES.TERRAIN,
   MAP_TYPES.NONE,
 ];
@@ -60,6 +60,21 @@ const propTypes = {
    * `ViewStylePropTypes.js` for more info.
    */
   style: View.propTypes.style,
+
+  /**
+   * A json object that describes the style of the map. This is transformed to a string
+   * and saved in mayStyleString to be sent to android and ios
+   * https://developers.google.com/maps/documentation/ios-sdk/styling#use_a_string_resource
+   * https://developers.google.com/maps/documentation/android-api/styling
+   */
+  customMapStyle: PropTypes.array,
+
+  /**
+   * A json string that describes the style of the map
+   * https://developers.google.com/maps/documentation/ios-sdk/styling#use_a_string_resource
+   * https://developers.google.com/maps/documentation/android-api/styling
+   */
+  customMapStyleString: PropTypes.string,
 
   /**
    * If `true` the app will ask for the user's location.
@@ -208,7 +223,8 @@ const propTypes = {
    * - standard: standard road map (default)
    * - satellite: satellite view
    * - hybrid: satellite view with roads and points of interest overlayed
-   * - terrain: (Android only) topographic view
+   * - terrain: topographic view
+   * - none: no base map
    */
   mapType: PropTypes.oneOf(Object.values(MAP_TYPES)),
 
@@ -370,15 +386,6 @@ class MapView extends React.Component {
     return { provider: this.props.provider };
   }
 
-  componentDidMount() {
-    const { region, initialRegion } = this.props;
-    if (region && this.state.isReady) {
-      this.map.setNativeProps({ region });
-    } else if (initialRegion && this.state.isReady) {
-      this.map.setNativeProps({ region: initialRegion });
-    }
-  }
-
   componentWillUpdate(nextProps) {
     const a = this.__lastRegion;
     const b = nextProps.region;
@@ -393,6 +400,18 @@ class MapView extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { isReady } = this.state;
+    if (isReady) {
+      this._updateStyle();
+    }
+  }
+
+  _updateStyle() {
+    const { customMapStyle } = this.props;
+    this.map.setNativeProps({ customMapStyleString: JSON.stringify(customMapStyle) });
+  }
+
   _onMapReady() {
     const { region, initialRegion } = this.props;
     if (region) {
@@ -400,12 +419,15 @@ class MapView extends React.Component {
     } else if (initialRegion) {
       this.map.setNativeProps({ region: initialRegion });
     }
+    this._updateStyle();
     this.setState({ isReady: true });
   }
 
   _onLayout(e) {
     const { region, initialRegion, onLayout } = this.props;
     const { isReady } = this.state;
+    const { layout } = e.nativeEvent;
+    if (!layout.width || !layout.height) return;
     if (region && isReady && !this.__layoutCalled) {
       this.__layoutCalled = true;
       this.map.setNativeProps({ region });
@@ -454,9 +476,79 @@ class MapView extends React.Component {
     this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
   }
 
-  takeSnapshot(width, height, region, callback) {
-    const finalRegion = region || this.props.region || this.props.initialRegion;
-    this._runCommand('takeSnapshot', [width, height, finalRegion, callback]);
+  /**
+   * Takes a snapshot of the map and saves it to a picture
+   * file or returns the image as a base64 encoded string.
+   *
+   * @param config Configuration options
+   * @param [config.width] Width of the rendered map-view (when omitted actual view width is used).
+   * @param [config.height] Height of the rendered map-view (when omitted actual height is used).
+   * @param [config.region] Region to render (Only supported on iOS).
+   * @param [config.format] Encoding format ('png', 'jpg') (default: 'png').
+   * @param [config.quality] Compression quality (only used for jpg) (default: 1.0).
+   * @param [config.result] Result format ('file', 'base64') (default: 'file').
+   *
+   * @return Promise Promise with either the file-uri or base64 encoded string
+   */
+  takeSnapshot(args) {
+    // For the time being we support the legacy API on iOS.
+    // This will be removed in a future release and only the
+    // new Promise style API shall be supported.
+    if (Platform.OS === 'ios' && (arguments.length === 4)) {
+      console.warn('Old takeSnapshot API has been deprecated; will be removed in the near future'); //eslint-disable-line
+      const width = arguments[0]; // eslint-disable-line
+      const height = arguments[1]; // eslint-disable-line
+      const region = arguments[2]; // eslint-disable-line
+      const callback = arguments[3]; // eslint-disable-line
+      this._runCommand('takeSnapshot', [
+        width || 0,
+        height || 0,
+        region || {},
+        'png',
+        1,
+        'legacy',
+        callback,
+      ]);
+      return undefined;
+    }
+
+    // Sanitize inputs
+    const config = {
+      width: args.width || 0,
+      height: args.height || 0,
+      region: args.region || {},
+      format: args.format || 'png',
+      quality: args.quality || 1.0,
+      result: args.result || 'file',
+    };
+    if ((config.format !== 'png') &&
+        (config.format !== 'jpg')) throw new Error('Invalid format specified');
+    if ((config.result !== 'file') &&
+        (config.result !== 'base64')) throw new Error('Invalid result specified');
+
+    // Call native function
+    if (Platform.OS === 'android') {
+      return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
+    } else if (Platform.OS === 'ios') {
+      return new Promise((resolve, reject) => {
+        this._runCommand('takeSnapshot', [
+          config.width,
+          config.height,
+          config.region,
+          config.format,
+          config.quality,
+          config.result,
+          (err, snapshot) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(snapshot);
+            }
+          },
+        ]);
+      });
+    }
+    return Promise.reject('takeSnapshot not supported on this platform');
   }
 
   _uiManagerCommand(name) {
@@ -502,8 +594,9 @@ class MapView extends React.Component {
         onMapReady: this._onMapReady,
         onLayout: this._onLayout,
       };
-      if (Platform.OS === 'ios' && ANDROID_ONLY_MAP_TYPES.includes(props.mapType)) {
-        props.mapType = MAP_TYPES.STANDARD;
+      if (Platform.OS === 'ios' && props.provider === ProviderConstants.PROVIDER_DEFAULT
+        && GOOGLE_MAPS_ONLY_TYPES.includes(props.mapType)) {
+        props.mapType = MAP_TYPES.standard;
       }
       props.handlePanDrag = !!props.onPanDrag;
     } else {

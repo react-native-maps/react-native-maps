@@ -182,6 +182,18 @@ CGRect unionRect(CGRect a, CGRect b) {
     _reloadImageCancellationBlock = nil;
   }
 
+  if (!_imageSrc) {
+    if (_iconImageView) [_iconImageView removeFromSuperview];
+    return;
+  }
+  
+  if (!_iconImageView) {
+    // prevent glitch with marker (cf. https://github.com/airbnb/react-native-maps/issues/738)
+    UIImageView *empyImageView = [[UIImageView alloc] init];
+    _iconImageView = empyImageView;
+    [self iconViewInsertSubview:_iconImageView atIndex:0];
+  }
+  
   _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                           size:self.bounds.size
                                                                          scale:RCTScreenScale()
@@ -225,9 +237,6 @@ CGRect unionRect(CGRect a, CGRect b) {
 
                                                                    _iconImageView = imageView;
                                                                    [self iconViewInsertSubview:imageView atIndex:0];
-
-                                                                   // TODO: This could be a prop
-                                                                   //_realMarker.groundAnchor = CGPointMake(0.75, 1);
                                                                  });
                                                                }];
 }
@@ -252,6 +261,12 @@ CGRect unionRect(CGRect a, CGRect b) {
   _pinColor = pinColor;
   _realMarker.icon = [GMSMarker markerImageWithColor:pinColor];
 }
+
+- (void)setAnchor:(CGPoint)anchor {
+  _anchor = anchor;
+  _realMarker.groundAnchor = anchor;
+}
+
 
 - (void)setZIndex:(NSInteger)zIndex
 {

@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
-  NOT_SUPPORTED,
+  SUPPORTED,
 } from './decorateMapComponent';
 
 const propTypes = {
@@ -20,6 +20,17 @@ const propTypes = {
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired,
   })),
+
+  /**
+   * An array of array of coordinates to describe the polygon holes
+   */
+  holes: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.shape({
+    /**
+     * Latitude/Longitude coordinates
+     */
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+  }))),
 
   /**
    * Callback that is called when the user presses on the polygon
@@ -92,7 +103,6 @@ const propTypes = {
    * points on the Earth's surface. The geodesic curve is constructed assuming the Earth is
    * a sphere.
    *
-   * @platform android
    */
   geodesic: PropTypes.bool,
 
@@ -145,7 +155,7 @@ module.exports = decorateMapComponent(MapPolygon, {
   componentType: 'Polygon',
   providers: {
     google: {
-      ios: NOT_SUPPORTED,
+      ios: SUPPORTED,
       android: USES_DEFAULT_IMPLEMENTATION,
     },
   },
