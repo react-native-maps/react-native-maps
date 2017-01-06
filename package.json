@@ -22,8 +22,8 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": ">=15.3.1",
-    "react-native": ">=0.35"
+    "react": ">=15.4.0",
+    "react-native": ">=0.40"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",

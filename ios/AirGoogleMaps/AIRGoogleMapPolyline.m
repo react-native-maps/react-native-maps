@@ -9,7 +9,7 @@
 #import "AIRGoogleMapMarker.h"
 #import "AIRGoogleMapMarkerManager.h"
 #import <GoogleMaps/GoogleMaps.h>
-#import "RCTUtils.h"
+#import <React/RCTUtils.h>
 
 @implementation AIRGoogleMapPolyline
 

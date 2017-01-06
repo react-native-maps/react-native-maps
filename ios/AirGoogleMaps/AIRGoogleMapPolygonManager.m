@@ -5,13 +5,13 @@
 //
 #import "AIRGoogleMapPolygonManager.h"
 
-#import "RCTBridge.h"
-#import "RCTConvert.h"
-#import "RCTConvert+CoreLocation.h"
+#import <React/RCTBridge.h>
+#import <React/RCTConvert.h>
+#import <React/RCTConvert+CoreLocation.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTViewManager.h>
+#import <React/UIView+React.h>
 #import "RCTConvert+MoreMapKit.h"
-#import "RCTEventDispatcher.h"
-#import "UIView+React.h"
-#import "RCTViewManager.h"
 #import "AIRGoogleMapPolygon.h"
 
 @interface AIRGoogleMapPolygonManager()
