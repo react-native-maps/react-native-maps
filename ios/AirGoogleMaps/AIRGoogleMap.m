@@ -13,8 +13,8 @@
 #import "AIRGoogleMapUrlTile.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
-#import "RCTConvert+MapKit.h"
-#import "UIView+React.h"
+#import <React/RCTConvert+MapKit.h>
+#import <React/UIView+React.h>
 
 id regionAsJSON(MKCoordinateRegion region) {
   return @{

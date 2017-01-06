@@ -8,7 +8,7 @@
 
 #import "AIRGoogleMapCalloutManager.h"
 #import "AIRGoogleMapCallout.h"
-#import "RCTView.h"
+#import <React/RCTView.h>
 
 @implementation AIRGoogleMapCalloutManager
 RCT_EXPORT_MODULE()

@@ -32,7 +32,6 @@
 		21E6570C1D77591A00B75EE5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */; };
 		21E6570E1D77591F00B75EE5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570D1D77591F00B75EE5 /* MapKit.framework */; };
 		21E657101D77594C00B75EE5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570F1D77594C00B75EE5 /* AudioToolbox.framework */; };
-		3E4E0B5921E01BC4043FD8CD /* Pods_AirMapsExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3591658C00398534590C8751 /* Pods_AirMapsExplorer.framework */; };
 		8620CC871DBD814A00B79BFE /* AIRGMSMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8620CC6E1DBD814A00B79BFE /* AIRGMSMarker.m */; };
 		8620CC881DBD814A00B79BFE /* AIRGoogleMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 8620CC701DBD814A00B79BFE /* AIRGoogleMap.m */; };
 		8620CC891DBD814A00B79BFE /* AIRGoogleMapCallout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8620CC721DBD814A00B79BFE /* AIRGoogleMapCallout.m */; };
@@ -50,7 +49,7 @@
 		8697D6251DBEE22B00DB7D0F /* AIRGoogleMapCircleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8697D6241DBEE22B00DB7D0F /* AIRGoogleMapCircleManager.m */; };
 		86DE6F881DCE7D21002A5053 /* AIRGoogleMapUrlTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DE6F871DCE7D21002A5053 /* AIRGoogleMapUrlTile.m */; };
 		86DE6F8B1DCE8543002A5053 /* AIRGoogleMapURLTileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DE6F8A1DCE8543002A5053 /* AIRGoogleMapURLTileManager.m */; };
-		C9315A21AD5A149EB5B40F29 /* Pods_AirMapsExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24EB66BA0860A4DCD4CA3D77 /* Pods_AirMapsExplorer.framework */; };
+		A622B8115793E41C70169A8B /* libPods-AirMapsExplorer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5044A406006E7C2A53E05C /* libPods-AirMapsExplorer.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +65,7 @@
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* AirMapsExplorerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AirMapsExplorerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0E5044A406006E7C2A53E05C /* libPods-AirMapsExplorer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirMapsExplorer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* AirMapsExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirMapsExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = AirMapsExplorer/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = AirMapsExplorer/AppDelegate.m; sourceTree = "<group>"; };
@@ -116,7 +116,6 @@
 		21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		21E6570D1D77591F00B75EE5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		21E6570F1D77594C00B75EE5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		3591658C00398534590C8751 /* Pods_AirMapsExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirMapsExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8620CC6D1DBD814A00B79BFE /* AIRGMSMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGMSMarker.h; sourceTree = "<group>"; };
 		8620CC6E1DBD814A00B79BFE /* AIRGMSMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRGMSMarker.m; sourceTree = "<group>"; };
 		8620CC6F1DBD814A00B79BFE /* AIRGoogleMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGoogleMap.h; sourceTree = "<group>"; };
@@ -147,12 +146,12 @@
 		8697D6211DBEDE6100DB7D0F /* AIRGoogleMapCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRGoogleMapCircle.m; sourceTree = "<group>"; };
 		8697D6231DBEE22B00DB7D0F /* AIRGoogleMapCircleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGoogleMapCircleManager.h; sourceTree = "<group>"; };
 		8697D6241DBEE22B00DB7D0F /* AIRGoogleMapCircleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRGoogleMapCircleManager.m; sourceTree = "<group>"; };
-		BE5DE1E9AE25978F88CD940A /* Pods-AirMapsExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.debug.xcconfig"; sourceTree = "<group>"; };
-		E138AD0CDB08FE57B09B18F8 /* Pods-AirMapsExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.release.xcconfig"; sourceTree = "<group>"; };
 		86DE6F861DCE7D21002A5053 /* AIRGoogleMapUrlTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGoogleMapUrlTile.h; sourceTree = "<group>"; };
 		86DE6F871DCE7D21002A5053 /* AIRGoogleMapUrlTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRGoogleMapUrlTile.m; sourceTree = "<group>"; };
 		86DE6F891DCE8543002A5053 /* AIRGoogleMapUrlTileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGoogleMapUrlTileManager.h; sourceTree = "<group>"; };
 		86DE6F8A1DCE8543002A5053 /* AIRGoogleMapURLTileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRGoogleMapURLTileManager.m; sourceTree = "<group>"; };
+		BE5DE1E9AE25978F88CD940A /* Pods-AirMapsExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.debug.xcconfig"; sourceTree = "<group>"; };
+		E138AD0CDB08FE57B09B18F8 /* Pods-AirMapsExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,7 +170,7 @@
 				21E6570E1D77591F00B75EE5 /* MapKit.framework in Frameworks */,
 				21E6570C1D77591A00B75EE5 /* MobileCoreServices.framework in Frameworks */,
 				21E6570A1D77591400B75EE5 /* SystemConfiguration.framework in Frameworks */,
-				3E4E0B5921E01BC4043FD8CD /* Pods_AirMapsExplorer.framework in Frameworks */,
+				A622B8115793E41C70169A8B /* libPods-AirMapsExplorer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,7 +189,7 @@
 				21E6570D1D77591F00B75EE5 /* MapKit.framework */,
 				21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */,
 				21E657091D77591400B75EE5 /* SystemConfiguration.framework */,
-				3591658C00398534590C8751 /* Pods_AirMapsExplorer.framework */,
+				0E5044A406006E7C2A53E05C /* libPods-AirMapsExplorer.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
