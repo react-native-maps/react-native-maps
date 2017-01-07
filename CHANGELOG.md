@@ -32,18 +32,6 @@
   [#904](https://github.com/airbnb/react-native-maps/pull/904),
   [#910](https://github.com/airbnb/react-native-maps/pull/910)
   (@anami, @dboydor, @ali-alamine)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
 
 
 ## 0.12.2 (December 9, 2016)
