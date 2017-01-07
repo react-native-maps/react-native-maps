@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.13.0 (January 6, 2017)
+
+### Breaking Changes
+
+* Update iOS header imports and JS SyntheticEvent import for RN 0.40
+  [#923](https://github.com/airbnb/react-native-maps/pull/923)
+  (@ide)
+
+### Patches
+
+* Fix issue where callouts sometimes overlap or don't appear
+  [#936](https://github.com/airbnb/react-native-maps/pull/936)
+  (@RajkumarPunchh)
+
 ## 0.12.3 (January 6, 2017)
 
 ### Patches
