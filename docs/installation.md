@@ -189,6 +189,7 @@ You have to link dependencies with rnpm and re-run the build:
     - Extras / Google Play services
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 19
+    - Android SDK Build-tools 23.0.3 
 1. Check manual installation steps if you didn't run "react-native link"
 1. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.
 Then, once enabled, select `Go to credentials`.
