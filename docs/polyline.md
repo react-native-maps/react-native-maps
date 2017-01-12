@@ -4,7 +4,7 @@
 
 | Prop | Type | Default | Note |
 |---|---|---|---|
-| `coordinates` | `Array<LatLng>` | (Required) | An array of coordinates to describe the polygon
+| `coordinates` | `Array<LatLng>` | (Required) | An array of coordinates to describe the polyline
 | `strokeWidth` | `Number` | `1` | The stroke width to use for the path.
 | `strokeColor` | `String` | `#000` | The stroke color to use for the path.
 | `lineCap` | `String` | `round` | The line cap style to apply to the open ends of the path.
