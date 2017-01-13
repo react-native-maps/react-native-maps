@@ -1,6 +1,24 @@
 # Change Log
 
-## 0.12.3 (January 6, 2017)
+## 0.12.4 (January 12, 2017)
+
+### Patches
+
+* Revert
+  [#923](https://github.com/airbnb/react-native-maps/pull/923),
+  which accidentally introduced a breaking change.
+
+## 0.12.3 (January 6, 2017) _DEPRECATED_
+
+**NOTE** 0.12.3 was accidentally released with the breaking change below.
+0.12.3 has been marked deprecated. Please use <=0.12.2 or ^0.12.4.
+
+### Breaking Changes
+
+* Update iOS header imports and JS SyntheticEvent import for RN 0.40
+  [#923](https://github.com/airbnb/react-native-maps/pull/923)
+  (@ide)
+
 
 ### Patches
 
@@ -18,18 +36,6 @@
   [#904](https://github.com/airbnb/react-native-maps/pull/904),
   [#910](https://github.com/airbnb/react-native-maps/pull/910)
   (@anami, @dboydor, @ali-alamine)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
-*
-  [#](https://github.com/airbnb/react-native-maps/pull/)
-  (@)
 
 
 ## 0.12.2 (December 9, 2016)
