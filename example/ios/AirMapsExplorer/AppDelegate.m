@@ -9,7 +9,7 @@
 
 #import "AppDelegate.h"
 
-#import <React/RCTRootView.h>
+#import "RCTRootView.h"
 
 #import <GoogleMaps/GoogleMaps.h>
 

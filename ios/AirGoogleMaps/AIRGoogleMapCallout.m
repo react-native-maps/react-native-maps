@@ -7,9 +7,9 @@
 //
 
 #import "AIRGoogleMapCallout.h"
-#import <React/RCTUtils.h>
-#import <React/RCTView.h>
-#import <React/RCTBridge.h>
+#import "RCTUtils.h"
+#import "RCTView.h"
+#import "RCTBridge.h"
 
 @implementation AIRGoogleMapCallout
 @end

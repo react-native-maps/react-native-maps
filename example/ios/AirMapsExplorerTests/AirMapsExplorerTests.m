@@ -10,8 +10,8 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import <React/RCTLog.h>
-#import <React/RCTRootView.h>
+#import "RCTLog.h"
+#import "RCTRootView.h"
 
 #define TIMEOUT_SECONDS 240
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"

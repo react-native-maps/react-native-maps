@@ -7,7 +7,7 @@
 //
 
 #import "AIRMapUrlTile.h"
-#import <React/UIView+React.h>
+#import "UIView+React.h"
 
 @implementation AIRMapUrlTile {
     BOOL _urlTemplateSet;

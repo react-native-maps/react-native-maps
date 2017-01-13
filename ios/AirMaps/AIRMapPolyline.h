@@ -8,11 +8,11 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import <React/RCTConvert+MapKit.h>
-#import <React/RCTComponent.h>
-#import <React/RCTView.h>
+#import "RCTConvert+MapKit.h"
+#import "RCTComponent.h"
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
+#import "RCTView.h"
 
 
 @interface AIRMapPolyline: MKAnnotationView <MKOverlay>

@@ -5,7 +5,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
-#import <React/RCTConvert.h>
+#import "RCTConvert.h"
 
 @interface RCTConvert (MoreMapKit)
 

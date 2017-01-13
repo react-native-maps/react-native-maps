@@ -6,8 +6,8 @@
 
 #import "AIRGoogleMapCircleManager.h"
 #import "AIRGoogleMapCircle.h"
-#import <React/RCTBridge.h>
-#import <React/UIView+React.h>
+#import "RCTBridge.h"
+#import "UIView+React.h"
 
 @interface AIRGoogleMapCircleManager()
 

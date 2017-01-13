@@ -4,7 +4,7 @@
 //
 
 #import "AIRMapCircle.h"
-#import <React/UIView+React.h>
+#import "UIView+React.h"
 
 
 @implementation AIRMapCircle {

@@ -3,7 +3,7 @@
 // Copyright (c) 2015 Facebook. All rights reserved.
 //
 
-#import <React/RCTViewManager.h>
+#import "RCTViewManager.h"
 
 
 @interface AIRMapPolylineManager : RCTViewManager

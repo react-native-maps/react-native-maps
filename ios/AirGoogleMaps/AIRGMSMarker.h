@@ -6,7 +6,7 @@
 //
 
 #import <GoogleMaps/GoogleMaps.h>
-#import <React/UIView+React.h>
+#import "UIView+React.h"
 
 @class AIRGoogleMapMarker;
 

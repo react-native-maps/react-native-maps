@@ -4,7 +4,7 @@
 //
 
 #import "AIRMapPolygon.h"
-#import <React/UIView+React.h>
+#import "UIView+React.h"
 
 
 @implementation AIRMapPolygon {

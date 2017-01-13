@@ -7,7 +7,7 @@
 //
 
 
-#import <React/RCTViewManager.h>
+#import "RCTViewManager.h"
 
 @interface AIRMapUrlTileManager : RCTViewManager
 
