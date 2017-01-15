@@ -1,13 +1,12 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
-  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
+import XMarksTheSpot from './CustomOverlayXMarksTheSpot';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -15,36 +14,6 @@ const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
-
-class XMarksTheSpot extends React.Component {
-  render() {
-    return (
-      <View>
-        <MapView.Polygon
-          coordinates={this.props.coordinates}
-          strokeColor="rgba(0, 0, 0, 1)"
-          strokeWidth={3}
-        />
-        <MapView.Polyline
-          coordinates={[this.props.coordinates[0], this.props.coordinates[2]]}
-        />
-        <MapView.Polyline
-          coordinates={[this.props.coordinates[1], this.props.coordinates[3]]}
-        />
-        <MapView.Marker
-          coordinate={this.props.center}
-        />
-      </View>
-    );
-  }
-}
-
-XMarksTheSpot.propTypes = {
-  coordinates: PropTypes.array,
-  center: PropTypes.object,
-  zIndex: PropTypes.number,
-};
 
 class CustomOverlay extends React.Component {
   constructor(props) {
@@ -91,7 +60,7 @@ class CustomOverlay extends React.Component {
           style={styles.map}
           initialRegion={region}
         >
-          <XMarksTheSpot coordinates={coordinates} center={center}/>
+          <XMarksTheSpot coordinates={coordinates} center={center} />
         </MapView>
       </View>
     );
