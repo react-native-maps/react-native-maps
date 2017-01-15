@@ -88,7 +88,7 @@ class SetNativePropsOverlays extends React.Component {
           initialRegion={region}
         >
           <MapView.Circle
-            ref={ref => this.circle = ref}
+            ref={ref => { this.circle = ref; }}
             center={circle.center}
             radius={circle.radius}
             fillColor="rgba(255, 255, 255, 0.6)"
@@ -97,31 +97,31 @@ class SetNativePropsOverlays extends React.Component {
             strokeWidth={3}
           />
           <MapView.Polygon
-            ref={ref => this.polygon = ref}
+            ref={ref => { this.polygon = ref; }}
             coordinates={polygon}
             fillColor="rgba(255, 255, 255, 0.6)"
             strokeColor="green"
             strokeWidth={2}
           />
           <MapView.Polyline
-            ref={ref => this.polyline = ref}
+            ref={ref => { this.polyline = ref; }}
             coordinates={polyline}
             strokeColor="green"
             strokeWidth={3}
           />
         </MapView>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.handleColorChange('green')}>
+          <TouchableOpacity onPress={() => { this.handleColorChange('green'); }}>
             <View style={styles.bubble}>
               <Text>Green</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.handleColorChange('black')}>
+          <TouchableOpacity onPress={() => { this.handleColorChange('black'); }}>
             <View style={styles.bubble}>
               <Text>Black</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.handleColorChange('red')}>
+          <TouchableOpacity onPress={() => { this.handleColorChange('red'); }}>
             <View style={styles.bubble}>
               <Text>Red</Text>
             </View>
