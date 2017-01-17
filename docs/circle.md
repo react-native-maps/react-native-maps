@@ -9,6 +9,7 @@
 | `strokeWidth` | `Number` | `1` | The stroke width to use for the path.
 | `strokeColor` | `String` | `#000` | The stroke color to use for the path.
 | `fillColor` | `String` |  | The fill color to use for the path.
+| `zIndex` | `Number` | 0 | The order in which this tile overlay is drawn with respect to other overlays. An overlay with a larger z-index is drawn over overlays with smaller z-indices. The order of overlays with the same z-index is arbitrary. The default zIndex is 0. (Android Only)
 | `lineCap` | `String` | `round` | The line cap style to apply to the open ends of the path.
 | `lineJoin` | `Array<LatLng>` |  | The line join style to apply to corners of the path.
 | `miterLimit` | `Number` |  | The limiting value that helps avoid spikes at junctions between connected line segments. The miter limit helps you avoid spikes in paths that use the `miter` `lineJoin` style. If the ratio of the miter length—that is, the diagonal length of the miter join—to the line thickness exceeds the miter limit, the joint is converted to a bevel join. The default miter limit is 10, which results in the conversion of miters whose angle at the joint is less than 11 degrees.
