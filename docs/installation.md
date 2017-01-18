@@ -212,3 +212,5 @@ Enter the name of the API key and create it.
    gradlew clean
    cd ..
   ```
+  
+1. If you are using Android Virtual Devices (AVD), ensure that `Use Host GPU` is checked in the settings for your virtual device.
