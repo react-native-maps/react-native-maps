@@ -22,10 +22,10 @@ react-native link
 1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile), replace all references to `AirMapExplorer` with your project name, and then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
-1. Drag the following folder into your project:
-    - `node_modules/react-native-maps/ios/AirMaps/`
-1. If you need `GoogleMaps` support also drag this folder into your project:
-    - `node_modules/react-native-maps/ios/AirGoogleMaps/`
+1. If you need `GoogleMaps` support also 
+    - Drag this folder `node_modules/react-native-maps/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
+    - In `AppDelegate.m`, add `@import GoogleMaps;` before `@implementation AppDelegate`. In `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions`, add `[GMSServices provideAPIKey:@"YOUR_GOOGLE_MAP_API_KEY"];`
+    - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
 
 ### Option 2: CocoaPods
 This is now considered the **old way** because it will only work if you **don't** have
