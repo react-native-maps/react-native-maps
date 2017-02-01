@@ -73,7 +73,7 @@ After your `Podfile` is setup properly, run `pod install`.
    }
    ```
    
-   If you have a different play serivces than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
+   If you have a different play services than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
    
    ```groovy
    ...
