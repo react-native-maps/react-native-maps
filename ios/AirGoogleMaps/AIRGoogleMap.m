@@ -91,6 +91,11 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
     tile.tileLayer.map = self;
     [self.tiles addObject:tile];
+  } else {
+    NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+    for (int i = 0; i < childSubviews.count; i++) {
+      [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
+    }
   }
   [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
@@ -122,6 +127,11 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
     tile.tileLayer.map = nil;
     [self.tiles removeObject:tile];
+  } else {
+    NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+    for (int i = 0; i < childSubviews.count; i++) {
+      [self removeReactSubview:(UIView *)childSubviews[i]];
+    }
   }
   [_reactSubviews removeObject:(UIView *)subview];
 }
