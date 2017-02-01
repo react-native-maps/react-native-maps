@@ -173,6 +173,11 @@ CGRect unionRect(CGRect a, CGRect b) {
   return _realMarker.onPress;
 }
 
+- (void)setOpacity:(double)opacity
+{
+  _realMarker.opacity = opacity;
+}
+
 - (void)setImageSrc:(NSString *)imageSrc
 {
   _imageSrc = imageSrc;
