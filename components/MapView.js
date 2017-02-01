@@ -15,6 +15,7 @@ import MapPolygon from './MapPolygon';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
 import MapUrlTile from './MapUrlTile';
+import MapOverlay from './MapOverlay';
 import AnimatedRegion from './AnimatedRegion';
 import {
   contextTypes as childContextTypes,
@@ -669,6 +670,7 @@ MapView.Polygon = MapPolygon;
 MapView.Circle = MapCircle;
 MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
+MapView.Overlay = MapOverlay;
 Object.assign(MapView, ProviderConstants);
 MapView.ProviderPropType = PropTypes.oneOf(Object.values(ProviderConstants));
 

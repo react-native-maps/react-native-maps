@@ -9,6 +9,7 @@
     "dev": "concurrently 'npm run watch' 'npm run packager'"
   },
   "dependencies": {
+    "geodesy": "^1.1.1",
     "react": "~15.4.1",
     "react-native": "^0.40.0",
     "react-native-maps": "file:../"
@@ -18,6 +19,13 @@
     "fs-extra": "^0.30.0",
     "minimatch": "^3.0.2",
     "node-watch": "^0.4.0",
-    "rimraf": "^2.5.4"
+    "rimraf": "^2.5.4",
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.3.1",
+    "eslint-config-airbnb": "^10.0.1",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.1.0",
+    "eslint-plugin-prefer-object-spread": "^1.1.0",
+    "eslint-plugin-react": "^6.1.2"
   }
 }

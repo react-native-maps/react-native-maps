@@ -1,156 +1,97 @@
 import React from 'react';
 import {
-  Platform,
-  View,
   StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Text,
-  Switch,
+  View,
+  Dimensions,
 } from 'react-native';
-import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
-import DisplayLatLng from './examples/DisplayLatLng';
-import ViewsAsMarkers from './examples/ViewsAsMarkers';
-import EventListener from './examples/EventListener';
-import MarkerTypes from './examples/MarkerTypes';
-import DraggableMarkers from './examples/DraggableMarkers';
-import PolygonCreator from './examples/PolygonCreator';
-import PolylineCreator from './examples/PolylineCreator';
-import AnimatedViews from './examples/AnimatedViews';
-import AnimatedMarkers from './examples/AnimatedMarkers';
-import Callouts from './examples/Callouts';
-import Overlays from './examples/Overlays';
-import DefaultMarkers from './examples/DefaultMarkers';
-import CustomMarkers from './examples/CustomMarkers';
-import CachedMap from './examples/CachedMap';
-import LoadingMap from './examples/LoadingMap';
-import TakeSnapshot from './examples/TakeSnapshot';
-import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
-import FitToCoordinates from './examples/FitToCoordinates';
-import LiteMapView from './examples/LiteMapView';
-import CustomTiles from './examples/CustomTiles';
-import ZIndexMarkers from './examples/ZIndexMarkers';
-import StaticMap from './examples/StaticMap';
-import MapStyle from './examples/MapStyle';
-import LegalLabel from './examples/LegalLabel';
+import MapView from 'react-native-maps';
 
-const IOS = Platform.OS === 'ios';
-const ANDROID = Platform.OS === 'android';
+import darthImg from './assets/Darth.jpg';
+import ersoJImg from './assets/ErsoJ.jpg';
+import ersoEImg from './assets/ErsoE.jpg';
 
-function makeExampleMapper(useGoogleMaps) {
-  if (useGoogleMaps) {
-    return example => [
-      example[0],
-      [example[1], example[3]].filter(Boolean).join(' '),
-    ];
-  }
-  return example => example;
-}
+const { width, height } = Dimensions.get('window');
+
+const ASPECT_RATIO = width / height;
+const LATITUDE = 37.78825;
+const LONGITUDE = -122.4324;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const SPACE = 0.01;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      Component: null,
-      useGoogleMaps: ANDROID,
+      region: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
+      boundsImg1: [
+        [LATITUDE - SPACE, LONGITUDE + SPACE],
+        [LATITUDE + SPACE, LONGITUDE - SPACE],
+      ],
+      boundsImg2: [
+        [LATITUDE - SPACE, LONGITUDE - (SPACE / 2)],
+        [LATITUDE + SPACE, LONGITUDE - (SPACE * 2)],
+      ],
+      boundsImg3: [
+        [LATITUDE - SPACE, LONGITUDE - SPACE],
+        [LATITUDE + SPACE, LONGITUDE + SPACE],
+      ],
     };
   }
 
-  renderExample([Component, title]) {
-    return (
-      <TouchableOpacity
-        key={title}
-        style={styles.button}
-        onPress={() => this.setState({ Component })}
-      >
-        <Text>{title}</Text>
-      </TouchableOpacity>
-    );
-  }
-
-  renderBackButton() {
-    return (
-      <TouchableOpacity
-        style={styles.back}
-        onPress={() => this.setState({ Component: null })}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 30 }}>&larr;</Text>
-      </TouchableOpacity>
-    );
-  }
-
-  renderGoogleSwitch() {
-    return (
-      <View>
-        <Text>Use GoogleMaps?</Text>
-        <Switch
-          onValueChange={(value) => this.setState({ useGoogleMaps: value })}
-          style={{ marginBottom: 10 }}
-          value={this.state.useGoogleMaps}
-        />
-      </View>
-    );
-  }
-
-  renderExamples(examples) {
-    const {
-      Component,
-      useGoogleMaps,
-    } = this.state;
+  render() {
+    const { region, boundsImg1, boundsImg2, boundsImg3 } = this.state;
 
     return (
       <View style={styles.container}>
-        {Component && <Component provider={useGoogleMaps ? PROVIDER_GOOGLE : PROVIDER_DEFAULT} />}
-        {Component && this.renderBackButton()}
-        {!Component &&
-          <ScrollView
-            style={StyleSheet.absoluteFill}
-            contentContainerStyle={styles.scrollview}
-            showsVerticalScrollIndicator={false}
-          >
-            {IOS && this.renderGoogleSwitch()}
-            {examples.map(example => this.renderExample(example))}
-          </ScrollView>
-        }
+        <MapView
+          provider={this.props.provider}
+          style={styles.map}
+          initialRegion={region}
+          zoomEnabled={false}
+        >
+          <MapView.Overlay
+            name="Darth"
+            image={darthImg}
+            bounds={boundsImg1}
+            rotation={0}
+            transparency={0.7}
+            zIndex={0}
+            region={region}
+          />
+          <MapView.Overlay
+            name="Erso J."
+            image={ersoJImg}
+            bounds={boundsImg2}
+            rotation={-10}
+            transparency={0}
+            zIndex={1}
+            region={region}
+          />
+          <MapView.Overlay
+            name="Erso E."
+            image={ersoEImg}
+            bounds={boundsImg3}
+            rotation={10}
+            transparency={0.3}
+            zIndex={10}
+            region={region}
+          />
+        </MapView>
       </View>
     );
   }
-
-  render() {
-    return this.renderExamples([
-      // [<component>, <component description>, <Google compatible>, <Google add'l description>]
-      [StaticMap, 'StaticMap', true],
-      [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
-      [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
-      [EventListener, 'Events', true, '(incomplete)'],
-      [MarkerTypes, 'Image Based Markers', true],
-      [DraggableMarkers, 'Draggable Markers', true],
-      [PolygonCreator, 'Polygon Creator', true],
-      [PolylineCreator, 'Polyline Creator', true],
-      [AnimatedViews, 'Animating with MapViews'],
-      [AnimatedMarkers, 'Animated Marker Position'],
-      [Callouts, 'Custom Callouts', true],
-      [Overlays, 'Circles, Polygons, and Polylines', true],
-      [DefaultMarkers, 'Default Markers', true],
-      [CustomMarkers, 'Custom Markers', true],
-      [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
-      [CachedMap, 'Cached Map'],
-      [LoadingMap, 'Map with loading'],
-      [FitToSuppliedMarkers, 'Focus Map On Markers', true],
-      [FitToCoordinates, 'Fit Map To Coordinates', true],
-      [LiteMapView, 'Android Lite MapView'],
-      [CustomTiles, 'Custom Tiles', true],
-      [ZIndexMarkers, 'Position Markers with Z-index', true],
-      [MapStyle, 'Customize the style of the map', true],
-      [LegalLabel, 'Reposition the legal label', true],
-    ]
-    // Filter out examples that are not yet supported for Google Maps on iOS.
-    .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
-    .map(makeExampleMapper(IOS && this.state.useGoogleMaps))
-    );
-  }
 }
+
+App.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -158,28 +99,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  scrollview: {
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  button: {
-    flex: 1,
-    marginTop: 10,
-    backgroundColor: 'rgba(220,220,220,0.7)',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
-  back: {
-    position: 'absolute',
-    top: 20,
-    left: 12,
-    backgroundColor: 'rgba(255,255,255,0.4)',
-    padding: 12,
-    borderRadius: 20,
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
 
