@@ -424,6 +424,8 @@ class MapView extends React.Component {
   }
 
   _onLayout(e) {
+    const { layout } = e.nativeEvent;
+    if (!layout.width || !layout.height) return;
     if (this.state.isReady && !this.__layoutCalled) {
       const region = this.props.region || this.props.initialRegion;
       if (region) {
