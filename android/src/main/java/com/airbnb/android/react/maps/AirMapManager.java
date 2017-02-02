@@ -93,7 +93,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         int typeId = MAP_TYPES.get(mapType);
         view.map.setMapType(typeId);
     }
-    
+
     @ReactProp(name = "customMapStyleString")
     public void setMapStyle(AirMapView view, @Nullable String customMapStyleString) {
         view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
@@ -133,6 +133,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     @ReactProp(name = "showsIndoors", defaultBoolean = false)
     public void setShowIndoors(AirMapView view, boolean showIndoors) {
         view.map.setIndoorEnabled(showIndoors);
+    }
+
+    @ReactProp(name = "showsIndoorLevelPicker", defaultBoolean = false)
+    public void setShowsIndoorLevelPicker(AirMapView view, boolean showsIndoorLevelPicker) {
+        view.map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
     }
 
     @ReactProp(name = "showsCompass", defaultBoolean = false)
