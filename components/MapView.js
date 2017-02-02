@@ -424,19 +424,15 @@ class MapView extends React.Component {
   }
 
   _onLayout(e) {
-    const { region, initialRegion, onLayout } = this.props;
-    const { isReady } = this.state;
-    const { layout } = e.nativeEvent;
-    if (!layout.width || !layout.height) return;
-    if (region && isReady && !this.__layoutCalled) {
-      this.__layoutCalled = true;
-      this.map.setNativeProps({ region });
-    } else if (initialRegion && isReady && !this.__layoutCalled) {
-      this.__layoutCalled = true;
-      this.map.setNativeProps({ region: initialRegion });
+    if (this.state.isReady && !this.__layoutCalled) {
+      const region = this.props.region || this.props.initialRegion;
+      if (region) {
+        this.__layoutCalled = true;
+        this.map.setNativeProps({ region });
+      }
     }
-    if (onLayout) {
-      onLayout(e);
+    if (this.props.onLayout) {
+      this.props.onLayout(e);
     }
   }
 
