@@ -73,7 +73,7 @@ After your `Podfile` is setup properly, run `pod install`.
    }
    ```
    
-   If you have a different play serivces than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
+   If you have a different play services than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
    
    ```groovy
    ...
@@ -114,7 +114,7 @@ After your `Podfile` is setup properly, run `pod install`.
 Source: https://developers.google.com/maps/documentation/android-api/signup
 
 1. Ensure that you have Google Play Services installed:
-  * For Genymotion you can follow [these instructions](http://stackoverflow.com/a/20137324/1424349).
+  * For Genymotion you can follow [these instructions](https://www.genymotion.com/help/desktop/faq/#google-play-services).
   * For a physical device you need to search on Google for 'Google Play Services'. There will be a link that takes you to the Play Store and from there you will see a button to update it (do not search within the Play Store).
 
 ## Troubleshooting

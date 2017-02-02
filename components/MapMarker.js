@@ -49,6 +49,11 @@ const propTypes = {
   image: PropTypes.any,
 
   /**
+   * Opacity level of view/image based markers
+   */
+  opacity: PropTypes.number,
+
+  /**
    * If no custom marker view or custom image is provided, the platform default pin will be used,
    * which can be customized by this color. Ignored if a custom marker is being used.
    */
@@ -210,6 +215,10 @@ class MapMarker extends React.Component {
 
     this.showCallout = this.showCallout.bind(this);
     this.hideCallout = this.hideCallout.bind(this);
+  }
+
+  setNativeProps(props) {
+    this.marker.setNativeProps(props);
   }
 
   showCallout() {

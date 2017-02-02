@@ -62,6 +62,17 @@ class MarkerTypes extends React.Component {
             anchor={{ x: 0.84, y: 1 }}
             image={this.state.marker2 ? flagBlueImg : flagPinkImg}
           />
+          <MapView.Marker
+            onPress={() => this.setState({ marker2: !this.state.marker2 })}
+            coordinate={{
+              latitude: LATITUDE + SPACE,
+              longitude: LONGITUDE - SPACE,
+            }}
+            centerOffset={{ x: -42, y: -60 }}
+            anchor={{ x: 0.84, y: 1 }}
+            opacity={0.6}
+            image={this.state.marker2 ? flagBlueImg : flagPinkImg}
+          />
         </MapView>
       </View>
     );
