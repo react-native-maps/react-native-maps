@@ -202,6 +202,11 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   return [googleMapView didTapMarker:marker];
 }
 
+- (void)mapView:(GMSMapView *)mapView didTapOverlay:(GMSPolygon *)polygon {
+  AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
+  [googleMapView didTapPolygon:polygon];
+}
+
 - (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
   [googleMapView didTapAtCoordinate:coordinate];
