@@ -56,7 +56,7 @@
 |---|---|---|
 | `animateToRegion` | `region: Region`, `duration: Number` |
 | `animateToCoordinate` | `coordinate: LatLng`, `duration: Number` |
-| `fitToElements` | `animated: Boolean` |
+| `fitToElements` | `animated: Boolean` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to be called in `onLayout` event from the MapView component. 
 | `fitToSuppliedMarkers` | `markerIDs: String[]`, `animated: Boolean` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` |
 
