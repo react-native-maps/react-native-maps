@@ -22,6 +22,17 @@ const propTypes = {
   })),
 
   /**
+   * An array of array of coordinates to describe the polygon holes
+   */
+  holes: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.shape({
+    /**
+     * Latitude/Longitude coordinates
+     */
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+  }))),
+
+  /**
    * Callback that is called when the user presses on the polygon
    */
   onPress: PropTypes.func,
@@ -129,10 +140,14 @@ const defaultProps = {
 };
 
 class MapPolygon extends React.Component {
+  setNativeProps(props) {
+    this.polygon.setNativeProps(props);
+  }
+
   render() {
     const AIRMapPolygon = this.getAirComponent();
     return (
-      <AIRMapPolygon {...this.props} />
+      <AIRMapPolygon {...this.props} ref={ref => { this.polygon = ref; }} />
     );
   }
 }

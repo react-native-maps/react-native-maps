@@ -172,7 +172,24 @@ For Android: add the following line in your AndroidManifest.xml
 ```
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
 
+### Customizing the map style
 
+Create the json object, or download a generated one from the [google style generator](https://mapstyle.withgoogle.com/).
+
+```jsx
+// The generated json object
+mapStyle = [ ... ]
+
+render() {
+  return (
+    <MapView
+      region={this.state.region}
+      onRegionChange={this.onRegionChange}
+      customMapStyle={mapStyle}
+    />
+  );
+}
+```
 
 ## Examples
 
@@ -199,6 +216,11 @@ One can change the mapview's position using refs and component methods, or by pa
 API could.
 
 ![](http://i.giphy.com/3o6UB7poyB6YJ0KPWU.gif) ![](http://i.giphy.com/xT77Yc4wK3pzZusEbm.gif)
+
+
+### Changing the style of the map
+
+![](http://i.imgur.com/a9WqCL6.png)
 
 
 
@@ -351,7 +373,6 @@ render() {
 ```
 
 ### Take Snapshot of map
-currently only for ios, android implementation WIP
 
 ```jsx
 getInitialState() {
@@ -364,11 +385,19 @@ getInitialState() {
 }
 
 takeSnapshot () {
-  // arguments to 'takeSnapshot' are width, height, coordinates and callback
-  this.refs.map.takeSnapshot(300, 300, this.state.coordinate, (err, snapshot) => {
-    // snapshot contains image 'uri' - full path to image and 'data' - base64 encoded image
-    this.setState({ mapSnapshot: snapshot })
-  })
+  // 'takeSnapshot' takes a config object with the
+  // following options
+  const snapshot = this.refs.map.takeSnapshot({
+    width: 300,      // optional, when omitted the view-width is used
+    height: 300,     // optional, when omitted the view-height is used
+    region: {..},    // iOS only, optional region to render
+    format: 'png',   // image formats: 'png', 'jpg' (default: 'png')
+    quality: 0.8,    // image quality: 0..1 (only relevant for jpg, default: 1)
+    result: 'file'   // result types: 'file', 'base64' (default: 'file')
+  });
+  snapshot.then((uri) => {
+    this.setState({ mapSnapshot: uri });
+  });
 }
 
 render() {
@@ -447,7 +476,7 @@ Good:
 License
 --------
 
-     Copyright (c) 2015 Leland Richardson
+     Copyright (c) 2015 Airbnb
 
      Licensed under the The MIT License (MIT) (the "License");
      you may not use this file except in compliance with the License.

@@ -6,10 +6,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RCTComponent.h"
+#import <React/RCTComponent.h>
+#import <React/RCTConvert+MapKit.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
-#import "RCTConvert+MapKit.h"
 #import "AIRGMSMarker.h"
 
 @interface AIRGoogleMap : GMSMapView
@@ -17,6 +17,7 @@
 // TODO: don't use MK region?
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
 @property (nonatomic, assign) MKCoordinateRegion region;
+@property (nonatomic, assign) NSString *customMapStyleString;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;

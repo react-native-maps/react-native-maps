@@ -149,13 +149,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             @Override
             public boolean onMarkerClick(Marker marker) {
                 WritableMap event;
+                AirMapMarker airMapMarker = markerMap.get(marker);
 
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "marker-press");
+                event.putString("id", airMapMarker.getIdentifier());
                 manager.pushEvent(view, "onMarkerPress", event);
 
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "marker-press");
+                event.putString("id", airMapMarker.getIdentifier());
                 manager.pushEvent(markerMap.get(marker), "onPress", event);
 
                 // Return false to open the callout info window and center on the marker
@@ -420,7 +423,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             urlTileView.addToMap(map);
             features.add(index, urlTileView);
         } else {
-            // TODO(lmr): throw? User shouldn't be adding non-feature children.
+            ViewGroup children = (ViewGroup) child;
+            for (int i = 0; i < children.getChildCount(); i++) {
+              addFeature(children.getChildAt(i), index);
+            }
         }
     }
 
@@ -479,13 +485,17 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
 
     public void animateToRegion(LatLngBounds bounds, int duration) {
-        startMonitoringRegion();
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+        if (map != null) {
+            startMonitoringRegion();
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+        }
     }
 
     public void animateToCoordinate(LatLng coordinate, int duration) {
-        startMonitoringRegion();
-        map.animateCamera(CameraUpdateFactory.newLatLng(coordinate), duration, null);
+        if (map != null) {
+            startMonitoringRegion();
+            map.animateCamera(CameraUpdateFactory.newLatLng(coordinate), duration, null);
+        }
     }
 
     public void fitToElements(boolean animated) {

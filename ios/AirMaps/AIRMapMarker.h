@@ -13,8 +13,8 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import "RCTConvert+MapKit.h"
-#import "RCTComponent.h"
+#import <React/RCTConvert+MapKit.h>
+#import <React/RCTComponent.h>
 #import "AIRMap.h"
 #import "SMCalloutView.h"
 
@@ -33,6 +33,7 @@
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, strong) UIColor *pinColor;
 @property (nonatomic, assign) NSInteger zIndex;
+@property (nonatomic, assign) double opacity;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTDirectEventBlock onSelect;
@@ -48,6 +49,7 @@
 - (BOOL)shouldShowCalloutView;
 - (void)showCalloutView;
 - (void)hideCalloutView;
+- (void)addTapGestureRecognizer;
 
 @end
 

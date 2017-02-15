@@ -4,7 +4,7 @@
 //  Created by Nick Italiano on 10/22/16.
 //
 
-#import "RCTViewManager.h"
+#import <React/RCTViewManager.h>
 
 @interface AIRGoogleMapPolylineManager : RCTViewManager
 

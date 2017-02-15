@@ -1,6 +1,132 @@
 # Change Log
 
+## 0.13.0 (January 6, 2017)
+
+### Breaking Changes
+
+* Update iOS header imports and JS SyntheticEvent import for RN 0.40
+  [#923](https://github.com/airbnb/react-native-maps/pull/923)
+  (@ide)
+
+### Patches
+
+* Fix issue where callouts sometimes overlap or don't appear
+  [#936](https://github.com/airbnb/react-native-maps/pull/936)
+  (@RajkumarPunchh)
+
+## 0.12.3 (January 6, 2017)
+
+### Patches
+
+* Fix "Animating with MapViews" example – fixes #763
+  [#888](https://github.com/airbnb/react-native-maps/pull/888)
+  (@javiercr)
+* [iOS] Fix "Option 2" method of building Google Maps
+  [#900](https://github.com/airbnb/react-native-maps/pull/900)
+  (@vjeranc)
+* [Android] Fix exception when animating region during initialization
+  [#901](https://github.com/airbnb/react-native-maps/pull/901)
+  (@mlanter)
+* Updated documentation
+  [#902](https://github.com/airbnb/react-native-maps/pull/902),
+  [#904](https://github.com/airbnb/react-native-maps/pull/904),
+  [#910](https://github.com/airbnb/react-native-maps/pull/910)
+  (@anami, @dboydor, @ali-alamine)
+
+
+## 0.12.2 (December 9, 2016)
+
+### Patches
+
+* [Android] Added support for taking snapshots on Android
+  [#625](https://github.com/airbnb/react-native-maps/pull/625)
+  (@IjzerenHein)
+* [iOS] Allow legalLabelInsets to be changed and animated
+  [#873](https://github.com/airbnb/react-native-maps/pull/873)
+  (@scarlac)
+* Added rotation attribute documentation
+  [#871](https://github.com/airbnb/react-native-maps/pull/871)
+  (@Arman92)
+* Update mapview.md documentation
+  [#866](https://github.com/airbnb/react-native-maps/pull/866)
+  (@dccarmo)
+
+
+## 0.12.1 (December 6, 2016)
+
+This release only corrects the version in package.json.
+
+## 0.12.0 (December 6, 2016)
+
+NOTE: This version was not published because package.json was not properly updated
+
+### Breaking Changes
+
+* [android] If we've disabled scrolling within the map, then don't capture the touch events
+  [#664](https://github.com/airbnb/react-native-maps/pull/664)
+  (@mikelambert)
+* [android] Use latest Google Play Services
+  [#731](https://github.com/airbnb/react-native-maps/pull/731)
+  (@mlanter)
+* [android] update google play services
+  [#805](https://github.com/airbnb/react-native-maps/pull/805)
+  (@lrivera)
+
+### Patches
+
+* [iOS] Support iOS SDK < 10 ( XCode < 8 )
+  [#708](https://github.com/airbnb/react-native-maps/pull/708)
+  (@rops)
+* [iOS] Added showsUserLocation property support for Google Maps
+  [#721](https://github.com/airbnb/react-native-maps/pull/721)
+  (@julien-rodrigues)
+* [iOS] Added Google Maps Circle, Polygon, Polyline, MapType Support
+  [#722](https://github.com/airbnb/react-native-maps/pull/722)
+  (@unboundfire)
+* [iOS] Fix Anchor point on Google Maps iOS
+  [#734](https://github.com/airbnb/react-native-maps/pull/734)
+  (@btoueg)
+* [Google Maps iOS] Marker init with image props.
+  [#738](https://github.com/airbnb/react-native-maps/pull/738)
+  (@btoueg)
+* [iOS] Fix dynamic imageSrc removal
+  [#737](https://github.com/airbnb/react-native-maps/pull/737)
+  (@btoueg)
+* [iOS] implement fitToSuppliedMarkers and fitToCoordinates for google
+  [#750](https://github.com/airbnb/react-native-maps/pull/750)
+  (@gilbox)
+* [iOS][android] Add onPress for polygons and polylines on iOS and Android
+  [#760](https://github.com/airbnb/react-native-maps/pull/760)
+  (@frankrowe)
+* [iOS] Fix flicker of map pins on state change
+  [#728](https://github.com/airbnb/react-native-maps/pull/728)
+  (@mlanter)
+* [iOS] Set region only when view has width&height
+  [#785](https://github.com/airbnb/react-native-maps/pull/785)
+  (@gilbox)
+* [iOS] Implements animateToRegion for Google
+  [#779](https://github.com/airbnb/react-native-maps/pull/779)
+  (@btoueg)
+* [iOS] Google Maps Custom Tile Support
+  [#770](https://github.com/airbnb/react-native-maps/pull/770)
+  (@unboundfire)
+* [android] Map Styling for android
+  [#808](https://github.com/airbnb/react-native-maps/pull/808)
+  (@ali-alamine using @azt3k code)
+* [iOS] IOS Google Map styling
+  [#817](https://github.com/airbnb/react-native-maps/pull/817)
+  (@ali-alamine using @azt3k code)
+* [iOS] Add support for polygon holes for Apple Maps and Google Maps on iOS
+  [#801](https://github.com/airbnb/react-native-maps/pull/801)
+  (@therealgilles)
+* [iOS] Fixes #470. Support legalLabelInsets on Apple Maps
+  [#840](https://github.com/airbnb/react-native-maps/pull/840)
+  (@scarlac)
+
 ## 0.11.0 (October 16, 2016)
+
+NOTE: `0.10.4` was released *after* this version, and it's possible
+`0.11.0` does not include everything in `0.10.4`. (see #851)
 
 ### Breaking Changes
 

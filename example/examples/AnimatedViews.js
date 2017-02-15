@@ -191,7 +191,7 @@ class AnimatedViews extends React.Component {
       scale,
       translateY,
       markers,
-      region: new Animated.Region({
+      region: new MapView.AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
@@ -220,7 +220,7 @@ class AnimatedViews extends React.Component {
     }).start();
   }
 
-  onStartShouldSetPanResponder(e) {
+  onStartShouldSetPanResponder = (e) => {
     // we only want to move the view if they are starting the gesture on top
     // of the view, so this calculates that and returns true if so. If we return
     // false, the gesture should get passed to the map view appropriately.
@@ -232,7 +232,7 @@ class AnimatedViews extends React.Component {
     return topOfTap < topOfMainWindow;
   }
 
-  onMoveShouldSetPanResponder(e) {
+  onMoveShouldSetPanResponder = (e) => {
     const { panY } = this.state;
     const { pageY } = e.nativeEvent;
     const topOfMainWindow = ITEM_PREVIEW_HEIGHT + panY.__getValue();
@@ -241,7 +241,7 @@ class AnimatedViews extends React.Component {
     return topOfTap < topOfMainWindow;
   }
 
-  onPanXChange({ value }) {
+  onPanXChange = ({ value }) => {
     const { index } = this.state;
     const newIndex = Math.floor(((-1 * value) + (SNAP_WIDTH / 2)) / SNAP_WIDTH);
     if (index !== newIndex) {
@@ -249,7 +249,7 @@ class AnimatedViews extends React.Component {
     }
   }
 
-  onPanYChange({ value }) {
+  onPanYChange = ({ value }) => {
     const { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
     const shouldBeMovable = Math.abs(value) < 2;
     if (shouldBeMovable !== canMoveHorizontal) {

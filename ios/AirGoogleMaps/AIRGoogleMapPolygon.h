@@ -11,6 +11,7 @@
 
 @property (nonatomic, strong) GMSPolygon *polygon;
 @property (nonatomic, strong) NSArray<AIRMapCoordinate *> *coordinates;
+@property (nonatomic, strong) NSArray<NSArray<AIRMapCoordinate *> *> *holes;
 
 @property (nonatomic, assign) UIColor *fillColor;
 @property (nonatomic, assign) double strokeWidth;

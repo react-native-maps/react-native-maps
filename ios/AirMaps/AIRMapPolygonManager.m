@@ -9,14 +9,14 @@
 
 #import "AIRMapPolygonManager.h"
 
-#import "RCTBridge.h"
-#import "RCTConvert.h"
+#import <React/RCTBridge.h>
+#import <React/RCTConvert.h>
+#import <React/RCTConvert+CoreLocation.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTViewManager.h>
+#import <React/UIView+React.h>
 #import "RCTConvert+MoreMapKit.h"
-#import "RCTConvert+CoreLocation.h"
-#import "RCTEventDispatcher.h"
-#import "UIView+React.h"
 #import "AIRMapMarker.h"
-#import "RCTViewManager.h"
 #import "AIRMapPolygon.h"
 
 @interface AIRMapPolygonManager()
@@ -34,6 +34,7 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(coordinates, AIRMapCoordinateArray)
+RCT_EXPORT_VIEW_PROPERTY(holes, AIRMapCoordinateArrayArray)
 RCT_EXPORT_VIEW_PROPERTY(fillColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeWidth, CGFloat)

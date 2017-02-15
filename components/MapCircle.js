@@ -125,10 +125,14 @@ const defaultProps = {
 };
 
 class MapCircle extends React.Component {
+  setNativeProps(props) {
+    this.circle.setNativeProps(props);
+  }
+
   render() {
     const AIRMapCircle = this.getAirComponent();
     return (
-      <AIRMapCircle {...this.props} />
+      <AIRMapCircle {...this.props} ref={ref => { this.circle = ref; }} />
     );
   }
 }

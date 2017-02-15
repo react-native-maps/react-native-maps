@@ -9,9 +9,9 @@
 
 #import "AIRMap.h"
 
-#import "RCTEventDispatcher.h"
+#import <React/RCTEventDispatcher.h>
+#import <React/UIView+React.h>
 #import "AIRMapMarker.h"
-#import "UIView+React.h"
 #import "AIRMapPolyline.h"
 #import "AIRMapPolygon.h"
 #import "AIRMapCircle.h"
@@ -104,7 +104,13 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     } else if ([subview isKindOfClass:[AIRMapCircle class]]) {
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
+        ((AIRMapUrlTile *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
+    } else {
+        NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+        for (int i = 0; i < childSubviews.count; i++) {
+          [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
+        }
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
@@ -125,6 +131,11 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
         [self removeOverlay:(id <MKOverlay>) subview];
     } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
+    } else {
+        NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+        for (int i = 0; i < childSubviews.count; i++) {
+          [self removeReactSubview:(UIView *)childSubviews[i]];
+        }
     }
     [_reactSubviews removeObject:(UIView *)subview];
 }
@@ -381,7 +392,33 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
 
         [self updateScrollEnabled];
         [self updateZoomEnabled];
+        [self updateLegalLabelInsets];
     }
+}
+
+- (void)updateLegalLabelInsets {
+    if (_legalLabel) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CGRect frame = _legalLabel.frame;
+            if (_legalLabelInsets.left) {
+                frame.origin.x = _legalLabelInsets.left;
+            } else if (_legalLabelInsets.right) {
+                frame.origin.x = self.frame.size.width - _legalLabelInsets.right - frame.size.width;
+            }
+            if (_legalLabelInsets.top) {
+                frame.origin.y = _legalLabelInsets.top;
+            } else if (_legalLabelInsets.bottom) {
+                frame.origin.y = self.frame.size.height - _legalLabelInsets.bottom - frame.size.height;
+            }
+            _legalLabel.frame = frame;
+        });
+    }
+}
+
+
+- (void)setLegalLabelInsets:(UIEdgeInsets)legalLabelInsets {
+  _legalLabelInsets = legalLabelInsets;
+  [self updateLegalLabelInsets];
 }
 
 - (void)beginLoading {

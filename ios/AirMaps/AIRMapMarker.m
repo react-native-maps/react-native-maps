@@ -9,11 +9,11 @@
 
 #import "AIRMapMarker.h"
 
-#import "RCTEventDispatcher.h"
-#import "UIView+React.h"
-#import "RCTBridge.h"
-#import "RCTUtils.h"
-#import "RCTImageLoader.h"
+#import <React/RCTBridge.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTImageLoader.h>
+#import <React/RCTUtils.h>
+#import <React/UIView+React.h>
 
 @implementation AIREmptyCalloutBackgroundView
 @end
@@ -71,6 +71,7 @@
         // In this case, we want to render a platform "default" marker.
         if (_pinView == nil) {
             _pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
+            [self addGestureRecognizerToView:_pinView];
             _pinView.annotation = self;
         }
 
@@ -167,6 +168,56 @@
                                        animated:YES];
 }
 
+#pragma mark - Tap Gesture & Events.
+
+- (void)addTapGestureRecognizer {
+    [self addGestureRecognizerToView:nil];
+}
+
+- (void)addGestureRecognizerToView:(UIView *)view {
+    if (!view) {
+        view = self;
+    }
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTap:)];
+    // setting this to NO allows the parent MapView to continue receiving marker selection events
+    tapGestureRecognizer.cancelsTouchesInView = NO;
+    [view addGestureRecognizer:tapGestureRecognizer];
+}
+
+- (void)_handleTap:(UITapGestureRecognizer *)recognizer {
+    AIRMapMarker *marker = self;
+    if (!marker) return;
+    
+    if (marker.selected) {
+        CGPoint touchPoint = [recognizer locationInView:marker.map.calloutView];
+        if ([marker.map.calloutView hitTest:touchPoint withEvent:nil]) {
+            
+            // the callout got clicked, not the marker
+            id event = @{
+                         @"action": @"callout-press",
+                         };
+            
+            if (marker.onCalloutPress) marker.onCalloutPress(event);
+            if (marker.calloutView && marker.calloutView.onPress) marker.calloutView.onPress(event);
+            if (marker.map.onCalloutPress) marker.map.onCalloutPress(event);
+            return;
+        }
+    }
+    
+    // the actual marker got clicked
+    id event = @{
+                 @"action": @"marker-press",
+                 @"id": marker.identifier ?: @"unknown",
+                 @"coordinate": @{
+                         @"latitude": @(marker.coordinate.latitude),
+                         @"longitude": @(marker.coordinate.longitude)
+                         }
+                 };
+    
+    if (marker.onPress) marker.onPress(event);
+    if (marker.map.onMarkerPress) marker.map.onMarkerPress(event);
+}
+
 - (void)hideCalloutView
 {
     // hide the callout view
@@ -203,6 +254,11 @@
     return self.reactSubviews.count == 0 && !self.imageSrc;
 }
 
+- (void)setOpacity:(double)opacity
+{
+  [self setAlpha:opacity];
+}
+
 - (void)setImageSrc:(NSString *)imageSrc
 {
     _imageSrc = imageSrc;
@@ -232,7 +288,7 @@
 - (void)setPinColor:(UIColor *)pinColor
 {
     _pinColor = pinColor;
-    
+
     if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
         _pinView.pinTintColor = _pinColor;
     }

@@ -13,8 +13,8 @@
 #import "AIRGoogleMapUrlTile.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
-#import "RCTConvert+MapKit.h"
-#import "UIView+React.h"
+#import <React/RCTConvert+MapKit.h>
+#import <React/UIView+React.h>
 
 id regionAsJSON(MKCoordinateRegion region) {
   return @{
@@ -91,6 +91,11 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
     tile.tileLayer.map = self;
     [self.tiles addObject:tile];
+  } else {
+    NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+    for (int i = 0; i < childSubviews.count; i++) {
+      [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
+    }
   }
   [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
@@ -122,6 +127,11 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
     tile.tileLayer.map = nil;
     [self.tiles removeObject:tile];
+  } else {
+    NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+    for (int i = 0; i < childSubviews.count; i++) {
+      [self removeReactSubview:(UIView *)childSubviews[i]];
+    }
   }
   [_reactSubviews removeObject:(UIView *)subview];
 }
@@ -236,6 +246,18 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setShowsCompass:(BOOL)showsCompass {
   self.settings.compassButton = showsCompass;
+}
+
+- (void)setCustomMapStyleString:(NSString *)customMapStyleString {
+  NSError *error;
+
+  GMSMapStyle *style = [GMSMapStyle styleWithJSONString:customMapStyleString error:&error];
+
+  if (!style) {
+    NSLog(@"The style definition could not be loaded: %@", error);
+  }
+
+  self.mapStyle = style;
 }
 
 - (BOOL)showsCompass {
