@@ -17,6 +17,7 @@ cd ios
 bundle install
 bundle exec pod install
 open AirMapsExplorer.xcworkspace
+npm start
 ```
 
 3. Make sure the `AirMapsExplorer` target is selected and click `Run`
