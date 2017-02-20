@@ -87,6 +87,15 @@ const propTypes = {
   showsUserLocation: PropTypes.bool,
 
   /**
+   * The title of the annotation for current user location. This only works if
+   * `showsUserLocation` is true.
+   * There is a default value `My Location` set by MapView.
+   *
+   * @platform ios
+   */
+  userLocationAnnotationTitle: PropTypes.string,
+
+  /**
    * If `false` hide the button to move map to the current user's location.
    * Default value is `true`.
    *
