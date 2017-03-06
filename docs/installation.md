@@ -215,4 +215,4 @@ Enter the name of the API key and create it.
 
 1. If you are using Android Virtual Devices (AVD), ensure that `Use Host GPU` is checked in the settings for your virtual device.
 
-1. If using an emulator and instead of the map, you see the message `[APPNAME] won't run without Google Play services which are not supported by your device.`, you need to change the emulator CPU/ABI setting to a system image that includes Google APIs.  These may need to be downloaded from the Android SDK Manager first.
+1. If using an emulator and the only thing that shows up on the screen is the message: `[APPNAME] won't run without Google Play services which are not supported by your device.`, you need to change the emulator CPU/ABI setting to a system image that includes Google APIs.  These may need to be downloaded from the Android SDK Manager first.
