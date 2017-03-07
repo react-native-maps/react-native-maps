@@ -7,8 +7,8 @@
 | `center` | `LatLng` | (Required) | The coordinate of the center of the circle
 | `radius` | `Number` | (Required) | The radius of the circle to be drawn (in meters)
 | `strokeWidth` | `Number` | `1` | The stroke width to use for the path.
-| `strokeColor` | `String` | `#000` | The stroke color to use for the path.
-| `fillColor` | `String` |  | The fill color to use for the path.
+| `strokeColor` | `String` | `#000`, `rgba(r,g,b,0.5)` | The stroke color to use for the path.
+| `fillColor` | `String` | `#000`, `rgba(r,g,b,0.5)` | The fill color to use for the path.
 | `zIndex` | `Number` | 0 | The order in which this tile overlay is drawn with respect to other overlays. An overlay with a larger z-index is drawn over overlays with smaller z-indices. The order of overlays with the same z-index is arbitrary. The default zIndex is 0. (Android Only)
 | `lineCap` | `String` | `round` | The line cap style to apply to the open ends of the path.
 | `lineJoin` | `Array<LatLng>` |  | The line join style to apply to corners of the path.
