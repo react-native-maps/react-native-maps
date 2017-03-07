@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -646,9 +647,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         @Override
         public void run() {
 
-            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            if (lastBoundsEmitted == null ||
-                    LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted)) {
+            Projection projection = map.getProjection();
+            VisibleRegion region = (projection != null) ? projection.getVisibleRegion() : null;
+            LatLngBounds bounds = (region != null) ? region.latLngBounds : null;
+
+            if ((bounds != null) &&
+                (lastBoundsEmitted == null || LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted))) {
                 LatLng center = map.getCameraPosition().target;
                 lastBoundsEmitted = bounds;
                 eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));
