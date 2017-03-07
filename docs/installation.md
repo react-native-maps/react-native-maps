@@ -10,7 +10,7 @@ Second, install the native dependencies: You can use `rnpm` (now part of `react-
 add native dependencies automatically then continue the directions below depending on your target OS.
 
 ```
-react-native link
+react-native link react-native-maps
 ```
 
    >This installation should work in physical devices. For Genymotion, be sure to check Android installation about Google Play Services
@@ -63,7 +63,7 @@ After your `Podfile` is setup properly, run `pod install`.
 ## Android
 
 1. In your `android/app/build.gradle` add:
-   >This step is not necessary if you ran "react-native link"
+   >This step is not necessary if you ran "react-native link react-native-maps"
 
    ```groovy
    ...
@@ -125,13 +125,13 @@ If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-ma
 
 You have to link dependencies with rnpm and re-run the build:
 
-1. `react-native link`
+1. `react-native link react-native-maps`
 1. `react-native run-ios`
 
 ### On Android:
 
 1. Be sure to have `new MapsPackage()` in your `MainApplication.java` :
-   >This step is not necessary if you ran "react-native link"
+   >This step is not necessary if you ran "react-native link react-native-maps"
 
    ```
    import com.airbnb.android.react.maps.MapsPackage;
@@ -190,7 +190,7 @@ You have to link dependencies with rnpm and re-run the build:
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 19
     - Android SDK Build-tools 23.0.3 
-1. Check manual installation steps if you didn't run "react-native link"
+1. Check manual installation steps if you didn't run "react-native link react-native-maps"
 1. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.
 Then, once enabled, select `Go to credentials`.
 Select `Google Maps Android API` and create a new key.
