@@ -22,7 +22,7 @@ react-native link react-native-maps
 1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile), replace all references to `AirMapExplorer` with your project name, and then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
-1. If you need `GoogleMaps` support also 
+1. If you need `GoogleMaps` support also
     - Drag this folder `node_modules/react-native-maps/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
     - In `AppDelegate.m`, add `@import GoogleMaps;` before `@implementation AppDelegate`. In `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions`, add `[GMSServices provideAPIKey:@"YOUR_GOOGLE_MAP_API_KEY"];`
     - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
@@ -72,9 +72,9 @@ After your `Podfile` is setup properly, run `pod install`.
      compile project(':react-native-maps')
    }
    ```
-   
+
    If you have a different play services than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
-   
+
    ```groovy
    ...
    dependencies {
@@ -212,5 +212,7 @@ Enter the name of the API key and create it.
    gradlew clean
    cd ..
   ```
-  
+
 1. If you are using Android Virtual Devices (AVD), ensure that `Use Host GPU` is checked in the settings for your virtual device.
+
+1. If using an emulator and the only thing that shows up on the screen is the message: `[APPNAME] won't run without Google Play services which are not supported by your device.`, you need to change the emulator CPU/ABI setting to a system image that includes Google APIs.  These may need to be downloaded from the Android SDK Manager first.
