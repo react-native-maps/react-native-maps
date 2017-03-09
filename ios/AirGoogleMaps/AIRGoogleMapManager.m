@@ -42,6 +42,8 @@ RCT_EXPORT_MODULE()
 {
   AIRGoogleMap *map = [AIRGoogleMap new];
   map.delegate = self;
+  map.isAccessibilityElement = "YES";
+  map.accessibilityElementsHidden = "NO";
   return map;
 }
 
