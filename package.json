@@ -6,7 +6,8 @@
   "version": "0.13.0",
   "scripts": {
     "start": "react-native start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "preversion": "./scripts/update-version.js"
   },
   "repository": {
     "type": "git",
