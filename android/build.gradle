@@ -18,7 +18,7 @@ buildscript {
       }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.1.0'
+    classpath 'com.android.tools.build:gradle:2.2.3'
   }
 }
 
@@ -39,12 +39,12 @@ allprojects {
 }
 
 android {
-  compileSdkVersion 23
+  compileSdkVersion 25
   buildToolsVersion "23.0.3"
 
   defaultConfig {
     minSdkVersion 16
-    targetSdkVersion 23
+    targetSdkVersion 25
   }
 
   lintOptions {
@@ -54,6 +54,6 @@ android {
 
 dependencies {
   compile "com.facebook.react:react-native:+"
-  compile "com.google.android.gms:play-services-base:9.8.0"
-  compile "com.google.android.gms:play-services-maps:9.8.0"
+  compile "com.google.android.gms:play-services-base:10.0.1"
+  compile "com.google.android.gms:play-services-maps:10.0.1"
 }
