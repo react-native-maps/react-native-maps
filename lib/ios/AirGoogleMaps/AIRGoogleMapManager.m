@@ -76,10 +76,14 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
       RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
     } else {
-      [AIRGoogleMap animateWithDuration:duration/1000 animations:^{
-        GMSCameraPosition* camera = [AIRGoogleMap makeGMSCameraPositionFromMap:(AIRGoogleMap *)view andMKCoordinateRegion:region];
-        [(AIRGoogleMap *)view animateToCameraPosition:camera];
-      }];
+      // Core Animation must be used to control the animation's duration
+      // See http://stackoverflow.com/a/15663039/171744
+      [CATransaction begin];
+      [CATransaction setAnimationDuration:duration/1000];
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:mapView andMKCoordinateRegion:region];
+      [mapView animateToCameraPosition:camera];
+      [CATransaction commit];
     }
   }];
 }
