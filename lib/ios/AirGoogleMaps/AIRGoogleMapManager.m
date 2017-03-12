@@ -26,6 +26,7 @@
 #import "RCTConvert+MapKit.h"
 
 #import <MapKit/MapKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 static NSString *const RCTMapViewKey = @"MapView";
 
@@ -79,6 +80,23 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
         GMSCameraPosition* camera = [AIRGoogleMap makeGMSCameraPositionFromMap:(AIRGoogleMap *)view andMKCoordinateRegion:region];
         [(AIRGoogleMap *)view animateToCameraPosition:camera];
       }];
+    }
+  }];
+}
+
+RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
+                  withRegion:(CLLocationCoordinate2D)latlng
+                  withDuration:(CGFloat)duration)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
+      [CATransaction begin];
+      [CATransaction setAnimationDuration:duration/1000];
+      [(AIRGoogleMap *)view animateToLocation:latlng];
+      [CATransaction commit];
     }
   }];
 }
