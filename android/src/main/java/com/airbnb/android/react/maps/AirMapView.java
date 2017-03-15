@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
@@ -79,7 +80,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final ScaleGestureDetector scaleDetector;
     private final GestureDetectorCompat gestureDetector;
     private final AirMapManager manager;
+    private LifecycleEventListener lifecycleListener;
     private boolean paused = false;
+    private boolean destroyed = false;
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
 
@@ -254,7 +257,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         // updating location constantly, killing the battery, even though some other location-mgmt
         // module may
         // desire to shut-down location-services.
-      LifecycleEventListener lifecycleListener = new LifecycleEventListener() {
+    lifecycleListener = new LifecycleEventListener() {
         @Override
         public void onHostResume() {
           if (hasPermissions()) {
@@ -273,11 +276,15 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             //noinspection MissingPermission
             map.setMyLocationEnabled(false);
           }
-          paused = true;
+            synchronized (AirMapView.this) {
+                AirMapView.this.onPause();
+                paused = true;
+            }
         }
 
         @Override
         public void onHostDestroy() {
+            AirMapView.this.doDestroy();
         }
       };
 
@@ -287,6 +294,24 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private boolean hasPermissions() {
         return checkSelfPermission(getContext(), PERMISSIONS[0]) == PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(getContext(), PERMISSIONS[1]) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /*
+    onDestroy is final method so I can't override it.
+     */
+    public synchronized  void doDestroy() {
+        if (lifecycleListener != null && context != null) {
+            context.removeLifecycleEventListener(lifecycleListener);
+            lifecycleListener = null;
+        }
+        if(!paused) {
+            onPause();
+        }
+        if (!destroyed) {
+            onDestroy();
+            destroyed = true;
+        }
+
     }
 
     public void setRegion(ReadableMap region) {
