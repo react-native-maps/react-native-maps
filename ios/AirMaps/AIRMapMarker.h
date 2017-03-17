@@ -13,10 +13,10 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import <React/RCTConvert+MapKit.h>
 #import <React/RCTComponent.h>
 #import "AIRMap.h"
 #import "SMCalloutView.h"
+#import "RCTConvert+MapKit.h"
 
 @class RCTBridge;
 
