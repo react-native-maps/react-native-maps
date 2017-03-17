@@ -8,6 +8,7 @@
  */
 
 #import <React/RCTViewManager.h>
+#import <React/RCTConvert+MapKit.h>
 
 @interface AIRMapManager : RCTViewManager
 
