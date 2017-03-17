@@ -453,25 +453,6 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
 - (void)handleMapDrag:(UIPanGestureRecognizer*)recognizer {
     AIRMap *map = (AIRMap *)recognizer.view;
     if (!map.onPanDrag) return;
-
-    CGPoint touchPoint = [recognizer locationInView:map];
-    CLLocationCoordinate2D coord = [map convertPoint:touchPoint toCoordinateFromView:map];
-    map.onPanDrag(@{
-                  @"coordinate": @{
-                          @"latitude": @(coord.latitude),
-                          @"longitude": @(coord.longitude),
-                          },
-                  @"position": @{
-                          @"x": @(touchPoint.x),
-                          @"y": @(touchPoint.y),
-                          },
-                  });
-    
-}
-
-- (void)handleMapDrag:(UIPanGestureRecognizer*)recognizer {
-    AIRMap *map = (AIRMap *)recognizer.view;
-    if (!map.onPanDrag) return;
     
     CGPoint touchPoint = [recognizer locationInView:map];
     CLLocationCoordinate2D coord = [map convertPoint:touchPoint toCoordinateFromView:map];
