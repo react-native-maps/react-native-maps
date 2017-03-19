@@ -30,6 +30,8 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<MapView.Callout />` Component API](docs/callout.md)
 
+[`<MapView.Overlay />` Component API](#)
+
 [`<MapView.Polygon />` Component API](docs/polygon.md)
 
 [`<MapView.Polyline />` Component API](docs/polyline.md)
@@ -108,6 +110,18 @@ render() {
     />
   ))}
 </MapView>
+```
+
+## MapOverlay(Just iOS(not GMaps))
+```jsx
+  <MapView
+    ...
+  >
+    <MapView.Overlay
+      bounds={bounds}
+      image={path_to_image}
+    />
+  </MapView>
 ```
 
 ### Rendering a Marker with a custom view
