@@ -12,6 +12,7 @@ import {
 import MapMarker from './MapMarker';
 import MapPolyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
+import MapOverlay from './MapOverlay';
 import MapCircle from './MapCircle';
 import MapCallout from './MapCallout';
 import MapUrlTile from './MapUrlTile';
@@ -664,6 +665,7 @@ const AIRMapLite = NativeModules.UIManager.AIRMapLite &&
 MapView.Marker = MapMarker;
 MapView.Polyline = MapPolyline;
 MapView.Polygon = MapPolygon;
+MapView.Overlay = MapOverlay;
 MapView.Circle = MapCircle;
 MapView.UrlTile = MapUrlTile;
 MapView.Callout = MapCallout;
