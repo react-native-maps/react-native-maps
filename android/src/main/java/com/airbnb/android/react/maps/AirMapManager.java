@@ -43,8 +43,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             "none", GoogleMap.MAP_TYPE_NONE
     );
 
-    private ReactContext reactContext;
-
     private final ReactApplicationContext appContext;
 
     protected GoogleMapOptions googleMapOptions;
@@ -61,24 +59,15 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     @Override
     protected AirMapView createViewInstance(ThemedReactContext context) {
-        reactContext = context;
-
-        try {
-            MapsInitializer.initialize(this.appContext);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            emitMapError("Map initialize error", "map_init_error");
-        }
-
-        return new AirMapView(context, this.appContext.getCurrentActivity(), this, this.googleMapOptions);
+        return new AirMapView(context, this, googleMapOptions);
     }
 
-    private void emitMapError(String message, String type) {
+    private void emitMapError(ThemedReactContext context, String message, String type) {
         WritableMap error = Arguments.createMap();
         error.putString("message", message);
         error.putString("type", type);
 
-        reactContext
+        context
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("onError", error);
     }
@@ -297,9 +286,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.updateExtraData(extraData);
     }
 
-    void pushEvent(View view, String name, WritableMap data) {
-        reactContext.getJSModule(RCTEventEmitter.class)
-                .receiveEvent(view.getId(), name, data);
+    void pushEvent(ThemedReactContext context, View view, String name, WritableMap data) {
+        context.getJSModule(RCTEventEmitter.class)
+            .receiveEvent(view.getId(), name, data);
     }
 
 }
