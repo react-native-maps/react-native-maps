@@ -30,7 +30,7 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<MapView.Callout />` Component API](docs/callout.md)
 
-[`<MapView.Overlay />` Component API](#)
+[`<MapView.Overlay />` Component API](docs/overlay.md)
 
 [`<MapView.Polygon />` Component API](docs/polygon.md)
 
