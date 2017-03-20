@@ -9,6 +9,6 @@
 
 #import <React/RCTViewManager.h>
 
-@interface AIRMapManager : RCTViewManager, UIGestureRecognizerDelegate
+@interface AIRMapManager : RCTViewManager
 
 @end

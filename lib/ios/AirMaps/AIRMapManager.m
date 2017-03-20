@@ -31,7 +31,7 @@
 static NSString *const RCTMapViewKey = @"MapView";
 
 
-@interface AIRMapManager() <MKMapViewDelegate>
+@interface AIRMapManager() <MKMapViewDelegate, UIGestureRecognizerDelegate>
 
 @end
 
