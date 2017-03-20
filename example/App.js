@@ -123,7 +123,7 @@ class App extends React.Component {
   render() {
     return this.renderExamples([
       // [<component>, <component description>, <Google compatible>, <Google add'l description>]
-      [ImageOverlay, 'Image Overlay Component', true],
+      [ImageOverlay, 'Image Overlay Component', false],
       [StaticMap, 'StaticMap', true],
       [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
       [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
