@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.12.5 (March 20, 2017)
+
+### Patches
+
+* Fix crashes on null activity
+  [#1148](https://github.com/airbnb/react-native-maps/pull/1148)
+
+
 ## 0.12.4 (January 12, 2017)
 
 ### Patches
