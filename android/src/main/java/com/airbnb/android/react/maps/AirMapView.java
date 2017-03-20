@@ -83,14 +83,15 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
 
-    public AirMapView(ThemedReactContext reactContext, Context appContext, AirMapManager manager,
+    public AirMapView(ThemedReactContext reactContext, AirMapManager manager,
             GoogleMapOptions googleMapOptions) {
-        super(appContext, googleMapOptions);
+        super(reactContext, googleMapOptions);
 
         this.manager = manager;
         this.context = reactContext;
 
         super.onCreate(null);
+        // TODO(lmr): what about onStart????
         super.onResume();
         super.getMapAsync(this);
 
@@ -141,7 +142,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.map.setInfoWindowAdapter(this);
         this.map.setOnMarkerDragListener(this);
 
-        manager.pushEvent(this, "onMapReady", new WritableNativeMap());
+        manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
         final AirMapView view = this;
 
@@ -154,12 +155,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "marker-press");
                 event.putString("id", airMapMarker.getIdentifier());
-                manager.pushEvent(view, "onMarkerPress", event);
+                manager.pushEvent(context, view, "onMarkerPress", event);
 
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "marker-press");
                 event.putString("id", airMapMarker.getIdentifier());
-                manager.pushEvent(markerMap.get(marker), "onPress", event);
+                manager.pushEvent(context, markerMap.get(marker), "onPress", event);
 
                 // Return false to open the callout info window and center on the marker
                 // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMarkerClickListener
@@ -177,7 +178,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             public void onPolygonClick(Polygon polygon) {
                 WritableMap event = makeClickEventData(polygon.getPoints().get(0));
                 event.putString("action", "polygon-press");
-                manager.pushEvent(polygonMap.get(polygon), "onPress", event);
+                manager.pushEvent(context, polygonMap.get(polygon), "onPress", event);
             }
         });
 
@@ -186,7 +187,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             public void onPolylineClick(Polyline polyline) {
                 WritableMap event = makeClickEventData(polyline.getPoints().get(0));
                 event.putString("action", "polyline-press");
-                manager.pushEvent(polylineMap.get(polyline), "onPress", event);
+                manager.pushEvent(context, polylineMap.get(polyline), "onPress", event);
             }
         });
 
@@ -197,17 +198,17 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "callout-press");
-                manager.pushEvent(view, "onCalloutPress", event);
+                manager.pushEvent(context, view, "onCalloutPress", event);
 
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "callout-press");
                 AirMapMarker markerView = markerMap.get(marker);
-                manager.pushEvent(markerView, "onCalloutPress", event);
+                manager.pushEvent(context, markerView, "onCalloutPress", event);
 
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "callout-press");
                 AirMapCallout infoWindow = markerView.getCalloutView();
-                if (infoWindow != null) manager.pushEvent(infoWindow, "onPress", event);
+                if (infoWindow != null) manager.pushEvent(context, infoWindow, "onPress", event);
             }
         });
 
@@ -216,7 +217,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             public void onMapClick(LatLng point) {
                 WritableMap event = makeClickEventData(point);
                 event.putString("action", "press");
-                manager.pushEvent(view, "onPress", event);
+                manager.pushEvent(context, view, "onPress", event);
             }
         });
 
@@ -225,7 +226,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             public void onMapLongClick(LatLng point) {
                 WritableMap event = makeClickEventData(point);
                 event.putString("action", "long-press");
-                manager.pushEvent(view, "onLongPress", makeClickEventData(point));
+                manager.pushEvent(context, view, "onLongPress", makeClickEventData(point));
             }
         });
 
@@ -661,31 +662,31 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     @Override
     public void onMarkerDragStart(Marker marker) {
         WritableMap event = makeClickEventData(marker.getPosition());
-        manager.pushEvent(this, "onMarkerDragStart", event);
+        manager.pushEvent(context, this, "onMarkerDragStart", event);
 
         AirMapMarker markerView = markerMap.get(marker);
         event = makeClickEventData(marker.getPosition());
-        manager.pushEvent(markerView, "onDragStart", event);
+        manager.pushEvent(context, markerView, "onDragStart", event);
     }
 
     @Override
     public void onMarkerDrag(Marker marker) {
         WritableMap event = makeClickEventData(marker.getPosition());
-        manager.pushEvent(this, "onMarkerDrag", event);
+        manager.pushEvent(context, this, "onMarkerDrag", event);
 
         AirMapMarker markerView = markerMap.get(marker);
         event = makeClickEventData(marker.getPosition());
-        manager.pushEvent(markerView, "onDrag", event);
+        manager.pushEvent(context, markerView, "onDrag", event);
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
         WritableMap event = makeClickEventData(marker.getPosition());
-        manager.pushEvent(this, "onMarkerDragEnd", event);
+        manager.pushEvent(context, this, "onMarkerDragEnd", event);
 
         AirMapMarker markerView = markerMap.get(marker);
         event = makeClickEventData(marker.getPosition());
-        manager.pushEvent(markerView, "onDragEnd", event);
+        manager.pushEvent(context, markerView, "onDragEnd", event);
     }
 
     private ProgressBar getMapLoadingProgressBar() {
@@ -778,6 +779,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         Point point = new Point((int) ev.getX(), (int) ev.getY());
         LatLng coords = this.map.getProjection().fromScreenLocation(point);
         WritableMap event = makeClickEventData(coords);
-        manager.pushEvent(this, "onPanDrag", event);
+        manager.pushEvent(context, this, "onPanDrag", event);
     }
 }
