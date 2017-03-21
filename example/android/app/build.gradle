@@ -61,6 +61,8 @@ import com.android.build.OutputFile
 
 apply from: "react.gradle"
 
+def enableSeparateBuildPerCPUArchitecture = false
+
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
@@ -76,6 +78,17 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+    }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false  // If true, also generate a universal APK
+            include "armeabi-v7a", "x86"
+        }
     }
     buildTypes {
         release {
