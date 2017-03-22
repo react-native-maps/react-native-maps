@@ -12,7 +12,7 @@
 | `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/airbnb/react-native-maps#customizing-the-map-style) for more information. 
 | `showsUserLocation` | `Boolean` | `false` | If `true` the app will ask for the user's location. **NOTE**: You need to add `NSLocationWhenInUseUsageDescription` key in Info.plist to enable geolocation, otherwise it is going to *fail silently*!
 | `followsUserLocation` | `Boolean` | `false` | If `true` the map will focus on the user's location. This only works if `showsUserLocation` is true and the user has shared their location. **Note**: iOS only.
-| `showsMyLocationButton` | `Boolean` | `true` | `Android only` If `false` hide the button to move map to the current user's location.
+| `showsMyLocationButton` | `Boolean` | `true` | If `false` hide the button to move map to the current user's location.
 | `showsPointsOfInterest` | `Boolean` | `true` | If `false` points of interest won't be displayed on the map.
 | `showsCompass` | `Boolean` | `true` | If `false` compass won't be displayed on the map.
 | `showsScale` | `Boolean` | `true` | A Boolean indicating whether the map shows scale information.
