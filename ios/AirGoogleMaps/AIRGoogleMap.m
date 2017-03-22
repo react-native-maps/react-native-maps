@@ -272,6 +272,15 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.myLocationEnabled;
 }
 
+- (void)setShowsMyLocationButton:(BOOL)showsMyLocationButton {
+  self.settings.myLocationButton = showsMyLocationButton;
+}
+
+- (BOOL)showsMyLocationButton {
+  return self.settings.myLocationButton;
+}
+
+
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
   // solution from here: http://stackoverflow.com/a/16587735/1102215
   GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
