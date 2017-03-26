@@ -8,7 +8,16 @@
  */
 
 #import <React/RCTViewManager.h>
+#import <React/RCTConvert+MapKit.h>
 
 @interface AIRMapManager : RCTViewManager
+
+@property (nonatomic, assign) NSInteger insetTop;
+@property (nonatomic, assign) NSInteger insetBottom;
+@property (nonatomic, assign) NSInteger insetLeft;
+@property (nonatomic, assign) NSInteger insetRight;
+
+- (UIEdgeInsets) getEdgeInsets;
++ (MKMapRect) getMKMapRectFromMKCoordinateRegion: (MKCoordinateRegion)region;
 
 @end

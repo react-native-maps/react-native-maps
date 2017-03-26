@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -179,6 +180,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
     }
 
+    @ReactProp(name = "insetTop")
+    public void setInsetTop(AirMapView view, double insetTop) {
+        view.insetTop = (int) insetTop;
+    }
+
+    @ReactProp(name = "insetBottom")
+    public void setInsetBottom(AirMapView view, double insetBottom) {
+        view.insetBottom = (int) insetBottom;
+    }
+
     @Override
     public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
         Integer duration;
@@ -187,6 +198,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         Double lngDelta;
         Double latDelta;
         ReadableMap region;
+        ReadableMap offset;
 
         switch (commandId) {
             case ANIMATE_TO_REGION:

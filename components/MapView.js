@@ -384,6 +384,10 @@ const propTypes = {
    */
   onMarkerDragEnd: PropTypes.func,
 
+  insetTop: PropTypes.number,
+  insetBottom: PropTypes.number,
+  insetLeft: PropTypes.number,
+  insetRight: PropTypes.number,
 };
 
 class MapView extends React.Component {

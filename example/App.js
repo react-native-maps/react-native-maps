@@ -35,6 +35,7 @@ import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
+import PixelOffsets from './examples/PixelOffsets';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -130,6 +131,7 @@ class App extends React.Component {
       [DraggableMarkers, 'Draggable Markers', true],
       [PolygonCreator, 'Polygon Creator', true],
       [PolylineCreator, 'Polyline Creator', true],
+      [PixelOffsets, 'Pixel Offsets', true],
       [AnimatedViews, 'Animating with MapViews'],
       [AnimatedMarkers, 'Animated Marker Position'],
       [Callouts, 'Custom Callouts', true],
