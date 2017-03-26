@@ -5,8 +5,8 @@
  * reference to the current package version:
  *
  * - android/gradle.properties
- * - react-native-maps.podspec
- * - react-native-google-maps.podspec
+ * x react-native-maps.podspec // <-- this is now dynamic
+ * x react-native-google-maps.podspec // <-- this is now dynamic
  *
  * And `git add`s them.
 */
@@ -16,8 +16,6 @@ const pkg = require('../package.json');
 
 const filesToUpdate = [
   'android/gradle.properties',
-  'react-native-maps.podspec',
-  'react-native-google-maps.podspec',
 ];
 
 function doExec(cmdString) {
