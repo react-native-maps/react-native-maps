@@ -66,6 +66,22 @@ RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
 
+RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
+                  withLocation:(CLLocationCoordinate2D)location
+                  withDuration:(CGFloat)duration)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
+      [AIRGoogleMap animateWithDuration:duration/1000 animations:^{
+        [(AIRGoogleMap *)view animateToLocation:location];
+      }];
+    }
+  }];
+}
+
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
                   withRegion:(MKCoordinateRegion)region
                   withDuration:(CGFloat)duration)
