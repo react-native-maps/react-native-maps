@@ -7,10 +7,10 @@
 
 #import <UIKit/UIKit.h>
 #import <React/RCTComponent.h>
-#import <React/RCTConvert+MapKit.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
+#import "RCTConvert+MapKit.h"
 
 @interface AIRGoogleMap : GMSMapView
 
