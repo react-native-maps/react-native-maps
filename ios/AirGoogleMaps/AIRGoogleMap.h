@@ -38,6 +38,7 @@
 @property (nonatomic, assign) BOOL rotateEnabled;
 @property (nonatomic, assign) BOOL pitchEnabled;
 @property (nonatomic, assign) BOOL showsUserLocation;
+@property (nonatomic, assign) BOOL showsMyLocationButton;
 
 - (BOOL)didTapMarker:(GMSMarker *)marker;
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate;
