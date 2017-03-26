@@ -32,7 +32,9 @@ export const createNotSupportedComponent = message => () => {
   return null;
 };
 
-export const googleMapIsInstalled = !!NativeModules.UIManager[getAirMapName(PROVIDER_GOOGLE)];
+export const googleMapIsInstalled = Boolean(
+  NativeModules.UIManager[getAirMapName(PROVIDER_GOOGLE)]
+);
 
 export default function decorateMapComponent(Component, { componentType, providers }) {
   const components = {};
