@@ -20,7 +20,7 @@
 | `showsBuildings` | `Boolean` | `true` | A Boolean indicating whether the map displays extruded building information.
 | `showsTraffic` | `Boolean` | `true` | A Boolean value indicating whether the map displays traffic information.
 | `showsIndoors` | `Boolean` | `true` | A Boolean indicating whether indoor maps should be enabled.
-| `showsIndoorLevelPicker` | `Boolean` | `false` | A Boolean indicating whether indoor level picker should be enabled.
+| `showsIndoorLevelPicker` | `Boolean` | `false` | A Boolean indicating whether indoor level picker should be enabled. **Note:** Android only.
 | `zoomEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/zoom the map.
 | `rotateEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/rotate the map.
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
