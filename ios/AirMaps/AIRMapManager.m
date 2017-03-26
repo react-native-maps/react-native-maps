@@ -13,7 +13,6 @@
 #import <React/RCTUIManager.h>
 #import <React/RCTConvert.h>
 #import <React/RCTConvert+CoreLocation.h>
-#import <React/RCTConvert+MapKit.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTViewManager.h>
 #import <React/UIView+React.h>
@@ -25,6 +24,7 @@
 #import "SMCalloutView.h"
 #import "AIRMapUrlTile.h"
 #import "AIRMapSnapshot.h"
+#import "RCTConvert+MapKit.h"
 
 #import <MapKit/MapKit.h>
 
