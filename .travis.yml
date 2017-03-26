@@ -6,6 +6,5 @@ node_js:
 cache:
   directories:
     - node_modules
-    - example/node_modules
 
-script: npm run lint
+script: npm run ci
