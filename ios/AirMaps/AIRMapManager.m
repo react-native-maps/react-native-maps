@@ -685,7 +685,7 @@ static int kDragCenterContext;
         mapView.region = region;
     }
 
-    // Continously observe region changes
+    // Continuously observe region changes
     [self _emitRegionChangeEvent:mapView continuous:YES];
 }
 
