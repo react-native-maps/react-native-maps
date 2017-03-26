@@ -35,6 +35,7 @@ import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
+import ImageOverlay from './examples/ImageOverlay';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -122,6 +123,7 @@ class App extends React.Component {
   render() {
     return this.renderExamples([
       // [<component>, <component description>, <Google compatible>, <Google add'l description>]
+      [ImageOverlay, 'Image Overlay Component', false],
       [StaticMap, 'StaticMap', true],
       [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
       [ViewsAsMarkers, 'Arbitrary Views as Markers', true],

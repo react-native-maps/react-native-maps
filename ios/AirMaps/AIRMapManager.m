@@ -18,6 +18,7 @@
 #import <React/UIView+React.h>
 #import "AIRMap.h"
 #import "AIRMapMarker.h"
+#import "AIRMapOverlay.h"
 #import "AIRMapPolyline.h"
 #import "AIRMapPolygon.h"
 #import "AIRMapCircle.h"
@@ -399,6 +400,23 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
                 }
             }
         }
+      
+      if ([overlay isKindOfClass:[AIRMapOverlay class]]) {
+          AIRMapOverlay *imageOverlay = (AIRMapOverlay*) overlay;
+          if (MKMapRectContainsPoint(imageOverlay.boundingMapRect, mapPoint)) {
+            if (imageOverlay.onPress) {
+              id event = @{
+                           @"action": @"image-overlay-press",
+                           @"name": imageOverlay.name ?: @"unknown",
+                           @"coordinate": @{
+                               @"latitude": @(imageOverlay.coordinate.latitude),
+                               @"longitude": @(imageOverlay.coordinate.longitude)
+                               }
+                           };
+              imageOverlay.onPress(event);
+            }
+          }
+      }
     }
 
     if (nearestDistance <= maxMeters) {
@@ -478,6 +496,8 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         return ((AIRMapCircle *)overlay).renderer;
     } else if ([overlay isKindOfClass:[AIRMapUrlTile class]]) {
         return ((AIRMapUrlTile *)overlay).renderer;
+    } else if ([overlay isKindOfClass:[AIRMapOverlay class]]) {
+        return ((AIRMapOverlay *)overlay).renderer;
     } else {
         return nil;
     }
