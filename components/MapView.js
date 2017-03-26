@@ -227,6 +227,14 @@ const propTypes = {
   showsIndoors: PropTypes.bool,
 
   /**
+   * A Boolean indicating whether indoor level picker should be enabled.
+   * Default value is `false`
+   *
+   * @platform android
+   */
+  showsIndoorLevelPicker: PropTypes.bool,
+
+  /**
    * The map type to be displayed.
    *
    * - standard: standard road map (default)
