@@ -322,7 +322,7 @@ Failed to build DependencyGraph: @providesModule naming collision:
   Duplicate module name: String.prototype.es6
   Paths: /Users/<path to project>/node_modules/react-native-maps/example2/node_modules/react-native/packager/react-packager/src/Resolver/polyfills/String.prototype.es6.js collides with /Users/<path to project>/node_modules/react-native/packager/react-packager/src/Resolver/polyfills/String.prototype.es6.js
 
-This error is caused by a @providesModule declaration with the same name accross two different files.
+This error is caused by a @providesModule declaration with the same name across two different files.
 ```
 
 0.8.2 is identical to 0.8.1, except with the offending code removed from the NPM package.
