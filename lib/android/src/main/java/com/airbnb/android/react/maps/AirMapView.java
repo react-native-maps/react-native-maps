@@ -1,6 +1,5 @@
 package com.airbnb.android.react.maps;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -21,7 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.LifecycleEventListener;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
@@ -142,6 +140,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     @Override
     public void onMapReady(final GoogleMap map) {
+        if (destroyed) {
+            return;
+        }
         this.map = map;
         this.map.setInfoWindowAdapter(this);
         this.map.setOnMarkerDragListener(this);
@@ -298,22 +299,26 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 checkSelfPermission(getContext(), PERMISSIONS[1]) == PackageManager.PERMISSION_GRANTED;
     }
 
+
+
     /*
     onDestroy is final method so I can't override it.
      */
     public synchronized  void doDestroy() {
+        if (destroyed) {
+            return;
+        }
+        destroyed = true;
+
         if (lifecycleListener != null && context != null) {
             context.removeLifecycleEventListener(lifecycleListener);
             lifecycleListener = null;
         }
-        if(!paused) {
+        if (!paused) {
             onPause();
+            paused = true;
         }
-        if (!destroyed) {
-            onDestroy();
-            destroyed = true;
-        }
-
+        onDestroy();
     }
 
     public void setRegion(ReadableMap region) {
