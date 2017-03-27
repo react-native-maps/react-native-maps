@@ -14,7 +14,7 @@
 #import <React/RCTView.h>
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 @interface AIRMapUrlTile : MKAnnotationView <MKOverlay>
 

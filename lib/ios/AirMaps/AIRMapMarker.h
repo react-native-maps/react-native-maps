@@ -16,7 +16,7 @@
 #import <React/RCTComponent.h>
 #import "AIRMap.h"
 #import "SMCalloutView.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 @class RCTBridge;
 

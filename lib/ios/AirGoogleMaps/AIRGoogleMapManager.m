@@ -23,7 +23,7 @@
 #import "AIRMapCircle.h"
 #import "SMCalloutView.h"
 #import "AIRGoogleMapMarker.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 #import <MapKit/MapKit.h>
 
