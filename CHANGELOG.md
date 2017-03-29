@@ -1,5 +1,47 @@
 # Change Log
 
+## 0.13.1 (March 21, 2017)
+
+
+## Enhancements
+
+* Add id identifier to marker-press event on Android
+[#1008](https://github.com/airbnb/react-native-maps/pull/1008)
+  (@stan229)
+
+* setNativeProps, marker opacity, nested components
+[#940](https://github.com/airbnb/react-native-maps/pull/940)
+  (@unboundfire)
+
+
+## Patches
+
+* Update the android buildToolsVersion to 25.0.0
+[#1152](https://github.com/airbnb/react-native-maps/pull/1152)
+  (@markusguenther)
+
+* use `provided` for RN gradle dependency
+[#1151](https://github.com/airbnb/react-native-maps/pull/1151)
+  (@gpeal)
+
+* fix null activity crash
+[#1150](https://github.com/airbnb/react-native-maps/pull/1150)
+  (@lelandrichardson)
+
+* Updated Google play services and gradle build plugin
+[#1023](https://github.com/airbnb/react-native-maps/pull/1023)
+  (@chris-at-translate)
+
+* Sets the map value for the AirMapUrlTile so that it can be updated properly
+[#992](https://github.com/airbnb/react-native-maps/pull/992)
+  (@jschloer)
+
+* onPress and onCalloutPress doesn't trigger on markers in iOS
+[#954](https://github.com/airbnb/react-native-maps/pull/954)
+  (@RajkumarPunchh)
+
+
+
 ## 0.13.0 (January 6, 2017)
 
 ### Breaking Changes
@@ -280,7 +322,7 @@ Failed to build DependencyGraph: @providesModule naming collision:
   Duplicate module name: String.prototype.es6
   Paths: /Users/<path to project>/node_modules/react-native-maps/example2/node_modules/react-native/packager/react-packager/src/Resolver/polyfills/String.prototype.es6.js collides with /Users/<path to project>/node_modules/react-native/packager/react-packager/src/Resolver/polyfills/String.prototype.es6.js
 
-This error is caused by a @providesModule declaration with the same name accross two different files.
+This error is caused by a @providesModule declaration with the same name across two different files.
 ```
 
 0.8.2 is identical to 0.8.1, except with the offending code removed from the NPM package.
