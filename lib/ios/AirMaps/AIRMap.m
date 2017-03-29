@@ -203,7 +203,13 @@ const CGFloat AIRMapZoomBoundBuffer = 0.01;
     if (self.showsUserLocation != showsUserLocation) {
         if (showsUserLocation && !_locationManager) {
             _locationManager = [CLLocationManager new];
-            if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            
+            // Request location access permission
+            if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"] &&
+                [_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+                [_locationManager requestAlwaysAuthorization];
+            } else if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] &&
+                       [_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
                 [_locationManager requestWhenInUseAuthorization];
             }
         }
