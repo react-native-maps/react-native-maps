@@ -26,3 +26,14 @@ target 'AirMapsExplorer' do
   pod 'react-native-google-maps', path: '../../'  # <~~ if you need GoogleMaps support on iOS
 
 end
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "react-native-google-maps"
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+      end
+    end
+  end
+end
