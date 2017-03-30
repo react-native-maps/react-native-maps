@@ -3,12 +3,12 @@
 // Copyright (c) 2015 Facebook. All rights reserved.
 //
 
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 #import <React/RCTConvert+CoreLocation.h>
 #import "AIRMapCoordinate.h"
 
-@implementation RCTConvert (MapKit)
+@implementation RCTConvert (AirMap)
 
 + (MKCoordinateSpan)MKCoordinateSpan:(id)json
 {

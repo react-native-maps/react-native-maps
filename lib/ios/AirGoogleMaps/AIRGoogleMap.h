@@ -10,7 +10,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 @interface AIRGoogleMap : GMSMapView
 

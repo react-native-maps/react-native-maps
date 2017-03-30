@@ -13,7 +13,7 @@
 
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 @interface AIRMapCircle: MKAnnotationView <MKOverlay>
 

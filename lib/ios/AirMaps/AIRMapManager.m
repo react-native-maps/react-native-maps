@@ -24,7 +24,7 @@
 #import "SMCalloutView.h"
 #import "AIRMapUrlTile.h"
 #import "AIRMapSnapshot.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 #import <MapKit/MapKit.h>
 
