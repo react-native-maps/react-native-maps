@@ -12,7 +12,7 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTViewManager.h>
 #import <React/UIView+React.h>
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 #import "AIRGoogleMapPolyline.h"
 
 @interface AIRGoogleMapPolylineManager()

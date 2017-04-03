@@ -7,7 +7,7 @@
 #import <MapKit/MapKit.h>
 #import <React/RCTConvert.h>
 
-@interface RCTConvert (MapKit)
+@interface RCTConvert (AirMap)
 
 + (MKCoordinateSpan)MKCoordinateSpan:(id)json;
 + (MKCoordinateRegion)MKCoordinateRegion:(id)json;
