@@ -37,6 +37,7 @@ CGRect unionRect(CGRect a, CGRect b) {
   if ((self = [super init])) {
     _realMarker = [[AIRGMSMarker alloc] init];
     _realMarker.fakeMarker = self;
+    _realMarker.appearAnimation = kGMSMarkerAnimationPop;
   }
   return self;
 }
@@ -102,7 +103,6 @@ CGRect unionRect(CGRect a, CGRect b) {
     _realMarker.icon = [GMSMarker markerImageWithColor:UIColor.blueColor];
   } else {
     _realMarker.icon = image;
-    _realMarker.appearAnimation = kGMSMarkerAnimationPop;
   }
 }
 
