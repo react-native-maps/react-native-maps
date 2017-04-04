@@ -10,7 +10,7 @@
 
 @implementation GlobalVars
 
-@synthesize image = _image;
+@synthesize dict = _dict;
 
 + (GlobalVars *)sharedInstance {
   static dispatch_once_t onceToken;
@@ -23,27 +23,31 @@
 
 - (UIImage *)getSharedUIImage:(NSString *)imageSrc {
   
-  CGImageRef cgref = [[GlobalVars sharedInstance].image CGImage];
-  CIImage *cim = [[GlobalVars sharedInstance].image CIImage];
+  UIImage* cachedImage = dict[imageSrc];
+  
+  CGImageRef cgref = [cachedImage CGImage];
+  CIImage *cim = [cachedImage CIImage];
   
   if (cim == nil && cgref == NULL) {
+    UIImage *newImage;
     if ([imageSrc hasPrefix:@"http://"] || [imageSrc hasPrefix:@"https://"]){
       NSURL *url = [NSURL URLWithString:imageSrc];
       NSData *data = [NSData dataWithContentsOfURL:url];
-      [GlobalVars sharedInstance].image = [UIImage imageWithData:data scale:[UIScreen mainScreen].scale];
+      newImage = [UIImage imageWithData:data scale:[UIScreen mainScreen].scale];
     } else {
-      [GlobalVars sharedInstance].image = [UIImage imageWithContentsOfFile:imageSrc];
+      newImage = [UIImage imageWithContentsOfFile:imageSrc];
     }
-    return [GlobalVars sharedInstance].image;
+    dict[imageSrc] = newImage;
+    return newImage;
   } else {
-    return [GlobalVars sharedInstance].image;
+    return cachedImage;
   }
 }
 
 - (id)init {
   self = [super init];
   if (self) {
-    image = nil;
+    dict = nil;
   }
   return self;
 }

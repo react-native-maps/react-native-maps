@@ -11,13 +11,13 @@
 
 @interface GlobalVars : NSObject
 {
-  UIImage *image;
+  NSMutableDictionary *dict;
 }
 
 + (GlobalVars *)sharedInstance;
 
 - (UIImage *)getSharedUIImage:(NSString *)imageSrc;
 
-@property(strong, nonatomic, readwrite) UIImage *image;
+@property(strong, nonatomic, readwrite) NSMutableDictionary *dict;
 
 @end
