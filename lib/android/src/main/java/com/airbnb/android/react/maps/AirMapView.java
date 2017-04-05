@@ -1,5 +1,7 @@
 package com.airbnb.android.react.maps;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -85,9 +87,38 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
 
+    private static boolean contextHasBug(Context context) {
+        return context == null ||
+            context.getResources() == null ||
+            context.getResources().getConfiguration() == null;
+    }
+
+    // We do this to fix this bug:
+    // https://github.com/airbnb/react-native-maps/issues/271
+    //
+    // which conflicts with another bug regarding the passed in context:
+    // https://github.com/airbnb/react-native-maps/issues/1147
+    //
+    // Doing this allows us to avoid both bugs.
+    private static Context getNonBuggyContext(ThemedReactContext reactContext) {
+        Context superContext = reactContext;
+
+        if (contextHasBug(superContext)) {
+            // we have the bug! let's try to find a better context to use
+            if (!contextHasBug(reactContext.getCurrentActivity())) {
+                superContext = reactContext.getCurrentActivity();
+            } else if (!contextHasBug(reactContext.getApplicationContext())) {
+                superContext = reactContext.getApplicationContext();
+            } else {
+                // ¯\_(ツ)_/¯
+            }
+        }
+        return superContext;
+    }
+
     public AirMapView(ThemedReactContext reactContext, AirMapManager manager,
             GoogleMapOptions googleMapOptions) {
-        super(reactContext, googleMapOptions);
+        super(getNonBuggyContext(reactContext), googleMapOptions);
 
         this.manager = manager;
         this.context = reactContext;
