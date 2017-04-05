@@ -47,7 +47,7 @@
 - (id)init {
   self = [super init];
   if (self) {
-    dict = nil;
+    dict = [[NSMutableDictionary alloc] init];
   }
   return self;
 }
