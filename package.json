@@ -53,7 +53,7 @@
   },
   "rnpm": {
     "android": {
-      "sourceDir": "./android"
+      "sourceDir": "./lib/android"
     }
   }
 }
