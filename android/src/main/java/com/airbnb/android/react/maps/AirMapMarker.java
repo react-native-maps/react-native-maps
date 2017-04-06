@@ -31,10 +31,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterItem;
 
 import javax.annotation.Nullable;
 
-public class AirMapMarker extends AirMapFeature {
+public class AirMapMarker extends AirMapFeature implements ClusterItem {
 
     private MarkerOptions markerOptions;
     private Marker marker;
@@ -273,7 +274,7 @@ public class AirMapMarker extends AirMapFeature {
         marker = null;
     }
 
-    private BitmapDescriptor getIcon() {
+    public BitmapDescriptor getIcon() {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
             if (iconBitmapDescriptor != null) {
@@ -427,4 +428,18 @@ public class AirMapMarker extends AirMapFeature {
         return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
     }
 
+    @Override
+    public LatLng getPosition() {
+        return position;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getSnippet() {
+        return snippet;
+    }
 }

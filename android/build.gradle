@@ -56,4 +56,5 @@ dependencies {
   provided "com.facebook.react:react-native:+"
   compile "com.google.android.gms:play-services-base:10.0.1"
   compile "com.google.android.gms:play-services-maps:10.0.1"
+  compile 'com.google.maps.android:android-maps-utils:0.5'
 }
