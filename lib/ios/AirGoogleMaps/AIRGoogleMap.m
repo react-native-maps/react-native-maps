@@ -14,7 +14,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import <React/UIView+React.h>
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 id regionAsJSON(MKCoordinateRegion region) {
   return @{

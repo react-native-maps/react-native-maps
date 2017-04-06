@@ -1,5 +1,48 @@
 # Change Log
 
+## 0.14.0 (April 4, 2017)
+
+## Enhancements
+
+* Restructure project #1164
+
+* Add showsIndoorLevelPicker -> setIndoorLevelPickerEnabled to MapView #1019
+[#1188](https://github.com/airbnb/react-native-maps/pull/1188)
+
+* iOS - Added onPress support for Polygons on Google Maps
+[#1024](https://github.com/airbnb/react-native-maps/pull/1024)
+
+*  Add customized user location annotation text
+[#1049](https://github.com/airbnb/react-native-maps/pull/1049)
+
+* iOS - Google Maps - Add `showsMyLocationButton` support
+[#1157](https://github.com/airbnb/react-native-maps/pull/1157)
+
+
+## Patches
+
+* Fix getResources() null crash in mapview
+[#1188](https://github.com/airbnb/react-native-maps/pull/1188)
+
+* Rename MapKit category to avoid conflicts with the one in RN
+[#1172](https://github.com/airbnb/react-native-maps/pull/1172)
+
+* Upgrade GMS dependencies to 10.2.0
+[#1169](https://github.com/airbnb/react-native-maps/pull/1169)
+
+* fix multiple-instance memory leak
+[#1130](https://github.com/airbnb/react-native-maps/pull/1130)
+
+* fix onSelected event for markers with custom view
+[#1079](https://github.com/airbnb/react-native-maps/pull/1079)
+
+* Crash in our App fix
+[#1096](https://github.com/airbnb/react-native-maps/pull/1096)
+
+* Use local RCTConvert+MapKit instead of the one in React Native
+[#1138](https://github.com/airbnb/react-native-maps/pull/1138)
+
+
 ## 0.13.1 (March 21, 2017)
 
 
