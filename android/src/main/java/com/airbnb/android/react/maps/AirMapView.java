@@ -173,7 +173,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         event = makeClickEventData(item.getPosition());
         event.putString("action", "marker-press");
         event.putString("id", item.getIdentifier());
-        manager.pushEvent(this.context, this, "onMarkerPress", event);
+        manager.pushEvent(context, this, "onMarkerPress", event);
         return true;
     }
 
@@ -188,7 +188,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         event = makeClickEventData(item.getPosition());
         event.putString("action", "marker-press");
         event.putString("id", item.getIdentifier());
-        manager.pushEvent(this.context, this, "onMarkerPress", event);
+        manager.pushEvent(context, this, "onMarkerPress", event);
         return true;
     }
 
