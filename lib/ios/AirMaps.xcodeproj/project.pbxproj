@@ -309,8 +309,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../../react-native/Libraries/Image",
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(SRCROOT)/../../../react-native/Libraries/Image",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
@@ -323,8 +323,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../../react-native/Libraries/Image",
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(SRCROOT)/../../../react-native/Libraries/Image",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
