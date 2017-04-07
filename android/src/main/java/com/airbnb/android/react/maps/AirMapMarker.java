@@ -62,6 +62,7 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
     private float rotation = 0.0f;
     private boolean flat = false;
     private boolean draggable = false;
+    private boolean cluster = false;
     private int zIndex = 0;
     private float opacity = 1.0f;
 
@@ -174,6 +175,15 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
             marker.setDraggable(draggable);
         }
         update();
+    }
+
+    public void setCluster(boolean cluster) {
+        this.cluster = cluster;
+        update();
+    }
+
+    public boolean getCluster() {
+        return this.cluster;
     }
 
     public void setZIndex(int zIndex) {

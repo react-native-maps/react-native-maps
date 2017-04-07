@@ -89,9 +89,6 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     public void setImage(AirMapMarker view, @Nullable String source) {
         view.setImage(source);
     }
-//    public void setImage(AirMapMarker view, ReadableMap image) {
-//        view.setImage(image);
-//    }
 
     @ReactProp(name = "pinColor", defaultInt = Color.RED, customType = "Color")
     public void setPinColor(AirMapMarker view, int pinColor) {
@@ -114,6 +111,11 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     @ReactProp(name = "draggable", defaultBoolean = false)
     public void setDraggable(AirMapMarker view, boolean draggable) {
         view.setDraggable(draggable);
+    }
+
+    @ReactProp(name = "cluster", defaultBoolean = false)
+    public void setCluster(AirMapMarker view, boolean cluster) {
+        view.setCluster(cluster);
     }
 
     @Override
