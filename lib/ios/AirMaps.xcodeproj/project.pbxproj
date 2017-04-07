@@ -309,6 +309,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)",
 					"$(SRCROOT)/../../../react-native/React/**",
 					"$(SRCROOT)/../../../react-native/Libraries/Image",
 				);
@@ -323,6 +324,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)",
 					"$(SRCROOT)/../../../react-native/React/**",
 					"$(SRCROOT)/../../../react-native/Libraries/Image",
 				);
