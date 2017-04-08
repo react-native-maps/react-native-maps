@@ -3,25 +3,22 @@ package com.airbnb.android.react.maps;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.facebook.common.executors.CallerThreadExecutor;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.DraweeHolder;
 import com.facebook.imagepipeline.core.ImagePipeline;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
-import com.facebook.imagepipeline.image.CloseableStaticBitmap;
-import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
@@ -36,6 +33,8 @@ import com.google.maps.android.clustering.ClusterItem;
 import javax.annotation.Nullable;
 
 public class AirMapMarker extends AirMapFeature implements ClusterItem {
+
+    private static final String TAG = AirMapMarker.class.getName();
 
     private MarkerOptions markerOptions;
     private Marker marker;
@@ -56,6 +55,7 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
     private final Context context;
 
     private float markerHue = 0.0f; // should be between 0 and 360
+    private String imageUri;
     private BitmapDescriptor iconBitmapDescriptor;
     private Bitmap iconBitmap;
 
@@ -73,38 +73,6 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
     private boolean hasCustomMarkerView = false;
 
     private final DraweeHolder<?> logoHolder;
-    private DataSource<CloseableReference<CloseableImage>> dataSource;
-    private final ControllerListener<ImageInfo> mLogoControllerListener =
-            new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onFinalImageSet(
-                        String id,
-                        @Nullable final ImageInfo imageInfo,
-                        @Nullable Animatable animatable) {
-                    CloseableReference<CloseableImage> imageReference = null;
-                    try {
-                        imageReference = dataSource.getResult();
-                        if (imageReference != null) {
-                            CloseableImage image = imageReference.get();
-                            if (image != null && image instanceof CloseableStaticBitmap) {
-                                CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
-                                Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
-                                if (bitmap != null) {
-                                    bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                                    iconBitmap = bitmap;
-                                    iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-                                }
-                            }
-                        }
-                    } finally {
-                        dataSource.close();
-                        if (imageReference != null) {
-                            CloseableReference.closeSafely(imageReference);
-                        }
-                    }
-                    update();
-                }
-            };
 
     public AirMapMarker(Context context) {
         super(context);
@@ -227,28 +195,54 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
         update();
     }
 
-    public void setImage(String uri) {
+    public void setImage(final String uri) {
         if (uri == null) {
+            // Render nothing
             iconBitmapDescriptor = null;
             update();
-        } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
-                uri.startsWith("file://")) {
-            ImageRequest imageRequest = ImageRequestBuilder
-                    .newBuilderWithSource(Uri.parse(uri))
-                    .build();
-
-            ImagePipeline imagePipeline = Fresco.getImagePipeline();
-            dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setImageRequest(imageRequest)
-                    .setControllerListener(mLogoControllerListener)
-                    .setOldController(logoHolder.getController())
-                    .build();
-            logoHolder.setController(controller);
-        } else {
-            iconBitmapDescriptor = getBitmapDescriptorByName(uri);
-            update();
+            return;
         }
+
+        Bitmap bitmap = LruCacheManager.getInstance().getBitmapFromMemCache(uri);
+        if(bitmap!=null) {
+            // Render icon from cached bitmap
+            iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+            update();
+            Log.v(TAG, "Reusing Bitmap " + uri);
+            return;
+        }
+
+        Log.v(TAG, "Start Loading Bitmap from uri: " + uri);
+        // Load Bitmap from uri using Fresco
+        ImageRequest imageRequest = ImageRequestBuilder
+                .newBuilderWithSource(Uri.parse(uri))
+                .setAutoRotateEnabled(true)
+                .build();
+
+        ImagePipeline imagePipeline = Fresco.getImagePipeline();
+        final DataSource<CloseableReference<CloseableImage>>
+                dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
+
+        dataSource.subscribe(new BaseBitmapDataSubscriber() {
+
+            @Override
+            public void onNewResultImpl(@Nullable Bitmap bitmap) {
+                if (dataSource.isFinished() && bitmap != null){
+                    Log.v(TAG, "Finished Loading Bitmap from uri: " + uri);
+                    LruCacheManager.getInstance().addBitmapToMemoryCache(uri, bitmap);
+                    iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                    dataSource.close();
+                    update();
+                }
+            }
+
+            @Override
+            public void onFailureImpl(DataSource dataSource) {
+                if (dataSource != null) {
+                    dataSource.close();
+                }
+            }
+        }, CallerThreadExecutor.getInstance());
     }
 
     public MarkerOptions getMarkerOptions() {
