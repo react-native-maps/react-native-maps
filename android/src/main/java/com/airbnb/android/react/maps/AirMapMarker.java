@@ -203,10 +203,10 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
             return;
         }
 
-        Bitmap bitmap = LruCacheManager.getInstance().getBitmapFromMemCache(uri);
-        if(bitmap!=null) {
+        BitmapDescriptor bitmapDescriptor = LruCacheManager.getInstance().getBitmapFromMemCache(uri);
+        if(bitmapDescriptor!=null) {
             // Render icon from cached bitmap
-            iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+            iconBitmapDescriptor = bitmapDescriptor;
             update();
             Log.v(TAG, "Reusing Bitmap " + uri);
             return;
@@ -229,8 +229,7 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
             public void onNewResultImpl(@Nullable Bitmap bitmap) {
                 if (dataSource.isFinished() && bitmap != null){
                     Log.v(TAG, "Finished Loading Bitmap from uri: " + uri);
-                    LruCacheManager.getInstance().addBitmapToMemoryCache(uri, bitmap);
-                    iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                    iconBitmapDescriptor = LruCacheManager.getInstance().addBitmapToMemoryCache(uri, bitmap);
                     dataSource.close();
                     update();
                 }
