@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 public class LruCacheManager {
     private static final String TAG = LruCacheManager.class.getName();
 
-    private LruCache<String, MapBmpContainer> mMemoryCache;
+    private LruCache<String, BitmapDescriptorContainer> mMemoryCache;
     private static final LruCacheManager INSTANCE = new LruCacheManager();
 
     public static LruCacheManager getInstance() {
@@ -29,9 +29,9 @@ public class LruCacheManager {
         // Use 1/8th of the available memory for this memory cache.
         final int cacheSize = maxMemory / 8;
 
-        mMemoryCache = new LruCache<String, MapBmpContainer>(cacheSize) {
+        mMemoryCache = new LruCache<String, BitmapDescriptorContainer>(cacheSize) {
             @Override
-            protected int sizeOf(String key, MapBmpContainer bitmapDescriptor) {
+            protected int sizeOf(String key, BitmapDescriptorContainer bitmapDescriptor) {
                 // The cache size will be measured in kilobytes rather than
                 // number of items.
                 return bitmapDescriptor.getByteCount() / 1024;
@@ -43,16 +43,16 @@ public class LruCacheManager {
         BitmapDescriptor bitmapDescriptor = getBitmapFromMemCache(key);
         if (bitmapDescriptor == null) {
             bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-            mMemoryCache.put(key, new MapBmpContainer(bitmapDescriptor, bitmap.getByteCount()));
+            mMemoryCache.put(key, new BitmapDescriptorContainer(bitmapDescriptor, bitmap.getByteCount()));
         }
         return bitmapDescriptor;
     }
 
     public BitmapDescriptor getBitmapFromMemCache(String key) {
-        MapBmpContainer bmpContainer = mMemoryCache.get(key);
-        if(bmpContainer == null)
+        BitmapDescriptorContainer bitmapDescriptorContainer = mMemoryCache.get(key);
+        if(bitmapDescriptorContainer == null)
             return null;
-        return bmpContainer.mBmpDescriptor;
+        return bitmapDescriptorContainer.mBitmapDescriptor;
     }
 
 }
