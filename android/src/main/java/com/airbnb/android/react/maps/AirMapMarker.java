@@ -30,6 +30,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 import javax.annotation.Nullable;
 
 public class AirMapMarker extends AirMapFeature implements ClusterItem {
@@ -73,6 +76,8 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
     private boolean hasCustomMarkerView = false;
 
     private final DraweeHolder<?> logoHolder;
+
+    private static HashSet<String> isCacheAdded = new HashSet<>();
 
     public AirMapMarker(Context context) {
         super(context);
@@ -203,6 +208,14 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
             return;
         }
 
+
+        try {
+            while(isCacheAdded.contains(uri))
+                Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         BitmapDescriptor bitmapDescriptor = LruCacheManager.getInstance().getBitmapFromMemCache(uri);
         if(bitmapDescriptor!=null) {
             // Render icon from cached bitmap
@@ -222,7 +235,7 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
         final DataSource<CloseableReference<CloseableImage>>
                 dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
-
+        isCacheAdded.add(uri);
         dataSource.subscribe(new BaseBitmapDataSubscriber() {
 
             @Override
@@ -232,6 +245,7 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
                     iconBitmapDescriptor = LruCacheManager.getInstance().addBitmapToMemoryCache(uri, bitmap);
                     dataSource.close();
                     update();
+                    isCacheAdded.remove(uri);
                 }
             }
 
@@ -240,6 +254,7 @@ public class AirMapMarker extends AirMapFeature implements ClusterItem {
                 if (dataSource != null) {
                     dataSource.close();
                 }
+                isCacheAdded.remove(uri);
             }
         }, CallerThreadExecutor.getInstance());
     }
