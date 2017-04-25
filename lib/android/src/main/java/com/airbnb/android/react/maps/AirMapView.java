@@ -82,7 +82,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private final GestureDetectorCompat gestureDetector;
     private final AirMapManager manager;
     private LifecycleEventListener lifecycleListener;
-    private boolean paused = false;
+    private boolean paused = true;
     private boolean destroyed = false;
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
@@ -124,7 +124,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.context = reactContext;
 
         super.onCreate(null);
-        // TODO(lmr): what about onStart????
+        super.onStart();
         super.onResume();
         super.getMapAsync(this);
 
@@ -294,6 +294,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     lifecycleListener = new LifecycleEventListener() {
         @Override
         public void onHostResume() {
+          if (!paused || destroyed)
+          {
+              return;
+          }
           if (hasPermissions()) {
             //noinspection MissingPermission
             map.setMyLocationEnabled(showUserLocation);
@@ -306,6 +310,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         @Override
         public void onHostPause() {
+          if (paused || destroyed)
+          {
+              return;
+          }
           if (hasPermissions()) {
             //noinspection MissingPermission
             map.setMyLocationEnabled(false);
@@ -349,6 +357,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             onPause();
             paused = true;
         }
+        onStop();
         onDestroy();
     }
 
