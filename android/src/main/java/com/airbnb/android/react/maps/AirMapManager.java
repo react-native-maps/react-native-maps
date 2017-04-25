@@ -34,6 +34,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     private static final int FIT_TO_ELEMENTS = 3;
     private static final int FIT_TO_SUPPLIED_MARKERS = 4;
     private static final int FIT_TO_COORDINATES = 5;
+    private static final int SET_INDOOR_ACTIVE_LEVEL_INDEX = 6;
 
     private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
             "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -82,7 +83,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         int typeId = MAP_TYPES.get(mapType);
         view.map.setMapType(typeId);
     }
-    
+
     @ReactProp(name = "customMapStyleString")
     public void setMapStyle(AirMapView view, @Nullable String customMapStyleString) {
         view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
@@ -119,9 +120,14 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.map.setBuildingsEnabled(showBuildings);
     }
 
-    @ReactProp(name = "showsIndoors", defaultBoolean = false)
+    @ReactProp(name = "showsIndoors", defaultBoolean = true)
     public void setShowIndoors(AirMapView view, boolean showIndoors) {
         view.map.setIndoorEnabled(showIndoors);
+    }
+
+    @ReactProp(name = "showsLevelPicker", defaultBoolean = true)
+    public void setShowsLevelPicker(AirMapView view, boolean showsLevelPicker) {
+        view.map.getUiSettings().setIndoorLevelPickerEnabled(showsLevelPicker);
     }
 
     @ReactProp(name = "showsCompass", defaultBoolean = false)
@@ -216,6 +222,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             case FIT_TO_COORDINATES:
                 view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
                 break;
+            case SET_INDOOR_ACTIVE_LEVEL_INDEX:
+                view.setIndoorActiveLevelIndex(args.getInt(0));
+                break;
         }
     }
 
@@ -236,7 +245,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                 "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
                 "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
                 "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
-                "onPanDrag", MapBuilder.of("registrationName", "onPanDrag")
+                "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
+                "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
+                "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused")
         ));
 
         return map;
@@ -250,7 +261,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                 "animateToCoordinate", ANIMATE_TO_COORDINATE,
                 "fitToElements", FIT_TO_ELEMENTS,
                 "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
-                "fitToCoordinates", FIT_TO_COORDINATES
+                "fitToCoordinates", FIT_TO_COORDINATES,
+                "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
         );
     }
 

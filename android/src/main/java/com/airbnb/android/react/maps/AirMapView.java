@@ -19,11 +19,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.util.Log;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -41,6 +44,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.IndoorBuilding;
+import com.google.android.gms.maps.model.IndoorLevel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,8 +55,11 @@ import java.util.Map;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
-public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
-        GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
+public class AirMapView extends MapView implements
+        GoogleMap.InfoWindowAdapter,
+        GoogleMap.OnIndoorStateChangeListener,
+        GoogleMap.OnMarkerDragListener,
+        OnMapReadyCallback {
     public GoogleMap map;
     private ProgressBar mapLoadingProgressBar;
     private RelativeLayout mapLoadingLayout;
@@ -60,6 +68,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
     private final int baseMapPadding = 50;
+    private static final String TAG = "OfficeLocations";
 
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
@@ -141,7 +150,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.map = map;
         this.map.setInfoWindowAdapter(this);
         this.map.setOnMarkerDragListener(this);
-
+        this.map.setOnIndoorStateChangeListener(this);
         manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
         final AirMapView view = this;
@@ -781,4 +790,50 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         WritableMap event = makeClickEventData(coords);
         manager.pushEvent(context, this, "onPanDrag", event);
     }
+    @Override
+    public void onIndoorBuildingFocused() {
+      IndoorBuilding building = this.map.getFocusedBuilding();
+      if (building != null) {
+        List<IndoorLevel> levels = building.getLevels();
+        int index = 0;
+        WritableArray levelsArray = Arguments.createArray();
+        for (IndoorLevel level : levels) {
+          WritableMap levelMap = Arguments.createMap();
+          levelMap.putInt("index", index);
+          levelMap.putString("name", level.getName());
+          levelMap.putString("shortName", level.getShortName());
+          levelsArray.pushMap(levelMap);
+    		}
+        WritableMap event = Arguments.createMap();
+        event.putArray("levels", levelsArray);
+
+        manager.pushEvent(context, this, "onIndoorBuildingFocused", event);
+
+      }
+    }
+
+    @Override
+    public void onIndoorLevelActivated(IndoorBuilding building) {
+      int activeLevelIndex = building.getActiveLevelIndex();
+
+      IndoorLevel level = building.getLevels().get(activeLevelIndex);
+
+      WritableMap event = Arguments.createMap();
+      event.putInt("activeLevelIndex", activeLevelIndex);
+      manager.pushEvent(context, this, "onIndoorLevelActivated", event);
+    }
+
+    public void setIndoorActiveLevelIndex(int activeLevelIndex) {
+      IndoorBuilding building = this.map.getFocusedBuilding();
+      if (building != null) {
+        try {
+          IndoorLevel level = building.getLevels().get(activeLevelIndex);
+          if (level != null) {
+            level.activate();
+          }
+        } catch(IndexOutOfBoundsException ignored) {
+        }
+      }
+    }
+
 }

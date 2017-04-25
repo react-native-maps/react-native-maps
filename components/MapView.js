@@ -211,11 +211,19 @@ const propTypes = {
 
   /**
    * A Boolean indicating whether indoor maps should be enabled.
-   * Default value is `false`
+   * Default value is `true`
    *
    * @platform android
    */
   showsIndoors: PropTypes.bool,
+
+  /**
+   * A Boolean indicating whether indoor maps level picker should be enabled.
+   * Default value is `true`
+   *
+   * @platform android
+   */
+   showsLevelPicker: PropTypes.bool,
 
   /**
    * The map type to be displayed.
@@ -321,10 +329,19 @@ const propTypes = {
   onLongPress: PropTypes.func,
 
   /**
-   * Callback that is called when user makes a "drag" somewhere on the map
+   * Callback that is called when user makes a "drag" somewhere on the map.
    */
   onPanDrag: PropTypes.func,
 
+  /**
+   * Callback that is called when a level is activated on a indoor building.
+   */
+  onIndoorLevelActivated: PropTypes.func,
+
+  /**
+   * Callback that is called when a Building is focused.
+   */
+  onIndoorBuildingFocused: PropTypes.func,
   /**
    * Callback that is called when a marker on the map is tapped by the user.
    */
@@ -439,6 +456,7 @@ class MapView extends React.Component {
   }
 
   _onChange(event) {
+    console.log("MapView", event)
     this.__lastRegion = event.nativeEvent.region;
     if (event.nativeEvent.continuous) {
       if (this.props.onRegionChange) {
@@ -472,6 +490,10 @@ class MapView extends React.Component {
     } = options;
 
     this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
+  }
+
+  setIndoorActiveLevelIndex(activeLevelIndex) {
+    this._runCommand('setIndoorActiveLevelIndex', [activeLevelIndex]);
   }
 
   /**
