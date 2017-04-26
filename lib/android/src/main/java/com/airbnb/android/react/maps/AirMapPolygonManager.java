@@ -57,6 +57,10 @@ public class AirMapPolygonManager extends ViewGroupManager<AirMapPolygon> {
     float widthInScreenPx = metrics.density * widthInPoints; // done for parity with iOS
     view.setStrokeWidth(widthInScreenPx);
   }
+  @ReactProp(name = "holes")
+  public void setHole(AirMapPolygon view, ReadableArray holes) {
+    view.setHoles(holes);
+  }
 
   @ReactProp(name = "fillColor", defaultInt = Color.RED, customType = "Color")
   public void setFillColor(AirMapPolygon view, int color) {
