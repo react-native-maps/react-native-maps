@@ -30,7 +30,7 @@
 static NSString *const RCTMapViewKey = @"MapView";
 
 
-@interface AIRGoogleMapManager() <GMSMapViewDelegate>
+@interface AIRGoogleMapManager() <GMSMapViewDelegate, GMSIndoorDisplayDelegate>
 
 @end
 
@@ -42,12 +42,16 @@ RCT_EXPORT_MODULE()
 {
   AIRGoogleMap *map = [AIRGoogleMap new];
   map.delegate = self;
+  map.indoorDisplay.delegate = self;
+  self.map = map;
   return map;
 }
 
 RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
 RCT_EXPORT_VIEW_PROPERTY(region, MKCoordinateRegion)
 RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsIndoors, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsLevelPicker, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsCompass, BOOL)
 //RCT_EXPORT_VIEW_PROPERTY(showsScale, BOOL)  // Not supported by GoogleMaps
 RCT_EXPORT_VIEW_PROPERTY(showsTraffic, BOOL)
@@ -63,6 +67,8 @@ RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onIndoorLevelActivated, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onIndoorBuildingFocused, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
 
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
@@ -161,6 +167,26 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
   }];
 }
 
+RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
+                  levelIndex:(NSInteger) levelIndex)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      if (!self.map.indoorDisplay) {
+        return;
+      }
+      if ( levelIndex < [self.map.indoorDisplay.activeBuilding.levels count]) {
+        mapView.indoorDisplay.activeLevel = self.map.indoorDisplay.activeBuilding.levels[levelIndex];
+      }
+    }
+  }];
+
+}
+
 RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
                   withWidth:(nonnull NSNumber *)width
                   withHeight:(nonnull NSNumber *)height
@@ -250,4 +276,58 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   AIRGMSMarker *aMarker = (AIRGMSMarker *)marker;
   [aMarker.fakeMarker didDragMarker:aMarker];
 }
+
+- (void) didChangeActiveBuilding: (nullable GMSIndoorBuilding *) building {
+  if (!building) {
+    return;
+  }
+
+  NSInteger i = 0;
+  NSMutableArray *arrayLevels = [[NSMutableArray alloc]init];
+
+  for (GMSIndoorLevel *level in building.levels) {
+    [arrayLevels addObject: @{
+                              @"index": @(i),
+                              @"name" : level.name,
+                              @"shortName" : level.shortName,
+                            }
+    ];
+    i++;
+  }
+  if (!self.map.onIndoorBuildingFocused) {
+    return;
+  }
+  self.map.onIndoorBuildingFocused(@{
+                                    @"indoorBuilding": @{
+                                        @"defaultLevelIndex": @(building.defaultLevelIndex),
+                                        @"underground": @(building.underground),
+                                        @"levels": arrayLevels
+                                    }
+  }
+
+  );
+}
+- (void) didChangeActiveLevel: (nullable GMSIndoorLevel *) 	level {
+
+  if (!self.map.onIndoorLevelActivated || !self.map.indoorDisplay  || !level) {
+    return;
+  }
+
+  NSInteger i = 0;
+  for (GMSIndoorLevel *buildingLevel in self.map.indoorDisplay.activeBuilding.levels) {
+    if (buildingLevel.name == level.name && buildingLevel.shortName == level.shortName) {
+      break;
+    }
+    i++;
+  }
+
+  self.map.onIndoorLevelActivated(@{
+                                  @"indoorlevel": @{
+                                    @"activeLevelIndex": @(i),
+                                    @"name": level.name,
+                                    @"shortName": level.shortName
+                                  }
+  });
+}
+
 @end

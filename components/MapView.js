@@ -456,7 +456,6 @@ class MapView extends React.Component {
   }
 
   _onChange(event) {
-    console.log("MapView", event)
     this.__lastRegion = event.nativeEvent.region;
     if (event.nativeEvent.continuous) {
       if (this.props.onRegionChange) {
