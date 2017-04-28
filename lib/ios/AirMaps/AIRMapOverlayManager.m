@@ -15,9 +15,9 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-  AIRMapOverlay *overlay = [AIRMapOverlay new];
-  overlay.bridge = self.bridge;
-  return overlay;
+    AIRMapOverlay *overlay = [AIRMapOverlay new];
+    overlay.bridge = self.bridge;
+    return overlay;
 }
 
 RCT_REMAP_VIEW_PROPERTY(bounds, boundsRect, NSArray)
