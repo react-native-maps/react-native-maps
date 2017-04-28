@@ -36,6 +36,8 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<MapView.Circle />` Component API](docs/circle.md)
 
+[`<MapView.Overlay />` Component API](docs/overlay.md)
+
 ## General Usage
 
 ```js
@@ -152,7 +154,7 @@ render() {
 ### Using a custom Tile Overlay
 
 ```jsx
-<MapView 
+<MapView
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
@@ -171,6 +173,18 @@ For Android: add the following line in your AndroidManifest.xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
+
+## MapOverlay(Just iOS(not GMaps))
+```jsx
+  <MapView
+    ...
+  >
+    <MapView.Overlay
+      bounds={bounds}
+      image={path_to_image}
+    />
+  </MapView>
+```
 
 ### Customizing the map style
 
