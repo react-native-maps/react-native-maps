@@ -804,8 +804,15 @@ public class AirMapView extends MapView implements
           levelMap.putString("shortName", level.getShortName());
           levelsArray.pushMap(levelMap);
     		}
+
         WritableMap event = Arguments.createMap();
-        event.putArray("levels", levelsArray);
+        WritableMap indoorBuilding = Arguments.createMap();
+
+        indoorBuilding.putArray("levels", levelsArray);
+        indoorBuilding.putInt("defaultLevelIndex", building.getActiveLevelIndex());
+        indoorBuilding.putBoolean("underground", building.isUnderground());
+
+        event.putMap("indoorBuilding", indoorBuilding);
 
         manager.pushEvent(context, this, "onIndoorBuildingFocused", event);
 
@@ -819,7 +826,14 @@ public class AirMapView extends MapView implements
       IndoorLevel level = building.getLevels().get(activeLevelIndex);
 
       WritableMap event = Arguments.createMap();
-      event.putInt("activeLevelIndex", activeLevelIndex);
+      WritableMap indoorlevel = Arguments.createMap();
+
+      indoorlevel.putInt("activeLevelIndex", activeLevelIndex);
+      indoorlevel.putString("name", level.getName());
+      indoorlevel.putString("shortName", level.getShortName());
+
+      event.putMap("indoorlevel", indoorlevel);
+
       manager.pushEvent(context, this, "onIndoorLevelActivated", event);
     }
 
