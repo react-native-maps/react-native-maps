@@ -9,7 +9,7 @@
 | `initialRegion` | `Region` |  | The initial region to be displayed by the map.  Use this prop instead of `region` only if you don't want to control the viewport of the map besides the initial region.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
 | `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: (Android only) topographic view
-| `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/airbnb/react-native-maps#customizing-the-map-style) for more information. 
+| `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/airbnb/react-native-maps#customizing-the-map-style) for more information.
 | `showsUserLocation` | `Boolean` | `false` | If `true` the app will ask for the user's location. **NOTE**: You need to add `NSLocationWhenInUseUsageDescription` key in Info.plist to enable geolocation, otherwise it is going to *fail silently*!
 | `userLocationAnnotationTitle` | `String` | | The title of the annotation for current user location. This only works if `showsUserLocation` is true. There is a default value `My Location` set by MapView. **Note**: iOS only.
 | `followsUserLocation` | `Boolean` | `false` | If `true` the map will focus on the user's location. This only works if `showsUserLocation` is true and the user has shared their location. **Note**: iOS only.
@@ -50,6 +50,8 @@
 | `onMarkerDragStart` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user initiates a drag on a marker (if it is draggable)
 | `onMarkerDrag` | `{ coordinate: LatLng, position: Point }` | Callback called continuously as a marker is dragged
 | `onMarkerDragEnd` | `{ coordinate: LatLng, position: Point }` | Callback that is called when a drag on a marker finishes. This is usually the point you will want to setState on the marker's coordinate again
+| `onIndoorLevelActivated` | `indoorBuilding` | Callback that is called when a level on indoor building is activated
+| `onIndoorBuildingFocused` | `indoorLevel` | Callback that is called when a indoor building is focused
 
 
 
@@ -59,9 +61,10 @@
 |---|---|---|
 | `animateToRegion` | `region: Region`, `duration: Number` |
 | `animateToCoordinate` | `coordinate: LatLng`, `duration: Number` |
-| `fitToElements` | `animated: Boolean` | 
+| `fitToElements` | `animated: Boolean` |
+| `setIndoorActiveLevelIndex` | `levelIndex: Number` |
 | `fitToSuppliedMarkers` | `markerIDs: String[]`, `animated: Boolean` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
-| `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event. 
+| `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
 
 
 
@@ -87,6 +90,29 @@ type LatLng {
 type Point {
   x: Number,
   y: Number,
+}
+```
+
+```
+type IndoorBuilding {
+  x: Number,
+  y: Number,
+}
+```
+
+```
+type indoorBuilding {
+  underground: boolean,
+  defaultLevelIndex: Number,
+  levels: Array<indoorLevel>,
+}
+```
+
+```
+type indoorLevel {
+  activeLevelIndex: Number,
+  name: String,
+  shortName: String,
 }
 ```
 
