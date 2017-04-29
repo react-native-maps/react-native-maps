@@ -160,7 +160,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 
   id event = @{@"action": @"marker-press",
                @"id": airMarker.identifier ?: @"unknown",
-              };
+               };
 
   if (airMarker.onPress) airMarker.onPress(event);
   if (self.onMarkerPress) self.onMarkerPress(event);
@@ -252,6 +252,22 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (BOOL)showsBuildings {
   return self.buildingsEnabled;
+}
+
+- (void)setShowsIndoors:(BOOL)showsIndoors {
+  self.indoorEnabled = showsIndoors;
+}
+
+- (BOOL)showsIndoors {
+  return self.indoorEnabled;
+}
+
+- (void)setshowsIndoorLevelPicker:(BOOL)showsIndoorLevelPicker {
+  self.settings.indoorPicker = showsIndoorLevelPicker;
+}
+
+- (BOOL)showsIndoorLevelPicker {
+  return self.settings.indoorPicker;
 }
 
 - (void)setShowsCompass:(BOOL)showsCompass {

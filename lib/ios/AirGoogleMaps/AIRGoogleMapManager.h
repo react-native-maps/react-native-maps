@@ -6,7 +6,10 @@
 //
 
 #import <React/RCTViewManager.h>
+#import "AIRGoogleMap.h"
 
 @interface AIRGoogleMapManager : RCTViewManager
+
+@property (nonatomic, assign) AIRGoogleMap *map;
 
 @end
