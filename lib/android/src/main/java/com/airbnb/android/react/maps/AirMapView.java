@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.util.Log;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableArray;
@@ -70,7 +69,6 @@ public class AirMapView extends MapView implements
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
     private final int baseMapPadding = 50;
-    private static final String TAG = "OfficeLocations";
 
     private LatLngBounds boundsToMove;
     private boolean showUserLocation = false;
