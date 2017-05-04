@@ -213,7 +213,7 @@ Enter the name of the API key and create it.
 1. If you encounter `com.android.dex.DexException: Multiple dex files define Landroid/support/v7/appcompat/R$anim`, then clear build folder.
   ```
    cd android
-   gradlew clean
+   ./gradlew clean
    cd ..
   ```
 
