@@ -52,7 +52,7 @@ After your `Podfile` is setup properly, run `pod install`.
   >This was already done for you if you ran "react-native link"
 
 1. Open your project in Xcode, right click on `Libraries` and click `Add
-   Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
+   Files to "Your Project Name"` Look under `node_modules/react-native-maps/lib/ios` and add `AIRMaps.xcodeproj`.
 1. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
 1. Click on `AIRMaps.xcodeproj` in `Libraries` and go the `Build
    Settings` tab. Double click the text to the right of `Header Search
