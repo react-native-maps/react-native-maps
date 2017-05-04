@@ -98,7 +98,7 @@ After your `Podfile` is setup properly, run `pod install`.
    ```groovy
    ...
    include ':react-native-maps'
-   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
    ```
 
 1. Specify your Google Maps API Key:
