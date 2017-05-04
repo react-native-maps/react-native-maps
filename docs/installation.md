@@ -25,9 +25,9 @@ react-native link react-native-maps
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
 1. If you need `GoogleMaps` support also
-    - Drag this folder `node_modules/react-native-maps/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
+    - Drag this folder `node_modules/react-native-maps/lib/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
     - In `AppDelegate.m`, add `@import GoogleMaps;` before `@implementation AppDelegate`. In `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions`, add `[GMSServices provideAPIKey:@"YOUR_GOOGLE_MAP_API_KEY"];`
-    - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
+    - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/lib/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/lib/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
     
 Note:  We recommend using a version of React Native >= .40.  Newer versions (>= .40) require `package.json` to be set to `"react-native-maps": "^0.13.0"`, while older versions require `"react-native-maps": "^0.12.4"`.
 
