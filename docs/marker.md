@@ -20,6 +20,8 @@
 
 ## Events
 
+To access event data, you will need to use `e.nativeEvent`. For example, `onPress={e => console.log(e.nativeEvent)}` will log the entire event object to your console.
+
 | Event Name | Returns | Notes
 |---|---|---|
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user presses on the marker
