@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.15.0 (May 8, 2017)
+
+* iOS: [#1195]((https://github.com/airbnb/react-native-maps/pull/1195) Rename project file to fix iOS build error
+* Android: Update Google Play Services to version `10.2.4`
+
 ## 0.14.0 (April 4, 2017)
 
 ## Enhancements

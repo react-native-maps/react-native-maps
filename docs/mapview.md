@@ -36,6 +36,8 @@
 
 ## Events
 
+To access event data, you will need to use `e.nativeEvent`. For example, `onPress={e => console.log(e.nativeEvent)}` will log the entire event object to your console.
+
 | Event Name | Returns | Notes
 |---|---|---|
 | `onRegionChange` | `Region` | Callback that is called continuously when the region changes, such as when a user is dragging the map.
