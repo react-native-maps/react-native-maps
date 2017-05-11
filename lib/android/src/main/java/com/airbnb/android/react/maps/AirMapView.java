@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
@@ -100,10 +101,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     // https://github.com/airbnb/react-native-maps/issues/1147
     //
     // Doing this allows us to avoid both bugs.
-    private static Context getNonBuggyContext(ThemedReactContext reactContext) {
+    private static Context getNonBuggyContext(ThemedReactContext reactContext,
+                                              ReactApplicationContext appContext) {
         Context superContext = reactContext;
-
-        if (contextHasBug(superContext)) {
+        if (!contextHasBug(appContext.getCurrentActivity())) {
+            superContext = appContext.getCurrentActivity();
+        } else if (contextHasBug(superContext)) {
             // we have the bug! let's try to find a better context to use
             if (!contextHasBug(reactContext.getCurrentActivity())) {
                 superContext = reactContext.getCurrentActivity();
@@ -116,9 +119,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         return superContext;
     }
 
-    public AirMapView(ThemedReactContext reactContext, AirMapManager manager,
-            GoogleMapOptions googleMapOptions) {
-        super(getNonBuggyContext(reactContext), googleMapOptions);
+    public AirMapView(ThemedReactContext reactContext, ReactApplicationContext appContext, AirMapManager manager,
+                      GoogleMapOptions googleMapOptions) {
+        super(getNonBuggyContext(reactContext, appContext), googleMapOptions);
 
         this.manager = manager;
         this.context = reactContext;
