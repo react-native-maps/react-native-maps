@@ -494,7 +494,7 @@ Good:
 License
 --------
 
-     Copyright (c) 2015 Airbnb
+     Copyright (c) 2017 Airbnb
 
      Licensed under the The MIT License (MIT) (the "License");
      you may not use this file except in compliance with the License.
