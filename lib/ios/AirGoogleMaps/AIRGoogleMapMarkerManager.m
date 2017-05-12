@@ -28,6 +28,7 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(identifier, NSString)
 RCT_EXPORT_VIEW_PROPERTY(coordinate, CLLocationCoordinate2D)
+RCT_EXPORT_VIEW_PROPERTY(rotation, CLLocationDegrees)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(image, imageSrc, NSString)
 RCT_EXPORT_VIEW_PROPERTY(title, NSString)
