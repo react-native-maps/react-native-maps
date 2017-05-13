@@ -21,7 +21,7 @@ react-native link react-native-maps
 
 ### Option 1: CocoaPods - Same as the included AirMapsExplorer example
 
-1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile), replace all references to `AirMapExplorer` with your project name, and then run `pod install`.
+1. Setup your `Podfile` like the included [example/ios/Podfile](../example/ios/Podfile), replace all references to `AirMapsExplorer` with your project name, and then run `pod install`.
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
 1. If you need `GoogleMaps` support also
