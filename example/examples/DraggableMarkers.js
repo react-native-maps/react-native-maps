@@ -1,18 +1,14 @@
-var React = require('react-native');
-var {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
-  Text,
   Dimensions,
-  TouchableOpacity,
-  Image,
-} = React;
+} from 'react-native';
 
-var MapView = require('react-native-maps');
-var PriceMarker = require('./PriceMarker');
+import MapView from 'react-native-maps';
+import PriceMarker from './PriceMarker';
 
-var { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,9 +17,15 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-var MarkerTypes = React.createClass({
-  getInitialState() {
-    return {
+function log(eventName, e) {
+  console.log(eventName, e.nativeEvent);
+}
+
+class MarkerTypes extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       a: {
         latitude: LATITUDE + SPACE,
         longitude: LONGITUDE + SPACE,
@@ -32,13 +34,14 @@ var MarkerTypes = React.createClass({
         latitude: LATITUDE - SPACE,
         longitude: LONGITUDE - SPACE,
       },
-    }
-  },
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -49,46 +52,42 @@ var MarkerTypes = React.createClass({
         >
           <MapView.Marker
             coordinate={this.state.a}
-            onSelect={(e) => console.log('onSelect', e)}
-            onDrag={(e) => console.log('onDrag', e)}
-            onDragStart={(e) => console.log('onDragStart', e)}
-            onDragEnd={(e) => console.log('onDragEnd', e)}
-            onPress={(e) => console.log('onPress', e)}
+            onSelect={(e) => log('onSelect', e)}
+            onDrag={(e) => log('onDrag', e)}
+            onDragStart={(e) => log('onDragStart', e)}
+            onDragEnd={(e) => log('onDragEnd', e)}
+            onPress={(e) => log('onPress', e)}
             draggable
           >
             <PriceMarker amount={99} />
           </MapView.Marker>
           <MapView.Marker
             coordinate={this.state.b}
-            onSelect={(e) => console.log('onSelect', e)}
-            onDrag={(e) => console.log('onDrag', e)}
-            onDragStart={(e) => console.log('onDragStart', e)}
-            onDragEnd={(e) => console.log('onDragEnd', e)}
-            onPress={(e) => console.log('onPress', e)}
+            onSelect={(e) => log('onSelect', e)}
+            onDrag={(e) => log('onDrag', e)}
+            onDragStart={(e) => log('onDragStart', e)}
+            onDragEnd={(e) => log('onDragEnd', e)}
+            onPress={(e) => log('onPress', e)}
             draggable
           />
         </MapView>
       </View>
     );
-  },
-});
+  }
+}
 
-var styles = StyleSheet.create({
+MarkerTypes.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
+const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
   },
 });
 

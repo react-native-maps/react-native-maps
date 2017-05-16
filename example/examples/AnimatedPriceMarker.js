@@ -1,46 +1,53 @@
-import React, {
+import React, { PropTypes } from 'react';
+import {
   StyleSheet,
-  PropTypes,
-  View,
   Text,
   Animated,
 } from 'react-native';
 
-const PriceMarker = ({ amount, selected, style }) => {
+class AnimatedPriceMarker extends React.Component {
+  render() {
+    const { amount, selected, style } = this.props;
 
-  var background = selected.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['#FF5A5F', '#4da2ab'],
-  });
+    const background = selected.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['#FF5A5F', '#4da2ab'],
+    });
 
-  var border = selected.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['#D23F44', '#007a87'],
-  });
+    const border = selected.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['#D23F44', '#007a87'],
+    });
 
-  return (
-    <Animated.View style={[styles.container, style]}>
-      <Animated.View style={[styles.bubble, {
-          backgroundColor: background,
-          borderColor: border,
-        }]}
+    return (
+      <Animated.View style={[styles.container, style]}>
+        <Animated.View
+          style={[
+            styles.bubble,
+            {
+              backgroundColor: background,
+              borderColor: border,
+            },
+          ]}
         >
-        <Text style={styles.dollar}>$</Text>
-        <Text style={styles.amount}>{amount}</Text>
+          <Text style={styles.dollar}>$</Text>
+          <Text style={styles.amount}>{amount}</Text>
+        </Animated.View>
+        <Animated.View
+          style={[styles.arrowBorder, { borderTopColor: border }]}
+        />
+        <Animated.View
+          style={[styles.arrow, { borderTopColor: background }]}
+        />
       </Animated.View>
-      <Animated.View style={[styles.arrowBorder, {
-          borderTopColor: border,
-        }]} />
-      <Animated.View style={[styles.arrow, {
-          borderTopColor: background,
-        }]} />
-    </Animated.View>
-  );
-};
+    );
+  }
+}
 
-
-PriceMarker.propTypes = {
+AnimatedPriceMarker.propTypes = {
   amount: PropTypes.number.isRequired,
+  selected: PropTypes.object.isRequired,
+  style: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -96,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = PriceMarker;
+module.exports = AnimatedPriceMarker;

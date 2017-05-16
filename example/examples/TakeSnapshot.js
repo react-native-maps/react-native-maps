@@ -1,18 +1,18 @@
-var React = require('react-native');
-var {
+import React from 'react';
+import {
   StyleSheet,
-  PropTypes,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
   Image,
-} = React;
+} from 'react-native';
 
-var MapView = require('react-native-maps');
-var PriceMarker = require('./PriceMarker');
+import MapView from 'react-native-maps';
+import flagBlueImg from './assets/flag-blue.png';
+import flagPinkImg from './assets/flag-pink.png';
 
-var { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -21,28 +21,32 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-var MarkerTypes = React.createClass({
-  getInitialState() {
-    return { mapSnapshot: null }
-  },
+class MarkerTypes extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mapSnapshot: null,
+    };
+  }
 
   takeSnapshot() {
-    this.refs.map.takeSnapshot(300, 300, {
+    this.map.takeSnapshot(300, 300, {
       latitude: LATITUDE - SPACE,
       longitude: LONGITUDE - SPACE,
       latitudeDelta: 0.01,
-      longitudeDelta: 0.01 * ASPECT_RATIO
+      longitudeDelta: 0.01 * ASPECT_RATIO,
     }, (err, data) => {
-      if (err) console.log(err)
-      this.setState({ mapSnapshot: data })
+      if (err) console.log(err);
+      this.setState({ mapSnapshot: data });
     });
-  },
+  }
 
   render() {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
+          provider={this.props.provider}
+          ref={ref => { this.map = ref; }}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -50,7 +54,7 @@ var MarkerTypes = React.createClass({
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}
-          >
+        >
           <MapView.Marker
             coordinate={{
               latitude: LATITUDE + SPACE,
@@ -58,8 +62,8 @@ var MarkerTypes = React.createClass({
             }}
             centerOffset={{ x: -18, y: -60 }}
             anchor={{ x: 0.69, y: 1 }}
-            image={require('./assets/flag-blue.png')}
-            />
+            image={flagBlueImg}
+          />
           <MapView.Marker
             coordinate={{
               latitude: LATITUDE - SPACE,
@@ -67,46 +71,46 @@ var MarkerTypes = React.createClass({
             }}
             centerOffset={{ x: -42, y: -60 }}
             anchor={{ x: 0.84, y: 1 }}
-            image={require('./assets/flag-pink.png')}
-            />
+            image={flagPinkImg}
+          />
         </MapView>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this.takeSnapshot} style={[styles.bubble, styles.button]}>
+          <TouchableOpacity
+            onPress={() => this.takeSnapshot()}
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Take snapshot</Text>
           </TouchableOpacity>
         </View>
-        {this.state.mapSnapshot
-          ? <TouchableOpacity
+        {this.state.mapSnapshot &&
+          <TouchableOpacity
             style={[styles.container, styles.overlay]}
-            onPress={() => this.setState({ mapSnapshot: null })}>
-              <Image
-                source={{ uri: this.state.mapSnapshot.uri }}
-                style={{ width: 300, height: 300 }}
-                />
-            </TouchableOpacity>
-            : null}
+            onPress={() => this.setState({ mapSnapshot: null })}
+          >
+            <Image
+              source={{ uri: this.state.mapSnapshot.uri }}
+              style={{ width: 300, height: 300 }}
+            />
+          </TouchableOpacity>
+        }
       </View>
     );
-  },
-});
+  }
+}
 
-var styles = StyleSheet.create({
+MarkerTypes.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
+const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
   },
   bubble: {
     backgroundColor: 'rgba(255,255,255,0.7)',
@@ -128,7 +132,7 @@ var styles = StyleSheet.create({
   overlay: {
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
-  }
+  },
 });
 
 module.exports = MarkerTypes;

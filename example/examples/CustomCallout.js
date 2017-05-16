@@ -1,11 +1,15 @@
-var React = require('react-native');
-var {
+import React, { PropTypes } from 'react';
+import {
   StyleSheet,
   View,
-  Text,
-} = React;
+} from 'react-native';
 
-var CustomCallout = React.createClass({
+const propTypes = {
+  children: PropTypes.node.isRequired,
+  style: PropTypes.object,
+};
+
+class CustomCallout extends React.Component {
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
@@ -18,10 +22,12 @@ var CustomCallout = React.createClass({
         <View style={styles.arrow} />
       </View>
     );
-  },
-});
+  }
+}
 
-var styles = StyleSheet.create({
+CustomCallout.propTypes = propTypes;
+
+const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignSelf: 'flex-start',
@@ -36,11 +42,6 @@ var styles = StyleSheet.create({
     borderRadius: 6,
     borderColor: '#007a87',
     borderWidth: 0.5,
-  },
-  dollar: {
-
-    //color: '#FFFFFF',
-    //fontSize: 10,
   },
   amount: {
     flex: 1,
