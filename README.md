@@ -405,7 +405,7 @@ getInitialState() {
 takeSnapshot () {
   // 'takeSnapshot' takes a config object with the
   // following options
-  const snapshot = this.refs.map.takeSnapshot({
+  const snapshot = this.map.takeSnapshot({
     width: 300,      // optional, when omitted the view-width is used
     height: 300,     // optional, when omitted the view-height is used
     region: {..},    // iOS only, optional region to render
@@ -421,7 +421,7 @@ takeSnapshot () {
 render() {
   return (
     <View>
-      <MapView initialRegion={...} ref="map">
+      <MapView initialRegion={...} ref={map => { this.map = map }}>
         <MapView.Marker coordinate={this.state.coordinate} />
       </MapView>
       <Image source={{ uri: this.state.mapSnapshot.uri }} />
