@@ -145,6 +145,7 @@ class EventListener extends React.Component {
           <MapView.Polyline
             strokeColor={'rgba(255,0,0,1)'}
             onPress={this.recordEvent('Polyline::onPress')}
+            tappable
             coordinates={[{
               latitude: LATITUDE + (LATITUDE_DELTA / 5),
               longitude: LONGITUDE - (LONGITUDE_DELTA / 4),
