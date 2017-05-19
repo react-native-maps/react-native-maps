@@ -1,9 +1,8 @@
 //
 //  GlobalVars.m
-//  EvoApp
 //
 //  Created by Eric Kim on 2017-04-04.
-//  Copyright © 2017 Facebook. All rights reserved.
+//  Copyright © 2017 Apply Digital. All rights reserved.
 //
 
 #import "GlobalVars.h"
