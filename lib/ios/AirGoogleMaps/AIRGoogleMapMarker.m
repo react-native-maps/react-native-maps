@@ -157,6 +157,14 @@ CGRect unionRect(CGRect a, CGRect b) {
   return _realMarker.position;
 }
 
+- (void)setRotation:(CLLocationDegrees)rotation {
+    _realMarker.rotation = rotation;
+}
+
+- (CLLocationDegrees)rotation {
+    return _realMarker.rotation;
+}
+
 - (void)setIdentifier:(NSString *)identifier {
   _realMarker.identifier = identifier;
 }

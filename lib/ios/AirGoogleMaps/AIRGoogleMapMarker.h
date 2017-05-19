@@ -17,6 +17,7 @@
 @property (nonatomic, strong) AIRGoogleMapCallout *calloutView;
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+@property (nonatomic, assign) CLLocationDegrees rotation;
 @property (nonatomic, strong) AIRGMSMarker* realMarker;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTDirectEventBlock onDragStart;
