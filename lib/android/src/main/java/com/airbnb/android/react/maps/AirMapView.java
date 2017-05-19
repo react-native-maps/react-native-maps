@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -37,13 +40,19 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +64,8 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
+    private static final String TAG = AirMapView.class.getName();
+
     public GoogleMap map;
     private ProgressBar mapLoadingProgressBar;
     private RelativeLayout mapLoadingLayout;
@@ -87,6 +98,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     private boolean destroyed = false;
     private final ThemedReactContext context;
     private final EventDispatcher eventDispatcher;
+
+    private ClusterManager<AirMapMarker> mClusterManager;
+    private ClusterMarkerIconGenerator mClusterIconGenerator = null;
 
     private static boolean contextHasBug(Context context) {
         return context == null ||
@@ -170,6 +184,69 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         });
 
         eventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+
+        mClusterIconGenerator = new ClusterMarkerIconGenerator(reactContext);
+
+    }
+
+    private class MarkerRenderer extends DefaultClusterRenderer<AirMapMarker> {
+
+        public MarkerRenderer(ThemedReactContext reactContext) {
+            super(reactContext.getApplicationContext(), map, mClusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(AirMapMarker post, MarkerOptions markerOptions) {
+            markerOptions.icon(post.getIcon());
+        }
+
+        @Override
+        protected void onBeforeClusterRendered(Cluster<AirMapMarker> cluster, MarkerOptions markerOptions) {
+
+            // Check if cluster icon with number has been cached
+            String bubbleKey = "bubble"+cluster.getSize();
+            BitmapDescriptorContainer cachedBitmap = LruCacheManager.getInstance().getBitmapFromMemCache(bubbleKey);
+            BitmapDescriptor iconBitmapDescriptor;
+            if(cachedBitmap == null) {
+                AirMapMarker first = cluster.getItems().iterator().next();
+                if(first.getBitmapIcon() != null) {
+                    Log.v(TAG, "Loading clusterIcon Bitmap with number " + cluster.getSize());
+                    Bitmap textBubbleBitmap = mClusterIconGenerator.makeIcon(String.valueOf(cluster.getSize()));
+                    Bitmap icon = overlay(first.getBitmapIcon(), textBubbleBitmap, 21, -12);
+                    iconBitmapDescriptor = LruCacheManager.getInstance().addBitmapToMemoryCache(bubbleKey, icon);
+                } else {
+                    // Default to default marker
+                    iconBitmapDescriptor = BitmapDescriptorFactory.defaultMarker();
+                }
+            } else {
+                Log.v(TAG, "Reusing clusterIcon Bitmap with number " + cluster.getSize());
+                iconBitmapDescriptor = cachedBitmap.mBitmapDescriptor;
+            }
+
+            markerOptions.icon(iconBitmapDescriptor);
+        }
+
+        @Override
+        protected boolean shouldRenderAsCluster(Cluster cluster) {
+            // Always render clusters.
+            return cluster.getSize() > 1;
+        }
+    }
+
+    private Bitmap overlay(Bitmap bmp1, Bitmap bmp2, float offsetX, float offsetY) {
+
+        float dp = Resources.getSystem().getDisplayMetrics().density;
+        float offsetXdp = offsetX * dp;
+        float offsetYdp = offsetY * dp;
+
+        float width = bmp1.getWidth() + 2 * ((bmp2.getWidth() + offsetXdp) - bmp1.getWidth());
+        float height = bmp1.getHeight() - offsetYdp;
+
+        Bitmap bmOverlay = Bitmap.createBitmap((int)width, (int)height, bmp1.getConfig());
+        Canvas canvas = new Canvas(bmOverlay);
+        canvas.drawBitmap(bmp1, (int)((bmp2.getWidth() + offsetXdp) - bmp1.getWidth()), -offsetYdp, null);
+        canvas.drawBitmap(bmp2, offsetXdp + ((bmp2.getWidth() + offsetXdp) - bmp1.getWidth()), 0, null);
+        return bmOverlay;
     }
 
     @Override
@@ -180,37 +257,70 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.map = map;
         this.map.setInfoWindowAdapter(this);
         this.map.setOnMarkerDragListener(this);
+        mClusterManager = new ClusterManager<AirMapMarker>(this.getContext(), map);
+        mClusterManager.setRenderer(new MarkerRenderer(this.context));
 
         manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
         final AirMapView view = this;
+        map.setOnMarkerClickListener(mClusterManager);
+        map.setOnCameraIdleListener(mClusterManager);
+        mClusterManager.cluster();
 
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<AirMapMarker>(){
             @Override
-            public boolean onMarkerClick(Marker marker) {
+            public boolean onClusterItemClick(AirMapMarker marker) {
                 WritableMap event;
-                AirMapMarker airMapMarker = markerMap.get(marker);
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "marker-press");
-                event.putString("id", airMapMarker.getIdentifier());
-                manager.pushEvent(context, view, "onMarkerPress", event);
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "marker-press");
-                event.putString("id", airMapMarker.getIdentifier());
-                manager.pushEvent(context, markerMap.get(marker), "onPress", event);
-
-                // Return false to open the callout info window and center on the marker
-                // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMarkerClickListener
-                if (view.moveOnMarkerPress) {
-                  return false;
-                } else {
-                  marker.showInfoWindow();
-                  return true;
+                if(marker == null) {
+                    return false;
                 }
+                event = makeClickEventData(marker.getPosition());
+                event.putString("action", "marker-press");
+                event.putString("id", marker.getIdentifier());
+                event.putInt("count", 1);
+                event.putDouble("zoom", map.getCameraPosition().zoom);
+                manager.pushEvent(context, view, "onPress", event);
+                return true;
             }
         });
+
+        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<AirMapMarker>(){
+            @Override
+            public boolean onClusterClick(Cluster<AirMapMarker> cluster) {
+                WritableMap event;
+                event = makeClickEventData(cluster.getPosition());
+                event.putString("action", "marker-press");
+                event.putInt("count", cluster.getItems().size());
+                event.putDouble("zoom", map.getCameraPosition().zoom);
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(), map.getCameraPosition().zoom+2f));
+                manager.pushEvent(context, view, "onPress", event);
+                return true;
+            }
+        });
+
+//        mClusterManager.getMarkerCollection().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                AirMapMarker airMapMarker = markerMap.get(marker);
+//                if(airMapMarker == null) {
+//                    // Maker is a cluster
+//                    WritableMap event;
+//                    event = makeClickEventData(marker.getPosition());
+//                    event.putString("action", "marker-press");
+//                    manager.pushEvent(context, view, "onPress", event);
+//                    return true;
+//                } else {
+//                    WritableMap event;
+//                    event = makeClickEventData(marker.getPosition());
+//                    event.putString("action", "marker-press");
+//                    event.putString("id", airMapMarker.getIdentifier());
+//                    event.putInt("count", 1);
+//                    event.putDouble("zoom", map.getCameraPosition().zoom);
+//                    manager.pushEvent(context, view, "onPress", event);
+//                    return true;
+//                }
+//            }
+//        });
 
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
@@ -464,10 +574,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         // This is where we intercept them and do the appropriate underlying mapview action.
         if (child instanceof AirMapMarker) {
             AirMapMarker annotation = (AirMapMarker) child;
-            annotation.addToMap(map);
+            if(annotation.getCluster()) {
+                mClusterManager.addItem(annotation);
+            } else {
+                // Add marker to MarkerCollection directly. This makes markers not cluster.
+                Marker marker = mClusterManager.getMarkerCollection().addMarker(annotation.getMarkerOptions());
+                annotation.setFeature(marker);
+                markerMap.put(marker, annotation);
+            }
             features.add(index, annotation);
-            Marker marker = (Marker) annotation.getFeature();
-            markerMap.put(marker, annotation);
+
         } else if (child instanceof AirMapPolyline) {
             AirMapPolyline polylineView = (AirMapPolyline) child;
             polylineView.addToMap(map);
@@ -507,9 +623,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     public void removeFeatureAt(int index) {
         AirMapFeature feature = features.remove(index);
         if (feature instanceof AirMapMarker) {
-            markerMap.remove(feature.getFeature());
+            AirMapMarker annotation = (AirMapMarker) feature;
+            if(annotation.getCluster()) {
+                mClusterManager.removeItem(annotation);
+            } else {
+                mClusterManager.getMarkerCollection().remove((Marker)annotation.getFeature());
+                markerMap.remove(annotation.getFeature());
+            }
+        } else {
+            feature.removeFromMap(map);
         }
-        feature.removeFromMap(map);
     }
 
     public WritableMap makeClickEventData(LatLng point) {
@@ -655,13 +778,21 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     @Override
     public View getInfoWindow(Marker marker) {
         AirMapMarker markerView = markerMap.get(marker);
-        return markerView.getCallout();
+        if(markerView != null) {
+            return markerView.getCallout();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public View getInfoContents(Marker marker) {
         AirMapMarker markerView = markerMap.get(marker);
-        return markerView.getInfoContents();
+        if(markerView != null) {
+            return markerView.getInfoContents();
+        } else {
+            return null;
+        }
     }
 
     @Override

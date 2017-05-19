@@ -2,26 +2,24 @@ package com.airbnb.android.react.maps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.facebook.common.executors.CallerThreadExecutor;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.DraweeHolder;
 import com.facebook.imagepipeline.core.ImagePipeline;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
-import com.facebook.imagepipeline.image.CloseableStaticBitmap;
-import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
@@ -31,10 +29,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterItem;
+
+import java.util.HashSet;
 
 import javax.annotation.Nullable;
 
-public class AirMapMarker extends AirMapFeature {
+public class AirMapMarker extends AirMapFeature implements ClusterItem {
+
+    private static final String TAG = AirMapMarker.class.getName();
 
     private MarkerOptions markerOptions;
     private Marker marker;
@@ -61,6 +64,7 @@ public class AirMapMarker extends AirMapFeature {
     private float rotation = 0.0f;
     private boolean flat = false;
     private boolean draggable = false;
+    private boolean cluster = false;
     private int zIndex = 0;
     private float opacity = 1.0f;
 
@@ -71,38 +75,8 @@ public class AirMapMarker extends AirMapFeature {
     private boolean hasCustomMarkerView = false;
 
     private final DraweeHolder<?> logoHolder;
-    private DataSource<CloseableReference<CloseableImage>> dataSource;
-    private final ControllerListener<ImageInfo> mLogoControllerListener =
-            new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onFinalImageSet(
-                        String id,
-                        @Nullable final ImageInfo imageInfo,
-                        @Nullable Animatable animatable) {
-                    CloseableReference<CloseableImage> imageReference = null;
-                    try {
-                        imageReference = dataSource.getResult();
-                        if (imageReference != null) {
-                            CloseableImage image = imageReference.get();
-                            if (image != null && image instanceof CloseableStaticBitmap) {
-                                CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
-                                Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
-                                if (bitmap != null) {
-                                    bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                                    iconBitmap = bitmap;
-                                    iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-                                }
-                            }
-                        }
-                    } finally {
-                        dataSource.close();
-                        if (imageReference != null) {
-                            CloseableReference.closeSafely(imageReference);
-                        }
-                    }
-                    update();
-                }
-            };
+
+    private static HashSet<String> isCacheAdded = new HashSet<>();
 
     public AirMapMarker(Context context) {
         super(context);
@@ -175,6 +149,15 @@ public class AirMapMarker extends AirMapFeature {
         update();
     }
 
+    public void setCluster(boolean cluster) {
+        this.cluster = cluster;
+        update();
+    }
+
+    public boolean getCluster() {
+        return this.cluster;
+    }
+
     public void setZIndex(int zIndex) {
         this.zIndex = zIndex;
         if (marker != null) {
@@ -216,27 +199,79 @@ public class AirMapMarker extends AirMapFeature {
         update();
     }
 
-    public void setImage(String uri) {
+    public void setImage(final String uri) {
         if (uri == null) {
+            // Render nothing
             iconBitmapDescriptor = null;
+            iconBitmap = null;
             update();
-        } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
-                uri.startsWith("file://")) {
+            return;
+        }
+
+
+        try {
+            while(isCacheAdded.contains(uri))
+                Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        BitmapDescriptorContainer bitmapDescriptorContainer = LruCacheManager.getInstance().getBitmapFromMemCache(uri);
+        if(bitmapDescriptorContainer!=null) {
+            // Render icon from cached bitmap
+            iconBitmapDescriptor = bitmapDescriptorContainer.mBitmapDescriptor;
+            iconBitmap = bitmapDescriptorContainer.mBitmap;
+            update();
+            Log.v(TAG, "Reusing Bitmap " + uri);
+            return;
+        }
+
+        Log.v(TAG, "Start Loading Bitmap from uri: " + uri);
+
+        // In Debug, uri will be http || https, use Fresco to load the Image
+        // In Release, uri will be image name
+
+        if (uri.startsWith("http://") || uri.startsWith("https://") || uri.startsWith("file://")) {
+
+            // Load Bitmap from uri using Fresco
             ImageRequest imageRequest = ImageRequestBuilder
                     .newBuilderWithSource(Uri.parse(uri))
+                    .setAutoRotateEnabled(true)
                     .build();
 
             ImagePipeline imagePipeline = Fresco.getImagePipeline();
-            dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setImageRequest(imageRequest)
-                    .setControllerListener(mLogoControllerListener)
-                    .setOldController(logoHolder.getController())
-                    .build();
-            logoHolder.setController(controller);
+            final DataSource<CloseableReference<CloseableImage>>
+                    dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
+            isCacheAdded.add(uri);
+            dataSource.subscribe(new BaseBitmapDataSubscriber() {
+
+                @Override
+                public void onNewResultImpl(@Nullable Bitmap bitmap) {
+                    if (dataSource.isFinished() && bitmap != null) {
+                        Log.v(TAG, "Finished Loading Bitmap from uri: " + uri);
+                        iconBitmapDescriptor = LruCacheManager.getInstance().addBitmapToMemoryCache(uri, bitmap);
+                        iconBitmap = bitmap;
+                        dataSource.close();
+                        update();
+                        isCacheAdded.remove(uri);
+                    }
+                }
+
+                @Override
+                public void onFailureImpl(DataSource dataSource) {
+                    if (dataSource != null) {
+                        dataSource.close();
+                    }
+                    isCacheAdded.remove(uri);
+                }
+            }, CallerThreadExecutor.getInstance());
         } else {
-            iconBitmapDescriptor = getBitmapDescriptorByName(uri);
+            Bitmap bitmap = getBitmapByDrawableName(uri);
+            iconBitmapDescriptor = LruCacheManager.getInstance().addBitmapToMemoryCache(uri, bitmap);
+            iconBitmap = bitmap;
             update();
+            Log.v(TAG, "Finished Loading Bitmap from drawable: " + uri);
+            return;
         }
     }
 
@@ -262,6 +297,10 @@ public class AirMapMarker extends AirMapFeature {
         return marker;
     }
 
+    public void setFeature(Marker marker) {
+        this.marker = marker;
+    }
+
     @Override
     public void addToMap(GoogleMap map) {
         marker = map.addMarker(getMarkerOptions());
@@ -273,7 +312,7 @@ public class AirMapMarker extends AirMapFeature {
         marker = null;
     }
 
-    private BitmapDescriptor getIcon() {
+    public BitmapDescriptor getIcon() {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
             if (iconBitmapDescriptor != null) {
@@ -295,6 +334,10 @@ public class AirMapMarker extends AirMapFeature {
             // render the default marker pin
             return BitmapDescriptorFactory.defaultMarker(this.markerHue);
         }
+    }
+
+    public Bitmap getBitmapIcon() {
+        return this.iconBitmap;
     }
 
     private MarkerOptions createMarkerOptions() {
@@ -338,7 +381,7 @@ public class AirMapMarker extends AirMapFeature {
         update();
     }
 
-    private Bitmap createDrawable() {
+    public Bitmap createDrawable() {
         int width = this.width <= 0 ? 100 : this.width;
         int height = this.height <= 0 ? 100 : this.height;
         this.buildDrawingCache();
@@ -427,4 +470,23 @@ public class AirMapMarker extends AirMapFeature {
         return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
     }
 
+    private Bitmap getBitmapByDrawableName(String name) {
+        int resourceId = getDrawableResourceByName(name);
+        return BitmapFactory.decodeResource(getResources(), resourceId);
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return position;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getSnippet() {
+        return snippet;
+    }
 }

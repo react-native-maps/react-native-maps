@@ -13,7 +13,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 
@@ -45,6 +44,11 @@ public class AirMapPolygonManager extends ViewGroupManager<AirMapPolygon> {
     @ReactProp(name = "coordinates")
     public void setCoordinate(AirMapPolygon view, ReadableArray coordinates) {
         view.setCoordinates(coordinates);
+    }
+
+    @ReactProp(name = "holes")
+    public void setHoles(AirMapPolygon view, ReadableArray holes) {
+        view.setHoles(holes);
     }
 
     @ReactProp(name = "strokeWidth", defaultFloat = 1f)

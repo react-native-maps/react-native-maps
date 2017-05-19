@@ -1,6 +1,7 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -13,11 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AirMapPolygon extends AirMapFeature {
+    private static final String TAG = AirMapPolygon.class.getName();
 
     private PolygonOptions polygonOptions;
     private Polygon polygon;
 
     private List<LatLng> coordinates;
+    private List<List<LatLng>> holes;
     private int strokeColor;
     private int fillColor;
     private float strokeWidth;
@@ -38,6 +41,41 @@ public class AirMapPolygon extends AirMapFeature {
         }
         if (polygon != null) {
             polygon.setPoints(this.coordinates);
+        }
+    }
+
+    public void setHoles(ReadableArray holes) {
+        // Convert ReadableArray<ReadableArray<ReadableMap>> into List<List<LatLng>>
+        int holesSize = holes.size();
+        this.holes = new ArrayList(holesSize);
+        for (int i = 0; i < holesSize; i++) {
+            ReadableArray hole = holes.getArray(i);
+            if(hole.size() > 3) {
+                List<LatLng> iterableHole = new ArrayList(hole.size());
+                this.holes.add(iterableHole);
+
+                if(BuildConfig.DEBUG){
+                    ReadableMap coordinate0 = hole.getMap(0);
+                    double lat0 = coordinate0.getDouble("latitude");
+                    double lon0 = coordinate0.getDouble("longitude");
+
+                    ReadableMap coordinate1 = hole.getMap(hole.size()-1);
+                    double lat1 = coordinate1.getDouble("latitude");
+                    double lon1 = coordinate1.getDouble("longitude");
+
+                    if(lat0 != lat1 || lon0 != lon1) {
+                        Log.e(TAG, "First and Last coordinates of the holes must be same");
+                    }
+                }
+
+                for (int j = 0; j < hole.size(); j++) {
+                    ReadableMap coordinate = hole.getMap(j);
+                    iterableHole.add(new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
+                }
+            }
+        }
+        if (polygon != null) {
+            polygon.setHoles(this.holes);
         }
     }
 
@@ -86,6 +124,11 @@ public class AirMapPolygon extends AirMapFeature {
     private PolygonOptions createPolygonOptions() {
         PolygonOptions options = new PolygonOptions();
         options.addAll(coordinates);
+        if(holes != null && holes.size() > 0) {
+            for(List<LatLng> hole : holes) {
+                options.addHole(hole);
+            }
+        }
         options.fillColor(fillColor);
         options.strokeColor(strokeColor);
         options.strokeWidth(strokeWidth);
