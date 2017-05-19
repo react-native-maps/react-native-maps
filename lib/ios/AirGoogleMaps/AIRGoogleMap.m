@@ -170,6 +170,16 @@ id regionAsJSON(MKCoordinateRegion region) {
   return NO;
 }
 
+- (void)didTapPolyline:(GMSOverlay *)polyline {
+  AIRGMSPolyline *airPolyline = (AIRGMSPolyline *)polyline;
+
+  id event = @{@"action": @"polyline-press",
+               @"id": airPolyline.identifier ?: @"unknown",
+               };
+
+   if (airPolyline.onPress) airPolyline.onPress(event);
+}
+
 - (void)didTapPolygon:(GMSOverlay *)polygon {
     AIRGMSPolygon *airPolygon = (AIRGMSPolygon *)polygon;
 

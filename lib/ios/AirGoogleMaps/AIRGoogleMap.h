@@ -41,6 +41,7 @@
 @property (nonatomic, assign) BOOL showsMyLocationButton;
 
 - (BOOL)didTapMarker:(GMSMarker *)marker;
+- (void)didTapPolyline:(GMSPolyline *)polyline;
 - (void)didTapPolygon:(GMSPolygon *)polygon;
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)didLongPressAtCoordinate:(CLLocationCoordinate2D)coordinate;
