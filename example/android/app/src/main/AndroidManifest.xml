@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.airbnb.android.react.maps.example">
 
+    <uses-sdk android:minSdkVersion="16" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application

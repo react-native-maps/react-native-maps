@@ -59,7 +59,22 @@ import com.android.build.OutputFile
  * ]
  */
 
-apply from: "react.gradle"
+project.ext.react = [
+    // the name of the generated asset file containing your JS bundle
+    bundleAssetName  : "example.bundle",
+
+    // the entry file for bundle generation
+    entryFile        : "index.js",
+
+    // the root of your project, i.e. where "package.json" lives
+    root             : "../../../",
+
+    // supply additional arguments to the packager
+    extraPackagerArgs: []
+]
+
+
+apply from: "../../../node_modules/react-native/react.gradle"
 
 def enableSeparateBuildPerCPUArchitecture = false
 
@@ -70,7 +85,7 @@ def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.airbnb.android.react.maps.example"
@@ -112,5 +127,8 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-maps')
+    compile 'com.facebook.react:react-native:0.42.+'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:support-annotations:25.1.1'
+    compile project(':react-native-maps-lib')
 }

@@ -25,9 +25,9 @@ react-native link react-native-maps
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
 1. If you need `GoogleMaps` support also
-    - Drag this folder `node_modules/react-native-maps/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
+    - Drag this folder `node_modules/react-native-maps/lib/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
     - In `AppDelegate.m`, add `@import GoogleMaps;` before `@implementation AppDelegate`. In `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions`, add `[GMSServices provideAPIKey:@"YOUR_GOOGLE_MAP_API_KEY"];`
-    - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
+    - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/lib/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/lib/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
     
 Note:  We recommend using a version of React Native >= .40.  Newer versions (>= .40) require `package.json` to be set to `"react-native-maps": "^0.13.0"`, while older versions require `"react-native-maps": "^0.12.4"`.
 
@@ -52,7 +52,7 @@ After your `Podfile` is setup properly, run `pod install`.
   >This was already done for you if you ran "react-native link"
 
 1. Open your project in Xcode, right click on `Libraries` and click `Add
-   Files to "Your Project Name"` Look under `node_modules/react-native-maps/ios` and add `AIRMaps.xcodeproj`.
+   Files to "Your Project Name"` Look under `node_modules/react-native-maps/lib/ios` and add `AIRMaps.xcodeproj`.
 1. Add `libAIRMaps.a` to `Build Phases -> Link Binary With Libraries.
 1. Click on `AIRMaps.xcodeproj` in `Libraries` and go the `Build
    Settings` tab. Double click the text to the right of `Header Search
@@ -98,7 +98,7 @@ After your `Podfile` is setup properly, run `pod install`.
    ```groovy
    ...
    include ':react-native-maps'
-   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+   project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
    ```
 
 1. Specify your Google Maps API Key:
@@ -203,7 +203,7 @@ Enter the name of the API key and create it.
 1. Clean the cache :
   ```
    watchman watch-del-all
-   npm cache clean
+   npm clean cache
   ```
 
 1. When starting emulator, make sure you have enabled `Wipe user data`.
@@ -213,7 +213,7 @@ Enter the name of the API key and create it.
 1. If you encounter `com.android.dex.DexException: Multiple dex files define Landroid/support/v7/appcompat/R$anim`, then clear build folder.
   ```
    cd android
-   gradlew clean
+   ./gradlew clean
    cd ..
   ```
 

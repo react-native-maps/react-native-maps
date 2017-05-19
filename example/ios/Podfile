@@ -5,7 +5,9 @@ platform :ios, '8.0'
 
 # Change 'AirMapsExplorer' to match the target in your Xcode project.
 target 'AirMapsExplorer' do
-  pod 'React', path: '../node_modules/react-native', :subspecs => [
+
+  pod 'Yoga', :path => '../../node_modules/react-native/ReactCommon/yoga/Yoga.podspec'
+  pod 'React', path: '../../node_modules/react-native', :subspecs => [
     'Core',
     'RCTActionSheet',
     'RCTAnimation',
@@ -20,8 +22,18 @@ target 'AirMapsExplorer' do
   ]
 
   pod 'GoogleMaps'  # <~~ remove this line if you do not want to support GoogleMaps on iOS
+  pod 'react-native-maps', path: '../../'
+  pod 'react-native-google-maps', path: '../../'  # <~~ if you need GoogleMaps support on iOS
 
-# when not using frameworks  we can do this instead of including the source files in our project (1/4):
-#  pod 'react-native-maps', path: '../../'
-#  pod 'react-native-google-maps', path: '../../'  # <~~ if you need GoogleMaps support on iOS
+end
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "react-native-google-maps"
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+      end
+    end
+  end
 end
