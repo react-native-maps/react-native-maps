@@ -36,6 +36,7 @@ import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
+import ClusterMarker from './examples/ClusterMarker'
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -128,6 +129,7 @@ class App extends React.Component {
       [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
       [EventListener, 'Events', true, '(incomplete)'],
       [MarkerTypes, 'Image Based Markers', true],
+      [ClusterMarker, '[Google Maps][Android] Cluster Marker', true],
       [DraggableMarkers, 'Draggable Markers', true],
       [PolygonCreator, 'Polygon Creator', true],
       [PolylineCreator, 'Polyline Creator', true],

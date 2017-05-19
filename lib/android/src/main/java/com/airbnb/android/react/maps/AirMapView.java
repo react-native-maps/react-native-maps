@@ -212,7 +212,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 if(first.getBitmapIcon() != null) {
                     Log.v(TAG, "Loading clusterIcon Bitmap with number " + cluster.getSize());
                     Bitmap textBubbleBitmap = mClusterIconGenerator.makeIcon(String.valueOf(cluster.getSize()));
-                    Bitmap icon = overlay(first.getBitmapIcon(), textBubbleBitmap, 21, -12);
+                    Bitmap icon = overlay(first.getBitmapIcon(), textBubbleBitmap);
                     iconBitmapDescriptor = LruCacheManager.getInstance().addBitmapToMemoryCache(bubbleKey, icon);
                 } else {
                     // Default to default marker
@@ -233,19 +233,18 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
     }
 
-    private Bitmap overlay(Bitmap bmp1, Bitmap bmp2, float offsetX, float offsetY) {
+    private Bitmap overlay(Bitmap bmp1, Bitmap bmp2) {
 
-        float dp = Resources.getSystem().getDisplayMetrics().density;
-        float offsetXdp = offsetX * dp;
-        float offsetYdp = offsetY * dp;
+        int width = bmp1.getWidth();
+        int height = bmp1.getHeight();
 
-        float width = bmp1.getWidth() + 2 * ((bmp2.getWidth() + offsetXdp) - bmp1.getWidth());
-        float height = bmp1.getHeight() - offsetYdp;
+        int bmp2OffsetX = width - bmp2.getWidth();
 
-        Bitmap bmOverlay = Bitmap.createBitmap((int)width, (int)height, bmp1.getConfig());
+        Bitmap bmOverlay = Bitmap.createBitmap(width, height, bmp1.getConfig());
         Canvas canvas = new Canvas(bmOverlay);
-        canvas.drawBitmap(bmp1, (int)((bmp2.getWidth() + offsetXdp) - bmp1.getWidth()), -offsetYdp, null);
-        canvas.drawBitmap(bmp2, offsetXdp + ((bmp2.getWidth() + offsetXdp) - bmp1.getWidth()), 0, null);
+        canvas.drawBitmap(bmp1, 0, 0, null);
+        canvas.drawBitmap(bmp2, bmp2OffsetX, 0, null);
+
         return bmOverlay;
     }
 
@@ -298,6 +297,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
         });
 
+// https://stackoverflow.com/questions/43815967/clustermanager-onmarkerclicklistener-for-non-clustered-markers
 //        mClusterManager.getMarkerCollection().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 //            @Override
 //            public boolean onMarkerClick(Marker marker) {
