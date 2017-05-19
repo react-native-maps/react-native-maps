@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import pinImg from './assets/pin.png';
 
@@ -13,13 +13,10 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
 class ClusterMarker extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   handleMapPress({ nativeEvent }) {
     if (!nativeEvent) return;
     if (nativeEvent.action === 'marker-press') {
-      const { coordinate, id, zoom } = nativeEvent;
+      // const { coordinate, id, zoom } = nativeEvent;
       if (nativeEvent.count === 1) {
         // single marker
         console.warn('single marker');

@@ -36,7 +36,7 @@ import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
-import ClusterMarker from './examples/ClusterMarker'
+import ClusterMarker from './examples/ClusterMarker';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
