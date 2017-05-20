@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.15.2 (May 20, 2017)
+
+* iOS: [#1351](https://github.com/airbnb/react-native-maps/pull/1351) Fix file references
+
 ## 0.15.1 (May 19, 2017)
 
 * iOS: [#1341](https://github.com/airbnb/react-native-maps/pull/1341) Fix compile error in rn version >= 0.40
