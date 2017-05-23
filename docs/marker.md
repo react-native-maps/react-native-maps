@@ -15,10 +15,12 @@
 | `calloutAnchor` | `Point` |  | Specifies the point in the marker image at which to anchor the callout when it is displayed. This is specified in the same coordinate system as the anchor. See the `anchor` prop for more details.<br/><br/> The default is the top middle of the image.<br/><br/> For ios, see the `calloutOffset` prop.
 | `flat` | `Boolean` |  | Sets whether this marker should be flat against the map true or a billboard facing the camera false.
 | `identifier` | `String` |  | An identifier used to reference this marker at a later date.
-| `rotation` | `Float` |  | A float number indicating marker's rotation angle.
+| `rotation` | `Float` |  | A float number indicating marker's rotation angle, in degrees.
 | `draggable` | `<null>` |  | This is a non-value based prop. Adding this allows the marker to be draggable (re-positioned).
 
 ## Events
+
+To access event data, you will need to use `e.nativeEvent`. For example, `onPress={e => console.log(e.nativeEvent)}` will log the entire event object to your console.
 
 | Event Name | Returns | Notes
 |---|---|---|

@@ -1,16 +1,16 @@
 //
-//  AIRGMSPolygon.h
+//  AIRGMSPolyline.h
 //  AirMaps
 //
-//  Created by Gerardo Pacheco 02/05/2017.
+//  Created by Guilherme Pontes 04/05/2017.
 //
 
 #import <GoogleMaps/GoogleMaps.h>
-#import <React/UIView+React.h>
+#import "UIView+React.h"
 
-@class AIRGoogleMapPolygon;
+@class AIRGoogleMapPolyline;
 
-@interface AIRGMSPolygon : GMSPolygon
+@interface AIRGMSPolyline : GMSPolyline
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @end
