@@ -12,8 +12,8 @@
 
 @implementation AIRMapOverlay {
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
-    CLLocationCoordinate2D _topLeftCoordinate;
-    CLLocationCoordinate2D _bottomRightCoordinate;
+    CLLocationCoordinate2D _southWest;
+    CLLocationCoordinate2D _northEast;
     MKMapRect _mapRect;
 }
 
@@ -50,13 +50,13 @@
 - (void)setBoundsRect:(NSArray *)boundsRect {
     _boundsRect = boundsRect;
 
-    _topLeftCoordinate = CLLocationCoordinate2DMake([boundsRect[0][0] doubleValue], [boundsRect[0][1] doubleValue]);
-    _bottomRightCoordinate = CLLocationCoordinate2DMake([boundsRect[1][0] doubleValue], [boundsRect[1][1] doubleValue]);
+    _southWest = CLLocationCoordinate2DMake([boundsRect[1][0] doubleValue], [boundsRect[0][1] doubleValue]);
+    _northEast = CLLocationCoordinate2DMake([boundsRect[0][0] doubleValue], [boundsRect[1][1] doubleValue]);
 
-    MKMapPoint topLeft = MKMapPointForCoordinate(_topLeftCoordinate);
-    MKMapPoint bottomRight = MKMapPointForCoordinate(_bottomRightCoordinate);
+    MKMapPoint southWest = MKMapPointForCoordinate(_southWest);
+    MKMapPoint northEast = MKMapPointForCoordinate(_northEast);
 
-    _mapRect = MKMapRectMake(topLeft.x, topLeft.y, topLeft.x - bottomRight.x, topLeft.y - bottomRight.y);
+    _mapRect = MKMapRectMake(southWest.x, southWest.y, northEast.x - southWest.x, southWest.y - northEast.y);
 
     [self update];
 }

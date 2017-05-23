@@ -14,6 +14,7 @@
     CGRect theRect = [self rectForMapRect:theMapRect];
 
     CGContextRotateCTM(context, M_PI);
+    CGContextScaleCTM(context, -1.0, 1.0);
     CGContextAddRect(context, theRect);
     CGContextDrawImage(context, theRect, imageReference);
 
