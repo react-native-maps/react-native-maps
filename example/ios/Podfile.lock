@@ -6,10 +6,10 @@ PODS:
     - GoogleMaps/Base
   - React (0.42.3):
     - React/Core (= 0.42.3)
-  - react-native-google-maps (0.13.1):
+  - react-native-google-maps (0.14.0):
     - GoogleMaps (= 2.1.1)
     - React
-  - react-native-maps (0.13.1):
+  - react-native-maps (0.14.0):
     - React
   - React/Core (0.42.3):
     - React/cxxreact
@@ -70,8 +70,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
   React: 35e039680feacd0563677d49ba410112d2748559
-  react-native-google-maps: b2668747ec289759993dc2411a7078afafa8adea
-  react-native-maps: 326ddbaaea8f6044b1817fb028c40950c71cc38a
+  react-native-google-maps: c9ae7cfad7ee118fd7161bea36ff793e4eaf7ca0
+  react-native-maps: c0145d0e4c31e6ce48cbe124543a4331baecfc7b
   Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
 
 PODFILE CHECKSUM: 222d08e48f834b6a3de650b72786105af7a9d331

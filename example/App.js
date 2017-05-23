@@ -151,7 +151,7 @@ class App extends React.Component {
       [SetNativePropsOverlays, 'Update native props', true],
       [CustomOverlay, 'Custom Overlay Component', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
-      [ImageOverlay, 'Image Overlay Component', false],
+      [ImageOverlay, 'Image Overlay Component', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
