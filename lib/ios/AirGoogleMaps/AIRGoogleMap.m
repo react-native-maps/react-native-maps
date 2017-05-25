@@ -300,6 +300,14 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.myLocationButton;
 }
 
+- (void)setMinZoomLevel:(CGFloat)minZoomLevel {
+  self.minZoom = minZoomLevel;
+}
+
+- (void)setMaxZoomLevel:(CGFloat)maxZoomLevel {
+  self.maxZoom = maxZoomLevel;
+}
+
 
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
   // solution from here: http://stackoverflow.com/a/16587735/1102215
