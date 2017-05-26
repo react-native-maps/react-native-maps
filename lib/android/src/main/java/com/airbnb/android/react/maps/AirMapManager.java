@@ -59,7 +59,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     @Override
     protected AirMapView createViewInstance(ThemedReactContext context) {
-        return new AirMapView(context, this, googleMapOptions);
+        return new AirMapView(context, this.appContext, this, googleMapOptions);
     }
 
     private void emitMapError(ThemedReactContext context, String message, String type) {

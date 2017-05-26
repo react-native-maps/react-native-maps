@@ -1,5 +1,65 @@
 # Change Log
 
+## 0.15.2 (May 20, 2017)
+
+* iOS: [#1351](https://github.com/airbnb/react-native-maps/pull/1351) Fix file references
+
+## 0.15.1 (May 19, 2017)
+
+* iOS: [#1341](https://github.com/airbnb/react-native-maps/pull/1341) Fix compile error in rn version >= 0.40
+* iOS: [#1194](https://github.com/airbnb/react-native-maps/pull/1194) Add onPress support for Google Maps Polyline
+* iOS: [#1326](https://github.com/airbnb/react-native-maps/pull/1326) Add Marker rotation for Google Maps on iOS
+* Android: [#1311](https://github.com/airbnb/react-native-maps/pull/1311) Fix overlay issue
+* Common [#1313](https://github.com/airbnb/react-native-maps/pull/1313) Fix Android sourceDir for react-native-link
+
+## 0.15.0 (May 8, 2017)
+
+* iOS: [#1195](https://github.com/airbnb/react-native-maps/pull/1195) Rename project file to fix iOS build error
+* Android: Update Google Play Services to version `10.2.4`
+
+## 0.14.0 (April 4, 2017)
+
+## Enhancements
+
+* Restructure project #1164
+
+* Add showsIndoorLevelPicker -> setIndoorLevelPickerEnabled to MapView #1019
+[#1188](https://github.com/airbnb/react-native-maps/pull/1188)
+
+* iOS - Added onPress support for Polygons on Google Maps
+[#1024](https://github.com/airbnb/react-native-maps/pull/1024)
+
+*  Add customized user location annotation text
+[#1049](https://github.com/airbnb/react-native-maps/pull/1049)
+
+* iOS - Google Maps - Add `showsMyLocationButton` support
+[#1157](https://github.com/airbnb/react-native-maps/pull/1157)
+
+
+## Patches
+
+* Fix getResources() null crash in mapview
+[#1188](https://github.com/airbnb/react-native-maps/pull/1188)
+
+* Rename MapKit category to avoid conflicts with the one in RN
+[#1172](https://github.com/airbnb/react-native-maps/pull/1172)
+
+* Upgrade GMS dependencies to 10.2.0
+[#1169](https://github.com/airbnb/react-native-maps/pull/1169)
+
+* fix multiple-instance memory leak
+[#1130](https://github.com/airbnb/react-native-maps/pull/1130)
+
+* fix onSelected event for markers with custom view
+[#1079](https://github.com/airbnb/react-native-maps/pull/1079)
+
+* Crash in our App fix
+[#1096](https://github.com/airbnb/react-native-maps/pull/1096)
+
+* Use local RCTConvert+MapKit instead of the one in React Native
+[#1138](https://github.com/airbnb/react-native-maps/pull/1138)
+
+
 ## 0.13.1 (March 21, 2017)
 
 
