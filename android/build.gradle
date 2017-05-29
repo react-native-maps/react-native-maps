@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-  provided "com.facebook.react:react-native:+"
+  provided "com.facebook.react:react-native:0.20.1"
   compile "com.google.android.gms:play-services-base:9.8.0"
   compile "com.google.android.gms:play-services-maps:9.8.0"
 }
