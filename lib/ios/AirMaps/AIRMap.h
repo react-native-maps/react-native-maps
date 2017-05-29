@@ -37,6 +37,8 @@ extern const CGFloat AIRMapZoomBoundBuffer;
 @property (nonatomic, assign) UIEdgeInsets legalLabelInsets;
 @property (nonatomic, strong) NSTimer *regionChangeObserveTimer;
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
+@property (nonatomic, assign) CGFloat minZoomLevel;
+@property (nonatomic, assign) CGFloat maxZoomLevel;
 
 @property (nonatomic, assign) CLLocationCoordinate2D pendingCenter;
 @property (nonatomic, assign) MKCoordinateSpan pendingSpan;
