@@ -634,10 +634,10 @@ static int kDragCenterContext;
 
     [self _regionChanged:mapView];
 
-    if (zoomLevel < mapView.minZoomLevel) {
+    if (mapView.minZoomLevel != nil && zoomLevel < mapView.minZoomLevel) {
       [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
     }
-    else if (zoomLevel > mapView.maxZoomLevel) {
+    else if (mapView.maxZoomLevel != nil && zoomLevel > mapView.maxZoomLevel) {
       [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
     }
 
