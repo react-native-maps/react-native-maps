@@ -301,13 +301,12 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setMinZoomLevel:(CGFloat)minZoomLevel {
-  self.minZoom = minZoomLevel;
+  [self setMinZoom:minZoomLevel maxZoom:self.maxZoom ];
 }
 
 - (void)setMaxZoomLevel:(CGFloat)maxZoomLevel {
-  self.maxZoom = maxZoomLevel;
+  [self setMinZoom:self.minZoom maxZoom:maxZoomLevel ];
 }
-
 
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
   // solution from here: http://stackoverflow.com/a/16587735/1102215
