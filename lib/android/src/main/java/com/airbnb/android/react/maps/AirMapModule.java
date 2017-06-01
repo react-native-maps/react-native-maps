@@ -86,7 +86,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
                 view.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
                     public void onSnapshotReady(@Nullable Bitmap snapshot) {
 
-                        // Convert image to requested width/height if neccesary
+                        // Convert image to requested width/height if necessary
                         if (snapshot == null) {
                             promise.reject("Failed to generate bitmap, snapshot = null");
                             return;
