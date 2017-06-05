@@ -65,7 +65,12 @@ After your `Podfile` is setup properly, run `pod install`.
    require('react-native-maps');`
 
 ## Android
-
+1. Install SDK Tools 23.0.3
+   >You will need to perform this step whether or not you use "react-native link"
+   
+   ```
+   android update sdk --no-ui --all --filter build-tools-23.0.3
+   ```
 1. In your `android/app/build.gradle` add:
    >This step is not necessary if you ran "react-native link react-native-maps"
 
