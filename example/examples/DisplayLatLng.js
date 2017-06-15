@@ -43,12 +43,22 @@ class DisplayLatLng extends React.Component {
     this.map.animateToRegion(this.randomRegion());
   }
 
-  randomRegion() {
-    const { region } = this.state;
+  animateRandomCoordinate() {
+    this.map.animateToCoordinate(this.randomCoordinate());
+  }
+
+  randomCoordinate() {
+    const region = this.state.region;
     return {
-      ...this.state.region,
       latitude: region.latitude + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
       longitude: region.longitude + ((Math.random() - 0.5) * (region.longitudeDelta / 2)),
+    };
+  }
+
+  randomRegion() {
+    return {
+      ...this.state.region,
+      ...this.randomCoordinate(),
     };
   }
 
@@ -74,13 +84,19 @@ class DisplayLatLng extends React.Component {
             onPress={() => this.jumpRandom()}
             style={[styles.bubble, styles.button]}
           >
-            <Text>Jump</Text>
+            <Text style={styles.buttonText}>Jump</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.animateRandom()}
             style={[styles.bubble, styles.button]}
           >
-            <Text>Animate</Text>
+            <Text style={styles.buttonText}>Animate (Region)</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.animateRandomCoordinate()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text style={styles.buttonText}>Animate (Coordinate)</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -112,15 +128,19 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   button: {
-    width: 80,
-    paddingHorizontal: 12,
+    width: 100,
+    paddingHorizontal: 8,
     alignItems: 'center',
-    marginHorizontal: 10,
+    justifyContent: 'center',
+    marginHorizontal: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
     marginVertical: 20,
     backgroundColor: 'transparent',
+  },
+  buttonText: {
+    textAlign: 'center',
   },
 });
 
