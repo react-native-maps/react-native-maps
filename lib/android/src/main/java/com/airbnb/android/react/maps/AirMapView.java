@@ -627,6 +627,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
 
     public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding, boolean animated) {
+        if (map == null) {
+            return;
+        }
+            
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         for (int i = 0; i < coordinatesArray.size(); i++) {
@@ -713,6 +717,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         @Override
         public void run() {
+                
+            if (map == null) {
+                return;
+            }
 
             Projection projection = map.getProjection();
             VisibleRegion region = (projection != null) ? projection.getVisibleRegion() : null;
