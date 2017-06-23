@@ -155,6 +155,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
 }
 
+- (void)didFinishTileRendering {
+    if (self.onMapReady) self.onMapReady(@{});
+}
+
 - (BOOL)didTapMarker:(GMSMarker *)marker {
   AIRGMSMarker *airMarker = (AIRGMSMarker *)marker;
 
