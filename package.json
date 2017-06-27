@@ -33,7 +33,8 @@
   ],
   "peerDependencies": {
     "react": ">=15.4.0 || ^16.0.0-alpha",
-    "react-native": ">=0.40"
+    "react-native": ">=0.40",
+    "prop-types": "^15.5.10"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
@@ -48,8 +49,9 @@
     "eslint-plugin-react": "^6.1.2",
     "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
-    "react": "~15.4.1",
-    "react-native": "^0.42.0"
+    "prop-types": "^15.5.10",
+    "react": "^16.0.0-alpha.12",
+    "react-native": "^0.45.1"
   },
   "rnpm": {
     "android": {
