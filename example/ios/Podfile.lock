@@ -11,8 +11,14 @@ PODS:
     - React
   - react-native-maps (0.15.2):
     - React
+  - React/BatchedBridge (0.45.1):
+    - React/Core
+    - React/cxxreact_legacy
   - React/Core (0.45.1):
     - Yoga (= 0.45.1.React)
+  - React/cxxreact_legacy (0.45.1):
+    - React/jschelpers_legacy
+  - React/jschelpers_legacy (0.45.1)
   - React/RCTActionSheet (0.45.1):
     - React/Core
   - React/RCTAnimation (0.45.1):
@@ -40,6 +46,7 @@ DEPENDENCIES:
   - GoogleMaps
   - react-native-google-maps (from `../../`)
   - react-native-maps (from `../../`)
+  - React/BatchedBridge (from `../../node_modules/react-native`)
   - React/Core (from `../../node_modules/react-native`)
   - React/RCTActionSheet (from `../../node_modules/react-native`)
   - React/RCTAnimation (from `../../node_modules/react-native`)
@@ -70,6 +77,6 @@ SPEC CHECKSUMS:
   react-native-maps: fe2e4680b4d3fcfd84d636ccedd470fe358d55e1
   Yoga: 89c8738d42a0b46a113acb4e574336d61cba2985
 
-PODFILE CHECKSUM: 222d08e48f834b6a3de650b72786105af7a9d331
+PODFILE CHECKSUM: 8b3eb68ef6553bf1fcb8a467e0e63000b37ec692
 
 COCOAPODS: 1.2.0
