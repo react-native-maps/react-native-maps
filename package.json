@@ -32,7 +32,7 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": ">=15.4.0",
+    "react": ">=15.4.0 || ^16.0.0-alpha",
     "react-native": ">=0.40"
   },
   "devDependencies": {
