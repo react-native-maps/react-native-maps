@@ -123,6 +123,8 @@ Source: https://developers.google.com/maps/documentation/android-api/signup
 
 ## Troubleshooting
 
+If you get the error `duplicate symbols for architecture x86_64` when building for iOS, you may need to reconfigure your linking and Podfile as [described in detail in this comment on issue #718](https://github.com/airbnb/react-native-maps/issues/718#issuecomment-295585410)
+
 If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-maps/issues/118), [#176](https://github.com/airbnb/react-native-maps/issues/176), [#684](https://github.com/airbnb/react-native-maps/issues/684)), try the following lines :
 
 ### On iOS:
