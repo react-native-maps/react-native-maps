@@ -178,6 +178,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
   }
 
+  @ReactProp(name = "minZoomLevel")
+  public void setMinZoomLevel(AirMapView view, float minZoomLevel) {
+    view.map.setMinZoomPreference(minZoomLevel);
+  }
+
+  @ReactProp(name = "maxZoomLevel")
+  public void setMaxZoomLevel(AirMapView view, float maxZoomLevel) {
+    view.map.setMaxZoomPreference(maxZoomLevel);
+  }
+
   @Override
   public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
     Integer duration;

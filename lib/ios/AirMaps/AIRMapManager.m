@@ -97,6 +97,9 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDragEnd, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
+RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
+
 
 RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
 {
@@ -625,10 +628,18 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
+    CGFloat zoomLevel = [self zoomLevel:mapView];
     [mapView.regionChangeObserveTimer invalidate];
     mapView.regionChangeObserveTimer = nil;
 
     [self _regionChanged:mapView];
+
+    if (mapView.minZoomLevel != nil && zoomLevel < mapView.minZoomLevel) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
+    }
+    else if (mapView.maxZoomLevel != nil && zoomLevel > mapView.maxZoomLevel) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
+    }
 
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
@@ -665,6 +676,7 @@ static int kDragCenterContext;
     BOOL needZoom = NO;
     CGFloat newLongitudeDelta = 0.0f;
     MKCoordinateRegion region = mapView.region;
+    CGFloat zoomLevel = [self zoomLevel:mapView];
     // On iOS 7, it's possible that we observe invalid locations during initialization of the map.
     // Filter those out.
     if (!CLLocationCoordinate2DIsValid(region.center)) {
@@ -757,6 +769,163 @@ static int kDragCenterContext;
     CLLocationCoordinate2D coordB = [mapView convertPoint:ptB toCoordinateFromView:mapView];
 
     return MKMetersBetweenMapPoints(MKMapPointForCoordinate(coordA), MKMapPointForCoordinate(coordB));
+}
+
++ (double)longitudeToPixelSpaceX:(double)longitude
+{
+    return round(MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * M_PI / 180.0);
+}
+
++ (double)latitudeToPixelSpaceY:(double)latitude
+{
+	if (latitude == 90.0) {
+		return 0;
+	} else if (latitude == -90.0) {
+		return MERCATOR_OFFSET * 2;
+	} else {
+		return round(MERCATOR_OFFSET - MERCATOR_RADIUS * logf((1 + sinf(latitude * M_PI / 180.0)) / (1 - sinf(latitude * M_PI / 180.0))) / 2.0);
+	}
+}
+
++ (double)pixelSpaceXToLongitude:(double)pixelX
+{
+    return ((round(pixelX) - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / M_PI;
+}
+
++ (double)pixelSpaceYToLatitude:(double)pixelY
+{
+    return (M_PI / 2.0 - 2.0 * atan(exp((round(pixelY) - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / M_PI;
+}
+
+#pragma mark -
+#pragma mark Helper methods
+
+- (MKCoordinateSpan)coordinateSpanWithMapView:(AIRMap *)mapView
+                             centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
+                                 andZoomLevel:(double)zoomLevel
+{
+    // convert center coordiate to pixel space
+    double centerPixelX = [AIRMapManager longitudeToPixelSpaceX:centerCoordinate.longitude];
+    double centerPixelY = [AIRMapManager latitudeToPixelSpaceY:centerCoordinate.latitude];
+
+    // determine the scale value from the zoom level
+    double zoomExponent = 20 - zoomLevel;
+    double zoomScale = pow(2, zoomExponent);
+
+    // scale the map’s size in pixel space
+    CGSize mapSizeInPixels = mapView.bounds.size;
+    double scaledMapWidth = mapSizeInPixels.width * zoomScale;
+    double scaledMapHeight = mapSizeInPixels.height * zoomScale;
+
+    // figure out the position of the top-left pixel
+    double topLeftPixelX = centerPixelX - (scaledMapWidth / 2);
+    double topLeftPixelY = centerPixelY - (scaledMapHeight / 2);
+
+    // find delta between left and right longitudes
+    CLLocationDegrees minLng = [AIRMapManager pixelSpaceXToLongitude:topLeftPixelX];
+    CLLocationDegrees maxLng = [AIRMapManager pixelSpaceXToLongitude:topLeftPixelX + scaledMapWidth];
+    CLLocationDegrees longitudeDelta = maxLng - minLng;
+
+    // find delta between top and bottom latitudes
+    CLLocationDegrees minLat = [AIRMapManager pixelSpaceYToLatitude:topLeftPixelY];
+    CLLocationDegrees maxLat = [AIRMapManager pixelSpaceYToLatitude:topLeftPixelY + scaledMapHeight];
+    CLLocationDegrees latitudeDelta = -1 * (maxLat - minLat);
+
+    // create and return the lat/lng span
+    MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
+    return span;
+}
+
+#pragma mark -
+#pragma mark Public methods
+
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
+                  zoomLevel:(double)zoomLevel
+                   animated:(BOOL)animated
+                    mapView:(AIRMap *)mapView
+{
+    // clamp large numbers to 28
+    zoomLevel = MIN(zoomLevel, 28);
+
+    // use the zoom level to compute the region
+    MKCoordinateSpan span = [self coordinateSpanWithMapView:mapView centerCoordinate:centerCoordinate andZoomLevel:zoomLevel];
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+
+    // set the region like normal
+    [mapView setRegion:region animated:animated];
+}
+
+//KMapView cannot display tiles that cross the pole (as these would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do).
+-(MKCoordinateRegion)coordinateRegionWithMapView:(AIRMap *)mapView
+                                centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
+                                    andZoomLevel:(double)zoomLevel
+{
+	// clamp lat/long values to appropriate ranges
+	centerCoordinate.latitude = MIN(MAX(-90.0, centerCoordinate.latitude), 90.0);
+	centerCoordinate.longitude = fmod(centerCoordinate.longitude, 180.0);
+
+	// convert center coordiate to pixel space
+	double centerPixelX = [AIRMapManager longitudeToPixelSpaceX:centerCoordinate.longitude];
+	double centerPixelY = [AIRMapManager latitudeToPixelSpaceY:centerCoordinate.latitude];
+
+	// determine the scale value from the zoom level
+	double zoomExponent = 20 - zoomLevel;
+	double zoomScale = pow(2, zoomExponent);
+
+	// scale the map’s size in pixel space
+	CGSize mapSizeInPixels = mapView.bounds.size;
+	double scaledMapWidth = mapSizeInPixels.width * zoomScale;
+	double scaledMapHeight = mapSizeInPixels.height * zoomScale;
+
+	// figure out the position of the left pixel
+	double topLeftPixelX = centerPixelX - (scaledMapWidth / 2);
+
+	// find delta between left and right longitudes
+	CLLocationDegrees minLng = [AIRMapManager pixelSpaceXToLongitude:topLeftPixelX];
+	CLLocationDegrees maxLng = [AIRMapManager pixelSpaceXToLongitude:topLeftPixelX + scaledMapWidth];
+	CLLocationDegrees longitudeDelta = maxLng - minLng;
+
+	// if we’re at a pole then calculate the distance from the pole towards the equator
+	// as MKMapView doesn’t like drawing boxes over the poles
+	double topPixelY = centerPixelY - (scaledMapHeight / 2);
+	double bottomPixelY = centerPixelY + (scaledMapHeight / 2);
+	BOOL adjustedCenterPoint = NO;
+	if (topPixelY > MERCATOR_OFFSET * 2) {
+		topPixelY = centerPixelY - scaledMapHeight;
+		bottomPixelY = MERCATOR_OFFSET * 2;
+		adjustedCenterPoint = YES;
+	}
+
+	// find delta between top and bottom latitudes
+	CLLocationDegrees minLat = [AIRMapManager pixelSpaceYToLatitude:topPixelY];
+	CLLocationDegrees maxLat = [AIRMapManager pixelSpaceYToLatitude:bottomPixelY];
+	CLLocationDegrees latitudeDelta = -1 * (maxLat - minLat);
+
+	// create and return the lat/lng span
+	MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
+	MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+	// once again, MKMapView doesn’t like drawing boxes over the poles
+	// so adjust the center coordinate to the center of the resulting region
+	if (adjustedCenterPoint) {
+		region.center.latitude = [AIRMapManager pixelSpaceYToLatitude:((bottomPixelY + topPixelY) / 2.0)];
+	}
+
+	return region;
+}
+
+- (double) zoomLevel:(AIRMap *)mapView {
+    MKCoordinateRegion region = mapView.region;
+
+    double centerPixelX = [AIRMapManager longitudeToPixelSpaceX: region.center.longitude];
+    double topLeftPixelX = [AIRMapManager longitudeToPixelSpaceX: region.center.longitude - region.span.longitudeDelta / 2];
+
+    double scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
+    CGSize mapSizeInPixels = mapView.bounds.size;
+    double zoomScale = scaledMapWidth / mapSizeInPixels.width;
+    double zoomExponent = log(zoomScale) / log(2);
+    double zoomLevel = 20 - zoomExponent;
+
+    return zoomLevel;
 }
 
 @end
