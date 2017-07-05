@@ -36,11 +36,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int FIT_TO_COORDINATES = 5;
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
-    "standard", GoogleMap.MAP_TYPE_NORMAL,
-    "satellite", GoogleMap.MAP_TYPE_SATELLITE,
-    "hybrid", GoogleMap.MAP_TYPE_HYBRID,
-    "terrain", GoogleMap.MAP_TYPE_TERRAIN,
-    "none", GoogleMap.MAP_TYPE_NONE
+      "standard", GoogleMap.MAP_TYPE_NORMAL,
+      "satellite", GoogleMap.MAP_TYPE_SATELLITE,
+      "hybrid", GoogleMap.MAP_TYPE_HYBRID,
+      "terrain", GoogleMap.MAP_TYPE_TERRAIN,
+      "none", GoogleMap.MAP_TYPE_NONE
   );
 
   private final ReactApplicationContext appContext;
@@ -68,8 +68,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     error.putString("type", type);
 
     context
-      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-      .emit("onError", error);
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit("onError", error);
   }
 
   @ReactProp(name = "region")
@@ -103,7 +103,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.setToolbarEnabled(toolbarEnabled);
   }
 
-  // This is a private prop to improve performance of panDrag by disabling it when the callback is not set
+  // This is a private prop to improve performance of panDrag by disabling it when the callback
+  // is not set
   @ReactProp(name = "handlePanDrag", defaultBoolean = false)
   public void setHandlePanDrag(AirMapView view, boolean handlePanDrag) {
     view.setHandlePanDrag(handlePanDrag);
@@ -161,7 +162,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   @ReactProp(name = "moveOnMarkerPress", defaultBoolean = true)
   public void setMoveOnMarkerPress(AirMapView view, boolean moveOnPress) {
-      view.setMoveOnMarkerPress(moveOnPress);
+    view.setMoveOnMarkerPress(moveOnPress);
   }
 
   @ReactProp(name = "loadingBackgroundColor", customType = "Color")
@@ -189,7 +190,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.map.setMaxZoomPreference(maxZoomLevel);
   }
 
-
   @Override
   public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
     Integer duration;
@@ -208,8 +208,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         lngDelta = region.getDouble("longitudeDelta");
         latDelta = region.getDouble("latitudeDelta");
         LatLngBounds bounds = new LatLngBounds(
-          new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-          new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
         );
         view.animateToRegion(bounds, duration);
         break;
@@ -239,20 +239,20 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   @Nullable
   public Map getExportedCustomDirectEventTypeConstants() {
     Map<String, Map<String, String>> map = MapBuilder.of(
-      "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
-      "onPress", MapBuilder.of("registrationName", "onPress"),
-      "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
-      "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
-      "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
-      "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect"),
-      "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
+        "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
+        "onPress", MapBuilder.of("registrationName", "onPress"),
+        "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
+        "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
+        "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
+        "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect"),
+        "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
     );
 
     map.putAll(MapBuilder.of(
-      "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
-      "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
-      "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
-      "onPanDrag", MapBuilder.of("registrationName", "onPanDrag")
+        "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
+        "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
+        "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
+        "onPanDrag", MapBuilder.of("registrationName", "onPanDrag")
     ));
 
     return map;
@@ -262,11 +262,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   @Nullable
   public Map<String, Integer> getCommandsMap() {
     return MapBuilder.of(
-      "animateToRegion", ANIMATE_TO_REGION,
-      "animateToCoordinate", ANIMATE_TO_COORDINATE,
-      "fitToElements", FIT_TO_ELEMENTS,
-      "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
-      "fitToCoordinates", FIT_TO_COORDINATES
+        "animateToRegion", ANIMATE_TO_REGION,
+        "animateToCoordinate", ANIMATE_TO_COORDINATE,
+        "fitToElements", FIT_TO_ELEMENTS,
+        "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
+        "fitToCoordinates", FIT_TO_COORDINATES
     );
   }
 
@@ -304,9 +304,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   void pushEvent(ThemedReactContext context, View view, String name, WritableMap data) {
     context.getJSModule(RCTEventEmitter.class)
-      .receiveEvent(view.getId(), name, data);
+        .receiveEvent(view.getId(), name, data);
   }
-
 
 
   @Override
