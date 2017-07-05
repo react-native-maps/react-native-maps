@@ -4,46 +4,49 @@ PODS:
   - GoogleMaps/Base (2.1.1)
   - GoogleMaps/Maps (2.1.1):
     - GoogleMaps/Base
-  - React (0.42.3):
-    - React/Core (= 0.42.3)
-  - react-native-google-maps (0.13.1):
+  - React (0.45.1):
+    - React/Core (= 0.45.1)
+  - react-native-google-maps (0.15.2):
     - GoogleMaps (= 2.1.1)
     - React
-  - react-native-maps (0.13.1):
+  - react-native-maps (0.15.2):
     - React
-  - React/Core (0.42.3):
-    - React/cxxreact
-    - Yoga (= 0.42.3.React)
-  - React/cxxreact (0.42.3):
-    - React/jschelpers
-  - React/jschelpers (0.42.3)
-  - React/RCTActionSheet (0.42.3):
+  - React/BatchedBridge (0.45.1):
     - React/Core
-  - React/RCTAnimation (0.42.3):
+    - React/cxxreact_legacy
+  - React/Core (0.45.1):
+    - Yoga (= 0.45.1.React)
+  - React/cxxreact_legacy (0.45.1):
+    - React/jschelpers_legacy
+  - React/jschelpers_legacy (0.45.1)
+  - React/RCTActionSheet (0.45.1):
     - React/Core
-  - React/RCTGeolocation (0.42.3):
+  - React/RCTAnimation (0.45.1):
     - React/Core
-  - React/RCTImage (0.42.3):
+  - React/RCTGeolocation (0.45.1):
+    - React/Core
+  - React/RCTImage (0.45.1):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.42.3):
+  - React/RCTLinkingIOS (0.45.1):
     - React/Core
-  - React/RCTNetwork (0.42.3):
+  - React/RCTNetwork (0.45.1):
     - React/Core
-  - React/RCTSettings (0.42.3):
+  - React/RCTSettings (0.45.1):
     - React/Core
-  - React/RCTText (0.42.3):
+  - React/RCTText (0.45.1):
     - React/Core
-  - React/RCTVibration (0.42.3):
+  - React/RCTVibration (0.45.1):
     - React/Core
-  - React/RCTWebSocket (0.42.3):
+  - React/RCTWebSocket (0.45.1):
     - React/Core
-  - Yoga (0.42.3.React)
+  - Yoga (0.45.1.React)
 
 DEPENDENCIES:
   - GoogleMaps
   - react-native-google-maps (from `../../`)
   - react-native-maps (from `../../`)
+  - React/BatchedBridge (from `../../node_modules/react-native`)
   - React/Core (from `../../node_modules/react-native`)
   - React/RCTActionSheet (from `../../node_modules/react-native`)
   - React/RCTAnimation (from `../../node_modules/react-native`)
@@ -69,11 +72,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
-  React: 35e039680feacd0563677d49ba410112d2748559
-  react-native-google-maps: b2668747ec289759993dc2411a7078afafa8adea
-  react-native-maps: 326ddbaaea8f6044b1817fb028c40950c71cc38a
-  Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
+  React: 0c9191a8b0c843d7004f950ac6b5f6cba9d125c7
+  react-native-google-maps: d0b8772eb76e1615ea32c73bc9d573360b8c0817
+  react-native-maps: fe2e4680b4d3fcfd84d636ccedd470fe358d55e1
+  Yoga: 89c8738d42a0b46a113acb4e574336d61cba2985
 
-PODFILE CHECKSUM: 222d08e48f834b6a3de650b72786105af7a9d331
+PODFILE CHECKSUM: 8b3eb68ef6553bf1fcb8a467e0e63000b37ec692
 
 COCOAPODS: 1.2.0

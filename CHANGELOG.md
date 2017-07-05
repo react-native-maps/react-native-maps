@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.15.3 (June 27, 2017)
+
+* iOS: [#1362](https://github.com/airbnb/react-native-maps/pull/1362) Updates for React 0.43-0.45 and React 16.
+* JS: [#1323](https://github.com/airbnb/react-native-maps/pull/1323) Updates for React 0.43-0.45 and React 16.
+* Android/iOS/JS: [#1440](https://github.com/airbnb/react-native-maps/pull/1440) Updates for React 0.43-0.45 and React 16.
+* iOS: [#1115](https://github.com/airbnb/react-native-maps/pull/1115) Fix animateToCoordinate and animateToRegion
+* Android: [#1403](https://github.com/airbnb/react-native-maps/pull/1403) Fix an NPE
+
 ## 0.15.2 (May 20, 2017)
 
 * iOS: [#1351](https://github.com/airbnb/react-native-maps/pull/1351) Fix file references
