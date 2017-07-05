@@ -203,7 +203,7 @@ Enter the name of the API key and create it.
 1. Clean the cache :
   ```
    watchman watch-del-all
-   npm clean cache
+   npm cache clean
   ```
 
 1. When starting emulator, make sure you have enabled `Wipe user data`.
