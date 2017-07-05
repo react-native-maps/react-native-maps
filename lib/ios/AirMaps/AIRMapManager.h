@@ -8,7 +8,23 @@
  */
 
 #import <React/RCTViewManager.h>
+#import "AIRMap.h"
+
+#define MERCATOR_RADIUS 85445659.44705395
+#define MERCATOR_OFFSET 268435456
+#define MAX_GOOGLE_LEVELS 20
 
 @interface AIRMapManager : RCTViewManager
+
+
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
+    zoomLevel:(double)zoomLevel
+    animated:(BOOL)animated
+    mapView:(AIRMap *)mapView;
+
+- (MKCoordinateRegion)coordinateRegionWithMapView:(AIRMap *)mapView
+                                 centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
+								                     andZoomLevel:(double)zoomLevel;
+- (double) zoomLevel:(AIRMap *)mapView;
 
 @end
