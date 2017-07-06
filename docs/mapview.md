@@ -40,6 +40,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 
 | Event Name | Returns | Notes
 |---|---|---|
+| `onMapReady` |  | Callback that is called once the map is fully loaded.
 | `onRegionChange` | `Region` | Callback that is called continuously when the region changes, such as when a user is dragging the map.
 | `onRegionChangeComplete` | `Region` | Callback that is called once when the region changes, such as when the user is done moving the map.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
