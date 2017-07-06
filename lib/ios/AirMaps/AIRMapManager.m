@@ -482,6 +482,8 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         return ((AIRMapCircle *)overlay).renderer;
     } else if ([overlay isKindOfClass:[AIRMapUrlTile class]]) {
         return ((AIRMapUrlTile *)overlay).renderer;
+    } else if([overlay isKindOfClass:[MKTileOverlay class]]) {
+        return [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
     } else {
         return nil;
     }
