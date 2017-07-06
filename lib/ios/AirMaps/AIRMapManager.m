@@ -85,6 +85,7 @@ RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(minDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
+RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
@@ -662,6 +663,8 @@ static int kDragCenterContext;
 {
     [mapView finishLoading];
     [mapView cacheViewIfNeeded];
+    
+    mapView.onMapReady(@{});
 }
 
 #pragma mark Private
