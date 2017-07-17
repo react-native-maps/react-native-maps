@@ -12,7 +12,6 @@
 
 #define MERCATOR_RADIUS 85445659.44705395
 #define MERCATOR_OFFSET 268435456
-#define MAX_GOOGLE_LEVELS 20
 
 @interface AIRMapManager : RCTViewManager
 
