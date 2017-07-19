@@ -31,6 +31,7 @@
 @property (nonatomic, assign) NSInteger zIndex;
 @property (nonatomic, assign) double opacity;
 @property (nonatomic, assign) BOOL draggable;
+@property (nonatomic, assign) BOOL tracksViewChanges;
 
 - (void)showCalloutView;
 - (void)hideCalloutView;

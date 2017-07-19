@@ -295,4 +295,12 @@ CGRect unionRect(CGRect a, CGRect b) {
   return _realMarker.draggable;
 }
 
+- (void)setTracksViewChanges:(BOOL)tracksViewChanges {
+  _realMarker.tracksViewChanges = tracksViewChanges;
+}
+
+- (BOOL)tracksViewChanges {
+  return _realMarker.tracksViewChanges;
+}
+
 @end
