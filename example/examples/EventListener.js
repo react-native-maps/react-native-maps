@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 // eslint-disable-next-line max-len
 import SyntheticEvent from 'react-native/Libraries/Renderer/src/renderers/shared/shared/event/SyntheticEvent';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
 const { width, height } = Dimensions.get('window');
@@ -79,6 +79,9 @@ class EventListener extends React.Component {
     };
   }
 
+  /**
+   *
+   *     */
   render() {
     return (
       <View style={styles.container}>
@@ -86,6 +89,13 @@ class EventListener extends React.Component {
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
+          showsUserLocation
+          showsMyLocationButton
+          onMyLocationChange={
+            this.props.provider === PROVIDER_GOOGLE
+            ? this.recordEvent('Map::onMyLocationChange')
+            : {}
+          }
           onRegionChange={this.recordEvent('Map::onRegionChange')}
           onRegionChangeComplete={this.recordEvent('Map::onRegionChangeComplete')}
           onPress={this.recordEvent('Map::onPress')}
