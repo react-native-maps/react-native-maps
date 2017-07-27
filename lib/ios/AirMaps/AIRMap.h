@@ -17,6 +17,7 @@
 extern const CLLocationDegrees AIRMapDefaultSpan;
 extern const NSTimeInterval AIRMapRegionChangeObserveInterval;
 extern const CGFloat AIRMapZoomBoundBuffer;
+extern const NSInteger AIRMapMaxZoomLevel;
 
 @interface AIRMap: MKMapView<SMCalloutViewDelegate>
 
