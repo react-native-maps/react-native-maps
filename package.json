@@ -1,5 +1,5 @@
 {
-  "name": "react-native-maps",
+  "name": "react-native-maps-battery",
   "description": "React Native Mapview component for iOS + Android",
   "main": "index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
