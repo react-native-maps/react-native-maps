@@ -29,6 +29,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.EventDispatcher;
+import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -78,6 +79,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private final Map<Marker, AirMapMarker> markerMap = new HashMap<>();
   private final Map<Polyline, AirMapPolyline> polylineMap = new HashMap<>();
   private final Map<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
+  private final Map<TileOverlay, AirMapHeatmap> heatmapMap = new HashMap<>();
   private final ScaleGestureDetector scaleDetector;
   private final GestureDetectorCompat gestureDetector;
   private final AirMapManager manager;
@@ -493,6 +495,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       AirMapUrlTile urlTileView = (AirMapUrlTile) child;
       urlTileView.addToMap(map);
       features.add(index, urlTileView);
+    } else if ( feature instanceof AirMapHeatmap) {
+      AirMapHeatmap heatmapView = (AirMapHeatmap) child;
+      heatmapView.addToMap(map);
+      features.add(index, heatmapView);
+      TileOverlay heatmap = (TileOverlay)heatmapView.getFeature();
+      heatmapMap.put(heatmap,heatmapVoew);
     } else {
       ViewGroup children = (ViewGroup) child;
       for (int i = 0; i < children.getChildCount(); i++) {
@@ -513,6 +521,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     AirMapFeature feature = features.remove(index);
     if (feature instanceof AirMapMarker) {
       markerMap.remove(feature.getFeature());
+    } else if (feature instanceof AirMapHeatmap) {
+      heatmapMap.remove(feature.getFeature());
     }
     feature.removeFromMap(map);
   }
@@ -733,7 +743,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
           eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));
         }
       }
-      
+
       timerHandler.postDelayed(this, 100);
     }
   };
