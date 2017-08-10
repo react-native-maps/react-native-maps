@@ -39,7 +39,7 @@ public class MapsPackage implements ReactPackage {
     AirMapManager mapManager = new AirMapManager(reactContext);
     AirMapLiteManager mapLiteManager = new AirMapLiteManager(reactContext);
     AirMapUrlTileManager tileManager = new AirMapUrlTileManager(reactContext);
-    AirMapHeatmapManager heatmapManager = new AirMapHeatmapManager(reactContext);
+    AirMapHeatmapManager heatmapManager = new AirMapHeatmapManager();
 
 
     return Arrays.<ViewManager>asList(
