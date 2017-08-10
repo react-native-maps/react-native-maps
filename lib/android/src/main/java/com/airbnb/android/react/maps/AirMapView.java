@@ -500,7 +500,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       heatmapView.addToMap(map);
       features.add(index, heatmapView);
       TileOverlay heatmap = (TileOverlay)heatmapView.getFeature();
-      heatmapMap.put(heatmap.heatmapView);
+      heatmapMap.put(heatmap, heatmapView);
     } else {
       ViewGroup children = (ViewGroup) child;
       for (int i = 0; i < children.getChildCount(); i++) {
