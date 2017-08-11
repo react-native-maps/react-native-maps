@@ -4,10 +4,10 @@
 //
 
 #import "RCTConvert+MoreMapKit.h"
+
+#import <React/RCTConvert+CoreLocation.h>
 #import "AIRMapCoordinate.h"
 #import "AIRMapWeightedPoint.h"
-#import "RCTConvert+CoreLocation.h"
-
 
 @implementation RCTConvert (MoreMapKit)
 
