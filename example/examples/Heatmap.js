@@ -43,7 +43,7 @@ class Heatmap extends React.Component {
 
     this.state = {
       points: getHeatMapPoints(50),
-      weighEnabled: false,
+      weightEnabled: false,
     }
   }
 
