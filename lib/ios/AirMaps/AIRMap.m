@@ -111,9 +111,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
         ((AIRMapUrlTile *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
-    } else if ([subview isKindOfCLass:[AirMapHeatmap class]) {
-        ((AIRMahHeatmap *) subview).map = self;
-        [self addOverlay:(id <MKOverlay>) subView];
+    } else if ([subview isKindOfClass:[AIRMapHeatmap class]]) {
+        ((AIRMapHeatmap *) subview).map = self;
+        [self addOverlay:(id <MKOverlay>)subview];
 
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
