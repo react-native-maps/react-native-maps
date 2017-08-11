@@ -11,15 +11,16 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import "RCTConvert+MapKit.h"
-#import "RCTComponent.h"
+#import <React/RCTComponent.h>
+#import <React/RCTView.h>
+
+#import "RCTConvert+MoreMapKit.h"
 #import "AIRMapWeightedPoint.h"
 
 #import "AIRMap.h"
-#import "RCTView.h"
 
-#import "DTMHeatmap.h"
-#import "DTMHeatmapRenderer.h"
+#import "DTMHeatmap/Heatmaps/DTMHeatmap.h"
+#import "DTMHeatmap/DTMHeatmapRenderer.h"
 
 @interface AIRMapHeatmap: MKAnnotationView <MKOverlay>
 
