@@ -665,7 +665,7 @@ static int kDragCenterContext;
 {
     [mapView finishLoading];
     [mapView cacheViewIfNeeded];
-    
+
     mapView.onMapReady(@{});
 }
 
