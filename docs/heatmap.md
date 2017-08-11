@@ -10,10 +10,10 @@
 
 ## Types
 
-'''
+```
 type Point {
 	latitude: Number,
 	longitude: Number,
 	weight: Number,
 }
-'''
+```
