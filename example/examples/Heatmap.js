@@ -1,5 +1,7 @@
-var React = require('react');
-var {
+import React from 'react'
+import MapView from 'react-native-maps'
+
+import {
   StyleSheet,
   PropTypes,
   View,
@@ -7,11 +9,10 @@ var {
   Dimensions,
   TouchableOpacity,
   Image,
-} = require('react-native');
+} from 'react-native'
 
-var MapView = require('react-native-maps');
 
-var { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -20,7 +21,8 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
-function getHeatMapPoints(size, withWeight = false) {
+let getHeatMapsPoints = (size, withWeight = false) => {
+
   let points = [];
 
   for (i = 0; i < size; i++) {
@@ -34,39 +36,33 @@ function getHeatMapPoints(size, withWeight = false) {
   return points;
 }
 
-var Heatmap = React.createClass({
-  getInitialState() {
+class Heatmap extends React.Component {
+  getInitialState: () => {
     return {
       points: getHeatMapPoints(50),
       weightEnabled: false,
     }
   },
-
-  changeHeatmap() {
-    this.setState({points: getHeatMapPoints(50, this.state.weightEnabled)});
+  changeHeatmap: () => {
+    this.setState({points: getHeatMapPoints(50,this.state.weightEnabled)})
   },
-
-  toggleWeightEnabled() {
-    this.setState({weightEnabled: !this.state.weightEnabled});
-    this.changeHeatmap();
+  toggleWeightEnabled: () => {
+    this.setState({weightEnabled: !this.state.weightEnabled})
   },
-
-  render() {
+  render: () => {
     return (
       <View style={styles.container}>
         <MapView
-          ref="map"
-          style={styles.map}
-          initialRegion={{
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
+        ref="map"
+        style = {styles.map}
+        initialRegion = {{
+          latitude: LATITUDE,
+          longitude: LONGITUDE,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
         >
-          <MapView.Heatmap
-            points={this.state.points}
-          />
+        <MapView.Heatmap points={this.state.points}/>
         </MapView>
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={this.changeHeatmap} style={[styles.bubble, styles.button]}>
@@ -77,11 +73,12 @@ var Heatmap = React.createClass({
           </TouchableOpacity>
         </View>
       </View>
-    );
-  },
-});
+    )
+  }
+}
 
-var styles = StyleSheet.create({
+
+let styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
@@ -118,4 +115,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = Heatmap;
+export default Heatmap;
