@@ -1,4 +1,4 @@
-# `<MapHeatmap />` Component API
+# `<MapView.MapHeatmap />` Component API
 
 ## Props
 
