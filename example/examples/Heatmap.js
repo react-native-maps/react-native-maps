@@ -37,19 +37,23 @@ let getHeatMapsPoints = (size, withWeight = false) => {
 }
 
 class Heatmap extends React.Component {
-  getInitialState: () => {
+  
+  getInitialState = () => {
     return {
       points: getHeatMapPoints(50),
       weightEnabled: false,
     }
-  },
-  changeHeatmap: () => {
+  }
+
+  changeHeatmap = () => {
     this.setState({points: getHeatMapPoints(50,this.state.weightEnabled)})
-  },
+  }
+
   toggleWeightEnabled: () => {
     this.setState({weightEnabled: !this.state.weightEnabled})
-  },
-  render: () => {
+  }
+
+  render = () => {
     return (
       <View style={styles.container}>
         <MapView
