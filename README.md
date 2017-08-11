@@ -36,6 +36,8 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<MapView.Circle />` Component API](docs/circle.md)
 
+[`<MapView.Heatmap />` Component API](docs/heatmap.md)
+
 ## General Usage
 
 ```js
@@ -280,12 +282,13 @@ So far, `<Circle />`, `<Polygon />`, and `<Polyline />` are available to pass in
 
 ![](http://i.giphy.com/xT77XZCH8JpEhzVcNG.gif) ![](http://i.giphy.com/xT77XZyA0aYeOX5jsA.gif)
 
-#### Heatmap
 
-Heatmap of points.
+
+### Heatmap
+
+Display a Heatmap of points with optional point weighting.
 
 ![](https://cloud.githubusercontent.com/assets/159813/15375723/9fe395a0-1d05-11e6-9b4d-0b053b894d04.gif)
-
 
 
 
