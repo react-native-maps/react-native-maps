@@ -15,12 +15,16 @@ import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.annotation.Nullable;
 
@@ -38,6 +42,13 @@ public class AirMapModule extends ReactContextBaseJavaModule {
   @Override
   public String getName() {
     return "AirMapModule";
+  }
+
+  @Override
+  public Map<String, Object> getConstants() {
+    final Map<String, Object> constants = new HashMap<>();
+    constants.put("legalNotice", GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(getReactApplicationContext()));
+    return constants;
   }
 
   public Activity getActivity() {
