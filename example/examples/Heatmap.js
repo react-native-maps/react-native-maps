@@ -27,7 +27,7 @@ class Heatmap extends React.Component {
     };
   }
 
-  getHeatMapsPoints = (size, withWeight = false) => {
+  getHeatMapPoints = (size, withWeight = false) => {
     const points = [];
 
     for (let i = 0; i < size; i++) {
