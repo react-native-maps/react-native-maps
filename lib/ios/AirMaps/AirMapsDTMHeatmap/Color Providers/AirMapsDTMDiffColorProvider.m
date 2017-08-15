@@ -1,14 +1,14 @@
 //
-//  DTMDiffColorProvider.m
-//  DTMHeatMapExample
+//  AirMapsDTMDiffColorProvider.m
+//  AirMapsDTMHeatMapExample
 //
 //  Created by Bryan Oltman on 1/8/15.
 //  Copyright (c) 2015 Dataminr. All rights reserved.
 //
 
-#import "DTMDiffColorProvider.h"
+#import "AirMapsDTMDiffColorProvider.h"
 
-@implementation DTMDiffColorProvider
+@implementation AirMapsDTMDiffColorProvider
 
 - (void)colorForValue:(double)value
                   red:(CGFloat *)red
