@@ -12,6 +12,7 @@
 #import "AIRGMSMarker.h"
 #import "AIRGoogleMapCallout.h"
 #import "DummyView.h"
+#import "GlobalVars.h"
 
 CGRect unionRect(CGRect a, CGRect b) {
   return CGRectMake(
@@ -36,6 +37,7 @@ CGRect unionRect(CGRect a, CGRect b) {
   if ((self = [super init])) {
     _realMarker = [[AIRGMSMarker alloc] init];
     _realMarker.fakeMarker = self;
+    _realMarker.appearAnimation = kGMSMarkerAnimationPop;
   }
   return self;
 }
@@ -90,6 +92,18 @@ CGRect unionRect(CGRect a, CGRect b) {
   }
   DummyView *dummySubview = [[DummyView alloc] initWithView:(UIView *)subview];
   [super insertReactSubview:(UIView*)dummySubview atIndex:atIndex];
+}
+
+- (void)setIcon:(UIImage*)image {
+  CGImageRef cgref = [image CGImage];
+  CIImage *cim = [image CIImage];
+  
+  if (cim == nil && cgref == NULL) {
+    // image does not contain image data
+    _realMarker.icon = [GMSMarker markerImageWithColor:UIColor.blueColor];
+  } else {
+    _realMarker.icon = image;
+  }
 }
 
 - (void)removeReactSubview:(id<RCTComponent>)dummySubview {
@@ -188,70 +202,8 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (void)setImageSrc:(NSString *)imageSrc
 {
-  _imageSrc = imageSrc;
-
-  if (_reloadImageCancellationBlock) {
-    _reloadImageCancellationBlock();
-    _reloadImageCancellationBlock = nil;
-  }
-
-  if (!_imageSrc) {
-    if (_iconImageView) [_iconImageView removeFromSuperview];
-    return;
-  }
-
-  if (!_iconImageView) {
-    // prevent glitch with marker (cf. https://github.com/airbnb/react-native-maps/issues/738)
-    UIImageView *empyImageView = [[UIImageView alloc] init];
-    _iconImageView = empyImageView;
-    [self iconViewInsertSubview:_iconImageView atIndex:0];
-  }
-
-  _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
-                                                                          size:self.bounds.size
-                                                                         scale:RCTScreenScale()
-                                                                       clipped:YES
-                                                                    resizeMode:RCTResizeModeCenter
-                                                                 progressBlock:nil
-                                                              partialLoadBlock:nil
-                                                               completionBlock:^(NSError *error, UIImage *image) {
-                                                                 if (error) {
-                                                                   // TODO(lmr): do something with the error?
-                                                                   NSLog(@"%@", error);
-                                                                 }
-                                                                 dispatch_async(dispatch_get_main_queue(), ^{
-
-                                                                   // TODO(gil): This way allows different image sizes
-                                                                   if (_iconImageView) [_iconImageView removeFromSuperview];
-
-                                                                   // ... but this way is more efficient?
-//                                                                   if (_iconImageView) {
-//                                                                     [_iconImageView setImage:image];
-//                                                                     return;
-//                                                                   }
-
-                                                                   UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-
-                                                                   // TODO: w,h or pixel density could be a prop.
-                                                                   float density = 1;
-                                                                   float w = image.size.width/density;
-                                                                   float h = image.size.height/density;
-                                                                   CGRect bounds = CGRectMake(0, 0, w, h);
-
-                                                                   imageView.contentMode = UIViewContentModeScaleAspectFit;
-                                                                   [imageView setFrame:bounds];
-
-                                                                   // NOTE: sizeToFit doesn't work instead. Not sure why.
-                                                                   // TODO: Doing it this way is not ideal because it causes things to reshuffle
-                                                                   //       when the image loads IF the image is larger than the UIView.
-                                                                   //       Shouldn't required images have size info automatically via RN?
-                                                                   CGRect selfBounds = unionRect(bounds, self.bounds);
-                                                                   [self setFrame:selfBounds];
-
-                                                                   _iconImageView = imageView;
-                                                                   [self iconViewInsertSubview:imageView atIndex:0];
-                                                                 });
-                                                               }];
+  UIImage * image = [[GlobalVars sharedInstance] getSharedUIImage:imageSrc];
+  [self setIcon:image];
 }
 
 - (void)setTitle:(NSString *)title {
