@@ -1,5 +1,5 @@
 //
-//  AirMapsDTMHeatmap.h
+//  AIRMapDTMHeatmap.h
 //  A standard heatmap with the full color spectrum representing 0..1
 //
 //  Created by Bryan Oltman on 1/6/15.
@@ -21,9 +21,9 @@ static const int kSBScalePower = 4;
 // Increase for big data sets which draw slowly
 static const int kSBScreenPointsPerBucket = 10;
 
-@class AirMapsDTMColorProvider;
+@class AIRMapDTMColorProvider;
 
-@interface AirMapsDTMHeatmap : NSObject <MKOverlay>
+@interface AIRMapDTMHeatmap : NSObject <MKOverlay>
 
 - (NSDictionary *)mapPointsWithHeatInMapRect:(MKMapRect)rect
                                      atScale:(MKZoomScale)scale;
@@ -32,7 +32,7 @@ static const int kSBScreenPointsPerBucket = 10;
 
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 
-@property (strong, nonatomic) AirMapsDTMColorProvider *colorProvider;
+@property (strong, nonatomic) AIRMapDTMColorProvider *colorProvider;
 
 @property (nonatomic, readonly) double maxValue;
 @property (readonly) double zoomedOutMax;

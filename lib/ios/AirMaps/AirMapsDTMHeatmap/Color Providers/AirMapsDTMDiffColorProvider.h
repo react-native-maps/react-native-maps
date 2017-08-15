@@ -1,4 +1,4 @@
-#import "AirMapsDTMColorProvider.h"
+#import "AIRMapDTMColorProvider.h"
 
-@interface AirMapsDTMDiffColorProvider : AirMapsDTMColorProvider
+@interface AIRMapDTMDiffColorProvider : AIRMapDTMColorProvider
 @end

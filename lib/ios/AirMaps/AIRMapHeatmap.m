@@ -14,9 +14,9 @@
 - (void) setPoints:(NSArray<AIRMapWeightedPoint *> *)points {
     _points = points;
 
-    self.heatmap = [AirMapsDTMHeatmap new];
+    self.heatmap = [AIRMapDTMHeatmap new];
     [self refreshHeatmapData];
-    self.renderer = [[AirMapsDTMHeatmapRenderer alloc] initWithOverlay:self.heatmap];
+    self.renderer = [[AIRMapDTMHeatmapRenderer alloc] initWithOverlay:self.heatmap];
     [self update];
 }
 

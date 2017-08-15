@@ -19,14 +19,14 @@
 
 #import "AIRMap.h"
 
-#import "AirMapsDTMHeatmap/Heatmaps/AirMapsDTMHeatmap.h"
-#import "AirMapsDTMHeatmap/AirMapsDTMHeatmapRenderer.h"
+#import "AIRMapDTMHeatmap/Heatmaps/AIRMapDTMHeatmap.h"
+#import "AIRMapDTMHeatmap/AIRMapDTMHeatmapRenderer.h"
 
 @interface AIRMapHeatmap: MKAnnotationView <MKOverlay>
 
 @property (nonatomic, weak) AIRMap *map;
 
-@property (nonatomic, strong) AirMapsDTMHeatmap *heatmap;
+@property (nonatomic, strong) AIRMapDTMHeatmap *heatmap;
 @property (nonatomic, strong) MKOverlayRenderer *renderer;
 @property (nonatomic, strong) NSArray<AIRMapWeightedPoint *> *points;
 

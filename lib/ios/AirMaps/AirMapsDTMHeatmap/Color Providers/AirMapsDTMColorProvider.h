@@ -1,6 +1,6 @@
 //
 //  ColorProvider.h
-//  AirMapsDTMHeatMapExample
+//  AIRMapDTMHeatMapExample
 //
 //  Created by Bryan Oltman on 1/8/15.
 //  Copyright (c) 2015 Dataminr. All rights reserved.
@@ -22,7 +22,7 @@ static const CGFloat kSBAlphaPivotY = 0.5;
 // This number should be between 0 and 1
 static const CGFloat kSBMaxAlpha = 0.85;
 
-@interface AirMapsDTMColorProvider : NSObject
+@interface AIRMapDTMColorProvider : NSObject
 
 - (void)colorForValue:(double)value
                   red:(CGFloat *)red

@@ -1,5 +1,5 @@
 #import <MapKit/MapKit.h>
-#import "AirMapsDTMHeatmap.h"
+#import "AIRMapDTMHeatmap.h"
 
-@interface AirMapsDTMHeatmapRenderer : MKOverlayRenderer
+@interface AIRMapDTMHeatmapRenderer : MKOverlayRenderer
 @end
