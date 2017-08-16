@@ -7,6 +7,7 @@
 | `title` | `String` |  | The title of the marker. This is only used if the <Marker /> component has no children that are an `<MapView.Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
 | `description` | `String` |  | The description of the marker. This is only used if the <Marker /> component has no children that are an `<MapView.Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
 | `image` | `ImageSource` |  | A custom image to be used as the marker's icon. Only local image resources are allowed to be used.
+| `icon` | `ImageSource` |  | Marker icon to render (equivalent to `icon` property of GMSMarker Class).
 | `pinColor` | `Color` |  | If no custom marker view or custom image is provided, the platform default pin will be used, which can be customized by this color. Ignored if a custom marker is being used.
 | `coordinate` | `LatLng` |  | The coordinate for the marker.
 | `centerOffset` | `Point` |  | The offset (in points) at which to display the view.<br/><br/> By default, the center point of an annotation view is placed at the coordinate point of the associated annotation. You can use this property to reposition the annotation view as needed. This x and y offset values are measured in points. Positive offset values move the annotation view down and to the right, while negative values move it up and to the left.<br/><br/> For Google Maps, see the `anchor` prop.
@@ -17,6 +18,7 @@
 | `identifier` | `String` |  | An identifier used to reference this marker at a later date.
 | `rotation` | `Float` |  | A float number indicating marker's rotation angle, in degrees.
 | `draggable` | `<null>` |  | This is a non-value based prop. Adding this allows the marker to be draggable (re-positioned).
+| `tracksViewChanges` | `Boolean` |  | Controls whether the icon for this marker should be redrawn every frame.
 
 ## Events
 
