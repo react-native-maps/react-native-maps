@@ -24,6 +24,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onDrag;
 @property (nonatomic, copy) RCTDirectEventBlock onDragEnd;
 @property (nonatomic, copy) NSString *imageSrc;
+@property (nonatomic, copy) NSString *iconSrc;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, strong) UIColor *pinColor;
@@ -31,6 +32,7 @@
 @property (nonatomic, assign) NSInteger zIndex;
 @property (nonatomic, assign) double opacity;
 @property (nonatomic, assign) BOOL draggable;
+@property (nonatomic, assign) BOOL tracksViewChanges;
 
 - (void)showCalloutView;
 - (void)hideCalloutView;
