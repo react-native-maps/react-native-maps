@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.16.1 (August 15, 2017)
+* Android: [#1428](https://github.com/airbnb/react-native-maps/pull/#1428) Add ability to load marker image from drawable
+* iOS: [#1187](https://github.com/airbnb/react-native-maps/pull/1187) Improve marker performance
+* iOS/Android: [#1458](https://github.com/airbnb/react-native-maps/pull/1458) Add Google Maps legalNotice constant
+* JS: [#1546](https://github.com/airbnb/react-native-maps/pull/1546) Fix initial region native prop
+
+## 0.16.0 (August 9, 2017)
+* Android: [#1481](https://github.com/airbnb/react-native-maps/pull/1481) Handle Android RN 0.47 breaking change
+* iOS: [#1357](https://github.com/airbnb/react-native-maps/pull/1357) add MKTileOverlayRenderer
+* iOS: [#1369](https://github.com/airbnb/react-native-maps/pull/1369) Add onMapReady callback
+* Android/iOS/JS: [#1360](https://github.com/airbnb/react-native-maps/pull/1360) Add minZoom and maxZoom properties for android and ios
+* JS: [#1479](https://github.com/airbnb/react-native-maps/pull/1479) Fix timing function used in AnimatedRegion.spring
+
 ## 0.15.3 (June 27, 2017)
 
 * iOS: [#1362](https://github.com/airbnb/react-native-maps/pull/1362) Updates for React 0.43-0.45 and React 16.
