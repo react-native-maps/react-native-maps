@@ -665,6 +665,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  public void setPadding(ReadableMap edgePadding) {
+    int density = (int) getContext().getResources().getDisplayMetrics().density;
+    map.setPadding(edgePadding.getInt("left") * density, edgePadding.getInt("top") * density,
+        edgePadding.getInt("right") * density, edgePadding.getInt("bottom") * density);
+  }
+
   // InfoWindowAdapter interface
 
   @Override
