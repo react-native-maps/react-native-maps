@@ -35,13 +35,12 @@ public class AirMapOverlay extends AirMapFeature {
     for (int i = 0; i < bounds.size(); i++) {
       tmpBounds.add(bounds.getArray(i));
     }
-//        this.bounds =  new LatLngBounds(
-//                new LatLng(tmpBounds.get(0).getDouble(0), tmpBounds.get(0).getDouble(1)),
-//                new LatLng(tmpBounds.get(1).getDouble(0), tmpBounds.get(1).getDouble(1))
-//        );
     this.bounds =  new LatLngBounds(
-        new LatLng(41.0242005281301, 28.62248707248892),
-        new LatLng(41.02950919251499, 28.626476968016167)
+        new LatLng(Double.parseDouble(bounds.getArray(0).getString(0)), Double.parseDouble(bounds.getArray(0)
+            .getString(1))),
+        new LatLng(Double.parseDouble(bounds.getArray(1).getString(0)), Double
+            .parseDouble(bounds.getArray(1)
+                .getString(1)))
     );
     if (groundOverlay != null) {
       groundOverlay.setPositionFromBounds(this.bounds);
