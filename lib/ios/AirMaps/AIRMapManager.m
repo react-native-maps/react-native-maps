@@ -152,6 +152,48 @@ RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(animateToViewingAngle:(nonnull NSNumber *)reactTag
+                  withAngle:(double)angle
+                  withDuration:(CGFloat)duration)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+      id view = viewRegistry[reactTag];
+      if (![view isKindOfClass:[AIRMap class]]) {
+          RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+      } else {
+          AIRMap *mapView = (AIRMap *)view;
+
+          MKMapCamera *mapCamera = [[mapView camera] copy];
+          [mapCamera setPitch:angle];
+
+          [AIRMap animateWithDuration:duration/1000 animations:^{
+              [mapView setCamera:mapCamera animated:YES];
+          }];
+      }
+  }];
+}
+
+RCT_EXPORT_METHOD(animateToBearing:(nonnull NSNumber *)reactTag
+                  withBearing:(CGFloat)bearing
+                  withDuration:(CGFloat)duration)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+      id view = viewRegistry[reactTag];
+      if (![view isKindOfClass:[AIRMap class]]) {
+          RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+      } else {
+          AIRMap *mapView = (AIRMap *)view;
+
+          MKMapCamera *mapCamera = [[mapView camera] copy];
+          [mapCamera setHeading:bearing];
+
+          [AIRMap animateWithDuration:duration/1000 animations:^{
+              [mapView setCamera:mapCamera animated:YES];
+          }];
+      }
+  }];
+}
+
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         animated:(BOOL)animated)
 {
