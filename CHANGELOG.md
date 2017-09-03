@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.16.3 (September 2, 2017)
+* iOS: [#1603](https://github.com/airbnb/react-native-maps/pull/1603) Added missing satellite option for iOS Google Maps
+* iOS: [#1579](https://github.com/airbnb/react-native-maps/pull/1579) Set initial region on view
+
 ## 0.16.2 (August 17, 2017)
 * Android: [#1563](https://github.com/airbnb/react-native-maps/pull/#1563) Add missing native method for setting initial region
 * iOS: [#1187](https://github.com/airbnb/react-native-maps/pull/1187) Reverted due to build issues
