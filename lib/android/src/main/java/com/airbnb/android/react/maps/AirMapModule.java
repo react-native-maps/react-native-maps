@@ -47,7 +47,12 @@ public class AirMapModule extends ReactContextBaseJavaModule {
   @Override
   public Map<String, Object> getConstants() {
     final Map<String, Object> constants = new HashMap<>();
-    constants.put("legalNotice", GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(getReactApplicationContext()));
+    try {
+      constants.put("legalNotice", GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(getReactApplicationContext()));
+    } catch (Exception e) {
+      constants.put("legalNotice", "");
+      Log.i("ReactMaps", "getOpenSourceSoftwareLicenseInfo is not available: " + e.getMessage());
+    }
     return constants;
   }
 
