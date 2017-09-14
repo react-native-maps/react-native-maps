@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.16.4 (September 13, 2017)
+* Android: [#1643](https://github.com/airbnb/react-native-maps/pull/1643) [MapMarker] fix android release crash on custom marker
+
 ## 0.16.3 (September 2, 2017)
 * iOS: [#1603](https://github.com/airbnb/react-native-maps/pull/1603) Added missing satellite option for iOS Google Maps
 * iOS: [#1579](https://github.com/airbnb/react-native-maps/pull/1579) Set initial region on view
