@@ -44,13 +44,6 @@ public class AirMapModule extends ReactContextBaseJavaModule {
     return "AirMapModule";
   }
 
-  @Override
-  public Map<String, Object> getConstants() {
-    final Map<String, Object> constants = new HashMap<>();
-    constants.put("legalNotice", GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(getReactApplicationContext()));
-    return constants;
-  }
-
   public Activity getActivity() {
     return getCurrentActivity();
   }
