@@ -155,6 +155,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
 }
 
+- (void)didFinishTileRendering {
+    if (self.onMapReady) self.onMapReady(@{});
+}
+
 - (BOOL)didTapMarker:(GMSMarker *)marker {
   AIRGMSMarker *airMarker = (AIRGMSMarker *)marker;
 
@@ -300,6 +304,13 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.myLocationButton;
 }
 
+- (void)setMinZoomLevel:(CGFloat)minZoomLevel {
+  [self setMinZoom:minZoomLevel maxZoom:self.maxZoom ];
+}
+
+- (void)setMaxZoomLevel:(CGFloat)maxZoomLevel {
+  [self setMinZoom:self.minZoom maxZoom:maxZoomLevel ];
+}
 
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
   // solution from here: http://stackoverflow.com/a/16587735/1102215

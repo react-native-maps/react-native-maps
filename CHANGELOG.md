@@ -1,5 +1,37 @@
 # Change Log
 
+## 0.16.4 (September 13, 2017)
+* Android: [#1643](https://github.com/airbnb/react-native-maps/pull/1643) [MapMarker] fix android release crash on custom marker
+
+## 0.16.3 (September 2, 2017)
+* iOS: [#1603](https://github.com/airbnb/react-native-maps/pull/1603) Added missing satellite option for iOS Google Maps
+* iOS: [#1579](https://github.com/airbnb/react-native-maps/pull/1579) Set initial region on view
+
+## 0.16.2 (August 17, 2017)
+* Android: [#1563](https://github.com/airbnb/react-native-maps/pull/#1563) Add missing native method for setting initial region
+* iOS: [#1187](https://github.com/airbnb/react-native-maps/pull/1187) Reverted due to build issues
+
+## 0.16.1 (August 15, 2017)
+* Android: [#1428](https://github.com/airbnb/react-native-maps/pull/#1428) Add ability to load marker image from drawable
+* iOS: [#1187](https://github.com/airbnb/react-native-maps/pull/1187) Improve marker performance
+* iOS/Android: [#1458](https://github.com/airbnb/react-native-maps/pull/1458) Add Google Maps legalNotice constant
+* JS: [#1546](https://github.com/airbnb/react-native-maps/pull/1546) Fix initial region native prop
+
+## 0.16.0 (August 9, 2017)
+* Android: [#1481](https://github.com/airbnb/react-native-maps/pull/1481) Handle Android RN 0.47 breaking change
+* iOS: [#1357](https://github.com/airbnb/react-native-maps/pull/1357) add MKTileOverlayRenderer
+* iOS: [#1369](https://github.com/airbnb/react-native-maps/pull/1369) Add onMapReady callback
+* Android/iOS/JS: [#1360](https://github.com/airbnb/react-native-maps/pull/1360) Add minZoom and maxZoom properties for android and ios
+* JS: [#1479](https://github.com/airbnb/react-native-maps/pull/1479) Fix timing function used in AnimatedRegion.spring
+
+## 0.15.3 (June 27, 2017)
+
+* iOS: [#1362](https://github.com/airbnb/react-native-maps/pull/1362) Updates for React 0.43-0.45 and React 16.
+* JS: [#1323](https://github.com/airbnb/react-native-maps/pull/1323) Updates for React 0.43-0.45 and React 16.
+* Android/iOS/JS: [#1440](https://github.com/airbnb/react-native-maps/pull/1440) Updates for React 0.43-0.45 and React 16.
+* iOS: [#1115](https://github.com/airbnb/react-native-maps/pull/1115) Fix animateToCoordinate and animateToRegion
+* Android: [#1403](https://github.com/airbnb/react-native-maps/pull/1403) Fix an NPE
+
 ## 0.15.2 (May 20, 2017)
 
 * iOS: [#1351](https://github.com/airbnb/react-native-maps/pull/1351) Fix file references
