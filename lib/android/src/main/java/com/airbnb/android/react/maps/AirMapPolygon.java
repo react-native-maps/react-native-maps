@@ -110,8 +110,10 @@ public class AirMapPolygon extends AirMapFeature {
         options.strokeWidth(strokeWidth);
         options.geodesic(geodesic);
         options.zIndex(zIndex);
-        for(int i = 0; i < holes.size(); i++){
-            options.addHole(holes.get(i));
+        if(holes != null) {
+            for(int i = 0; i < holes.size(); i++){
+                options.addHole(holes.get(i));
+            }
         }
         return options;
     }
