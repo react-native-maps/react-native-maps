@@ -42,40 +42,24 @@ public class AirMapPolygon extends AirMapFeature {
     }
   }
 
-<<<<<<< HEAD
   public void setHoles(ReadableArray holes) {
     this.holes = new ArrayList<List<LatLng>>(holes.size());
     for (int i = 0; i < holes.size(); i++) {
       ReadableArray array = holes.getArray(i);
-      if(array.size() >= 3) {
+      if (array.size() >= 3) {
         this.holes.add(new ArrayList<LatLng>(array.size()));
         for (int j = 0; j < array.size(); j++) {
           ReadableMap hole = array.getMap(j); 
           this.holes.get(i).add(j,
               new LatLng(hole.getDouble("latitude"), hole.getDouble("longitude")));
-=======
-  public void setHoles(ReadableArray holes){
-    this.holes = new ArrayList<List<LatLng>>(holes.size());
-    for (int i = 0; i < holes.size(); i++) {
-      ReadableArray array = holes.getArray(i);
-      if(array.size() > 0){
-        this.holes.add(new ArrayList<LatLng>(array.size()));
-        for (int j = 0; j < array.size(); j++) {
-            ReadableMap hole = array.getMap(j); 
-            this.holes.get(i).add(j,
-                    new LatLng(hole.getDouble("latitude"), hole.getDouble("longitude")));
->>>>>>> Add support for polygons with holes for Google Maps on Android
         }
       }
     }
     if (polygon != null) {
-<<<<<<< HEAD
       polygon.setHoles(this.holes);
-=======
-        polygon.setHoles(this.holes);
->>>>>>> Add support for polygons with holes for Google Maps on Android
     }
   }
+
 
   public void setFillColor(int color) {
     this.fillColor = color;
