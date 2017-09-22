@@ -46,7 +46,7 @@ public class AirMapPolygon extends AirMapFeature {
         this.holes = new ArrayList<List<LatLng>>(holes.size());
         for (int i = 0; i < holes.size(); i++) {
             ReadableArray array = holes.getArray(i);
-            if(array.size() > 0){
+            if(array.size() >= 3){
                 this.holes.add(new ArrayList<LatLng>(array.size()));
                 for (int j = 0; j < array.size(); j++) {
                     ReadableMap hole = array.getMap(j); 
