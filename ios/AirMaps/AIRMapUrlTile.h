@@ -10,7 +10,7 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirKit.h"
 #import "RCTComponent.h"
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"

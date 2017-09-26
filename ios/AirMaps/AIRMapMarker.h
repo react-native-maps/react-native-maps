@@ -13,7 +13,7 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirKit.h"
 #import "RCTComponent.h"
 #import "AIRMap.h"
 #import "SMCalloutView.h"

@@ -13,7 +13,7 @@
 #import "RCTBridge.h"
 #import "RCTUIManager.h"
 #import "RCTConvert+CoreLocation.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirKit.h"
 #import "RCTEventDispatcher.h"
 #import "AIRMap.h"
 #import "UIView+React.h"
