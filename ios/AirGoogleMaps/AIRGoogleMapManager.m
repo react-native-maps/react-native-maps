@@ -45,6 +45,7 @@ RCT_EXPORT_MODULE()
   return map;
 }
 
+RCT_EXPORT_VIEW_PROPERTY(customPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
 RCT_EXPORT_VIEW_PROPERTY(region, MKCoordinateRegion)
 RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)

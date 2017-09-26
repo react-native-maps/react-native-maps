@@ -14,6 +14,7 @@
 
 @interface AIRGoogleMap : GMSMapView
 
+@property (nonatomic, assign) UIEdgeInsets customPadding;
 // TODO: don't use MK region?
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
 @property (nonatomic, assign) MKCoordinateRegion region;

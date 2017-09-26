@@ -134,6 +134,10 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 #pragma clang diagnostic pop
 
+- (void)setCustomPadding(UIEdgeInsets)customPadding {
+  self.padding = customPadding;
+}
+
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
   if (_initialRegionSet) return;
   _initialRegionSet = true;
