@@ -19,6 +19,7 @@ public class AirMapPolygon extends AirMapFeature {
 
   private List<LatLng> coordinates;
   private List<List<LatLng>> holes;
+
   private int strokeColor;
   private int fillColor;
   private float strokeWidth;
