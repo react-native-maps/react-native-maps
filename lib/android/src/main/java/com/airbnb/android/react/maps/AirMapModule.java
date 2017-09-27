@@ -34,6 +34,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
   private static final String SNAPSHOT_RESULT_BASE64 = "base64";
   private static final String SNAPSHOT_FORMAT_PNG = "png";
   private static final String SNAPSHOT_FORMAT_JPG = "jpg";
+  private static final Integer GOOGLE_PLAY_SERVICES_VERSION_CODE_11 = 11000000;
 
   public AirMapModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -47,7 +48,17 @@ public class AirMapModule extends ReactContextBaseJavaModule {
   @Override
   public Map<String, Object> getConstants() {
     final Map<String, Object> constants = new HashMap<>();
-    constants.put("legalNotice", GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(getReactApplicationContext()));
+
+    // The function getOpenSourceSoftwareLicenseInfo has been removed in GooglePlayServices version 11
+    if (GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE < GOOGLE_PLAY_SERVICES_VERSION_CODE_11) {
+      constants.put(
+        "legalNotice",
+        GoogleApiAvailability
+          .getInstance()
+          .getOpenSourceSoftwareLicenseInfo(getReactApplicationContext())
+      );
+    }
+
     return constants;
   }
 
