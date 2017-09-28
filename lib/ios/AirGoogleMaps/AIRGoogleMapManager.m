@@ -236,10 +236,17 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   return [googleMapView didTapMarker:marker];
 }
 
-- (void)mapView:(GMSMapView *)mapView didTapOverlay:(GMSPolygon *)polygon {
-  AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
-  [googleMapView didTapPolygon:polygon];
+- (void)mapView:(GMSMapView *)mapView didTapOverlay:(GMSOverlay *)overlay {
+  if ([overlay isKindOfClass:[GMSPolygon class]]) {
+    AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
+    GMSPolygon* polygon = (GMSPolygon*)overlay;
+    [googleMapView didTapPolygon:polygon];
+  } else if ([overlay isKindOfClass:[GMSGroundOverlay class]]) {
+    float opacity = (((float)arc4random()/0x100000000)*0.5f + 0.5f);
+    ((GMSGroundOverlay *)overlay).opacity = opacity;
+  }
 }
+
 
 - (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
