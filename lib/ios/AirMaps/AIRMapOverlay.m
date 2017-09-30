@@ -4,7 +4,6 @@
 //
 
 #import "AIRMapOverlay.h"
-#import "AIRMapImageOverlay.h"
 #import "AirMapOverlayRenderer.h"
 #import <React/UIView+React.h>
 #import <React/RCTBridge.h>

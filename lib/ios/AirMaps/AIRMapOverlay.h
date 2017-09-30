@@ -13,7 +13,6 @@
 #import <React/RCTResizeMode.h>
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
-#import "AIRMapImageOverlay.h"
 #import "AIRMapOverlayRenderer.h"
 #import "RCTConvert+AirMap.h"
 
