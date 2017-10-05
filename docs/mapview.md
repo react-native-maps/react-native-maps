@@ -20,7 +20,7 @@
 | `showsBuildings` | `Boolean` | `true` | A Boolean indicating whether the map displays extruded building information.
 | `showsTraffic` | `Boolean` | `true` | A Boolean value indicating whether the map displays traffic information.
 | `showsIndoors` | `Boolean` | `true` | A Boolean indicating whether indoor maps should be enabled.
-| `showsIndoorLevelPicker` | `Boolean` | `false` | A Boolean indicating whether indoor level picker should be enabled. **Note:** Android only.
+| `showsIndoorLevelPicker` | `Boolean` | `false` | A Boolean indicating whether indoor level picker should be enabled. **Note:** Google Maps only (either Android or iOS with `PROVIDER_GOOGLE`).
 | `zoomEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/zoom the map.
 | `minZoomLevel` | `Number` | `0` | Minimum zoom value for the map, must be between 0 and 20
 | `maxZoomLevel` | `Number` | `20` | Maximum zoom value for the map, must be between 0 and 20
