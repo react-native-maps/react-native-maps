@@ -653,8 +653,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
 
     if (edgePadding != null) {
-      map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+      int density = (int) getContext().getResources().getDisplayMetrics().density;
+      map.setPadding(edgePadding.getInt("left") * density, edgePadding.getInt("top") * density,
+          edgePadding.getInt("right") * density, edgePadding.getInt("bottom") * density);
     }
 
     if (animated) {
@@ -663,8 +664,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     } else {
       map.moveCamera(cu);
     }
-    map.setPadding(0, 0, 0,
-        0); // Without this, the Google logo is moved up by the value of edgePadding.bottom
+  }
+
+  public void setPadding(ReadableMap edgePadding) {
+    int density = (int) getContext().getResources().getDisplayMetrics().density;
+    map.setPadding(edgePadding.getInt("left") * density, edgePadding.getInt("top") * density,
+        edgePadding.getInt("right") * density, edgePadding.getInt("bottom") * density);
   }
 
   // InfoWindowAdapter interface
