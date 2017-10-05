@@ -29,9 +29,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final String REACT_CLASS = "AIRMap";
   private static final int ANIMATE_TO_REGION = 1;
   private static final int ANIMATE_TO_COORDINATE = 2;
-  private static final int FIT_TO_ELEMENTS = 3;
-  private static final int FIT_TO_SUPPLIED_MARKERS = 4;
-  private static final int FIT_TO_COORDINATES = 5;
+  private static final int ANIMATE_TO_VIEWING_ANGLE = 3;
+  private static final int ANIMATE_TO_BEARING = 4;
+  private static final int FIT_TO_ELEMENTS = 5;
+  private static final int FIT_TO_SUPPLIED_MARKERS = 6;
+  private static final int FIT_TO_COORDINATES = 7;
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
       "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -200,6 +202,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     Double lng;
     Double lngDelta;
     Double latDelta;
+    float bearing;
+    float angle;
     ReadableMap region;
 
     switch (commandId) {
@@ -225,6 +229,18 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.animateToCoordinate(new LatLng(lat, lng), duration);
         break;
 
+      case ANIMATE_TO_VIEWING_ANGLE:
+        angle = (float)args.getDouble(0);
+        duration = args.getInt(1);
+        view.animateToViewingAngle(angle, duration);
+        break;
+      
+      case ANIMATE_TO_BEARING:
+        bearing = (float)args.getDouble(0);
+        duration = args.getInt(1);
+        view.animateToBearing(bearing, duration);
+        break;
+      
       case FIT_TO_ELEMENTS:
         view.fitToElements(args.getBoolean(0));
         break;
@@ -267,6 +283,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     return MapBuilder.of(
         "animateToRegion", ANIMATE_TO_REGION,
         "animateToCoordinate", ANIMATE_TO_COORDINATE,
+        "animateToViewingAngle", ANIMATE_TO_VIEWING_ANGLE,
+        "animateToBearing", ANIMATE_TO_BEARING,
         "fitToElements", FIT_TO_ELEMENTS,
         "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
         "fitToCoordinates", FIT_TO_COORDINATES
