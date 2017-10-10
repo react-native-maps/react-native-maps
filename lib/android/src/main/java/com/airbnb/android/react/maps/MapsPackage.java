@@ -24,11 +24,6 @@ public class MapsPackage implements ReactPackage {
     return Arrays.<NativeModule>asList(new AirMapModule(reactContext));
   }
 
-  // Deprecated RN 0.47
-  public List<Class<? extends JavaScriptModule>> createJSModules() {
-    return Collections.emptyList();
-  }
-
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
     AirMapCalloutManager calloutManager = new AirMapCalloutManager();
