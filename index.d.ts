@@ -1,65 +1,68 @@
 import * as React from 'react';
 
-declare module "react-native-maps" {
+interface MapViewProps {
+    provider?: 'google';
+    style: any;
+    customMapStyle?: any[];
+    customMapStyleString?: string;
+    showsUserLocation?: boolean;
+    userLocationAnnotationTitle?: string;
+    showsMyLocationButton?: boolean;
+    followsUserLocation?: boolean;
+    showsPointsOfInterest?: boolean;
+    showsCompass?: boolean;
+    zoomEnabled?: boolean;
+    rotateEnabled?: boolean;
+    cacheEnabled?: boolean;
+    loadingEnabled?: boolean;
+    loadingBackgroundColor?: any;
+    loadingIndicatorColor?: any;
+    scrollEnabled?: boolean;
+    pitchEnabled?: boolean;
+    toolbarEnabled?: boolean;
+    moveOnMarkerPress?: boolean;
+    showsScale?: boolean;
+    showsBuildings?: boolean;
+    showsTraffic?: boolean;
+    showsIndoors?: boolean;
+    showsIndoorLevelPicker?: boolean;
+    mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none';
+    region?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
+    initialRegion?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
+    liteMode?: boolean;
+    maxDelta?: number;
+    minDelta?: number;
+    legalLabelInsets?: any;
+    onChange?: Function;
+    onMapReady?: Function;
+    onRegionChange?: Function;
+    onRegionChangeComplete?: Function;
+    onPress?: Function;
+    onLayout?: Function;
+    onLongPress?: Function;
+    onPanDrag?: Function;
+    onMarkerPress?: Function;
+    onMarkerSelect?: Function;
+    onMarkerDeselect?: Function;
+    onCalloutPress?: Function;
+    onMarkerDragStart?: Function;
+    onMarkerDrag?: Function;
+    onMarkerDragEnd?: Function;
+    minZoomLevel?: number;
+    maxZoomLevel?: number;
+}
 
-    export type ProviderType = 'google';
-    export type MapType = 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none';
-    export type LineCapType = 'butt' | 'round' | 'square';
-    export type LineJoinType = 'miter' | 'round' | 'bevel';
+declare class MapView extends React.Component<MapViewProps, any> {
+    static Animated: any;
+    static AnimatedRegion: any;
+}
 
-    export interface MapViewProperties {
-        provider?: ProviderType;
-        style?: any;
-        customMapStyle?: any[];
-        customMapStyleString?: string;
-        showsUserLocation?: boolean;
-        userLocationAnnotationTitle?: string;
-        showsMyLocationButton?: boolean;
-        followsUserLocation?: boolean;
-        showsPointsOfInterest?: boolean;
-        showsCompass?: boolean;
-        zoomEnabled?: boolean;
-        rotateEnabled?: boolean;
-        cacheEnabled?: boolean;
-        loadingEnabled?: boolean;
-        loadingBackgroundColor?: any;
-        loadingIndicatorColor?: any;
-        scrollEnabled?: boolean;
-        pitchEnabled?: boolean;
-        toolbarEnabled?: boolean;
-        moveOnMarkerPress?: boolean;
-        showsScale?: boolean;
-        showsBuildings?: boolean;
-        showsTraffic?: boolean;
-        showsIndoors?: boolean;
-        showsIndoorLevelPicker?: boolean;
-        mapType?: MapType;
-        region?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
-        initialRegion?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
-        liteMode?: boolean;
-        maxDelta?: number;
-        minDelta?: number;
-        legalLabelInsets?: any;
-        onChange?: Function;
-        onMapReady?: Function;
-        onRegionChange?: Function;
-        onRegionChangeComplete?: Function;
-        onPress?: Function;
-        onLayout?: Function;
-        onLongPress?: Function;
-        onPanDrag?: Function;
-        onMarkerPress?: Function;
-        onMarkerSelect?: Function;
-        onMarkerDeselect?: Function;
-        onCalloutPress?: Function;
-        onMarkerDragStart?: Function;
-        onMarkerDrag?: Function;
-        onMarkerDragEnd?: Function;
-        minZoomLevel?: number;
-        maxZoomLevel?: number;
-    }
+declare namespace MapView {
 
-    export interface MarkerProperties {
+    type LineCapType = 'butt' | 'round' | 'square';
+    type LineJoinType = 'miter' | 'round' | 'bevel';
+
+    interface MarkerProps {
         identifier?: string;
         reuseIdentifier?: string;
         title?: string;
@@ -81,9 +84,10 @@ declare module "react-native-maps" {
         onDragStart?: Function;
         onDrag?: Function;
         onDragEnd?: Function;
+        zIndex?: number;
     }
 
-    export interface MapPolylineProperties {
+    interface MapPolylineProps {
         coordinates?: { latitude: number; longitude: number; }[];
         onPress?: Function;
         tappable?: boolean;
@@ -99,7 +103,7 @@ declare module "react-native-maps" {
         lineDashPattern?: number[];
     }
 
-    export interface MapPolygonProperties {
+    interface MapPolygonProps {
         coordinates?: { latitude: number; longitude: number; }[];
         holes?: { latitude: number; longitude: number; }[][];
         onPress?: Function;
@@ -116,7 +120,7 @@ declare module "react-native-maps" {
         lineDashPattern?: number[];
     }
 
-    export interface MapCircleProperties {
+    interface MapCircleProps {
         center: { latitude: number; longitude: number };
         radius: number;
         onPress?: Function;
@@ -131,29 +135,22 @@ declare module "react-native-maps" {
         lineDashPattern?: number[];
     }
 
-    export interface MapUrlTitleProperties {
+    interface MapUrlTitleProps {
         urlTemplate: string;
         zIndex?: number;
     }
 
-    export interface MapCalloutProperties {
+    interface MapCalloutProps {
         tooltip?: boolean;
         onPress?: Function;
     }
 
-    class MapView extends React.Component<MapViewProperties, any> {
-        static Animated: any;
-        static AnimatedRegion: any;
-    }
-
-    namespace MapView {
-        class Marker extends React.Component<MarkerProperties, any> {}
-        class Polyline extends React.Component<MapPolylineProperties, any> {}
-        class Polygon extends React.Component<MapPolygonProperties, any> {}
-        class Circle extends React.Component<MapCircleProperties, any> {}
-        class UrlTile extends React.Component<MapUrlTitleProperties, any> {}
-        class Callout extends React.Component<MapCalloutProperties, any> {}
-    }
-    
-    export default MapView;
+    export class Marker extends React.Component<MarkerProps, any> {}
+    export class Polyline extends React.Component<MapPolylineProps, any> {}
+    export class Polygon extends React.Component<MapPolygonProps, any> {}
+    export class Circle extends React.Component<MapCircleProps, any> {}
+    export class UrlTile extends React.Component<MapUrlTitleProps, any> {}
+    export class Callout extends React.Component<MapCalloutProps, any> {}
 }
+
+export = MapView;
