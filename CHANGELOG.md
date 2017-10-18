@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.17.1 (October 18, 2017)
+* Common: [#1687](https://github.com/airbnb/react-native-maps/pull/1687) Fixed TypeScript definitions
+
 ## 0.17.0 (October 11, 2017)
 * iOS: [#1527](https://github.com/airbnb/react-native-maps/pull/1527) Added [iOS / Google Maps] support for showsIndoorLevelPicker
 * iOS/Android: [#1544](https://github.com/airbnb/react-native-maps/pull/1544) Adds support to animateToBearing and animateToViewingAngle ( IOS + Android )
