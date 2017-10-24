@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.17.0 (October 11, 2017)
+* iOS: [#1527](https://github.com/airbnb/react-native-maps/pull/1527) Added [iOS / Google Maps] support for showsIndoorLevelPicker
+* iOS/Android: [#1544](https://github.com/airbnb/react-native-maps/pull/1544) Adds support to animateToBearing and animateToViewingAngle ( IOS + Android )
+* JS: [#1503](https://github.com/airbnb/react-native-maps/pull/1503) Remove caret from "react": "^16.0.0-alpha.12
+* Android: [#1521](https://github.com/airbnb/react-native-maps/pull/1521) Fix rare android crashes when map size is 0
+* Common: [#1610](https://github.com/airbnb/react-native-maps/pull/1610) Added Typescript Definitions
+* Android: [#1612](https://github.com/airbnb/react-native-maps/pull/1612) Remove legalNotice from android AirMapModule
+
+## 0.16.4 (September 13, 2017)
+* Android: [#1643](https://github.com/airbnb/react-native-maps/pull/1643) [MapMarker] fix android release crash on custom marker
+
+## 0.16.3 (September 2, 2017)
+* iOS: [#1603](https://github.com/airbnb/react-native-maps/pull/1603) Added missing satellite option for iOS Google Maps
+* iOS: [#1579](https://github.com/airbnb/react-native-maps/pull/1579) Set initial region on view
+
 ## 0.16.2 (August 17, 2017)
 * Android: [#1563](https://github.com/airbnb/react-native-maps/pull/#1563) Add missing native method for setting initial region
 * iOS: [#1187](https://github.com/airbnb/react-native-maps/pull/1187) Reverted due to build issues

@@ -549,16 +549,17 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     // a proper camera move
     if (boundsToMove != null) {
       HashMap<String, Float> data = (HashMap<String, Float>) extraData;
-      float width = data.get("width");
-      float height = data.get("height");
-      map.moveCamera(
-          CameraUpdateFactory.newLatLngBounds(
-              boundsToMove,
-              (int) width,
-              (int) height,
-              0
-          )
-      );
+      int width = data.get("width") == null ? 0 : data.get("width").intValue();
+      int height = data.get("height") == null ? 0 : data.get("height").intValue();
+
+      //fix for https://github.com/airbnb/react-native-maps/issues/245,
+      //it's not guaranteed the passed-in height and width would be greater than 0.
+      if (width <= 0 || height <= 0) {
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
+      } else {
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
+      }
+
       boundsToMove = null;
     }
   }
@@ -567,6 +568,26 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     if (map != null) {
       startMonitoringRegion();
       map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+    }
+  }
+
+  public void animateToViewingAngle(float angle, int duration) {
+    if (map != null) {
+      startMonitoringRegion();
+      CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
+          .tilt(angle)
+          .build();
+      map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, null);
+    }
+  }
+
+  public void animateToBearing(float bearing, int duration) {
+    if (map != null) {
+      startMonitoringRegion();
+      CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
+          .bearing(bearing)
+          .build();
+      map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, null);
     }
   }
 
