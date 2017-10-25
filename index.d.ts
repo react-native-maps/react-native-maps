@@ -1,94 +1,92 @@
-import * as React from 'react';
+declare module 'react-native-maps' {
 
-interface MapViewProps {
-  provider?: 'google';
-  style: any;
-  customMapStyle?: any[];
-  customMapStyleString?: string;
-  showsUserLocation?: boolean;
-  userLocationAnnotationTitle?: string;
-  showsMyLocationButton?: boolean;
-  followsUserLocation?: boolean;
-  showsPointsOfInterest?: boolean;
-  showsCompass?: boolean;
-  zoomEnabled?: boolean;
-  rotateEnabled?: boolean;
-  cacheEnabled?: boolean;
-  loadingEnabled?: boolean;
-  loadingBackgroundColor?: any;
-  loadingIndicatorColor?: any;
-  scrollEnabled?: boolean;
-  pitchEnabled?: boolean;
-  toolbarEnabled?: boolean;
-  moveOnMarkerPress?: boolean;
-  showsScale?: boolean;
-  showsBuildings?: boolean;
-  showsTraffic?: boolean;
-  showsIndoors?: boolean;
-  showsIndoorLevelPicker?: boolean;
-  mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none';
-  region?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
-  initialRegion?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
-  liteMode?: boolean;
-  maxDelta?: number;
-  minDelta?: number;
-  legalLabelInsets?: any;
-  onChange?: Function;
-  onMapReady?: Function;
-  onRegionChange?: Function;
-  onRegionChangeComplete?: Function;
-  onPress?: Function;
-  onLayout?: Function;
-  onLongPress?: Function;
-  onPanDrag?: Function;
-  onMarkerPress?: Function;
-  onMarkerSelect?: Function;
-  onMarkerDeselect?: Function;
-  onCalloutPress?: Function;
-  onMarkerDragStart?: Function;
-  onMarkerDrag?: Function;
-  onMarkerDragEnd?: Function;
-  minZoomLevel?: number;
-  maxZoomLevel?: number;
-}
+  export interface MapViewProps {
+    provider?: 'google';
+    style: any;
+    customMapStyle?: any[];
+    customMapStyleString?: string;
+    showsUserLocation?: boolean;
+    userLocationAnnotationTitle?: string;
+    showsMyLocationButton?: boolean;
+    followsUserLocation?: boolean;
+    showsPointsOfInterest?: boolean;
+    showsCompass?: boolean;
+    zoomEnabled?: boolean;
+    rotateEnabled?: boolean;
+    cacheEnabled?: boolean;
+    loadingEnabled?: boolean;
+    loadingBackgroundColor?: any;
+    loadingIndicatorColor?: any;
+    scrollEnabled?: boolean;
+    pitchEnabled?: boolean;
+    toolbarEnabled?: boolean;
+    moveOnMarkerPress?: boolean;
+    showsScale?: boolean;
+    showsBuildings?: boolean;
+    showsTraffic?: boolean;
+    showsIndoors?: boolean;
+    showsIndoorLevelPicker?: boolean;
+    mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none';
+    region?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
+    initialRegion?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
+    liteMode?: boolean;
+    maxDelta?: number;
+    minDelta?: number;
+    legalLabelInsets?: any;
+    onChange?: Function;
+    onMapReady?: Function;
+    onRegionChange?: Function;
+    onRegionChangeComplete?: Function;
+    onPress?: Function;
+    onLayout?: Function;
+    onLongPress?: Function;
+    onPanDrag?: Function;
+    onMarkerPress?: Function;
+    onMarkerSelect?: Function;
+    onMarkerDeselect?: Function;
+    onCalloutPress?: Function;
+    onMarkerDragStart?: Function;
+    onMarkerDrag?: Function;
+    onMarkerDragEnd?: Function;
+    minZoomLevel?: number;
+    maxZoomLevel?: number;
+  }
 
-interface FitToCoordinatesOptions {
-  edgePadding: EdgePadding,
-  animated: boolean;
-}
+  export interface FitToCoordinatesOptions {
+    edgePadding: EdgePadding,
+    animated: boolean;
+  }
 
-interface EdgePadding {
-  top: number,
-  right: number,
-  bottom: number,
-  left: number
-}
+  export interface EdgePadding {
+    top: number,
+    right: number,
+    bottom: number,
+    left: number
+  }
 
-declare class MapView extends React.Component<MapViewProps, any> {
-  static Animated: any;
-  static AnimatedRegion: any;
+  export class MapView extends React.Component<MapViewProps, any> {
+    static Animated: any;
+    static AnimatedRegion: any;
 
-  animateToRegion(region, durationInMillis?);
+    public animateToRegion(region: any, durationInMillis?: number): void;
 
-  animateToCoordinate(latLng, durationInMillis?);
+    public animateToCoordinate(latLng: any, durationInMillis?: number): void;
 
-  animateToBearing(bearing, durationInMillis?);
+    public animateToBearing(bearing: any, durationInMillis?: number): void;
 
-  animateToViewingAngle(angle, durationInMillis?);
+    public animateToViewingAngle(angle: any, durationInMillis?: number): void;
 
-  fitToElements(animated);
+    public fitToElements(animated: boolean): void;
 
-  fitToSuppliedMarkers(markers, animated);
+    public fitToSuppliedMarkers(markers: any, animated: boolean): void;
 
-  fitToCoordinates(coordinates = [], options: FitToCoordinatesOptions);
-}
+    public fitToCoordinates(coordinates: any, options: FitToCoordinatesOptions): void;
+  }
 
-declare namespace MapView {
+  export type LineCapType = 'butt' | 'round' | 'square';
+  export type LineJoinType = 'miter' | 'round' | 'bevel';
 
-  type LineCapType = 'butt' | 'round' | 'square';
-  type LineJoinType = 'miter' | 'round' | 'bevel';
-
-  interface MarkerProps {
+  export interface MarkerProps {
     identifier?: string;
     reuseIdentifier?: string;
     title?: string;
@@ -113,7 +111,7 @@ declare namespace MapView {
     zIndex?: number;
   }
 
-  interface MapPolylineProps {
+  export interface MapPolylineProps {
     coordinates?: { latitude: number; longitude: number; }[];
     onPress?: Function;
     tappable?: boolean;
@@ -129,7 +127,7 @@ declare namespace MapView {
     lineDashPattern?: number[];
   }
 
-  interface MapPolygonProps {
+  export interface MapPolygonProps {
     coordinates?: { latitude: number; longitude: number; }[];
     holes?: { latitude: number; longitude: number; }[][];
     onPress?: Function;
@@ -146,7 +144,7 @@ declare namespace MapView {
     lineDashPattern?: number[];
   }
 
-  interface MapCircleProps {
+  export interface MapCircleProps {
     center: { latitude: number; longitude: number };
     radius: number;
     onPress?: Function;
@@ -161,12 +159,12 @@ declare namespace MapView {
     lineDashPattern?: number[];
   }
 
-  interface MapUrlTitleProps {
+  export interface MapUrlTitleProps {
     urlTemplate: string;
     zIndex?: number;
   }
 
-  interface MapCalloutProps {
+  export interface MapCalloutProps {
     tooltip?: boolean;
     onPress?: Function;
   }
@@ -189,5 +187,3 @@ declare namespace MapView {
   export class Callout extends React.Component<MapCalloutProps, any> {
   }
 }
-
-export = MapView;
