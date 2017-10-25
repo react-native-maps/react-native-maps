@@ -64,7 +64,7 @@ declare module 'react-native-maps' {
     left: number
   }
 
-  export class MapView extends React.Component<MapViewProps, any> {
+  export default class MapView extends React.Component<MapViewProps, any> {
     static Animated: any;
     static AnimatedRegion: any;
 
