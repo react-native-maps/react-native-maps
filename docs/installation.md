@@ -25,10 +25,10 @@ react-native link react-native-maps
    (If you do not need `GoogleMaps` support for iOS, then you can probably completely skip this step.)
 1. Open your project in Xcode workspace
 1. If you need `GoogleMaps` support also
-    - Drag this folder `node_modules/react-native-maps/lib/ios/AirGoogleMaps/` into your project, and choose `Create groups` in the popup window.
+    - Drag this folder `node_modules/react-native-maps/lib/ios/AirGoogleMaps/` into your project, and choose `Create groups` and `Copy items if needed` in the popup window.
     - In `AppDelegate.m`, add `@import GoogleMaps;` before `@implementation AppDelegate`. In `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions`, add `[GMSServices provideAPIKey:@"YOUR_GOOGLE_MAP_API_KEY"];`
     - In your project's `Build Settings` > `Header Search Paths`, double click the value field. In the popup, add `$(SRCROOT)/../node_modules/react-native-maps/lib/ios/AirMaps` and change `non-recursive` to `recursive`. (Dragging the folder `node_modules/react-native-maps/lib/ios/AirMaps/` into your project introduces duplicate symbols. We should not do it.)
-    
+
 Note:  We recommend using a version of React Native >= .40.  Newer versions (>= .40) require `package.json` to be set to `"react-native-maps": "^0.13.0"`, while older versions require `"react-native-maps": "^0.12.4"`.
 
 ### Option 2: CocoaPods
@@ -195,7 +195,7 @@ You have to link dependencies with rnpm and re-run the build:
     - Extras / Google Play services
     - Extras / Google Repository
     - Android 6.0 (API 23) / Google APIs Intel x86 Atom System Image Rev. 19
-    - Android SDK Build-tools 23.0.3 
+    - Android SDK Build-tools 23.0.3
 1. Check manual installation steps if you didn't run "react-native link react-native-maps"
 1. Go to [Google API Console](https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend) and select your project, or create one.
 Then, once enabled, select `Go to credentials`.
