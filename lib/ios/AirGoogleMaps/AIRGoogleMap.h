@@ -18,6 +18,7 @@
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
 @property (nonatomic, assign) MKCoordinateRegion region;
 @property (nonatomic, assign) NSString *customMapStyleString;
+@property (nonatomic, assign) UIEdgeInsets mapPadding;
 @property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;

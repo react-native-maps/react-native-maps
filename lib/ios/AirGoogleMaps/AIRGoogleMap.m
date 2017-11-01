@@ -219,6 +219,13 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (self.onChange) self.onChange(event);  // complete
 }
 
+- (void)setMapPadding:(UIEdgeInsets)mapPadding {
+  self.padding = mapPadding;
+}
+
+- (UIEdgeInsets)mapPadding {
+  return self.padding;
+}
 
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
   self.settings.scrollGestures = scrollEnabled;
