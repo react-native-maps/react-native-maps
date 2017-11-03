@@ -263,6 +263,10 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   return @{ @"legalNotice": [GMSServices openSourceLicenseInfo] };
 }
 
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
 - (void)mapViewDidFinishTileRendering:(GMSMapView *)mapView {
     AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
     [googleMapView didFinishTileRendering];
