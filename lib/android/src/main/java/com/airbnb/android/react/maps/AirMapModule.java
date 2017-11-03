@@ -23,9 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import java.util.Map;
-import java.util.HashMap;
-
 import javax.annotation.Nullable;
 
 public class AirMapModule extends ReactContextBaseJavaModule {
@@ -42,13 +39,6 @@ public class AirMapModule extends ReactContextBaseJavaModule {
   @Override
   public String getName() {
     return "AirMapModule";
-  }
-
-  @Override
-  public Map<String, Object> getConstants() {
-    final Map<String, Object> constants = new HashMap<>();
-    constants.put("legalNotice", "This license information is displayed in Settings > Google > Open Source on any device running Google Play services.");
-    return constants;
   }
 
   public Activity getActivity() {

@@ -259,10 +259,6 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   }];
 }
 
-- (NSDictionary *)constantsToExport {
-  return @{ @"legalNotice": [GMSServices openSourceLicenseInfo] };
-}
-
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }
