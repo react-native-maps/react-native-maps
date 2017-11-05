@@ -143,6 +143,7 @@ declare namespace MapView {
     interface MapCalloutProps {
         tooltip?: boolean;
         onPress?: Function;
+        style?: any;
     }
 
     export class Marker extends React.Component<MarkerProps, any> {}
