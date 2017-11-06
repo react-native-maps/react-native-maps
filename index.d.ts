@@ -85,6 +85,7 @@ declare namespace MapView {
         onDrag?: Function;
         onDragEnd?: Function;
         zIndex?: number;
+        style?: any;
     }
 
     interface MapPolylineProps {
