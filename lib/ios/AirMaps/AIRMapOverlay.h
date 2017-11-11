@@ -3,7 +3,7 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import <React/RCTConvert+MapKit.h>
+#import "RCTConvert+AirMap.h"
 #import <React/RCTComponent.h>
 #import "AIRMap.h"
 #import "AIRMapOverlayRenderer.h"
