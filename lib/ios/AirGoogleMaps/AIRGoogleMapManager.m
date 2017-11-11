@@ -26,6 +26,7 @@
 #import "RCTConvert+AirMap.h"
 
 #import <MapKit/MapKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 static NSString *const RCTMapViewKey = @"MapView";
 
@@ -57,7 +58,9 @@ RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsMyLocationButton, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsIndoorLevelPicker, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(customMapStyleString, NSString)
+RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
@@ -65,6 +68,8 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
+RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
 
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
                   withRegion:(MKCoordinateRegion)region
@@ -75,10 +80,67 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
       RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
     } else {
-      [AIRGoogleMap animateWithDuration:duration/1000 animations:^{
-        GMSCameraPosition* camera = [AIRGoogleMap makeGMSCameraPositionFromMap:(AIRGoogleMap *)view andMKCoordinateRegion:region];
-        [(AIRGoogleMap *)view animateToCameraPosition:camera];
-      }];
+      // Core Animation must be used to control the animation's duration
+      // See http://stackoverflow.com/a/15663039/171744
+      [CATransaction begin];
+      [CATransaction setAnimationDuration:duration/1000];
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:mapView andMKCoordinateRegion:region];
+      [mapView animateToCameraPosition:camera];
+      [CATransaction commit];
+    }
+  }];
+}
+
+RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
+                  withRegion:(CLLocationCoordinate2D)latlng
+                  withDuration:(CGFloat)duration)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
+      [CATransaction begin];
+      [CATransaction setAnimationDuration:duration/1000];
+      [(AIRGoogleMap *)view animateToLocation:latlng];
+      [CATransaction commit];
+    }
+  }];
+}
+
+RCT_EXPORT_METHOD(animateToViewingAngle:(nonnull NSNumber *)reactTag
+                  withAngle:(double)angle
+                  withDuration:(CGFloat)duration)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
+      [CATransaction begin];
+      [CATransaction setAnimationDuration:duration/1000];
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      [mapView animateToViewingAngle:angle];
+      [CATransaction commit];
+    }
+  }];
+}
+
+RCT_EXPORT_METHOD(animateToBearing:(nonnull NSNumber *)reactTag
+                  withBearing:(CGFloat)bearing
+                  withDuration:(CGFloat)duration)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
+      [CATransaction begin];
+      [CATransaction setAnimationDuration:duration/1000];
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      [mapView animateToBearing:bearing];
+      [CATransaction commit];
     }
   }];
 }
@@ -197,6 +259,18 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   }];
 }
 
+- (NSDictionary *)constantsToExport {
+  return @{ @"legalNotice": [GMSServices openSourceLicenseInfo] };
+}
+
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
+- (void)mapViewDidFinishTileRendering:(GMSMapView *)mapView {
+    AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
+    [googleMapView didFinishTileRendering];
+}
 
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
