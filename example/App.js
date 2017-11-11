@@ -37,6 +37,7 @@ import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlay from './examples/ImageOverlay';
+import ImageOverlay2 from './examples/ImageOverlay2';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -152,6 +153,7 @@ class App extends React.Component {
       [CustomOverlay, 'Custom Overlay Component', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlay, 'Image Overlay Component', true],
+      [ImageOverlay2, 'Image Overlay Component 2', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))

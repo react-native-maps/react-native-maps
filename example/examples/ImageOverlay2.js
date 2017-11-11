@@ -6,18 +6,17 @@ import {
 } from 'react-native';
 
 import MapView from 'react-native-maps';
-import overlayFlag from './assets/tower.png';
-
+import overlayImage from './assets/newark_nj_1922.jpg';
 
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 35.65856;
-const LONGITUDE = 139.74541;
+const LATITUDE = 40.742216;
+const LONGITUDE = -74.20655;
 const LATITUDE_DELTA = 0.05;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const OVERLAY_TOP_LEFT_COORDINATE = [35.65856 - 0.001, 139.74541 + 0.001];
-const OVERLAY_BOTTOM_RIGHT_COORDINATE = [35.65856 + 0.001, 139.74541 - 0.001];
+const OVERLAY_TOP_LEFT_COORDINATE = [40.712216, -74.22655];
+const OVERLAY_BOTTOM_RIGHT_COORDINATE = [40.773941, -74.12544];
 
 export default class ImageOverlay extends Component {
 
@@ -37,8 +36,8 @@ export default class ImageOverlay extends Component {
       },
       overlay: {
         bounds: [OVERLAY_TOP_LEFT_COORDINATE, OVERLAY_BOTTOM_RIGHT_COORDINATE],
-        image: overlayFlag,
-      },
+        image: overlayImage,
+      }
     };
   }
 
