@@ -37,7 +37,7 @@ export default class ImageOverlay extends Component {
       overlay: {
         bounds: [OVERLAY_TOP_LEFT_COORDINATE, OVERLAY_BOTTOM_RIGHT_COORDINATE],
         image: overlayImage,
-      }
+      },
     };
   }
 
