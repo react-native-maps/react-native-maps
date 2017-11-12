@@ -94,7 +94,7 @@ public class AirMapOverlay extends AirMapFeature implements ISupportImageReader 
       options.image(iconBitmapDescriptor);
       options.positionFromBounds(bounds);
       // options.transparency(transparency);
-      //options.zIndex(zIndex);
+      options.zIndex(zIndex);
       return options;
     } else {
       return null;
