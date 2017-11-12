@@ -154,7 +154,8 @@ class App extends React.Component {
       [CustomOverlay, 'Custom Overlay Component', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlay, 'Image Overlay Component', true],
-      [ImageOverlay2, 'Image Overlay Component 2 (BUG: all image doesn\'t draw before zoom down in iOS)', true],
+      [ImageOverlay2, 'Image Overlay Component 2 ' +
+      '(BUG: all image doesn\'t draw before zoom down in iOS)', true],
       [ImageOverlay3, 'Image Overlay Component 3 (get image from internet)', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
