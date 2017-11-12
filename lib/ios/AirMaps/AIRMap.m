@@ -112,6 +112,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         ((AIRMapUrlTile *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapOverlay class]]) {
+        ((AIRMapOverlay *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
