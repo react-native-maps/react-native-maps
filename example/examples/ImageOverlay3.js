@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 
 import MapView from 'react-native-maps';
-import overlayImage from './assets/newark_nj_1922.jpg';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,11 +17,11 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 // 116423, 51613, 17
 const OVERLAY_TOP_LEFT_COORDINATE1 = [35.68184060244454, 139.76531982421875];
 const OVERLAY_BOTTOM_RIGHT_COORDINATE1 = [35.679609609368576, 139.76806640625];
-const IMAGE_URL1 = "https://maps.gsi.go.jp/xyz/std/17/116423/51613.png";
+const IMAGE_URL1 = 'https://maps.gsi.go.jp/xyz/std/17/116423/51613.png';
 // 116423, 51614, 17
 const OVERLAY_TOP_LEFT_COORDINATE2 = [35.679609609368576, 139.76531982421875];
 const OVERLAY_BOTTOM_RIGHT_COORDINATE2 = [35.67737855391474, 139.76806640625];
-const IMAGE_URL2 = "https://maps.gsi.go.jp/xyz/std/17/116423/51614.png";
+const IMAGE_URL2 = 'https://maps.gsi.go.jp/xyz/std/17/116423/51614.png';
 
 export default class ImageOverlay3 extends Component {
 
