@@ -174,7 +174,7 @@ For Android: add the following line in your AndroidManifest.xml
 ```
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
 
-## MapOverlay(Just iOS)
+## MapOverlay
 ```jsx
   <MapView
     ...
