@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.util.LruCache;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -36,6 +37,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import javax.annotation.Nullable;
 
 public class AirMapMarker extends AirMapFeature {
+  private static int cacheSize = 8 * 1024 * 1024; // 8MB
+
+  private static final LruCache<String, BitmapDescriptorHolder> bitmapCache
+      = new LruCache<String, BitmapDescriptorHolder>(cacheSize) { };
+
+  private class BitmapDescriptorHolder {
+    private final Bitmap bitmap;
+    private final BitmapDescriptor bitmapDescriptor;
+
+    private BitmapDescriptorHolder(Bitmap bitmap, BitmapDescriptor bitmapDescriptor) {
+      this.bitmap = bitmap;
+      this.bitmapDescriptor = bitmapDescriptor;
+    }
+  }
 
   private MarkerOptions markerOptions;
   private Marker marker;
@@ -71,6 +86,7 @@ public class AirMapMarker extends AirMapFeature {
 
   private boolean hasCustomMarkerView = false;
 
+  private String uri;
   private final DraweeHolder<?> logoHolder;
   private DataSource<CloseableReference<CloseableImage>> dataSource;
   private final ControllerListener<ImageInfo> mLogoControllerListener =
@@ -82,18 +98,31 @@ public class AirMapMarker extends AirMapFeature {
             @Nullable Animatable animatable) {
           CloseableReference<CloseableImage> imageReference = null;
           try {
+
             imageReference = dataSource.getResult();
-            if (imageReference != null) {
-              CloseableImage image = imageReference.get();
-              if (image != null && image instanceof CloseableStaticBitmap) {
-                CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
+            if (imageReference == null) return;
+
+            CloseableImage image = imageReference.get();
+            if (image == null || !(image instanceof CloseableStaticBitmap)) return;
+
+            CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
+
+            synchronized (bitmapCache) {
+              BitmapDescriptorHolder holder = bitmapCache.get(uri);
+
+              if (holder == null) {
                 Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
-                if (bitmap != null) {
-                  bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                  iconBitmap = bitmap;
-                  iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-                }
+                if (bitmap == null) return;
+
+                holder = new BitmapDescriptorHolder(
+                    bitmap.copy(Bitmap.Config.ARGB_8888, true),
+                    BitmapDescriptorFactory.fromBitmap(bitmap)
+                );
+                bitmapCache.put(uri, holder);
               }
+
+              iconBitmap = holder.bitmap;
+              iconBitmapDescriptor = holder.bitmapDescriptor;
             }
           } finally {
             dataSource.close();
@@ -223,6 +252,19 @@ public class AirMapMarker extends AirMapFeature {
       update();
     } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
         uri.startsWith("file://")) {
+
+      this.uri = uri;
+
+      synchronized (bitmapCache) {
+        BitmapDescriptorHolder holder = bitmapCache.get(uri);
+        if (holder != null) {
+          iconBitmap = holder.bitmap;
+          iconBitmapDescriptor = holder.bitmapDescriptor;
+          update();
+          return;
+        }
+      }
+
       ImageRequest imageRequest = ImageRequestBuilder
           .newBuilderWithSource(Uri.parse(uri))
           .build();
@@ -236,9 +278,18 @@ public class AirMapMarker extends AirMapFeature {
           .build();
       logoHolder.setController(controller);
     } else {
-      iconBitmapDescriptor = getBitmapDescriptorByName(uri);
-      if (iconBitmapDescriptor != null) {
-          iconBitmap = BitmapFactory.decodeResource(getResources(), getDrawableResourceByName(uri));
+      synchronized (bitmapCache) {
+        BitmapDescriptorHolder holder = bitmapCache.get(uri);
+
+        if (holder == null) {
+          holder = new BitmapDescriptorHolder(
+              BitmapFactory.decodeResource(getResources(), getDrawableResourceByName(uri)),
+              getBitmapDescriptorByName(uri));
+          bitmapCache.put(uri, holder);
+        }
+
+        iconBitmapDescriptor = holder.bitmapDescriptor;
+        iconBitmap = holder.bitmap;
       }
       update();
     }
