@@ -42,7 +42,7 @@
 @property (nonatomic, assign) BOOL showsMyLocationButton;
 @property (nonatomic, assign) BOOL showsIndoorLevelPicker;
 
-- (void)didFinishTileRendering;
+- (void)didPrepareMap;
 - (BOOL)didTapMarker:(GMSMarker *)marker;
 - (void)didTapPolyline:(GMSPolyline *)polyline;
 - (void)didTapPolygon:(GMSPolygon *)polygon;
