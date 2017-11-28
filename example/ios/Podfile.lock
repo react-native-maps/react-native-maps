@@ -6,10 +6,10 @@ PODS:
     - GoogleMaps/Base
   - React (0.45.1):
     - React/Core (= 0.45.1)
-  - react-native-google-maps (0.15.2):
+  - react-native-google-maps (0.17.0):
     - GoogleMaps (= 2.1.1)
     - React
-  - react-native-maps (0.15.2):
+  - react-native-maps (0.17.0):
     - React
   - React/BatchedBridge (0.45.1):
     - React/Core
@@ -62,21 +62,21 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   React:
-    :path: "../../node_modules/react-native"
+    :path: ../../node_modules/react-native
   react-native-google-maps:
-    :path: "../../"
+    :path: ../../
   react-native-maps:
-    :path: "../../"
+    :path: ../../
   Yoga:
-    :path: "../../node_modules/react-native/ReactCommon/yoga/Yoga.podspec"
+    :path: ../../node_modules/react-native/ReactCommon/yoga/Yoga.podspec
 
 SPEC CHECKSUMS:
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
   React: 0c9191a8b0c843d7004f950ac6b5f6cba9d125c7
-  react-native-google-maps: d0b8772eb76e1615ea32c73bc9d573360b8c0817
-  react-native-maps: fe2e4680b4d3fcfd84d636ccedd470fe358d55e1
+  react-native-google-maps: 73a7f74a00d36c74df41388ebb8394ceba81ef0e
+  react-native-maps: ee0bb36520eb49dfc2bf11754a486a4fa5c5f883
   Yoga: 89c8738d42a0b46a113acb4e574336d61cba2985
 
-PODFILE CHECKSUM: 8b3eb68ef6553bf1fcb8a467e0e63000b37ec692
+PODFILE CHECKSUM: c069397afd4c9ecf6886b7c00e7d7264dced43a4
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.3.1
