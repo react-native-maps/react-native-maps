@@ -138,7 +138,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             new ScaleGestureDetector.SimpleOnScaleGestureListener() {
               @Override
               public boolean onScaleBegin(ScaleGestureDetector detector) {
-                view.startMonitoringRegion();
                 return true; // stop recording this gesture. let mapview handle it.
               }
             });
@@ -147,7 +146,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         new GestureDetectorCompat(reactContext, new GestureDetector.SimpleOnGestureListener() {
           @Override
           public boolean onDoubleTap(MotionEvent e) {
-            view.startMonitoringRegion();
             return false;
           }
 
@@ -157,7 +155,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             if (handlePanDrag) {
               onPanDrag(e2);
             }
-            view.startMonitoringRegion();
             return false;
           }
         });
@@ -272,14 +269,19 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       }
     });
 
-    map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-      @Override
-      public void onCameraChange(CameraPosition position) {
+    map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+      @Override public void onCameraIdle() {
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-        LatLng center = position.target;
-        lastBoundsEmitted = bounds;
+        LatLng center = map.getCameraPosition().target;
         eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
-        view.stopMonitoringRegion();
+      }
+    });
+
+    map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+      @Override public void onCameraMove() {
+        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+        LatLng center = map.getCameraPosition().target;
+        eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));
       }
     });
 
@@ -566,14 +568,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   public void animateToRegion(LatLngBounds bounds, int duration) {
     if (map != null) {
-      startMonitoringRegion();
       map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
     }
   }
 
   public void animateToViewingAngle(float angle, int duration) {
     if (map != null) {
-      startMonitoringRegion();
       CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
           .tilt(angle)
           .build();
@@ -583,7 +583,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   public void animateToBearing(float bearing, int duration) {
     if (map != null) {
-      startMonitoringRegion();
       CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
           .bearing(bearing)
           .build();
@@ -593,7 +592,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   public void animateToCoordinate(LatLng coordinate, int duration) {
     if (map != null) {
-      startMonitoringRegion();
       map.animateCamera(CameraUpdateFactory.newLatLng(coordinate), duration, null);
     }
   }
@@ -615,7 +613,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       LatLngBounds bounds = builder.build();
       CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
       if (animated) {
-        startMonitoringRegion();
         map.animateCamera(cu);
       } else {
         map.moveCamera(cu);
@@ -650,7 +647,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       LatLngBounds bounds = builder.build();
       CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
       if (animated) {
-        startMonitoringRegion();
         map.animateCamera(cu);
       } else {
         map.moveCamera(cu);
@@ -678,7 +674,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
 
     if (animated) {
-      startMonitoringRegion();
       map.animateCamera(cu);
     } else {
       map.moveCamera(cu);
@@ -714,9 +709,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             map != null && map.getUiSettings().isScrollGesturesEnabled());
         isTouchDown = true;
         break;
-      case (MotionEvent.ACTION_MOVE):
-        startMonitoringRegion();
-        break;
       case (MotionEvent.ACTION_UP):
         // Clear this regardless, since isScrollGesturesEnabled() may have been updated
         this.getParent().requestDisallowInterceptTouchEvent(false);
@@ -727,45 +719,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     return true;
   }
 
-  // Timer Implementation
-
-  public void startMonitoringRegion() {
-    if (map == null || isMonitoringRegion) return;
-    timerHandler.postDelayed(timerRunnable, 100);
-    isMonitoringRegion = true;
-  }
-
-  public void stopMonitoringRegion() {
-    if (map == null || !isMonitoringRegion) return;
-    timerHandler.removeCallbacks(timerRunnable);
-    isMonitoringRegion = false;
-  }
-
-  private LatLngBounds lastBoundsEmitted;
-
-  Handler timerHandler = new Handler();
-  Runnable timerRunnable = new Runnable() {
-
-    @Override
-    public void run() {
-
-      if (map != null) {
-        Projection projection = map.getProjection();
-        VisibleRegion region = (projection != null) ? projection.getVisibleRegion() : null;
-        LatLngBounds bounds = (region != null) ? region.latLngBounds : null;
-
-        if ((bounds != null) &&
-            (lastBoundsEmitted == null ||
-                LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted))) {
-          LatLng center = map.getCameraPosition().target;
-          lastBoundsEmitted = bounds;
-          eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));
-        }
-      }
-
-      timerHandler.postDelayed(this, 100);
-    }
-  };
 
   @Override
   public void onMarkerDragStart(Marker marker) {
