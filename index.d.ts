@@ -85,6 +85,7 @@ declare namespace MapView {
         onDrag?: Function;
         onDragEnd?: Function;
         zIndex?: number;
+        style?: any;
     }
 
     interface MapPolylineProps {
@@ -143,6 +144,7 @@ declare namespace MapView {
     interface MapCalloutProps {
         tooltip?: boolean;
         onPress?: Function;
+        style?: any;
     }
 
     export class Marker extends React.Component<MarkerProps, any> {}
