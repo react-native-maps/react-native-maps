@@ -231,34 +231,65 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
                   withWidth:(nonnull NSNumber *)width
                   withHeight:(nonnull NSNumber *)height
                   withRegion:(MKCoordinateRegion)region
+                  format:(nonnull NSString *)format
+                  quality:(nonnull NSNumber *)quality
+                  result:(nonnull NSString *)result
                   withCallback:(RCTResponseSenderBlock)callback)
 {
+  NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+  NSString *pathComponent = [NSString stringWithFormat:@"Documents/snapshot-%.20lf.%@", timeStamp, format];
+  NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent: pathComponent];
+
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
     id view = viewRegistry[reactTag];
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
     } else {
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-
+      
       // TODO: currently we are ignoring width, height, region
-
+        
       UIGraphicsBeginImageContextWithOptions(mapView.frame.size, YES, 0.0f);
       [mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
       UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-      UIGraphicsEndImageContext();
-
-      NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-      NSString *pathComponent = [NSString stringWithFormat:@"Documents/snapshot-%.20lf.png", timeStamp];
-      NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent: pathComponent];
-
-      NSData *data = UIImagePNGRepresentation(image);
-      [data writeToFile:filePath atomically:YES];
-      NSDictionary *snapshotData = @{
-                                     @"uri": filePath,
-                                     @"data": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]
-                                     };
-      callback(@[[NSNull null], snapshotData]);
+        
+      NSData *data;
+      if ([format isEqualToString:@"png"]) {
+          data = UIImagePNGRepresentation(image);
+          
+      }
+      else if([format isEqualToString:@"jpg"]) {
+            data = UIImageJPEGRepresentation(image, quality.floatValue);
+      }
+      
+      if ([result isEqualToString:@"file"]) {
+          [data writeToFile:filePath atomically:YES];
+            callback(@[[NSNull null], filePath]);
+        }
+        else if ([result isEqualToString:@"base64"]) {
+            callback(@[[NSNull null], [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]]);
+        }
+        else if ([result isEqualToString:@"legacy"]) {
+            
+            // In the initial (iOS only) implementation of takeSnapshot,
+            // both the uri and the base64 encoded string were returned.
+            // Returning both is rarely useful and in fact causes a
+            // performance penalty when only the file URI is desired.
+            // In that case the base64 encoded string was always marshalled
+            // over the JS-bridge (which is quite slow).
+            // A new more flexible API was created to cover this.
+            // This code should be removed in a future release when the
+            // old API is fully deprecated.
+            [data writeToFile:filePath atomically:YES];
+            NSDictionary *snapshotData = @{
+                                           @"uri": filePath,
+                                           @"data": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]
+                                           };
+            callback(@[[NSNull null], snapshotData]);
+        }
+    
     }
+    UIGraphicsEndImageContext();
   }];
 }
 
