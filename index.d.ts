@@ -26,7 +26,7 @@ interface MapViewProps {
     showsTraffic?: boolean;
     showsIndoors?: boolean;
     showsIndoorLevelPicker?: boolean;
-    mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none';
+    mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none' | 'mutedStandard';
     region?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
     initialRegion?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
     liteMode?: boolean;
@@ -85,6 +85,7 @@ declare namespace MapView {
         onDrag?: Function;
         onDragEnd?: Function;
         zIndex?: number;
+        style?: any;
     }
 
     interface MapPolylineProps {
@@ -143,6 +144,7 @@ declare namespace MapView {
     interface MapCalloutProps {
         tooltip?: boolean;
         onPress?: Function;
+        style?: any;
     }
 
     export class Marker extends React.Component<MarkerProps, any> {}

@@ -7,7 +7,7 @@ platform :ios, '8.0'
 target 'AirMapsExplorer' do
   rn_path = '../../node_modules/react-native'
 
-  pod 'Yoga', path: "#{rn_path}/ReactCommon/yoga/Yoga.podspec"
+  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
   pod 'React', path: rn_path, subspecs: [
     'Core',
     'RCTActionSheet',
@@ -34,10 +34,6 @@ post_install do |installer|
       target.build_configurations.each do |config|
         config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
       end
-    end
-    
-    if target.name == "React"
-      target.remove_from_project
     end
   end
 end
