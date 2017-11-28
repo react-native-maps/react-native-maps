@@ -26,7 +26,7 @@ interface MapViewProps {
     showsTraffic?: boolean;
     showsIndoors?: boolean;
     showsIndoorLevelPicker?: boolean;
-    mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none';
+    mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none' | 'mutedStandard';
     region?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
     initialRegion?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
     liteMode?: boolean;
