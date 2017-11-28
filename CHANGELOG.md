@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.18.0 (November 28, 2017)
+* Android/iOS: [#1587](https://github.com/airbnb/react-native-maps/pull/1750) Add support to set map boundaries
+* Android/iOS: [#1750](https://github.com/airbnb/react-native-maps/pull/1750) Add mapPadding property
+* Common: [#1792](https://github.com/airbnb/react-native-maps/pull/1792) Make all components use ViewPropTypes || View.propTypes
+* iOS: [#1774](https://github.com/airbnb/react-native-maps/pull/1774) Added missing parameters to google map screenshot
+* iOS: [#1824](https://github.com/airbnb/react-native-maps/pull/1824) Add new iOS `mutedStandard` map-type
+* iOS: [#1705](https://github.com/airbnb/react-native-maps/pull/1705) Enable control of Google Maps Marker tracksViewChanges property.
+* Android: [#1710](https://github.com/airbnb/react-native-maps/pull/1710) Added support for new Android camera movement APIs
+* iOS: [#1741](https://github.com/airbnb/react-native-maps/pull/1741) Fixed iOS google MapView.onMarkerPress not receiving the marker identifier
+* iOS: [#1816](https://github.com/airbnb/react-native-maps/pull/1816) Fix The name of the given podspec ‘yoga' doesn't match the expected one ‘Yoga'
+* iOS: [#1797](https://github.com/airbnb/react-native-maps/pull/1797) Fixed onMapReady event on iOS to resemble onMapReady on Android
+* Common: [#1817](https://github.com/airbnb/react-native-maps/pull/1817) Allow fitToCoordinates to be called without options parameter
+
+## 0.17.1 (October 18, 2017)
+* Common: [#1687](https://github.com/airbnb/react-native-maps/pull/1687) Fixed TypeScript definitions
+
 ## 0.17.0 (October 11, 2017)
 * iOS: [#1527](https://github.com/airbnb/react-native-maps/pull/1527) Added [iOS / Google Maps] support for showsIndoorLevelPicker
 * iOS/Android: [#1544](https://github.com/airbnb/react-native-maps/pull/1544) Adds support to animateToBearing and animateToViewingAngle ( IOS + Android )
