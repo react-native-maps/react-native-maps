@@ -6,10 +6,10 @@ PODS:
     - GoogleMaps/Base
   - React (0.45.1):
     - React/Core (= 0.45.1)
-  - react-native-google-maps (0.15.2):
+  - react-native-google-maps (0.15.3):
     - GoogleMaps (= 2.1.1)
     - React
-  - react-native-maps (0.15.2):
+  - react-native-maps (0.15.3):
     - React
   - React/BatchedBridge (0.45.1):
     - React/Core
@@ -73,8 +73,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
   React: 0c9191a8b0c843d7004f950ac6b5f6cba9d125c7
-  react-native-google-maps: d0b8772eb76e1615ea32c73bc9d573360b8c0817
-  react-native-maps: fe2e4680b4d3fcfd84d636ccedd470fe358d55e1
+  react-native-google-maps: f8780ca7802588d0ccd3a83c522a81f433bc1b4a
+  react-native-maps: 6a886202fb8af8568615501c0f9f933ca282a7a3
   Yoga: 89c8738d42a0b46a113acb4e574336d61cba2985
 
 PODFILE CHECKSUM: 8b3eb68ef6553bf1fcb8a467e0e63000b37ec692
