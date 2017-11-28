@@ -7,7 +7,7 @@ platform :ios, '8.0'
 target 'AirMapsExplorer' do
   rn_path = '../../node_modules/react-native'
 
-  pod 'Yoga', path: "#{rn_path}/ReactCommon/yoga/Yoga.podspec"
+  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
   pod 'React', path: rn_path, subspecs: [
     'Core',
     'RCTActionSheet',
