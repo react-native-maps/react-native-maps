@@ -93,6 +93,35 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
   }
 
+  @ReactProp(name = "mapPadding")
+  public void setMapPadding(AirMapView view, @Nullable ReadableMap padding) {
+    int left = 0;
+    int top = 0;
+    int right = 0;
+    int bottom = 0;
+    double density = (double) view.getResources().getDisplayMetrics().density;
+    
+    if (padding != null) {
+      if (padding.hasKey("left")) {
+        left = (int) (padding.getDouble("left") * density);
+      }
+
+      if (padding.hasKey("top")) {
+        top = (int) (padding.getDouble("top") * density);
+      }
+
+      if (padding.hasKey("right")) {
+        right = (int) (padding.getDouble("right") * density);
+      }
+
+      if (padding.hasKey("bottom")) {
+        bottom = (int) (padding.getDouble("bottom") * density);
+      }
+    }
+
+    view.map.setPadding(left, top, right, bottom);
+  }
+
   @ReactProp(name = "showsUserLocation", defaultBoolean = false)
   public void setShowsUserLocation(AirMapView view, boolean showUserLocation) {
     view.setShowsUserLocation(showUserLocation);
