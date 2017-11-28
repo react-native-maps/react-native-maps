@@ -32,7 +32,10 @@ static NSString *const RCTMapViewKey = @"MapView";
 
 
 @interface AIRGoogleMapManager() <GMSMapViewDelegate>
-
+{
+  BOOL didCallOnMapReady;
+}
+  
 @end
 
 @implementation AIRGoogleMapManager
@@ -263,13 +266,12 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   return @{ @"legalNotice": [GMSServices openSourceLicenseInfo] };
 }
 
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-- (void)mapViewDidFinishTileRendering:(GMSMapView *)mapView {
-    AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
-    [googleMapView didFinishTileRendering];
+- (void)mapViewDidStartTileRendering:(GMSMapView *)mapView {
+  if (didCallOnMapReady) return;
+  didCallOnMapReady = YES;
+  
+  AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
+  [googleMapView didPrepareMap];
 }
 
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {

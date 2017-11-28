@@ -155,7 +155,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
 }
 
-- (void)didFinishTileRendering {
+- (void)didPrepareMap {
     if (self.onMapReady) self.onMapReady(@{});
 }
 
