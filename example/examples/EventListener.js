@@ -6,7 +6,8 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-
+// eslint-disable-next-line max-len
+import SyntheticEvent from 'react-native/Libraries/Renderer/src/renderers/shared/shared/event/SyntheticEvent';
 import MapView from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
@@ -41,7 +42,7 @@ Event.propTypes = {
 
 
 // eslint-disable-next-line react/no-multi-comp
-class DisplayLatLng extends React.Component {
+class EventListener extends React.Component {
   constructor(props) {
     super(props);
 
@@ -66,13 +67,15 @@ class DisplayLatLng extends React.Component {
 
   recordEvent(name) {
     return e => {
-      const { events } = this.state;
-      this.setState({
+      if (e instanceof SyntheticEvent && typeof e.persist === 'function') {
+        e.persist();
+      }
+      this.setState(prevState => ({
         events: [
           this.makeEvent(e, name),
-          ...events.slice(0, 10),
+          ...prevState.events.slice(0, 10),
         ],
-      });
+      }));
     };
   }
 
@@ -80,6 +83,7 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
           onRegionChange={this.recordEvent('Map::onRegionChange')}
@@ -93,6 +97,20 @@ class DisplayLatLng extends React.Component {
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
         >
           <MapView.Marker
+            coordinate={{
+              latitude: LATITUDE + (LATITUDE_DELTA / 2),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
+            }}
+          />
+          <MapView.Marker
+            coordinate={{
+              latitude: LATITUDE - (LATITUDE_DELTA / 2),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
+            }}
+          />
+          <MapView.Marker
+            title="This is a title"
+            description="This is a description"
             coordinate={this.state.region}
             onPress={this.recordEvent('Marker::onPress')}
             onSelect={this.recordEvent('Marker::onSelect')}
@@ -109,6 +127,36 @@ class DisplayLatLng extends React.Component {
               </View>
             </MapView.Callout>
           </MapView.Marker>
+          <MapView.Polygon
+            fillColor={'rgba(255,0,0,0.3)'}
+            onPress={this.recordEvent('Polygon::onPress')}
+            tappable
+            coordinates={[{
+              latitude: LATITUDE + (LATITUDE_DELTA / 5),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 3),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 4),
+              longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
+            }]}
+          />
+          <MapView.Polyline
+            strokeColor={'rgba(255,0,0,1)'}
+            onPress={this.recordEvent('Polyline::onPress')}
+            tappable
+            coordinates={[{
+              latitude: LATITUDE + (LATITUDE_DELTA / 5),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 3),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 4),
+            }, {
+              latitude: LATITUDE + (LATITUDE_DELTA / 4),
+              longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
+            }]}
+          />
         </MapView>
         <View style={styles.eventList}>
           <ScrollView>
@@ -120,7 +168,14 @@ class DisplayLatLng extends React.Component {
   }
 }
 
+EventListener.propTypes = {
+  provider: MapView.ProviderPropType,
+};
+
 const styles = StyleSheet.create({
+  callout: {
+    width: 60,
+  },
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
@@ -178,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DisplayLatLng;
+module.exports = EventListener;

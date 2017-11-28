@@ -1,0 +1,39 @@
+# You Podfile should look similar to this file. React Native currently does not support use_frameworks!
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '8.0'
+
+# Change 'AirMapsExplorer' to match the target in your Xcode project.
+target 'AirMapsExplorer' do
+  rn_path = '../../node_modules/react-native'
+
+  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
+  pod 'React', path: rn_path, subspecs: [
+    'Core',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket',
+    'BatchedBridge'
+  ]
+
+  pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
+  pod 'react-native-maps', path: '../../'
+  pod 'react-native-google-maps', path: '../../'  # If you need GoogleMaps support on iOS
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == 'react-native-google-maps'
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+      end
+    end
+  end
+end

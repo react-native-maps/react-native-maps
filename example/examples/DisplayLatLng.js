@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { MAP_TYPES } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,12 +43,34 @@ class DisplayLatLng extends React.Component {
     this.map.animateToRegion(this.randomRegion());
   }
 
-  randomRegion() {
-    const { region } = this.state;
+  animateRandomCoordinate() {
+    this.map.animateToCoordinate(this.randomCoordinate());
+  }
+
+  animateToRandomBearing() {
+    this.map.animateToBearing(this.getRandomFloat(-360, 360));
+  }
+
+  animateToRandomViewingAngle() {
+    this.map.animateToViewingAngle(this.getRandomFloat(0, 90));
+  }
+
+  getRandomFloat(min, max) {
+    return (Math.random() * (max - min)) + min;
+  }
+
+  randomCoordinate() {
+    const region = this.state.region;
     return {
-      ...this.state.region,
       latitude: region.latitude + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
       longitude: region.longitude + ((Math.random() - 0.5) * (region.longitudeDelta / 2)),
+    };
+  }
+
+  randomRegion() {
+    return {
+      ...this.state.region,
+      ...this.randomCoordinate(),
     };
   }
 
@@ -56,10 +78,11 @@ class DisplayLatLng extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           ref={ref => { this.map = ref; }}
-          mapType="terrain"
+          mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
-          region={this.state.region}
+          initialRegion={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
         />
         <View style={[styles.bubble, styles.latlng]}>
@@ -73,19 +96,41 @@ class DisplayLatLng extends React.Component {
             onPress={() => this.jumpRandom()}
             style={[styles.bubble, styles.button]}
           >
-            <Text>Jump</Text>
+            <Text style={styles.buttonText}>Jump</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.animateRandom()}
             style={[styles.bubble, styles.button]}
           >
-            <Text>Animate</Text>
+            <Text style={styles.buttonText}>Animate (Region)</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.animateRandomCoordinate()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text style={styles.buttonText}>Animate (Coordinate)</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.animateToRandomBearing()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text style={styles.buttonText}>Animate (Bearing)</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.animateToRandomViewingAngle()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text style={styles.buttonText}>Animate (View Angle)</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
+
+DisplayLatLng.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -107,15 +152,19 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   button: {
-    width: 80,
-    paddingHorizontal: 12,
+    width: 100,
+    paddingHorizontal: 8,
     alignItems: 'center',
-    marginHorizontal: 10,
+    justifyContent: 'center',
+    marginHorizontal: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
     marginVertical: 20,
     backgroundColor: 'transparent',
+  },
+  buttonText: {
+    textAlign: 'center',
   },
 });
 

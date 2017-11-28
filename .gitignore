@@ -33,3 +33,7 @@ local.properties
 #
 node_modules/
 npm-debug.log
+Pods/
+AirMapsExplorer.xcworkspace/
+lib/android/src/main/gen
+example/android/app/src/main/gen

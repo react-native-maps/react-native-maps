@@ -113,6 +113,7 @@ class FocusOnMarkers extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
+          provider={this.props.provider}
           ref={ref => { this.map = ref; }}
           style={styles.map}
           initialRegion={{
@@ -147,6 +148,10 @@ class FocusOnMarkers extends React.Component {
     );
   }
 }
+
+FocusOnMarkers.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {

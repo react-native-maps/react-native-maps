@@ -57,6 +57,7 @@ class CachedMap extends React.Component {
             >
               <Text>{region.name}</Text>
               <MapView
+                provider={this.props.provider}
                 style={{
                   width: mapSize,
                   height: mapSize,
@@ -65,8 +66,8 @@ class CachedMap extends React.Component {
                 cacheEnabled={this.state.cache}
                 zoomEnabled
                 scrollingEnabled
-                loadingIndicatorColor={"#666666"}
-                loadingBackgroundColor={"#eeeeee"}
+                loadingIndicatorColor="#666666"
+                loadingBackgroundColor="#eeeeee"
               >
                 <MapView.Marker
                   coordinate={region}
@@ -83,6 +84,10 @@ class CachedMap extends React.Component {
     );
   }
 }
+
+CachedMap.propTypes = {
+  provider: MapView.ProviderPropType,
+};
 
 const styles = StyleSheet.create({
   container: {
