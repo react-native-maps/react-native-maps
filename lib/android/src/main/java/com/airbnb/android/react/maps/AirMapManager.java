@@ -102,7 +102,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     int right = 0;
     int bottom = 0;
     double density = (double) view.getResources().getDisplayMetrics().density;
-    
+
     if (padding != null) {
       if (padding.hasKey("left")) {
         left = (int) (padding.getDouble("left") * density);
@@ -312,20 +312,25 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     return map;
   }
-
-  @Override
+  
   @Nullable
+  @Override
   public Map<String, Integer> getCommandsMap() {
-    return MapBuilder.of(
+    Map<String, Integer> map = MapBuilder.of(
         "animateToRegion", ANIMATE_TO_REGION,
         "animateToCoordinate", ANIMATE_TO_COORDINATE,
         "animateToViewingAngle", ANIMATE_TO_VIEWING_ANGLE,
         "animateToBearing", ANIMATE_TO_BEARING,
         "fitToElements", FIT_TO_ELEMENTS,
         "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
-        "fitToCoordinates", FIT_TO_COORDINATES,
-        "setMapBoundaries", SET_MAP_BOUNDARIES
+        "fitToCoordinates", FIT_TO_COORDINATES
     );
+
+    map.putAll(MapBuilder.of(
+      "setMapBoundaries", SET_MAP_BOUNDARIES
+    ));
+
+    return map;
   }
 
   @Override
@@ -364,7 +369,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     context.getJSModule(RCTEventEmitter.class)
         .receiveEvent(view.getId(), name, data);
   }
-
 
   @Override
   public void onDropViewInstance(AirMapView view) {
