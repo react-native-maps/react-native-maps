@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.18.1 (November 28, 2017)
+* Android: [#1828](https://github.com/airbnb/react-native-maps/pull/1828) [AirMapManager] Update MapBuilder for getCommandsMap to support all entires
+
 ## 0.18.0 (November 28, 2017)
 * Android/iOS: [#1587](https://github.com/airbnb/react-native-maps/pull/1750) Add support to set map boundaries
 * Android/iOS: [#1750](https://github.com/airbnb/react-native-maps/pull/1750) Add mapPadding property
