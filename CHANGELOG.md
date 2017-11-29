@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.18.2 (November 29, 2017)
+* Android: [#1835](https://github.com/airbnb/react-native-maps/pull/1835)  [AirMapView] Null check map instance on view methods
+
 ## 0.18.1 (November 28, 2017)
 * Android: [#1828](https://github.com/airbnb/react-native-maps/pull/1828) [AirMapManager] Update MapBuilder for getCommandsMap to support all entires
 
