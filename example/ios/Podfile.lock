@@ -6,10 +6,10 @@ PODS:
     - GoogleMaps/Base
   - React (0.45.1):
     - React/Core (= 0.45.1)
-  - react-native-google-maps (0.18.2):
+  - react-native-google-maps (0.18.3):
     - GoogleMaps (= 2.1.1)
     - React
-  - react-native-maps (0.18.2):
+  - react-native-maps (0.18.3):
     - React
   - React/BatchedBridge (0.45.1):
     - React/Core

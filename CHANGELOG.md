@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.18.3 (November 30, 2017)
+* Android: [#1839](https://github.com/airbnb/react-native-maps/pull/1839) [AirGoogleMapManager] Use RCTDirectEventBlock for onMarkerPress
+
 ## 0.18.2 (November 29, 2017)
 * Android: [#1835](https://github.com/airbnb/react-native-maps/pull/1835)  [AirMapView] Null check map instance on view methods
 
