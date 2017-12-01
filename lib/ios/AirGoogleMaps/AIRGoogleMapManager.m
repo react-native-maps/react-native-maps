@@ -312,6 +312,26 @@ RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
   }];
 }
 
+RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
+                  withPoint:(CGPoint)point
+                  withCallback:(RCTResponseSenderBlock)callback)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+    } else {
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      CLLocationCoordinate2D coordinate = [mapView.projection coordinateForPoint:point];
+      NSDictionary *coordinateData= @{
+                                      @"latitude": @(coordinate.latitude),
+                                      @"longitude": @(coordinate.longitude)
+                                      };
+      callback(@[[NSNull null], coordinateData]);
+    }
+  }];
+}
+
 - (NSDictionary *)constantsToExport {
   return @{ @"legalNotice": [GMSServices openSourceLicenseInfo] };
 }
