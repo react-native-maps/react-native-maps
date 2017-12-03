@@ -425,6 +425,10 @@ const NSInteger AIRMapMaxZoomLevel = 20;
   [self updateLegalLabelInsets];
 }
 
+- (void)setCalloutContentViewInset:(UIEdgeInsets)calloutContentViewInset{
+    [self.calloutView setContentViewInset:calloutContentViewInset];
+}
+
 - (void)beginLoading {
     if ((!self.hasShownInitialLoading && self.loadingEnabled) || (self.cacheEnabled && self.cacheImageView.image == nil)) {
         self.loadingView.hidden = NO;
