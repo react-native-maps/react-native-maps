@@ -19,13 +19,12 @@ public class AirMapLocalTile extends AirMapFeature {
 
     class AIRMapLocalTileProvider implements TileProvider {
         private static final int BUFFER_SIZE = 16 * 1024;
-        private int width, height;
+        private float tileSize;
         private String pathTemplate;
 
 
-        public AIRMapLocalTileProvider(int width, int height, String pathTemplate) {
-            this.width = width;
-            this.height = height;
+        public AIRMapLocalTileProvider(float tileSizet, String pathTemplate) {
+            this.tileSize = tileSizet;
             this.pathTemplate = pathTemplate;
         }
 
@@ -33,11 +32,15 @@ public class AirMapLocalTile extends AirMapFeature {
         public Tile getTile(int x, int y, int zoom) {
             byte[] image = readTileImage(x, y, zoom);
             Log.d("AirMapLocalTile", String.format("getTile(%s, %s, %s) -> %s", x, y, zoom, getTileFilename(x, y, zoom)));
-            return image == null ? TileProvider.NO_TILE : new Tile(this.width, this.height, image);
+            return image == null ? TileProvider.NO_TILE : new Tile((int)this.tileSize, (int)this.tileSize, image);
         }
 
         public void setPathTemplate(String pathTemplate) {
             this.pathTemplate = pathTemplate;
+        }
+
+        public void setTileSize(float tileSize) {
+            this.tileSize = tileSize;
         }
 
         private byte[] readTileImage(int x, int y, int zoom) {
@@ -84,6 +87,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private AirMapLocalTile.AIRMapLocalTileProvider tileProvider;
 
     private String pathTemplate;
+    private float tileSize;
     private float zIndex;
 
     public AirMapLocalTile(Context context) {
@@ -107,6 +111,13 @@ public class AirMapLocalTile extends AirMapFeature {
         }
     }
 
+    public void setTileSize(float tileSize) {
+        this.tileSize = tileSize;
+        if (tileProvider != null) {
+            tileProvider.setTileSize(tileSize);
+        }
+    }
+
     public TileOverlayOptions getTileOverlayOptions() {
         if (tileOverlayOptions == null) {
             tileOverlayOptions = createTileOverlayOptions();
@@ -117,7 +128,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
-        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider(256, 256, this.pathTemplate);
+        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider(this.tileSize, this.pathTemplate);
         options.tileProvider(this.tileProvider);
         return options;
     }
