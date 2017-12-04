@@ -302,6 +302,38 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     self.activityIndicatorView.color = loadingIndicatorColor;
 }
 
+RCT_EXPORT_METHOD(pointForCoordinate:(NSDictionary *)coordinate resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  CGPoint touchPoint = [self convertCoordinate:
+                        CLLocationCoordinate2DMake(
+                                                   [coordinate[@"lat"] doubleValue],
+                                                   [coordinate[@"lng"] doubleValue]
+                                                   )
+                                 toPointToView:self];
+  
+  resolve(@{
+            @"x": @(touchPoint.x),
+            @"y": @(touchPoint.y),
+            });
+}
+
+RCT_EXPORT_METHOD(coordinateForPoint:(NSDictionary *)point resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  CLLocationCoordinate2D coordinate = [self convertPoint:
+                                       CGPointMake(
+                                                   [point[@"x"] doubleValue],
+                                                   [point[@"y"] doubleValue]
+                                                   )
+                                    toCoordinateFromView:self];
+  
+  resolve(@{
+            @"lat": @(coordinate.latitude),
+            @"lng": @(coordinate.longitude),
+            });
+}
+
 // Include properties of MKMapView which are only available on iOS 9+
 // and check if their selector is available before calling super method.
 
