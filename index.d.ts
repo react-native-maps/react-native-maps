@@ -143,6 +143,7 @@ declare namespace MapView {
 
     interface MapLocalTileProps {
         pathTemplate: string;
+        tileSize: number;
         zIndex?: number;
     }
 
