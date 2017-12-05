@@ -19,11 +19,11 @@ public class AirMapLocalTile extends AirMapFeature {
 
     class AIRMapLocalTileProvider implements TileProvider {
         private static final int BUFFER_SIZE = 16 * 1024;
-        private float tileSize;
+        private int tileSize;
         private String pathTemplate;
 
 
-        public AIRMapLocalTileProvider(float tileSizet, String pathTemplate) {
+        public AIRMapLocalTileProvider(int tileSizet, String pathTemplate) {
             this.tileSize = tileSizet;
             this.pathTemplate = pathTemplate;
         }
@@ -32,14 +32,14 @@ public class AirMapLocalTile extends AirMapFeature {
         public Tile getTile(int x, int y, int zoom) {
             byte[] image = readTileImage(x, y, zoom);
             Log.d("AirMapLocalTile", String.format("getTile(%s, %s, %s) -> %s", x, y, zoom, getTileFilename(x, y, zoom)));
-            return image == null ? TileProvider.NO_TILE : new Tile((int)this.tileSize, (int)this.tileSize, image);
+            return image == null ? TileProvider.NO_TILE : new Tile(this.tileSize, this.tileSize, image);
         }
 
         public void setPathTemplate(String pathTemplate) {
             this.pathTemplate = pathTemplate;
         }
 
-        public void setTileSize(float tileSize) {
+        public void setTileSize(int tileSize) {
             this.tileSize = tileSize;
         }
 
@@ -114,7 +114,7 @@ public class AirMapLocalTile extends AirMapFeature {
     public void setTileSize(float tileSize) {
         this.tileSize = tileSize;
         if (tileProvider != null) {
-            tileProvider.setTileSize(tileSize);
+            tileProvider.setTileSize((int)tileSize);
         }
     }
 
@@ -128,7 +128,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
-        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider(this.tileSize, this.pathTemplate);
+        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate);
         options.tileProvider(this.tileProvider);
         return options;
     }
