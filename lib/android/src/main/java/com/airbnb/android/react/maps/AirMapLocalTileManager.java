@@ -43,7 +43,7 @@ public class AirMapLocalTileManager extends ViewGroupManager<AirMapLocalTile> {
         view.setPathTemplate(pathTemplate);
     }
 
-    @ReactProp(name = "zIndex", defaultFloat = 256f)
+    @ReactProp(name = "tileSize", defaultFloat = 256f)
     public void setTileSize(AirMapLocalTile view, float tileSize) {
         view.setTileSize(tileSize);
     }
