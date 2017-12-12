@@ -312,6 +312,10 @@ RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
   }];
 }
 
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
 - (NSDictionary *)constantsToExport {
   return @{ @"legalNotice": [GMSServices openSourceLicenseInfo] };
 }
