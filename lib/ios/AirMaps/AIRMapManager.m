@@ -24,6 +24,7 @@
 #import "SMCalloutView.h"
 #import "AIRMapUrlTile.h"
 #import "AIRMapSnapshot.h"
+#import "AIRMapOverlay.h"
 #import "RCTConvert+AirMap.h"
 
 #import <MapKit/MapKit.h>
@@ -539,7 +540,9 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         return ((AIRMapUrlTile *)overlay).renderer;
     } else if([overlay isKindOfClass:[MKTileOverlay class]]) {
         return [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
-    } else {
+    } else if ([overlay isKindOfClass:[AIRMapOverlay class]]) {
+        return ((AIRMapOverlay*)overlay).renderer;
+     } else {
         return nil;
     }
 }

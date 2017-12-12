@@ -36,6 +36,8 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<MapView.Circle />` Component API](docs/circle.md)
 
+[`<MapView.Overlay />` Component API](docs/overlay.md)
+
 ## General Usage
 
 ```js
@@ -152,7 +154,7 @@ render() {
 ### Using a custom Tile Overlay
 
 ```jsx
-<MapView 
+<MapView
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
@@ -171,6 +173,20 @@ For Android: add the following line in your AndroidManifest.xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
+
+### Using a custom Image Overlay
+```jsx
+<MapView
+  region={this.state.region}
+  onRegionChange={this.onRegionChange}
+>
+  <MapView.Overlay
+    image={require('image.png')}
+    bounds={northEast, southWest}
+  />
+</MapView>
+```
+
 
 ### Customizing the map style
 
@@ -275,7 +291,7 @@ Markers' coordinates can also be animated, as shown in this example:
 
 ### Other Overlays
 
-So far, `<Circle />`, `<Polygon />`, and `<Polyline />` are available to pass in as children to the
+So far, `<Circle />`, `<Polygon />`, `<Polyline />` and `<Overlay />` are available to pass in as children to the
 `<MapView />` component.
 
 ![](http://i.giphy.com/xT77XZCH8JpEhzVcNG.gif) ![](http://i.giphy.com/xT77XZyA0aYeOX5jsA.gif)

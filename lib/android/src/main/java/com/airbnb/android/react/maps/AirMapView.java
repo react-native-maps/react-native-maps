@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.android.gms.maps.model.GroundOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -502,6 +503,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       AirMapUrlTile urlTileView = (AirMapUrlTile) child;
       urlTileView.addToMap(map);
       features.add(index, urlTileView);
+    } else if (child instanceof AirMapOverlay) {
+      AirMapOverlay groundOverlayView = (AirMapOverlay) child;
+      groundOverlayView.addToMap(map);
+      features.add(index, groundOverlayView);
     } else {
       ViewGroup children = (ViewGroup) child;
       for (int i = 0; i < children.getChildCount(); i++) {
