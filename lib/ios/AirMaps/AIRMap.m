@@ -63,7 +63,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (instancetype)init
 {
-    NSLog(@"AirMap.init................");
     if ((self = [super init])) {
         _hasStartedRendering = NO;
         _reactSubviews = [NSMutableArray new];
