@@ -36,7 +36,7 @@
 
   ***Make sure you are on v0.48.0 or greater of react-native, otherwise you may get this error:
 
-  Target Platform: eg: iOS - 11.2
+  Target Platform: eg: iOS - 11.2 Simulator/iPhone 6, Android 7.1.1/Galaxy S6/Genymotion etc
 -->
 
 ### Steps to Reproduce
