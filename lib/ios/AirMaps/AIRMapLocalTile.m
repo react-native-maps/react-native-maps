@@ -17,7 +17,6 @@
 
 
 - (void)setPathTemplate:(NSString *)pathTemplate{
-    NSLog(@"setPathTemplate %@", pathTemplate);
     _pathTemplate = pathTemplate;
     _pathTemplateSet = YES;
     [self createTileOverlayAndRendererIfPossible];
@@ -25,7 +24,6 @@
 }
 
 - (void)setTileSize:(CGFloat)tileSize{
-    NSLog(@"setTileSize %f", tileSize);
     _tileSize = tileSize;
     _tileSizeSet = YES;
     [self createTileOverlayAndRendererIfPossible];
@@ -34,7 +32,6 @@
 
 - (void) createTileOverlayAndRendererIfPossible
 {
-    NSLog(@"createTileOverlayAndRendererIfPossible");
     if (!_pathTemplateSet || !_tileSizeSet) return;
     self.tileOverlay = [[AIRMapLocalTileOverlay alloc] initWithURLTemplate:self.pathTemplate];
     self.tileOverlay.canReplaceMapContent = YES;
