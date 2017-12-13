@@ -1,7 +1,6 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Tile;
@@ -31,7 +30,6 @@ public class AirMapLocalTile extends AirMapFeature {
         @Override
         public Tile getTile(int x, int y, int zoom) {
             byte[] image = readTileImage(x, y, zoom);
-            Log.d("AirMapLocalTile", String.format("getTile(%s, %s, %s) -> %s", x, y, zoom, getTileFilename(x, y, zoom)));
             return image == null ? TileProvider.NO_TILE : new Tile(this.tileSize, this.tileSize, image);
         }
 
