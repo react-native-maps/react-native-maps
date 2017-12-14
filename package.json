@@ -13,7 +13,8 @@
     "lint": "eslint ./",
     "build": "npm run build:js && npm run build:android && npm run build:ios",
     "build:js": "exit 0",
-    "build:ios": "bundle install --binstubs ./examples/ios && bundle exec pod install --project-directory=./example/ios/",
+    "build:ios":
+      "bundle install --binstubs ./examples/ios && bundle exec pod install --project-directory=./example/ios/",
     "build:android": "./gradlew :react-native-maps:assembleDebug",
     "ci": "npm run lint",
     "preversion": "./scripts/update-version.js"
@@ -32,8 +33,8 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": ">=15.4.0 || ^16.0.0-alpha",
-    "react-native": ">=0.40",
+    "react": "16.0.0",
+    "react-native": "0.51.0",
     "prop-types": "^15.5.10"
   },
   "devDependencies": {
@@ -50,8 +51,8 @@
     "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
     "prop-types": "^15.5.10",
-    "react": "16.0.0-alpha.12",
-    "react-native": "^0.45.1"
+    "react": "16.0.0",
+    "react-native": "0.51.0"
   },
   "rnpm": {
     "android": {
