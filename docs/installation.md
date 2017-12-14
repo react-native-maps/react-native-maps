@@ -71,7 +71,7 @@ end
 Add to `ios/_YOUR_PROJECT_NAME_/AppDelegate.m:
 
 ```
-+ @import GoogleMaps; //add this line if you
++ @import GoogleMaps; //add this line if you want to use GoogleMaps
 @implementation AppDelegate
 ...
 
@@ -135,7 +135,7 @@ Add to `ios/_YOUR_PROJECT_NAME_/AppDelegate.m:
 Source: https://developers.google.com/maps/documentation/android-api/signup
 
 
-4. Add `new MapsPackage()` in your `MainApplication.java` :
+4. Add `import com.airbnb.android.react.maps.MapsPackage;` and `new MapsPackage()` in your `MainApplication.java` :
 
    ```
    import com.airbnb.android.react.maps.MapsPackage;
