@@ -5,7 +5,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  Animated,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
