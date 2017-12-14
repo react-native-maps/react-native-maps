@@ -157,6 +157,8 @@
         // no callout to show
         return;
     }
+    
+    [self.superview bringSubviewToFront:self];
 
     [self fillCalloutView:self.map.calloutView];
 
