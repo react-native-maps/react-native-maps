@@ -23,7 +23,7 @@ class AnimatedMarkers extends React.Component {
     super(props);
 
     this.state = {
-      coordinate: new Animated.Region({
+      coordinate: new MapView.AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE,
       }),
