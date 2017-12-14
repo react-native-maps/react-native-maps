@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from 'react-native';
 // eslint-disable-next-line max-len
-import SyntheticEvent from 'react-native/Libraries/Renderer/src/renderers/shared/shared/event/SyntheticEvent';
 import MapView from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
@@ -67,9 +66,6 @@ class EventListener extends React.Component {
 
   recordEvent(name) {
     return e => {
-      if (e instanceof SyntheticEvent && typeof e.persist === 'function') {
-        e.persist();
-      }
       this.setState(prevState => ({
         events: [
           this.makeEvent(e, name),
