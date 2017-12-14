@@ -12,10 +12,7 @@ gem install bundler
 
 ```
 npm install
-cd example/ios
-bundle install
-bundle exec pod install
-cd ../../
+rpm run build:ios
 rpm run run:ios
 ```
 
@@ -23,10 +20,7 @@ or
 
 ```
 yarn install
-cd example/ios
-bundle install
-bundle exec pod install
-cd ../../
+yarn build:ios
 yarn run:ios
 ```
 
@@ -34,14 +28,16 @@ yarn run:ios
 
 1. Start your emulator
 
-2. Install via gradle:
+2. Install dependencies and run the example:
 
 ```
+npm install
 npm run run:android
 ```
 
 or
 
 ```
+yarn install
 yarn run:android
 ```
