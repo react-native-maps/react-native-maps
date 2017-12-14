@@ -12,8 +12,8 @@ gem install bundler
 
 ```
 npm install
-rpm run build:ios
-rpm run run:ios
+npm run build:ios
+npm run run:ios
 ```
 
 or
