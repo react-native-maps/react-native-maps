@@ -197,7 +197,12 @@ Tiles can be stored locally within device using xyz tiling scheme and displayed 
 </MapView>
 ```
 
-For Android: if original (for example Google) tiles are not desirable (no need to download them when using offline tiles), set mapType to 'none'.
+For Android: LocalTile is still just overlay over original map tiles. It means that if device is online, underlying tiles will be still downloaded. If original tiles download/display is not desirable set mapType to 'none'. For example:
+```
+<MapView
+  mapType={Platform.OS == "android" ? "none" : "standard"}
+>
+```
 
 See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) for how to download tiles for offline usage.
 
