@@ -11,23 +11,33 @@ gem install bundler
 2. Install dependencies and open the workspace:
 
 ```
-cd example
 npm install
-cd ios
-bundle install
-bundle exec pod install
-open AirMapsExplorer.xcworkspace
+rpm run build:ios
+rpm run run:ios
 ```
 
-3. Make sure the `AirMapsExplorer` target is selected and click `Run`
+or
+
+```
+yarn install
+yarn build:ios
+yarn run:ios
+```
 
 ## android
 
 1. Start your emulator
 
-2. Install via gradle:
+2. Install dependencies and run the example:
 
 ```
-# from the example/ dir:
-react-native run-android
+npm install
+npm run run:android
+```
+
+or
+
+```
+yarn install
+yarn run:android
 ```
