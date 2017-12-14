@@ -151,8 +151,10 @@ render() {
 
 ### Using a custom Tile Overlay
 
+#### Tile Overlay using tile server
+
 ```jsx
-<MapView 
+<MapView
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
@@ -171,6 +173,33 @@ For Android: add the following line in your AndroidManifest.xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
+
+#### Tile Overlay using local tiles
+
+Tiles can be stored locally within device using xyz tiling scheme and displayed as tile overlay as well. This is usefull especially for offline map usage when tiles are available for selected map region within device storage.
+
+```jsx
+<MapView
+  region={this.state.region}
+  onRegionChange={this.onRegionChange}
+>
+  <MapView.LocalTile
+   /**
+    * The path template of the locally stored tiles. The patterns {x} {y} {z} will be replaced at runtime
+    * For example, /storage/emulated/0/mytiles/{z}/{x}/{y}.png
+    */
+   pathTemplate={this.state.pathTemplate}
+   /**
+    * The size of provided local tiles (usually 256 or 512).
+    */
+   tileSize={256}
+  />
+</MapView>
+```
+
+For Android: if original (for example Google) tiles are not desirable (no need to download them when using offline tiles), set mapType to 'none'.
+
+See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) for how to download tiles for offline usage.
 
 ### Customizing the map style
 
