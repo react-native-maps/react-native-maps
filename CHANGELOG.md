@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.19.0 (December 14, 2017)
+* Common: [#1715](https://github.com/airbnb/react-native-maps/pull/1715) Fixed region/initialRegion null overrides of this.props
+* Common: [#1876](https://github.com/airbnb/react-native-maps/pull/1876) Added support for locally stored tile overlay
+* iOS: [#1854](https://github.com/airbnb/react-native-maps/pull/1854) Update GoogleMaps dependency to 2.5.0
+
 ## 0.18.3 (November 30, 2017)
 * Android: [#1839](https://github.com/airbnb/react-native-maps/pull/1839) [AirGoogleMapManager] Use RCTDirectEventBlock for onMarkerPress
 
