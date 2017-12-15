@@ -56,7 +56,7 @@ class AnimatedMarkers extends React.Component {
         </MapView>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={this.animate}
+            onPress={() => this.animate()}
             style={[styles.bubble, styles.button]}
           >
             <Text>Animate</Text>
