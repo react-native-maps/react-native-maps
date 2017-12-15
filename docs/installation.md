@@ -66,7 +66,7 @@ end
 ~~~
 
 
-## If you want to Google maps
+## If you want to use Google maps
 
 Add to `ios/_YOUR_PROJECT_NAME_/AppDelegate.m:
 
