@@ -241,7 +241,15 @@ Then add the AirGoogleMaps directory:
 
 https://github.com/airbnb/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
 
-An unofficial step-by-step guide is also available at https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
+Unofficial guides are also available:
+
+- Here is the most famous one with an active discussion thread:
+
+https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
+
+- For react-native ≥ 0.46 you can follow this complete step by step guide:
+
+https://codeburst.io/react-native-google-map-with-react-native-maps-572e3d3eee14
 
 ## Examples
 
