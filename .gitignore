@@ -33,6 +33,7 @@ local.properties
 #
 node_modules/
 npm-debug.log
+package-lock.json
 Pods/
 AirMapsExplorer.xcworkspace/
 lib/android/src/main/gen
