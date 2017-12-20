@@ -5,7 +5,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  Animated,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -23,7 +22,7 @@ class AnimatedMarkers extends React.Component {
     super(props);
 
     this.state = {
-      coordinate: new Animated.Region({
+      coordinate: new MapView.AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE,
       }),
@@ -57,7 +56,7 @@ class AnimatedMarkers extends React.Component {
         </MapView>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={this.animate}
+            onPress={() => this.animate()}
             style={[styles.bubble, styles.button]}
           >
             <Text>Animate</Text>

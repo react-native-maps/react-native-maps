@@ -1,8 +1,90 @@
 # Change Log
 
+## 0.19.0 (December 14, 2017)
+* Common: [#1715](https://github.com/airbnb/react-native-maps/pull/1715) Fixed region/initialRegion null overrides of this.props
+* Common: [#1876](https://github.com/airbnb/react-native-maps/pull/1876) Added support for locally stored tile overlay
+* iOS: [#1854](https://github.com/airbnb/react-native-maps/pull/1854) Update GoogleMaps dependency to 2.5.0
+
+## 0.18.3 (November 30, 2017)
+* Android: [#1839](https://github.com/airbnb/react-native-maps/pull/1839) [AirGoogleMapManager] Use RCTDirectEventBlock for onMarkerPress
+
+## 0.18.2 (November 29, 2017)
+* Android: [#1835](https://github.com/airbnb/react-native-maps/pull/1835)  [AirMapView] Null check map instance on view methods
+
+## 0.18.1 (November 28, 2017)
+* Android: [#1828](https://github.com/airbnb/react-native-maps/pull/1828) [AirMapManager] Update MapBuilder for getCommandsMap to support all entires
+
+## 0.18.0 (November 28, 2017)
+* Android/iOS: [#1587](https://github.com/airbnb/react-native-maps/pull/1750) Add support to set map boundaries
+* Android/iOS: [#1750](https://github.com/airbnb/react-native-maps/pull/1750) Add mapPadding property
+* Common: [#1792](https://github.com/airbnb/react-native-maps/pull/1792) Make all components use ViewPropTypes || View.propTypes
+* iOS: [#1774](https://github.com/airbnb/react-native-maps/pull/1774) Added missing parameters to google map screenshot
+* iOS: [#1824](https://github.com/airbnb/react-native-maps/pull/1824) Add new iOS `mutedStandard` map-type
+* iOS: [#1705](https://github.com/airbnb/react-native-maps/pull/1705) Enable control of Google Maps Marker tracksViewChanges property.
+* Android: [#1710](https://github.com/airbnb/react-native-maps/pull/1710) Added support for new Android camera movement APIs
+* iOS: [#1741](https://github.com/airbnb/react-native-maps/pull/1741) Fixed iOS google MapView.onMarkerPress not receiving the marker identifier
+* iOS: [#1816](https://github.com/airbnb/react-native-maps/pull/1816) Fix The name of the given podspec ‘yoga' doesn't match the expected one ‘Yoga'
+* iOS: [#1797](https://github.com/airbnb/react-native-maps/pull/1797) Fixed onMapReady event on iOS to resemble onMapReady on Android
+* Common: [#1817](https://github.com/airbnb/react-native-maps/pull/1817) Allow fitToCoordinates to be called without options parameter
+
+## 0.17.1 (October 18, 2017)
+* Common: [#1687](https://github.com/airbnb/react-native-maps/pull/1687) Fixed TypeScript definitions
+
+## 0.17.0 (October 11, 2017)
+* iOS: [#1527](https://github.com/airbnb/react-native-maps/pull/1527) Added [iOS / Google Maps] support for showsIndoorLevelPicker
+* iOS/Android: [#1544](https://github.com/airbnb/react-native-maps/pull/1544) Adds support to animateToBearing and animateToViewingAngle ( IOS + Android )
+* JS: [#1503](https://github.com/airbnb/react-native-maps/pull/1503) Remove caret from "react": "^16.0.0-alpha.12
+* Android: [#1521](https://github.com/airbnb/react-native-maps/pull/1521) Fix rare android crashes when map size is 0
+* Common: [#1601](https://github.com/airbnb/react-native-maps/pull/1610) Added Typescript Definitions
+* Android: [#1612](https://github.com/airbnb/react-native-maps/pull/1612) Remove legalNotice from android AirMapModule
+
+## 0.16.4 (September 13, 2017)
+* Android: [#1643](https://github.com/airbnb/react-native-maps/pull/1643) [MapMarker] fix android release crash on custom marker
+
+## 0.16.3 (September 2, 2017)
+* iOS: [#1603](https://github.com/airbnb/react-native-maps/pull/1603) Added missing satellite option for iOS Google Maps
+* iOS: [#1579](https://github.com/airbnb/react-native-maps/pull/1579) Set initial region on view
+
+## 0.16.2 (August 17, 2017)
+* Android: [#1563](https://github.com/airbnb/react-native-maps/pull/#1563) Add missing native method for setting initial region
+* iOS: [#1187](https://github.com/airbnb/react-native-maps/pull/1187) Reverted due to build issues
+
+## 0.16.1 (August 15, 2017)
+* Android: [#1428](https://github.com/airbnb/react-native-maps/pull/#1428) Add ability to load marker image from drawable
+* iOS: [#1187](https://github.com/airbnb/react-native-maps/pull/1187) Improve marker performance
+* iOS/Android: [#1458](https://github.com/airbnb/react-native-maps/pull/1458) Add Google Maps legalNotice constant
+* JS: [#1546](https://github.com/airbnb/react-native-maps/pull/1546) Fix initial region native prop
+
+## 0.16.0 (August 9, 2017)
+* Android: [#1481](https://github.com/airbnb/react-native-maps/pull/1481) Handle Android RN 0.47 breaking change
+* iOS: [#1357](https://github.com/airbnb/react-native-maps/pull/1357) add MKTileOverlayRenderer
+* iOS: [#1369](https://github.com/airbnb/react-native-maps/pull/1369) Add onMapReady callback
+* Android/iOS/JS: [#1360](https://github.com/airbnb/react-native-maps/pull/1360) Add minZoom and maxZoom properties for android and ios
+* JS: [#1479](https://github.com/airbnb/react-native-maps/pull/1479) Fix timing function used in AnimatedRegion.spring
+
+## 0.15.3 (June 27, 2017)
+
+* iOS: [#1362](https://github.com/airbnb/react-native-maps/pull/1362) Updates for React 0.43-0.45 and React 16.
+* JS: [#1323](https://github.com/airbnb/react-native-maps/pull/1323) Updates for React 0.43-0.45 and React 16.
+* Android/iOS/JS: [#1440](https://github.com/airbnb/react-native-maps/pull/1440) Updates for React 0.43-0.45 and React 16.
+* iOS: [#1115](https://github.com/airbnb/react-native-maps/pull/1115) Fix animateToCoordinate and animateToRegion
+* Android: [#1403](https://github.com/airbnb/react-native-maps/pull/1403) Fix an NPE
+
+## 0.15.2 (May 20, 2017)
+
+* iOS: [#1351](https://github.com/airbnb/react-native-maps/pull/1351) Fix file references
+
+## 0.15.1 (May 19, 2017)
+
+* iOS: [#1341](https://github.com/airbnb/react-native-maps/pull/1341) Fix compile error in rn version >= 0.40
+* iOS: [#1194](https://github.com/airbnb/react-native-maps/pull/1194) Add onPress support for Google Maps Polyline
+* iOS: [#1326](https://github.com/airbnb/react-native-maps/pull/1326) Add Marker rotation for Google Maps on iOS
+* Android: [#1311](https://github.com/airbnb/react-native-maps/pull/1311) Fix overlay issue
+* Common [#1313](https://github.com/airbnb/react-native-maps/pull/1313) Fix Android sourceDir for react-native-link
+
 ## 0.15.0 (May 8, 2017)
 
-* iOS: [#1195]((https://github.com/airbnb/react-native-maps/pull/1195) Rename project file to fix iOS build error
+* iOS: [#1195](https://github.com/airbnb/react-native-maps/pull/1195) Rename project file to fix iOS build error
 * Android: Update Google Play Services to version `10.2.4`
 
 ## 0.14.0 (April 4, 2017)
