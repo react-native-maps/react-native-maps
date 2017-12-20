@@ -336,12 +336,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
                 "animateToBearing", ANIMATE_TO_BEARING,
                 "fitToElements", FIT_TO_ELEMENTS,
                 "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
-                "fitToCoordinates", FIT_TO_COORDINATES,
-                "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
+                "fitToCoordinates", FIT_TO_COORDINATES
         );
 
         map.putAll(MapBuilder.of(
-                "setMapBoundaries", SET_MAP_BOUNDARIES
+                "setMapBoundaries", SET_MAP_BOUNDARIES,
+                "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
         ));
 
         return map;
