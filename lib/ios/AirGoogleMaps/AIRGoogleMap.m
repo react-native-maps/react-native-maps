@@ -248,7 +248,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (BOOL)zoomControlEnabled {
-  return self.settings.zoomControl;
+  return self.settings.zoomControls;
 }
 
 - (void)setRotateEnabled:(BOOL)rotateEnabled {
