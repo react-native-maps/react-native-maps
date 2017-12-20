@@ -5,4 +5,3 @@ project(":example-android").projectDir = file("./example/android/app")
 
 include ":react-native-maps-lib"
 project(":react-native-maps-lib").projectDir = file("./lib/android")
-
