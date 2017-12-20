@@ -243,6 +243,14 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.zoomGestures;
 }
 
+- (void)setZoomControlEnabled:(BOOL)zoomControlEnabled {
+  self.settings.ZoomControls = zoomControlEnabled;
+}
+
+- (BOOL)zoomControlEnabled {
+  return self.settings.zoomControl;
+}
+
 - (void)setRotateEnabled:(BOOL)rotateEnabled {
   self.settings.rotateGestures = rotateEnabled;
 }

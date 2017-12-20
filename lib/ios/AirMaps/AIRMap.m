@@ -36,10 +36,12 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, assign) NSNumber *shouldZoomEnabled;
+@property (nonatomic, assign) NSNumber *shouldZoomControlEnabled;
 @property (nonatomic, assign) NSNumber *shouldScrollEnabled;
 
 - (void)updateScrollEnabled;
 - (void)updateZoomEnabled;
+- (void)updateZoomControlEnabled;
 
 @end
 
@@ -375,6 +377,20 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
 }
 
+- (void)setZoomControlEnabled:(BOOL)zoomControlEnabled {
+  self.shouldZoomControlEnabled = [NSNumber numberWithBool:zoomControlEnabled];
+  [self updateZoomControlEnabled];
+}
+
+- (void)updateZoomControlEnabled {
+  if (self.cacheEnabled) {
+  [super setZoomControlEnabled: NO];
+  }
+  else if (self.shouldZoomControlEnabled != nil) {
+  [super setZoomControlEnabled:[self.shouldZoomControlEnabled boolValue]];
+  }
+}
+
 - (void)cacheViewIfNeeded {
     if (self.hasShownInitialLoading) {
         if (!self.cacheEnabled) {
@@ -402,6 +418,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
         [self updateScrollEnabled];
         [self updateZoomEnabled];
+        [self updateZoomControlEnabled];
         [self updateLegalLabelInsets];
     }
 }
