@@ -339,10 +339,6 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.settings.indoorPicker = showsIndoorLevelPicker;
 }
 
-- (BOOL)showsIndoorLevelPicker {
-  return self.settings.indoorPicker;
-}
-
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
   // solution from here: http://stackoverflow.com/a/16587735/1102215
   GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
