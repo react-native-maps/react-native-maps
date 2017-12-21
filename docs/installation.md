@@ -177,7 +177,7 @@ If you have ran 'react-native link` by mistake:
 6. delete ios/build folder
 7. start again with the installation steps
 
-If you use Xcode with version less than 9 you may get `use of undeclared identifier 'MKMapTypeMutedStandard'` error. In this case you have to update your Xcode.
+If you use Xcode with version less than 9 you may get `use of undeclared identifier 'MKMapTypeMutedStandard'` or `Entry, ":CFBundleIdentifier", Does Not Exist` errors. In this case you have to update your Xcode.
 
 ### On Android:
 
