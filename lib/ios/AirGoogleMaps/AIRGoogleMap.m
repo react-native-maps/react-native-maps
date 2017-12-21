@@ -145,6 +145,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 #pragma clang diagnostic pop
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
+  if(!self.window) return;
   if (_initialRegionSet) return;
   _initialRegionSet = true;
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
