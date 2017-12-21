@@ -22,6 +22,7 @@
 | `showsIndoors` | `Boolean` | `true` | A Boolean indicating whether indoor maps should be enabled.
 | `showsIndoorLevelPicker` | `Boolean` | `false` | A Boolean indicating whether indoor level picker should be enabled. **Note:** Google Maps only (either Android or iOS with `PROVIDER_GOOGLE`).
 | `zoomEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/zoom the map.
+| `zoomControlEnabled` | `Boolean` | `true` | If `false` the zoom control at the bottom right of the map won't be visible **Note:** Android only.
 | `minZoomLevel` | `Number` | `0` | Minimum zoom value for the map, must be between 0 and 20
 | `maxZoomLevel` | `Number` | `20` | Maximum zoom value for the map, must be between 0 and 20
 | `rotateEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/rotate the map.

@@ -12,6 +12,7 @@ interface MapViewProps {
     showsPointsOfInterest?: boolean;
     showsCompass?: boolean;
     zoomEnabled?: boolean;
+    zoomControlEnabled?: boolean;
     rotateEnabled?: boolean;
     cacheEnabled?: boolean;
     loadingEnabled?: boolean;
