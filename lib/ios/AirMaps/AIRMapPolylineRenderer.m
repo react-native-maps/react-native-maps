@@ -11,9 +11,9 @@
 @interface AIRMapPolylineRendererSegment : NSObject
 - (id)initWithPoint:(CGPoint)point color:(UIColor*)color;
 - (void) addPoint:(CGPoint)point color:(UIColor*)color;
-@property UIColor *color;
 @property CGMutablePathRef path;
-@property UIColor *color2;
+@property UIColor *startColor;
+@property UIColor *endColor;
 @property CGPoint startPoint;
 @property CGPoint endPoint;
 @end
@@ -23,9 +23,9 @@
     self = [super init];
     if (self){
         self.path = CGPathCreateMutable();
+        self.startColor = color;
         self.startPoint = point;
         self.endPoint = point;
-        self.color = color;
         CGPathMoveToPoint(self.path, nil, point.x, point.y);
     }
     return self;
@@ -33,7 +33,7 @@
 - (void) addPoint:(CGPoint)point color:(UIColor*)color
 {
     self.endPoint = point;
-    self.color2 = color;
+    self.endColor = color;
     CGPathAddLineToPoint(self.path, nil, point.x, point.y);
 }
 @end
@@ -125,8 +125,8 @@
             segment = [[AIRMapPolylineRendererSegment alloc] initWithPoint:point color:color];
             [_segments addObject:segment];
         }
-        else if (((color == nil) && (segment.color2 == nil)) ||
-                 ((color != nil) && [segment.color isEqual:color])) {
+        else if (((color == nil) && (segment.endColor == nil)) ||
+                 ((color != nil) && [segment.startColor isEqual:color])) {
             
             // Append point to segment
             [segment addPoint:point color: color];
@@ -134,13 +134,13 @@
         else {
             
             // Close the last segment if needed
-            if (segment.color2 == nil) {
+            if (segment.endColor == nil) {
                 [segment addPoint:point color:color];
             }
             else {
                 
                 // Add transition gradient
-                segment = [[AIRMapPolylineRendererSegment alloc] initWithPoint:segment.endPoint color:segment.color2];
+                segment = [[AIRMapPolylineRendererSegment alloc] initWithPoint:segment.endPoint color:segment.endColor];
                 [segment addPoint:point color:color];
                 [_segments addObject:segment];
             }
@@ -154,8 +154,8 @@
     }
     
     // Close last segment in case this was forgotten
-    if ((segment != nil) && (segment.color2 == nil)) {
-        segment.color2 = segment.color;
+    if ((segment != nil) && (segment.endColor == nil)) {
+        segment.endColor = segment.startColor;
     }
 }
 
@@ -208,11 +208,11 @@
         CGContextSaveGState(context);
         
         // When segment has two colors, draw it as a gradient
-        if (![segment.color isEqual:segment.color2]) {
+        if (![segment.startColor isEqual:segment.endColor]) {
             CGFloat pc_r,pc_g,pc_b,pc_a,
             cc_r,cc_g,cc_b,cc_a;
-            [segment.color getRed:&pc_r green:&pc_g blue:&pc_b alpha:&pc_a];
-            [segment.color2 getRed:&cc_r green:&cc_g blue:&cc_b alpha:&cc_a];
+            [segment.startColor getRed:&pc_r green:&pc_g blue:&pc_b alpha:&pc_a];
+            [segment.endColor getRed:&cc_r green:&cc_g blue:&cc_b alpha:&cc_a];
             CGFloat gradientColors[8] = {pc_r,pc_g,pc_b,pc_a,
                 cc_r,cc_g,cc_b,cc_a};
             CGFloat gradientLocation[2] = {0,1};
@@ -239,7 +239,7 @@
         }
         else {
             CGContextAddPath(context, segment.path);
-            CGContextSetStrokeColorWithColor(context, segment.color.CGColor);
+            CGContextSetStrokeColorWithColor(context, segment.startColor.CGColor);
             CGContextStrokePath(context);
         }
         CGContextRestoreGState(context);
