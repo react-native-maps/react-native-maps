@@ -179,19 +179,18 @@
 {
     CGRect pointsRect = CGPathGetBoundingBox(self.path);
     CGRect mapRectCG = [self rectForMapRect:mapRect];
-    if (!CGRectIntersectsRect(pointsRect, mapRectCG))return;
+    if (!CGRectIntersectsRect(pointsRect, mapRectCG)) return;
     
     [self drawWithZoomScale:zoomScale inContext:context];
 }
 
 - (void) drawWithZoomScale:(MKZoomScale)zoomScale inContext:(CGContextRef)context
 {
-    CGContextSaveGState(context);
-    
     CGFloat lineWidth = (self.lineWidth / zoomScale) * 2.0;
     CGContextSetLineWidth(context, lineWidth);
     CGContextSetLineCap(context, self.lineCap);
     CGContextSetLineJoin(context, self.lineJoin);
+    CGContextSetFillColorWithColor(context, self.fillColor.CGColor);
     CGContextSetMiterLimit(context, self.miterLimit);
     CGFloat dashes[self.lineDashPattern.count];
     for (NSUInteger i = 0; i < self.lineDashPattern.count; i++) {
@@ -205,7 +204,9 @@
     
     for (NSUInteger i = 0, n = _segments.count; i < n; i++) {
         AIRMapPolylineRendererSegment* segment = _segments[i];
-        CGContextSaveGState(context);
+        
+        CGContextBeginPath(context);
+        CGContextAddPath(context, segment.path);
         
         // When segment has two colors, draw it as a gradient
         if (![segment.startColor isEqual:segment.endColor]) {
@@ -219,14 +220,8 @@
             CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
             CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, gradientColors, gradientLocation, 2);
             CGColorSpaceRelease(colorSpace);
-            CGPathRef pathToFill = CGPathCreateCopyByStrokingPath(
-                                                                  segment.path,
-                                                                  NULL,
-                                                                  lineWidth,
-                                                                  self.lineCap,
-                                                                  self.lineJoin,
-                                                                  self.miterLimit);
-            CGContextAddPath(context, pathToFill);
+            
+            CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
             CGContextDrawLinearGradient(
                                         context,
@@ -236,16 +231,13 @@
                                         kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation
                                         );
             CGGradientRelease(gradient);
+            CGContextResetClip(context);
         }
         else {
-            CGContextAddPath(context, segment.path);
             CGContextSetStrokeColorWithColor(context, segment.startColor.CGColor);
             CGContextStrokePath(context);
         }
-        CGContextRestoreGState(context);
     }
-    
-    CGContextRestoreGState(context);
 }
 
 @end
