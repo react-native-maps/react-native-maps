@@ -153,8 +153,10 @@ render() {
 
 ### Using a custom Tile Overlay
 
+#### Tile Overlay using tile server
+
 ```jsx
-<MapView 
+<MapView
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
@@ -173,6 +175,38 @@ For Android: add the following line in your AndroidManifest.xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
+
+#### Tile Overlay using local tiles
+
+Tiles can be stored locally within device using xyz tiling scheme and displayed as tile overlay as well. This is usefull especially for offline map usage when tiles are available for selected map region within device storage.
+
+```jsx
+<MapView
+  region={this.state.region}
+  onRegionChange={this.onRegionChange}
+>
+  <MapView.LocalTile
+   /**
+    * The path template of the locally stored tiles. The patterns {x} {y} {z} will be replaced at runtime
+    * For example, /storage/emulated/0/mytiles/{z}/{x}/{y}.png
+    */
+   pathTemplate={this.state.pathTemplate}
+   /**
+    * The size of provided local tiles (usually 256 or 512).
+    */
+   tileSize={256}
+  />
+</MapView>
+```
+
+For Android: LocalTile is still just overlay over original map tiles. It means that if device is online, underlying tiles will be still downloaded. If original tiles download/display is not desirable set mapType to 'none'. For example:
+```
+<MapView
+  mapType={Platform.OS == "android" ? "none" : "standard"}
+>
+```
+
+See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) for how to download tiles for offline usage.
 
 ### Customizing the map style
 
@@ -454,6 +488,7 @@ Pass an array of coordinates to focus a map region on said coordinates.
 * Make sure that you have [properly installed](docs/installation.md) react-native-maps.
 * Check in the logs if there is more informations about the issue.
 * Try setting the style of the MapView to an absolute position with top, left, right and bottom values set.
+* Make sure you have enabled Google Maps API in ![Google developer console](https://console.developers.google.com/apis/library)
 
 ```javascript
 const styles = StyleSheet.create({

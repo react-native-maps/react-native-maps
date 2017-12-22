@@ -155,7 +155,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
 }
 
-- (void)didFinishTileRendering {
+- (void)didPrepareMap {
     if (self.onMapReady) self.onMapReady(@{});
 }
 
@@ -219,6 +219,13 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (self.onChange) self.onChange(event);  // complete
 }
 
+- (void)setMapPadding:(UIEdgeInsets)mapPadding {
+  self.padding = mapPadding;
+}
+
+- (UIEdgeInsets)mapPadding {
+  return self.padding;
+}
 
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
   self.settings.scrollGestures = scrollEnabled;
@@ -310,6 +317,14 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setMaxZoomLevel:(CGFloat)maxZoomLevel {
   [self setMinZoom:self.minZoom maxZoom:maxZoomLevel ];
+}
+
+- (void)setShowsIndoorLevelPicker:(BOOL)showsIndoorLevelPicker {
+  self.settings.indoorPicker = showsIndoorLevelPicker;
+}
+
+- (BOOL)showsIndoorLevelPicker {
+  return self.settings.indoorPicker;
 }
 
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {

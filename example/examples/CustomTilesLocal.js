@@ -4,81 +4,84 @@ import {
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { MAP_TYPES, PROVIDER_DEFAULT } from 'react-native-maps';
 
-const screen = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const ASPECT_RATIO = screen.width / screen.height;
+const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class AnimatedMarkers extends React.Component {
-  constructor(props) {
-    super(props);
+class CustomTiles extends React.Component {
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
-      coordinate: new MapView.AnimatedRegion({
+      region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
-      }),
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
     };
   }
 
-  animate() {
-    const { coordinate } = this.state;
-    coordinate.timing({
-      latitude: LATITUDE + ((Math.random() - 0.5) * (LATITUDE_DELTA / 2)),
-      longitude: LONGITUDE + ((Math.random() - 0.5) * (LONGITUDE_DELTA / 2)),
-    }).start();
+  get mapType() {
+    // MapKit does not support 'none' as a base map
+    return this.props.provider === PROVIDER_DEFAULT ?
+      MAP_TYPES.STANDARD : MAP_TYPES.NONE;
   }
 
   render() {
+    const { region } = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
+          mapType={this.mapType}
           style={styles.map}
-          initialRegion={{
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
+          initialRegion={region}
         >
-          <MapView.Marker.Animated
-            coordinate={this.state.coordinate}
+          <MapView.LocalTile
+            pathTemplate="/path/to/locally/saved/tiles/{z}/{x}/{y}.png"
+            tileSize={256}
+            zIndex={-1}
           />
         </MapView>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={() => this.animate()}
-            style={[styles.bubble, styles.button]}
-          >
-            <Text>Animate</Text>
-          </TouchableOpacity>
+          <View style={styles.bubble}>
+            <Text>Custom Tiles Local</Text>
+          </View>
         </View>
       </View>
     );
   }
 }
 
-AnimatedMarkers.propTypes = {
+CustomTiles.propTypes = {
   provider: MapView.ProviderPropType,
 };
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   bubble: {
     flex: 1,
@@ -104,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = AnimatedMarkers;
+module.exports = CustomTiles;
