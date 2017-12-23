@@ -316,6 +316,14 @@ So far, `<Circle />`, `<Polygon />`, and `<Polyline />` are available to pass in
 
 
 
+### Gradient Polylines (iOS MapKit only)
+
+Gradient polylines can be created using the `strokeColors` prop of the `<Polyline>` component.
+
+![](https://i.imgur.com/P7UeqAm.png?1)
+
+
+
 ### Default Markers
 
 Default markers will be rendered unless a custom marker is specified. One can optionally adjust the

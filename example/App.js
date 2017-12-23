@@ -16,6 +16,7 @@ import MarkerTypes from './examples/MarkerTypes';
 import DraggableMarkers from './examples/DraggableMarkers';
 import PolygonCreator from './examples/PolygonCreator';
 import PolylineCreator from './examples/PolylineCreator';
+import GradientPolylines from './examples/GradientPolylines';
 import AnimatedViews from './examples/AnimatedViews';
 import AnimatedMarkers from './examples/AnimatedMarkers';
 import Callouts from './examples/Callouts';
@@ -131,6 +132,7 @@ class App extends React.Component {
       [DraggableMarkers, 'Draggable Markers', true],
       [PolygonCreator, 'Polygon Creator', true],
       [PolylineCreator, 'Polyline Creator', true],
+      [GradientPolylines, 'Gradient Polylines', true],
       [AnimatedViews, 'Animating with MapViews'],
       [AnimatedMarkers, 'Animated Marker Position'],
       [Callouts, 'Custom Callouts', true],
