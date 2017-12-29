@@ -36,6 +36,8 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<MapView.Circle />` Component API](docs/circle.md)
 
+[`<MapView.Overlay />` Component API](docs/overlay.md)
+
 ## General Usage
 
 ```js
