@@ -1,5 +1,17 @@
 declare module "react-native-maps" {
     import * as React from 'react';
+    
+    export interface Region {
+        latitude: number
+        longitude: number
+        latitudeDelta: number
+        longitudeDelta: number
+    }
+    
+    export interface LatLng {
+        latitude: number
+        longitude: number
+    }
 
     export interface MapViewProps {
         provider?: 'google';
@@ -57,6 +69,14 @@ declare module "react-native-maps" {
     export default class MapView extends React.Component<MapViewProps, any> {
         static Animated: any;
         static AnimatedRegion: any;
+        animateToRegion(region: Region, duration?: number): void;
+        animateToCoordinate(latLng: LatLng, duration?: number): void;
+        animateToBearing(bearing: number, duration?: number): void;
+        animateToViewingAngle(angle: number, duration?: number): void;
+        fitToElements(animated: boolean): void;
+        fitToSuppliedMarkers(markers: string[], animated: boolean): void;
+        fitToCoordinates(coordinates?: LatLng[], options?:{}): void;
+        setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
     }
 
     export type LineCapType = 'butt' | 'round' | 'square';
