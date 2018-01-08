@@ -35,6 +35,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 {
   NSMutableArray<UIView *> *_reactSubviews;
   BOOL _initialRegionSet;
+  BOOL _didCallOnMapReady;
 }
 
 - (instancetype)init
@@ -47,6 +48,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _circles = [NSMutableArray array];
     _tiles = [NSMutableArray array];
     _initialRegionSet = false;
+    _didCallOnMapReady = false;
   }
   return self;
 }
@@ -145,7 +147,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 #pragma clang diagnostic pop
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
-  if (_initialRegionSet) return;
+  if (!_didCallOnMapReady || _initialRegionSet) return;
   _initialRegionSet = true;
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
 }
@@ -156,7 +158,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didPrepareMap {
-    if (self.onMapReady) self.onMapReady(@{});
+  if (_didCallOnMapReady) return;
+  _didCallOnMapReady = true;
+  if (self.onMapReady) self.onMapReady(@{});
 }
 
 - (BOOL)didTapMarker:(GMSMarker *)marker {
