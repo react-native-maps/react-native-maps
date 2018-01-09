@@ -34,7 +34,8 @@ id regionAsJSON(MKCoordinateRegion region) {
 @implementation AIRGoogleMap
 {
   NSMutableArray<UIView *> *_reactSubviews;
-  BOOL _initialRegionSet;
+  BOOL _initialRegionSetOnLoad;
+  BOOL _regionSetOnLoad;
   BOOL _didCallOnMapReady;
 }
 
@@ -47,7 +48,8 @@ id regionAsJSON(MKCoordinateRegion region) {
     _polylines = [NSMutableArray array];
     _circles = [NSMutableArray array];
     _tiles = [NSMutableArray array];
-    _initialRegionSet = false;
+    _initialRegionSetOnLoad = false;
+    _regionSetOnLoad = false;
     _didCallOnMapReady = false;
   }
   return self;
@@ -147,13 +149,14 @@ id regionAsJSON(MKCoordinateRegion region) {
 #pragma clang diagnostic pop
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
-  if (!_didCallOnMapReady || _initialRegionSet) return;
-  _initialRegionSet = true;
+  if (!_didCallOnMapReady || _initialRegionSetOnLoad) return;
+  _initialRegionSetOnLoad = true;
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
 }
 
 - (void)setRegion:(MKCoordinateRegion)region {
   if (!_didCallOnMapReady) return;
+  _regionSetOnLoad = true;
   // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
 }
@@ -210,6 +213,8 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position {
+  // Only allow event if either _initialRegionSetOnLoad or _regionSetOnLoad is set.
+  if (!_initialRegionSetOnLoad && !_regionSetOnLoad) return;
   id event = @{@"continuous": @YES,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                };
@@ -218,6 +223,8 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position {
+  // Only allow event if either _initialRegionSetOnLoad or _regionSetOnLoad is set.
+  if (!_initialRegionSetOnLoad && !_regionSetOnLoad) return;
   id event = @{@"continuous": @NO,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                };
