@@ -294,6 +294,59 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
   }];
 }
 
+RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
+                  coordinate:(NSDictionary *)coordinate
+                  withCallback:(RCTResponseSenderBlock)callback)
+{
+  CLLocationCoordinate2D coord =
+  CLLocationCoordinate2DMake(
+                             [coordinate[@"latitude"] doubleValue],
+                             [coordinate[@"longitude"] doubleValue]
+                             );
+  
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+    } else {
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      
+      CGPoint touchPoint = [mapView.projection pointForCoordinate:coord];
+      
+      callback(@[[NSNull null], @{
+                   @"x": @(touchPoint.x),
+                   @"y": @(touchPoint.y),
+                   }]);
+    }
+  }];
+}
+
+RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
+                  point:(NSDictionary *)point
+                  withCallback:(RCTResponseSenderBlock)callback)
+{
+  CGPoint pt = CGPointMake(
+                           [point[@"x"] doubleValue],
+                           [point[@"y"] doubleValue]
+                           );
+  
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[AIRGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+    } else {
+      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+      
+      CLLocationCoordinate2D coordinate = [mapView.projection coordinateForPoint:pt];
+      
+      callback(@[[NSNull null], @{
+                @"latitude": @(coordinate.latitude),
+                @"longitude": @(coordinate.longitude),
+                }]);
+    }
+  }];
+}
+
 RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
                   northEast:(CLLocationCoordinate2D)northEast
                   southWest:(CLLocationCoordinate2D)southWest)
