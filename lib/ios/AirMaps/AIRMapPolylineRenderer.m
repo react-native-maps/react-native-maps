@@ -39,7 +39,6 @@
 @end
 
 @implementation AIRMapPolylineRenderer {
-    NSMutableArray* _segments;
     MKPolyline* _polyline;
     NSArray<UIColor *> *_strokeColors;
     MKMapSnapshot* _snapshot;
@@ -111,10 +110,10 @@
     self.path = path;
 }
 
-- (void) createSegments
+- (NSArray*) createSegments
 {
-    _segments = [NSMutableArray new];
-    if (_polyline.pointCount <= 1) return;
+    NSMutableArray* segments = [NSMutableArray new];
+    if (_polyline.pointCount <= 1) return segments;
     AIRMapPolylineRendererSegment* segment = nil;
     for (NSUInteger i = 0, n = _polyline.pointCount; i < n; i++){
         CGPoint point = [self pointForIndex:i];
@@ -123,7 +122,7 @@
             
             // Start new segment
             segment = [[AIRMapPolylineRendererSegment alloc] initWithPoint:point color:color];
-            [_segments addObject:segment];
+            [segments addObject:segment];
         }
         else if (((color == nil) && (segment.endColor == nil)) ||
                  ((color != nil) && [segment.startColor isEqual:color])) {
@@ -142,28 +141,29 @@
                 // Add transition gradient
                 segment = [[AIRMapPolylineRendererSegment alloc] initWithPoint:segment.endPoint color:segment.endColor];
                 [segment addPoint:point color:color];
-                [_segments addObject:segment];
+                [segments addObject:segment];
             }
             
             // Start new segment
             if (i < (n - 1)) {
                 segment = [[AIRMapPolylineRendererSegment alloc] initWithPoint:point color:color];
-                [_segments addObject:segment];
+                [segments addObject:segment];
             }
         }
     }
     
-    // Close last segment in case this was forgotten
+    // Remove last segment in case it only contains a single path point
     if ((segment != nil) && (segment.endColor == nil)) {
-        segment.endColor = segment.startColor;
+        [segments removeLastObject];
     }
+    
+    return segments;
 }
 
 - (void) setStrokeColors:(NSArray<UIColor *> *)strokeColors
 {
     if (_strokeColors != strokeColors) {
         _strokeColors = strokeColors;
-        _segments = nil;
     }
 }
 
@@ -171,7 +171,6 @@
 {
     if (super.strokeColor != strokeColor) {
         super.strokeColor = strokeColor;
-        _segments = nil;
     }
 }
 
@@ -198,12 +197,9 @@
     }
     CGContextSetLineDash(context, self.lineDashPhase, dashes, self.lineDashPattern.count);
     
-    if (_segments == nil) {
-        [self createSegments];
-    }
-    
-    for (NSUInteger i = 0, n = _segments.count; i < n; i++) {
-        AIRMapPolylineRendererSegment* segment = _segments[i];
+    NSArray* segments = [self createSegments];
+    for (NSUInteger i = 0, n = segments.count; i < n; i++) {
+        AIRMapPolylineRendererSegment* segment = segments[i];
         
         CGContextBeginPath(context);
         CGContextAddPath(context, segment.path);
