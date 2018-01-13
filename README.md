@@ -249,7 +249,6 @@ An unofficial step-by-step guide is also available at https://gist.github.com/he
 
 To run examples:
 
-Android:
 ```bash
 npm i
 npm start 
