@@ -247,6 +247,21 @@ An unofficial step-by-step guide is also available at https://gist.github.com/he
 
 ## Examples
 
+To run examples:
+
+Android:
+```bash
+npm i
+npm start 
+
+#Android
+npm run run:android
+
+#iOS
+npm run build:ios
+npm run run:ios
+```
+
 ### MapView Events
 
 The `<MapView />` component and its child components have several events that you can subscribe to.
