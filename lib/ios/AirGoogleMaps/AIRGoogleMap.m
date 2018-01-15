@@ -34,9 +34,11 @@ id regionAsJSON(MKCoordinateRegion region) {
 @implementation AIRGoogleMap
 {
   NSMutableArray<UIView *> *_reactSubviews;
+  MKCoordinateRegion _initialRegion;
   BOOL _initialRegionSetOnLoad;
   BOOL _regionSetOnLoad;
   BOOL _didCallOnMapReady;
+  BOOL _didMoveToWindow;
 }
 
 - (instancetype)init
@@ -48,9 +50,11 @@ id regionAsJSON(MKCoordinateRegion region) {
     _polylines = [NSMutableArray array];
     _circles = [NSMutableArray array];
     _tiles = [NSMutableArray array];
+    _initialRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(0.0, 0.0), MKCoordinateSpanMake(0.0, 0.0));
     _initialRegionSetOnLoad = false;
     _regionSetOnLoad = false;
     _didCallOnMapReady = false;
+    _didMoveToWindow = false;
   }
   return self;
 }
@@ -148,14 +152,26 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 #pragma clang diagnostic pop
 
+- (void)didMoveToWindow {
+  if (_didMoveToWindow) return;
+  _didMoveToWindow = true;
+
+  if (_initialRegion.span.latitudeDelta != 0.0 &&
+      _initialRegion.span.longitudeDelta != 0.0) {
+    self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_initialRegion];
+  }
+
+  [super didMoveToWindow];
+}
+
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
-  if (!_didCallOnMapReady || _initialRegionSetOnLoad) return;
+  if (_initialRegionSetOnLoad) return;
+  _initialRegion = initialRegion;
   _initialRegionSetOnLoad = true;
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
 }
 
 - (void)setRegion:(MKCoordinateRegion)region {
-  if (!_didCallOnMapReady) return;
   _regionSetOnLoad = true;
   // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
