@@ -35,8 +35,8 @@ id regionAsJSON(MKCoordinateRegion region) {
 {
   NSMutableArray<UIView *> *_reactSubviews;
   MKCoordinateRegion _initialRegion;
+  MKCoordinateRegion _region;
   BOOL _initialRegionSetOnLoad;
-  BOOL _regionSetOnLoad;
   BOOL _didCallOnMapReady;
   BOOL _didMoveToWindow;
 }
@@ -51,8 +51,8 @@ id regionAsJSON(MKCoordinateRegion region) {
     _circles = [NSMutableArray array];
     _tiles = [NSMutableArray array];
     _initialRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(0.0, 0.0), MKCoordinateSpanMake(0.0, 0.0));
+    _region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(0.0, 0.0), MKCoordinateSpanMake(0.0, 0.0));
     _initialRegionSetOnLoad = false;
-    _regionSetOnLoad = false;
     _didCallOnMapReady = false;
     _didMoveToWindow = false;
   }
@@ -159,6 +159,9 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (_initialRegion.span.latitudeDelta != 0.0 &&
       _initialRegion.span.longitudeDelta != 0.0) {
     self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_initialRegion];
+  } else if (_region.span.latitudeDelta != 0.0 &&
+      _region.span.longitudeDelta != 0.0) {
+    self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_region];
   }
 
   [super didMoveToWindow];
@@ -172,8 +175,8 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setRegion:(MKCoordinateRegion)region {
-  _regionSetOnLoad = true;
   // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
+  _region = region;
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
 }
 
@@ -229,8 +232,6 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position {
-  // Only allow event if either _initialRegionSetOnLoad or _regionSetOnLoad is set.
-  if (!_initialRegionSetOnLoad && !_regionSetOnLoad) return;
   id event = @{@"continuous": @YES,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                };
@@ -239,8 +240,6 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position {
-  // Only allow event if either _initialRegionSetOnLoad or _regionSetOnLoad is set.
-  if (!_initialRegionSetOnLoad && !_regionSetOnLoad) return;
   id event = @{@"continuous": @NO,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                };
