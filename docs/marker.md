@@ -17,6 +17,7 @@
 | `identifier` | `String` |  | An identifier used to reference this marker at a later date.
 | `rotation` | `Float` |  | A float number indicating marker's rotation angle, in degrees.
 | `draggable` | `<null>` |  | This is a non-value based prop. Adding this allows the marker to be draggable (re-positioned).
+| `tracksInfoWindowChanges` | false | Sets whether this marker should track view changes in info window. Enabling it will let marker change content of info window after first render pass, but will lead to decreased performance, so it's recommended to disable it whenever you don't need it. **Note**: iOS Google Maps only.
 
 ## Events
 
