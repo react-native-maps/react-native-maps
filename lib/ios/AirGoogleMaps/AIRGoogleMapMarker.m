@@ -37,6 +37,7 @@ CGRect unionRect(CGRect a, CGRect b) {
     _realMarker = [[AIRGMSMarker alloc] init];
     _realMarker.fakeMarker = self;
     _realMarker.tracksViewChanges = true;
+    _realMarker.tracksInfoWindowChanges = false;
   }
   return self;
 }
@@ -302,6 +303,14 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (BOOL)tracksViewChanges {
   return _realMarker.tracksViewChanges;
+}
+
+- (void)setTracksInfoWindowChanges:(BOOL)tracksInfoWindowChanges {
+  _realMarker.tracksInfoWindowChanges = tracksInfoWindowChanges;
+}
+
+- (BOOL)tracksInfoWindowChanges {
+  return _realMarker.tracksInfoWindowChanges;
 }
 
 @end
