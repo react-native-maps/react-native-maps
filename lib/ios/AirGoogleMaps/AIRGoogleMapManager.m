@@ -32,10 +32,7 @@ static NSString *const RCTMapViewKey = @"MapView";
 
 
 @interface AIRGoogleMapManager() <GMSMapViewDelegate>
-{
-  BOOL didCallOnMapReady;
-}
-  
+
 @end
 
 @implementation AIRGoogleMapManager
@@ -247,22 +244,22 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
     } else {
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-      
+
       // TODO: currently we are ignoring width, height, region
-        
+
       UIGraphicsBeginImageContextWithOptions(mapView.frame.size, YES, 0.0f);
       [mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
       UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        
+
       NSData *data;
       if ([format isEqualToString:@"png"]) {
           data = UIImagePNGRepresentation(image);
-          
+
       }
       else if([format isEqualToString:@"jpg"]) {
             data = UIImageJPEGRepresentation(image, quality.floatValue);
       }
-      
+
       if ([result isEqualToString:@"file"]) {
           [data writeToFile:filePath atomically:YES];
             callback(@[[NSNull null], filePath]);
@@ -271,7 +268,7 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
             callback(@[[NSNull null], [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]]);
         }
         else if ([result isEqualToString:@"legacy"]) {
-            
+
             // In the initial (iOS only) implementation of takeSnapshot,
             // both the uri and the base64 encoded string were returned.
             // Returning both is rarely useful and in fact causes a
@@ -288,7 +285,7 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
                                            };
             callback(@[[NSNull null], snapshotData]);
         }
-    
+
     }
     UIGraphicsEndImageContext();
   }];
@@ -374,9 +371,6 @@ RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
 }
 
 - (void)mapViewDidStartTileRendering:(GMSMapView *)mapView {
-  if (didCallOnMapReady) return;
-  didCallOnMapReady = YES;
-  
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
   [googleMapView didPrepareMap];
 }
