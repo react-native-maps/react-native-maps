@@ -211,4 +211,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = PolygonCreator;
+export default PolygonCreator;

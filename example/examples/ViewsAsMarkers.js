@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = ViewsAsMarkers;
+export default ViewsAsMarkers;

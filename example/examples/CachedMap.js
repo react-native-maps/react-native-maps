@@ -1832,4 +1832,4 @@ const COUNTRIES = [
   },
 ];
 
-module.exports = CachedMap;
+export default CachedMap;

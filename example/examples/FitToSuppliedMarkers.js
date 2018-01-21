@@ -164,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = FocusOnMarkers;
+export default FocusOnMarkers;

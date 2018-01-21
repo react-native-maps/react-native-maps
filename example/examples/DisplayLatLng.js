@@ -168,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DisplayLatLng;
+export default DisplayLatLng;

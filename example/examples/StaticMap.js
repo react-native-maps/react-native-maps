@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = StaticMap;
+export default StaticMap;

@@ -131,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = BugMarkerWontUpdate;
+export default BugMarkerWontUpdate;

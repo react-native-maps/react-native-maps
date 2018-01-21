@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = LoadingMap;
+export default LoadingMap;

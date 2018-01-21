@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = SetNativePropsOverlays;
+export default SetNativePropsOverlays;
