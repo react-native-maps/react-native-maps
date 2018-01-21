@@ -68,6 +68,9 @@ class EventListener extends React.Component {
 
   recordEvent(name) {
     return e => {
+      if (e.persist) {
+        e.persist();  // Avoids warnings relating to https://fb.me/react-event-pooling
+      }
       this.setState(prevState => ({
         events: [
           this.makeEvent(e, name),
