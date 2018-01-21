@@ -6,7 +6,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import MapView, { MAP_TYPES, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { MAP_TYPES, PROVIDER_DEFAULT, ProviderPropType, UrlTile } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -46,7 +46,7 @@ class CustomTiles extends React.Component {
           style={styles.map}
           initialRegion={region}
         >
-          <MapView.UrlTile
+          <UrlTile
             urlTemplate="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
             zIndex={-1}
           />
@@ -62,7 +62,7 @@ class CustomTiles extends React.Component {
 }
 
 CustomTiles.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({

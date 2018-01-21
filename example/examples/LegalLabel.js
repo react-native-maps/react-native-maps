@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { Marker, ProviderPropType } from 'react-native-maps';
 
 const screen = Dimensions.get('window');
 
 class LegalLabel extends React.Component {
   static propTypes = {
-    provider: MapView.ProviderPropType,
+    provider: ProviderPropType,
   }
 
   state = {
@@ -67,7 +67,7 @@ class LegalLabel extends React.Component {
             longitudeDelta: LONGITUDE_DELTA,
           }}
         >
-          <MapView.Marker coordinate={latlng} />
+          <Marker coordinate={latlng} />
         </MapView>
 
         <View style={styles.username}>

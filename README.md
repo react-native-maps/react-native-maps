@@ -26,17 +26,17 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<MapView />` Component API](docs/mapview.md)
 
-[`<MapView.Marker />` Component API](docs/marker.md)
+[`<Marker />` Component API](docs/marker.md)
 
-[`<MapView.Callout />` Component API](docs/callout.md)
+[`<Callout />` Component API](docs/callout.md)
 
-[`<MapView.Polygon />` Component API](docs/polygon.md)
+[`<Polygon />` Component API](docs/polygon.md)
 
-[`<MapView.Polyline />` Component API](docs/polyline.md)
+[`<Polyline />` Component API](docs/polyline.md)
 
-[`<MapView.Circle />` Component API](docs/circle.md)
+[`<Circle />` Component API](docs/circle.md)
 
-[`<MapView.Overlay />` Component API](docs/overlay.md)
+[`<Overlay />` Component API](docs/overlay.md)
 
 ## General Usage
 
@@ -98,12 +98,14 @@ render() {
 ### Rendering a list of markers on a map
 
 ```jsx
+import { Marker } from 'react-native-maps';
+
 <MapView
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
   {this.state.markers.map(marker => (
-    <MapView.Marker
+    <Marker
       coordinate={marker.latlng}
       title={marker.title}
       description={marker.description}
@@ -115,15 +117,15 @@ render() {
 ### Rendering a Marker with a custom view
 
 ```jsx
-<MapView.Marker coordinate={marker.latlng}>
+<Marker coordinate={marker.latlng}>
   <MyCustomMarkerView {...marker} />
-</MapView.Marker>
+</Marker>
 ```
 
 ### Rendering a Marker with a custom image
 
 ```jsx
-<MapView.Marker
+<Marker
   coordinate={marker.latlng}
   image={require('../assets/pin.png')}
 />
@@ -132,19 +134,21 @@ render() {
 ### Rendering a custom Marker with a custom Callout
 
 ```jsx
-<MapView.Marker coordinate={marker.latlng}>
+import { Callout } from 'react-native-maps';
+
+<Marker coordinate={marker.latlng}>
   <MyCustomMarkerView {...marker} />
-  <MapView.Callout>
+  <Callout>
     <MyCustomCalloutView {...marker} />
-  </MapView.Callout>
-</MapView.Marker>
+  </Callout>
+</Marker>
 ```
 
 ### Draggable Markers
 
 ```jsx
 <MapView initialRegion={...}>
-  <MapView.Marker draggable
+  <Marker draggable
     coordinate={this.state.x}
     onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
   />
@@ -156,11 +160,13 @@ render() {
 #### Tile Overlay using tile server
 
 ```jsx
+import { UrlTile } from 'react-native-maps';
+
 <MapView
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
-  <MapView.UrlTile
+  <UrlTile
    /**
    * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
    * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
@@ -181,11 +187,13 @@ For IOS: configure [App Transport Security](https://developer.apple.com/library/
 Tiles can be stored locally within device using xyz tiling scheme and displayed as tile overlay as well. This is usefull especially for offline map usage when tiles are available for selected map region within device storage.
 
 ```jsx
+import { LocalTile } from 'react-native-maps';
+
 <MapView
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
-  <MapView.LocalTile
+  <LocalTile
    /**
     * The path template of the locally stored tiles. The patterns {x} {y} {z} will be replaced at runtime
     * For example, /storage/emulated/0/mytiles/{z}/{x}/{y}.png
@@ -386,14 +394,14 @@ Enable lite mode on Android with `liteMode` prop. Ideal when having multiple map
 
 ### Animated Region
 
-The MapView can accept an `MapView.AnimatedRegion` value as its `region` prop. This allows you to utilize the Animated API to control the map's center and zoom.
+The MapView can accept an `AnimatedRegion` value as its `region` prop. This allows you to utilize the Animated API to control the map's center and zoom.
 
 ```jsx
-import MapView from 'react-native-maps';
+import MapView, { AnimatedRegion, Animated } from 'react-native-maps';
 
 getInitialState() {
   return {
-    region: new MapView.AnimatedRegion({
+    region: new AnimatedRegion({
       latitude: LATITUDE,
       longitude: LONGITUDE,
       latitudeDelta: LATITUDE_DELTA,
@@ -408,7 +416,7 @@ onRegionChange(region) {
 
 render() {
   return (
-    <MapView.Animated
+    <Animated
       region={this.state.region}
       onRegionChange={this.onRegionChange}
     />
@@ -421,9 +429,11 @@ render() {
 Markers can also accept an `AnimatedRegion` value as a coordinate.
 
 ```jsx
+import Mapview, { AnimatedRegion, Marker } from 'react-native-maps';
+
 getInitialState() {
   return {
-    coordinate: new MapView.AnimatedRegion({
+    coordinate: new AnimatedRegion({
       latitude: LATITUDE,
       longitude: LONGITUDE,
     }),
@@ -442,7 +452,7 @@ componentWillReceiveProps(nextProps) {
 render() {
   return (
     <MapView initialRegion={...}>
-      <MapView.Marker.Animated coordinate={this.state.coordinate} />
+      <Marker.Animated coordinate={this.state.coordinate} />
     </MapView>
   );
 }
@@ -451,6 +461,8 @@ render() {
 ### Take Snapshot of map
 
 ```jsx
+import MapView, { Marker } from 'react-native-maps';
+
 getInitialState() {
   return {
     coordinate: {
@@ -480,7 +492,7 @@ render() {
   return (
     <View>
       <MapView initialRegion={...} ref={map => { this.map = map }}>
-        <MapView.Marker coordinate={this.state.coordinate} />
+        <Marker coordinate={this.state.coordinate} />
       </MapView>
       <Image source={{ uri: this.state.mapSnapshot.uri }} />
       <TouchableOpacity onPress={this.takeSnapshot}>

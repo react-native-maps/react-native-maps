@@ -1,4 +1,4 @@
-# `<MapView.Circle />` Component API
+# `<Circle />` Component API
 
 ## Props
 

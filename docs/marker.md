@@ -1,11 +1,11 @@
-# `<MapView.Marker />` Component API
+# `<Marker />` Component API
 
 ## Props
 
 | Prop | Type | Default | Note |
 |---|---|---|---|
-| `title` | `String` |  | The title of the marker. This is only used if the <Marker /> component has no children that are an `<MapView.Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
-| `description` | `String` |  | The description of the marker. This is only used if the <Marker /> component has no children that are an `<MapView.Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
+| `title` | `String` |  | The title of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
+| `description` | `String` |  | The description of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
 | `image` | `ImageSource` |  | A custom image to be used as the marker's icon. Only local image resources are allowed to be used.
 | `pinColor` | `Color` |  | If no custom marker view or custom image is provided, the platform default pin will be used, which can be customized by this color. Ignored if a custom marker is being used.
 | `coordinate` | `LatLng` |  | The coordinate for the marker.

@@ -1,4 +1,4 @@
-# `<MapView.Polygon />` Component API
+# `<Polygon />` Component API
 
 ## Props
 
