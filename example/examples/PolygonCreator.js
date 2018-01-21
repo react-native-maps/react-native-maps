@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { MAP_TYPES, Polygon, ProviderPropType } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -126,13 +126,13 @@ class PolygonCreator extends React.Component {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          mapType={MapView.MAP_TYPES.HYBRID}
+          mapType={MAP_TYPES.HYBRID}
           initialRegion={this.state.region}
           onPress={e => this.onPress(e)}
           {...mapOptions}
         >
           {this.state.polygons.map(polygon => (
-            <MapView.Polygon
+            <Polygon
               key={polygon.id}
               coordinates={polygon.coordinates}
               holes={polygon.holes}
@@ -142,7 +142,7 @@ class PolygonCreator extends React.Component {
             />
           ))}
           {this.state.editing && (
-            <MapView.Polygon
+            <Polygon
               key={this.state.editing.id}
               coordinates={this.state.editing.coordinates}
               holes={this.state.editing.holes}
@@ -176,7 +176,7 @@ class PolygonCreator extends React.Component {
 }
 
 PolygonCreator.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
