@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = ZIndexMarkers;
+export default ZIndexMarkers;

@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = PolylineCreator;
+export default PolylineCreator;

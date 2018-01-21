@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = CustomTiles;
+export default CustomTiles;

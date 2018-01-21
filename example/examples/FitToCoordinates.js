@@ -129,4 +129,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = FitToCoordinates;
+export default FitToCoordinates;

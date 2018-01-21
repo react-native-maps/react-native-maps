@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = Overlays;
+export default Overlays;

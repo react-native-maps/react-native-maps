@@ -231,4 +231,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = EventListener;
+export default EventListener;

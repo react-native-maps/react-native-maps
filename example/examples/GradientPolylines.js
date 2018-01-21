@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = GradientPolylines;
+export default GradientPolylines;

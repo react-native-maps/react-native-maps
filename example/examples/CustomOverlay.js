@@ -82,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = CustomOverlay;
+export default CustomOverlay;

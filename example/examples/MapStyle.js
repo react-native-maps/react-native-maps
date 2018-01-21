@@ -219,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = MapStyle;
+export default MapStyle;

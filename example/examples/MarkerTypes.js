@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = MarkerTypes;
+export default MarkerTypes;

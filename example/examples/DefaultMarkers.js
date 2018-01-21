@@ -116,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DefaultMarkers;
+export default DefaultMarkers;

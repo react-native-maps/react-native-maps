@@ -418,4 +418,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = AnimatedViews;
+export default AnimatedViews;
