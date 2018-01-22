@@ -102,14 +102,14 @@ public class AirMapOverlay extends AirMapFeature {
   public void setBounds(ReadableArray bnds) {
     if (bnds.size() != 2) return;
 
-    LatLng[] latlngs = new LatLng[2];
+    LatLngBounds.Builder builder = new LatLngBounds.Builder();
     for (int i = 0; i < bnds.size(); i++) {
       ReadableMap coordinate = bnds.getMap(i);
       LatLng latLng = new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude"));
-      latlngs[i] = latLng;
+      builder.include(latLng);
     }
 
-    this.bounds = new LatLngBounds(latlngs[1], latlngs[0]);
+    this.bounds = builder.build();
 
     if (groundOverlay != null) {
       groundOverlay.setPositionFromBounds(this.bounds);
@@ -121,7 +121,7 @@ public class AirMapOverlay extends AirMapFeature {
       iconBitmapDescriptor = null;
       //update();
     } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
-            uri.startsWith("file://")) {
+               uri.startsWith("file://")) {
       ImageRequest imageRequest = ImageRequestBuilder
               .newBuilderWithSource(Uri.parse(uri))
               .build();
