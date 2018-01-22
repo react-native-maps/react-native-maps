@@ -31,10 +31,18 @@ class AnimatedMarkers extends React.Component {
 
   animate() {
     const { coordinate } = this.state;
-    coordinate.timing({
-      latitude: LATITUDE + ((Math.random() - 0.5) * (LATITUDE_DELTA / 2)),
-      longitude: LONGITUDE + ((Math.random() - 0.5) * (LONGITUDE_DELTA / 2)),
-    }).start();
+    const newCoordinate = {
+      latitude: LATITUDE + (Math.random() - 0.5) * (LATITUDE_DELTA / 2),
+      longitude: LONGITUDE + (Math.random() - 0.5) * (LONGITUDE_DELTA / 2),
+    }
+
+    if (Platform.OS === 'android') {
+      if (this.marker) {
+        this.marker._component.animateMarkerToCoordinate(newCoordinate, 500);
+      }
+    } else {
+      coordinate.timing(newCoordinate).start();
+    }
   }
 
   render() {
@@ -51,6 +59,7 @@ class AnimatedMarkers extends React.Component {
           }}
         >
           <MapView.Marker.Animated
+            ref={marker => { this.marker = marker }}
             coordinate={this.state.coordinate}
           />
         </MapView>
