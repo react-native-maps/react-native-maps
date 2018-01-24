@@ -5,3 +5,6 @@ project(":example-android").projectDir = file("./example/android/app")
 
 include ":react-native-maps-lib"
 project(":react-native-maps-lib").projectDir = file("./lib/android")
+
+include ':react-native-fs'
+project(':react-native-fs').projectDir = new File(settingsDir, './node_modules/react-native-fs/android')

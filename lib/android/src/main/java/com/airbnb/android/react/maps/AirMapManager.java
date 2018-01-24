@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.maps.android.data.kml.KmlLayer;
 
 import java.util.Map;
 
@@ -229,6 +230,15 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   @ReactProp(name = "maxZoomLevel")
   public void setMaxZoomLevel(AirMapView view, float maxZoomLevel) {
     view.map.setMaxZoomPreference(maxZoomLevel);
+  }
+
+  @ReactProp(name = "kmlMap")
+  public void setKmlMap(AirMapView view, String kmlPath) {
+    if (kmlPath != null && kmlPath != null) {
+      view.setKmlMap(kmlPath);
+    } else {
+      view.removeKmlMap();
+    }
   }
 
   @Override

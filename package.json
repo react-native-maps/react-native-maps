@@ -32,9 +32,9 @@
     "mapkit"
   ],
   "peerDependencies": {
+    "prop-types": "^15.5.10",
     "react": "16.0.0",
-    "react-native": "0.51.0",
-    "prop-types": "^15.5.10"
+    "react-native": "0.51.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
@@ -57,5 +57,8 @@
     "android": {
       "sourceDir": "./lib/android"
     }
+  },
+  "dependencies": {
+    "react-native-fs": "^2.9.7"
   }
 }

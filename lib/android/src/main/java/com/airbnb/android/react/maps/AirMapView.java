@@ -42,7 +42,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.maps.android.data.kml.KmlLayer;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,6 +60,7 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
   public GoogleMap map;
+  private KmlLayer layer;
   private ProgressBar mapLoadingProgressBar;
   private RelativeLayout mapLoadingLayout;
   private ImageView cacheImageView;
@@ -867,5 +874,31 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     LatLng coords = this.map.getProjection().fromScreenLocation(point);
     WritableMap event = makeClickEventData(coords);
     manager.pushEvent(context, this, "onPanDrag", event);
+  }
+
+  public void setKmlMap(String kmlPath) {
+    FileInputStream inputStream = null;
+    try {
+      inputStream = new FileInputStream(kmlPath);
+
+      layer = new KmlLayer(map, inputStream, context);
+      layer.addLayerToMap();
+    } catch (FileNotFoundException | NullPointerException e) {
+      if (inputStream != null) {
+        try {
+          inputStream.close();
+        } catch (IOException ignored) {
+        }
+      }
+    } catch (XmlPullParserException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void removeKmlMap() {
+    if (layer != null)
+      layer.removeLayerFromMap();
   }
 }
