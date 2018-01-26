@@ -5,6 +5,7 @@
 | Prop | Type | Default | Note |
 |---|---|---|---|
 | `coordinates` | `Array<LatLng>` | (Required) | An array of coordinates to describe the polygon
+| `holes` | `Array<Array<LatLng>>` |  | A 2d array of coordinates to describe holes of the polygon where each hole has at least 3 points.
 | `strokeWidth` | `Number` | `1` | The stroke width to use for the path.
 | `strokeColor` | `String` | `#000`, `rgba(r,g,b,0.5)` | The stroke color to use for the path.
 | `fillColor` | `String` | `#000`, `rgba(r,g,b,0.5)` | The fill color to use for the path.
