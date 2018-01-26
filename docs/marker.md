@@ -41,6 +41,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 |---|---|---|
 | `showCallout` |  | Shows the callout for this marker
 | `hideCallout` |  | Hides the callout for this marker
+| `animateMarkerToCoordinate` | `coordinate: LatLng, duration: number` | Animates marker movement. **Note**: Android only
 
 
 
