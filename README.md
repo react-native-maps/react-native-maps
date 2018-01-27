@@ -431,18 +431,69 @@ getInitialState() {
 }
 
 componentWillReceiveProps(nextProps) {
+  const duration = 500
+
   if (this.props.coordinate !== nextProps.coordinate) {
-    this.state.coordinate.timing({
-      ...nextProps.coordinate,
-      duration: 500
-    }).start();
+    if (Platform.OS === 'android') {
+      if (this.marker) {
+        this.marker._component.animateMarkerToCoordinate(
+          nextProps.coordinate,
+          duration
+        );
+      }
+    } else {
+      this.state.coordinate.timing({
+        ...nextProps.coordinate,
+        duration
+      }).start();
+    }
   }
 }
 
 render() {
   return (
     <MapView initialRegion={...}>
-      <MapView.Marker.Animated coordinate={this.state.coordinate} />
+      <MapView.Marker.Animated
+        ref={marker => { this.marker = marker }}
+        coordinate={this.state.coordinate}
+      />
+    </MapView>
+  );
+}
+```
+
+If you need a smoother animation to move the marker on Android, you can modify the previous example:
+
+```jsx
+// ...
+
+componentWillReceiveProps(nextProps) {
+  const duration = 500
+
+  if (this.props.coordinate !== nextProps.coordinate) {
+    if (Platform.OS === 'android') {
+      if (this.marker) {
+        this.marker._component.animateMarkerToCoordinate(
+          nextProps.coordinate,
+          duration
+        );
+      }
+    } else {
+      this.state.coordinate.timing({
+        ...nextProps.coordinate,
+        duration
+      }).start();
+    }
+  }
+}
+
+render() {
+  return (
+    <MapView initialRegion={...}>
+      <MapView.Marker.Animated
+        ref={marker => { this.marker = marker }}
+        coordinate={this.state.coordinate}
+      />
     </MapView>
   );
 }
