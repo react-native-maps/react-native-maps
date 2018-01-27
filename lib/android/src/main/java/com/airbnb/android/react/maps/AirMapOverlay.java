@@ -15,42 +15,37 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 
-public class AirMapOverlay extends AirMapFeature {
+public class AirMapOverlay extends AirMapFeature implements ImageReadable {
 
   private GroundOverlayOptions groundOverlayOptions;
   private GroundOverlay groundOverlay;
   private LatLngBounds bounds;
   private BitmapDescriptor iconBitmapDescriptor;
+  private Bitmap iconBitmap;
   private float zIndex;
   private float transparency;
 
+  private final ImageReader mImageReader;
+  private GoogleMap map;
 
   public AirMapOverlay(Context context) {
     super(context);
+    this.mImageReader = new ImageReader(context, getResources(), this);
   }
 
-
   public void setBounds(ReadableArray bounds) {
-    ArrayList<ReadableArray> tmpBounds = new ArrayList<>(bounds.size());
-    for (int i = 0; i < bounds.size(); i++) {
-      tmpBounds.add(bounds.getArray(i));
-    }
-    this.bounds =  new LatLngBounds(
-        new LatLng(Double.parseDouble(bounds.getArray(0).getString(0)), Double.parseDouble(bounds.getArray(0)
-            .getString(1))),
-        new LatLng(Double.parseDouble(bounds.getArray(1).getString(0)), Double
-            .parseDouble(bounds.getArray(1)
-                .getString(1)))
-    );
-    if (groundOverlay != null) {
-      groundOverlay.setPositionFromBounds(this.bounds);
+    LatLng sw = new LatLng(bounds.getArray(1).getDouble(0), bounds.getArray(0).getDouble(1));
+    LatLng ne = new LatLng(bounds.getArray(0).getDouble(0), bounds.getArray(1).getDouble(1));
+    this.bounds = new LatLngBounds(sw, ne);
+    if (this.groundOverlay != null) {
+      this.groundOverlay.setPositionFromBounds(this.bounds);
     }
   }
 
   public void setZIndex(float zIndex) {
     this.zIndex = zIndex;
-    if (groundOverlay != null) {
-      groundOverlay.setZIndex(zIndex);
+    if (this.groundOverlay != null) {
+      this.groundOverlay.setZIndex(zIndex);
     }
   }
 
@@ -62,33 +57,29 @@ public class AirMapOverlay extends AirMapFeature {
   // }
 
   public void setImage(String uri) {
-    this.iconBitmapDescriptor = getBitmapDescriptorByName(uri);
-
-    if (groundOverlay != null) {
-      groundOverlay.setImage(this.iconBitmapDescriptor);
-    }
+    this.mImageReader.setImage(uri);
   }
 
 
   public GroundOverlayOptions getGroundOverlayOptions() {
-    if (groundOverlayOptions == null) {
-      groundOverlayOptions = createGroundOverlayOptions();
+    if (this.groundOverlayOptions == null) {
+      this.groundOverlayOptions = createGroundOverlayOptions();
     }
-    return groundOverlayOptions;
+    return this.groundOverlayOptions;
   }
 
   private GroundOverlayOptions createGroundOverlayOptions() {
-    GroundOverlayOptions options = new GroundOverlayOptions();
-    options.image(iconBitmapDescriptor);
-    options.positionFromBounds(bounds);
-    // options.transparency(transparency);
-    options.zIndex(zIndex);
-    return options;
-  }
-
-  private BitmapDescriptor getBitmapDescriptorByName(String name) {
-    Bitmap bitmap = ImageUtil.convert(name);
-    return BitmapDescriptorFactory.fromBitmap(bitmap);
+    if (this.groundOverlayOptions != null) {
+      return this.groundOverlayOptions;
+    }
+    if (this.iconBitmapDescriptor != null) {
+      GroundOverlayOptions options = new GroundOverlayOptions();
+      options.image(iconBitmapDescriptor);
+      options.positionFromBounds(bounds);
+      options.zIndex(zIndex);
+      return options;
+    }
+    return null;
   }
 
   @Override
@@ -98,12 +89,55 @@ public class AirMapOverlay extends AirMapFeature {
 
   @Override
   public void addToMap(GoogleMap map) {
-    groundOverlay = map.addGroundOverlay(getGroundOverlayOptions());
-    groundOverlay.setClickable(true);
+    GroundOverlayOptions groundOverlayOptions = getGroundOverlayOptions();
+    if (groundOverlayOptions != null) {
+      this.groundOverlay = map.addGroundOverlay(groundOverlayOptions);
+      this.groundOverlay.setClickable(true);
+    } else {
+      this.map = map;
+    }
   }
 
   @Override
   public void removeFromMap(GoogleMap map) {
-    groundOverlay.remove();
+    if (this.groundOverlay != null) {
+      this.groundOverlay.remove();
+      this.groundOverlay = null;
+      this.groundOverlayOptions = null;
+    }
+  }
+
+  @Override
+  public void setIconBitmap(Bitmap bitmap) {
+    this.iconBitmap = bitmap;
+  }
+
+  @Override
+  public void setIconBitmapDescriptor(
+      BitmapDescriptor iconBitmapDescriptor) {
+    this.iconBitmapDescriptor = iconBitmapDescriptor;
+  }
+
+  @Override
+  public void update() {
+    this.groundOverlay = getGroundOverlay();
+    if (this.groundOverlay != null) {
+      this.groundOverlay.setImage(this.iconBitmapDescriptor);
+      this.groundOverlay.setClickable(true);
+    }
+  }
+
+  private GroundOverlay getGroundOverlay() {
+    if (this.groundOverlay != null) {
+      return this.groundOverlay;
+    }
+    if (this.map == null) {
+      return null;
+    }
+    GroundOverlayOptions groundOverlayOptions = getGroundOverlayOptions();
+    if (groundOverlayOptions != null) {
+      return this.map.addGroundOverlay(groundOverlayOptions);
+    }
+    return null;
   }
 }
