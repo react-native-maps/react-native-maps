@@ -57,8 +57,5 @@
     "android": {
       "sourceDir": "./lib/android"
     }
-  },
-  "dependencies": {
-    "react-native-fs": "^2.9.7"
   }
 }

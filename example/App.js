@@ -141,7 +141,7 @@ class App extends React.Component {
       [DefaultMarkers, 'Default Markers', true],
       [CustomMarkers, 'Custom Markers', true],
       [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
-      [CachedMap, 'Cached Map'],
+      [CachedMap, 'Cached Map', true],
       [LoadingMap, 'Map with loading'],
       [FitToSuppliedMarkers, 'Focus Map On Markers', true],
       [FitToCoordinates, 'Fit Map To Coordinates', true],

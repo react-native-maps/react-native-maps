@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <React/RCTComponent.h>
+#import <React/RCTBridge.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
@@ -15,6 +16,7 @@
 @interface AIRGoogleMap : GMSMapView
 
 // TODO: don't use MK region?
+@property (nonatomic, weak) RCTBridge *bridge;
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
 @property (nonatomic, assign) MKCoordinateRegion region;
 @property (nonatomic, assign) NSString *customMapStyleString;
@@ -42,6 +44,7 @@
 @property (nonatomic, assign) BOOL showsUserLocation;
 @property (nonatomic, assign) BOOL showsMyLocationButton;
 @property (nonatomic, assign) BOOL showsIndoorLevelPicker;
+@property (nonatomic, assign) NSString *kmlSrc;
 
 - (void)didPrepareMap;
 - (BOOL)didTapMarker:(GMSMarker *)marker;

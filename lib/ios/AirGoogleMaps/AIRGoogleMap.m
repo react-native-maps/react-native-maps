@@ -7,13 +7,19 @@
 
 #import "AIRGoogleMap.h"
 #import "AIRGoogleMapMarker.h"
+#import "AIRGoogleMapMarkerManager.h"
 #import "AIRGoogleMapPolygon.h"
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGoogleMapCircle.h"
 #import "AIRGoogleMapUrlTile.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import "GMUKMLParser.h"
+#import "GMUPlacemark.h"
+#import "GMUPoint.h"
+#import "GMUGeometryRenderer.h"
 #import <MapKit/MapKit.h>
 #import <React/UIView+React.h>
+#import <React/RCTBridge.h>
 #import "RCTConvert+AirMap.h"
 
 id regionAsJSON(MKCoordinateRegion region) {
@@ -191,7 +197,11 @@ id regionAsJSON(MKCoordinateRegion region) {
 
   id event = @{@"action": @"marker-press",
                @"id": airMarker.identifier ?: @"unknown",
-              };
+               @"coordinate": @{
+                   @"latitude": @(airMarker.position.latitude),
+                   @"longitude": @(airMarker.position.longitude)
+                   }
+               };
 
   if (airMarker.onPress) airMarker.onPress(event);
   if (self.onMarkerPress) self.onMarkerPress(event);
@@ -387,6 +397,45 @@ id regionAsJSON(MKCoordinateRegion region) {
                                                         region.center.longitude - longitudeDelta);
   GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
+}
+
+- (void)setKmlSrc:(NSString *)kmlUrl {
+    
+    _kmlSrc = kmlUrl;
+    
+    NSURL *url = [NSURL URLWithString:kmlUrl];
+    NSData *urlData = [NSData dataWithContentsOfURL:url];
+    GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
+    [parser parse];
+    
+    NSUInteger index = 0;
+
+  for (GMUPlacemark *place in parser.placemarks) {
+        
+    CLLocationCoordinate2D location =((GMUPoint *) place.geometry).coordinate;
+//        GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:self.region.center coordinate:location];
+    
+    AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)[[AIRGoogleMapMarkerManager alloc] view];
+    if (!marker.bridge) {
+      marker.bridge = _bridge;
+    }
+    marker.identifier = place.title;
+    marker.coordinate = location;
+    marker.title = place.title;
+    marker.subtitle = place.snippet;
+    marker.pinColor = place.style.fillColor;
+    marker.imageSrc = place.style.iconUrl;
+    marker.layer.backgroundColor = [UIColor clearColor].CGColor;
+    marker.layer.position = CGPointZero;
+      
+    [self insertReactSubview:(UIView *) marker atIndex:index];
+
+    index++;
+  }
+}
+
+- (NSString *)KmlSrc {
+    return _kmlSrc;
 }
 
 @end

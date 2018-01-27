@@ -5,7 +5,7 @@ import {
   Dimensions,
 } from 'react-native';
 import MapView from 'react-native-maps';
-// import RNFS from 'react-native-fs';
+import flagImg from './assets/flag-pink.png';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,6 +14,7 @@ const LATITUDE = -18.9193508;
 const LONGITUDE = -48.2830592;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const KML_FILE = 'https://pastebin.com/raw/jAzGpq1F';
 
 class MapKml extends React.Component {
   constructor(props) {
@@ -26,33 +27,7 @@ class MapKml extends React.Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      kmlFile: './assets/ula.kml',
     };
-  }
-
-  componentWillMount() {
-    // console.log(RNFS.DocumentDirectoryPath);
-    // const formUrl = 'https://pastebin.com/raw/XftaUixU';
-    // const downloadDest = `${RNFS.DocumentDirectoryPath}/ula.kml`;
-    // const options = {
-    //   fromUrl: formUrl,
-    //   toFile: downloadDest,
-    //   background: true,
-    //   begin: (res) => {
-    //     console.log(res);
-    //   },
-    //   progress: (res) => {
-    //     console.log('progress', res);
-    //   },
-    // };
-
-    // const ret = RNFS.downloadFile(options);
-    // ret.promise.then(res => {
-    //   console.log(res);
-    //   this.setState({
-    //     kmlFile: downloadDest,
-    //   });
-    // });
   }
 
   render() {
@@ -66,8 +41,15 @@ class MapKml extends React.Component {
           pitchEnabled
           rotateEnabled
           initialRegion={this.state.region}
-          kmlMap={this.state.kmlFile}
-        />
+          kmlSrc={KML_FILE}
+        >
+          <MapView.Marker
+            coordinate={this.state.region}
+            title="Test"
+            description="Test"
+            image={flagImg}
+          />
+        </MapView>
       </View>
     );
   }
