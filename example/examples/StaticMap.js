@@ -6,7 +6,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker, ProviderPropType } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -54,7 +54,7 @@ class StaticMap extends React.Component {
             rotateEnabled={false}
             initialRegion={this.state.region}
           >
-            <MapView.Marker
+            <Marker
               title="This is a title"
               description="This is a description"
               coordinate={this.state.region}
@@ -96,7 +96,7 @@ class StaticMap extends React.Component {
 }
 
 StaticMap.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = StaticMap;
+export default StaticMap;

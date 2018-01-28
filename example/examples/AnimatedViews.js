@@ -6,7 +6,12 @@ import {
   Animated,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import {
+  ProviderPropType,
+  Animated as AnimatedMap,
+  AnimatedRegion,
+  Marker,
+} from 'react-native-maps';
 import PanController from './PanController';
 import PriceMarker from './AnimatedPriceMarker';
 
@@ -191,7 +196,7 @@ class AnimatedViews extends React.Component {
       scale,
       translateY,
       markers,
-      region: new MapView.AnimatedRegion({
+      region: new AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
@@ -324,7 +329,7 @@ class AnimatedViews extends React.Component {
           onStartShouldSetPanResponder={this.onStartShouldSetPanResponder}
           onMoveShouldSetPanResponder={this.onMoveShouldSetPanResponder}
         >
-          <MapView.Animated
+          <AnimatedMap
             provider={this.props.provider}
             style={styles.map}
             region={region}
@@ -338,7 +343,7 @@ class AnimatedViews extends React.Component {
               } = animations[i];
 
               return (
-                <MapView.Marker
+                <Marker
                   key={marker.id}
                   coordinate={marker.coordinate}
                 >
@@ -352,10 +357,10 @@ class AnimatedViews extends React.Component {
                     amount={marker.amount}
                     selected={selected}
                   />
-                </MapView.Marker>
+                </Marker>
               );
             })}
-          </MapView.Animated>
+          </AnimatedMap>
           <View style={styles.itemContainer}>
             {markers.map((marker, i) => {
               const {
@@ -387,7 +392,7 @@ class AnimatedViews extends React.Component {
 }
 
 AnimatedViews.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -418,4 +423,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = AnimatedViews;
+export default AnimatedViews;
