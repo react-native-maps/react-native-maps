@@ -93,6 +93,14 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     [_regionChangeObserveTimer invalidate];
 }
 
+-(void)addSubview:(UIView *)view {
+    if([view isKindOfClass:[AIRMapMarker class]]) {
+        [self addAnnotation:(id <MKAnnotation>)view];
+    } else {
+        [super addSubview:view];
+    }
+}
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
