@@ -214,7 +214,7 @@ If you use Xcode with version less than 9 you may get `use of undeclared identif
      },
    });
 
-   module.exports = class MyApp extends React.Component {
+   export default class MyApp extends React.Component {
      render() {
        const { region } = this.props;
        console.log(region);

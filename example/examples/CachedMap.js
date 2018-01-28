@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { ProviderPropType, Marker } from 'react-native-maps';
 import flagImg from './assets/flag-blue.png';
 
 const HORIZONTAL_PADDING = 12;
@@ -69,7 +69,7 @@ class CachedMap extends React.Component {
                 loadingIndicatorColor="#666666"
                 loadingBackgroundColor="#eeeeee"
               >
-                <MapView.Marker
+                <Marker
                   coordinate={region}
                   centerOffset={{ x: -18, y: -60 }}
                   anchor={{ x: 0.69, y: 1 }}
@@ -86,7 +86,7 @@ class CachedMap extends React.Component {
 }
 
 CachedMap.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -1832,4 +1832,4 @@ const COUNTRIES = [
   },
 ];
 
-module.exports = CachedMap;
+export default CachedMap;

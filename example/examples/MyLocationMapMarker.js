@@ -8,7 +8,7 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
-import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import isEqual from 'lodash/isEqual';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
@@ -17,7 +17,7 @@ const ANCHOR = { x: 0.5, y: 0.5 };
 const colorOfmyLocationMapMarker = 'blue';
 
 const propTypes = {
-  ...MapView.Marker.propTypes,
+  ...Marker.propTypes,
   // override this prop to make it optional
   coordinate: PropTypes.shape({
     latitude: PropTypes.number.isRequired,
@@ -87,7 +87,7 @@ export default class MyLocationMapMarker extends React.PureComponent {
     const rotate = (typeof heading === 'number' && heading >= 0) ? `${heading}deg` : null;
 
     return (
-      <MapView.Marker
+      <Marker
         anchor={ANCHOR}
         style={styles.mapMarker}
         {...this.props}
@@ -107,7 +107,7 @@ export default class MyLocationMapMarker extends React.PureComponent {
           </View>
         </View>
         {this.props.children}
-      </MapView.Marker>
+      </Marker>
     );
   }
 }
