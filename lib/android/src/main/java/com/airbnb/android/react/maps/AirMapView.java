@@ -19,10 +19,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -39,16 +41,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.data.kml.KmlLayer;
+import com.google.maps.android.data.kml.KmlPlacemark;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -876,29 +881,34 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     manager.pushEvent(context, this, "onPanDrag", event);
   }
 
-  public void setKmlMap(String kmlPath) {
-    FileInputStream inputStream = null;
+  public void setKmlSrc(String kmlSrc) {
     try {
-      inputStream = new FileInputStream(kmlPath);
+      InputStream kmlStream = FileUtil.getFileInputStream(context, kmlSrc);
 
-      layer = new KmlLayer(map, inputStream, context);
-      layer.addLayerToMap();
-    } catch (FileNotFoundException | NullPointerException e) {
-      if (inputStream != null) {
-        try {
-          inputStream.close();
-        } catch (IOException ignored) {
-        }
+      if (kmlStream == null) {
+        return;
       }
+
+      layer = new KmlLayer(map, kmlStream, context);
+
+      Integer index = 0;
+      for (KmlPlacemark placemark : layer.getPlacemarks()) {
+        MarkerOptions options = placemark.getMarkerOptions();
+
+        AirMapMarker marker = new AirMapMarker(context, options);
+
+        if (placemark.getInlineStyle() != null
+            && placemark.getInlineStyle().getIconUrl() != null) {
+          marker.setImage(placemark.getInlineStyle().getIconUrl());
+        }
+
+        addFeature(marker, index++);
+      }
+
     } catch (XmlPullParserException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  public void removeKmlMap() {
-    if (layer != null)
-      layer.removeLayerFromMap();
   }
 }

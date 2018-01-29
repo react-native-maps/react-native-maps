@@ -413,7 +413,6 @@ id regionAsJSON(MKCoordinateRegion region) {
   for (GMUPlacemark *place in parser.placemarks) {
         
     CLLocationCoordinate2D location =((GMUPoint *) place.geometry).coordinate;
-//        GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:self.region.center coordinate:location];
     
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)[[AIRGoogleMapMarkerManager alloc] view];
     if (!marker.bridge) {

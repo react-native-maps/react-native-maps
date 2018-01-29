@@ -131,5 +131,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:support-annotations:25.3.0'
     compile project(':react-native-maps-lib')
-    compile project(':react-native-fs')
 }

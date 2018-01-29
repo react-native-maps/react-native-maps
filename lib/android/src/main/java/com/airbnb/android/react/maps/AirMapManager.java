@@ -232,12 +232,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.map.setMaxZoomPreference(maxZoomLevel);
   }
 
-  @ReactProp(name = "kmlMap")
-  public void setKmlMap(AirMapView view, String kmlPath) {
-    if (kmlPath != null && kmlPath != null) {
-      view.setKmlMap(kmlPath);
-    } else {
-      view.removeKmlMap();
+  @ReactProp(name = "kmlSrc")
+  public void setKmlSrc(AirMapView view, String kmlUrl) {
+    if (kmlUrl != null) {
+      view.setKmlSrc(kmlUrl);
     }
   }
 
