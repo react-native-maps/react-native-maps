@@ -47,7 +47,6 @@ class MapKml extends React.Component {
             coordinate={this.state.region}
             title="Test"
             description="Test"
-            image={flagImg}
           />
         </MapView>
       </View>

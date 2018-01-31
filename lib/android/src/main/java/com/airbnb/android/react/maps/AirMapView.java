@@ -37,6 +37,7 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -45,6 +46,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
 
@@ -59,13 +61,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
   public GoogleMap map;
-  private KmlLayer layer;
+  private KmlLayer kmlLayer;
   private ProgressBar mapLoadingProgressBar;
   private RelativeLayout mapLoadingLayout;
   private ImageView cacheImageView;
@@ -186,7 +189,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       @Override
       public boolean onMarkerClick(Marker marker) {
         WritableMap event;
-        AirMapMarker airMapMarker = markerMap.get(marker);
+        AirMapMarker airMapMarker = getMarkerMap(marker);
 
         event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
@@ -196,7 +199,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
         event.putString("id", airMapMarker.getIdentifier());
-        manager.pushEvent(context, markerMap.get(marker), "onPress", event);
+        manager.pushEvent(context, airMapMarker, "onPress", event);
 
         // Return false to open the callout info window and center on the marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
@@ -883,17 +886,46 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   public void setKmlSrc(String kmlSrc) {
     try {
-      InputStream kmlStream = FileUtil.getFileInputStream(context, kmlSrc);
+      InputStream kmlStream =  new FileUtil(context).execute(kmlSrc).get();
 
       if (kmlStream == null) {
         return;
       }
 
-      layer = new KmlLayer(map, kmlStream, context);
+      kmlLayer = new KmlLayer(map, kmlStream, context);
+      kmlLayer.addLayerToMap();
+      if (kmlLayer.getContainers() == null){
+        return;
+      }
+      KmlContainer container = kmlLayer.getContainers().iterator().next();
+      //Retrieve a nested container within the first container
+      container = container.getContainers().iterator().next();
 
       Integer index = 0;
-      for (KmlPlacemark placemark : layer.getPlacemarks()) {
-        MarkerOptions options = placemark.getMarkerOptions();
+      for (KmlPlacemark placemark : container.getPlacemarks()) {
+        MarkerOptions options = new MarkerOptions();
+
+        if (placemark.getInlineStyle() != null) {
+          options = placemark.getMarkerOptions();
+        } else {
+          options.icon(BitmapDescriptorFactory.defaultMarker());
+        }
+
+        LatLng latLng = ((LatLng) placemark.getGeometry().getGeometryObject());
+        String title = "";
+        String snippet = "";
+
+        if (placemark.hasProperty("name")) {
+          title = placemark.getProperty("name");
+        }
+
+        if (placemark.hasProperty("description")) {
+          snippet = placemark.getProperty("description");
+        }
+
+        options.position(latLng);
+        options.title(title);
+        options.snippet(snippet);
 
         AirMapMarker marker = new AirMapMarker(context, options);
 
@@ -902,6 +934,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
           marker.setImage(placemark.getInlineStyle().getIconUrl());
         }
 
+        marker.setIdentifier(title + " - " + index);
+
         addFeature(marker, index++);
       }
 
@@ -909,6 +943,28 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
     }
+  }
+
+  private AirMapMarker getMarkerMap(Marker marker) {
+    AirMapMarker airMarker = markerMap.get(marker);
+
+    if (airMarker != null) {
+      return airMarker;
+    }
+
+    for (Map.Entry<Marker, AirMapMarker> entryMarker : markerMap.entrySet()) {
+      if (entryMarker.getKey().getPosition().equals(marker.getPosition())
+          && entryMarker.getKey().getTitle().equals(marker.getTitle())) {
+        airMarker = entryMarker.getValue();
+        break;
+      }
+    }
+
+    return airMarker;
   }
 }

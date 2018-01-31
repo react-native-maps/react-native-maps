@@ -401,14 +401,14 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setKmlSrc:(NSString *)kmlUrl {
     
-    _kmlSrc = kmlUrl;
-    
-    NSURL *url = [NSURL URLWithString:kmlUrl];
-    NSData *urlData = [NSData dataWithContentsOfURL:url];
-    GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
-    [parser parse];
-    
-    NSUInteger index = 0;
+  _kmlSrc = kmlUrl;
+  
+  NSURL *url = [NSURL URLWithString:kmlUrl];
+  NSData *urlData = [NSData dataWithContentsOfURL:url];
+  GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
+  [parser parse];
+  
+  NSUInteger index = 0;
 
   for (GMUPlacemark *place in parser.placemarks) {
         

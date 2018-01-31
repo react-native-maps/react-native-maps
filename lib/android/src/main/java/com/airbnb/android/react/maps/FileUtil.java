@@ -2,7 +2,7 @@ package com.airbnb.android.react.maps;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import android.os.AsyncTask;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.common.ReactConstants;
@@ -16,31 +16,39 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
-public class FileUtil {
+public class FileUtil extends AsyncTask<String, Void, InputStream> {
 
-  private static final String NAME = "FileUtil";
-  private static final String TEMP_FILE_SUFFIX = "temp";
+  private final String NAME = "FileUtil";
+  private final String TEMP_FILE_SUFFIX = "temp";
 
-  public static @Nullable InputStream getFileInputStream(
-      Context context,
-      String fileContentUriStr) {
+  private Exception exception;
+  private Context context;
+
+  public FileUtil(Context context) {
+    super();
+
+    this.context = context;
+  }
+
+  protected InputStream doInBackground(String... urls) {
     try {
-      Uri fileContentUri = Uri.parse(fileContentUriStr);
+      Uri fileContentUri = Uri.parse(urls[0]);
 
       if (fileContentUri.getScheme().startsWith("http")) {
         return getDownloadFileInputStream(context, fileContentUri);
       }
       return context.getContentResolver().openInputStream(fileContentUri);
     } catch (Exception e) {
+      this.exception = e;
       FLog.e(
           ReactConstants.TAG,
-          "Could not retrieve file for contentUri " + fileContentUriStr,
+          "Could not retrieve file for contentUri " + urls[0],
           e);
       return null;
     }
   }
 
-  private static InputStream getDownloadFileInputStream(Context context, Uri uri)
+  private InputStream getDownloadFileInputStream(Context context, Uri uri)
       throws IOException {
     final File outputDir = context.getApplicationContext().getCacheDir();
     final File file = File.createTempFile(NAME, TEMP_FILE_SUFFIX, outputDir);
