@@ -5,7 +5,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { ProviderPropType } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -205,7 +205,7 @@ class MapStyle extends React.Component {
 }
 
 MapStyle.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -219,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = MapStyle;
+export default MapStyle;

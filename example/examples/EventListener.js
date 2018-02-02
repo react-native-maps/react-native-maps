@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 // eslint-disable-next-line max-len
-import MapView from 'react-native-maps';
+import MapView, { Marker, ProviderPropType, Polygon, Polyline, Callout } from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
 const { width, height } = Dimensions.get('window');
@@ -68,6 +68,9 @@ class EventListener extends React.Component {
 
   recordEvent(name) {
     return e => {
+      if (e.persist) {
+        e.persist();  // Avoids warnings relating to https://fb.me/react-event-pooling
+      }
       this.setState(prevState => ({
         events: [
           this.makeEvent(e, name),
@@ -94,19 +97,19 @@ class EventListener extends React.Component {
           onMarkerDeselect={this.recordEvent('Map::onMarkerDeselect')}
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
         >
-          <MapView.Marker
+          <Marker
             coordinate={{
               latitude: LATITUDE + (LATITUDE_DELTA / 2),
               longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
             }}
           />
-          <MapView.Marker
+          <Marker
             coordinate={{
               latitude: LATITUDE - (LATITUDE_DELTA / 2),
               longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
             }}
           />
-          <MapView.Marker
+          <Marker
             title="This is a title"
             description="This is a description"
             coordinate={this.state.region}
@@ -116,16 +119,16 @@ class EventListener extends React.Component {
             onCalloutPress={this.recordEvent('Marker::onCalloutPress')}
           >
             <PriceMarker amount={99} />
-            <MapView.Callout
+            <Callout
               style={styles.callout}
               onPress={this.recordEvent('Callout::onPress')}
             >
               <View>
                 <Text>Well hello there...</Text>
               </View>
-            </MapView.Callout>
-          </MapView.Marker>
-          <MapView.Polygon
+            </Callout>
+          </Marker>
+          <Polygon
             fillColor={'rgba(255,0,0,0.3)'}
             onPress={this.recordEvent('Polygon::onPress')}
             tappable
@@ -140,7 +143,7 @@ class EventListener extends React.Component {
               longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
             }]}
           />
-          <MapView.Polyline
+          <Polyline
             strokeColor={'rgba(255,0,0,1)'}
             onPress={this.recordEvent('Polyline::onPress')}
             tappable
@@ -167,7 +170,7 @@ class EventListener extends React.Component {
 }
 
 EventListener.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -231,4 +234,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = EventListener;
+export default EventListener;

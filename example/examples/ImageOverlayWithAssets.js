@@ -1,24 +1,33 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   Dimensions,
 } from 'react-native';
 
-import MapView, { MAP_TYPES, PROVIDER_DEFAULT, ProviderPropType, UrlTile } from 'react-native-maps';
+import MapView from 'react-native-maps';
+import flagPinkImg from './assets/flag-pink.png';
 
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE = 35.679976;
+const LONGITUDE = 139.768458;
+const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+// 116423, 51613, 17
+const OVERLAY_TOP_LEFT_COORDINATE = [35.68184060244454, 139.76531982421875];
+const OVERLAY_BOTTOM_RIGHT_COORDINATE = [35.679609609368576, 139.76806640625];
+const IMAGE = flagPinkImg;
 
-class CustomTiles extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+export default class ImageOverlayWithURL extends Component {
+
+  static propTypes = {
+    provider: MapView.ProviderPropType,
+  };
+
+  constructor(props) {
+    super(props);
 
     this.state = {
       region: {
@@ -27,63 +36,41 @@ class CustomTiles extends React.Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
+      overlay: {
+        bounds: [OVERLAY_TOP_LEFT_COORDINATE, OVERLAY_BOTTOM_RIGHT_COORDINATE],
+        image: IMAGE,
+      },
     };
   }
 
-  get mapType() {
-    // MapKit does not support 'none' as a base map
-    return this.props.provider === PROVIDER_DEFAULT ?
-      MAP_TYPES.STANDARD : MAP_TYPES.NONE;
-  }
-
   render() {
-    const { region } = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-          mapType={this.mapType}
           style={styles.map}
-          initialRegion={region}
+          initialRegion={this.state.region}
         >
-          <UrlTile
-            urlTemplate="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
-            zIndex={-1}
+          <MapView.Overlay
+            bounds={this.state.overlay.bounds}
+            image={this.state.overlay.image}
           />
         </MapView>
-        <View style={styles.buttonContainer}>
-          <View style={styles.bubble}>
-            <Text>Custom Tiles</Text>
-          </View>
-        </View>
       </View>
     );
   }
 }
 
-CustomTiles.propTypes = {
-  provider: ProviderPropType,
-};
-
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
   },
   bubble: {
-    flex: 1,
     backgroundColor: 'rgba(255,255,255,0.7)',
     paddingHorizontal: 18,
     paddingVertical: 12,
@@ -105,5 +92,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-
-export default CustomTiles;
