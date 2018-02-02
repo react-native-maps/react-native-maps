@@ -35,6 +35,7 @@
 | `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
 | `moveOnMarkerPress` | `Boolean` | `true` | `Android only` If `false` the map won't move when a marker is pressed.
 | `legalLabelInsets` | `EdgeInsets` | | If set, changes the position of the "Legal" label link from the OS default. **Note:** iOS only.
+| `kmlSrc` | `string` | | The URL from KML file. **Note:** Google Maps only (either Android or iOS with `PROVIDER_GOOGLE`).
 
 
 ## Events
