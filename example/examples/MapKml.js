@@ -4,8 +4,7 @@ import {
   View,
   Dimensions,
 } from 'react-native';
-import MapView from 'react-native-maps';
-import flagImg from './assets/flag-pink.png';
+import MapView, { Marker } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,7 +42,7 @@ class MapKml extends React.Component {
           initialRegion={this.state.region}
           kmlSrc={KML_FILE}
         >
-          <MapView.Marker
+          <Marker
             coordinate={this.state.region}
             title="Test"
             description="Test"
