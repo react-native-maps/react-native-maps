@@ -13,6 +13,11 @@ declare module "react-native-maps" {
         longitude: number
     }
 
+    export interface Point {
+        x: number
+        y: number
+    }
+
     export interface MapViewProps {
         provider?: 'google';
         style: any;
@@ -49,19 +54,19 @@ declare module "react-native-maps" {
         legalLabelInsets?: any;
         onChange?: Function;
         onMapReady?: Function;
-        onRegionChange?: Function;
-        onRegionChangeComplete?: Function;
-        onPress?: Function;
+        onRegionChange?: (region: Region) => void;
+        onRegionChangeComplete?: (region: Region) => void;
+        onPress?: (value: { coordinate: LatLng, position: Point }) => void;
         onLayout?: Function;
-        onLongPress?: Function;
-        onPanDrag?: Function;
+        onLongPress?: (value: { coordinate: LatLng, position: Point }) => void;
+        onPanDrag?: (value: {coordinate: LatLng, position: Point }) => void;
         onMarkerPress?: Function;
         onMarkerSelect?: Function;
         onMarkerDeselect?: Function;
         onCalloutPress?: Function;
-        onMarkerDragStart?: Function;
-        onMarkerDrag?: Function;
-        onMarkerDragEnd?: Function;
+        onMarkerDragStart?: (value: { coordinate: LatLng, position: Point }) => void;
+        onMarkerDrag?: (value: { coordinate: LatLng, position: Point }) => void;
+        onMarkerDragEnd?: (value: { coordinate: LatLng, position: Point }) => void;
         minZoomLevel?: number;
         maxZoomLevel?: number;
     }
@@ -109,7 +114,7 @@ declare module "react-native-maps" {
     }
 
     export interface MapPolylineProps {
-        coordinates?: { latitude: number; longitude: number; }[];
+        coordinates: { latitude: number; longitude: number; }[];
         onPress?: Function;
         tappable?: boolean;
         fillColor?: string;
@@ -125,7 +130,7 @@ declare module "react-native-maps" {
     }
 
     export interface MapPolygonProps {
-        coordinates?: { latitude: number; longitude: number; }[];
+        coordinates: { latitude: number; longitude: number; }[];
         holes?: { latitude: number; longitude: number; }[][];
         onPress?: Function;
         tappable?: boolean;
