@@ -102,15 +102,18 @@ declare module "react-native-maps" {
         calloutAnchor?: { x: number; y: number };
         flat?: boolean;
         draggable?: boolean;
-        onPress?: Function;
-        onSelect?: Function;
-        onDeselect?: Function;
+        onPress?: (value: { coordinate: LatLng, position: Point }) => void;
+        onSelect?: (value: { coordinate: LatLng, position: Point }) => void;
+        onDeselect?: (value: { coordinate: LatLng, position: Point }) => void;
         onCalloutPress?: Function;
-        onDragStart?: Function;
-        onDrag?: Function;
-        onDragEnd?: Function;
+        onDragStart?: (value: { coordinate: LatLng, position: Point }) => void;
+        onDrag?: (value: { coordinate: LatLng, position: Point }) => void;
+        onDragEnd?: (value: { coordinate: LatLng, position: Point }) => void;
         zIndex?: number;
         style?: any;
+        rotation?: number;
+        tracksViewChanges?: boolean
+        tracksInfoWindowChanges?: boolean
     }
 
     export interface MapPolylineProps {
@@ -178,7 +181,11 @@ declare module "react-native-maps" {
         style?: any;
     }
 
-    export class Marker extends React.Component<MarkerProps, any> { }
+    export class Marker extends React.Component<MarkerProps, any> {
+        showCallout(): void;
+        hideCallout(): void;
+        animateMarkerToCoordinate(coordinate: LatLng, duration: number): void;
+    }
     export class Polyline extends React.Component<MapPolylineProps, any> { }
     export class Polygon extends React.Component<MapPolygonProps, any> { }
     export class Circle extends React.Component<MapCircleProps, any> { }
