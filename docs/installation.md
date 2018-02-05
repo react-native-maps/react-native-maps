@@ -15,12 +15,6 @@ Without this key the Google Maps map won't render anything.
 
 
 
-## IMPORTANT!!
-
-**!!  DO NOT USE  !!** `react-native link`
-
-Have ran it already? Read [this](#on-ios).
-
 ## iOS - CocoaPods
 
 Setup your `Podfile` (found at `/ios/Podfile` as below, replace all references to `_YOUR_PROJECT_TARGET_` with your project target (it's the same as project name by default), and then run `pod install` while in the `ios` folder.
@@ -72,7 +66,15 @@ end
 ~~~
 
 
+
+## IMPORTANT!!
+
+**!!  DO NOT USE  !!** `react-native link`
+
+Have ran it already? Read [this](#on-ios).
+
 ## If you want to use Google maps
+
 
 Add to `ios/_YOUR_PROJECT_NAME_/AppDelegate.m:
 
