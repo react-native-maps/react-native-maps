@@ -899,7 +899,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       }
       KmlContainer container = kmlLayer.getContainers().iterator().next();
       //Retrieve a nested container within the first container
-      container = container.getContainers().iterator().next();
+      if (container == null || container.getContainers() == null) {
+        return;
+      }
+      if (container.getContainers().iterator().hasNext()) {
+        container = container.getContainers().iterator().next();
+      }
 
       Integer index = 0;
       for (KmlPlacemark placemark : container.getPlacemarks()) {
