@@ -24,6 +24,7 @@
 @property (nonatomic, strong) AIRMapUrlTileOverlay *tileOverlay;
 @property (nonatomic, strong) MKTileOverlayRenderer *renderer;
 @property (nonatomic, copy) NSString *urlTemplate;
+@property NSInteger maximumZ;
 
 @property BOOL overzoomEnabled;
 @property NSInteger overzoomThreshold;
