@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.20.0 (February 2, 2018)
+* Common: [#1889](https://github.com/airbnb/react-native-maps/pull/1889) Fix for 'Animated.Region undefined constructor' in recent react-native version.
+* iOS: [#1853](https://github.com/airbnb/react-native-maps/pull/1853) Fixed onMapReady no longer getting called on iOS
+* Android: [#1906](https://github.com/airbnb/react-native-maps/pull/1906) Manage Zoom Controls visibility on the map
+* iOS: [#1911](https://github.com/airbnb/react-native-maps/pull/1911) Add gradient/multi-color polyline support for iOS (MapKit)
+* Android: [#1918](https://github.com/airbnb/react-native-maps/pull/1918) Ground Overlay Support
+* Common: [#1851](https://github.com/airbnb/react-native-maps/pull/1851) New methods to convert between LatLng and Point
+* iOS: [#1846](https://github.com/airbnb/react-native-maps/pull/1846) Fix callouts appearing behind markers
+* iOS: [#1969](https://github.com/airbnb/react-native-maps/pull/1969) Added tracksInfoWindowChanges property to iOS Google Maps
+* iOS: [#1960](https://github.com/airbnb/react-native-maps/pull/1960) Fixed gradient polyline not always fully drawn + stability issues
+* iOS: [#1953](https://github.com/airbnb/react-native-maps/pull/1953) Fix onMapReady not getting called after first time, initialRegion lat/lng delta not setting properly, setRegion method getting called even when map is not ready and prevent onRegionChange/ onRegionChangeComplete event until initialRegion or region is set.
+* Android: [#1781](https://github.com/airbnb/react-native-maps/pull/1781) Polygon holes support
+* Android: [#1976](https://github.com/airbnb/react-native-maps/pull/1976) Add native animation for Markers on Android
+
 ## 0.19.0 (December 14, 2017)
 * Common: [#1715](https://github.com/airbnb/react-native-maps/pull/1715) Fixed region/initialRegion null overrides of this.props
 * Common: [#1876](https://github.com/airbnb/react-native-maps/pull/1876) Added support for locally stored tile overlay
