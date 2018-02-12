@@ -51,6 +51,10 @@ This MapView component is built so that features on the map (such as Markers, Po
 specified as children of the MapView itself. This provides an intuitive and react-like API for
 declaratively controlling features on the map.
 
+## NSLocationAlwaysUsageDescription
+
+If you need to use `requestAlwaysAuthorization`, then define `NSLocationAlwaysUsageDescription` in your Info.plist and when maps are shown with `showsUserLocation === true` it will call `requestAlwaysAuthorization` for you rather than `requestWhenInUseAuthorization`.
+
 ### Rendering a Map with an initial region
 
 ## MapView
