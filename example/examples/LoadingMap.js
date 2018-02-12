@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
 import flagImg from './assets/flag-blue.png';
 
 const { width, height } = Dimensions.get('window');
@@ -44,7 +44,7 @@ class LoadingMap extends React.Component {
           loadingIndicatorColor="#666666"
           loadingBackgroundColor="#eeeeee"
         >
-          <MapView.Marker
+          <Marker
             coordinate={{
               latitude: LATITUDE + SPACE,
               longitude: LONGITUDE + SPACE,
@@ -53,7 +53,7 @@ class LoadingMap extends React.Component {
             anchor={{ x: 0.69, y: 1 }}
             image={flagImg}
           />
-          <MapView.Marker
+          <Marker
             coordinate={{
               latitude: LATITUDE - SPACE,
               longitude: LONGITUDE - SPACE,
@@ -61,12 +61,12 @@ class LoadingMap extends React.Component {
             centerOffset={{ x: -42, y: -60 }}
             anchor={{ x: 0.84, y: 1 }}
           >
-            <MapView.Callout>
+            <Callout>
               <View>
                 <Text>This is a plain view</Text>
               </View>
-            </MapView.Callout>
-          </MapView.Marker>
+            </Callout>
+          </Marker>
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>
@@ -79,7 +79,7 @@ class LoadingMap extends React.Component {
 }
 
 LoadingMap.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = LoadingMap;
+export default LoadingMap;

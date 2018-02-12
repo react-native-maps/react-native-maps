@@ -16,6 +16,7 @@ import MarkerTypes from './examples/MarkerTypes';
 import DraggableMarkers from './examples/DraggableMarkers';
 import PolygonCreator from './examples/PolygonCreator';
 import PolylineCreator from './examples/PolylineCreator';
+import GradientPolylines from './examples/GradientPolylines';
 import AnimatedViews from './examples/AnimatedViews';
 import AnimatedMarkers from './examples/AnimatedMarkers';
 import Callouts from './examples/Callouts';
@@ -36,6 +37,8 @@ import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
+import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
+import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -131,6 +134,7 @@ class App extends React.Component {
       [DraggableMarkers, 'Draggable Markers', true],
       [PolygonCreator, 'Polygon Creator', true],
       [PolylineCreator, 'Polyline Creator', true],
+      [GradientPolylines, 'Gradient Polylines', true],
       [AnimatedViews, 'Animating with MapViews'],
       [AnimatedMarkers, 'Animated Marker Position'],
       [Callouts, 'Custom Callouts', true],
@@ -150,6 +154,8 @@ class App extends React.Component {
       [SetNativePropsOverlays, 'Update native props', true],
       [CustomOverlay, 'Custom Overlay Component', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
+      [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
+      [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
@@ -189,4 +195,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = App;
+export default App;

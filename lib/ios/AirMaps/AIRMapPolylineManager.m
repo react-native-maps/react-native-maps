@@ -15,7 +15,7 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTViewManager.h>
 #import <React/UIView+React.h>
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 #import "AIRMapMarker.h"
 #import "AIRMapPolyline.h"
 
@@ -35,6 +35,7 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(coordinates, AIRMapCoordinateArray)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(strokeColors, UIColorArray)
 RCT_EXPORT_VIEW_PROPERTY(strokeWidth, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(lineCap, CGLineCap)
 RCT_EXPORT_VIEW_PROPERTY(lineJoin, CGLineJoin)

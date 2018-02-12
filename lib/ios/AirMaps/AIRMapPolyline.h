@@ -12,7 +12,7 @@
 #import <React/RCTView.h>
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 
 @interface AIRMapPolyline: MKAnnotationView <MKOverlay>
@@ -20,11 +20,12 @@
 @property (nonatomic, weak) AIRMap *map;
 
 @property (nonatomic, strong) MKPolyline *polyline;
-@property (nonatomic, strong) MKPolylineRenderer *renderer;
+@property (nonatomic, strong) MKOverlayPathRenderer *renderer;
 
 @property (nonatomic, strong) NSArray<AIRMapCoordinate *> *coordinates;
 @property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, strong) UIColor *strokeColor;
+@property (nonatomic, strong) NSArray<UIColor *> *strokeColors;
 @property (nonatomic, assign) CGFloat strokeWidth;
 @property (nonatomic, assign) CGFloat miterLimit;
 @property (nonatomic, assign) CGLineCap lineCap;

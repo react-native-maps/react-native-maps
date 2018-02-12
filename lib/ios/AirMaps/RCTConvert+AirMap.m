@@ -3,12 +3,12 @@
 // Copyright (c) 2015 Facebook. All rights reserved.
 //
 
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 #import <React/RCTConvert+CoreLocation.h>
 #import "AIRMapCoordinate.h"
 
-@implementation RCTConvert (MapKit)
+@implementation RCTConvert (AirMap)
 
 + (MKCoordinateSpan)MKCoordinateSpan:(id)json
 {
@@ -31,6 +31,9 @@ RCT_ENUM_CONVERTER(MKMapType, (@{
   @"standard": @(MKMapTypeStandard),
   @"satellite": @(MKMapTypeSatellite),
   @"hybrid": @(MKMapTypeHybrid),
+  @"satelliteFlyover": @(MKMapTypeSatelliteFlyover),
+  @"hybridFlyover": @(MKMapTypeHybridFlyover),
+  @"mutedStandard": @(MKMapTypeMutedStandard)
 }), MKMapTypeStandard, integerValue)
 
 // NOTE(lmr):

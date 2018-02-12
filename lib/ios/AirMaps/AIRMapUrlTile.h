@@ -14,7 +14,7 @@
 #import <React/RCTView.h>
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
-#import "RCTConvert+MapKit.h"
+#import "RCTConvert+AirMap.h"
 
 @interface AIRMapUrlTile : MKAnnotationView <MKOverlay>
 
@@ -24,6 +24,7 @@
 @property (nonatomic, strong) MKTileOverlayRenderer *renderer;
 
 @property (nonatomic, copy) NSString *urlTemplate;
+@property NSInteger maximumZ;
 
 #pragma mark MKOverlay protocol
 
