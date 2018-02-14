@@ -342,7 +342,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   
   if ([keyPath isEqualToString:@"myLocation"]) {
     id event = @{
-                 @"coords": @{
+                 @"coordinate": @{
                      @"latitude": @(self.myLocation.coordinate.latitude),
                      @"longitude": @(self.myLocation.coordinate.longitude)
                      }

@@ -401,7 +401,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       //noinspection MissingPermission
       map.setMyLocationEnabled(showUserLocation);
       if(showUserLocation) {
-
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
           @Override
           public void onMyLocationChange(Location location) {
@@ -572,7 +571,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     WritableMap coordinate = new WritableNativeMap();
     coordinate.putDouble("latitude", location.getLatitude());
     coordinate.putDouble("longitude", location.getLongitude());
-    event.putMap("coords", coordinate);
+    event.putMap("coordinate", coordinate);
 
     return event;
   }
