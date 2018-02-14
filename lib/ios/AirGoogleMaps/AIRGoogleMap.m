@@ -322,9 +322,35 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.compassButton;
 }
 
+- (void)dealloc {
+  [self removeObserver:self forKeyPath:@"myLocation"];
+}
+
 - (void)setShowsUserLocation:(BOOL)showsUserLocation {
   self.myLocationEnabled = showsUserLocation;
+  [self addObserver:self
+                 forKeyPath:@"myLocation"
+                    options:(NSKeyValueObservingOptionNew |
+                             NSKeyValueObservingOptionOld)
+                    context:NULL];
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+  
+  if ([keyPath isEqualToString:@"myLocation"]) {
+    id event = @{
+                 @"coords": @{
+                     @"latitude": @(self.myLocation.coordinate.latitude),
+                     @"longitude": @(self.myLocation.coordinate.longitude)
+                     }
+                 };
+    self.onUserLocationChange(event);
+  }
+}
+
 
 - (BOOL)showsUserLocation {
   return self.myLocationEnabled;

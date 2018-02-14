@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
@@ -395,9 +396,19 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   public void setShowsUserLocation(boolean showUserLocation) {
     this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
+    final AirMapView view = this;
     if (hasPermissions()) {
       //noinspection MissingPermission
       map.setMyLocationEnabled(showUserLocation);
+      if(showUserLocation) {
+
+        map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+          @Override
+          public void onMyLocationChange(Location location) {
+            manager.pushEvent(context, view, "onUserLocationChange", makeClickEventData(location));
+          }
+        });
+      }
     }
   }
 
@@ -551,6 +562,17 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     position.putDouble("x", screenPoint.x);
     position.putDouble("y", screenPoint.y);
     event.putMap("position", position);
+
+    return event;
+  }
+
+  public WritableMap makeClickEventData(Location location) {
+    WritableMap event = new WritableNativeMap();
+
+    WritableMap coordinate = new WritableNativeMap();
+    coordinate.putDouble("latitude", location.getLatitude());
+    coordinate.putDouble("longitude", location.getLongitude());
+    event.putMap("coords", coordinate);
 
     return event;
   }
