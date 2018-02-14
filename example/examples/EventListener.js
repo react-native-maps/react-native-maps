@@ -96,6 +96,8 @@ class EventListener extends React.Component {
           onMarkerSelect={this.recordEvent('Map::onMarkerSelect')}
           onMarkerDeselect={this.recordEvent('Map::onMarkerDeselect')}
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
+          onPanDrag={this.recordEvent('Map::onPanDrag')}
+          onUserLocationChange={this.recordEvent('Map::onUserLocationChange')}
         >
           <Marker
             coordinate={{

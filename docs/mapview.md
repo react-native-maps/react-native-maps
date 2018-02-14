@@ -56,7 +56,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `onMarkerDragStart` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user initiates a drag on a marker (if it is draggable)
 | `onMarkerDrag` | `{ coordinate: LatLng, position: Point }` | Callback called continuously as a marker is dragged
 | `onMarkerDragEnd` | `{ coordinate: LatLng, position: Point }` | Callback that is called when a drag on a marker finishes. This is usually the point you will want to setState on the marker's coordinate again
-
+| `onUserLocationChange` | `{ coordinate: LatLng }` | Callback that is called when user location changed
 
 
 ## Methods
