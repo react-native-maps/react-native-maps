@@ -1,6 +1,11 @@
 # Change Log
 
-## 0.20.0 (February 2, 2018)
+## 0.20.1 (February 13, 2018)
+* Common: [hotfix PROVIDER_GOOGLE](https://github.com/react-community/react-native-maps/commit/cd868ea7b33a04c8bdd5e909cf134a133b2cb316)
+* iOS: [#2019](https://github.com/airbnb/react-native-maps/pull/2019) Exposing the maximumZ property to AIRMapUrlTile
+
+
+## 0.20.0 (February 9, 2018)
 * Common: [#1889](https://github.com/airbnb/react-native-maps/pull/1889) Fix for 'Animated.Region undefined constructor' in recent react-native version.
 * iOS: [#1853](https://github.com/airbnb/react-native-maps/pull/1853) Fixed onMapReady no longer getting called on iOS
 * Android: [#1906](https://github.com/airbnb/react-native-maps/pull/1906) Manage Zoom Controls visibility on the map

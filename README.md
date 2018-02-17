@@ -172,6 +172,11 @@ import { UrlTile } from 'react-native-maps';
    * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
    */
     urlTemplate={this.state.urlTemplate}
+    /**
+     * The maximum zoom level for this tile overlay. Corresponds to the maximumZ setting in
+     * MKTileOverlay. iOS only.
+     */
+    maximumZ={19}
   />
 </MapView>
 ```
