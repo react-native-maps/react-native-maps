@@ -15,7 +15,3 @@ type LatLng {
   longitude: Number,
 }
 ```
-
-## Limitation
-
-When placing images close to each other, some images will be break with zooming up operation in iOS, see [#2022](https://github.com/react-community/react-native-maps/pull/2022) .
