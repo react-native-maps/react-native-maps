@@ -55,9 +55,22 @@ id regionAsJSON(MKCoordinateRegion region) {
     _initialRegionSetOnLoad = false;
     _didCallOnMapReady = false;
     _didMoveToWindow = false;
+
+    // Listen to the myLocation property of GMSMapView.
+    [self addObserver:self
+           forKeyPath:@"myLocation"
+              options:NSKeyValueObservingOptionNew
+              context:NULL];
   }
   return self;
 }
+
+- (void)dealloc {
+  [self removeObserver:self
+            forKeyPath:@"myLocation"
+               context:NULL];
+}
+
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate {
 
   CGPoint touchPoint = [self.projection pointForCoordinate:coordinate];
@@ -387,6 +400,28 @@ id regionAsJSON(MKCoordinateRegion region) {
                                                         region.center.longitude - longitudeDelta);
   GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
+}
+
+#pragma mark - KVO updates
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+  if ([keyPath isEqualToString:@"myLocation"]){
+    CLLocation *location = [object myLocation];
+
+    id event = @{@"coordinate": @{
+                    @"latitude": @(location.coordinate.latitude),
+                    @"longitude": @(location.coordinate.longitude),
+                    }
+                };
+
+  if (self.onMyLocationChange) self.onMyLocationChange(event);
+  } else {
+    // This message is not for me; pass it on to super.
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+  }
 }
 
 @end

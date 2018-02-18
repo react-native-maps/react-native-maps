@@ -22,6 +22,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
+@property (nonatomic, copy) RCTBubblingEventBlock onMyLocationChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
