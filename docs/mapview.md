@@ -46,6 +46,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `onMapReady` |  | Callback that is called once the map is fully loaded.
 | `onRegionChange` | `Region` | Callback that is called continuously when the region changes, such as when a user is dragging the map.
 | `onRegionChangeComplete` | `Region` | Callback that is called once when the region changes, such as when the user is done moving the map.
+| `onMyLocationChange` | `{ coordinate: LatLng }` | Callback that is called when the underlying map figures our users current location. Make sure **showsUserLocation** is set to *true* and that the provider is `"google"`.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
 | `onPanDrag` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user presses and drags the map. **NOTE**: for iOS `scrollEnabled` should be set to false to trigger the event
 | `onLongPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user makes a "long press" somewhere on the map.
