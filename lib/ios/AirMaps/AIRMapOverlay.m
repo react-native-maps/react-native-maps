@@ -21,7 +21,7 @@
 {
     NSLog(@">>> SET IMAGESRC: %@", imageSrc);
     _imageSrc = imageSrc;
-    
+
     if (_reloadImageCancellationBlock) {
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
@@ -49,15 +49,15 @@
 
 - (void)setBoundsRect:(NSArray *)boundsRect {
     _boundsRect = boundsRect;
-    
+
     _southWest = CLLocationCoordinate2DMake([boundsRect[1][0] doubleValue], [boundsRect[0][1] doubleValue]);
     _northEast = CLLocationCoordinate2DMake([boundsRect[0][0] doubleValue], [boundsRect[1][1] doubleValue]);
-    
+
     MKMapPoint southWest = MKMapPointForCoordinate(_southWest);
     MKMapPoint northEast = MKMapPointForCoordinate(_northEast);
-    
-    _mapRect = MKMapRectMake(southWest.x, southWest.y, northEast.x - southWest.x, southWest.y - northEast.y);
-    
+
+    _mapRect = MKMapRectMake(southWest.x, northEast.y, northEast.x - southWest.x, northEast.y - southWest.y);
+
     [self update];
 }
 
@@ -71,7 +71,7 @@
 - (void)update
 {
     if (!_renderer) return;
-    
+
     if (_map == nil) return;
     [_map removeOverlay:self];
     [_map addOverlay:self];
@@ -101,4 +101,3 @@
 }
 
 @end
-
