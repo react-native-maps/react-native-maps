@@ -179,6 +179,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         WritableMap coordinate = new WritableNativeMap();
         coordinate.putDouble("latitude", location.getLatitude());
         coordinate.putDouble("longitude", location.getLongitude());
+        coordinate.putDouble("altitude", location.getAltitude());
+        coordinate.putFloat("accuracy", location.getAccuracy());
+        coordinate.putFloat("altitude_accuracy", location.getVerticalAccuracyMeters());
+        coordinate.putFloat("speed", location.getSpeed());
         event.putMap("coordinate", coordinate);
 
         manager.pushEvent(context, view, "onMyLocationChange", event);
