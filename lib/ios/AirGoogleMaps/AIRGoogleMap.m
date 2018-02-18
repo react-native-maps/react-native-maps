@@ -414,6 +414,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     id event = @{@"coordinate": @{
                     @"latitude": @(location.coordinate.latitude),
                     @"longitude": @(location.coordinate.longitude),
+                    @"altitude": @(location.altitude),
+                    @"accuracy": @(location.horizontalAccuracy),
+                    @"altitude_accuracy": @(location.verticalAccuracy),
+                    @"speed": @(location.speed),
                     }
                 };
 
