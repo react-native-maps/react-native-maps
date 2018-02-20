@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.view.GestureDetector;
@@ -19,13 +18,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -45,15 +44,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -894,14 +890,23 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
       kmlLayer = new KmlLayer(map, kmlStream, context);
       kmlLayer.addLayerToMap();
-      if (kmlLayer.getContainers() == null){
+
+      WritableMap pointers = new WritableNativeMap();
+      WritableArray markers = new WritableNativeArray();
+
+      if (kmlLayer.getContainers() == null) {
+        manager.pushEvent(context, this, "onKmlReady", pointers);
         return;
       }
-      KmlContainer container = kmlLayer.getContainers().iterator().next();
+
       //Retrieve a nested container within the first container
+      KmlContainer container = kmlLayer.getContainers().iterator().next();
       if (container == null || container.getContainers() == null) {
+        manager.pushEvent(context, this, "onKmlReady", pointers);
         return;
       }
+
+
       if (container.getContainers().iterator().hasNext()) {
         container = container.getContainers().iterator().next();
       }
@@ -939,10 +944,23 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
           marker.setImage(placemark.getInlineStyle().getIconUrl());
         }
 
-        marker.setIdentifier(title + " - " + index);
+        String identifier = title + " - " + index;
+
+        marker.setIdentifier(identifier);
 
         addFeature(marker, index++);
+
+        WritableMap loadedMarker = makeClickEventData(latLng);
+        loadedMarker.putString("id", identifier);
+        loadedMarker.putString("title", title);
+        loadedMarker.putString("description", snippet);
+
+        markers.pushMap(loadedMarker);
       }
+
+      pointers.putArray("markers", markers);
+
+      manager.pushEvent(context, this, "onKmlReady", pointers);
 
     } catch (XmlPullParserException e) {
       e.printStackTrace();
