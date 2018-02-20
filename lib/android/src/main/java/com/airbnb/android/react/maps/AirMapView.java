@@ -47,6 +47,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
+import com.google.maps.android.data.kml.KmlStyle;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -942,6 +943,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if (placemark.getInlineStyle() != null
             && placemark.getInlineStyle().getIconUrl() != null) {
           marker.setImage(placemark.getInlineStyle().getIconUrl());
+        } else if (container.getStyle(placemark.getStyleId()) != null) {
+          KmlStyle style = container.getStyle(placemark.getStyleId());
+          marker.setImage(style.getIconUrl());
         }
 
         String identifier = title + " - " + index;
