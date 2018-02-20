@@ -16,7 +16,6 @@ export { Marker, Overlay };
 export const PROVIDER_GOOGLE = MapView.PROVIDER_GOOGLE;
 export const PROVIDER_DEFAULT = MapView.PROVIDER_DEFAULT;
 
-export const MapViewAnimated = MapView.Animated;
 export const MarkerAnimated = Marker.Animated;
 export const OverlayAnimated = Overlay.Animated;
 
