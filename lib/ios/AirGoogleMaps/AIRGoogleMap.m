@@ -399,6 +399,22 @@ id regionAsJSON(MKCoordinateRegion region) {
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
 }
 
++ (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
+  if (marker.style.styleID != nil) {
+    for (GMUStyle *style in parser.styles) {
+      if (style.styleID == marker.style.styleID) {
+        return style.iconUrl;
+      }
+    }
+  }
+  
+  return marker.style.iconUrl;
+}
+
+- (NSString *)KmlSrc {
+  return _kmlSrc;
+}
+
 - (void)setKmlSrc:(NSString *)kmlUrl {
     
   _kmlSrc = kmlUrl;
@@ -409,6 +425,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   [parser parse];
   
   NSUInteger index = 0;
+  NSMutableArray *markers = [NSMutableArray init];
 
   for (GMUPlacemark *place in parser.placemarks) {
         
@@ -423,18 +440,26 @@ id regionAsJSON(MKCoordinateRegion region) {
     marker.title = place.title;
     marker.subtitle = place.snippet;
     marker.pinColor = place.style.fillColor;
-    marker.imageSrc = place.style.iconUrl;
+    marker.imageSrc = [AIRGoogleMap GetIconUrl:place parser:parser];
     marker.layer.backgroundColor = [UIColor clearColor].CGColor;
     marker.layer.position = CGPointZero;
       
     [self insertReactSubview:(UIView *) marker atIndex:index];
+    
+    [markers addObject:@{@"id": marker.identifier,
+                         @"title": marker.title,
+                         @"description": marker.subtitle,
+                         @"coordinate": @{
+                             @"latitude": @(location.latitude),
+                             @"longitude": @(location.longitude)
+                             }
+                         }];
 
     index++;
   }
-}
-
-- (NSString *)KmlSrc {
-    return _kmlSrc;
+  
+  id event = @{@"markers": markers};
+  self.onKmlReady(event);
 }
 
 @end

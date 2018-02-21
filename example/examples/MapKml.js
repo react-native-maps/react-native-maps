@@ -27,6 +27,12 @@ class MapKml extends React.Component {
         longitudeDelta: LONGITUDE_DELTA,
       },
     };
+
+    this.onKmlReady = this.onKmlReady.bind(this);
+  }
+
+  onKmlReady(e) {
+    alert(e[0].id);
   }
 
   render() {
@@ -35,12 +41,9 @@ class MapKml extends React.Component {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          scrollEnabled
-          zoomEnabled
-          pitchEnabled
-          rotateEnabled
           initialRegion={this.state.region}
           kmlSrc={KML_FILE}
+          onKmlReady={this.onKmlReady}
         >
           <Marker
             coordinate={this.state.region}

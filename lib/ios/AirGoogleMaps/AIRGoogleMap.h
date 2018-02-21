@@ -22,6 +22,7 @@
 @property (nonatomic, assign) NSString *customMapStyleString;
 @property (nonatomic, assign) UIEdgeInsets mapPadding;
 @property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
+@property (nonatomic, copy) RCTBubblingEventBlock onKmlReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;
