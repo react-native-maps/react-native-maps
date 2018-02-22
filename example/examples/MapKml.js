@@ -31,14 +31,15 @@ class MapKml extends React.Component {
     this.onKmlReady = this.onKmlReady.bind(this);
   }
 
-  onKmlReady(e) {
-    alert(e[0].id);
+  onKmlReady() {
+    this.map.fitToElements(true);
   }
 
   render() {
     return (
       <View style={styles.container}>
         <MapView
+          ref={(ref) => { this.map = ref; }}
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}

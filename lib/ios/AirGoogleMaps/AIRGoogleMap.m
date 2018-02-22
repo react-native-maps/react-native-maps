@@ -420,12 +420,19 @@ id regionAsJSON(MKCoordinateRegion region) {
   _kmlSrc = kmlUrl;
   
   NSURL *url = [NSURL URLWithString:kmlUrl];
-  NSData *urlData = [NSData dataWithContentsOfURL:url];
+  NSData *urlData = nil;
+  
+  if ([url isFileURL]) {
+    urlData = [NSData dataWithContentsOfURL:url];
+  } else {
+    urlData = [[NSFileManager defaultManager] contentsAtPath:kmlUrl];
+  }
+  
   GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
   [parser parse];
   
   NSUInteger index = 0;
-  NSMutableArray *markers = [NSMutableArray init];
+  NSMutableArray *markers = [[NSMutableArray alloc]init];
 
   for (GMUPlacemark *place in parser.placemarks) {
         
