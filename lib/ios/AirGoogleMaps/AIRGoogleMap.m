@@ -466,7 +466,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   }
   
   id event = @{@"markers": markers};
-  self.onKmlReady(event);
+  if (self.onKmlReady) self.onKmlReady(event);
 }
 
 @end

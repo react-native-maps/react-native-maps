@@ -239,7 +239,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
         event = makeClickEventData(marker.getPosition());
         event.putString("action", "callout-press");
-        AirMapMarker markerView = markerMap.get(marker);
+        AirMapMarker markerView = getMarkerMap(marker);
         manager.pushEvent(context, markerView, "onCalloutPress", event);
 
         event = makeClickEventData(marker.getPosition());
@@ -728,13 +728,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   @Override
   public View getInfoWindow(Marker marker) {
-    AirMapMarker markerView = markerMap.get(marker);
+    AirMapMarker markerView = getMarkerMap(marker);
     return markerView.getCallout();
   }
 
   @Override
   public View getInfoContents(Marker marker) {
-    AirMapMarker markerView = markerMap.get(marker);
+    AirMapMarker markerView = getMarkerMap(marker);
     return markerView.getInfoContents();
   }
 
@@ -763,7 +763,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     WritableMap event = makeClickEventData(marker.getPosition());
     manager.pushEvent(context, this, "onMarkerDragStart", event);
 
-    AirMapMarker markerView = markerMap.get(marker);
+    AirMapMarker markerView = getMarkerMap(marker);
     event = makeClickEventData(marker.getPosition());
     manager.pushEvent(context, markerView, "onDragStart", event);
   }
@@ -773,7 +773,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     WritableMap event = makeClickEventData(marker.getPosition());
     manager.pushEvent(context, this, "onMarkerDrag", event);
 
-    AirMapMarker markerView = markerMap.get(marker);
+    AirMapMarker markerView = getMarkerMap(marker);
     event = makeClickEventData(marker.getPosition());
     manager.pushEvent(context, markerView, "onDrag", event);
   }
@@ -783,7 +783,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     WritableMap event = makeClickEventData(marker.getPosition());
     manager.pushEvent(context, this, "onMarkerDragEnd", event);
 
-    AirMapMarker markerView = markerMap.get(marker);
+    AirMapMarker markerView = getMarkerMap(marker);
     event = makeClickEventData(marker.getPosition());
     manager.pushEvent(context, markerView, "onDragEnd", event);
   }
