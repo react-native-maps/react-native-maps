@@ -35,6 +35,7 @@
 | `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
 | `moveOnMarkerPress` | `Boolean` | `true` | `Android only` If `false` the map won't move when a marker is pressed.
 | `legalLabelInsets` | `EdgeInsets` | | If set, changes the position of the "Legal" label link from the OS default. **Note:** iOS only.
+| `kmlSrc` | `string` | | The URL from KML file. **Note:** Google Maps and Markers only (either Android or iOS with `PROVIDER_GOOGLE`).
 
 
 ## Events
@@ -44,6 +45,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | Event Name | Returns | Notes
 |---|---|---|
 | `onMapReady` |  | Callback that is called once the map is fully loaded.
+| `onKmlReady` | `KmlContainer` | Callback that is called once the kml is fully loaded.
 | `onRegionChange` | `Region` | Callback that is called continuously when the region changes, such as when a user is dragging the map.
 | `onRegionChangeComplete` | `Region` | Callback that is called once when the region changes, such as when the user is done moving the map.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
@@ -125,5 +127,20 @@ type EdgeInsets {
   left: Number,
   bottom: Number,
   right: Number
+}
+```
+
+```
+type Marker {
+  id: String,
+  coordinate: LatLng,
+  title: String,
+  description: String
+}
+```
+
+```
+type KmlContainer {
+  markers: [Marker]
 }
 ```
