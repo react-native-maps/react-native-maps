@@ -7,14 +7,20 @@
 
 #import "AIRGoogleMap.h"
 #import "AIRGoogleMapMarker.h"
+#import "AIRGoogleMapMarkerManager.h"
 #import "AIRGoogleMapPolygon.h"
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGoogleMapCircle.h"
 #import "AIRGoogleMapUrlTile.h"
 #import "AIRGoogleMapOverlay.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import "GMUKMLParser.h"
+#import "GMUPlacemark.h"
+#import "GMUPoint.h"
+#import "GMUGeometryRenderer.h"
 #import <MapKit/MapKit.h>
 #import <React/UIView+React.h>
+#import <React/RCTBridge.h>
 #import "RCTConvert+AirMap.h"
 
 id regionAsJSON(MKCoordinateRegion region) {
@@ -201,7 +207,11 @@ id regionAsJSON(MKCoordinateRegion region) {
 
   id event = @{@"action": @"marker-press",
                @"id": airMarker.identifier ?: @"unknown",
-              };
+               @"coordinate": @{
+                   @"latitude": @(airMarker.position.latitude),
+                   @"longitude": @(airMarker.position.longitude)
+                   }
+               };
 
   if (airMarker.onPress) airMarker.onPress(event);
   if (self.onMarkerPress) self.onMarkerPress(event);
@@ -397,6 +407,76 @@ id regionAsJSON(MKCoordinateRegion region) {
                                                         region.center.longitude - longitudeDelta);
   GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:a coordinate:b];
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
+}
+
++ (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
+  if (marker.style.styleID != nil) {
+    for (GMUStyle *style in parser.styles) {
+      if (style.styleID == marker.style.styleID) {
+        return style.iconUrl;
+      }
+    }
+  }
+  
+  return marker.style.iconUrl;
+}
+
+- (NSString *)KmlSrc {
+  return _kmlSrc;
+}
+
+- (void)setKmlSrc:(NSString *)kmlUrl {
+    
+  _kmlSrc = kmlUrl;
+  
+  NSURL *url = [NSURL URLWithString:kmlUrl];
+  NSData *urlData = nil;
+  
+  if ([url isFileURL]) {
+    urlData = [NSData dataWithContentsOfURL:url];
+  } else {
+    urlData = [[NSFileManager defaultManager] contentsAtPath:kmlUrl];
+  }
+  
+  GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
+  [parser parse];
+  
+  NSUInteger index = 0;
+  NSMutableArray *markers = [[NSMutableArray alloc]init];
+
+  for (GMUPlacemark *place in parser.placemarks) {
+        
+    CLLocationCoordinate2D location =((GMUPoint *) place.geometry).coordinate;
+    
+    AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)[[AIRGoogleMapMarkerManager alloc] view];
+    if (!marker.bridge) {
+      marker.bridge = _bridge;
+    }
+    marker.identifier = place.title;
+    marker.coordinate = location;
+    marker.title = place.title;
+    marker.subtitle = place.snippet;
+    marker.pinColor = place.style.fillColor;
+    marker.imageSrc = [AIRGoogleMap GetIconUrl:place parser:parser];
+    marker.layer.backgroundColor = [UIColor clearColor].CGColor;
+    marker.layer.position = CGPointZero;
+      
+    [self insertReactSubview:(UIView *) marker atIndex:index];
+    
+    [markers addObject:@{@"id": marker.identifier,
+                         @"title": marker.title,
+                         @"description": marker.subtitle,
+                         @"coordinate": @{
+                             @"latitude": @(location.latitude),
+                             @"longitude": @(location.longitude)
+                             }
+                         }];
+
+    index++;
+  }
+  
+  id event = @{@"markers": markers};
+  if (self.onKmlReady) self.onKmlReady(event);
 }
 
 @end

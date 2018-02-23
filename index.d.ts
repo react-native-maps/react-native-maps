@@ -91,6 +91,7 @@ declare module "react-native-maps" {
         onMarkerDragEnd?: (value: { coordinate: LatLng, position: Point }) => void;
         minZoomLevel?: number;
         maxZoomLevel?: number;
+        kmlSrc?: string;
     }
 
     export default class MapView extends React.Component<MapViewProps, any> {

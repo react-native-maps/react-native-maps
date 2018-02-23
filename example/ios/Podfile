@@ -24,6 +24,7 @@ target 'AirMapsExplorer' do
   ]
 
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
+  pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'react-native-maps', path: '../../'
   pod 'react-native-google-maps', path: '../../'  # If you need GoogleMaps support on iOS
 end
