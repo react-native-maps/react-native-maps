@@ -50,6 +50,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `onRegionChangeComplete` | `Region` | Callback that is called once when the region changes, such as when the user is done moving the map.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
 | `onPanDrag` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user presses and drags the map. **NOTE**: for iOS `scrollEnabled` should be set to false to trigger the event
+| `onPoiClick` | `{ coordinate: LatLng, position: Point, placeId: string, name: string }` | Callback that is called when user click on a POI. **NOTE**: Android only (IOS soon)
 | `onLongPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user makes a "long press" somewhere on the map.
 | `onMarkerPress` |  | Callback that is called when a marker on the map is tapped by the user.
 | `onMarkerSelect` |  | Callback that is called when a marker on the map becomes selected. This will be called when the callout for that marker is about to be shown. **Note**: iOS only.
