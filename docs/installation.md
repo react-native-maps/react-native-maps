@@ -7,48 +7,48 @@ npm install react-native-maps --save
 ```
 
 
-## Get a map developer key
+## Get a Google Maps API key
 
 Go to https://developers.google.com/maps/documentation/ios-sdk/get-api-key and get your key.
 
-Without this key the map won't render anything.
+Without this key the Google Maps map won't render anything.
 
 
-
-## IMPORTANT!!
-
-**!!  DO NOT USE  !!** `react-native link`
 
 ## iOS - CocoaPods
 
-Setup your `Podfile` (found at `/ios/Podfile` as below, replace all references to `AirMapsExplorer` with your project name, and then run `pod install` while in the `ios` folder.
+Setup your `Podfile` (found at `/ios/Podfile` as below, replace all references to `_YOUR_PROJECT_TARGET_` with your project target (it's the same as project name by default), and then run `pod install` while in the `ios` folder.
+
+Please make sure to use `.xcworkspace`, not `.xcproject` after that.
 
 ~~~
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-target 'AirMapsExplorer' do
+target '_YOUR_PROJECT_TARGET_' do
   rn_path = '../node_modules/react-native'
+  rn_maps_path = '../node_modules/react-native-maps'
 
-    pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
-    pod 'React', path: rn_path, subspecs: [
-      'Core',
-      'RCTActionSheet',
-      'RCTAnimation',
-      'RCTGeolocation',
-      'RCTImage',
-      'RCTLinkingIOS',
-      'RCTNetwork',
-      'RCTSettings',
-      'RCTText',
-      'RCTVibration',
-      'RCTWebSocket',
-      'BatchedBridge'
-    ]
+  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
+  pod 'React', path: rn_path, subspecs: [
+    'Core',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket',
+    'BatchedBridge'
+  ]
 
-    pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
-    pod 'react-native-maps', path: '../node_modules/react-native-maps'
-    pod 'react-native-google-maps', path: '../node_modules/react-native-maps'  # Remove this line if you don't want to support GoogleMaps on iOS
+  pod 'react-native-maps', path: rn_maps_path
+
+  pod 'GoogleMaps'  # Remove this line if you don't want to support Google Maps on iOS
+  pod 'react-native-google-maps', path: rn_maps_path  # Remove this line if you don't want to support Google Maps on iOS
 end
 
 post_install do |installer|
@@ -66,22 +66,33 @@ end
 ~~~
 
 
+
+## IMPORTANT!!
+
+**!!  DO NOT USE  !!** `react-native link`
+
+Have ran it already? Read [this](#on-ios).
+
 ## If you want to use Google maps
+
 
 Add to `ios/_YOUR_PROJECT_NAME_/AppDelegate.m:
 
 ```
-+ @import GoogleMaps; //add this line if you want to use GoogleMaps
++ @import GoogleMaps; //add this line if you want to use Google Maps
+
 @implementation AppDelegate
 ...
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
-+  [GMSServices provideAPIKey:@"_YOUR_API_KEY"]; // add this line using the api key obtained from Google Console
++  [GMSServices provideAPIKey:@"_YOUR_API_KEY_"]; // add this line using the api key obtained from Google Console
+...
 ```
 
+## Notes on running on a real ios device
 
+The steps are as described in https://facebook.github.io/react-native/docs/running-on-device.html , however instead of opening the .xcodeproj file you should open .xcworkspace file.
 
 
 ## Android
@@ -170,6 +181,8 @@ If you have ran 'react-native link` by mistake:
 6. delete ios/build folder
 7. start again with the installation steps
 
+If you use Xcode with version less than 9 you may get `use of undeclared identifier 'MKMapTypeMutedStandard'` or `Entry, ":CFBundleIdentifier", Does Not Exist` errors. In this case you have to update your Xcode.
+
 ### On Android:
 
 1. Be sure to have `new MapsPackage()` in your `MainApplication.java` :
@@ -203,7 +216,7 @@ If you have ran 'react-native link` by mistake:
      },
    });
 
-   module.exports = class MyApp extends React.Component {
+   export default class MyApp extends React.Component {
      render() {
        const { region } = this.props;
        console.log(region);
