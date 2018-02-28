@@ -107,7 +107,26 @@ The steps are as described in https://facebook.github.io/react-native/docs/runni
    }
    ```
 
-   If you have a different play services than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
+If you've defined *[project-wide properties](https://developer.android.com/studio/build/gradle-tips.html)* (**recommended**) in your root `build.gradle`, this library will detect the presence of the following properties:
+
+    ```groovy
+    buildscript {...}
+    allprojects {...}
+    
+    /**
+     + Project-wide Gradle configuration properties
+     */
+    ext {
+        compileSdkVersion   = 26
+        targetSdkVersion    = 26
+        buildToolsVersion   = "26.0.2"
+        supportLibVersion   = "26.1.0"
+        googlePlayServicesVersion = "11.8.0"
+        androidMapsUtilsVersion = "0.5+"
+    }
+    ```
+
+   If you do **not** have *project-wide properties* defined and have a different play-services version than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
 
    ```groovy
    ...

@@ -1,4 +1,6 @@
 # Change Log
+## Unreleased
+* Android: Check for presence of Gradle configuration properties that may have been defined by the hosting `rootProject`: `compileSdkVersion`, `buildToolsVersion`, `googlePlayServicesVersion`, `androidMapsUtilsVersion`.  This provides a better mechanism for aligning the requirements of the module with that of the host project.
 
 ## 0.20.1 (February 13, 2018)
 * Common: [hotfix PROVIDER_GOOGLE](https://github.com/react-community/react-native-maps/commit/cd868ea7b33a04c8bdd5e909cf134a133b2cb316)
