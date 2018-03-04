@@ -183,9 +183,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     final AirMapView view = this;
 
-    map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+    map.setOnUserLocationChangeListener(new GoogleMap.OnUserLocationChangeListener() {
       @Override
-      public void onMyLocationChange(Location location){
+      public void onUserLocationChange(Location location){
         WritableMap event = new WritableNativeMap();
 
         WritableMap coordinate = new WritableNativeMap();
@@ -197,7 +197,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         coordinate.putFloat("speed", location.getSpeed());
         event.putMap("coordinate", coordinate);
 
-        manager.pushEvent(context, view, "onMyLocationChange", event);
+        manager.pushEvent(context, view, "onUserLocationChange", event);
       }
     });
 
