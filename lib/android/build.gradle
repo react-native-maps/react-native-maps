@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply from: 'gradle-maven-push.gradle'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "25.0.3"
+  compileSdkVersion 26
+  buildToolsVersion "26.0.2"
 
   defaultConfig {
     minSdkVersion 16
-    targetSdkVersion 25
+    targetSdkVersion 26
   }
 
   packagingOptions {
