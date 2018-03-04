@@ -441,7 +441,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                     }
                 };
 
-  if (self.onMyLocationChange) self.onMyLocationChange(event);
+  if (self.onUserLocationChange) self.onUserLocationChange(event);
   } else {
     // This message is not for me; pass it on to super.
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

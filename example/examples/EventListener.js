@@ -85,7 +85,7 @@ class EventListener extends React.Component {
     let googleProviderProps = {};
     if (this.props.provider === PROVIDER_GOOGLE) {
       googleProviderProps = {
-        onMyLocationChange: this.recordEvent('Map::onMyLocationChange'),
+        onUserLocationChange: this.recordEvent('Map::onUserLocationChange'),
       };
     }
 
