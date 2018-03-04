@@ -115,6 +115,25 @@ public class AirMapMarker extends AirMapFeature {
     logoHolder.onAttach();
   }
 
+  public AirMapMarker(Context context, MarkerOptions options) {
+    super(context);
+    this.context = context;
+    logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
+    logoHolder.onAttach();
+
+    position = options.getPosition();
+    setAnchor(options.getAnchorU(), options.getAnchorV());
+    setCalloutAnchor(options.getInfoWindowAnchorU(), options.getInfoWindowAnchorV());
+    setTitle(options.getTitle());
+    setSnippet(options.getSnippet());
+    setRotation(options.getRotation());
+    setFlat(options.isFlat());
+    setDraggable(options.isDraggable());
+    setZIndex(Math.round(options.getZIndex()));
+    setAlpha(options.getAlpha());
+    iconBitmapDescriptor = options.getIcon();
+  }
+
   private GenericDraweeHierarchy createDraweeHierarchy() {
     return new GenericDraweeHierarchyBuilder(getResources())
         .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)

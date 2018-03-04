@@ -36,6 +36,7 @@ import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
+import MapKml from './examples/MapKml';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
@@ -153,6 +154,7 @@ class App extends React.Component {
       [LegalLabel, 'Reposition the legal label', true],
       [SetNativePropsOverlays, 'Update native props', true],
       [CustomOverlay, 'Custom Overlay Component', true],
+      [MapKml, 'Load Map with KML', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
       [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
