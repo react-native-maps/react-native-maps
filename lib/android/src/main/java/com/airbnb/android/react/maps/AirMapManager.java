@@ -317,6 +317,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     );
 
     map.putAll(MapBuilder.of(
+        "onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),
         "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
         "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
         "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),

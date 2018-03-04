@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.location.Location;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -181,6 +182,24 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
     final AirMapView view = this;
+
+    map.setOnUserLocationChangeListener(new GoogleMap.OnUserLocationChangeListener() {
+      @Override
+      public void onUserLocationChange(Location location){
+        WritableMap event = new WritableNativeMap();
+
+        WritableMap coordinate = new WritableNativeMap();
+        coordinate.putDouble("latitude", location.getLatitude());
+        coordinate.putDouble("longitude", location.getLongitude());
+        coordinate.putDouble("altitude", location.getAltitude());
+        coordinate.putFloat("accuracy", location.getAccuracy());
+        coordinate.putFloat("altitudeAccuracy", location.getVerticalAccuracyMeters());
+        coordinate.putFloat("speed", location.getSpeed());
+        event.putMap("coordinate", coordinate);
+
+        manager.pushEvent(context, view, "onUserLocationChange", event);
+      }
+    });
 
     map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
