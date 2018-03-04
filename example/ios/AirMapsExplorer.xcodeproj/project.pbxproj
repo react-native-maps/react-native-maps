@@ -29,6 +29,20 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = AirMapsExplorer;
 		};
+		9B7EF7E8201949F00039273A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B7EF7E3201949F00039273A /* RNFS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F12AFB9B1ADAF8F800E0535D;
+			remoteInfo = RNFS;
+		};
+		9B7EF7EA201949F00039273A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B7EF7E3201949F00039273A /* RNFS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6456441F1EB8DA9100672408;
+			remoteInfo = "RNFS-tvOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +69,7 @@
 		8490F2171E887A36000099F8 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		8490F2191E887A8F000099F8 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8490F21B1E887AAC000099F8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		9B7EF7E3201949F00039273A /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		BE5DE1E9AE25978F88CD940A /* Pods-AirMapsExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.debug.xcconfig"; sourceTree = "<group>"; };
 		E138AD0CDB08FE57B09B18F8 /* Pods-AirMapsExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +138,7 @@
 		2BAA8C4A80B44CFBB3F83458 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				9B7EF7E3201949F00039273A /* RNFS.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -145,6 +161,15 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* AirMapsExplorer.app */,
 				00E356EE1AD99517003FC87E /* AirMapsExplorerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9B7EF7E4201949F00039273A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9B7EF7E9201949F00039273A /* libRNFS.a */,
+				9B7EF7EB201949F00039273A /* libRNFS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,6 +251,12 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 9B7EF7E4201949F00039273A /* Products */;
+					ProjectRef = 9B7EF7E3201949F00039273A /* RNFS.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* AirMapsExplorer */,
@@ -233,6 +264,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		9B7EF7E9201949F00039273A /* libRNFS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFS.a;
+			remoteRef = 9B7EF7E8201949F00039273A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9B7EF7EB201949F00039273A /* libRNFS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFS.a;
+			remoteRef = 9B7EF7EA201949F00039273A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -294,7 +342,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

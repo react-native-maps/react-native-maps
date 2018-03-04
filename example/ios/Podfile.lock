@@ -1,4 +1,20 @@
 PODS:
+  - Google-Maps-iOS-Utils (2.1.0):
+    - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
+    - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 2.1.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 2.1.0)
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Clustering (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Geometry (2.1.0):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/QuadTree (2.1.0):
+    - GoogleMaps
   - GoogleMaps (2.5.0):
     - GoogleMaps/Maps (= 2.5.0)
   - GoogleMaps/Base (2.5.0)
@@ -7,6 +23,7 @@ PODS:
   - React (0.51.0):
     - React/Core (= 0.51.0)
   - react-native-google-maps (0.20.1):
+    - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 2.5.0)
     - React
   - react-native-maps (0.20.1):
@@ -48,6 +65,7 @@ PODS:
   - yoga (0.51.0.React)
 
 DEPENDENCIES:
+  - Google-Maps-iOS-Utils
   - GoogleMaps
   - react-native-google-maps (from `../../`)
   - react-native-maps (from `../../`)
@@ -76,12 +94,13 @@ EXTERNAL SOURCES:
     :path: ../../node_modules/react-native/ReactCommon/yoga/yoga.podspec
 
 SPEC CHECKSUMS:
+  Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
-  React: 352f02f1db6e4744f9a758527e13e3fdefbbd6ba
-  react-native-google-maps: 57af8d96a008489af2657caaeb074e7448451ff8
-  react-native-maps: 016cff46e0ae7ad4c1b1143a1aa2044e9983a544
-  yoga: b5d96400ca8b2936965a7a6516da7c1177f432a3
+  React: 541ba768b9855e10cdc76f55427a5cd0653ca806
+  react-native-google-maps: 2cfe3b01f8422c7dae51d8764139fd70f888cfce
+  react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
+  yoga: 17521bbb0dd54a47c0b3ac43253e78cdac7488e0
 
-PODFILE CHECKSUM: 3785dd4599f2a790496347330ebfcc43450c1692
+PODFILE CHECKSUM: de8380bda50e37e1da2c4dada3c722921bdbcbda
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.4.0
