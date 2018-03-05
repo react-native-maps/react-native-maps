@@ -446,6 +446,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     // This message is not for me; pass it on to super.
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
   }
+}
 
 + (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
   if (marker.style.styleID != nil) {
