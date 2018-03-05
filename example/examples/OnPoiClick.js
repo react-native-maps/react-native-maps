@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
 } from 'react-native';
 
 import MapView, { Callout, Marker, ProviderPropType } from 'react-native-maps';
@@ -28,7 +27,7 @@ class OnPoiClick extends React.Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      poi: null
+      poi: null,
     };
 
     this.onPoiClick = this.onPoiClick.bind(this);
@@ -38,8 +37,8 @@ class OnPoiClick extends React.Component {
     const poi = e.nativeEvent;
 
     this.setState({
-      poi
-    })
+      poi,
+    });
   }
 
   render() {
@@ -51,18 +50,18 @@ class OnPoiClick extends React.Component {
           initialRegion={this.state.region}
           onPoiClick={this.onPoiClick}
         >
-        {this.state.poi && (
-          <Marker
-            coordinate={this.state.poi.coordinate}
-          >
-            <Callout>
-              <View>
-                <Text>Place Id: { this.state.poi.placeId }</Text>
-                <Text>Name: { this.state.poi.name }</Text>
-              </View>
-            </Callout>
-          </Marker>
-        )}
+          {this.state.poi && (
+            <Marker
+              coordinate={this.state.poi.coordinate}
+            >
+              <Callout>
+                <View>
+                  <Text>Place Id: { this.state.poi.placeId }</Text>
+                  <Text>Name: { this.state.poi.name }</Text>
+                </View>
+              </Callout>
+            </Marker>
+          )}
         </MapView>
       </View>
     );
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-  }
+  },
 });
 
 export default OnPoiClick;
