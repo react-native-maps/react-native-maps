@@ -397,7 +397,7 @@ Enable lite mode on Android with `liteMode` prop. Ideal when having multiple map
 
 ![](http://i.giphy.com/qZ2lAf18s89na.gif)
 
-### On Poi Click
+### On Poi Click (Google Maps Only)
 
 Poi are clickable, you can catch the event to get its information (usually to get the full detail from Google Place using the placeId).
 
