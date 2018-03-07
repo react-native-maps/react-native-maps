@@ -42,7 +42,6 @@ target '_YOUR_PROJECT_TARGET_' do
     'RCTText',
     'RCTVibration',
     'RCTWebSocket',
-    'BatchedBridge'
   ]
 
   pod 'react-native-maps', path: rn_maps_path
