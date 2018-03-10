@@ -264,7 +264,7 @@ To run examples:
 
 ```bash
 npm i
-npm start 
+npm start
 
 #Android
 npm run run:android
@@ -396,6 +396,12 @@ Markers are draggable, and emit continuous drag events to update other UI during
 Enable lite mode on Android with `liteMode` prop. Ideal when having multiple maps in a View or ScrollView.
 
 ![](http://i.giphy.com/qZ2lAf18s89na.gif)
+
+### On Poi Click (Google Maps Only)
+
+Poi are clickable, you can catch the event to get its information (usually to get the full detail from Google Place using the placeId).
+
+![](https://media.giphy.com/media/3480VsCKnHr31uCLU3/giphy.gif)
 
 ### Animated Region
 
