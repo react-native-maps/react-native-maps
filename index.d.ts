@@ -146,6 +146,7 @@ declare module "react-native-maps" {
         rotation?: number;
         tracksViewChanges?: boolean
         tracksInfoWindowChanges?: boolean
+        stopPropagation?: boolean
     }
 
     export interface MapPolylineProps {
