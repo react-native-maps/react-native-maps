@@ -11,7 +11,7 @@ npm install react-native-maps --save
 
 Go to https://developers.google.com/maps/documentation/ios-sdk/get-api-key and get your key.
 
-Make sure that Google Maps Android API and Google Maps SDK for iOS are enabled.
+Make sure that Google Maps Android API and Google Maps SDK for iOS are enabled for the current project.
 https://console.developers.google.com/apis/library/maps-android-backend.googleapis.com/
 https://console.developers.google.com/apis/library/maps-ios-backend.googleapis.com
 
