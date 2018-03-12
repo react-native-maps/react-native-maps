@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.location.Location;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -24,12 +25,9 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-<<<<<<< HEAD
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.Arguments;
-=======
 import com.facebook.react.bridge.WritableNativeArray;
->>>>>>> d22f96f9115f10b50085206463143c421f8d948d
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -47,18 +45,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
-<<<<<<< HEAD
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.IndoorLevel;
-=======
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
 import com.google.maps.android.data.kml.KmlStyle;
->>>>>>> d22f96f9115f10b50085206463143c421f8d948d
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -77,7 +73,8 @@ public class AirMapView extends MapView implements
         GoogleMap.InfoWindowAdapter,
         GoogleMap.OnIndoorStateChangeListener,
         GoogleMap.OnMarkerDragListener,
-        OnMapReadyCallback {
+        OnMapReadyCallback,
+        GoogleMap.OnPoiClickListener {
   public GoogleMap map;
   private KmlLayer kmlLayer;
   private ProgressBar mapLoadingProgressBar;
@@ -192,9 +189,28 @@ public class AirMapView extends MapView implements
     this.map.setInfoWindowAdapter(this);
     this.map.setOnMarkerDragListener(this);
         this.map.setOnIndoorStateChangeListener(this);
+    this.map.setOnPoiClickListener(this);
+
     manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
     final AirMapView view = this;
+
+    map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+      @Override
+      public void onMyLocationChange(Location location){
+        WritableMap event = new WritableNativeMap();
+
+        WritableMap coordinate = new WritableNativeMap();
+        coordinate.putDouble("latitude", location.getLatitude());
+        coordinate.putDouble("longitude", location.getLongitude());
+        coordinate.putDouble("altitude", location.getAltitude());
+        coordinate.putDouble("accuracy", location.getAccuracy());
+        coordinate.putDouble("speed", location.getSpeed());
+        event.putMap("coordinate", coordinate);
+
+        manager.pushEvent(context, view, "onUserLocationChange", event);
+      }
+    });
 
     map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
@@ -802,6 +818,16 @@ public class AirMapView extends MapView implements
     manager.pushEvent(context, markerView, "onDragEnd", event);
   }
 
+  @Override
+  public void onPoiClick(PointOfInterest poi) {
+    WritableMap event = makeClickEventData(poi.latLng);
+
+    event.putString("placeId", poi.placeId);
+    event.putString("name", poi.name);
+
+    manager.pushEvent(context, this, "onPoiClick", event);
+  }
+
   private ProgressBar getMapLoadingProgressBar() {
     if (this.mapLoadingProgressBar == null) {
       this.mapLoadingProgressBar = new ProgressBar(getContext());
@@ -894,7 +920,6 @@ public class AirMapView extends MapView implements
     WritableMap event = makeClickEventData(coords);
     manager.pushEvent(context, this, "onPanDrag", event);
   }
-<<<<<<< HEAD
     @Override
     public void onIndoorBuildingFocused() {
       IndoorBuilding building = this.map.getFocusedBuilding();
@@ -954,8 +979,6 @@ public class AirMapView extends MapView implements
         }
       }
     }
-
-=======
 
   public void setKmlSrc(String kmlSrc) {
     try {
@@ -1070,5 +1093,4 @@ public class AirMapView extends MapView implements
 
     return airMarker;
   }
->>>>>>> d22f96f9115f10b50085206463143c421f8d948d
 }

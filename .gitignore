@@ -37,3 +37,5 @@ Pods/
 AirMapsExplorer.xcworkspace/
 lib/android/src/main/gen
 example/android/app/src/main/gen
+
+*.lock

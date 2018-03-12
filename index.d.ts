@@ -89,6 +89,7 @@ declare module "react-native-maps" {
         onMarkerDragStart?: (value: { coordinate: LatLng, position: Point }) => void;
         onMarkerDrag?: (value: { coordinate: LatLng, position: Point }) => void;
         onMarkerDragEnd?: (value: { coordinate: LatLng, position: Point }) => void;
+        onPoiClick?: (value: {coordinate: LatLng, position: Point, placeId: string, name: string }) => void;
         minZoomLevel?: number;
         maxZoomLevel?: number;
         kmlSrc?: string;
@@ -146,6 +147,7 @@ declare module "react-native-maps" {
         rotation?: number;
         tracksViewChanges?: boolean
         tracksInfoWindowChanges?: boolean
+        stopPropagation?: boolean
     }
 
     export interface MapPolylineProps {
