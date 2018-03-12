@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/9.7.1_1/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js run:ios
+  /usr/local/Cellar/node/9.7.1_1/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js run:android
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/Users/tblaziken/Library/Android/sdk/tools:/Users/tblaziken/Library/Android/sdk/platform-tools
@@ -6087,7 +6087,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c react-native run-ios --project-path ./example/ios
+  Arguments: -c ./gradlew installDebug && npm run start:android
   Directory: /Users/tblaziken/Documents/Git/react-native-maps
   Output:
   
