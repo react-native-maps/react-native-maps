@@ -197,15 +197,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
-<<<<<<< HEAD
-  if(!self.window) return;
-  if (_initialRegionSet) return;
-  _initialRegionSet = true;
-=======
   if (_initialRegionSetOnLoad) return;
   _initialRegion = initialRegion;
   _initialRegionSetOnLoad = true;
->>>>>>> d22f96f9115f10b50085206463143c421f8d948d
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
 }
 
@@ -226,13 +220,10 @@ id regionAsJSON(MKCoordinateRegion region) {
 
   id event = @{@"action": @"marker-press",
                @"id": airMarker.identifier ?: @"unknown",
-<<<<<<< HEAD
-=======
                @"coordinate": @{
                    @"latitude": @(airMarker.position.latitude),
                    @"longitude": @(airMarker.position.longitude)
                    }
->>>>>>> d22f96f9115f10b50085206463143c421f8d948d
                };
 
   if (airMarker.onPress) airMarker.onPress(event);
