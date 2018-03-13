@@ -46,7 +46,7 @@ target '_YOUR_PROJECT_TARGET_' do
     'RCTText',
     'RCTVibration',
     'RCTWebSocket',
-    'BatchedBridge'
+    'BatchedBridge', // REMOVE THIS if you use RN 0.54+
   ]
 
   pod 'react-native-maps', path: rn_maps_path
