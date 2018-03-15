@@ -199,7 +199,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
   if (_initialRegionSetOnLoad) return;
   _initialRegion = initialRegion;
-  _initialRegionSetOnLoad = true;
+  _initialRegionSetOnLoad = _didCallOnMapReady;
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
 }
 
