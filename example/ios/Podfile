@@ -20,7 +20,7 @@ target 'AirMapsExplorer' do
     'RCTText',
     'RCTVibration',
     'RCTWebSocket',
-    'BatchedBridge', // REMOVE THIS if you use RN 0.54+
+    'BatchedBridge', # REMOVE THIS if you use RN 0.54+
   ]
 
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
