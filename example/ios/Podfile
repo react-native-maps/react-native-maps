@@ -36,6 +36,14 @@ target 'AirMapsExplorer' do
   pod 'react-native-google-maps', path: rn_maps_path  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
+
+  target 'AirMapsExplorerTests' do
+    inherit! :complete
+
+    pod 'React', path: rn_path, subspecs: [
+      'RCTTest',
+    ]
+  end
 end
 
 post_install do |installer|
