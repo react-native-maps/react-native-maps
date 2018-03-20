@@ -48,7 +48,7 @@
     "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
     "prop-types": "^15.5.10",
-    "react": "^16.2.0",
+    "react": "^16.3.0-alpha.1",
     "react-native": "^0.54"
   },
   "rnpm": {
