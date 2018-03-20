@@ -28,7 +28,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
+               BlueprintIdentifier = "4A181BFB206024B500C5EAC8"
                BuildableName = "AirMapsExplorerTests.xctest"
                BlueprintName = "AirMapsExplorerTests"
                ReferencedContainer = "container:AirMapsExplorer.xcodeproj">
@@ -41,13 +41,23 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = ""
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO">
       <Testables>
+         <TestableReference
+            skipped = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4A181BFB206024B500C5EAC8"
+               BuildableName = "AirMapsExplorerTests.xctest"
+               BlueprintName = "AirMapsExplorerTests"
+               ReferencedContainer = "container:AirMapsExplorer.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
+               BlueprintIdentifier = "4A8DF3072060684B00B656BF"
                BuildableName = "AirMapsExplorerTests.xctest"
                BlueprintName = "AirMapsExplorerTests"
                ReferencedContainer = "container:AirMapsExplorer.xcodeproj">
@@ -63,6 +73,13 @@
             ReferencedContainer = "container:AirMapsExplorer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "CI_USE_PACKAGER"
+            value = "1"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

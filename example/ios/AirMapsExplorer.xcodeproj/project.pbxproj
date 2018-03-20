@@ -15,16 +15,17 @@
 		21E6570C1D77591A00B75EE5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */; };
 		21E6570E1D77591F00B75EE5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570D1D77591F00B75EE5 /* MapKit.framework */; };
 		21E657101D77594C00B75EE5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E6570F1D77594C00B75EE5 /* AudioToolbox.framework */; };
-		44A242C633380812536E4BCE /* libPods-AirMapsExplorer-AirMapsExplorerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C197D940CC74799A9A1FCB0C /* libPods-AirMapsExplorer-AirMapsExplorerTests.a */; };
-		4A181BFF206024B500C5EAC8 /* AirMapsExplorerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A181BFE206024B500C5EAC8 /* AirMapsExplorerTests.m */; };
+		356755BA0797356A3E8BA443 /* libPods-AirMapsExplorer-AirMapsExplorerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C197D940CC74799A9A1FCB0C /* libPods-AirMapsExplorer-AirMapsExplorerTests.a */; };
+		4ACF603F206129D800FE3ED5 /* AirMapsExplorerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACF603E206129D800FE3ED5 /* AirMapsExplorerTests.m */; };
 		8490F2161E8879FB000099F8 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8490F2151E8879FB000099F8 /* CoreFoundation.framework */; };
 		8490F21A1E887A8F000099F8 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8490F2191E887A8F000099F8 /* CFNetwork.framework */; };
 		8490F21C1E887AAC000099F8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8490F21B1E887AAC000099F8 /* Security.framework */; };
+		8AE2E1AC9A43D335FDCB5A3E /* libPods-AirMapsExplorerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87700A1C88B95E91103EA6A8 /* libPods-AirMapsExplorerTests.a */; };
 		A622B8115793E41C70169A8B /* libPods-AirMapsExplorer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5044A406006E7C2A53E05C /* libPods-AirMapsExplorer.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4A181C01206024B500C5EAC8 /* PBXContainerItemProxy */ = {
+		4ACF6041206129D800FE3ED5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
@@ -67,18 +68,24 @@
 		21E6570B1D77591A00B75EE5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		21E6570D1D77591F00B75EE5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		21E6570F1D77594C00B75EE5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		4A181BFC206024B500C5EAC8 /* AirMapsExplorerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AirMapsExplorerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4A181BFE206024B500C5EAC8 /* AirMapsExplorerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirMapsExplorerTests.m; sourceTree = "<group>"; };
-		4A181C00206024B500C5EAC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3ABC872CE8D0AD7B318B57F0 /* Pods-AirMapsExplorer-AirMapsExplorerUnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer-AirMapsExplorerUnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerUnitTests/Pods-AirMapsExplorer-AirMapsExplorerUnitTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4ACF603C206129D800FE3ED5 /* AirMapsExplorerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AirMapsExplorerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4ACF603E206129D800FE3ED5 /* AirMapsExplorerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirMapsExplorerTests.m; sourceTree = "<group>"; };
+		4ACF6040206129D800FE3ED5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4E255C9774A4337EF79B0B14 /* Pods-AirMapsExplorerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorerTests/Pods-AirMapsExplorerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		67BA97B46C786678E728E231 /* Pods-AirMapsExplorerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorerTests/Pods-AirMapsExplorerTests.release.xcconfig"; sourceTree = "<group>"; };
 		8490F2151E8879FB000099F8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		8490F2171E887A36000099F8 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		8490F2191E887A8F000099F8 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8490F21B1E887AAC000099F8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		87700A1C88B95E91103EA6A8 /* libPods-AirMapsExplorerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirMapsExplorerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B7EF7E3201949F00039273A /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		B144F5CB43A418C55B529803 /* Pods-AirMapsExplorer-AirMapsExplorerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer-AirMapsExplorerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerTests/Pods-AirMapsExplorer-AirMapsExplorerTests.release.xcconfig"; sourceTree = "<group>"; };
 		BE5DE1E9AE25978F88CD940A /* Pods-AirMapsExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.debug.xcconfig"; sourceTree = "<group>"; };
 		C197D940CC74799A9A1FCB0C /* libPods-AirMapsExplorer-AirMapsExplorerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirMapsExplorer-AirMapsExplorerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2D295258F7972B16BF0E9EE /* Pods-AirMapsExplorer-AirMapsExplorerUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer-AirMapsExplorerUnitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerUnitTests/Pods-AirMapsExplorer-AirMapsExplorerUnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		E138AD0CDB08FE57B09B18F8 /* Pods-AirMapsExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirMapsExplorer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer.release.xcconfig"; sourceTree = "<group>"; };
+		E50250D884B364DFBD463CAA /* libPods-AirMapsExplorer-AirMapsExplorerUnitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirMapsExplorer-AirMapsExplorerUnitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,11 +104,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4A181BF9206024B500C5EAC8 /* Frameworks */ = {
+		4ACF6039206129D800FE3ED5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44A242C633380812536E4BCE /* libPods-AirMapsExplorer-AirMapsExplorerTests.a in Frameworks */,
+				356755BA0797356A3E8BA443 /* libPods-AirMapsExplorer-AirMapsExplorerTests.a in Frameworks */,
+				8AE2E1AC9A43D335FDCB5A3E /* libPods-AirMapsExplorerTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +134,8 @@
 				21E657091D77591400B75EE5 /* SystemConfiguration.framework */,
 				0E5044A406006E7C2A53E05C /* libPods-AirMapsExplorer.a */,
 				C197D940CC74799A9A1FCB0C /* libPods-AirMapsExplorer-AirMapsExplorerTests.a */,
+				E50250D884B364DFBD463CAA /* libPods-AirMapsExplorer-AirMapsExplorerUnitTests.a */,
+				87700A1C88B95E91103EA6A8 /* libPods-AirMapsExplorerTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -152,11 +162,11 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
-		4A181BFD206024B500C5EAC8 /* AirMapsExplorerTests */ = {
+		4ACF603D206129D800FE3ED5 /* AirMapsExplorerTests */ = {
 			isa = PBXGroup;
 			children = (
-				4A181BFE206024B500C5EAC8 /* AirMapsExplorerTests.m */,
-				4A181C00206024B500C5EAC8 /* Info.plist */,
+				4ACF603E206129D800FE3ED5 /* AirMapsExplorerTests.m */,
+				4ACF6040206129D800FE3ED5 /* Info.plist */,
 			);
 			path = AirMapsExplorerTests;
 			sourceTree = "<group>";
@@ -165,7 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAE1A68108700A75B9A /* AirMapsExplorer */,
-				4A181BFD206024B500C5EAC8 /* AirMapsExplorerTests */,
+				4ACF603D206129D800FE3ED5 /* AirMapsExplorerTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				051AB288C799B62BE091B88A /* Frameworks */,
 				2BAA8C4A80B44CFBB3F83458 /* Libraries */,
@@ -179,7 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* AirMapsExplorer.app */,
-				4A181BFC206024B500C5EAC8 /* AirMapsExplorerTests.xctest */,
+				4ACF603C206129D800FE3ED5 /* AirMapsExplorerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -200,6 +210,10 @@
 				E138AD0CDB08FE57B09B18F8 /* Pods-AirMapsExplorer.release.xcconfig */,
 				11FEE5DDD9EE0B2884DB212E /* Pods-AirMapsExplorer-AirMapsExplorerTests.debug.xcconfig */,
 				B144F5CB43A418C55B529803 /* Pods-AirMapsExplorer-AirMapsExplorerTests.release.xcconfig */,
+				3ABC872CE8D0AD7B318B57F0 /* Pods-AirMapsExplorer-AirMapsExplorerUnitTests.debug.xcconfig */,
+				C2D295258F7972B16BF0E9EE /* Pods-AirMapsExplorer-AirMapsExplorerUnitTests.release.xcconfig */,
+				4E255C9774A4337EF79B0B14 /* Pods-AirMapsExplorerTests.debug.xcconfig */,
+				67BA97B46C786678E728E231 /* Pods-AirMapsExplorerTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -228,26 +242,26 @@
 			productReference = 13B07F961A680F5B00A75B9A /* AirMapsExplorer.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4A181BFB206024B500C5EAC8 /* AirMapsExplorerTests */ = {
+		4ACF603B206129D800FE3ED5 /* AirMapsExplorerTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4A181C03206024B500C5EAC8 /* Build configuration list for PBXNativeTarget "AirMapsExplorerTests" */;
+			buildConfigurationList = 4ACF6043206129D800FE3ED5 /* Build configuration list for PBXNativeTarget "AirMapsExplorerTests" */;
 			buildPhases = (
-				F91F3748880253A959F7F79A /* [CP] Check Pods Manifest.lock */,
-				4A181BF8206024B500C5EAC8 /* Sources */,
-				4A181BF9206024B500C5EAC8 /* Frameworks */,
-				4A181BFA206024B500C5EAC8 /* Resources */,
-				7F94B40D28A56F3BDE6BAAB5 /* [CP] Embed Pods Frameworks */,
-				69BD2933130B353EE6406334 /* [CP] Copy Pods Resources */,
+				67C1AABF9ED210158B312BE4 /* [CP] Check Pods Manifest.lock */,
+				4ACF6038206129D800FE3ED5 /* Sources */,
+				4ACF6039206129D800FE3ED5 /* Frameworks */,
+				4ACF603A206129D800FE3ED5 /* Resources */,
+				41D0998C4DC462F20934D0E1 /* [CP] Embed Pods Frameworks */,
+				B609A68A726AF62AD5ECA6CA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				4A181C02206024B500C5EAC8 /* PBXTargetDependency */,
+				4ACF6042206129D800FE3ED5 /* PBXTargetDependency */,
 			);
 			name = AirMapsExplorerTests;
 			productName = AirMapsExplorerTests;
-			productReference = 4A181BFC206024B500C5EAC8 /* AirMapsExplorerTests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
+			productReference = 4ACF603C206129D800FE3ED5 /* AirMapsExplorerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -258,7 +272,7 @@
 				LastUpgradeCheck = 710;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
-					4A181BFB206024B500C5EAC8 = {
+					4ACF603B206129D800FE3ED5 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
@@ -285,7 +299,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* AirMapsExplorer */,
-				4A181BFB206024B500C5EAC8 /* AirMapsExplorerTests */,
+				4ACF603B206129D800FE3ED5 /* AirMapsExplorerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -317,7 +331,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4A181BFA206024B500C5EAC8 /* Resources */ = {
+		4ACF603A206129D800FE3ED5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -356,25 +370,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		69BD2933130B353EE6406334 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerTests/Pods-AirMapsExplorer-AirMapsExplorerTests-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerTests/Pods-AirMapsExplorer-AirMapsExplorerTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7F94B40D28A56F3BDE6BAAB5 /* [CP] Embed Pods Frameworks */ = {
+		41D0998C4DC462F20934D0E1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -387,6 +383,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerTests/Pods-AirMapsExplorer-AirMapsExplorerTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		67C1AABF9ED210158B312BE4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AirMapsExplorer-AirMapsExplorerTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A6FAA2DEE540E08939F1B2AB /* [CP] Copy Pods Resources */ = {
@@ -407,6 +421,24 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer/Pods-AirMapsExplorer-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B609A68A726AF62AD5ECA6CA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerTests/Pods-AirMapsExplorer-AirMapsExplorerTests-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirMapsExplorer-AirMapsExplorerTests/Pods-AirMapsExplorer-AirMapsExplorerTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CD9BCC809B77B74C231EE502 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -425,24 +457,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F91F3748880253A959F7F79A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AirMapsExplorer-AirMapsExplorerTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -455,21 +469,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4A181BF8206024B500C5EAC8 /* Sources */ = {
+		4ACF6038206129D800FE3ED5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A181BFF206024B500C5EAC8 /* AirMapsExplorerTests.m in Sources */,
+				4ACF603F206129D800FE3ED5 /* AirMapsExplorerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4A181C02206024B500C5EAC8 /* PBXTargetDependency */ = {
+		4ACF6042206129D800FE3ED5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* AirMapsExplorer */;
-			targetProxy = 4A181C01206024B500C5EAC8 /* PBXContainerItemProxy */;
+			targetProxy = 4ACF6041206129D800FE3ED5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -531,10 +545,11 @@
 			};
 			name = Release;
 		};
-		4A181C04206024B500C5EAC8 /* Debug */ = {
+		4ACF6044206129D800FE3ED5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 11FEE5DDD9EE0B2884DB212E /* Pods-AirMapsExplorer-AirMapsExplorerTests.debug.xcconfig */;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -559,14 +574,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "react-native-maps.AirMapsExplorerTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AirMapsExplorer;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AirMapsExplorer.app/AirMapsExplorer";
 			};
 			name = Debug;
 		};
-		4A181C05206024B500C5EAC8 /* Release */ = {
+		4ACF6045206129D800FE3ED5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B144F5CB43A418C55B529803 /* Pods-AirMapsExplorer-AirMapsExplorerTests.release.xcconfig */;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -592,7 +608,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "react-native-maps.AirMapsExplorerTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AirMapsExplorer;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AirMapsExplorer.app/AirMapsExplorer";
 			};
 			name = Release;
 		};
@@ -693,11 +709,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4A181C03206024B500C5EAC8 /* Build configuration list for PBXNativeTarget "AirMapsExplorerTests" */ = {
+		4ACF6043206129D800FE3ED5 /* Build configuration list for PBXNativeTarget "AirMapsExplorerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4A181C04206024B500C5EAC8 /* Debug */,
-				4A181C05206024B500C5EAC8 /* Release */,
+				4ACF6044206129D800FE3ED5 /* Debug */,
+				4ACF6045206129D800FE3ED5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
