@@ -19,13 +19,15 @@ declare module "react-native-maps" {
         y: number
     }
 
+    export type Coordinate = Number[];
+
     export class AnimatedRegion extends Animated.AnimatedWithChildren {
         latitude: Animated.Value
         longitude: Animated.Value
         latitudeDelta: Animated.Value
         longitudeDelta: Animated.Value
 
-        constructor(LatLng);
+        constructor(region: Region);
 
         setValue(value: Region): void;
         setOffset(offset: Region): void;
@@ -211,7 +213,7 @@ declare module "react-native-maps" {
 
     export interface MapOverlayProps {
         image?: any;
-        bounds: LatLng[];
+        bounds: Coordinate[];
     }
 
     export interface MapCalloutProps {
