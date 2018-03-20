@@ -85,7 +85,7 @@ PODS:
 DEPENDENCIES:
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Folly (from `../../node_modules/react-native/third-party-podspecs/Folly.podspec`)
-  - glog (from `../../node_modules/react-native/third-party-podspecs/GLog.podspec`)
+  - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - react-native-google-maps (from `../../`)
@@ -111,7 +111,7 @@ EXTERNAL SOURCES:
   Folly:
     :podspec: ../../node_modules/react-native/third-party-podspecs/Folly.podspec
   glog:
-    :podspec: ../../node_modules/react-native/third-party-podspecs/GLog.podspec
+    :podspec: ../../node_modules/react-native/third-party-podspecs/glog.podspec
   React:
     :path: ../../node_modules/react-native
   react-native-google-maps:
@@ -133,6 +133,6 @@ SPEC CHECKSUMS:
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: d01505104d2a01c2b97198cce9cedfa94d91d799
+PODFILE CHECKSUM: 360a4a3ec45be233c554495279bfd087f4f29b0b
 
 COCOAPODS: 1.4.0

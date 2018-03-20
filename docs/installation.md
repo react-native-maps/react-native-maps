@@ -52,7 +52,7 @@ target '_YOUR_PROJECT_TARGET_' do
 
   # React Native third party dependencies podspecs
   pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
-  pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/GLog.podspec"
+  pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
   pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
 
   # react-native-maps dependencies
@@ -75,7 +75,6 @@ post_install do |installer|
   end
 end
 ~~~
-
 
 
 ## IMPORTANT!!
