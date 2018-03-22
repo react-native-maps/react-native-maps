@@ -23,9 +23,13 @@ public class AirMapUrlTile extends AirMapFeature {
     @Override
     public synchronized URL getTileUrl(int x, int y, int zoom) {
 
+      if(this.urlTemplate.contains("{y-tms}")) {
+        y = (1 << zoom) - 1 - y;
+      }
       String s = this.urlTemplate
           .replace("{x}", Integer.toString(x))
           .replace("{y}", Integer.toString(y))
+          .replace("{y-tms}", Integer.toString(y))
           .replace("{z}", Integer.toString(zoom));
       URL url = null;
       try {
