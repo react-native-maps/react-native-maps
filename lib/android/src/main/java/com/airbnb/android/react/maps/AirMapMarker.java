@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -283,7 +284,15 @@ public class AirMapMarker extends AirMapFeature {
     } else {
       iconBitmapDescriptor = getBitmapDescriptorByName(uri);
       if (iconBitmapDescriptor != null) {
-          iconBitmap = BitmapFactory.decodeResource(getResources(), getDrawableResourceByName(uri));
+          int drawableId = getDrawableResourceByName(uri);
+          iconBitmap = BitmapFactory.decodeResource(getResources(), drawableId);
+          if (iconBitmap == null) { // VectorDrawable or similar
+              Drawable drawable = getResources().getDrawable(drawableId);
+              iconBitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+              drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+              Canvas canvas = new Canvas(iconBitmap);
+              drawable.draw(canvas);
+          }
       }
       update();
     }
