@@ -72,10 +72,10 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `animateToBearing` | `bearing: Number`, `duration: Number` |
 | `animateToViewingAngle` | `angle: Number`, `duration: Number` |
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | `GoogleMaps only`
-| `zoomIn` | `duration: Number` | Increment zoom level by 1 `Android only`
-| `zoomOut` | `duration: Number` | Increment zoom level by -1 `Android only`
-| `zoomTo` | `zoom: Number`, `duration: Number` | Move to a particular level `Android only`
-| `zoomBy` | `zoom: Number`, `duration: Number` | Shift the zoom by a particular value `Android only`
+| `zoomIn` | `duration: Number` | Increment zoom level by 1 (default duration to 500) `Android only`
+| `zoomOut` | `duration: Number` | Increment zoom level by -1 (default duration to 500) `Android only`
+| `zoomTo` | `zoom: Number`, `duration: Number` | Move to a particular level (default duration to 500) `Android only`
+| `zoomBy` | `zoom: Number`, `duration: Number` | Shift the zoom by a particular value (default duration to 500) `Android only`
 | `fitToElements` | `animated: Boolean` |
 | `fitToSuppliedMarkers` | `markerIDs: String[]`, `animated: Boolean` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
