@@ -41,6 +41,7 @@ import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
 import OnPoiClick from './examples/OnPoiClick';
+import ZoomProgramatically from './examples/zoomProgramatically';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -128,6 +129,7 @@ class App extends React.Component {
   render() {
     return this.renderExamples([
       // [<component>, <component description>, <Google compatible>, <Google add'l description>]
+      [ZoomProgramatically, 'Zoom Programatically', true],
       [StaticMap, 'StaticMap', true],
       [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
       [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
