@@ -106,6 +106,10 @@ declare module "react-native-maps" {
         fitToSuppliedMarkers(markers: string[], animated: boolean): void;
         fitToCoordinates(coordinates?: LatLng[], options?:{}): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
+        zoomIn(duration?: number): void;
+        zoomOut(duration?: number): void;
+        zoomTo(zoom: number, duration?: number): void;
+        zoomBy(zoom: number, duration?: number): void;
     }
 
     export class MapViewAnimated extends React.Component<MapViewProps, any> {
@@ -117,6 +121,10 @@ declare module "react-native-maps" {
         fitToSuppliedMarkers(markers: string[], animated: boolean): void;
         fitToCoordinates(coordinates?: LatLng[], options?:{}): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
+        zoomIn(duration?: number): void;
+        zoomOut(duration?: number): void;
+        zoomTo(zoom: number, duration?: number): void;
+        zoomBy(zoom: number, duration?: number): void;
     }
 
     export type LineCapType = 'butt' | 'round' | 'square';

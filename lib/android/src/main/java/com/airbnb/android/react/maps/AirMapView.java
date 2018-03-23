@@ -744,6 +744,22 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     map.setLatLngBoundsForCameraTarget(bounds);
   }
 
+  public void zoomIn(int duration) {
+    map.animateCamera(CameraUpdateFactory.zoomIn(), duration, null);
+  }
+
+  public void zoomOut(int duration) {
+    map.animateCamera(CameraUpdateFactory.zoomOut(), duration, null);
+  }
+
+  public void zoomTo(float zoom, int duration) {
+    map.animateCamera(CameraUpdateFactory.zoomTo(zoom), duration, null);
+  }
+
+  public void zoomBy(float zoom, int duration) {
+    map.animateCamera(CameraUpdateFactory.zoomBy(zoom), duration, null);
+  }
+
   // InfoWindowAdapter interface
 
   @Override

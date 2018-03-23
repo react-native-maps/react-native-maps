@@ -36,6 +36,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int FIT_TO_SUPPLIED_MARKERS = 6;
   private static final int FIT_TO_COORDINATES = 7;
   private static final int SET_MAP_BOUNDARIES = 8;
+  private static final int ZOOM_IN = 9;
+  private static final int ZOOM_OUT = 10;
+  private static final int ZOOM_TO = 11;
+  private static final int ZOOM_BY = 12;
 
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
@@ -248,6 +252,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     Double latDelta;
     float bearing;
     float angle;
+    float zoom;
     ReadableMap region;
 
     switch (commandId) {
@@ -300,6 +305,28 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
       case SET_MAP_BOUNDARIES:
         view.setMapBoundaries(args.getMap(0), args.getMap(1));
         break;
+
+      case ZOOM_IN:
+        duration = args.getInt(0);
+        view.zoomIn(duration);
+        break;
+
+      case ZOOM_OUT:
+        duration = args.getInt(0);
+        view.zoomOut(duration);
+        break;
+
+      case ZOOM_TO:
+        zoom = (float)args.getDouble(0);
+        duration = args.getInt(1);
+        view.zoomTo(zoom, duration);
+        break;
+
+      case ZOOM_BY:
+        zoom = (float)args.getDouble(0);
+        duration = args.getInt(1);
+        view.zoomBy(zoom, duration);
+        break;
     }
   }
 
@@ -328,7 +355,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     return map;
   }
-  
+
   @Nullable
   @Override
   public Map<String, Integer> getCommandsMap() {
@@ -343,7 +370,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     );
 
     map.putAll(MapBuilder.of(
-      "setMapBoundaries", SET_MAP_BOUNDARIES
+      "setMapBoundaries", SET_MAP_BOUNDARIES,
+      "zoomIn", ZOOM_IN,
+      "zoomOut", ZOOM_OUT,
+      "zoomTo", ZOOM_TO,
+      "zoomBy", ZOOM_BY
     ));
 
     return map;
