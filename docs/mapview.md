@@ -7,6 +7,7 @@
 | `provider` | `string` |  | The map framework to use. <br/><br/>Either `"google"` for GoogleMaps, otherwise `null` or `undefined` to use the native map framework (`MapKit` in iOS and `GoogleMaps` in android).
 | `region` | `Region` |  | The region to be displayed by the map. <br/><br/>The region is defined by the center coordinates and the span of coordinates to display.
 | `initialRegion` | `Region` |  | The initial region to be displayed by the map.  Use this prop instead of `region` only if you don't want to control the viewport of the map besides the initial region.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
+| `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured. **Note** Google Maps only.
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
 | `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: (Android only) topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
 | `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/airbnb/react-native-maps#customizing-the-map-style) for more information.
