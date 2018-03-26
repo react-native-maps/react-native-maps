@@ -106,7 +106,7 @@ The steps are as described in https://facebook.github.io/react-native/docs/runni
    ...
    dependencies {
      ...
-     compile project(':react-native-maps')
+     implementation project(':react-native-maps')
    }
    ```
 
@@ -135,12 +135,12 @@ If you've defined *[project-wide properties](https://developer.android.com/studi
    ...
    dependencies {
        ...
-       compile(project(':react-native-maps')){
+       implementation(project(':react-native-maps')){
            exclude group: 'com.google.android.gms', module: 'play-services-base'
            exclude group: 'com.google.android.gms', module: 'play-services-maps'
        }
-       compile 'com.google.android.gms:play-services-base:10.0.1'
-       compile 'com.google.android.gms:play-services-maps:10.0.1'
+       implementation 'com.google.android.gms:play-services-base:10.0.1'
+       implementation 'com.google.android.gms:play-services-maps:10.0.1'
    }
    ```
 
