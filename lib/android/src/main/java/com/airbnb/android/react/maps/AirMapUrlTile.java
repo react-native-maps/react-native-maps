@@ -1,16 +1,111 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AirMapUrlTile extends AirMapFeature {
+  class CanvasTileProvider implements TileProvider {
+    static final int TILE_SIZE = 512;
+
+    public AIRMapUrlTileProvider mTileProvider;
+
+    public CanvasTileProvider(AIRMapUrlTileProvider tileProvider) {
+      mTileProvider = tileProvider;
+    }
+
+    @Override
+    public Tile getTile(int x, int y, int zoom) {
+      byte[] data;
+      Bitmap image = getNewBitmap();
+      Canvas canvas = new Canvas(image);
+      boolean isOk = onDraw(canvas, zoom, x, y);
+      data = bitmapToByteArray(image);
+      image.recycle();
+
+      if (isOk) {
+        Tile tile = new Tile(TILE_SIZE, TILE_SIZE, data);
+        return tile;
+      } else {
+        return mTileProvider.getTile(x, y, zoom);
+      }
+    }
+
+    Paint paint = new Paint();
+
+    private boolean onDraw(Canvas canvas, int zoom, int x, int y) {
+      x = x * 2;
+      y = y * 2;
+      Tile leftTop = mTileProvider.getTile(x, y, zoom + 1);
+      Tile leftBottom = mTileProvider.getTile(x, y + 1, zoom + 1);
+      Tile rightTop = mTileProvider.getTile(x + 1, y, zoom + 1);
+      Tile rightBottom = mTileProvider.getTile(x + 1, y + 1, zoom + 1);
+
+      if (leftTop == NO_TILE && leftBottom == NO_TILE && rightTop == NO_TILE && rightBottom == NO_TILE) {
+        return false;
+      }
+
+      Bitmap bitmap;
+
+      if (leftTop != NO_TILE) {
+        bitmap = BitmapFactory.decodeByteArray(leftTop.data, 0, leftTop.data.length);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        bitmap.recycle();
+      }
+
+      if (leftBottom != NO_TILE) {
+        bitmap = BitmapFactory.decodeByteArray(leftBottom.data, 0, leftBottom.data.length);
+        canvas.drawBitmap(bitmap, 0, 256, paint);
+        bitmap.recycle();
+      }
+      if (rightTop != NO_TILE) {
+        bitmap = BitmapFactory.decodeByteArray(rightTop.data, 0, rightTop.data.length);
+        canvas.drawBitmap(bitmap, 256, 0, paint);
+        bitmap.recycle();
+      }
+      if (rightBottom != NO_TILE) {
+        bitmap = BitmapFactory.decodeByteArray(rightBottom.data, 0, rightBottom.data.length);
+        canvas.drawBitmap(bitmap, 256, 256, paint);
+        bitmap.recycle();
+      }
+      return true;
+    }
+
+
+    private Bitmap getNewBitmap() {
+      Bitmap image = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE,
+              Bitmap.Config.ARGB_8888);
+      image.eraseColor(Color.TRANSPARENT);
+      return image;
+    }
+
+    private byte[] bitmapToByteArray(Bitmap bm) {
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      bm.compress(Bitmap.CompressFormat.PNG, 100, bos);
+
+      byte[] data = bos.toByteArray();
+      try {
+        bos.close();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return data;
+    }
+  }
 
   class AIRMapUrlTileProvider extends UrlTileProvider {
     private String urlTemplate;
@@ -22,11 +117,11 @@ public class AirMapUrlTile extends AirMapFeature {
 
     @Override
     public synchronized URL getTileUrl(int x, int y, int zoom) {
-
       String s = this.urlTemplate
-          .replace("{x}", Integer.toString(x))
-          .replace("{y}", Integer.toString(y))
-          .replace("{z}", Integer.toString(zoom));
+              .replace("{x}", Integer.toString(x))
+              .replace("{y}", Integer.toString(y))
+              .replace("{z}", Integer.toString(zoom));
+
       URL url = null;
       try {
         url = new URL(s);
@@ -43,7 +138,7 @@ public class AirMapUrlTile extends AirMapFeature {
 
   private TileOverlayOptions tileOverlayOptions;
   private TileOverlay tileOverlay;
-  private AIRMapUrlTileProvider tileProvider;
+  private CanvasTileProvider tileProvider;
 
   private String urlTemplate;
   private float zIndex;
@@ -55,7 +150,7 @@ public class AirMapUrlTile extends AirMapFeature {
   public void setUrlTemplate(String urlTemplate) {
     this.urlTemplate = urlTemplate;
     if (tileProvider != null) {
-      tileProvider.setUrlTemplate(urlTemplate);
+      tileProvider.mTileProvider.setUrlTemplate(urlTemplate);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
@@ -79,7 +174,7 @@ public class AirMapUrlTile extends AirMapFeature {
   private TileOverlayOptions createTileOverlayOptions() {
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
-    this.tileProvider = new AIRMapUrlTileProvider(256, 256, this.urlTemplate);
+    this.tileProvider = new CanvasTileProvider(new AIRMapUrlTileProvider(256, 256, this.urlTemplate));
     options.tileProvider(this.tileProvider);
     return options;
   }
