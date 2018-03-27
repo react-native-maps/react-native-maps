@@ -13,7 +13,7 @@
     "lint": "eslint ./",
     "build": "npm run build:js && npm run build:android && npm run build:ios",
     "build:js": "exit 0",
-    "build:ios": "bundle install --binstubs ./examples/ios && bundle exec pod install --project-directory=./example/ios/",
+    "build:ios": "bundle install --path ./example/ios/bundles && bundle exec pod install --project-directory=./example/ios/",
     "build:android": "./gradlew :react-native-maps:assembleDebug",
     "ci": "npm run lint",
     "preversion": "./scripts/update-version.js"
@@ -33,7 +33,7 @@
   ],
   "peerDependencies": {
     "react": "^16.0",
-    "react-native": "^0.51",
+    "react-native": "^0.51 || ^0.52 || ^0.53 || ^0.54",
     "prop-types": "^15.0 || ^16.0"
   },
   "devDependencies": {
@@ -48,8 +48,8 @@
     "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
     "prop-types": "^15.5.10",
-    "react": "16.0.0",
-    "react-native": "0.51.0"
+    "react": "^16.3.0-alpha.1",
+    "react-native": "^0.54"
   },
   "rnpm": {
     "android": {

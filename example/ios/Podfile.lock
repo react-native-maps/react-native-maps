@@ -1,4 +1,11 @@
 PODS:
+  - boost-for-react-native (1.63.0)
+  - DoubleConversion (1.1.5)
+  - Folly (2016.09.26.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+  - glog (0.3.4)
   - Google-Maps-iOS-Utils (2.1.0):
     - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
     - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
@@ -20,57 +27,72 @@ PODS:
   - GoogleMaps/Base (2.5.0)
   - GoogleMaps/Maps (2.5.0):
     - GoogleMaps/Base
-  - React (0.51.0):
-    - React/Core (= 0.51.0)
+  - React (0.54.2):
+    - React/Core (= 0.54.2)
   - react-native-google-maps (0.20.1):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 2.5.0)
     - React
   - react-native-maps (0.20.1):
     - React
-  - React/BatchedBridge (0.51.0):
+  - React/Core (0.54.2):
+    - yoga (= 0.54.2.React)
+  - React/CxxBridge (0.54.2):
+    - Folly (= 2016.09.26.00)
     - React/Core
-    - React/cxxreact_legacy
-  - React/Core (0.51.0):
-    - yoga (= 0.51.0.React)
-  - React/cxxreact_legacy (0.51.0):
-    - React/jschelpers_legacy
-  - React/fishhook (0.51.0)
-  - React/jschelpers_legacy (0.51.0)
-  - React/RCTActionSheet (0.51.0):
+    - React/cxxreact
+  - React/cxxreact (0.54.2):
+    - boost-for-react-native (= 1.63.0)
+    - Folly (= 2016.09.26.00)
+    - React/jschelpers
+    - React/jsinspector
+  - React/DevSupport (0.54.2):
     - React/Core
-  - React/RCTAnimation (0.51.0):
+    - React/RCTWebSocket
+  - React/fishhook (0.54.2)
+  - React/jschelpers (0.54.2):
+    - Folly (= 2016.09.26.00)
+    - React/PrivateDatabase
+  - React/jsinspector (0.54.2)
+  - React/PrivateDatabase (0.54.2)
+  - React/RCTActionSheet (0.54.2):
     - React/Core
-  - React/RCTBlob (0.51.0):
+  - React/RCTAnimation (0.54.2):
     - React/Core
-  - React/RCTGeolocation (0.51.0):
+  - React/RCTBlob (0.54.2):
     - React/Core
-  - React/RCTImage (0.51.0):
+  - React/RCTGeolocation (0.54.2):
+    - React/Core
+  - React/RCTImage (0.54.2):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.51.0):
+  - React/RCTLinkingIOS (0.54.2):
     - React/Core
-  - React/RCTNetwork (0.51.0):
+  - React/RCTNetwork (0.54.2):
     - React/Core
-  - React/RCTSettings (0.51.0):
+  - React/RCTSettings (0.54.2):
     - React/Core
-  - React/RCTText (0.51.0):
+  - React/RCTText (0.54.2):
     - React/Core
-  - React/RCTVibration (0.51.0):
+  - React/RCTVibration (0.54.2):
     - React/Core
-  - React/RCTWebSocket (0.51.0):
+  - React/RCTWebSocket (0.54.2):
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - yoga (0.51.0.React)
+  - yoga (0.54.2.React)
 
 DEPENDENCIES:
+  - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - Folly (from `../../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+  - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - react-native-google-maps (from `../../`)
   - react-native-maps (from `../../`)
-  - React/BatchedBridge (from `../../node_modules/react-native`)
   - React/Core (from `../../node_modules/react-native`)
+  - React/CxxBridge (from `../../node_modules/react-native`)
+  - React/DevSupport (from `../../node_modules/react-native`)
   - React/RCTActionSheet (from `../../node_modules/react-native`)
   - React/RCTAnimation (from `../../node_modules/react-native`)
   - React/RCTGeolocation (from `../../node_modules/react-native`)
@@ -84,6 +106,12 @@ DEPENDENCIES:
   - yoga (from `../../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 EXTERNAL SOURCES:
+  DoubleConversion:
+    :podspec: ../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec
+  Folly:
+    :podspec: ../../node_modules/react-native/third-party-podspecs/Folly.podspec
+  glog:
+    :podspec: ../../node_modules/react-native/third-party-podspecs/glog.podspec
   React:
     :path: ../../node_modules/react-native
   react-native-google-maps:
@@ -94,13 +122,17 @@ EXTERNAL SOURCES:
     :path: ../../node_modules/react-native/ReactCommon/yoga/yoga.podspec
 
 SPEC CHECKSUMS:
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  DoubleConversion: ebb6747c5b66026ad4f97b789c3ceac6f18e57a6
+  Folly: 211775e49d8da0ca658aebc8eab89d642935755c
+  glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
-  React: 541ba768b9855e10cdc76f55427a5cd0653ca806
+  React: c237e42de9c70e5cac6eeb52b4cfd3a0910c1f00
   react-native-google-maps: 2cfe3b01f8422c7dae51d8764139fd70f888cfce
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
-  yoga: 17521bbb0dd54a47c0b3ac43253e78cdac7488e0
+  yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: de8380bda50e37e1da2c4dada3c722921bdbcbda
+PODFILE CHECKSUM: 360a4a3ec45be233c554495279bfd087f4f29b0b
 
 COCOAPODS: 1.4.0
