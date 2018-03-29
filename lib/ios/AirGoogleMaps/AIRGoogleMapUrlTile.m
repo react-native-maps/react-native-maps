@@ -22,13 +22,28 @@
 - (GMSTileURLConstructor)_getTileURLConstructor
 {
   NSString *urlTemplate = self.urlTemplate;
-  GMSTileURLConstructor urls = ^(NSUInteger x, NSUInteger y, NSUInteger zoom) {
+  NSUInteger *maximumZ = self.maximumZ;
+  NSUInteger *minimumZ = self.minimumZ;
+  GMSTileURLConstructor urls = ^NSURL* _Nullable (NSUInteger x, NSUInteger y, NSUInteger zoom) {
     NSString *url = urlTemplate;
     url = [url stringByReplacingOccurrencesOfString:@"{x}" withString:[NSString stringWithFormat: @"%ld", (long)x]];
     url = [url stringByReplacingOccurrencesOfString:@"{y}" withString:[NSString stringWithFormat: @"%ld", (long)y]];
     url = [url stringByReplacingOccurrencesOfString:@"{z}" withString:[NSString stringWithFormat: @"%ld", (long)zoom]];
+
+   if(maximumZ && zoom > maximumZ) {
+      NSLog(@"google tile greater than maximum, returning nil");
+      return nil;
+    }
+
+    if(minimumZ && zoom < minimumZ) {
+      NSLog(@"google tile lower than minimum, returning nil");
+      return nil;
+    }
+
+    NSLog(@"google tile zoom %ld returning URL %@",(long)zoom,url);
     return [NSURL URLWithString:url];
   };
   return urls;
 }
+
 @end
