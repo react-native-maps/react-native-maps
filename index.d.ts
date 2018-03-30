@@ -104,8 +104,9 @@ declare module "react-native-maps" {
         animateToViewingAngle(angle: number, duration?: number): void;
         fitToElements(animated: boolean): void;
         fitToSuppliedMarkers(markers: string[], animated: boolean): void;
-        fitToCoordinates(coordinates?: LatLng[], options?:{}): void;
+        fitToCoordinates(coordinates?: LatLng[], options?: {}): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
+        takeSnapshot(options?: SnapshotOptions): Promise<string>;
     }
 
     export class MapViewAnimated extends React.Component<MapViewProps, any> {
@@ -115,8 +116,18 @@ declare module "react-native-maps" {
         animateToViewingAngle(angle: number, duration?: number): void;
         fitToElements(animated: boolean): void;
         fitToSuppliedMarkers(markers: string[], animated: boolean): void;
-        fitToCoordinates(coordinates?: LatLng[], options?:{}): void;
+        fitToCoordinates(coordinates?: LatLng[], options?: {}): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
+        takeSnapshot(options?: SnapshotOptions): Promise<string>;
+    }
+
+    export interface SnapshotOptions {
+        width?: number;              // optional, when omitted the view-width is used
+        height?: number;             // optional, when omitted the view-height is used
+        region?: Region;             // iOS only, optional region to render
+        format?: 'png' | 'jpg';      // image formats: 'png', 'jpg' (default: 'png')
+        quality?: number;            // image quality: 0..1 (only relevant for jpg, default: 1)
+        result?: 'file' | 'base64';  // result types: 'file', 'base64' (default: 'file')
     }
 
     export type LineCapType = 'butt' | 'round' | 'square';
