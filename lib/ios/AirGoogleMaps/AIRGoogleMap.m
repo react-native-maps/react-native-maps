@@ -301,6 +301,38 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.padding;
 }
 
+- (void)setPaddingAdjustmentBehaviorString:(NSString *)str
+{
+  if ([str isEqualToString:@"never"])
+  {
+    self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorNever;
+  }
+  else if ([str isEqualToString:@"automatic"])
+  {
+    self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorAutomatic;
+  }
+  else //if ([str isEqualToString:@"always"]) <-- default
+  {
+    self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorAlways;
+  }
+}
+
+- (NSString *)paddingAdjustmentBehaviorString
+{
+  switch (self.paddingAdjustmentBehavior)
+  {
+    case kGMSMapViewPaddingAdjustmentBehaviorNever:
+      return @"never";
+    case kGMSMapViewPaddingAdjustmentBehaviorAutomatic:
+      return @"automatic";
+    case kGMSMapViewPaddingAdjustmentBehaviorAlways:
+      return @"always";
+      
+    default:
+      return @"unknown";
+  }
+}
+
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
   self.settings.scrollGestures = scrollEnabled;
 }
