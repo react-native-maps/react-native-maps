@@ -21,64 +21,64 @@ In this example, we will be writing a new test called `EverythingWorks`.
 
 1. Register the test on the iOS side, in [`example/ios/AirMapsExplorerTests/AirMapsExplorerTests.m`](../example/ios/AirMapsExplorerTests/AirMapsExplorerTests.m):
 
-  ```objective-c
-  MAPS_TEST(EverythingWorks);
-  ```
+    ```objective-c
+    MAPS_TEST(EverythingWorks);
+    ```
 
-  `MAPS_TEST` is a macro which runs a test several times, once for every supported Maps API.
+    `MAPS_TEST` is a macro which runs a test several times, once for every supported Maps API.
 
 2. Add a new test component in the [`example/tests/`](../example/tests/) directory: `example/tests/EverythingWorks.js`
 
-  ```js
-  import React, { Component } from 'react';
-  import PropTypes from 'prop-types';
-  import { NativeModules } from 'react-native';
-  import MapView from 'react-native-maps';
+    ```js
+    import React, { Component } from 'react';
+    import PropTypes from 'prop-types';
+    import { NativeModules } from 'react-native';
+    import MapView from 'react-native-maps';
 
-  const { TestModule } = NativeModules;
+    const { TestModule } = NativeModules;
 
-  export default class EverythingWorksTest extends Component {
-    componentDidMount() {
-      // To make your test fail, throw an exception.
-      if (TestModule == null) {
-        throw new Error('TestModule not registered');
+    export default class EverythingWorksTest extends Component {
+      componentDidMount() {
+        // To make your test fail, throw an exception.
+        if (TestModule == null) {
+          throw new Error('TestModule not registered');
+        }
+        // Call this method if your test has passed successfully.
+        TestModule.markTestCompleted();
       }
-      // Call this method if your test has passed successfully.
-      TestModule.markTestCompleted();
+
+      render() {
+        // The test will be run once for every supported provider.
+        // Make sure to pass the provider to MapView.
+        const { provider } = this.props;
+        return (
+          <MapView
+            provider={provider}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
+        );
+      }
     }
 
-    render() {
-      // The test will be run once for every supported provider.
-      // Make sure to pass the provider to MapView.
-      const { provider } = this.props;
-      return (
-        <MapView
-          provider={provider}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
-      );
-    }
-  }
-
-  EverythingWorksTest.propTypes = {
-    provider: PropTypes.string,
-  };
-  ```
+    EverythingWorksTest.propTypes = {
+      provider: PropTypes.string,
+    };
+    ```
 
 3. Export your test in [`example/tests/index.js`](../example/tests/index.js):
 
-  ```js
-  import EverythingWorks from './EverythingWorks';
+    ```js
+    import EverythingWorks from './EverythingWorks';
 
-  export default {
-    // ...other tests
-    EverythingWorks,
-  };
-  ```
+    export default {
+      // ...other tests
+      EverythingWorks,
+    };
+    ```
 
-  The exported name needs to match up to the name of the test on the native side, otherwise the test runner will not be able to run the test.
+    The exported name needs to match up to the name of the test on the native side, otherwise the test runner will not be able to run the test.
