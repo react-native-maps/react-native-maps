@@ -35,6 +35,8 @@
   [_runner runTest:_cmd module:@#name initialProps:@{@"provider": @"google"} configurationBlock:nil]; \
 }
 
+// To add a new test, add a new MAPS_TEST line here.
+// The names here need to correspond with the names exported in `example/tests/index.js`.
 MAPS_TEST(PointForCoordinate);
 
 @end

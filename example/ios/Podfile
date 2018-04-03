@@ -37,6 +37,7 @@ target 'AirMapsExplorer' do
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
 
+  # You will most likely not need this target in your own Podfile - this target is for running iOS integration tests.
   target 'AirMapsExplorerTests' do
     inherit! :complete
 

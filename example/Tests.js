@@ -6,18 +6,10 @@ import tests from './tests/';
 const { TestModule } = NativeModules;
 
 class Tests extends Component {
-  // componentDidMount() {
-  //   if (TestModule == null) {
-  //     throw new Error('TestModule is null');
-  //   }
-  //   TestModule.markTestCompleted();
-  // }
-
   render() {
     return (
       <View>
         <Text>TestModule loaded: {!!TestModule}</Text>
-        <Text>{JSON.stringify(this.props)}</Text>
       </View>
     );
   }
