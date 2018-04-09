@@ -5,11 +5,15 @@ platform :ios, '8.0'
 
 # Change 'AirMapsExplorer' to match the target in your Xcode project.
 target 'AirMapsExplorer' do
-  rn_path = '../../node_modules/react-native'
+  rn_path = '../../node_modules/react-native' # This path is likely to be `../node_modules/react-native` in your own project.
+  rn_maps_path = '../../' # This path is likely to be `../node_modules/react-native-maps` in your own project.
 
+  # See http://facebook.github.io/react-native/docs/integration-with-existing-apps.html#configuring-cocoapods-dependencies
   pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
   pod 'React', path: rn_path, subspecs: [
     'Core',
+    'CxxBridge',
+    'DevSupport',
     'RCTActionSheet',
     'RCTAnimation',
     'RCTGeolocation',
@@ -20,13 +24,18 @@ target 'AirMapsExplorer' do
     'RCTText',
     'RCTVibration',
     'RCTWebSocket',
-    'BatchedBridge', # REMOVE THIS if you use RN 0.54+
   ]
 
+  # React Native third party dependencies podspecs
+  pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
+  pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
+  pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
+
+  # react-native-maps dependencies
+  pod 'react-native-maps', path: rn_maps_path
+  pod 'react-native-google-maps', path: rn_maps_path  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
-  pod 'react-native-maps', path: '../../'
-  pod 'react-native-google-maps', path: '../../'  # If you need GoogleMaps support on iOS
 end
 
 post_install do |installer|

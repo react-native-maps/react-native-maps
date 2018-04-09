@@ -1,6 +1,22 @@
 # Change Log
-## Unreleased
-* Android: Check for presence of Gradle configuration properties that may have been defined by the hosting `rootProject`: `compileSdkVersion`, `buildToolsVersion`, `googlePlayServicesVersion`, `androidMapsUtilsVersion`.  This provides a better mechanism for aligning the requirements of the module with that of the host project.
+## 0.21.0 (March 31, 2018)
+* Common: [#2030](https://github.com/react-community/react-native-maps/pull/2030) Broadened peer-dependency support
+* Common: [#2035](https://github.com/react-community/react-native-maps/pull/2035), [#2113](https://github.com/react-community/react-native-maps/pull/2113), & [#2141](https://github.com/react-community/react-native-maps/pull/2141) Typescript improvements and fixes
+* Common: [#2011](https://github.com/react-community/react-native-maps/pull/2011) Add suport for KML file (Only Markers)
+* Common: [#2053](https://github.com/react-community/react-native-maps/pull/2053) Fix 'module undefined' for React Native >= 0.54
+* Common: [#2131](https://github.com/react-community/react-native-maps/pull/2131) Fix initialRegion for React Native >= 0.54
+* Common: [#2115](https://github.com/react-community/react-native-maps/pull/2115) Upgrade React Native peer dependency to 0.54
+* Common: [#2032](https://github.com/react-community/react-native-maps/pull/2032) Add onMyLocationChange event
+* Common: [#2039](https://github.com/react-community/react-native-maps/pull/2039) Fixed problem with pointForCoordinate and coordinateForPoint methods
+* Common: [#2050](https://github.com/react-community/react-native-maps/pull/2050) Add support for onPoiClick
+* iOS: [#2022](https://github.com/react-community/react-native-maps/pull/2022) Add support for Map.Overlay
+* iOS: [#2068](https://github.com/react-community/react-native-maps/pull/2068) Prevent marker press from calling MapView onPress
+* iOS: [#2057](https://github.com/react-community/react-native-maps/pull/2057) Fixed polygon and polyline not re-rendering when changing tile URL (AirMaps)
+* iOS: [#2101](https://github.com/react-community/react-native-maps/pull/2101) Fixed re-render not updating MapView.Circle component in UI when radius or center coordinates change (AirMaps)
+* Android: [#2111](https://github.com/react-community/react-native-maps/pull/2111) Allow vector drawables to be used as markers
+* Android: [#2132](https://github.com/react-community/react-native-maps/pull/2132) Add mock-provider boolean on each location update
+* Android: [#2047](https://github.com/react-community/react-native-maps/pull/2047) Check for presence of project-wide (ext) Gradle configuration properties `compileSdkVersion`, `targetSdkVersion`, `buildToolsVersion`, `supportLibVersion`, `googlePlayServicesVersion`, and `androidMapsUtilsVersion`. This provides a better mechanism for aligning the requirements of the module with that of the host project.
+* Android: [#2096](https://github.com/react-community/react-native-maps/pull/2096) Updated gradle configuration for gradle 3.0.0+
 
 ## 0.20.1 (February 13, 2018)
 * Common: [hotfix PROVIDER_GOOGLE](https://github.com/react-community/react-native-maps/commit/cd868ea7b33a04c8bdd5e909cf134a133b2cb316)
