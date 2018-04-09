@@ -22,13 +22,25 @@
 - (GMSTileURLConstructor)_getTileURLConstructor
 {
   NSString *urlTemplate = self.urlTemplate;
-  GMSTileURLConstructor urls = ^(NSUInteger x, NSUInteger y, NSUInteger zoom) {
+  NSInteger *maximumZ = self.maximumZ;
+  NSInteger *minimumZ = self.minimumZ;
+  GMSTileURLConstructor urls = ^NSURL* _Nullable (NSUInteger x, NSUInteger y, NSUInteger zoom) {
     NSString *url = urlTemplate;
     url = [url stringByReplacingOccurrencesOfString:@"{x}" withString:[NSString stringWithFormat: @"%ld", (long)x]];
     url = [url stringByReplacingOccurrencesOfString:@"{y}" withString:[NSString stringWithFormat: @"%ld", (long)y]];
     url = [url stringByReplacingOccurrencesOfString:@"{z}" withString:[NSString stringWithFormat: @"%ld", (long)zoom]];
+
+   if(maximumZ && (long)zoom > (long)maximumZ) {
+      return nil;
+    }
+
+    if(minimumZ && (long)zoom < (long)minimumZ) {
+      return nil;
+    }
+
     return [NSURL URLWithString:url];
   };
   return urls;
 }
+
 @end
