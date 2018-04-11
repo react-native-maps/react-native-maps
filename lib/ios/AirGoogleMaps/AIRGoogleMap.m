@@ -463,9 +463,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 + (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
-  if (marker.style.styleID != nil) {
+  if (marker.styleUrl != nil) {
     for (GMUStyle *style in parser.styles) {
-      if (style.styleID == marker.style.styleID) {
+      if ([style.styleID isEqualToString:marker.styleUrl]) {
         return style.iconUrl;
       }
     }
