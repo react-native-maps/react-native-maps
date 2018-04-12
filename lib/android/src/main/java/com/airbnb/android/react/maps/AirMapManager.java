@@ -301,6 +301,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
       case SET_MAP_BOUNDARIES:
         view.setMapBoundaries(args.getMap(0), args.getMap(1));
         break;
+
+      case SET_INDOOR_ACTIVE_LEVEL_INDEX:
+        view.setIndoorActiveLevelIndex(args.getInt(0));
+        break;
     }
   }
 
