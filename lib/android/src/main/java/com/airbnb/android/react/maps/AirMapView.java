@@ -970,7 +970,7 @@ public class AirMapView extends MapView implements
     public void setIndoorActiveLevelIndex(int activeLevelIndex) {
       IndoorBuilding building = this.map.getFocusedBuilding();
       if (building != null) {
-        if (activeLevelIndex >= 0 && activeLevelIndex < building.getLevels().length) {
+        if (activeLevelIndex >= 0 && activeLevelIndex < building.getLevels().size()) {
           IndoorLevel level = building.getLevels().get(activeLevelIndex);
           if (level != null) {
             level.activate();
