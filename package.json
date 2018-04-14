@@ -58,6 +58,6 @@
   },
   "dependencies": {
     "babel-plugin-module-resolver": "^2.3.0",
-    "babel-preset-react-native": "1.9.0"
+    "babel-preset-react-native": "^1.9.0 || ^2.0.0 || ^3.0.0 || ^4.0.0"
   }
 }
