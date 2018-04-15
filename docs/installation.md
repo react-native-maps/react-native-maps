@@ -9,14 +9,13 @@ npm install react-native-maps --save
 
 ## Get a Google Maps API key
 
-Go to https://developers.google.com/maps/documentation/ios-sdk/get-api-key and get your key.
+Go to https://developers.google.com/maps/documentation/ios-sdk/get-api-key and https://developers.google.com/maps/documentation/android-api/signup to get your keys for both iOS and Android.
 
 Make sure that Google Maps Android API and Google Maps SDK for iOS are enabled for the current project.
 https://console.developers.google.com/apis/library/maps-android-backend.googleapis.com/
 https://console.developers.google.com/apis/library/maps-ios-backend.googleapis.com
 
-Without this key the Google Maps map won't render anything.
-
+Without an API key the Google Maps map won't render anything.
 
 
 ## iOS - CocoaPods
@@ -33,9 +32,12 @@ target '_YOUR_PROJECT_TARGET_' do
   rn_path = '../node_modules/react-native'
   rn_maps_path = '../node_modules/react-native-maps'
 
+  # See http://facebook.github.io/react-native/docs/integration-with-existing-apps.html#configuring-cocoapods-dependencies
   pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
   pod 'React', path: rn_path, subspecs: [
     'Core',
+    'CxxBridge',
+    'DevSupport',
     'RCTActionSheet',
     'RCTAnimation',
     'RCTGeolocation',
@@ -46,13 +48,22 @@ target '_YOUR_PROJECT_TARGET_' do
     'RCTText',
     'RCTVibration',
     'RCTWebSocket',
-    'BatchedBridge'
   ]
 
-  pod 'react-native-maps', path: rn_maps_path
+  # React Native third party dependencies podspecs
+  pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
+  pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
+  # If you are using React Native <0.54, you will get the following error:
+  # "The name of the given podspec `GLog` doesn't match the expected one `glog`"
+  # Use the following line instead:
+  #pod 'GLog', :podspec => "#{rn_path}/third-party-podspecs/GLog.podspec"
+  pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
 
-  pod 'GoogleMaps'  # Remove this line if you don't want to support Google Maps on iOS
-  pod 'react-native-google-maps', path: rn_maps_path  # Remove this line if you don't want to support Google Maps on iOS
+  # react-native-maps dependencies
+  pod 'react-native-maps', path: rn_maps_path
+  pod 'react-native-google-maps', path: rn_maps_path  # Remove this line if you don't want to support GoogleMaps on iOS
+  pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
+  pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
 end
 
 post_install do |installer|
@@ -68,7 +79,6 @@ post_install do |installer|
   end
 end
 ~~~
-
 
 
 ## IMPORTANT!!
@@ -107,7 +117,7 @@ The steps are as described in https://facebook.github.io/react-native/docs/runni
    ...
    dependencies {
      ...
-     compile project(':react-native-maps')
+     implementation project(':react-native-maps')
    }
    ```
 
@@ -116,7 +126,7 @@ If you've defined *[project-wide properties](https://developer.android.com/studi
     ```groovy
     buildscript {...}
     allprojects {...}
-    
+
     /**
      + Project-wide Gradle configuration properties
      */
@@ -136,12 +146,12 @@ If you've defined *[project-wide properties](https://developer.android.com/studi
    ...
    dependencies {
        ...
-       compile(project(':react-native-maps')){
+       implementation(project(':react-native-maps')){
            exclude group: 'com.google.android.gms', module: 'play-services-base'
            exclude group: 'com.google.android.gms', module: 'play-services-maps'
        }
-       compile 'com.google.android.gms:play-services-base:10.0.1'
-       compile 'com.google.android.gms:play-services-maps:10.0.1'
+       implementation 'com.google.android.gms:play-services-base:10.0.1'
+       implementation 'com.google.android.gms:play-services-maps:10.0.1'
    }
    ```
 
@@ -155,7 +165,7 @@ If you've defined *[project-wide properties](https://developer.android.com/studi
 
 3. Specify your Google Maps API Key:
 
-   Add your API key to your manifest file (`android\app\src\main\AndroidManifest.xml`):
+   Add your API key to your manifest file (`android/app/src/main/AndroidManifest.xml`):
 
    ```xml
    <application>

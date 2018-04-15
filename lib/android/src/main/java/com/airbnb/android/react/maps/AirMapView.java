@@ -206,6 +206,10 @@ public class AirMapView extends MapView implements
         coordinate.putDouble("altitude", location.getAltitude());
         coordinate.putDouble("accuracy", location.getAccuracy());
         coordinate.putDouble("speed", location.getSpeed());
+        if(android.os.Build.VERSION.SDK_INT >= 18){
+        coordinate.putBoolean("isFromMockProvider", location.isFromMockProvider());
+        }         
+
         event.putMap("coordinate", coordinate);
 
         manager.pushEvent(context, view, "onUserLocationChange", event);
