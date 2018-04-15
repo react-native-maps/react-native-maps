@@ -4,7 +4,7 @@ import {
   View,
   Dimensions,
   Button,
-  Alert
+  Alert,
 } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -55,7 +55,8 @@ class IndoorMap extends React.Component {
           showsIndoors
           showsIndoorLevelPicker
           onIndoorBuildingFocused={this.handleIndoorFocus}
-          ref={map => { this.map = map; }} />
+          ref={map => { this.map = map; }}
+        />
         <Button title="go to level 5" onPress={() => { this.setIndoorLevel(5); }} />
         <Button title="go to level 1" onPress={() => { this.setIndoorLevel(1); }} />
       </View>
