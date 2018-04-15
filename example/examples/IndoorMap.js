@@ -4,10 +4,7 @@ import {
   View,
   Dimensions,
   Button,
-  Alert,
-  findNodeHandle,
-  NaiveModules,
-  Platform
+  Alert
 } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -21,26 +18,22 @@ const LONGITUDE = 103.8316911;
 // const LONGITUDE = -122.3876189;
 const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
-
-function log(eventName, e) {
-  console.log(eventName, e.nativeEvent);
-}
 
 class IndoorMap extends React.Component {
   constructor(props) {
     super(props);
+    this.setIndoorLevel = this.setIndoorLevel.bind(this);
   }
 
   handleIndoorFocus(event) {
     const { indoorBuilding } = event.nativeEvent;
     const { defaultLevelIndex, levels } = indoorBuilding;
     const levelNames = levels.map(lv => lv.name || '');
-    const msg = 'Default Level: ' + defaultLevelIndex + '\nLevels: ' + levelNames.toString();
+    const msg = `Default Level: ${defaultLevelIndex}\nLevels: ${levelNames.toString()}`;
     Alert.alert(
       'Indoor building focused',
       msg
-    )
+    );
   }
 
   setIndoorLevel(level) {
@@ -59,14 +52,12 @@ class IndoorMap extends React.Component {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}
-          showsIndoors={true}
-          showsIndoorLevelPicker={true}
+          showsIndoors
+          showsIndoorLevelPicker
           onIndoorBuildingFocused={this.handleIndoorFocus}
-          ref={map => {this.map = map;}}
-        >
-        </MapView>
-        <Button title="go to level 5" onPress={() => {this.setIndoorLevel(5)}} />
-        <Button title="go to level 1" onPress={() => {this.setIndoorLevel(1)}} />
+          ref={map => { this.map = map; }} />
+        <Button title="go to level 5" onPress={() => { this.setIndoorLevel(5); }} />
+        <Button title="go to level 1" onPress={() => { this.setIndoorLevel(1); }} />
       </View>
     );
   }
