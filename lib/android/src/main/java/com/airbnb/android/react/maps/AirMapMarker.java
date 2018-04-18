@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -114,25 +113,6 @@ public class AirMapMarker extends AirMapFeature {
     this.context = context;
     logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
     logoHolder.onAttach();
-  }
-
-  public AirMapMarker(Context context, MarkerOptions options) {
-    super(context);
-    this.context = context;
-    logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
-    logoHolder.onAttach();
-
-    position = options.getPosition();
-    setAnchor(options.getAnchorU(), options.getAnchorV());
-    setCalloutAnchor(options.getInfoWindowAnchorU(), options.getInfoWindowAnchorV());
-    setTitle(options.getTitle());
-    setSnippet(options.getSnippet());
-    setRotation(options.getRotation());
-    setFlat(options.isFlat());
-    setDraggable(options.isDraggable());
-    setZIndex(Math.round(options.getZIndex()));
-    setAlpha(options.getAlpha());
-    iconBitmapDescriptor = options.getIcon();
   }
 
   private GenericDraweeHierarchy createDraweeHierarchy() {
@@ -284,15 +264,7 @@ public class AirMapMarker extends AirMapFeature {
     } else {
       iconBitmapDescriptor = getBitmapDescriptorByName(uri);
       if (iconBitmapDescriptor != null) {
-          int drawableId = getDrawableResourceByName(uri);
-          iconBitmap = BitmapFactory.decodeResource(getResources(), drawableId);
-          if (iconBitmap == null) { // VectorDrawable or similar
-              Drawable drawable = getResources().getDrawable(drawableId);
-              iconBitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-              drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-              Canvas canvas = new Canvas(iconBitmap);
-              drawable.draw(canvas);
-          }
+          iconBitmap = BitmapFactory.decodeResource(getResources(), getDrawableResourceByName(uri));
       }
       update();
     }

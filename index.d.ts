@@ -1,14 +1,13 @@
 declare module "react-native-maps" {
     import * as React from 'react';
-    import { Animated } from 'react-native';
-
+    
     export interface Region {
         latitude: number
         longitude: number
         latitudeDelta: number
         longitudeDelta: number
     }
-
+    
     export interface LatLng {
         latitude: number
         longitude: number
@@ -17,29 +16,6 @@ declare module "react-native-maps" {
     export interface Point {
         x: number
         y: number
-    }
-
-    export type Coordinate = Number[];
-
-    export class AnimatedRegion extends Animated.AnimatedWithChildren {
-        latitude: Animated.Value
-        longitude: Animated.Value
-        latitudeDelta: Animated.Value
-        longitudeDelta: Animated.Value
-
-        constructor(region: Region);
-
-        setValue(value: Region): void;
-        setOffset(offset: Region): void;
-        flattenOffset(): void;
-        __getValue(): Region;
-        __attach(): void;
-        __detach(): void;
-        stopAnimation(callback?: Function): void;
-        addListener(callback: Function): string;
-        removeListener(id: string): void;
-        spring(config: any): any;
-        timing(config: any): any;
     }
 
     export interface MapViewProps {
@@ -91,43 +67,21 @@ declare module "react-native-maps" {
         onMarkerDragStart?: (value: { coordinate: LatLng, position: Point }) => void;
         onMarkerDrag?: (value: { coordinate: LatLng, position: Point }) => void;
         onMarkerDragEnd?: (value: { coordinate: LatLng, position: Point }) => void;
-        onPoiClick?: (value: {coordinate: LatLng, position: Point, placeId: string, name: string }) => void;
         minZoomLevel?: number;
         maxZoomLevel?: number;
-        kmlSrc?: string;
     }
 
     export default class MapView extends React.Component<MapViewProps, any> {
+        static Animated: any;
+        static AnimatedRegion: any;
         animateToRegion(region: Region, duration?: number): void;
         animateToCoordinate(latLng: LatLng, duration?: number): void;
         animateToBearing(bearing: number, duration?: number): void;
         animateToViewingAngle(angle: number, duration?: number): void;
         fitToElements(animated: boolean): void;
         fitToSuppliedMarkers(markers: string[], animated: boolean): void;
-        fitToCoordinates(coordinates?: LatLng[], options?: {}): void;
+        fitToCoordinates(coordinates?: LatLng[], options?:{}): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
-        takeSnapshot(options?: SnapshotOptions): Promise<string>;
-    }
-
-    export class MapViewAnimated extends React.Component<MapViewProps, any> {
-        animateToRegion(region: Region, duration?: number): void;
-        animateToCoordinate(latLng: LatLng, duration?: number): void;
-        animateToBearing(bearing: number, duration?: number): void;
-        animateToViewingAngle(angle: number, duration?: number): void;
-        fitToElements(animated: boolean): void;
-        fitToSuppliedMarkers(markers: string[], animated: boolean): void;
-        fitToCoordinates(coordinates?: LatLng[], options?: {}): void;
-        setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
-        takeSnapshot(options?: SnapshotOptions): Promise<string>;
-    }
-
-    export interface SnapshotOptions {
-        width?: number;              // optional, when omitted the view-width is used
-        height?: number;             // optional, when omitted the view-height is used
-        region?: Region;             // iOS only, optional region to render
-        format?: 'png' | 'jpg';      // image formats: 'png', 'jpg' (default: 'png')
-        quality?: number;            // image quality: 0..1 (only relevant for jpg, default: 1)
-        result?: 'file' | 'base64';  // result types: 'file', 'base64' (default: 'file')
     }
 
     export type LineCapType = 'butt' | 'round' | 'square';
@@ -141,7 +95,7 @@ declare module "react-native-maps" {
         image?: any;
         opacity?: number;
         pinColor?: string;
-        coordinate: { latitude: number; longitude: number } | AnimatedRegion;
+        coordinate: { latitude: number; longitude: number };
         centerOffset?: { x: number; y: number };
         calloutOffset?: { x: number; y: number };
         anchor?: { x: number; y: number };
@@ -160,7 +114,6 @@ declare module "react-native-maps" {
         rotation?: number;
         tracksViewChanges?: boolean
         tracksInfoWindowChanges?: boolean
-        stopPropagation?: boolean
     }
 
     export interface MapPolylineProps {
@@ -222,9 +175,10 @@ declare module "react-native-maps" {
         zIndex?: number;
     }
 
-    export interface MapOverlayProps {
-        image?: any;
-        bounds: Coordinate[];
+    export interface MapMbTileProps {
+        pathTemplate: string;
+        tileSize: number;
+        zIndex?: number;
     }
 
     export interface MapCalloutProps {
@@ -243,13 +197,6 @@ declare module "react-native-maps" {
     export class Circle extends React.Component<MapCircleProps, any> { }
     export class UrlTile extends React.Component<MapUrlTileProps, any> { }
     export class LocalTile extends React.Component<MapLocalTileProps, any> { }
-    export class Overlay extends React.Component<MapOverlayProps, any> { }
+    export class MbTile extends React.Component<MapMbTileProps, any> { }
     export class Callout extends React.Component<MapCalloutProps, any> { }
-
-    export class MarkerAnimated extends React.Component<MarkerProps, any> {
-        showCallout(): void;
-        hideCallout(): void;
-        animateMarkerToCoordinate(coordinate: LatLng, duration: number): void;
-    }
-    export class OverlayAnimated extends React.Component<MapOverlayProps, any> { }
 }
