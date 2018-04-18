@@ -29,11 +29,11 @@ public class AirMapUrlTile extends AirMapFeature {
           .replace("{z}", Integer.toString(zoom));
       URL url = null;
 
-      if(this.maximumZ && zoom > maximumZ) {
+      if(AirMapUrlTile.this.maximumZ > 0 && zoom > maximumZ) {
         return url;
       }
 
-      if(this.minimumZ && zoom < minimumZ) {
+      if(AirMapUrlTile.this.minimumZ > 0 && zoom < minimumZ) {
         return url;
       }
 
@@ -92,7 +92,7 @@ public class AirMapUrlTile extends AirMapFeature {
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
     }
-  }  
+  }
 
   public TileOverlayOptions getTileOverlayOptions() {
     if (tileOverlayOptions == null) {
