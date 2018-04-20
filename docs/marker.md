@@ -1,11 +1,11 @@
-# `<MapView.Marker />` Component API
+# `<Marker />` Component API
 
 ## Props
 
 | Prop | Type | Default | Note |
 |---|---|---|---|
-| `title` | `String` |  | The title of the marker. This is only used if the <Marker /> component has no children that are an `<MapView.Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
-| `description` | `String` |  | The description of the marker. This is only used if the <Marker /> component has no children that are an `<MapView.Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
+| `title` | `String` |  | The title of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
+| `description` | `String` |  | The description of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
 | `image` | `ImageSource` |  | A custom image to be used as the marker's icon. Only local image resources are allowed to be used.
 | `pinColor` | `Color` |  | If no custom marker view or custom image is provided, the platform default pin will be used, which can be customized by this color. Ignored if a custom marker is being used.
 | `coordinate` | `LatLng` |  | The coordinate for the marker.
@@ -19,6 +19,7 @@
 | `draggable` | `<null>` |  | This is a non-value based prop. Adding this allows the marker to be draggable (re-positioned).
 | `tracksViewChanges` | `Boolean` | true | Sets whether this marker should track view changes. It's recommended to turn it off whenever it's possible to improve custom marker performance. **Note**: iOS Google Maps only.
 | `tracksInfoWindowChanges` | `Boolean` | false | Sets whether this marker should track view changes in info window. Enabling it will let marker change content of info window after first render pass, but will lead to decreased performance, so it's recommended to disable it whenever you don't need it. **Note**: iOS Google Maps only.
+| `stopPropagation` | `Boolean` | false | Sets whether this marker should propagate `onPress` events. Enabling it will stop the parent `MapView`'s `onPress` from being called. **Note**: iOS only. Android does not propagate `onPress` events. See [#1132](https://github.com/react-community/react-native-maps/issues/1132) for more information.
 
 ## Events
 
@@ -41,6 +42,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 |---|---|---|
 | `showCallout` |  | Shows the callout for this marker
 | `hideCallout` |  | Hides the callout for this marker
+| `animateMarkerToCoordinate` | `coordinate: LatLng, duration: number` | Animates marker movement. **Note**: Android only
 
 
 

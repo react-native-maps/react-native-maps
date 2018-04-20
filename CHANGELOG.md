@@ -1,4 +1,41 @@
 # Change Log
+## 0.21.0 (March 31, 2018)
+* Common: [#2030](https://github.com/react-community/react-native-maps/pull/2030) Broadened peer-dependency support
+* Common: [#2035](https://github.com/react-community/react-native-maps/pull/2035), [#2113](https://github.com/react-community/react-native-maps/pull/2113), & [#2141](https://github.com/react-community/react-native-maps/pull/2141) Typescript improvements and fixes
+* Common: [#2011](https://github.com/react-community/react-native-maps/pull/2011) Add suport for KML file (Only Markers)
+* Common: [#2053](https://github.com/react-community/react-native-maps/pull/2053) Fix 'module undefined' for React Native >= 0.54
+* Common: [#2131](https://github.com/react-community/react-native-maps/pull/2131) Fix initialRegion for React Native >= 0.54
+* Common: [#2115](https://github.com/react-community/react-native-maps/pull/2115) Upgrade React Native peer dependency to 0.54
+* Common: [#2032](https://github.com/react-community/react-native-maps/pull/2032) Add onMyLocationChange event
+* Common: [#2039](https://github.com/react-community/react-native-maps/pull/2039) Fixed problem with pointForCoordinate and coordinateForPoint methods
+* Common: [#2050](https://github.com/react-community/react-native-maps/pull/2050) Add support for onPoiClick
+* iOS: [#2022](https://github.com/react-community/react-native-maps/pull/2022) Add support for Map.Overlay
+* iOS: [#2068](https://github.com/react-community/react-native-maps/pull/2068) Prevent marker press from calling MapView onPress
+* iOS: [#2057](https://github.com/react-community/react-native-maps/pull/2057) Fixed polygon and polyline not re-rendering when changing tile URL (AirMaps)
+* iOS: [#2101](https://github.com/react-community/react-native-maps/pull/2101) Fixed re-render not updating MapView.Circle component in UI when radius or center coordinates change (AirMaps)
+* Android: [#2111](https://github.com/react-community/react-native-maps/pull/2111) Allow vector drawables to be used as markers
+* Android: [#2132](https://github.com/react-community/react-native-maps/pull/2132) Add mock-provider boolean on each location update
+* Android: [#2047](https://github.com/react-community/react-native-maps/pull/2047) Check for presence of project-wide (ext) Gradle configuration properties `compileSdkVersion`, `targetSdkVersion`, `buildToolsVersion`, `supportLibVersion`, `googlePlayServicesVersion`, and `androidMapsUtilsVersion`. This provides a better mechanism for aligning the requirements of the module with that of the host project.
+* Android: [#2096](https://github.com/react-community/react-native-maps/pull/2096) Updated gradle configuration for gradle 3.0.0+
+
+## 0.20.1 (February 13, 2018)
+* Common: [hotfix PROVIDER_GOOGLE](https://github.com/react-community/react-native-maps/commit/cd868ea7b33a04c8bdd5e909cf134a133b2cb316)
+* iOS: [#2019](https://github.com/airbnb/react-native-maps/pull/2019) Exposing the maximumZ property to AIRMapUrlTile
+
+
+## 0.20.0 (February 9, 2018)
+* Common: [#1889](https://github.com/airbnb/react-native-maps/pull/1889) Fix for 'Animated.Region undefined constructor' in recent react-native version.
+* iOS: [#1853](https://github.com/airbnb/react-native-maps/pull/1853) Fixed onMapReady no longer getting called on iOS
+* Android: [#1906](https://github.com/airbnb/react-native-maps/pull/1906) Manage Zoom Controls visibility on the map
+* iOS: [#1911](https://github.com/airbnb/react-native-maps/pull/1911) Add gradient/multi-color polyline support for iOS (MapKit)
+* Android: [#1918](https://github.com/airbnb/react-native-maps/pull/1918) Ground Overlay Support
+* Common: [#1851](https://github.com/airbnb/react-native-maps/pull/1851) New methods to convert between LatLng and Point
+* iOS: [#1846](https://github.com/airbnb/react-native-maps/pull/1846) Fix callouts appearing behind markers
+* iOS: [#1969](https://github.com/airbnb/react-native-maps/pull/1969) Added tracksInfoWindowChanges property to iOS Google Maps
+* iOS: [#1960](https://github.com/airbnb/react-native-maps/pull/1960) Fixed gradient polyline not always fully drawn + stability issues
+* iOS: [#1953](https://github.com/airbnb/react-native-maps/pull/1953) Fix onMapReady not getting called after first time, initialRegion lat/lng delta not setting properly, setRegion method getting called even when map is not ready and prevent onRegionChange/ onRegionChangeComplete event until initialRegion or region is set.
+* Android: [#1781](https://github.com/airbnb/react-native-maps/pull/1781) Polygon holes support
+* Android: [#1976](https://github.com/airbnb/react-native-maps/pull/1976) Add native animation for Markers on Android
 
 ## 0.19.0 (December 14, 2017)
 * Common: [#1715](https://github.com/airbnb/react-native-maps/pull/1715) Fixed region/initialRegion null overrides of this.props

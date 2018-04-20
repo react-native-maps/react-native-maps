@@ -7,6 +7,7 @@
 | `provider` | `string` |  | The map framework to use. <br/><br/>Either `"google"` for GoogleMaps, otherwise `null` or `undefined` to use the native map framework (`MapKit` in iOS and `GoogleMaps` in android).
 | `region` | `Region` |  | The region to be displayed by the map. <br/><br/>The region is defined by the center coordinates and the span of coordinates to display.
 | `initialRegion` | `Region` |  | The initial region to be displayed by the map.  Use this prop instead of `region` only if you don't want to control the viewport of the map besides the initial region.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
+| `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured. **Note** Google Maps only.
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
 | `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: (Android only) topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
 | `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/airbnb/react-native-maps#customizing-the-map-style) for more information.
@@ -35,6 +36,7 @@
 | `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
 | `moveOnMarkerPress` | `Boolean` | `true` | `Android only` If `false` the map won't move when a marker is pressed.
 | `legalLabelInsets` | `EdgeInsets` | | If set, changes the position of the "Legal" label link from the OS default. **Note:** iOS only.
+| `kmlSrc` | `string` | | The URL from KML file. **Note:** Google Maps and Markers only (either Android or iOS with `PROVIDER_GOOGLE`).
 
 
 ## Events
@@ -44,10 +46,13 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | Event Name | Returns | Notes
 |---|---|---|
 | `onMapReady` |  | Callback that is called once the map is fully loaded.
+| `onKmlReady` | `KmlContainer` | Callback that is called once the kml is fully loaded.
 | `onRegionChange` | `Region` | Callback that is called continuously when the region changes, such as when a user is dragging the map.
 | `onRegionChangeComplete` | `Region` | Callback that is called once when the region changes, such as when the user is done moving the map.
+| `onUserLocationChange` | `{ coordinate: LatLng }` | Callback that is called when the underlying map figures our users current location (coordinate also includes isFromMockProvider value for Android). Make sure **showsUserLocation** is set to *true* and that the provider is `"google"`.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
 | `onPanDrag` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user presses and drags the map. **NOTE**: for iOS `scrollEnabled` should be set to false to trigger the event
+| `onPoiClick` | `{ coordinate: LatLng, position: Point, placeId: string, name: string }` | Callback that is called when user click on a POI.
 | `onLongPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user makes a "long press" somewhere on the map.
 | `onMarkerPress` |  | Callback that is called when a marker on the map is tapped by the user.
 | `onMarkerSelect` |  | Callback that is called when a marker on the map becomes selected. This will be called when the callout for that marker is about to be shown. **Note**: iOS only.
@@ -125,5 +130,20 @@ type EdgeInsets {
   left: Number,
   bottom: Number,
   right: Number
+}
+```
+
+```
+type Marker {
+  id: String,
+  coordinate: LatLng,
+  title: String,
+  description: String
+}
+```
+
+```
+type KmlContainer {
+  markers: [Marker]
 }
 ```
