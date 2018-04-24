@@ -123,7 +123,7 @@ The steps are as described in https://facebook.github.io/react-native/docs/runni
 
 If you've defined *[project-wide properties](https://developer.android.com/studio/build/gradle-tips.html)* (**recommended**) in your root `build.gradle`, this library will detect the presence of the following properties:
 
-    ```groovy
+```groovy
     buildscript {...}
     allprojects {...}
 
@@ -138,7 +138,7 @@ If you've defined *[project-wide properties](https://developer.android.com/studi
         googlePlayServicesVersion = "11.8.0"
         androidMapsUtilsVersion = "0.5+"
     }
-    ```
+ ```
 
    If you do **not** have *project-wide properties* defined and have a different play-services version than the one included in this library, use the following instead (switch 10.0.1 for the desired version):
 
