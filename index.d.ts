@@ -108,6 +108,7 @@ declare module "react-native-maps" {
                 latitude: number,
                 longitude: number,
                 altitude: number,
+                timestamp: number,
                 accuracy: number,
                 speed: number,
                 isFromMockProvider: boolean,
