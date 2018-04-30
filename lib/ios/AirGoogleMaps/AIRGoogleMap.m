@@ -13,6 +13,7 @@
 #import "AIRGoogleMapPolygon.h"
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGoogleMapCircle.h"
+#import "AIRGoogleMapHeatmap.h"
 #import "AIRGoogleMapUrlTile.h"
 #import "AIRGoogleMapOverlay.h"
 #import <GoogleMaps/GoogleMaps.h>
@@ -70,6 +71,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _polygons = [NSMutableArray array];
     _polylines = [NSMutableArray array];
     _circles = [NSMutableArray array];
+    _heatmaps = [NSMutableArray array];
     _tiles = [NSMutableArray array];
     _overlays = [NSMutableArray array];
     _initialCamera = nil;
@@ -180,6 +182,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapOverlay *overlay = (AIRGoogleMapOverlay*)subview;
     overlay.overlay.map = nil;
     [self.overlays removeObject:overlay];
+  } else if ([subview isKindOfClass:[AIRGoogleMapHeatmap class]]){
+    AIRGoogleMapHeatmap *heatmap = (AIRGoogleMapHeatmap*)subview;
+    heatmap.heatmap.map = self;
+    [self.heatmaps addObject:heatmap];
   } else {
     NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
     for (int i = 0; i < childSubviews.count; i++) {
