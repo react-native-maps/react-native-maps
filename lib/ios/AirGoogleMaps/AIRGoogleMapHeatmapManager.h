@@ -1,7 +1,7 @@
 //
-//  AIRGoogleMapCircleManager.h
+//  AIRGoogleMapHeatmapManager.h
 //
-//  Created by Nick Italiano on 10/24/16.
+//  Created by David Cako on 29 April 2018.
 //
 
 #import <React/RCTViewManager.h>

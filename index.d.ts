@@ -415,6 +415,30 @@ declare module "react-native-maps" {
 
     export class Overlay extends React.Component<MapOverlayProps, any> {
     }
+    export interface MapHeatmapProps {
+        points: LatLng[];
+        gradient?: {
+            colors: string[],
+            startPoints: number[],
+            colorMapSize: number
+        }
+        radius?: number;
+        opacity?: number;
+    }
+
+    export class Marker extends React.Component<MarkerProps, any> {
+        showCallout(): void;
+        hideCallout(): void;
+        animateMarkerToCoordinate(coordinate: LatLng, duration: number): void;
+    }
+    export class Polyline extends React.Component<MapPolylineProps, any> { }
+    export class Polygon extends React.Component<MapPolygonProps, any> { }
+    export class Circle extends React.Component<MapCircleProps, any> { }
+    export class UrlTile extends React.Component<MapUrlTileProps, any> { }
+    export class LocalTile extends React.Component<MapLocalTileProps, any> { }
+    export class Overlay extends React.Component<MapOverlayProps, any> { }
+    export class Callout extends React.Component<MapCalloutProps, any> { }
+    export class Heatmap extends React.Component<MapHeatmapProps, any> { }
 
     export class OverlayAnimated extends Overlay {
     }

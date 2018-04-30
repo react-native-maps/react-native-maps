@@ -1,7 +1,7 @@
 //
-//  AIRGoogleMapCircleManager.m
+//  AIRGoogleMapHeatmapManager.m
 //
-//  Created by Nick Italiano on 10/24/16.
+//  Created by David Cako on 29 April 2018.
 //
 
 #import "AIRGoogleMapHeatmapManager.h"
@@ -27,5 +27,6 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_VIEW_PROPERTY(points, NSArray<NSDictionary *>)
 RCT_EXPORT_VIEW_PROPERTY(radius, NSUInteger)
 RCT_EXPORT_VIEW_PROPERTY(opacity, float)
+RCT_EXPORT_VIEW_PROPERTY(gradient, NSDictionary *)
 
 @end

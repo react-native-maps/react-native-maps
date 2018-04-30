@@ -1,7 +1,7 @@
 //
-//  AIRGoogleMapsCircle.m
+//  AIRGoogleMapHeatmap.m
 //
-//  Created by Nick Italiano on 10/24/16.
+//  Created by David Cako on 29 April 2018.
 //
 #import <UIKit/UIKit.h>
 #import "AIRGoogleMapHeatmap.h"
@@ -26,18 +26,34 @@
         CLLocationCoordinate2D coord = [RCTConvert CLLocationCoordinate2D:points[i]];
         [w addObject:[[GMUWeightedLatLng alloc] initWithCoordinate:coord intensity:1.0]];
     }
+    self.points = w;
     [self.heatmap setWeightedData:w];
     [self.heatmap clearTileCache];
 }
 
 - (void)setRadius:(NSUInteger)radius
 {
+    self.radius = radius;
     [self.heatmap setRadius:radius];
 }
 
 - (void)setOpacity:(float)opacity
 {
+    self.opacity = opacity;
     [self.heatmap setOpacity:opacity];
+}
+
+- (void)setGradient:(NSDictionary *)gradient
+{
+    NSArray<UIColor *> *colors = [RCTConvert UIColorArray:gradient[@"colors"]];
+    NSArray<NSNumber *> *colorStartPoints = [RCTConvert NSNumberArray:gradient[@"startPoints"]];
+    NSUInteger colorMapSize = [RCTConvert NSUInteger:gradient[@"colorMapSize"]];
+    
+    GMUGradient *gmuGradient = [[GMUGradient alloc] initWithColors:colors
+                                        startPoints:colorStartPoints
+                                       colorMapSize:colorMapSize];
+    self.gradient = gmuGradient;
+    [self.heatmap setGradient:gmuGradient];
 }
 
 @end
