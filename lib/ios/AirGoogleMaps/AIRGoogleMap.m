@@ -142,6 +142,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapOverlay *overlay = (AIRGoogleMapOverlay*)subview;
     overlay.overlay.map = self;
     [self.overlays addObject:overlay];
+  } else if ([subview isKindOfClass:[AIRGoogleMapHeatmap class]]){
+      AIRGoogleMapHeatmap *heatmap = (AIRGoogleMapHeatmap*)subview;
+      heatmap.heatmap.map = self;
+      [self.heatmaps addObject:heatmap];
   } else {
     NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
     for (int i = 0; i < childSubviews.count; i++) {
@@ -184,8 +188,8 @@ id regionAsJSON(MKCoordinateRegion region) {
     [self.overlays removeObject:overlay];
   } else if ([subview isKindOfClass:[AIRGoogleMapHeatmap class]]){
     AIRGoogleMapHeatmap *heatmap = (AIRGoogleMapHeatmap*)subview;
-    heatmap.heatmap.map = self;
-    [self.heatmaps addObject:heatmap];
+    heatmap.heatmap.map = nil;
+    [self.heatmaps removeObject:heatmap];
   } else {
     NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
     for (int i = 0; i < childSubviews.count; i++) {
