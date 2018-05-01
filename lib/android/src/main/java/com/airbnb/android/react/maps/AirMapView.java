@@ -2,6 +2,7 @@ package com.airbnb.android.react.maps;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -200,7 +201,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if(android.os.Build.VERSION.SDK_INT >= 18){
         coordinate.putBoolean("isFromMockProvider", location.isFromMockProvider());
         }
-
+         
         event.putMap("coordinate", coordinate);
 
         manager.pushEvent(context, view, "onUserLocationChange", event);
@@ -916,6 +917,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     manager.pushEvent(context, this, "onPanDrag", event);
   }
 
+  public void setKmlFileName(String fileName) {
+    try {
+      AssetManager assetManager = context.getAssets();
+      InputStream kmlStream = assetManager.open(fileName);
+      loadKml(kmlStream);
+    } catch (IOException e) {
+
+    }
+  }
+
   public void setKmlSrc(String kmlSrc) {
     try {
       InputStream kmlStream =  new FileUtil(context).execute(kmlSrc).get();
@@ -924,6 +935,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         return;
       }
 
+      loadKml(kmlStream);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void loadKml(InputStream kmlStream) {
+    try {
       kmlLayer = new KmlLayer(map, kmlStream, context);
       kmlLayer.addLayerToMap();
 
@@ -976,7 +997,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         AirMapMarker marker = new AirMapMarker(context, options);
 
         if (placemark.getInlineStyle() != null
-            && placemark.getInlineStyle().getIconUrl() != null) {
+                && placemark.getInlineStyle().getIconUrl() != null) {
           marker.setImage(placemark.getInlineStyle().getIconUrl());
         } else if (container.getStyle(placemark.getStyleId()) != null) {
           KmlStyle style = container.getStyle(placemark.getStyleId());
@@ -1000,14 +1021,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       pointers.putArray("markers", markers);
 
       manager.pushEvent(context, this, "onKmlReady", pointers);
-
     } catch (XmlPullParserException e) {
       e.printStackTrace();
     } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } catch (ExecutionException e) {
       e.printStackTrace();
     }
   }

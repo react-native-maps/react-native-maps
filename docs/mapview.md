@@ -37,7 +37,7 @@
 | `moveOnMarkerPress` | `Boolean` | `true` | `Android only` If `false` the map won't move when a marker is pressed.
 | `legalLabelInsets` | `EdgeInsets` | | If set, changes the position of the "Legal" label link from the OS default. **Note:** iOS only.
 | `kmlSrc` | `string` | | The URL from KML file. **Note:** Google Maps and Markers only (either Android or iOS with `PROVIDER_GOOGLE`).
-
+| `kmlFileName` | `string` | | The file name in app's bundle (assets folder in android). **Note:** Google Maps and Markers only (either Android or iOS with `PROVIDER_GOOGLE`).
 
 ## Events
 

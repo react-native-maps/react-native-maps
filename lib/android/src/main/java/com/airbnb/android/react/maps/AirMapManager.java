@@ -239,6 +239,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     }
   }
 
+  @ReactProp(name = "kmlFileName")
+  public void kmlFileName(AirMapView view, String kmlUrl) {
+    if (kmlUrl != null) {
+      view.setKmlFileName(kmlUrl);
+    }
+  }
+
   @Override
   public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
     Integer duration;
