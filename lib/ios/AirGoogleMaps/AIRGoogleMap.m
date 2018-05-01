@@ -495,7 +495,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   [self loadKmlData:urlData];
 }
 
-- (void)sktKmlFileName:(NSString *)kmlFileName {
+- (void)setKmlFileName:(NSString *)kmlFileName {
     NSArray* components = [kmlFileName componentsSeparatedByString:@"."];
     NSString* path = [[NSBundle mainBundle] pathForResource:components[0] ofType:components[1]];
     NSURL *url = [NSURL fileURLWithPath:path];
