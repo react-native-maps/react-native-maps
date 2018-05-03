@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 // eslint-disable-next-line max-len
-import MapView, { Marker, ProviderPropType, Polygon, Polyline, Callout } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, ProviderPropType, Polygon, Polyline, Callout } from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
 const { width, height } = Dimensions.get('window');
@@ -81,12 +81,22 @@ class EventListener extends React.Component {
   }
 
   render() {
+    // Events that are dependent on
+    let googleProviderProps = {};
+    if (this.props.provider === PROVIDER_GOOGLE) {
+      googleProviderProps = {
+        onUserLocationChange: this.recordEvent('Map::onUserLocationChange'),
+      };
+    }
+
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
+          showsUserLocation
+          showsMyLocationButton
           onRegionChange={this.recordEvent('Map::onRegionChange')}
           onRegionChangeComplete={this.recordEvent('Map::onRegionChangeComplete')}
           onPress={this.recordEvent('Map::onPress')}
@@ -96,6 +106,7 @@ class EventListener extends React.Component {
           onMarkerSelect={this.recordEvent('Map::onMarkerSelect')}
           onMarkerDeselect={this.recordEvent('Map::onMarkerDeselect')}
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
+          {...googleProviderProps}
         >
           <Marker
             coordinate={{

@@ -14,10 +14,10 @@
 #import "AIRGoogleMapUrlTile.h"
 #import "AIRGoogleMapOverlay.h"
 #import <GoogleMaps/GoogleMaps.h>
-#import "GMUKMLParser.h"
-#import "GMUPlacemark.h"
-#import "GMUPoint.h"
-#import "GMUGeometryRenderer.h"
+#import <Google-Maps-iOS-Utils/GMUKMLParser.h>
+#import <Google-Maps-iOS-Utils/GMUPlacemark.h>
+#import <Google-Maps-iOS-Utils/GMUPoint.h>
+#import <Google-Maps-iOS-Utils/GMUGeometryRenderer.h>
 #import <MapKit/MapKit.h>
 #import <React/UIView+React.h>
 #import <React/RCTBridge.h>
@@ -63,9 +63,22 @@ id regionAsJSON(MKCoordinateRegion region) {
     _initialRegionSetOnLoad = false;
     _didCallOnMapReady = false;
     _didMoveToWindow = false;
+
+    // Listen to the myLocation property of GMSMapView.
+    [self addObserver:self
+           forKeyPath:@"myLocation"
+              options:NSKeyValueObservingOptionNew
+              context:NULL];
   }
   return self;
 }
+
+- (void)dealloc {
+  [self removeObserver:self
+            forKeyPath:@"myLocation"
+               context:NULL];
+}
+
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate {
 
   CGPoint touchPoint = [self.projection pointForCoordinate:coordinate];
@@ -186,7 +199,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
   if (_initialRegionSetOnLoad) return;
   _initialRegion = initialRegion;
-  _initialRegionSetOnLoad = true;
+  _initialRegionSetOnLoad = _didMoveToWindow;
   self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
 }
 
@@ -257,6 +270,20 @@ id regionAsJSON(MKCoordinateRegion region) {
                };
 
   if (self.onChange) self.onChange(event);
+}
+
+- (void)didTapPOIWithPlaceID:(NSString *)placeID
+                        name:(NSString *)name
+                    location:(CLLocationCoordinate2D)location {
+  id event = @{@"placeId": placeID,
+               @"name": name,
+               @"coordinate": @{
+                   @"latitude": @(location.latitude),
+                   @"longitude": @(location.longitude)
+                   }
+               };
+
+  if (self.onPoiClick) self.onPoiClick(event);
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position {
@@ -409,6 +436,33 @@ id regionAsJSON(MKCoordinateRegion region) {
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
 }
 
+#pragma mark - KVO updates
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+  if ([keyPath isEqualToString:@"myLocation"]){
+    CLLocation *location = [object myLocation];
+
+    id event = @{@"coordinate": @{
+                    @"latitude": @(location.coordinate.latitude),
+                    @"longitude": @(location.coordinate.longitude),
+                    @"altitude": @(location.altitude),
+                    @"timestamp": @(location.timestamp),
+                    @"accuracy": @(location.horizontalAccuracy),
+                    @"altitudeAccuracy": @(location.verticalAccuracy),
+                    @"speed": @(location.speed),
+                    }
+                };
+
+  if (self.onUserLocationChange) self.onUserLocationChange(event);
+  } else {
+    // This message is not for me; pass it on to super.
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+  }
+}
+
 + (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
   if (marker.style.styleID != nil) {
     for (GMUStyle *style in parser.styles) {
@@ -417,7 +471,7 @@ id regionAsJSON(MKCoordinateRegion region) {
       }
     }
   }
-  
+
   return marker.style.iconUrl;
 }
 
@@ -426,28 +480,28 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setKmlSrc:(NSString *)kmlUrl {
-    
+
   _kmlSrc = kmlUrl;
-  
+
   NSURL *url = [NSURL URLWithString:kmlUrl];
   NSData *urlData = nil;
-  
+
   if ([url isFileURL]) {
     urlData = [NSData dataWithContentsOfURL:url];
   } else {
     urlData = [[NSFileManager defaultManager] contentsAtPath:kmlUrl];
   }
-  
+
   GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
   [parser parse];
-  
+
   NSUInteger index = 0;
   NSMutableArray *markers = [[NSMutableArray alloc]init];
 
   for (GMUPlacemark *place in parser.placemarks) {
-        
+
     CLLocationCoordinate2D location =((GMUPoint *) place.geometry).coordinate;
-    
+
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)[[AIRGoogleMapMarkerManager alloc] view];
     if (!marker.bridge) {
       marker.bridge = _bridge;
@@ -460,9 +514,9 @@ id regionAsJSON(MKCoordinateRegion region) {
     marker.imageSrc = [AIRGoogleMap GetIconUrl:place parser:parser];
     marker.layer.backgroundColor = [UIColor clearColor].CGColor;
     marker.layer.position = CGPointZero;
-      
+
     [self insertReactSubview:(UIView *) marker atIndex:index];
-    
+
     [markers addObject:@{@"id": marker.identifier,
                          @"title": marker.title,
                          @"description": marker.subtitle,
@@ -474,7 +528,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 
     index++;
   }
-  
+
   id event = @{@"markers": markers};
   if (self.onKmlReady) self.onKmlReady(event);
 }

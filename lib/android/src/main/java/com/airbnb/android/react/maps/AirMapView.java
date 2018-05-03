@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.location.Location;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.android.data.kml.KmlContainer;
@@ -63,7 +65,7 @@ import java.util.concurrent.ExecutionException;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
-    GoogleMap.OnMarkerDragListener, OnMapReadyCallback {
+    GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener {
   public GoogleMap map;
   private KmlLayer kmlLayer;
   private ProgressBar mapLoadingProgressBar;
@@ -177,10 +179,33 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     this.map = map;
     this.map.setInfoWindowAdapter(this);
     this.map.setOnMarkerDragListener(this);
+    this.map.setOnPoiClickListener(this);
 
     manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
     final AirMapView view = this;
+
+    map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+      @Override
+      public void onMyLocationChange(Location location){
+        WritableMap event = new WritableNativeMap();
+
+        WritableMap coordinate = new WritableNativeMap();
+        coordinate.putDouble("latitude", location.getLatitude());
+        coordinate.putDouble("longitude", location.getLongitude());
+        coordinate.putDouble("altitude", location.getAltitude());
+        coordinate.putDouble("timestamp", location.getTime());
+        coordinate.putDouble("accuracy", location.getAccuracy());
+        coordinate.putDouble("speed", location.getSpeed());
+        if(android.os.Build.VERSION.SDK_INT >= 18){
+        coordinate.putBoolean("isFromMockProvider", location.isFromMockProvider());
+        }
+
+        event.putMap("coordinate", coordinate);
+
+        manager.pushEvent(context, view, "onUserLocationChange", event);
+      }
+    });
 
     map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
@@ -796,6 +821,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     AirMapMarker markerView = getMarkerMap(marker);
     event = makeClickEventData(marker.getPosition());
     manager.pushEvent(context, markerView, "onDragEnd", event);
+  }
+
+  @Override
+  public void onPoiClick(PointOfInterest poi) {
+    WritableMap event = makeClickEventData(poi.latLng);
+
+    event.putString("placeId", poi.placeId);
+    event.putString("name", poi.name);
+
+    manager.pushEvent(context, this, "onPoiClick", event);
   }
 
   private ProgressBar getMapLoadingProgressBar() {
