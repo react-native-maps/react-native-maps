@@ -26,20 +26,20 @@
         CLLocationCoordinate2D coord = [RCTConvert CLLocationCoordinate2D:points[i]];
         [w addObject:[[GMUWeightedLatLng alloc] initWithCoordinate:coord intensity:1.0]];
     }
-    self.points = w;
+    _points = points;
     [self.heatmap setWeightedData:w];
     [self.heatmap clearTileCache];
 }
 
 - (void)setRadius:(NSUInteger)radius
 {
-    self.radius = radius;
+    _radius = radius;
     [self.heatmap setRadius:radius];
 }
 
 - (void)setOpacity:(float)opacity
 {
-    self.opacity = opacity;
+    _opacity = opacity;
     [self.heatmap setOpacity:opacity];
 }
 
@@ -52,7 +52,7 @@
     GMUGradient *gmuGradient = [[GMUGradient alloc] initWithColors:colors
                                         startPoints:colorStartPoints
                                        colorMapSize:colorMapSize];
-    self.gradient = gmuGradient;
+    _gradient = gmuGradient;
     [self.heatmap setGradient:gmuGradient];
 }
 
