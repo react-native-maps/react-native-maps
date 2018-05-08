@@ -26,7 +26,7 @@
         CLLocationCoordinate2D coord = [RCTConvert CLLocationCoordinate2D:points[i]];
         [w addObject:[[GMUWeightedLatLng alloc] initWithCoordinate:coord intensity:1.0]];
     }
-    _points = points;
+    _points = w;
     [self.heatmap setWeightedData:w];
     [self.heatmap clearTileCache];
 }
