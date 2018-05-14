@@ -41,6 +41,7 @@ import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
 import OnPoiClick from './examples/OnPoiClick';
+import TestIdMarkers from './examples/TestIdMarkers';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -155,6 +156,7 @@ class App extends React.Component {
       [LegalLabel, 'Reposition the legal label', true],
       [SetNativePropsOverlays, 'Update native props', true],
       [CustomOverlay, 'Custom Overlay Component', true],
+      [TestIdMarkers, 'Test ID for Automation', true]
       [MapKml, 'Load Map with KML', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
