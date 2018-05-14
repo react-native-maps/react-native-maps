@@ -43,8 +43,8 @@ dependencies {
   def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion')  ? rootProject.googlePlayServicesVersion : DEFAULT_GOOGLE_PLAY_SERVICES_VERSION
   def androidMapsUtilsVersion   = rootProject.hasProperty('androidMapsUtilsVersion')    ? rootProject.androidMapsUtilsVersion   : DEFAULT_ANDROID_MAPS_UTILS_VERSION
 
-  compileOnly "com.facebook.react:react-native:+"
-  implementation "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
-  implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
-  implementation "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
+  provided "com.facebook.react:react-native:+"
+  compile "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
+  compile "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
+  compile "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
 }
