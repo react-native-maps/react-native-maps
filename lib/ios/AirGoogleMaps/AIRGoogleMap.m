@@ -266,10 +266,10 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position {
     double scale = 0.5 / [self.projection pointsForMeters:1 atCoordinate:self.camera.target];
-    
-    for(int i=0; i< _polylines.count; i++){
-        [_polylines[i] updateLineDashPattern:scale];
-    }
+  
+  for(int i=0; i< _polylines.count; i++){
+    [_polylines[i] updateLineDashPattern:scale];
+  }
 
   id event = @{@"continuous": @YES,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
@@ -294,10 +294,10 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position {
     double scale = 0.5 / [self.projection pointsForMeters:1 atCoordinate:self.camera.target];
-    
-    for(int i=0; i< _polylines.count; i++){
-        [_polylines[i] updateLineDashPattern:scale];
-    }
+  
+  for(int i=0; i< _polylines.count; i++){
+    [_polylines[i] updateLineDashPattern:scale];
+  }
 
   id event = @{@"continuous": @NO,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
@@ -311,6 +311,38 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (UIEdgeInsets)mapPadding {
   return self.padding;
+}
+
+- (void)setPaddingAdjustmentBehaviorString:(NSString *)str
+{
+  if ([str isEqualToString:@"never"])
+  {
+    self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorNever;
+  }
+  else if ([str isEqualToString:@"automatic"])
+  {
+    self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorAutomatic;
+  }
+  else //if ([str isEqualToString:@"always"]) <-- default
+  {
+    self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorAlways;
+  }
+}
+
+- (NSString *)paddingAdjustmentBehaviorString
+{
+  switch (self.paddingAdjustmentBehavior)
+  {
+    case kGMSMapViewPaddingAdjustmentBehaviorNever:
+      return @"never";
+    case kGMSMapViewPaddingAdjustmentBehaviorAutomatic:
+      return @"automatic";
+    case kGMSMapViewPaddingAdjustmentBehaviorAlways:
+      return @"always";
+      
+    default:
+      return @"unknown";
+  }
 }
 
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
@@ -461,7 +493,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                     @"latitude": @(location.coordinate.latitude),
                     @"longitude": @(location.coordinate.longitude),
                     @"altitude": @(location.altitude),
-                    @"timestamp": @(location.timestamp),
+                    @"timestamp": @(location.timestamp.timeIntervalSinceReferenceDate * 1000),
                     @"accuracy": @(location.horizontalAccuracy),
                     @"altitudeAccuracy": @(location.verticalAccuracy),
                     @"speed": @(location.speed),
