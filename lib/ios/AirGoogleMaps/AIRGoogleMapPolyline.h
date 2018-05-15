@@ -20,10 +20,13 @@
 
 @property (nonatomic, strong) UIColor *strokeColor;
 @property (nonatomic, assign) double strokeWidth;
+@property (nonatomic, assign) double scale;
 @property (nonatomic, assign) UIColor *fillColor;
 @property (nonatomic, assign) BOOL geodesic;
 @property (nonatomic, assign) NSString *title;
 @property (nonatomic, assign) int zIndex;
 @property (nonatomic, assign) BOOL tappable;
+@property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
+-(void)updateLineDashPattern:(double)scale;
 
 @end

@@ -42,6 +42,11 @@ public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
     return new AirMapPolyline(context);
   }
 
+  @ReactProp(name = "lineDashPattern")
+  public void setDash(AirMapPolyline view, ReadableArray dash) {
+    view.setDash(dash);
+  }
+
   @ReactProp(name = "coordinates")
   public void setCoordinate(AirMapPolyline view, ReadableArray coordinates) {
     view.setCoordinates(coordinates);
