@@ -34,13 +34,17 @@
   if (_scale) {
     [self updateLineDash:_scale];
   }
-   _polyline.path = path;
+
+  _polyline.path = path;
+
+  [self configureStyleSpansIfNeeded];
 }
 
 -(void)setStrokeColor:(UIColor *)strokeColor
 {
   _strokeColor = strokeColor;
   _polyline.strokeColor = strokeColor;
+  [self configureStyleSpansIfNeeded];
 }
 
 -(void)setStrokeWidth:(double)strokeWidth
@@ -88,6 +92,11 @@
   _polyline.spans = @[[GMSStyleSpan spanWithColor:fillColor]];
 }
 
+- (void)setLineDashPattern:(NSArray<NSNumber *> *)lineDashPattern {
+  _lineDashPattern = lineDashPattern;
+  [self configureStyleSpansIfNeeded];
+}
+
 -(void)setGeodesic:(BOOL)geodesic
 {
   _geodesic = geodesic;
@@ -114,6 +123,25 @@
 
 - (void)setOnPress:(RCTBubblingEventBlock)onPress {
   _polyline.onPress = onPress;
+}
+
+- (void)configureStyleSpansIfNeeded {
+  if (!_strokeColor || !_lineDashPattern || !_polyline.path) {
+      return;
+  }
+
+  BOOL isLine = YES;
+  NSMutableArray *styles = [[NSMutableArray alloc] init];
+  for (NSInteger i = 0; i < _lineDashPattern.count; i++) {
+    if (isLine) {
+      [styles addObject:[GMSStrokeStyle solidColor:_strokeColor]];
+    } else {
+      [styles addObject:[GMSStrokeStyle solidColor:[UIColor clearColor]]];
+    }
+    isLine = !isLine;
+  }
+
+  _polyline.spans = GMSStyleSpans(_polyline.path, styles, _lineDashPattern, kGMSLengthRhumb);
 }
 
 @end
