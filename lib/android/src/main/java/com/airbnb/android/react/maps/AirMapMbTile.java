@@ -51,21 +51,32 @@ public class AirMapMbTile extends AirMapFeature {
             String rawQuery = "SELECT * FROM map INNER JOIN images ON map.tile_id = images.tile_id WHERE map.zoom_level = {z} AND map.tile_column = {x} AND map.tile_row = {y}";
 
             try {
+                byte[] tile = null;
                 SQLiteDatabase offlineDataDatabase = SQLiteDatabase.openDatabase(this.pathTemplate, null, SQLiteDatabase.OPEN_READONLY);
                 String query = rawQuery.replace("{x}", Integer.toString(x))
                         .replace("{y}", Integer.toString(y))
                         .replace("{z}", Integer.toString(zoom));
                 Cursor cursor = offlineDataDatabase.rawQuery(query, null);
                 if(cursor.moveToFirst()){
-                    byte[] tile = cursor.getBlob(5);
-                    cursor.close();
-                    offlineDataDatabase.close();
-                    return tile;
+                    tile = cursor.getBlob(5);
                 }
+                cursor.close();
                 offlineDataDatabase.close();
-                return null;
+                return tile;
+            } catch (SQLiteCantOpenDatabaseException e) {
+                e.printStackTrace();
+                throw e;
+            } catch (SQLiteDatabaseCorruptException e) {
+                e.printStackTrace();
+                throw e;
+            } catch (SQLiteDatabaseLockedException e) {
+                e.printStackTrace();
+                throw e;
             } catch (Exception e) {
                 e.printStackTrace();
+                throw e;
+            } finally {
+                offlineDataDatabase.close();
                 return null;
             }
         }
