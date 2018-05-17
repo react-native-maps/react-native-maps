@@ -52,9 +52,6 @@
   _strokeWidth = strokeWidth;
   _polyline.strokeWidth = strokeWidth;
 }
--(void)setLineDashPattern:(NSArray <NSNumber *> *)lineDashPattern {
-  _lineDashPattern = lineDashPattern;
-}
 -(void)updateLineDashPattern:(double)scale {
   
   // scale = 1.0 / mapView.projection.pointsForMeters(1, atCoordinate: mapView.camera.target)
