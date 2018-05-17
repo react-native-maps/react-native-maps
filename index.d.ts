@@ -14,8 +14,137 @@ declare module "react-native-maps" {
     }
 
     export interface Point {
-        x: number
-        y: number
+        x: number;
+        y: number;
+    }
+
+    // helper interface
+    export interface MapEvent<T = {}> extends NativeSyntheticEvent<T & {
+        coordinate: LatLng;
+        position: Point;
+    }> {}
+
+    export type LineCapType = 'butt' | 'round' | 'square';
+    export type LineJoinType = 'miter' | 'round' | 'bevel';
+
+    // =======================================================================
+    //  AnimatedRegion
+    // =======================================================================
+
+    interface AnimatedRegionTimingConfig extends Animated.AnimationConfig, Partial<Region> {
+        easing?: (value: number) => number;
+        duration?: number;
+        delay?: number;
+    }
+
+    interface AnimatedRegionSpringConfig extends Animated.AnimationConfig, Partial<Region> {
+        overshootClamping?: boolean;
+        restDisplacementThreshold?: number;
+        restSpeedThreshold?: number;
+        velocity?: number | Point;
+        bounciness?: number;
+        speed?: number;
+        tension?: number;
+        friction?: number;
+        stiffness?: number;
+        mass?: number;
+        damping?: number;
+    }
+
+    export class AnimatedRegion extends Animated.AnimatedWithChildren {
+        latitude: Animated.Value
+        longitude: Animated.Value
+        latitudeDelta: Animated.Value
+        longitudeDelta: Animated.Value
+
+        constructor(region?: Region);
+
+        setValue(value: Region): void;
+        setOffset(offset: Region): void;
+        flattenOffset(): void;
+        stopAnimation(callback?: (region: Region) => void): void;
+        addListener(callback: (region: Region) => void): string;
+        removeListener(id: string): void;
+        spring(config: AnimatedRegionSpringConfig): Animated.CompositeAnimation;
+        timing(config: AnimatedRegionTimingConfig): Animated.CompositeAnimation;
+    }
+
+    // =======================================================================
+    //  MapView (default export)
+    // =======================================================================
+
+    /**
+     * takeSnapshot options
+     */
+    export interface SnapshotOptions {
+        /** optional, when omitted the view-width is used */
+        width?: number;
+        /** optional, when omitted the view-height is used */
+        height?: number;
+        /** __iOS only__, optional region to render */
+        region?: Region;
+        /** image formats, defaults to 'png' */
+        format?: 'png' | 'jpg';
+        /** image quality: 0..1 (only relevant for jpg, default: 1) */
+        quality?: number;
+        /** result types, defaults to 'file' */
+        result?: 'file' | 'base64';
+    }
+
+    /**
+     * onUserLocationChange parameters
+     */
+    export interface EventUserLocation extends NativeSyntheticEvent<{}> {
+        nativeEvent: {
+            coordinate: {
+                latitude: number,
+                longitude: number,
+                altitude: number,
+                timestamp: number,
+                accuracy: number,
+                speed: number,
+                isFromMockProvider: boolean,
+            },
+        };
+    }
+
+    /**
+     * Map style elements.
+     * @see https://developers.google.com/maps/documentation/ios-sdk/styling#use_a_string_resource
+     * @see https://developers.google.com/maps/documentation/android-api/styling
+     */
+    export type MapStyleElement = {
+        featureType?: string,
+        elementType?: string,
+        stylers: object[],
+    };
+
+    export type EdgePadding = {
+        top: Number,
+        right: Number,
+        bottom: Number,
+        left: Number,
+    };
+
+    export type EdgeInsets = {
+        top: Number,
+        right: Number,
+        bottom: Number,
+        left: Number,
+    };
+
+    export type KmlMarker = {
+        id: String,
+        title: String,
+        description: String,
+        coordinate: LatLng,
+        position: Point,
+    };
+
+    /**
+     * onKmlReady parameter
+     */
+    export interface KmlMapEvent extends NativeSyntheticEvent<{ markers: KmlMarker[] }> {
     }
 
     export interface MapViewProps {

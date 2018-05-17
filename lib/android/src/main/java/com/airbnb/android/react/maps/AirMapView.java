@@ -170,6 +170,28 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     final AirMapView view = this;
 
+    map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+      @Override
+      public void onMyLocationChange(Location location){
+        WritableMap event = new WritableNativeMap();
+
+        WritableMap coordinate = new WritableNativeMap();
+        coordinate.putDouble("latitude", location.getLatitude());
+        coordinate.putDouble("longitude", location.getLongitude());
+        coordinate.putDouble("altitude", location.getAltitude());
+        coordinate.putDouble("timestamp", location.getTime());
+        coordinate.putDouble("accuracy", location.getAccuracy());
+        coordinate.putDouble("speed", location.getSpeed());
+        if(android.os.Build.VERSION.SDK_INT >= 18){
+        coordinate.putBoolean("isFromMockProvider", location.isFromMockProvider());
+        }
+
+        event.putMap("coordinate", coordinate);
+
+        manager.pushEvent(context, view, "onUserLocationChange", event);
+      }
+    });
+
     map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
       public boolean onMarkerClick(Marker marker) {

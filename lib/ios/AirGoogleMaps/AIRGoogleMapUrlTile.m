@@ -17,6 +17,7 @@
 {
   _urlTemplate = urlTemplate;
   _tileLayer = [GMSURLTileLayer tileLayerWithURLConstructor:[self _getTileURLConstructor]];
+  _tileLayer.tileSize = [[UIScreen mainScreen] scale] * 256;
 }
 
 - (GMSTileURLConstructor)_getTileURLConstructor
