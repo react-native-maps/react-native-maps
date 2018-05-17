@@ -27,7 +27,6 @@
 @property (nonatomic, assign) NSString *title;
 @property (nonatomic, assign) int zIndex;
 @property (nonatomic, assign) BOOL tappable;
-@property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
 -(void)updateLineDashPattern:(double)scale;
 
 @end
