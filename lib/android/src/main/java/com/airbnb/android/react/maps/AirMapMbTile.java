@@ -12,6 +12,9 @@ import java.io.File;
 
 import android.os.Environment;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
+import android.database.sqlite.SQLiteDatabaseCorruptException;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.Cursor;
 
 /**
@@ -76,7 +79,6 @@ public class AirMapMbTile extends AirMapFeature {
                 e.printStackTrace();
                 throw e;
             } finally {
-                offlineDataDatabase.close();
                 return null;
             }
         }
