@@ -57,7 +57,7 @@ public class AirMapMbTile extends AirMapFeature {
                         .replace("{y}", Integer.toString(y))
                         .replace("{z}", Integer.toString(zoom));
                 Cursor cursor = offlineDataDatabase.rawQuery(query, null);
-                if(cursor.moveToFirst()){
+                if (cursor.moveToFirst()) {
                     tile = cursor.getBlob(5);
                 }
                 cursor.close();
