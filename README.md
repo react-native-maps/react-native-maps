@@ -224,7 +224,7 @@ See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) fo
 
 #### Tile Overlay using MbTile
 
-Tiles can be stored locally in a MBTiles database on the device using xyz tiling scheme. The locally stored tiles can be displayed as a tile overlay. This can be used for displaying maps offline. Manging many tiles in a database is especially useful if larger areas are covered by an offline map. Keeping all the files locally and "raw" on the device most likely results in bad performance as well as troublesome datahandling. Please make sure that your database follows the MBTiles [specifications](https://github.com/mapbox/mbtiles-spec). This only works with tiles stored in the [xyz scheme](https://gist.github.com/tmcw/4954720) as used by Google, OSM, MapBox, ... 
+Tiles can be stored locally in a MBTiles database on the device using xyz tiling scheme. The locally stored tiles can be displayed as a tile overlay. This can be used for displaying maps offline. Manging many tiles in a database is especially useful if larger areas are covered by an offline map. Keeping all the files locally and "raw" on the device most likely results in bad performance as well as troublesome datahandling. Please make sure that your database follows the MBTiles [specifications](https://github.com/mapbox/mbtiles-spec). This only works with tiles stored in the [xyz scheme](https://gist.github.com/tmcw/4954720) as used by Google, OSM, MapBox, ... Make sure to include the ending .mbtiles when you pass your pathTemplate.
 
 ```jsx
 import MapView from 'react-native-maps';
