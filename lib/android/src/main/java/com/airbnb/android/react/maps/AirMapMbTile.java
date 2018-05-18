@@ -68,17 +68,15 @@ public class AirMapMbTile extends AirMapFeature {
                 return tile;
             } catch (SQLiteCantOpenDatabaseException e) {
                 e.printStackTrace();
-                throw e;
+                return null;
             } catch (SQLiteDatabaseCorruptException e) {
                 e.printStackTrace();
-                throw e;
+                return null;
             } catch (SQLiteDatabaseLockedException e) {
                 e.printStackTrace();
-                throw e;
+                return null;
             } catch (Exception e) {
                 e.printStackTrace();
-                throw e;
-            } finally {
                 return null;
             }
         }
