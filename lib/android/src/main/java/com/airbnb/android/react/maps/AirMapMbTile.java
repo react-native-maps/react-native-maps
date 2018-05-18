@@ -66,12 +66,16 @@ public class AirMapMbTile extends AirMapFeature {
                 offlineDataDatabase.close();
             } catch (SQLiteCantOpenDatabaseException e) {
                 e.printStackTrace();
+                throw e;
             } catch (SQLiteDatabaseCorruptException e) {
                 e.printStackTrace();
+                throw e;
             } catch (SQLiteDatabaseLockedException e) {
                 e.printStackTrace();
+                throw e;
             } catch (Exception e) {
                 e.printStackTrace();
+                throw e;
             } finally {
                 return tile;
             }
