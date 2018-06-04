@@ -15,6 +15,7 @@ export { Animated, MAP_TYPES, ProviderPropType };
 
 export const PROVIDER_GOOGLE = MapView.PROVIDER_GOOGLE;
 export const PROVIDER_DEFAULT = MapView.PROVIDER_DEFAULT;
+export const PROVIDER_OSMDROID = MapView.PROVIDER_OSMDROID;
 
 export const MarkerAnimated = Marker.Animated;
 export const OverlayAnimated = Overlay.Animated;

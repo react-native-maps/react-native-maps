@@ -6,6 +6,7 @@ def DEFAULT_BUILD_TOOLS_VERSION             = "25.0.3"
 def DEFAULT_TARGET_SDK_VERSION              = 25
 def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION    = "10.2.4"
 def DEFAULT_ANDROID_MAPS_UTILS_VERSION      = "0.5+"
+def DEFAULT_OSMDROID_VERSION                = "6.0.1"
 
 android {
   compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
@@ -42,9 +43,12 @@ android {
 dependencies {
   def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion')  ? rootProject.googlePlayServicesVersion : DEFAULT_GOOGLE_PLAY_SERVICES_VERSION
   def androidMapsUtilsVersion   = rootProject.hasProperty('androidMapsUtilsVersion')    ? rootProject.androidMapsUtilsVersion   : DEFAULT_ANDROID_MAPS_UTILS_VERSION
+  def osmdroidVersion = rootProject.hasProperty('osmdroidVersion')  ? rootProject.osmdroidVersion : DEFAULT_OSMDROID_VERSION
 
   compileOnly "com.facebook.react:react-native:+"
   implementation "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
   implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
   implementation "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
+
+  implementation "org.osmdroid:osmdroid-android:${osmdroidVersion}"
 }

@@ -8,7 +8,7 @@ import {
   Text,
   Switch,
 } from 'react-native';
-import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
+import { PROVIDER_GOOGLE, PROVIDER_OSMDROID, PROVIDER_DEFAULT } from 'react-native-maps';
 import DisplayLatLng from './examples/DisplayLatLng';
 import ViewsAsMarkers from './examples/ViewsAsMarkers';
 import EventListener from './examples/EventListener';
@@ -62,6 +62,7 @@ class App extends React.Component {
     this.state = {
       Component: null,
       useGoogleMaps: ANDROID,
+      useOsmdroid: false,
     };
   }
 
@@ -101,15 +102,36 @@ class App extends React.Component {
     );
   }
 
+  renderOsmdroidSwitch() {
+    return (
+      <View>
+        <Text>Use Osmdroid?</Text>
+        <Switch
+          onValueChange={(value) => this.setState({ useOsmdroid: value })}
+          style={{ marginBottom: 10 }}
+          value={this.state.useOsmdroid}
+        />
+      </View>
+    );
+  }
+
   renderExamples(examples) {
     const {
       Component,
       useGoogleMaps,
+      useOsmdroid,
     } = this.state;
+
+    let provider = PROVIDER_DEFAULT;
+    if (useOsmdroid) {
+      provider = PROVIDER_OSMDROID;
+    } else if (useGoogleMaps) {
+      provider = PROVIDER_GOOGLE;
+    }
 
     return (
       <View style={styles.container}>
-        {Component && <Component provider={useGoogleMaps ? PROVIDER_GOOGLE : PROVIDER_DEFAULT} />}
+        {Component && <Component provider={provider} />}
         {Component && this.renderBackButton()}
         {!Component &&
           <ScrollView
@@ -118,6 +140,7 @@ class App extends React.Component {
             showsVerticalScrollIndicator={false}
           >
             {IOS && this.renderGoogleSwitch()}
+            {ANDROID && this.renderOsmdroidSwitch()}
             {examples.map(example => this.renderExample(example))}
           </ScrollView>
         }

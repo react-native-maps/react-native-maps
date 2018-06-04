@@ -2,6 +2,11 @@ package com.airbnb.android.react.maps;
 
 import android.app.Activity;
 
+import com.airbnb.android.react.maps.osmdroid.OsmMapCalloutManager;
+import com.airbnb.android.react.maps.osmdroid.OsmMapManager;
+import com.airbnb.android.react.maps.osmdroid.OsmMapMarkerManager;
+import com.airbnb.android.react.maps.osmdroid.OsmMapPolygonManager;
+import com.airbnb.android.react.maps.osmdroid.OsmMapPolylineManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -42,6 +47,12 @@ public class MapsPackage implements ReactPackage {
     AirMapLocalTileManager localTileManager = new AirMapLocalTileManager(reactContext);
     AirMapOverlayManager overlayManager = new AirMapOverlayManager(reactContext);
 
+    OsmMapCalloutManager osmCalloutManager = new OsmMapCalloutManager();
+    OsmMapMarkerManager osmMarkerManager = new OsmMapMarkerManager();
+    OsmMapPolylineManager osmPolylineManager = new OsmMapPolylineManager(reactContext);
+    OsmMapPolygonManager osmPolygonManager = new OsmMapPolygonManager(reactContext);
+    OsmMapManager osmMapManager = new OsmMapManager(reactContext);
+
     return Arrays.<ViewManager>asList(
         calloutManager,
         annotationManager,
@@ -52,7 +63,12 @@ public class MapsPackage implements ReactPackage {
         mapLiteManager,
         urlTileManager,
         localTileManager,
-        overlayManager
+        overlayManager,
+        osmCalloutManager,
+        osmMarkerManager,
+        osmPolylineManager,
+        osmPolygonManager,
+        osmMapManager
     );
   }
 }
