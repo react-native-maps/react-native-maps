@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.airbnb.android.react.maps.R;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -398,8 +399,8 @@ public class OsmMapMarker extends OsmMapFeature {
         }
 
         if (customInfoWindowCache == null) {
-            customInfoWindowCache = new CustomInfoWindow(org.osmdroid.library.R.layout.bonuspack_bubble,
-                    mapView);
+            int layoutID = getResources().getIdentifier("bonuspack_bubble", "layout", getContext().getPackageName());
+            customInfoWindowCache = new CustomInfoWindow(layoutID, mapView);
         }
 
         LinearLayout bubbleView = (LinearLayout) customInfoWindowCache.getView();

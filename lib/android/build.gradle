@@ -50,5 +50,5 @@ dependencies {
   implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
   implementation "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
 
-  implementation "org.osmdroid:osmdroid-android:${osmdroidVersion}"
+  compileOnly "org.osmdroid:osmdroid-android:${osmdroidVersion}"
 }
