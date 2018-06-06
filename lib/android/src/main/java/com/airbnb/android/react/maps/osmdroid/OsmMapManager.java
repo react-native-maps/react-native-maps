@@ -70,7 +70,6 @@ public class OsmMapManager extends ViewGroupManager<OsmMapView> {
     @Override
     protected OsmMapView createViewInstance(ThemedReactContext context) {
         OsmMapView view = new OsmMapView(context, this.appContext, this);
-        view.setBuiltInZoomControls(false);
         view.setZoomEnabled(true);
         view.setRotateEnabled(true);
         view.setScrollEnabled(true);
@@ -338,6 +337,7 @@ public class OsmMapManager extends ViewGroupManager<OsmMapView> {
     @Override
     public void onDropViewInstance(OsmMapView view) {
         super.onDropViewInstance(view);
+        view.doDestroy();
     }
 
 }

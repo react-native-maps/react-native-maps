@@ -113,6 +113,52 @@ public class OsmMapView extends MapView implements MapView.OnFirstLayoutListener
         this.setTileSource(TileSourceFactory.MAPNIK);
     }
 
+    /*
+     * Disabled builtin zoom controls for good, because it does not work
+     * after view detached even if reattached to window.
+     */
+    @Override
+    @Deprecated
+    public void setBuiltInZoomControls(boolean on) {
+        super.setBuiltInZoomControls(false);
+    }
+
+    /*
+     * Keep a cache of map listeners because the original list is destroyed
+     * when view detached from window.
+     */
+    protected List<MapListener> mListnersCache = new ArrayList<>();
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        mListners.addAll(mListnersCache);
+        mListnersCache.clear();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mListnersCache.addAll(mListners);
+        mListners.clear();
+
+        super.onDetachedFromWindow();
+    }
+
+    boolean m_isDestroying = false;
+    public void doDestroy() {
+        m_isDestroying = true;
+        onDetach();
+    }
+
+    @Override
+    public void onDetach() {
+        if(m_isDestroying){
+            new Exception("not an exception").printStackTrace();
+            super.onDetach();
+        }
+    }
+
     @Override
     public void onFirstLayout(View view, int i, int i1, int i2, int i3) {
         manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
