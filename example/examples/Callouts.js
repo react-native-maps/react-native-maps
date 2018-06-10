@@ -6,7 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
 import CustomCallout from './CustomCallout';
 
 const { width, height } = Dimensions.get('window');
@@ -69,33 +69,33 @@ class Callouts extends React.Component {
           style={styles.map}
           initialRegion={region}
         >
-          <MapView.Marker
+          <Marker
             ref={ref => { this.marker1 = ref; }}
             coordinate={markers[0].coordinate}
             title="This is a native view"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation" // eslint-disable-line max-len
           />
-          <MapView.Marker
+          <Marker
             coordinate={markers[1].coordinate}
           >
-            <MapView.Callout style={styles.plainView}>
+            <Callout style={styles.plainView}>
 
               <View>
                 <Text>This is a plain view</Text>
               </View>
-            </MapView.Callout>
-          </MapView.Marker>
-          <MapView.Marker
+            </Callout>
+          </Marker>
+          <Marker
             coordinate={markers[2].coordinate}
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}
           >
-            <MapView.Callout tooltip style={styles.customView}>
+            <Callout tooltip style={styles.customView}>
               <CustomCallout>
                 <Text>This is a custom callout bubble view</Text>
               </CustomCallout>
-            </MapView.Callout>
-          </MapView.Marker>
+            </Callout>
+          </Marker>
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>
@@ -116,7 +116,7 @@ class Callouts extends React.Component {
 }
 
 Callouts.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = Callouts;
+export default Callouts;

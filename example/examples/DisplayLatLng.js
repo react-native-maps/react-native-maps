@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView, { MAP_TYPES } from 'react-native-maps';
+import MapView, { MAP_TYPES, ProviderPropType } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -45,6 +45,18 @@ class DisplayLatLng extends React.Component {
 
   animateRandomCoordinate() {
     this.map.animateToCoordinate(this.randomCoordinate());
+  }
+
+  animateToRandomBearing() {
+    this.map.animateToBearing(this.getRandomFloat(-360, 360));
+  }
+
+  animateToRandomViewingAngle() {
+    this.map.animateToViewingAngle(this.getRandomFloat(0, 90));
+  }
+
+  getRandomFloat(min, max) {
+    return (Math.random() * (max - min)) + min;
   }
 
   randomCoordinate() {
@@ -98,6 +110,18 @@ class DisplayLatLng extends React.Component {
           >
             <Text style={styles.buttonText}>Animate (Coordinate)</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.animateToRandomBearing()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text style={styles.buttonText}>Animate (Bearing)</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.animateToRandomViewingAngle()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text style={styles.buttonText}>Animate (View Angle)</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -105,7 +129,7 @@ class DisplayLatLng extends React.Component {
 }
 
 DisplayLatLng.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -144,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = DisplayLatLng;
+export default DisplayLatLng;

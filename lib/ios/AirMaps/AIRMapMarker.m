@@ -143,7 +143,6 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     _calloutIsOpen = YES;
     [self setZIndex:_zIndexBeforeOpen];
-
     MKAnnotationView *annotationView = [self getAnnotationView];
 
     [self setSelected:YES animated:NO];

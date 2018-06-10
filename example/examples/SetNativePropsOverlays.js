@@ -7,7 +7,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { Circle, Polygon, Polyline, ProviderPropType } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -87,7 +87,7 @@ class SetNativePropsOverlays extends React.Component {
           style={styles.map}
           initialRegion={region}
         >
-          <MapView.Circle
+          <Circle
             ref={ref => { this.circle = ref; }}
             center={circle.center}
             radius={circle.radius}
@@ -96,14 +96,14 @@ class SetNativePropsOverlays extends React.Component {
             zIndex={3}
             strokeWidth={3}
           />
-          <MapView.Polygon
+          <Polygon
             ref={ref => { this.polygon = ref; }}
             coordinates={polygon}
             fillColor="rgba(255, 255, 255, 0.6)"
             strokeColor="green"
             strokeWidth={2}
           />
-          <MapView.Polyline
+          <Polyline
             ref={ref => { this.polyline = ref; }}
             coordinates={polyline}
             strokeColor="green"
@@ -133,7 +133,7 @@ class SetNativePropsOverlays extends React.Component {
 }
 
 SetNativePropsOverlays.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: ProviderPropType,
 };
 
 const styles = StyleSheet.create({
@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = SetNativePropsOverlays;
+export default SetNativePropsOverlays;
