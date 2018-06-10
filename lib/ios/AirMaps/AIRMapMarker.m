@@ -15,6 +15,8 @@
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
 
+NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
+
 @implementation AIREmptyCalloutBackgroundView
 @end
 
@@ -22,6 +24,8 @@
     BOOL _hasSetCalloutOffset;
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     MKPinAnnotationView *_pinView;
+    BOOL _calloutIsOpen;
+    NSInteger _zIndexBeforeOpen;
 }
 
 - (void)reactSetFrame:(CGRect)frame
@@ -137,6 +141,9 @@
 
 - (void)showCalloutView
 {
+    _calloutIsOpen = YES;
+    [self setZIndex:_zIndexBeforeOpen];
+
     MKAnnotationView *annotationView = [self getAnnotationView];
 
     [self setSelected:YES animated:NO];
@@ -187,23 +194,23 @@
 - (void)_handleTap:(UITapGestureRecognizer *)recognizer {
     AIRMapMarker *marker = self;
     if (!marker) return;
-    
+
     if (marker.selected) {
         CGPoint touchPoint = [recognizer locationInView:marker.map.calloutView];
         if ([marker.map.calloutView hitTest:touchPoint withEvent:nil]) {
-            
+
             // the callout got clicked, not the marker
             id event = @{
                          @"action": @"callout-press",
                          };
-            
+
             if (marker.onCalloutPress) marker.onCalloutPress(event);
             if (marker.calloutView && marker.calloutView.onPress) marker.calloutView.onPress(event);
             if (marker.map.onCalloutPress) marker.map.onCalloutPress(event);
             return;
         }
     }
-    
+
     // the actual marker got clicked
     id event = @{
                  @"action": @"marker-press",
@@ -213,15 +220,17 @@
                          @"longitude": @(marker.coordinate.longitude)
                          }
                  };
-    
+
     if (marker.onPress) marker.onPress(event);
     if (marker.map.onMarkerPress) marker.map.onMarkerPress(event);
-    
+
     [marker.map selectAnnotation:marker animated:NO];
 }
 
 - (void)hideCalloutView
 {
+    _calloutIsOpen = NO;
+    [self setZIndex:_zIndexBeforeOpen];
     // hide the callout view
     [self.map.calloutView dismissCalloutAnimated:YES];
 
@@ -298,6 +307,11 @@
 
 - (void)setZIndex:(NSInteger)zIndex
 {
+    if (zIndex == 2) {  // added line
+        [self setSelected:YES animated:NO]; // added line
+    } else { // added line
+        [self setSelected:NO animated:NO]; // added line
+    } // added line
     _zIndex = zIndex;
     self.layer.zPosition = _zIndex;
 }
