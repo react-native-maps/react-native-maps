@@ -300,8 +300,10 @@ public class AirMapMarker extends AirMapFeature {
 
   public MarkerOptions getMarkerOptions() {
     if (markerOptions == null) {
-      markerOptions = createMarkerOptions();
+      markerOptions = new MarkerOptions();
     }
+
+    fillMarkerOptions(markerOptions);
     return markerOptions;
   }
 
@@ -355,8 +357,8 @@ public class AirMapMarker extends AirMapFeature {
     }
   }
 
-  private MarkerOptions createMarkerOptions() {
-    MarkerOptions options = new MarkerOptions().position(position);
+  private MarkerOptions fillMarkerOptions(MarkerOptions options) {
+    options.position(position);
     if (anchorIsSet) options.anchor(anchorX, anchorY);
     if (calloutAnchorIsSet) options.infoWindowAnchor(calloutAnchorX, calloutAnchorY);
     options.title(title);
