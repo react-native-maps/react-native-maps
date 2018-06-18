@@ -33,7 +33,7 @@
   ],
   "peerDependencies": {
     "react": "^16.0",
-    "react-native": "^0.51 || ^0.52 || ^0.53 || ^0.54",
+    "react-native": "^0.51 || ^0.52 || ^0.53 || ^0.54 || ^0.55",
     "prop-types": "^15.0 || ^16.0"
   },
   "devDependencies": {
