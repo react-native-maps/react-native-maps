@@ -81,6 +81,16 @@
         }
         _interiorPolygons = polygons;
     }
+    
+    CLLocationCoordinate2D coords[_coordinates.count];
+    for(int i = 0; i < _coordinates.count; i++)
+    {
+        coords[i] = _coordinates[i].coordinate;
+    }
+    
+    self.polygon = [MKPolygon polygonWithCoordinates:coords count:_coordinates.count interiorPolygons:_interiorPolygons];
+    self.renderer = [[MKPolygonRenderer alloc] initWithPolygon:self.polygon];
+    [self update];
 }
 
 - (void) update
