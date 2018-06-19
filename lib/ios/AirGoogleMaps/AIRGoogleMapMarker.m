@@ -224,7 +224,7 @@ CGRect unionRect(CGRect a, CGRect b) {
                                                                  dispatch_async(dispatch_get_main_queue(), ^{
 
                                                                    // TODO(gil): This way allows different image sizes
-                                                                   if (_iconImageView) [_iconImageView removeFromSuperview];
+                                                                   if (self->_iconImageView) [self->_iconImageView removeFromSuperview];
 
                                                                    // ... but this way is more efficient?
 //                                                                   if (_iconImageView) {
@@ -250,7 +250,7 @@ CGRect unionRect(CGRect a, CGRect b) {
                                                                    CGRect selfBounds = unionRect(bounds, self.bounds);
                                                                    [self setFrame:selfBounds];
 
-                                                                   _iconImageView = imageView;
+                                                                   self->_iconImageView = imageView;
                                                                    [self iconViewInsertSubview:imageView atIndex:0];
                                                                  });
                                                                }];
