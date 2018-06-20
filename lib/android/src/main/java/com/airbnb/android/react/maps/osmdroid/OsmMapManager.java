@@ -177,12 +177,12 @@ public class OsmMapManager extends ViewGroupManager<OsmMapView> {
 //  public void setLoadingEnabled(AirMapView view, boolean loadingEnabled) {
 //    view.enableMapLoading(loadingEnabled);
 //  }
-//
-//  @ReactProp(name = "moveOnMarkerPress", defaultBoolean = true)
-//  public void setMoveOnMarkerPress(AirMapView view, boolean moveOnPress) {
-//    view.setMoveOnMarkerPress(moveOnPress);
-//  }
-//
+
+  @ReactProp(name = "moveOnMarkerPress", defaultBoolean = true)
+  public void setMoveOnMarkerPress(OsmMapView view, boolean moveOnPress) {
+    view.setMoveOnMarkerPress(moveOnPress);
+  }
+
 //  @ReactProp(name = "loadingBackgroundColor", customType = "Color")
 //  public void setLoadingBackgroundColor(AirMapView view, @Nullable Integer
 // loadingBackgroundColor) {
