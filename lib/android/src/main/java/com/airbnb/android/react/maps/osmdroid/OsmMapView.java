@@ -384,14 +384,27 @@ public class OsmMapView extends MapView implements MapView.OnFirstLayoutListener
         int height = getHeight();
         if (width > 0 && height > 0) {
             startMonitoringRegion();
-            double zoom = TileSystem.getBoundingBoxZoom(bounds, width, height);
-            double currentZoom = getZoomLevel(true);
-            double zoomDelta = Math.abs(currentZoom - zoom);
-            // TODO: made to avoid zoom 'flickering' until osmdroid 6 is released since zoom is integer
-            if (zoomDelta > 0.1) {
-                this.getController().zoomTo((int) zoom);
+
+            GeoPoint newCenter = bounds.getCenterWithDateLine();
+            double newZoom = TileSystem.getBoundingBoxZoom(bounds, width, height);
+            double currentZoom = this.getZoomLevelDouble();
+
+            double centerDistance = newCenter.distanceToAsDouble(this.getMapCenter());
+            double boxDiagonal = getBoundingBox().getDiagonalLengthInMeters();
+
+            double zoomDelta = Math.abs(currentZoom - newZoom);
+            boolean animateZoomHint = zoomDelta <= 5;
+            boolean animateCenterHint = zoomDelta <= 1 && centerDistance < 2 * boxDiagonal;
+            if (animateCenterHint) {
+                this.getController().setZoom(newZoom);
+                this.getController().animateTo(newCenter);
+            } else if (animateZoomHint) {
+                this.getController().setCenter(newCenter);
+                this.getController().zoomTo(newZoom);
+            } else {
+                this.getController().setZoom(newZoom);
+                this.getController().setCenter(newCenter);
             }
-            this.getController().animateTo(bounds.getCenter());
         }
     }
 
