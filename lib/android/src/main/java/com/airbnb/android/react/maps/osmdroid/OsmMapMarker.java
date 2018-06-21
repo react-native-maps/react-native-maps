@@ -76,6 +76,9 @@ public class OsmMapMarker extends OsmMapFeature {
     private boolean calloutAnchorIsSet;
 
     private boolean hasCustomMarkerView = false;
+    private boolean isCustomMarkerViewDirty = false;
+    private Bitmap customMarkerViewBitmap = null;
+
     private OnCalloutPressListener onCalloutPressListener;
 
     private final DraweeHolder<?> logoHolder;
@@ -294,7 +297,7 @@ public class OsmMapMarker extends OsmMapFeature {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
             if (iconBitmapDrawable != null) {
-                Bitmap viewBitmap = createDrawable();
+                Bitmap viewBitmap = getCustomMarkerViewBitmap();
                 int width = Math.max(iconBitmap.getWidth(), viewBitmap.getWidth());
                 int height = Math.max(iconBitmap.getHeight(), viewBitmap.getHeight());
                 Bitmap combinedBitmap = Bitmap.createBitmap(width, height, iconBitmap.getConfig());
@@ -303,7 +306,7 @@ public class OsmMapMarker extends OsmMapFeature {
                 canvas.drawBitmap(viewBitmap, 0, 0, null);
                 return new BitmapDrawable(getResources(), combinedBitmap);
             } else {
-                return new BitmapDrawable(getResources(), createDrawable());
+                return new BitmapDrawable(getResources(), getCustomMarkerViewBitmap());
             }
         } else if (iconBitmapDrawable != null) {
             // use local image as a marker
@@ -348,6 +351,7 @@ public class OsmMapMarker extends OsmMapFeature {
     public void update(int width, int height) {
         this.width = width;
         this.height = height;
+        isCustomMarkerViewDirty = true;
         update();
     }
 
@@ -361,7 +365,15 @@ public class OsmMapMarker extends OsmMapFeature {
         return null;
     }
 
-    private Bitmap createDrawable() {
+    private Bitmap getCustomMarkerViewBitmap() {
+        if (isCustomMarkerViewDirty || customMarkerViewBitmap == null) {
+            customMarkerViewBitmap = createCustomMarkerViewBitmap();
+            isCustomMarkerViewDirty = false;
+        }
+        return customMarkerViewBitmap;
+    }
+
+    private Bitmap createCustomMarkerViewBitmap() {
         int width = this.width <= 0 ? 100 : this.width;
         int height = this.height <= 0 ? 100 : this.height;
         this.buildDrawingCache();
