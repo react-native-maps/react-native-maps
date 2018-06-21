@@ -60,10 +60,9 @@ public class OsmMapMarker extends OsmMapFeature {
     private float anchorY;
 
     private OsmMapCallout calloutView;
-    private final Context context;
 
     private float markerHue = 0.0f; // should be between 0 and 360
-    private Drawable iconBitmapDescriptor;
+    private Drawable iconBitmapDrawable;
     private Bitmap iconBitmap;
 
     private float rotation = 0.0f;
@@ -99,7 +98,7 @@ public class OsmMapMarker extends OsmMapFeature {
                                 if (bitmap != null) {
                                     bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
                                     iconBitmap = bitmap;
-                                    iconBitmapDescriptor = new BitmapDrawable(getResources(), bitmap);
+                                    iconBitmapDrawable = new BitmapDrawable(getResources(), bitmap);
                                 }
                             }
                         }
@@ -115,7 +114,6 @@ public class OsmMapMarker extends OsmMapFeature {
 
     public OsmMapMarker(Context context) {
         super(context);
-        this.context = context;
         logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
         logoHolder.onAttach();
     }
@@ -227,7 +225,7 @@ public class OsmMapMarker extends OsmMapFeature {
 
     public void setImage(String uri) {
         if (uri == null) {
-            iconBitmapDescriptor = null;
+            iconBitmapDrawable = null;
             update();
         } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
                 uri.startsWith("file://")) {
@@ -244,8 +242,8 @@ public class OsmMapMarker extends OsmMapFeature {
                     .build();
             logoHolder.setController(controller);
         } else {
-            iconBitmapDescriptor = getBitmapDescriptorByName(uri);
-            if (iconBitmapDescriptor != null) {
+            iconBitmapDrawable = getBitmapDrawableByName(uri);
+            if (iconBitmapDrawable != null) {
                 iconBitmap = BitmapFactory.decodeResource(getResources(), getDrawableResourceByName(uri));
             }
             update();
@@ -295,7 +293,7 @@ public class OsmMapMarker extends OsmMapFeature {
     private Drawable getIcon() {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
-            if (iconBitmapDescriptor != null) {
+            if (iconBitmapDrawable != null) {
                 Bitmap viewBitmap = createDrawable();
                 int width = Math.max(iconBitmap.getWidth(), viewBitmap.getWidth());
                 int height = Math.max(iconBitmap.getHeight(), viewBitmap.getHeight());
@@ -307,9 +305,9 @@ public class OsmMapMarker extends OsmMapFeature {
             } else {
                 return new BitmapDrawable(getResources(), createDrawable());
             }
-        } else if (iconBitmapDescriptor != null) {
+        } else if (iconBitmapDrawable != null) {
             // use local image as a marker
-            return iconBitmapDescriptor;
+            return iconBitmapDrawable;
         } else {
             // render the default marker pin
             // return BitmapDescriptorFactory.defaultMarker(this.markerHue);
@@ -426,7 +424,7 @@ public class OsmMapMarker extends OsmMapFeature {
                 getContext().getPackageName());
     }
 
-    private Drawable getBitmapDescriptorByName(String name) {
+    private Drawable getBitmapDrawableByName(String name) {
         return getResources().getDrawable(getDrawableResourceByName(name));
     }
 
