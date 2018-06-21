@@ -13,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.airbnb.android.react.maps.R;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -274,7 +273,7 @@ public class OsmMapMarker extends OsmMapFeature {
         defaultInfoWindow = marker.getInfoWindow();
         defaultInfoWindow.getView().setOnTouchListener(OsmMapMarker.this.infoWindowTouched);
         mapView = map;
-        initProperties(marker);
+        fillProperties(marker);
         map.getOverlays().add(marker);
     }
 
@@ -318,17 +317,24 @@ public class OsmMapMarker extends OsmMapFeature {
         }
     }
 
-    private void initProperties(Marker marker) {
+    private void fillProperties(Marker marker) {
         marker.setPosition(position);
-        if (anchorIsSet) marker.setAnchor(anchorX, anchorY);
-        if (calloutAnchorIsSet) marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
+        if (anchorIsSet) {
+            marker.setAnchor(anchorX, anchorY);
+        } else {
+            marker.setAnchor(0.5f, 1.0f);
+        }
+        if (calloutAnchorIsSet) {
+            marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
+        } else {
+            marker.setInfoWindowAnchor(0.5f, 0);
+        }
         marker.setInfoWindow(getInfoWindow());
         marker.setTitle(title);
         marker.setSnippet(snippet);
         marker.setRotation(rotation);
         marker.setFlat(flat);
         marker.setDraggable(draggable);
-        // TODO: options.zIndex(zIndex);
         marker.setAlpha(opacity);
         marker.setIcon(getIcon());
     }
@@ -337,23 +343,7 @@ public class OsmMapMarker extends OsmMapFeature {
         if (marker == null) {
             return;
         }
-
-        marker.setInfoWindow(getInfoWindow());
-
-        marker.setIcon(getIcon());
-
-        if (anchorIsSet) {
-            marker.setAnchor(anchorX, anchorY);
-        } else {
-            marker.setAnchor(0.5f, 1.0f);
-        }
-
-        if (calloutAnchorIsSet) {
-            marker.setInfoWindowAnchor(calloutAnchorX, calloutAnchorY);
-        } else {
-            marker.setInfoWindowAnchor(0.5f, 0);
-        }
-
+        fillProperties(marker);
         mapView.invalidate();
     }
 
