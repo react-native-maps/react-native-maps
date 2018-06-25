@@ -7,12 +7,12 @@
 //
 
 #import "AIRMapUrlTile.h"
+#import "AIRMapUrlTileOverlay.h"
 #import <React/UIView+React.h>
 
 @implementation AIRMapUrlTile {
     BOOL _urlTemplateSet;
 }
-
 
 - (void)setUrlTemplate:(NSString *)urlTemplate{
     _urlTemplate = urlTemplate;
@@ -21,11 +21,48 @@
     [self update];
 }
 
+- (void)setMaximumZ:(NSInteger)maximumZ
+{
+    _maximumZ = maximumZ;
+    if(self.tileOverlay) {
+        self.tileOverlay.maximumZ = maximumZ;
+    }
+    [self update];
+}
+
+- (void)setOverzoomEnabled:(BOOL)overzoomEnabled
+{
+    _overzoomEnabled = overzoomEnabled;
+    if(self.tileOverlay) {
+        self.tileOverlay.overzoomEnabled = _overzoomEnabled;
+    }
+    [self update];
+}
+
+- (void)setOverzoomThreshold:(NSInteger)overzoomThreshold
+{
+    _overzoomThreshold = overzoomThreshold;
+    if(self.tileOverlay) {
+        self.tileOverlay.overzoomThreshold = overzoomThreshold;
+    }
+    [self update];
+}
+
+
 - (void) createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
-    self.tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
+    self.tileOverlay = [[AIRMapUrlTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
     self.tileOverlay.canReplaceMapContent = YES;
+    
+    if (self.overzoomEnabled) {
+        self.tileOverlay.overzoomEnabled = self.overzoomEnabled;
+    }
+    
+    if (self.overzoomThreshold) {
+        self.tileOverlay.overzoomThreshold = self.overzoomThreshold;
+    }
+    
     if (self.maximumZ) {
         self.tileOverlay.maximumZ = self.maximumZ;
     }
