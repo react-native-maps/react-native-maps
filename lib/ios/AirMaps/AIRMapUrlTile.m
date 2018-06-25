@@ -64,6 +64,15 @@
     [self update];
 }
 
+- (void)setMaximumZ:(NSInteger)maximumZ
+{
+    _maximumZ = maximumZ;
+    if(self.tileOverlay) {
+        self.tileOverlay.maximumZ = maximumZ;
+    }
+    [self update];
+}
+
 - (void)setOverzoomEnabled:(BOOL)overzoomEnabled
 {
     _overzoomEnabled = overzoomEnabled;
@@ -82,16 +91,25 @@
     [self update];
 }
 
+
 - (void) createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
     self.tileOverlay = [[AIRMapUrlTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
-
     self.tileOverlay.canReplaceMapContent = self.shouldReplaceMapContent;
-
+    
+    if (self.overzoomEnabled) {
+        self.tileOverlay.overzoomEnabled = self.overzoomEnabled;
+    }
+    
+    if (self.overzoomThreshold) {
+        self.tileOverlay.overzoomThreshold = self.overzoomThreshold;
+    }
+    
     if(self.minimumZ) {
         self.tileOverlay.minimumZ = self.minimumZ;
     }
+    
     if (self.maximumZ) {
         self.tileOverlay.maximumZ = self.maximumZ;
     }
