@@ -40,6 +40,7 @@ import MapKml from './examples/MapKml';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
+import AnimatedNavigation from './examples/AnimatedNavigation';
 import OnPoiClick from './examples/OnPoiClick';
 
 const IOS = Platform.OS === 'ios';
@@ -159,6 +160,7 @@ class App extends React.Component {
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
       [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
+      [AnimatedNavigation, 'Animated Map Navigation', true],
       [OnPoiClick, 'On Poi Click', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
