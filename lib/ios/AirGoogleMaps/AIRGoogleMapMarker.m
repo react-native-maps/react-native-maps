@@ -282,6 +282,11 @@ CGRect unionRect(CGRect a, CGRect b) {
   _realMarker.groundAnchor = anchor;
 }
 
+- (void)setCalloutAnchor:(CGPoint)calloutAnchor {
+  _calloutAnchor = calloutAnchor;
+  _realMarker.infoWindowAnchor = calloutAnchor;
+}
+
 
 - (void)setZIndex:(NSInteger)zIndex
 {
