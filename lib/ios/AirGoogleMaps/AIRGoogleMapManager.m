@@ -82,6 +82,7 @@ RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
                   withRegion:(MKCoordinateRegion)region
                   withBearing:(CGFloat)bearing
                   withAngle:(double)angle
+                  withZoom:(CGFloat)zoom
                   withDuration:(CGFloat)duration)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -95,6 +96,7 @@ RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
       GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:mapView andMKCoordinateRegion:region];
       [mapView animateToCameraPosition:camera];
       [mapView animateToViewingAngle:angle];
+      [mapView animateToZoom:zoom];
       [mapView animateToBearing:bearing];
       [CATransaction commit];
     }
@@ -339,7 +341,7 @@ RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
 
       CGPoint touchPoint = [mapView.projection pointForCoordinate:coord];
-      
+
       resolve(@{
                 @"x": @(touchPoint.x),
                 @"y": @(touchPoint.y),
@@ -366,7 +368,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
 
       CLLocationCoordinate2D coordinate = [mapView.projection coordinateForPoint:pt];
-      
+
       resolve(@{
                 @"latitude": @(coordinate.latitude),
                 @"longitude": @(coordinate.longitude),

@@ -38,7 +38,7 @@ static NSString *const RCTMapViewKey = @"MapView";
 @end
 
 @implementation AIRMapManager
-  
+
 RCT_EXPORT_MODULE()
 
 - (UIView *)view
@@ -133,6 +133,7 @@ RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
         withRegion:(MKCoordinateRegion)region
         withBearing:(CGFloat)bearing
         withAngle:(double)angle
+        withZoom:(CGFloat)zoom
         withDuration:(CGFloat)duration)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -144,7 +145,7 @@ RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
             MKMapCamera *mapCamera = [[mapView camera] copy];
              [mapCamera setPitch:angle];
              [mapCamera setHeading:bearing];
-
+             [mapCamera setZoom:zoom];
             [AIRMap animateWithDuration:duration/1000 animations:^{
                 [(AIRMap *)view setRegion:region animated:YES];
                 [mapView setCamera:mapCamera animated:YES];
@@ -358,7 +359,7 @@ RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
                                                              [coordinate[@"lng"] doubleValue]
                                                              )
                                               toPointToView:mapView];
-            
+
             resolve(@{
                       @"x": @(touchPoint.x),
                       @"y": @(touchPoint.y),
@@ -384,7 +385,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                                                              [point[@"y"] doubleValue]
                                                              )
                                                  toCoordinateFromView:mapView];
-            
+
             resolve(@{
                       @"lat": @(coordinate.latitude),
                       @"lng": @(coordinate.longitude),
@@ -534,7 +535,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                 }
             }
         }
-        
+
         if ([overlay isKindOfClass:[AIRMapOverlay class]]) {
             AIRMapOverlay *imageOverlay = (AIRMapOverlay*) overlay;
             if (MKMapRectContainsPoint(imageOverlay.boundingMapRect, mapPoint)) {
@@ -810,7 +811,7 @@ static int kDragCenterContext;
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView
 {
     if (!mapView.hasStartedRendering) {
-      mapView.onMapReady(@{}); 
+      mapView.onMapReady(@{});
       mapView.hasStartedRendering = YES;
     }
     [mapView beginLoading];
