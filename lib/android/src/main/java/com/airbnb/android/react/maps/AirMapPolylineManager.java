@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -90,6 +91,12 @@ public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
         break;
     }
     view.setLineCap(cap);
+  }
+
+  @ReactProp(name = "lineDashPattern")
+  public void setLineDashPattern(AirMapPolyline view, ReadableArray patternValues) {
+      Log.i("VANNA", "setLineDash " + patternValues);
+      view.setLineDashPattern(patternValues);
   }
 
   @Override
