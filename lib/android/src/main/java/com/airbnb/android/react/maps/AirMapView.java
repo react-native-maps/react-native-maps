@@ -439,13 +439,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   public void setShowsMyLocationButton(boolean showMyLocationButton) {
-    if (hasPermissions()) {
+    if (hasPermissions() || !showMyLocationButton) {
       map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
     }
   }
 
   public void setToolbarEnabled(boolean toolbarEnabled) {
-    if (hasPermissions()) {
+    if (hasPermissions() || !toolbarEnabled) {
       map.getUiSettings().setMapToolbarEnabled(toolbarEnabled);
     }
   }
