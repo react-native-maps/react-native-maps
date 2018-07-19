@@ -1,16 +1,24 @@
 declare module "react-native-maps" {
+
     import * as React from 'react';
-    
+    import {
+        Animated,
+        ImageRequireSource,
+        ImageURISource,
+        NativeSyntheticEvent,
+        ViewProperties
+    } from 'react-native';
+
     export interface Region {
-        latitude: number
-        longitude: number
-        latitudeDelta: number
-        longitudeDelta: number
+        latitude: number;
+        longitude: number;
+        latitudeDelta: number;
+        longitudeDelta: number;
     }
-    
+
     export interface LatLng {
-        latitude: number
-        longitude: number
+        latitude: number;
+        longitude: number;
     }
 
     export interface Point {
@@ -147,10 +155,11 @@ declare module "react-native-maps" {
     export interface KmlMapEvent extends NativeSyntheticEvent<{ markers: KmlMarker[] }> {
     }
 
-    export interface MapViewProps {
-        provider?: 'google';
-        style: any;
-        customMapStyle?: any[];
+    type MapTypes = 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none' | 'mutedStandard';
+
+    export interface MapViewProps extends ViewProperties {
+        provider?: 'google' | null;
+        customMapStyle?: MapStyleElement[];
         customMapStyleString?: string;
         showsUserLocation?: boolean;
         userLocationAnnotationTitle?: string;
@@ -163,8 +172,8 @@ declare module "react-native-maps" {
         rotateEnabled?: boolean;
         cacheEnabled?: boolean;
         loadingEnabled?: boolean;
-        loadingBackgroundColor?: any;
-        loadingIndicatorColor?: any;
+        loadingBackgroundColor?: string;
+        loadingIndicatorColor?: string;
         scrollEnabled?: boolean;
         pitchEnabled?: boolean;
         toolbarEnabled?: boolean;
@@ -174,158 +183,250 @@ declare module "react-native-maps" {
         showsTraffic?: boolean;
         showsIndoors?: boolean;
         showsIndoorLevelPicker?: boolean;
-        mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none' | 'mutedStandard';
-        region?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
-        initialRegion?: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number; };
+        mapType?: MapTypes;
+        region?: Region;
+        initialRegion?: Region;
         liteMode?: boolean;
+        mapPadding?: EdgePadding;
         maxDelta?: number;
         minDelta?: number;
-        legalLabelInsets?: any;
-        onChange?: Function;
-        onMapReady?: Function;
+        legalLabelInsets?: EdgeInsets;
+
+        onMapReady?: () => void;
+        onKmlReady?: (values: KmlMapEvent) => void;
         onRegionChange?: (region: Region) => void;
         onRegionChangeComplete?: (region: Region) => void;
-        onPress?: (value: { coordinate: LatLng, position: Point }) => void;
-        onLayout?: Function;
-        onLongPress?: (value: { coordinate: LatLng, position: Point }) => void;
-        onPanDrag?: (value: {coordinate: LatLng, position: Point }) => void;
-        onMarkerPress?: Function;
-        onMarkerSelect?: Function;
-        onMarkerDeselect?: Function;
-        onCalloutPress?: Function;
-        onMarkerDragStart?: (value: { coordinate: LatLng, position: Point }) => void;
-        onMarkerDrag?: (value: { coordinate: LatLng, position: Point }) => void;
-        onMarkerDragEnd?: (value: { coordinate: LatLng, position: Point }) => void;
+        onPress?: (event: MapEvent) => void;
+        onLongPress?: (event: MapEvent) => void;
+        onUserLocationChange?: (event: EventUserLocation) => void;
+        onPanDrag?: (event: MapEvent) => void;
+        onPoiClick?: (event: MapEvent<{ placeId: string, name: string }>) => void;
+        onMarkerPress?: (event: MapEvent<{ action: 'marker-press', id: string }>) => void;
+        onMarkerSelect?: (event: MapEvent<{ action: 'marker-select', id: string }>) => void;
+        onMarkerDeselect?: (event: MapEvent<{ action: 'marker-deselect', id: string }>) => void;
+        onCalloutPress?: (event: MapEvent<{ action: 'callout-press' }>) => void;
+        onMarkerDragStart?: (event: MapEvent) => void;
+        onMarkerDrag?: (event: MapEvent) => void;
+        onMarkerDragEnd?: (event: MapEvent) => void;
+
         minZoomLevel?: number;
         maxZoomLevel?: number;
+        kmlSrc?: string;
     }
 
     export default class MapView extends React.Component<MapViewProps, any> {
-        static Animated: any;
-        static AnimatedRegion: any;
+        animateToNavigation(location: LatLng, bearing: number, angle: number, duration?: number): void;
         animateToRegion(region: Region, duration?: number): void;
         animateToCoordinate(latLng: LatLng, duration?: number): void;
         animateToBearing(bearing: number, duration?: number): void;
         animateToViewingAngle(angle: number, duration?: number): void;
         fitToElements(animated: boolean): void;
         fitToSuppliedMarkers(markers: string[], animated: boolean): void;
-        fitToCoordinates(coordinates?: LatLng[], options?:{}): void;
+        fitToCoordinates(coordinates?: LatLng[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
+        takeSnapshot(options?: SnapshotOptions): Promise<string>;
     }
 
-    export type LineCapType = 'butt' | 'round' | 'square';
-    export type LineJoinType = 'miter' | 'round' | 'bevel';
+    export class MapViewAnimated extends MapView {
+    }
 
-    export interface MarkerProps {
+    // =======================================================================
+    //  Marker
+    // =======================================================================
+
+    export interface MarkerProps extends ViewProperties {
         identifier?: string;
         reuseIdentifier?: string;
         title?: string;
         description?: string;
-        image?: any;
+        image?: ImageURISource | ImageRequireSource;
         opacity?: number;
         pinColor?: string;
-        coordinate: { latitude: number; longitude: number };
-        centerOffset?: { x: number; y: number };
-        calloutOffset?: { x: number; y: number };
-        anchor?: { x: number; y: number };
-        calloutAnchor?: { x: number; y: number };
+        coordinate: LatLng | AnimatedRegion;
+        centerOffset?: Point;
+        calloutOffset?: Point;
+        anchor?: Point;
+        calloutAnchor?: Point;
         flat?: boolean;
         draggable?: boolean;
-        onPress?: (value: { coordinate: LatLng, position: Point }) => void;
-        onSelect?: (value: { coordinate: LatLng, position: Point }) => void;
-        onDeselect?: (value: { coordinate: LatLng, position: Point }) => void;
-        onCalloutPress?: Function;
-        onDragStart?: (value: { coordinate: LatLng, position: Point }) => void;
-        onDrag?: (value: { coordinate: LatLng, position: Point }) => void;
-        onDragEnd?: (value: { coordinate: LatLng, position: Point }) => void;
-        zIndex?: number;
-        style?: any;
-        rotation?: number;
         tracksViewChanges?: boolean
         tracksInfoWindowChanges?: boolean
-    }
+        stopPropagation?: boolean
+        onPress?: (event: MapEvent<{ action: 'marker-press', id: string }>) => void;
+        onSelect?: (event: MapEvent<{ action: 'marker-select', id: string }>) => void;
+        onDeselect?: (event: MapEvent<{ action: 'marker-deselect', id: string }>) => void;
+        onCalloutPress?: (event: MapEvent<{ action: 'callout-press' }>) => void;
+        onDragStart?: (event: MapEvent) => void;
+        onDrag?: (event: MapEvent) => void;
+        onDragEnd?: (event: MapEvent) => void;
 
-    export interface MapPolylineProps {
-        coordinates: { latitude: number; longitude: number; }[];
-        onPress?: Function;
-        tappable?: boolean;
-        fillColor?: string;
-        strokeWidth?: number;
-        strokeColor?: string;
+        rotation?: number;
         zIndex?: number;
-        lineCap?: LineCapType;
-        lineJoin?: LineJoinType;
-        miterLimit?: number;
-        geodesic?: boolean;
-        lineDashPhase?: number;
-        lineDashPattern?: number[];
-    }
-
-    export interface MapPolygonProps {
-        coordinates: { latitude: number; longitude: number; }[];
-        holes?: { latitude: number; longitude: number; }[][];
-        onPress?: Function;
-        tappable?: boolean;
-        strokeWidth?: number;
-        strokeColor?: string;
-        fillColor?: string;
-        zIndex?: number;
-        lineCap?: LineCapType;
-        lineJoin?: LineJoinType;
-        miterLimit?: number;
-        geodesic?: boolean;
-        lineDashPhase?: number;
-        lineDashPattern?: number[];
-    }
-
-    export interface MapCircleProps {
-        center: { latitude: number; longitude: number };
-        radius: number;
-        onPress?: Function;
-        strokeWidth?: number;
-        strokeColor?: string;
-        fillColor?: string;
-        zIndex?: number;
-        lineCap?: LineCapType;
-        lineJoin?: LineJoinType;
-        miterLimit?: number;
-        lineDashPhase?: number;
-        lineDashPattern?: number[];
-    }
-
-    export interface MapUrlTileProps {
-        urlTemplate: string;
-        zIndex?: number;
-    }
-
-    export interface MapLocalTileProps {
-        pathTemplate: string;
-        tileSize: number;
-        zIndex?: number;
-    }
-
-    export interface MapMbTileProps {
-        pathTemplate: string;
-        tileSize: number;
-        zIndex?: number;
-    }
-
-    export interface MapCalloutProps {
-        tooltip?: boolean;
-        onPress?: Function;
-        style?: any;
     }
 
     export class Marker extends React.Component<MarkerProps, any> {
+        /**
+         * Shows the callout for this marker
+         */
         showCallout(): void;
+        /**
+         * Hides the callout for this marker
+         */
         hideCallout(): void;
-        animateMarkerToCoordinate(coordinate: LatLng, duration: number): void;
+        /**
+         * Animates marker movement.
+         * __Android only__
+         */
+        animateMarkerToCoordinate(coordinate: LatLng, duration?: number): void;
     }
-    export class Polyline extends React.Component<MapPolylineProps, any> { }
-    export class Polygon extends React.Component<MapPolygonProps, any> { }
-    export class Circle extends React.Component<MapCircleProps, any> { }
-    export class UrlTile extends React.Component<MapUrlTileProps, any> { }
-    export class LocalTile extends React.Component<MapLocalTileProps, any> { }
-    export class MbTile extends React.Component<MapMbTileProps, any> { }
-    export class Callout extends React.Component<MapCalloutProps, any> { }
+
+    export class MarkerAnimated extends Marker {
+    }
+
+    // =======================================================================
+    //  Callout
+    // =======================================================================
+
+    export interface MapCalloutProps extends ViewProperties {
+        tooltip?: boolean;
+        onPress?: (event: MapEvent<{ action: 'callout-press' }>) => void;
+    }
+
+    export class Callout extends React.Component<MapCalloutProps, any> {
+    }
+
+    // =======================================================================
+    //  Polyline
+    // =======================================================================
+
+    export interface MapPolylineProps extends ViewProperties {
+        coordinates: LatLng[];
+        onPress?: (event: MapEvent) => void;
+        tappable?: boolean;
+        fillColor?: string;
+        strokeWidth?: number;
+        strokeColor?: string;
+        strokeColors?: string[];
+        zIndex?: number;
+        lineCap?: LineCapType;
+        lineJoin?: LineJoinType;
+        miterLimit?: number;
+        geodesic?: boolean;
+        lineDashPhase?: number;
+        lineDashPattern?: number[];
+    }
+
+    export class Polyline extends React.Component<MapPolylineProps, any> {
+    }
+
+    // =======================================================================
+    //  Polygon
+    // =======================================================================
+
+    export interface MapPolygonProps extends ViewProperties {
+        coordinates: LatLng[];
+        holes?: LatLng[][];
+        onPress?: (event: MapEvent) => void;
+        tappable?: boolean;
+        strokeWidth?: number;
+        strokeColor?: string;
+        fillColor?: string;
+        zIndex?: number;
+        lineCap?: LineCapType;
+        lineJoin?: LineJoinType;
+        miterLimit?: number;
+        geodesic?: boolean;
+        lineDashPhase?: number;
+        lineDashPattern?: number[];
+    }
+
+    export class Polygon extends React.Component<MapPolygonProps, any> {
+    }
+
+    // =======================================================================
+    //  Circle
+    // =======================================================================
+
+    export interface MapCircleProps extends ViewProperties {
+        center: LatLng;
+        radius: number;
+        onPress?: (event: MapEvent) => void;
+        strokeWidth?: number;
+        strokeColor?: string;
+        fillColor?: string;
+        zIndex?: number;
+        lineCap?: LineCapType;
+        lineJoin?: LineJoinType;
+        miterLimit?: number;
+        lineDashPhase?: number;
+        lineDashPattern?: number[];
+    }
+
+    export class Circle extends React.Component<MapCircleProps, any> {
+    }
+
+    // =======================================================================
+    //  UrlTile, LocalTile & MbTile
+    // =======================================================================
+
+    export interface MapUrlTileProps extends ViewProperties {
+        urlTemplate: string;
+        maximumZ?: number;
+        zIndex?: number;
+    }
+
+    export class UrlTile extends React.Component<MapUrlTileProps, any> {
+    }
+
+    export interface MapLocalTileProps extends ViewProperties {
+        pathTemplate: string;
+        tileSize?: number;
+        zIndex?: number;
+    }
+
+    export class LocalTile extends React.Component<MapLocalTileProps, any> {
+    }
+
+    export interface MapMbTileProps extends ViewProperties {
+        pathTemplate: string;
+        tileSize: number;
+        zIndex?: number;
+    }
+
+    export class MbTile extends React.Component<MapMbTileProps, any> {
+    }
+
+    // =======================================================================
+    //  Overlay
+    // =======================================================================
+
+    type Coordinate = [number, number]
+
+    export interface MapOverlayProps extends ViewProperties {
+        image?: ImageURISource | ImageRequireSource;
+        bounds: [Coordinate, Coordinate];
+    }
+
+    export class Overlay extends React.Component<MapOverlayProps, any> {
+    }
+
+    export class OverlayAnimated extends Overlay {
+    }
+
+    // =======================================================================
+    //  Constants
+    // =======================================================================
+
+    export const MAP_TYPES: {
+        STANDARD: MapTypes,
+        SATELLITE: MapTypes,
+        HYBRID: MapTypes,
+        TERRAIN: MapTypes,
+        NONE: MapTypes,
+        MUTEDSTANDARD: MapTypes,
+    }
+
+    export const PROVIDER_DEFAULT: null;
+    export const PROVIDER_GOOGLE: 'google';
+
 }
