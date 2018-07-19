@@ -16,7 +16,7 @@ const LATITUDE = 23.736906;
 const LONGITUDE = 90.397768;
 const LATITUDE_DELTA = 0.022;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
+
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -24,20 +24,21 @@ export default class App extends Component<Props> {
     super(props);
 
     this.state = {
-      offlineMap: false
+      offlineMap: false,
     };
   }
 
   _toggleOfflineMap = () => {
     this.setState({
-      offlineMap: !this.state.offlineMap
+      offlineMap: !this.state.offlineMap,
     });
   }
 
   render() {
     return (
-      <View
-        style={styles.container}>
+      <View 
+      style={styles.container}
+      >
         <MapView
           style={styles.map}
           initialRegion={{
@@ -47,40 +48,43 @@ export default class App extends Component<Props> {
             longitudeDelta: LONGITUDE_DELTA,
           }}
           loadingEnabled
-          loadingIndicatorColor="#666666"
-          loadingBackgroundColor="#eeeeee"
-          mapType={Platform.OS == "android" && this.state.offlineMap ? "none" : "standard"}>
-          {this.state.offlineMap ? <MapView.MbTile
-            pathTemplate={"Path/to/mBTilesDatabase.mbtiles"}
-            tileSize={256} /> : null}
+          loadingIndicatorColor='#666666'
+          loadingBackgroundColor='#eeeeee'
+          mapType={Platform.OS === 'android' && this.state.offlineMap ? 'none' : 'standard'}
+        >
+          {this.state.offlineMap ? 
+          <MapView.MbTile
+            pathTemplate={'Path/to/mBTilesDatabase.mbtiles'}
+            tileSize={256} 
+          /> : null}
         </MapView>
         <TouchableOpacity
           style={styles.button}
           onPress={() => this._toggleOfflineMap()}>
-          <Text> {this.state.offlineMap ? "Switch to Online Map" : "Switch to Offline Map"} </Text>
+          <Text> {this.state.offlineMap ? 'Switch to Online Map' : 'Switch to Offline Map'} </Text>
         </TouchableOpacity>
       </View >
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
+    alignItems: 'center',
   },
   button: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
-    backgroundColor: "lightblue",
+    backgroundColor: 'lightblue',
     zIndex: 999999,
     height: 50,
     width: width / 2,
     borderRadius: width / 2,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-  }
+  },
 });
