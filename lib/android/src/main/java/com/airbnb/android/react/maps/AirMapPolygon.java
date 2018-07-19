@@ -18,10 +18,12 @@ public class AirMapPolygon extends AirMapFeature {
   private Polygon polygon;
 
   private List<LatLng> coordinates;
+  private List<List<LatLng>> holes;
   private int strokeColor;
   private int fillColor;
   private float strokeWidth;
   private boolean geodesic;
+  private boolean tappable;
   private float zIndex;
 
   public AirMapPolygon(Context context) {
@@ -41,6 +43,38 @@ public class AirMapPolygon extends AirMapFeature {
     }
   }
 
+  public void setHoles(ReadableArray holes) {
+    if (holes == null) { return; }
+
+    this.holes = new ArrayList<>(holes.size());
+
+    for (int i = 0; i < holes.size(); i++) {
+      ReadableArray hole = holes.getArray(i);
+
+      if (hole.size() < 3) { continue; }
+
+      List<LatLng> coordinates = new ArrayList<>();
+      for (int j = 0; j < hole.size(); j++) {
+        ReadableMap coordinate = hole.getMap(j);
+        coordinates.add(new LatLng(
+            coordinate.getDouble("latitude"),
+            coordinate.getDouble("longitude")));
+      }
+
+      // If hole is triangle
+      if (coordinates.size() == 3) {
+        coordinates.add(coordinates.get(0));
+      }
+
+      this.holes.add(coordinates);
+    }
+
+    if (polygon != null) {
+      polygon.setHoles(this.holes);
+    }
+  }
+
+
   public void setFillColor(int color) {
     this.fillColor = color;
     if (polygon != null) {
@@ -59,6 +93,13 @@ public class AirMapPolygon extends AirMapFeature {
     this.strokeWidth = width;
     if (polygon != null) {
       polygon.setStrokeWidth(width);
+    }
+  }
+
+  public void setTappable(boolean tapabble) {
+    this.tappable = tapabble;
+    if (polygon != null) {
+      polygon.setClickable(tappable);
     }
   }
 
@@ -91,6 +132,13 @@ public class AirMapPolygon extends AirMapFeature {
     options.strokeWidth(strokeWidth);
     options.geodesic(geodesic);
     options.zIndex(zIndex);
+
+    if (this.holes != null) {
+      for (int i = 0; i < holes.size(); i++) {
+        options.addHole(holes.get(i));
+      }
+    }
+
     return options;
   }
 
@@ -102,7 +150,7 @@ public class AirMapPolygon extends AirMapFeature {
   @Override
   public void addToMap(GoogleMap map) {
     polygon = map.addPolygon(getPolygonOptions());
-    polygon.setClickable(true);
+    polygon.setClickable(this.tappable);
   }
 
   @Override

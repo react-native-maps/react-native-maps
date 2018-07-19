@@ -130,5 +130,5 @@ dependencies {
     compile 'com.facebook.react:react-native:0.51.+'
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:support-annotations:25.3.0'
-    compile project(':react-native-maps')
+    compile project(':react-native-maps-lib')
 }

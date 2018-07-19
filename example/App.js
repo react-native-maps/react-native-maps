@@ -36,7 +36,12 @@ import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
+import MapKml from './examples/MapKml';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
+import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
+import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
+import AnimatedNavigation from './examples/AnimatedNavigation';
+import OnPoiClick from './examples/OnPoiClick';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -151,7 +156,12 @@ class App extends React.Component {
       [LegalLabel, 'Reposition the legal label', true],
       [SetNativePropsOverlays, 'Update native props', true],
       [CustomOverlay, 'Custom Overlay Component', true],
+      [MapKml, 'Load Map with KML', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
+      [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
+      [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
+      [AnimatedNavigation, 'Animated Map Navigation', true],
+      [OnPoiClick, 'On Poi Click', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
@@ -191,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = App;
+export default App;
