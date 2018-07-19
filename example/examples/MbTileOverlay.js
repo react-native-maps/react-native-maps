@@ -49,14 +49,14 @@ export default class App extends Component<Props> {
           }}
           loadingEnabled
           loadingIndicatorColor="#666666"
-          loadingBackgroundColor='#eeeeee'
+          loadingBackgroundColor="#eeeeee"
           mapType={Platform.OS === 'android' && this.state.offlineMap ? 'none' : 'standard'}
         >
           {this.state.offlineMap ?
-          <MapView.MbTile
-            pathTemplate={'Path/to/mBTilesDatabase.mbtiles'}
-            tileSize={256} 
-          /> : null}
+            <MapView.MbTile
+              pathTemplate={'Path/to/mBTilesDatabase.mbtiles'}
+              tileSize={256}
+            /> : null}
         </MapView>
         <TouchableOpacity
           style={styles.button}
@@ -64,7 +64,7 @@ export default class App extends Component<Props> {
         >
           <Text> {this.state.offlineMap ? 'Switch to Online Map' : 'Switch to Offline Map'} </Text>
         </TouchableOpacity>
-      </View >
+      </View>
     );
   }
 }
@@ -72,18 +72,18 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    alignItems: 'center',
+    alignItems: "center",
   },
   button: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
-    backgroundColor: 'lightblue',
+    backgroundColor: "lightblue",
     zIndex: 999999,
     height: 50,
     width: width / 2,
     borderRadius: width / 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   map: {
     ...StyleSheet.absoluteFillObject,
