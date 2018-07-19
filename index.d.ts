@@ -366,7 +366,7 @@ declare module "react-native-maps" {
     }
 
     // =======================================================================
-    //  UrlTile & LocalTile
+    //  UrlTile, LocalTile & MbTile
     // =======================================================================
 
     export interface MapUrlTileProps extends ViewProperties {
@@ -385,6 +385,15 @@ declare module "react-native-maps" {
     }
 
     export class LocalTile extends React.Component<MapLocalTileProps, any> {
+    }
+
+    export interface MapMbTileProps extends ViewProperties {
+        pathTemplate: string;
+        tileSize: number;
+        zIndex?: number;
+    }
+
+    export class MbTile extends React.Component<MapMbTileProps, any> {
     }
 
     // =======================================================================

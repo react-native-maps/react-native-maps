@@ -221,6 +221,39 @@ For Android: LocalTile is still just overlay over original map tiles. It means t
 
 See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) for how to download tiles for offline usage.
 
+
+#### Tile Overlay using MbTile
+
+Tiles can be stored locally in a MBTiles database on the device using xyz tiling scheme. The locally stored tiles can be displayed as a tile overlay. This can be used for displaying maps offline. Manging many tiles in a database is especially useful if larger areas are covered by an offline map. Keeping all the files locally and "raw" on the device most likely results in bad performance as well as troublesome datahandling. Please make sure that your database follows the MBTiles [specifications](https://github.com/mapbox/mbtiles-spec). This only works with tiles stored in the [xyz scheme](https://gist.github.com/tmcw/4954720) as used by Google, OSM, MapBox, ... Make sure to include the ending .mbtiles when you pass your pathTemplate.
+
+```jsx
+import MapView from 'react-native-maps';
+
+<MapView
+  region={this.state.region}
+  onRegionChange={this.onRegionChange}
+>
+  <MapView.MbTile
+   /**
+    * The path template of the locally stored MBTiles database. 
+    /storage/emulated/0/path/to/mBTilesDatabase.mbtiles
+    */
+   pathTemplate={this.state.pathTemplate}
+   /**
+    * The size of provided local tiles (usually 256 or 512).
+    */
+   tileSize={256}
+  />
+</MapView>
+```
+
+For Android: LocalTile is still just overlay over original map tiles. It means that if device is online, underlying tiles will be still downloaded. If original tiles download/display is not desirable set mapType to 'none'. For example:
+```
+<MapView
+  mapType={Platform.OS == "android" ? "none" : "standard"}
+>
+```
+
 ### Customizing the map style
 
 Create the json object, or download a generated one from the [google style generator](https://mapstyle.withgoogle.com/).
