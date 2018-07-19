@@ -36,8 +36,8 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-      <View 
-      style={styles.container}
+      <View
+        style={styles.container}
       >
         <MapView
           style={styles.map}
@@ -48,11 +48,11 @@ export default class App extends Component<Props> {
             longitudeDelta: LONGITUDE_DELTA,
           }}
           loadingEnabled
-          loadingIndicatorColor='#666666'
+          loadingIndicatorColor="#666666"
           loadingBackgroundColor='#eeeeee'
           mapType={Platform.OS === 'android' && this.state.offlineMap ? 'none' : 'standard'}
         >
-          {this.state.offlineMap ? 
+          {this.state.offlineMap ?
           <MapView.MbTile
             pathTemplate={'Path/to/mBTilesDatabase.mbtiles'}
             tileSize={256} 
@@ -60,7 +60,8 @@ export default class App extends Component<Props> {
         </MapView>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => this._toggleOfflineMap()}>
+          onPress={() => this._toggleOfflineMap()}
+        >
           <Text> {this.state.offlineMap ? 'Switch to Online Map' : 'Switch to Offline Map'} </Text>
         </TouchableOpacity>
       </View >
