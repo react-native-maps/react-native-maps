@@ -72,18 +72,18 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
+    alignItems: 'center',
   },
   button: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
-    backgroundColor: "lightblue",
+    backgroundColor: 'lightblue',
     zIndex: 999999,
     height: 50,
     width: width / 2,
     borderRadius: width / 2,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
