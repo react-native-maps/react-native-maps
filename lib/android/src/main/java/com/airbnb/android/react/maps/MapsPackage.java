@@ -40,7 +40,6 @@ public class MapsPackage implements ReactPackage {
     AirMapLiteManager mapLiteManager = new AirMapLiteManager(reactContext);
     AirMapUrlTileManager urlTileManager = new AirMapUrlTileManager(reactContext);
     AirMapLocalTileManager localTileManager = new AirMapLocalTileManager(reactContext);
-    AirMapMbTileManager mbTileManager = new AirMapMbTileManager(reactContext);
     AirMapOverlayManager overlayManager = new AirMapOverlayManager(reactContext);
 
     return Arrays.<ViewManager>asList(
@@ -53,7 +52,6 @@ public class MapsPackage implements ReactPackage {
         mapLiteManager,
         urlTileManager,
         localTileManager,
-        mbTileManager,
         overlayManager
     );
   }
