@@ -225,6 +225,8 @@ declare module "react-native-maps" {
         fitToCoordinates(coordinates?: LatLng[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
         takeSnapshot(options?: SnapshotOptions): Promise<string>;
+        pointForCoordinate(coordinate: LatLng): Promise<Point>;
+        coordinateForPoint(point: Point): Promise<LatLng>;
     }
 
     export class MapViewAnimated extends MapView {
