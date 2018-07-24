@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/airbnb/react-native-maps.git" }
   s.source_files  = "lib/ios/AirGoogleMaps/**/*.{h,m}"
-  s.compiler_flags = '-fno-modules'
+  s.compiler_flags = '-DHAVE_GOOGLE_MAPS=1', '-DHAVE_GOOGLE_MAPS_UTILS=1', '-fno-modules'
 
   s.dependency 'React'
   s.dependency 'GoogleMaps', '2.5.0'
