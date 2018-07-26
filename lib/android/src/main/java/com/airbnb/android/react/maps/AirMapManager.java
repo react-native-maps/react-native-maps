@@ -38,10 +38,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int FIT_TO_COORDINATES = 7;
   private static final int SET_MAP_BOUNDARIES = 8;
   private static final int ANIMATE_TO_NAVIGATION = 9;
-  private static final int ZOOM_IN = 9;
-  private static final int ZOOM_OUT = 10;
-  private static final int ZOOM_TO = 11;
-  private static final int ZOOM_BY = 12;
+  private static final int ZOOM_IN = 10;
+  private static final int ZOOM_OUT = 11;
+  private static final int ZOOM_TO = 12;
+  private static final int ZOOM_BY = 13;
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
       "standard", GoogleMap.MAP_TYPE_NORMAL,
