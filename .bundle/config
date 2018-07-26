@@ -1,2 +1,2 @@
 ---
-BUNDLE_BIN: "./examples/ios"
+BUNDLE_PATH: "./example/ios/bundles"

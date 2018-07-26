@@ -7,10 +7,12 @@
 | `provider` | `string` |  | The map framework to use. <br/><br/>Either `"google"` for GoogleMaps, otherwise `null` or `undefined` to use the native map framework (`MapKit` in iOS and `GoogleMaps` in android).
 | `region` | `Region` |  | The region to be displayed by the map. <br/><br/>The region is defined by the center coordinates and the span of coordinates to display.
 | `initialRegion` | `Region` |  | The initial region to be displayed by the map.  Use this prop instead of `region` only if you don't want to control the viewport of the map besides the initial region.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
+| `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured. **Note** Google Maps only.
+| `paddingAdjustmentBehavior` | 'always'\|'automatic'\|'never' | 'never' | Indicates how/when to affect padding with safe area insets (`GoogleMaps` in iOS only)
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
-| `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: (Android only) topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
+| `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - none: no map<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: (Android only) topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
 | `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/airbnb/react-native-maps#customizing-the-map-style) for more information.
-| `showsUserLocation` | `Boolean` | `false` | If `true` the app will ask for the user's location. **NOTE**: You need to add `NSLocationWhenInUseUsageDescription` key in Info.plist to enable geolocation, otherwise it is going to *fail silently*!
+| `showsUserLocation` | `Boolean` | `false` | If `true` the app will ask for the user's location. **NOTE**: You need to add `NSLocationWhenInUseUsageDescription` key in Info.plist to enable geolocation, otherwise it is going to *fail silently*! You will also need to add an explanation for why you need the users location against `NSLocationWhenInUseUsageDescription` in Info.plist. Otherwise Apple may reject your app submission.
 | `userLocationAnnotationTitle` | `String` | | The title of the annotation for current user location. This only works if `showsUserLocation` is true. There is a default value `My Location` set by MapView. **Note**: iOS only.
 | `followsUserLocation` | `Boolean` | `false` | If `true` the map will focus on the user's location. This only works if `showsUserLocation` is true and the user has shared their location. **Note**: iOS only.
 | `showsMyLocationButton` | `Boolean` | `true` | If `false` hide the button to move map to the current user's location.
@@ -48,7 +50,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `onKmlReady` | `KmlContainer` | Callback that is called once the kml is fully loaded.
 | `onRegionChange` | `Region` | Callback that is called continuously when the region changes, such as when a user is dragging the map.
 | `onRegionChangeComplete` | `Region` | Callback that is called once when the region changes, such as when the user is done moving the map.
-| `onUserLocationChange` | `{ coordinate: LatLng }` | Callback that is called when the underlying map figures our users current location. Make sure **showsUserLocation** is set to *true* and that the provider is `"google"`.
+| `onUserLocationChange` | `{ coordinate: Location }` | Callback that is called when the underlying map figures our users current location (coordinate also includes isFromMockProvider value for Android API 18 and above). Make sure **showsUserLocation** is set to *true* and that the provider is `"google"`.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
 | `onPanDrag` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user presses and drags the map. **NOTE**: for iOS `scrollEnabled` should be set to false to trigger the event
 | `onPoiClick` | `{ coordinate: LatLng, position: Point, placeId: string, name: string }` | Callback that is called when user click on a POI.
@@ -67,6 +69,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 
 | Method Name | Arguments | Notes
 |---|---|---|
+| `animateToNavigation` | `location: LatLng`, `bearing: Number`, `angle: Number`, `duration: Number` |
 | `animateToRegion` | `region: Region`, `duration: Number` |
 | `animateToCoordinate` | `coordinate: LatLng`, `duration: Number` |
 | `animateToBearing` | `bearing: Number`, `duration: Number` |
@@ -99,6 +102,18 @@ type Region {
 type LatLng {
   latitude: Number,
   longitude: Number,
+}
+```
+
+```
+type Location {
+  latitude: Number,
+  longitude: Number,
+  altitude: Number,
+  timestamp: Number, //Milliseconds since Unix epoch
+  accuracy: Number,
+  altitudeAccuracy: Number,
+  speed: Number,
 }
 ```
 

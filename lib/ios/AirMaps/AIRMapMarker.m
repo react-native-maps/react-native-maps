@@ -14,17 +14,26 @@
 #import <React/RCTImageLoader.h>
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
-NSInteger const CALLOUT_OPEN_ZINDEX_BASELINE = 999;
+
+NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
 @implementation AIREmptyCalloutBackgroundView
-bool _calloutIsOpen = NO;
-NSInteger _zIndexBeforeOpen = 0;
 @end
 
 @implementation AIRMapMarker {
     BOOL _hasSetCalloutOffset;
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     MKPinAnnotationView *_pinView;
+    BOOL _calloutIsOpen;
+    NSInteger _zIndexBeforeOpen;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self.layer addObserver:self forKeyPath:@"zPosition" options:NSKeyValueObservingOptionNew context:nil];
+    }
+    return self;
 }
 
 - (void)reactSetFrame:(CGRect)frame
@@ -307,8 +316,18 @@ NSInteger _zIndexBeforeOpen = 0;
 - (void)setZIndex:(NSInteger)zIndex
 {
     _zIndexBeforeOpen = zIndex;
-    _zIndex = _calloutIsOpen ? zIndex + CALLOUT_OPEN_ZINDEX_BASELINE : zIndex;
+    _zIndex = _calloutIsOpen ? zIndex + AIR_CALLOUT_OPEN_ZINDEX_BASELINE : zIndex;
     self.layer.zPosition = zIndex;
+}
+
+- (void)dealloc {
+    [self.layer removeObserver:self forKeyPath:@"zPosition"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"zPosition"]) {
+        self.layer.zPosition = _zIndex;
+    }
 }
 
 @end
