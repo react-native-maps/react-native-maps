@@ -39,9 +39,14 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int SET_MAP_BOUNDARIES = 8;
   private static final int ANIMATE_TO_NAVIGATION = 9;
 
-  private final Map<String, Integer> MAP_TYPES = MapBuilder.of("standard", GoogleMap.MAP_TYPE_NORMAL, "satellite",
-      GoogleMap.MAP_TYPE_SATELLITE, "hybrid", GoogleMap.MAP_TYPE_HYBRID, "terrain", GoogleMap.MAP_TYPE_TERRAIN, "none",
-      GoogleMap.MAP_TYPE_NONE);
+
+  private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
+      "standard", GoogleMap.MAP_TYPE_NORMAL,
+      "satellite", GoogleMap.MAP_TYPE_SATELLITE,
+      "hybrid", GoogleMap.MAP_TYPE_HYBRID,
+      "terrain", GoogleMap.MAP_TYPE_TERRAIN,
+      "none", GoogleMap.MAP_TYPE_NONE
+  );
 
   private final ReactApplicationContext appContext;
 
@@ -67,7 +72,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     error.putString("message", message);
     error.putString("type", type);
 
-    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("onError", error);
+    context
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit("onError", error);
   }
 
   @ReactProp(name = "region")
@@ -135,8 +142,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.setToolbarEnabled(toolbarEnabled);
   }
 
-  // This is a private prop to improve performance of panDrag by disabling it when
-  // the callback
+  // This is a private prop to improve performance of panDrag by disabling it when the callback
   // is not set
   @ReactProp(name = "handlePanDrag", defaultBoolean = false)
   public void setHandlePanDrag(AirMapView view, boolean handlePanDrag) {
@@ -248,108 +254,121 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     ReadableMap region;
 
     switch (commandId) {
-    case ANIMATE_TO_NAVIGATION:
-      region = args.getMap(0);
-      lng = region.getDouble("longitude");
-      lat = region.getDouble("latitude");
-      lngDelta = region.getDouble("longitudeDelta");
-      latDelta = region.getDouble("latitudeDelta");
-      bounds = new LatLngBounds(new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-          new LatLng(lat + latDelta / 2, lng + lngDelta / 2) // northeast
-      );
-      bearing = (float) args.getDouble(1);
-      angle = (float) args.getDouble(2);
-      duration = args.getInt(3);
-      view.animateToNavigation(bounds, bearing, angle, duration);
-      break;
+      case ANIMATE_TO_NAVIGATION:
+        region = args.getMap(0);
+        lng = region.getDouble("longitude");
+        lat = region.getDouble("latitude");
+        lngDelta = region.getDouble("longitudeDelta");
+        latDelta = region.getDouble("latitudeDelta");
+        bounds = new LatLngBounds(new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+            new LatLng(lat + latDelta / 2, lng + lngDelta / 2) // northeast
+        );
+        bearing = (float)args.getDouble(1);
+        angle = (float)args.getDouble(2);
+        duration = args.getInt(3);
+        view.animateToNavigation(bounds, bearing, angle, duration);
+        break;
 
-    case ANIMATE_TO_REGION:
-      region = args.getMap(0);
-      duration = args.getInt(1);
-      lng = region.getDouble("longitude");
-      lat = region.getDouble("latitude");
-      lngDelta = region.getDouble("longitudeDelta");
-      latDelta = region.getDouble("latitudeDelta");
-      bounds = new LatLngBounds(new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-          new LatLng(lat + latDelta / 2, lng + lngDelta / 2) // northeast
-      );
-      view.animateToRegion(bounds, duration);
-      break;
+      case ANIMATE_TO_REGION:
+        region = args.getMap(0);
+        duration = args.getInt(1);
+        lng = region.getDouble("longitude");
+        lat = region.getDouble("latitude");
+        lngDelta = region.getDouble("longitudeDelta");
+        latDelta = region.getDouble("latitudeDelta");
+        bounds = new LatLngBounds(new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+            new LatLng(lat + latDelta / 2, lng + lngDelta / 2) // northeast
+        );
+        view.animateToRegion(bounds, duration);
+        break;
 
-    case ANIMATE_TO_COORDINATE:
-      region = args.getMap(0);
-      duration = args.getInt(1);
-      lng = region.getDouble("longitude");
-      lat = region.getDouble("latitude");
-      view.animateToCoordinate(new LatLng(lat, lng), duration);
-      break;
+      case ANIMATE_TO_COORDINATE:
+        region = args.getMap(0);
+        duration = args.getInt(1);
+        lng = region.getDouble("longitude");
+        lat = region.getDouble("latitude");
+        view.animateToCoordinate(new LatLng(lat, lng), duration);
+        break;
 
-    case ANIMATE_TO_VIEWING_ANGLE:
-      angle = (float) args.getDouble(0);
-      duration = args.getInt(1);
-      view.animateToViewingAngle(angle, duration);
-      break;
+      case ANIMATE_TO_VIEWING_ANGLE:
+        angle = (float)args.getDouble(0);
+        duration = args.getInt(1);
+        view.animateToViewingAngle(angle, duration);
+        break;
 
-    case ANIMATE_TO_BEARING:
-      bearing = (float) args.getDouble(0);
-      duration = args.getInt(1);
-      view.animateToBearing(bearing, duration);
-      break;
+      case ANIMATE_TO_BEARING:
+        bearing = (float)args.getDouble(0);
+        duration = args.getInt(1);
+        view.animateToBearing(bearing, duration);
+        break;
 
-    case FIT_TO_ELEMENTS:
-      view.fitToElements(args.getBoolean(0));
-      break;
+      case FIT_TO_ELEMENTS:
+        view.fitToElements(args.getBoolean(0));
+        break;
 
-    case FIT_TO_SUPPLIED_MARKERS:
-      view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
-      break;
+      case FIT_TO_SUPPLIED_MARKERS:
+        view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
+        break;
 
-    case FIT_TO_COORDINATES:
-      view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
-      break;
+      case FIT_TO_COORDINATES:
+        view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
+        break;
 
-    case SET_MAP_BOUNDARIES:
-      view.setMapBoundaries(args.getMap(0), args.getMap(1));
-      break;
+      case SET_MAP_BOUNDARIES:
+        view.setMapBoundaries(args.getMap(0), args.getMap(1));
+        break;
     }
   }
 
   @Override
   @Nullable
   public Map getExportedCustomDirectEventTypeConstants() {
-    Map<String, Map<String, String>> map = MapBuilder.of("onMapReady", MapBuilder.of("registrationName", "onMapReady"),
-        "onPress", MapBuilder.of("registrationName", "onPress"), "onLongPress",
-        MapBuilder.of("registrationName", "onLongPress"), "onMarkerPress",
-        MapBuilder.of("registrationName", "onMarkerPress"), "onMarkerSelect",
-        MapBuilder.of("registrationName", "onMarkerSelect"), "onMarkerDeselect",
-        MapBuilder.of("registrationName", "onMarkerDeselect"), "onCalloutPress",
-        MapBuilder.of("registrationName", "onCalloutPress"));
+    Map<String, Map<String, String>> map = MapBuilder.of(
+        "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
+        "onPress", MapBuilder.of("registrationName", "onPress"),
+        "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
+        "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
+        "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
+        "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect"),
+        "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
+    );
 
-    map.putAll(MapBuilder.of("onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),
-        "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"), "onMarkerDrag",
-        MapBuilder.of("registrationName", "onMarkerDrag"), "onMarkerDragEnd",
-        MapBuilder.of("registrationName", "onMarkerDragEnd"), "onPanDrag",
-        MapBuilder.of("registrationName", "onPanDrag"), "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-        "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")));
+    map.putAll(MapBuilder.of(
+        "onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),
+        "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
+        "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
+        "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
+        "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
+        "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
+        "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
+    ));
 
     return map;
   }
-
+  
   @Nullable
   @Override
   public Map<String, Integer> getCommandsMap() {
-    Map<String, Integer> map = this.CreateMap("animateToRegion", ANIMATE_TO_REGION, "animateToCoordinate",
-        ANIMATE_TO_COORDINATE, "animateToViewingAngle", ANIMATE_TO_VIEWING_ANGLE, "animateToBearing",
-        ANIMATE_TO_BEARING, "fitToElements", FIT_TO_ELEMENTS, "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
-        "fitToCoordinates", FIT_TO_COORDINATES, "animateToNavigation", ANIMATE_TO_NAVIGATION);
+    Map<String, Integer> map = this.CreateMap(
+        "animateToRegion", ANIMATE_TO_REGION,
+        "animateToCoordinate", ANIMATE_TO_COORDINATE,
+        "animateToViewingAngle", ANIMATE_TO_VIEWING_ANGLE,
+        "animateToBearing", ANIMATE_TO_BEARING,
+        "fitToElements", FIT_TO_ELEMENTS,
+        "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
+        "fitToCoordinates", FIT_TO_COORDINATES,
+        "animateToNavigation", ANIMATE_TO_NAVIGATION
+    );
 
-    map.putAll(MapBuilder.of("setMapBoundaries", SET_MAP_BOUNDARIES));
+    map.putAll(MapBuilder.of(
+      "setMapBoundaries", SET_MAP_BOUNDARIES
+    ));
 
     return map;
   }
 
-  public static <K, V> Map<K, V> CreateMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7,
-      V v7, K k8, V v8) {
+  public static <K, V> Map<K, V> CreateMap(
+  K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
     Map map = new HashMap<K, V>();
     map.put(k1, v1);
     map.put(k2, v2);
@@ -364,8 +383,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   @Override
   public LayoutShadowNode createShadowNodeInstance() {
-    // A custom shadow node is needed in order to pass back the width/height of the
-    // map to the
+    // A custom shadow node is needed in order to pass back the width/height of the map to the
     // view manager so that it can start applying camera moves with bounds.
     return new SizeReportingShadowNode();
   }
@@ -396,7 +414,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   }
 
   void pushEvent(ThemedReactContext context, View view, String name, WritableMap data) {
-    context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), name, data);
+    context.getJSModule(RCTEventEmitter.class)
+        .receiveEvent(view.getId(), name, data);
   }
 
   @Override
