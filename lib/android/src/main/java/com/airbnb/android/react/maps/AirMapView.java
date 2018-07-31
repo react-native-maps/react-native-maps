@@ -33,6 +33,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -612,14 +613,24 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
-  public void animateToNavigation(LatLng location, float bearing, float angle, int duration) {
+  
+    
+  public void animateToNavigation(LatLngBounds bounds, final float bearing, final float angle,final int duration) {
     if (map == null) return;
-    CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
-        .bearing(bearing)
-        .tilt(angle)
-        .target(location)
-        .build();
-    map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, null);
+    map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50), 
+        new CancelableCallback() {
+          @Override
+          public void onFinish() {
+              map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder(map.getCameraPosition())
+                .bearing(bearing)
+                .tilt(angle)
+                .build()));
+          }
+
+          @Override
+          public void onCancel() {
+          }
+      });
   }
 
   public void animateToRegion(LatLngBounds bounds, int duration) {
