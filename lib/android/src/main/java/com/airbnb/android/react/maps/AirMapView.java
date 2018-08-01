@@ -613,24 +613,41 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
-  
-    
-  public void animateToNavigation(LatLngBounds bounds, final float bearing, final float angle,final int duration) {
-    if (map == null) return;
-    map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50), 
-        new CancelableCallback() {
-          @Override
-          public void onFinish() {
-              map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder(map.getCameraPosition())
-                .bearing(bearing)
-                .tilt(angle)
-                .build()));
-          }
+  public static int getBoundsZoomLevel(LatLng northeast,LatLng southwest,
+                                       int width, int height) {
+    final int GLOBE_WIDTH = 256; // a constant in Google's map projection
+    final int ZOOM_MAX = 21;
+    double latFraction = (latRad(northeast.latitude) - latRad(southwest.latitude)) / Math.PI;
+    double lngDiff = northeast.longitude - southwest.longitude;
+    double lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+    double latZoom = zoom(height, GLOBE_WIDTH, latFraction);
+    double lngZoom = zoom(width, GLOBE_WIDTH, lngFraction);
+    double zoom = Math.min(Math.min(latZoom, lngZoom),ZOOM_MAX);
+    return (int)(zoom);
+  }
 
-          @Override
-          public void onCancel() {
-          }
-      });
+  private static double latRad(double lat) {
+    double sin = Math.sin(lat * Math.PI / 180);
+    double radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+  }
+
+  private static double zoom(double mapPx, double worldPx, double fraction) {
+    final double LN2 = .693147180559945309417;
+    return (Math.log(mapPx / worldPx / fraction) / LN2);
+  }
+    
+  public void animateToNavigation(LatLng center, LatLngBounds bounds, final float bearing, final float angle,final int duration) {
+    if (map == null) return;
+
+    int zoomLevel = getBoundsZoomLevel(bounds.northeast, bounds.southwest, super.getHeight() ,super.getWidth());
+    
+    map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder(map.getCameraPosition())
+            .target(center)
+            .zoom(zoomLevel)
+            .bearing(bearing)
+            .tilt(angle)
+            .build()));
   }
 
   public void animateToRegion(LatLngBounds bounds, int duration) {
