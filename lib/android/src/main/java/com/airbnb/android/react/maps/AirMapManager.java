@@ -260,13 +260,14 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         lat = region.getDouble("latitude");
         lngDelta = region.getDouble("longitudeDelta");
         latDelta = region.getDouble("latitudeDelta");
+        LatLng center = new LatLng(lat, lng);
         bounds = new LatLngBounds(new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
             new LatLng(lat + latDelta / 2, lng + lngDelta / 2) // northeast
         );
         bearing = (float)args.getDouble(1);
         angle = (float)args.getDouble(2);
         duration = args.getInt(3);
-        view.animateToNavigation(bounds, bearing, angle, duration);
+        view.animateToNavigation(center, bounds, bearing, angle, duration);
         break;
 
       case ANIMATE_TO_REGION:
