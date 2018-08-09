@@ -116,9 +116,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private static Context getNonBuggyContext(ThemedReactContext reactContext,
       ReactApplicationContext appContext) {
     Context superContext = reactContext;
-    if (!contextHasBug(appContext.getCurrentActivity())) {
-      superContext = appContext.getCurrentActivity();
-    } else if (contextHasBug(superContext)) {
+    if (contextHasBug(superContext)) {
       // we have the bug! let's try to find a better context to use
       if (!contextHasBug(reactContext.getCurrentActivity())) {
         superContext = reactContext.getCurrentActivity();
