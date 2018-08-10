@@ -431,7 +431,12 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                           if (CGRectContainsPoint(rect, point)) {
                               point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
                               point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
-                              [pin.image drawAtPoint:point];
+                              if (pin.image) {
+                                  [pin.image drawAtPoint:point];
+                              } else {
+                                  CGRect pinRect = CGRectMake(point.x, point.y, pin.bounds.size.width, pin.bounds.size.height);
+                                  [pin drawViewHierarchyInRect:pinRect afterScreenUpdates:NO];
+                              }
                           }
                       }
 
