@@ -1,5 +1,22 @@
 <!--
   PLEASE DON'T DELETE THIS TEMPLATE UNTIL YOU HAVE READ THE FIRST SECTION.
+
+  What happens if you skip this step?
+
+  Someone will read your bug report, and maybe will be able to help you,
+  but it’s unlikely that it will get much attention from the team. Eventually,
+  the issue will likely get closed in favor of issues that have reproducible demos.
+
+  Please remember that:
+
+    * Issues without reproducible demos have a very low priority.
+    * The person fixing the bug would have to do that anyway. Please be respectful of their time.
+    * You might figure out the issues yourself as you work on extracting it.
+
+
+  PLEASE NOTE THAT ISSUES WITHOUT THE TEMPLATE IN PLACE WILL BE CLOSED RIGHT FROM THE START.
+
+  Thanks for helping us help you!
 -->
 
 ### Is this a bug report?
@@ -92,18 +109,3 @@
 
 (Paste the link to an example project and exact instructions to reproduce the issue.)
 
-<!--
-  What happens if you skip this step?
-
-  Someone will read your bug report, and maybe will be able to help you,
-  but it’s unlikely that it will get much attention from the team. Eventually,
-  the issue will likely get closed in favor of issues that have reproducible demos.
-
-  Please remember that:
-
-    * Issues without reproducible demos have a very low priority.
-    * The person fixing the bug would have to do that anyway. Please be respectful of their time.
-    * You might figure out the issues yourself as you work on extracting it.
-
-  Thanks for helping us help you!
--->
