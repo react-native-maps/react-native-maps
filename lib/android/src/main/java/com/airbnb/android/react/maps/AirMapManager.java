@@ -250,6 +250,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     Double latDelta;
     float bearing;
     float angle;
+    float zoom;
     ReadableMap region;
 
     switch (commandId) {
@@ -260,8 +261,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         LatLng location = new LatLng(lat, lng);
         bearing = (float)args.getDouble(1);
         angle = (float)args.getDouble(2);
-        duration = args.getInt(3);
-        view.animateToNavigation(location, bearing, angle, duration);
+        zoom = (float)args.getDouble(3);
+        duration = args.getInt(4);
+        view.animateToNavigation(location, bearing, angle, zoom, duration);
         break;
 
       case ANIMATE_TO_REGION:
@@ -341,7 +343,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     return map;
   }
-  
+
   @Nullable
   @Override
   public Map<String, Integer> getCommandsMap() {
