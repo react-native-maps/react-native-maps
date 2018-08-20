@@ -383,7 +383,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     bounding.putDouble("lon_min", cameraLastIdleBounds.southwest.longitude);
     bounding.putDouble("lat_max", cameraLastIdleBounds.northeast.latitude);
     bounding.putDouble("lon_max", cameraLastIdleBounds.northeast.longitude);
-    event.putMap("coordinate", bounding);
+    event.putMap("bounding", bounding);
 
     WritableMap region = new WritableNativeMap();
     LatLng center = cameraLastIdleBounds.getCenter();
