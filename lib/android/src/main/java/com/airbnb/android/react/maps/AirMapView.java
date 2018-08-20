@@ -317,6 +317,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
           cameraLastIdleBounds = bounds;
           eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, false));
+          sendIdleCameraEvent();
         }
       }
     });
@@ -371,6 +372,28 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     };
 
     context.addLifecycleEventListener(lifecycleListener);
+  }
+
+  public void sendIdleCameraEvent() {
+    WritableMap event = new WritableNativeMap();
+    event.putBoolean("continuous", false);
+
+    WritableMap bounding = new WritableNativeMap();
+    bounding.putDouble("lat_min", cameraLastIdleBounds.southwest.latitude);
+    bounding.putDouble("lon_min", cameraLastIdleBounds.southwest.longitude);
+    bounding.putDouble("lat_max", cameraLastIdleBounds.northeast.latitude);
+    bounding.putDouble("lon_max", cameraLastIdleBounds.northeast.longitude);
+    event.putMap("coordinate", bounding);
+
+    WritableMap region = new WritableNativeMap();
+    LatLng center = cameraLastIdleBounds.getCenter();
+    region.putDouble("latitude", center.latitude);
+    region.putDouble("longitude", center.longitude);
+    region.putDouble("latitudeDelta", cameraLastIdleBounds.northeast.latitude - cameraLastIdleBounds.southwest.latitude);
+    region.putDouble("longitudeDelta", cameraLastIdleBounds.northeast.longitude - cameraLastIdleBounds.southwest.longitude);
+    event.putMap("region", region);
+
+    manager.pushEvent(context, this, "onIdleCamera", event);
   }
 
   private boolean hasPermissions() {
