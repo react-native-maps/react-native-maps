@@ -291,6 +291,23 @@ id regionAsJSON(MKCoordinateRegion region) {
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                };
   if (self.onChange) self.onChange(event);  // complete
+  
+  //Camera is idle so send an event with region and bounding box
+    GMSVisibleRegion visibleRegion = self.projection.visibleRegion;
+    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion:visibleRegion];
+    
+    // we've got what we want, but here are NE and SW points
+    CLLocationCoordinate2D northEast = bounds.northEast;
+    CLLocationCoordinate2D southWest = bounds.southWest;
+    
+    if (self.onIdleCamera) self.onIdleCamera(@{@"continuous": @NO,
+                                               @"bounding": @{@"lat_max": [NSNumber numberWithDouble:northEast.latitude],
+                                                              @"lon_max": [NSNumber numberWithDouble:northEast.longitude],
+                                                              @"lat_min": [NSNumber numberWithDouble:southWest.latitude],
+                                                              @"lon_min": [NSNumber numberWithDouble:southWest.longitude]
+                                                              },
+                                               @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+                                               });
 }
 
 - (void)setMapPadding:(UIEdgeInsets)mapPadding {
