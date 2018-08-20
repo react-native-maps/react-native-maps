@@ -32,6 +32,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPoiClick;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
+@property (nonatomic, copy) RCTDirectEventBlock onIdleCamera;
 @property (nonatomic, strong) NSMutableArray *markers;
 @property (nonatomic, strong) NSMutableArray *polygons;
 @property (nonatomic, strong) NSMutableArray *polylines;
