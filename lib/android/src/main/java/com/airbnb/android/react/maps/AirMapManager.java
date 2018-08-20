@@ -339,6 +339,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
     ));
 
+    map.put("onIdleCamera", MapBuilder.of("registrationName", "onIdleCamera"));
+
     return map;
   }
   
