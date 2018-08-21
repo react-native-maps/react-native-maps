@@ -252,6 +252,22 @@ For Android: LocalTile is still just overlay over original map tiles. It means t
 <MapView
   mapType={Platform.OS == "android" ? "none" : "standard"}
 >
+
+### Overlaying other components on the map
+
+Place components you that wish to overlay `MapView` underneath the `MapView` closing tag. Absolutely position these elements.
+
+```jsx
+render() {
+  return (
+    <MapView
+      region={this.state.region}
+    />
+    <OverlayComponent
+      style={{position: “absolute”, bottom: 50}}
+    />
+  );
+}
 ```
 
 ### Customizing the map style
