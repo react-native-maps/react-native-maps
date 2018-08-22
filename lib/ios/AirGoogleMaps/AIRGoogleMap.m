@@ -425,6 +425,14 @@ id regionAsJSON(MKCoordinateRegion region) {
   [self setMinZoom:self.minZoom maxZoom:maxZoomLevel ];
 }
 
+- (void)setShowsIndoors:(BOOL)showsIndoors {
+  self.indoorEnabled = showsIndoors;
+}
+
+- (BOOL)showsIndoors {
+  return self.indoorEnabled;
+}
+
 - (void)setShowsIndoorLevelPicker:(BOOL)showsIndoorLevelPicker {
   self.settings.indoorPicker = showsIndoorLevelPicker;
 }
