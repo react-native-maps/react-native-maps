@@ -11,46 +11,46 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class IndoorMap extends React.Component {
   constructor(props) {
-      super(props);
-      this.setIndoorLevel = this.setIndoorLevel.bind(this);
+    super(props);
+    this.setIndoorLevel = this.setIndoorLevel.bind(this);
   }
 
   handleIndoorFocus(event) {
-      const { indoorBuilding } = event.nativeEvent;
-      const { defaultLevelIndex, levels } = indoorBuilding;
-      const levelNames = levels.map(lv => lv.name || '');
-      const msg = `Default Level: ${defaultLevelIndex}\nLevels: ${levelNames.toString()}`;
-      Alert.alert(
-          'Indoor building focused',
-          msg
-      );
+    const { indoorBuilding } = event.nativeEvent;
+    const { defaultLevelIndex, levels } = indoorBuilding;
+    const levelNames = levels.map(lv => lv.name || '');
+    const msg = `Default Level: ${defaultLevelIndex}\nLevels: ${levelNames.toString()}`;
+    Alert.alert(
+      'Indoor building focused',
+      msg
+    );
   }
 
   setIndoorLevel(level) {
-      this.map.setIndoorActiveLevelIndex(level);
+    this.map.setIndoorActiveLevelIndex(level);
   }
 
   render() {
-      return (
+    return (
       <View style={styles.container}>
-          <MapView
+        <MapView
           provider={this.props.provider}
           style={styles.map}
           initialRegion={{
-              latitude: LATITUDE,
-              longitude: LONGITUDE,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
           }}
           showsIndoors
           showsIndoorLevelPicker
           onIndoorBuildingFocused={this.handleIndoorFocus}
           ref={map => { this.map = map; }}
-          />
-          <Button title="go to level 5" onPress={() => { this.setIndoorLevel(5); }} />
-          <Button title="go to level 1" onPress={() => { this.setIndoorLevel(1); }} />
+        />
+        <Button title="go to level 5" onPress={() => { this.setIndoorLevel(5); }} />
+        <Button title="go to level 1" onPress={() => { this.setIndoorLevel(1); }} />
       </View>
-      );
+    );
   }
 }
 
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   map: {
-      ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFillObject,
   },
 });
 
