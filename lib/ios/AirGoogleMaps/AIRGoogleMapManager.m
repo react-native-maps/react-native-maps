@@ -31,7 +31,7 @@
 static NSString *const RCTMapViewKey = @"MapView";
 
 
-@interface AIRGoogleMapManager() <GMSMapViewDelegate>
+@interface AIRGoogleMapManager() <GMSMapViewDelegate, GMSIndoorDisplayDelegate>
 {
   BOOL didCallOnMapReady;
 }
