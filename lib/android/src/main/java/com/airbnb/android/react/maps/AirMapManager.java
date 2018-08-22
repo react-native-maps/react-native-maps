@@ -37,7 +37,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int FIT_TO_SUPPLIED_MARKERS = 6;
   private static final int FIT_TO_COORDINATES = 7;
   private static final int SET_MAP_BOUNDARIES = 8;
-  private static final int ANIMATE_TO_NAVIGATION = 9;
+  private static final int ANIMATE_TO_NAVIGATION = 9; 
+  private static final int SET_INDOOR_ACTIVE_LEVEL_INDEX = 10;
 
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
@@ -313,6 +314,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
       case SET_MAP_BOUNDARIES:
         view.setMapBoundaries(args.getMap(0), args.getMap(1));
         break;
+
+      case SET_INDOOR_ACTIVE_LEVEL_INDEX:
+        view.setIndoorActiveLevelIndex(args.getInt(0));
+        break;
     }
   }
 
@@ -336,7 +341,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
         "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
         "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-        "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
+        "onPoiClick", MapBuilder.of("registrationName", "onPoiClick"),
+        "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
+        "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused")
     ));
 
     return map;
@@ -353,7 +360,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "fitToElements", FIT_TO_ELEMENTS,
         "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
         "fitToCoordinates", FIT_TO_COORDINATES,
-        "animateToNavigation", ANIMATE_TO_NAVIGATION
+        "animateToNavigation", ANIMATE_TO_NAVIGATION,
+        "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
     );
 
     map.putAll(MapBuilder.of(

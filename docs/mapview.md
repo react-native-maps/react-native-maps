@@ -62,6 +62,8 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `onMarkerDragStart` | `{ coordinate: LatLng, position: Point }` | Callback that is called when the user initiates a drag on a marker (if it is draggable)
 | `onMarkerDrag` | `{ coordinate: LatLng, position: Point }` | Callback called continuously as a marker is dragged
 | `onMarkerDragEnd` | `{ coordinate: LatLng, position: Point }` | Callback that is called when a drag on a marker finishes. This is usually the point you will want to setState on the marker's coordinate again
+| `onIndoorLevelActivated` | `IndoorLevel` | Callback that is called when a level on indoor building is activated
+| `onIndoorBuildingFocused` | `IndoorBuilding` | Callback that is called when a indoor building is focused/unfocused
 
 
 
@@ -75,6 +77,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `animateToBearing` | `bearing: Number`, `duration: Number` |
 | `animateToViewingAngle` | `angle: Number`, `duration: Number` |
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | `GoogleMaps only`
+| `setIndoorActiveLevelIndex` | `levelIndex: Number` |
 | `fitToElements` | `animated: Boolean` |
 | `fitToSuppliedMarkers` | `markerIDs: String[]`, `animated: Boolean` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
@@ -159,5 +162,21 @@ type Marker {
 ```
 type KmlContainer {
   markers: [Marker]
+}
+```
+
+```
+type IndoorBuilding {
+  underground: boolean,
+  activeLevelIndex: Number,
+  levels: Array<IndoorLevel>,
+}
+```
+
+```
+type IndoorLevel {
+  activeLevelIndex: Number,
+  name: String,
+  shortName: String,
 }
 ```

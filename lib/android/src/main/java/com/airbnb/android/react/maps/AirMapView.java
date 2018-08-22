@@ -27,6 +27,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.EventDispatcher;
@@ -46,6 +47,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.android.gms.maps.model.IndoorBuilding;
+import com.google.android.gms.maps.model.IndoorLevel;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
@@ -65,7 +69,7 @@ import java.util.concurrent.ExecutionException;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
-    GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener {
+    GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
   public GoogleMap map;
   private KmlLayer kmlLayer;
   private ProgressBar mapLoadingProgressBar;
@@ -180,6 +184,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     this.map.setInfoWindowAdapter(this);
     this.map.setOnMarkerDragListener(this);
     this.map.setOnPoiClickListener(this);
+    this.map.setOnIndoorStateChangeListener(this);
 
     manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
@@ -1019,6 +1024,73 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       e.printStackTrace();
     } catch (ExecutionException e) {
       e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void onIndoorBuildingFocused() {
+    IndoorBuilding building = this.map.getFocusedBuilding();
+    if (building != null) {
+      List<IndoorLevel> levels = building.getLevels();
+      int index = 0;
+      WritableArray levelsArray = Arguments.createArray();
+      for (IndoorLevel level : levels) {
+        WritableMap levelMap = Arguments.createMap();
+        levelMap.putInt("index", index);
+        levelMap.putString("name", level.getName());
+        levelMap.putString("shortName", level.getShortName());
+        levelsArray.pushMap(levelMap);
+        index++;
+      }
+      WritableMap event = Arguments.createMap();
+      WritableMap indoorBuilding = Arguments.createMap();
+      indoorBuilding.putArray("levels", levelsArray);
+      indoorBuilding.putInt("activeLevelIndex", building.getActiveLevelIndex());
+      indoorBuilding.putBoolean("underground", building.isUnderground());
+
+      event.putMap("IndoorBuilding", indoorBuilding);
+
+      manager.pushEvent(context, this, "onIndoorBuildingFocused", event);
+    } else {
+      WritableMap event = Arguments.createMap();
+      WritableArray levelsArray = Arguments.createArray();
+      WritableMap indoorBuilding = Arguments.createMap();
+      indoorBuilding.putArray("levels", levelsArray);
+      indoorBuilding.putInt("activeLevelIndex", 0);
+      indoorBuilding.putBoolean("underground", false);
+      
+      event.putMap("IndoorBuilding", indoorBuilding);
+
+      manager.pushEvent(context, this, "onIndoorBuildingFocused", event);
+    }
+  }
+  
+  @Override
+  public void onIndoorLevelActivated(IndoorBuilding building) {
+    int activeLevelIndex = building.getActiveLevelIndex();
+    IndoorLevel level = building.getLevels().get(activeLevelIndex);
+
+    WritableMap event = Arguments.createMap();
+    WritableMap indoorlevel = Arguments.createMap();
+
+    indoorlevel.putInt("activeLevelIndex", activeLevelIndex);
+    indoorlevel.putString("name", level.getName());
+    indoorlevel.putString("shortName", level.getShortName());
+
+    event.putMap("IndoorLevel", indoorlevel);
+
+    manager.pushEvent(context, this, "onIndoorLevelActivated", event);
+  }
+    
+  public void setIndoorActiveLevelIndex(int activeLevelIndex) {
+    IndoorBuilding building = this.map.getFocusedBuilding();
+    if (building != null) {
+      if (activeLevelIndex >= 0 && activeLevelIndex < building.getLevels().size()) {
+        IndoorLevel level = building.getLevels().get(activeLevelIndex);
+        if (level != null) {
+          level.activate();
+        }
+      }
     }
   }
 
