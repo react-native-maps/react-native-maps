@@ -341,7 +341,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
         "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
         "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-        "onPoiClick", MapBuilder.of("registrationName", "onPoiClick"),
+        "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
+    ));
+
+    map.putAll(MapBuilder.of(
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
         "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused")
     ));
@@ -360,12 +363,12 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "fitToElements", FIT_TO_ELEMENTS,
         "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
         "fitToCoordinates", FIT_TO_COORDINATES,
-        "animateToNavigation", ANIMATE_TO_NAVIGATION,
-        "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
+        "animateToNavigation", ANIMATE_TO_NAVIGATION
     );
 
     map.putAll(MapBuilder.of(
-      "setMapBoundaries", SET_MAP_BOUNDARIES
+      "setMapBoundaries", SET_MAP_BOUNDARIES,
+      "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
     ));
 
     return map;
