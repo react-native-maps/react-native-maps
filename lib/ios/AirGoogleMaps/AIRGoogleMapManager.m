@@ -497,7 +497,7 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
       return;
     }
     self.map.onIndoorBuildingFocused(@{
-                                      @"indoorBuilding": @{
+                                      @"IndoorBuilding": @{
                                           @"activeLevelIndex": @0,
                                           @"underground": @false,
                                           @"levels": [[NSMutableArray alloc]init]
