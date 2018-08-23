@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <React/RCTView.h>
+#if __has_include(<React/RCTView.h>)
+    #import <React/RCTView.h>
+#else
+    #import "RCTView.h"
+#endif
 
 @interface AIRGoogleMapCallout : UIView
 @property (nonatomic, assign) BOOL tooltip;

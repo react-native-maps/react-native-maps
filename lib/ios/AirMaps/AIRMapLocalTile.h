@@ -10,8 +10,16 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import <React/RCTComponent.h>
-#import <React/RCTView.h>
+#if __has_include(<React/RCTComponent.h>)
+    #import <React/RCTComponent.h>
+#else
+    #import "RCTComponent.h"
+#endif
+#if __has_include(<React/RCTView.h>)
+    #import <React/RCTView.h>
+#else
+    #import "RCTView.h"
+#endif
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
 #import "RCTConvert+AirMap.h"

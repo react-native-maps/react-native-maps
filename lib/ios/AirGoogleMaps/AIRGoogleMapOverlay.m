@@ -5,10 +5,26 @@
 
 #import "AIRGoogleMapOverlay.h"
 
-#import <React/RCTEventDispatcher.h>
-#import <React/RCTImageLoader.h>
-#import <React/RCTUtils.h>
-#import <React/UIView+React.h>
+#if __has_include(<React/RCTEventDispatcher.h>)
+    #import <React/RCTEventDispatcher.h>
+#else
+    #import "RCTEventDispatcher.h"
+#endif
+#if __has_include(<React/RCTImageLoader.h>)
+    #import <React/RCTImageLoader.h>
+#else
+    #import "RCTImageLoader.h"
+#endif
+#if __has_include(<React/RCTUtils.h>)
+    #import <React/RCTUtils.h>
+#else
+    #import "RCTUtils.h"
+#endif
+#if __has_include(<React/UIView+React.h>)
+    #import <React/UIView+React.h>
+#else
+    #import "UIView+React.h"
+#endif
 
 @interface AIRGoogleMapOverlay()
   @property (nonatomic, strong, readwrite) UIImage *overlayImage;

@@ -6,7 +6,11 @@
 
 #import "RCTConvert+GMSMapViewType.h"
 #import <GoogleMaps/GoogleMaps.h>
-#import <React/RCTConvert.h>
+#if __has_include(<React/RCTConvert.h>)
+    #import <React/RCTConvert.h>
+#else
+    #import "RCTConvert.h"
+#endif
 
 @implementation RCTConvert (GMSMapViewType)
   RCT_ENUM_CONVERTER(GMSMapViewType,
