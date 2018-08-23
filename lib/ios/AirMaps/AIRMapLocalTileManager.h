@@ -6,7 +6,11 @@
 //  Copyright © 2017 Christopher. All rights reserved.
 //
 
-#import <React/RCTViewManager.h>
+#if __has_include(<React/RCTViewManager.h>)
+    #import <React/RCTViewManager.h>
+#else
+    #import "RCTViewManager.h"
+#endif
 
 @interface AIRMapLocalTileManager : RCTViewManager
 

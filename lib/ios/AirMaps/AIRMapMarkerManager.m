@@ -9,9 +9,21 @@
 
 #import "AIRMapMarkerManager.h"
 
-#import <React/RCTConvert+CoreLocation.h>
-#import <React/RCTUIManager.h>
-#import <React/UIView+React.h>
+#if __has_include(<React/RCTConvert+CoreLocation.h>)
+    #import <React/RCTConvert+CoreLocation.h>
+#else
+    #import "RCTConvert+CoreLocation.h"
+#endif
+#if __has_include(<React/RCTUIManager.h>)
+    #import <React/RCTUIManager.h>
+#else
+    #import "RCTUIManager.h"
+#endif
+#if __has_include(<React/UIView+React.h>)
+    #import <React/UIView+React.h>
+#else
+    #import "UIView+React.h"
+#endif
 #import "AIRMapMarker.h"
 
 @interface AIRMapMarkerManager () <MKMapViewDelegate>

@@ -3,7 +3,11 @@
 // Copyright (c) 2015 Facebook. All rights reserved.
 //
 
-#import <React/RCTViewManager.h>
+#if __has_include(<React/RCTViewManager.h>)
+    #import <React/RCTViewManager.h>
+#else
+    #import "RCTViewManager.h"
+#endif
 
 
 @interface AIRMapCalloutManager : RCTViewManager

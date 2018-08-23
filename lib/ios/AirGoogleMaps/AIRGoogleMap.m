@@ -19,8 +19,16 @@
 #import <Google-Maps-iOS-Utils/GMUPoint.h>
 #import <Google-Maps-iOS-Utils/GMUGeometryRenderer.h>
 #import <MapKit/MapKit.h>
-#import <React/UIView+React.h>
-#import <React/RCTBridge.h>
+#if __has_include(<React/UIView+React.h>)
+    #import <React/UIView+React.h>
+#else
+    #import "UIView+React.h"
+#endif
+#if __has_include(<React/RCTBridge.h>)
+    #import <React/RCTBridge.h>
+#else
+    #import "RCTBridge.h"
+#endif
 #import "RCTConvert+AirMap.h"
 
 id regionAsJSON(MKCoordinateRegion region) {

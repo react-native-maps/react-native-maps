@@ -6,8 +6,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <React/RCTComponent.h>
-#import <React/RCTBridge.h>
+#if __has_include(<React/RCTComponent.h>)
+    #import <React/RCTComponent.h>
+#else
+    #import "RCTComponent.h"
+#endif
+#if __has_include(<React/RCTBridge.h>)
+    #import <React/RCTBridge.h>
+#else
+    #import "RCTBridge.h"
+#endif
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"

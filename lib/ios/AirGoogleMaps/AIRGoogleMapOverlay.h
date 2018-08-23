@@ -6,7 +6,11 @@
 
 #import <Foundation/Foundation.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import <React/RCTBridge.h>
+#if __has_include(<React/RCTBridge.h>)
+    #import <React/RCTBridge.h>
+#else
+    #import "RCTBridge.h"
+#endif
 #import "AIRMapCoordinate.h"
 #import "AIRGoogleMap.h"
 

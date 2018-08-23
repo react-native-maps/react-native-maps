@@ -10,7 +10,11 @@
 #import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 
-#import <React/RCTComponent.h>
+#if __has_include(<React/RCTComponent.h>)
+    #import <React/RCTComponent.h>
+#else
+    #import "RCTComponent.h"
+#endif
 #import "SMCalloutView.h"
 #import "RCTConvert+AirMap.h"
 

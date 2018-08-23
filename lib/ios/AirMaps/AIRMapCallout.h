@@ -4,7 +4,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <React/RCTView.h>
+#if __has_include(<React/RCTView.h>)
+    #import <React/RCTView.h>
+#else
+    #import "RCTView.h"
+#endif
 
 
 @interface AIRMapCallout : RCTView
