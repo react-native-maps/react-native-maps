@@ -7,8 +7,14 @@
 ```
 gem install bundler
 ```
+If you don't have the repo cloned locally
 
-2. Install dependencies and open the workspace:
+2. ```
+git clone repo
+cd example/ios
+```
+
+3. Install dependencies and open the workspace:
 
 ```
 npm install
