@@ -15,6 +15,8 @@
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
 
+NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
+
 @implementation AIREmptyCalloutBackgroundView
 @end
 
@@ -22,6 +24,16 @@
     BOOL _hasSetCalloutOffset;
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     MKPinAnnotationView *_pinView;
+    BOOL _calloutIsOpen;
+    NSInteger _zIndexBeforeOpen;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self.layer addObserver:self forKeyPath:@"zPosition" options:NSKeyValueObservingOptionNew context:nil];
+    }
+    return self;
 }
 
 - (void)reactSetFrame:(CGRect)frame
@@ -137,6 +149,9 @@
 
 - (void)showCalloutView
 {
+    _calloutIsOpen = YES;
+    [self setZIndex:_zIndexBeforeOpen];
+    
     MKAnnotationView *annotationView = [self getAnnotationView];
 
     [self setSelected:YES animated:NO];
@@ -222,6 +237,8 @@
 
 - (void)hideCalloutView
 {
+    _calloutIsOpen = NO;
+    [self setZIndex:_zIndexBeforeOpen];
     // hide the callout view
     [self.map.calloutView dismissCalloutAnimated:YES];
 
@@ -298,8 +315,19 @@
 
 - (void)setZIndex:(NSInteger)zIndex
 {
-    _zIndex = zIndex;
-    self.layer.zPosition = _zIndex;
+    _zIndexBeforeOpen = zIndex;
+    _zIndex = _calloutIsOpen ? zIndex + AIR_CALLOUT_OPEN_ZINDEX_BASELINE : zIndex;
+    self.layer.zPosition = zIndex;
+}
+
+- (void)dealloc {
+    [self.layer removeObserver:self forKeyPath:@"zPosition"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"zPosition"]) {
+        self.layer.zPosition = _zIndex;
+    }
 }
 
 @end
