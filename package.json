@@ -6,7 +6,7 @@
   "version": "0.21.0",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "run:packager": "./node_modules/react-native/packager/packager.sh",
+    "run:packager": "./node_modules/react-native/scripts/packager.sh",
     "run:ios": "react-native run-ios --project-path ./example/ios",
     "start:android": "adb shell am start -n com.airbnb.android.react.maps.example/.MainActivity",
     "run:android": "./gradlew installDebug && npm run start:android",
