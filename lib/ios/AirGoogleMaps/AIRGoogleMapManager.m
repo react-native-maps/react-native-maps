@@ -5,6 +5,8 @@
 //  Created by Gil Birman on 9/1/16.
 //
 
+#ifdef HAVE_GOOGLE_MAPS
+
 
 #import "AIRGoogleMapManager.h"
 #import <React/RCTViewManager.h>
@@ -473,3 +475,5 @@ RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
     [googleMapView didTapPOIWithPlaceID:placeID name:name location:location];
 }
 @end
+
+#endif
