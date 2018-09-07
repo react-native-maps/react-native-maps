@@ -80,20 +80,24 @@ post_install do |installer|
 end
 ~~~
 
+## iOS - ReactNative Link
 
-## IMPORTANT!!
+Run `react-native link react-native-maps`. Note that by default this will use
+Apple Maps and that the configuration of Google Maps will be more difficult.
 
-**!!  DO NOT USE  !!** `react-native link`
+Functionality that depends on `Google-Maps-iOS-Utils` has been disabled for this
+configuration via runtime errors due to the fact that this framework is not
+available for download as a pre-compiled binary. An exception will be raised if
+you try to use the following features:
 
-Have ran it already? Read [this](#on-ios).
+- Making markers via KML files
 
 ## If you want to use Google maps
-
 
 Add to `ios/_YOUR_PROJECT_NAME_/AppDelegate.m:
 
 ```objc
-+ @import GoogleMaps; //add this line if you want to use Google Maps
++ #import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 ...
@@ -105,6 +109,25 @@ Add to `ios/_YOUR_PROJECT_NAME_/AppDelegate.m:
 ```
 
 This should be the **first line** of the method.
+
+#### If you are not using CocoaPods
+
+If you installed via `react-native-link`, add the following to your
+`package.json` and replace the `REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL`
+with the relative path from your project root to the directory in which you
+installed the Google Maps frameworks:
+
+```json
+{
+  "name": "your-app",
+  "scripts": {
+    "postinstall": "./node_modules/react-native-maps/enable-google-maps REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL"
+  }
+}
+```
+
+Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
+
 
 ## Notes on running on a real ios device
 
@@ -207,16 +230,6 @@ If you have a blank map issue, ([#118](https://github.com/airbnb/react-native-ma
 ### On iOS:
 
 If google logo/markers/polylines etc are displayed, this is likely an API key issue. Verify your API keys and their restrictions. Ensure the native `provideAPIKey` call is the first line of `didFinishLaunchingWithOptions`.
-
-If you have ran 'react-native link` by mistake:
-
-1. delete node_modules
-2. delete ios/Pods
-3. delete ios/Podfile.lock
-4. open Xcode and delete `AIRMaps.xcodeproj` from Libraries if it exists
-5. in Build Phases -> Link Binary With Libraries delete `libAIRMaps.a` if it exists
-6. delete ios/build folder
-7. start again with the installation steps
 
 If you use Xcode with version less than 9 you may get `use of undeclared identifier 'MKMapTypeMutedStandard'` or `Entry, ":CFBundleIdentifier", Does Not Exist` errors. In this case you have to update your Xcode.
 
