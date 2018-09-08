@@ -226,6 +226,7 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
 RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
                   markers:(nonnull NSArray *)markers
+                  edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -244,7 +245,13 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
 
             NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
 
-            [mapView showAnnotations:filteredMarkers animated:animated];
+            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+
+            [mapView showAnnotations:filteredMarkers edgePadding:UIEdgeInsetsMake(top, left, bottom, right) animated:animated];
+            
         }
     }];
 }
