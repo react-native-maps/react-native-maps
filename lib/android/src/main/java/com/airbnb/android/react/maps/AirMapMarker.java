@@ -73,6 +73,9 @@ public class AirMapMarker extends AirMapFeature {
   private float calloutAnchorY;
   private boolean calloutAnchorIsSet;
 
+  private boolean tracksViewChanges = true;
+  private boolean tracksViewChangesActive = false;
+
   private boolean hasCustomMarkerView = false;
 
   private final DraweeHolder<?> logoHolder;
@@ -240,6 +243,32 @@ public class AirMapMarker extends AirMapFeature {
     update();
   }
 
+  public void setTracksViewChanges(boolean tracksViewChanges) {
+    this.tracksViewChanges = tracksViewChanges;
+    updateTracksViewChanges();
+  }
+
+  private void updateTracksViewChanges() {
+    boolean shouldTrack = tracksViewChanges && hasCustomMarkerView && marker != null;
+    if (shouldTrack == tracksViewChangesActive) return;
+    tracksViewChangesActive = shouldTrack;
+
+    if (shouldTrack) {
+      ViewChangesTracker.getInstance().addMarker(this);
+    } else {
+      ViewChangesTracker.getInstance().removeMarker(this);
+    }
+  }
+
+  public boolean updateCustomMarkerIcon() {
+    if (!tracksViewChangesActive)
+      return false;
+
+    marker.setIcon(getIcon());
+
+    return true;
+  }
+
   public LatLng interpolate(float fraction, LatLng a, LatLng b) {
     double lat = (b.latitude - a.latitude) * fraction + a.latitude;
     double lng = (b.longitude - a.longitude) * fraction + a.longitude;
@@ -313,6 +342,7 @@ public class AirMapMarker extends AirMapFeature {
     // if children are added, it means we are rendering a custom marker
     if (!(child instanceof AirMapCallout)) {
       hasCustomMarkerView = true;
+      updateTracksViewChanges();
     }
     update();
   }
@@ -325,12 +355,14 @@ public class AirMapMarker extends AirMapFeature {
   @Override
   public void addToMap(GoogleMap map) {
     marker = map.addMarker(getMarkerOptions());
+    updateTracksViewChanges();
   }
 
   @Override
   public void removeFromMap(GoogleMap map) {
     marker.remove();
     marker = null;
+    updateTracksViewChanges();
   }
 
   private BitmapDescriptor getIcon() {
