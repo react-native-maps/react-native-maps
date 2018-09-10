@@ -354,8 +354,8 @@ RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
         } else {
             CGPoint touchPoint = [mapView convertCoordinate:
                                   CLLocationCoordinate2DMake(
-                                                             [coordinate[@"lat"] doubleValue],
-                                                             [coordinate[@"lng"] doubleValue]
+                                                             [coordinate[@"latitude"] doubleValue],
+                                                             [coordinate[@"longitude"] doubleValue]
                                                              )
                                               toPointToView:mapView];
             
@@ -386,8 +386,8 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                                                  toCoordinateFromView:mapView];
             
             resolve(@{
-                      @"lat": @(coordinate.latitude),
-                      @"lng": @(coordinate.longitude),
+                      @"latitude": @(coordinate.latitude),
+                      @"longitude": @(coordinate.longitude),
                       });
         }
     }];
