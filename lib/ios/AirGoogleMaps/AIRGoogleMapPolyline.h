@@ -21,13 +21,14 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
 @property (nonatomic, strong) UIColor *strokeColor;
+@property(nonatomic, strong) NSArray<UIColor *> *strokeColors;
 @property (nonatomic, assign) double strokeWidth;
 @property (nonatomic, assign) UIColor *fillColor;
 @property (nonatomic, strong) NSArray<NSNumber *> *lineDashPattern;
 @property (nonatomic, assign) BOOL geodesic;
 @property (nonatomic, assign) NSString *title;
 @property (nonatomic, assign) int zIndex;
-@property (nonatomic, assign) BOOL tappable;
+@property(nonatomic, assign) BOOL tappable;
 
 @end
 
