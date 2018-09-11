@@ -189,7 +189,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       attacherGroup.setClipBounds(new Rect(0, 0, 0, 0));
     }
-    attacherGroup.setOverflow(ViewProps.HIDDEN);
+    attacherGroup.setOverflow("hidden"); // Move to ViewProps.HIDDEN when RN 0.57 is the base version
     addView(attacherGroup);
   }
 
