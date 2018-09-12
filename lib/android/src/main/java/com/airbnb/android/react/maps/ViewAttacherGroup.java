@@ -8,6 +8,8 @@ public class ViewAttacherGroup extends ReactViewGroup {
 
   public ViewAttacherGroup(Context context) {
     super(context);
+
+    this.setWillNotDraw(true);
   }
 
   // This should make it more performant, avoid trying to hard to overlap layers with opacity.
