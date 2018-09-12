@@ -141,14 +141,14 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
       parent.setCalloutView((AirMapCallout) child);
     } else {
       super.addView(parent, child, index);
-      parent.update();
+      parent.update(true);
     }
   }
 
   @Override
   public void removeViewAt(AirMapMarker parent, int index) {
     super.removeViewAt(parent, index);
-    parent.update();
+    parent.update(true);
   }
 
   @Override
