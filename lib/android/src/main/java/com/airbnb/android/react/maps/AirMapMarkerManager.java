@@ -23,6 +23,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
   private static final int SHOW_INFO_WINDOW = 1;
   private static final int HIDE_INFO_WINDOW = 2;
   private static final int ANIMATE_MARKER_TO_COORDINATE = 3;
+  private static final int REDRAW = 4;
 
   public AirMapMarkerManager() {
   }
@@ -162,7 +163,8 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     return MapBuilder.of(
         "showCallout", SHOW_INFO_WINDOW,
         "hideCallout", HIDE_INFO_WINDOW,
-        "animateMarkerToCoordinate",  ANIMATE_MARKER_TO_COORDINATE
+        "animateMarkerToCoordinate", ANIMATE_MARKER_TO_COORDINATE,
+        "redraw", REDRAW
     );
   }
 
@@ -181,7 +183,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
       case HIDE_INFO_WINDOW:
         ((Marker) view.getFeature()).hideInfoWindow();
         break;
-      
+
       case ANIMATE_MARKER_TO_COORDINATE:
         region = args.getMap(0);
         duration = args.getInt(1);
@@ -189,6 +191,10 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         lng = region.getDouble("longitude");
         lat = region.getDouble("latitude");
         view.animateToCoodinate(new LatLng(lat, lng), duration);
+        break;
+
+      case REDRAW:
+        view.updateMarkerIcon();
         break;
     }
   }

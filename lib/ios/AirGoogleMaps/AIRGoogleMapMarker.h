@@ -39,6 +39,7 @@
 
 - (void)showCalloutView;
 - (void)hideCalloutView;
+- (void)redraw;
 - (UIView *)markerInfoContents;
 - (UIView *)markerInfoWindow;
 - (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker;
