@@ -183,13 +183,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     attacherLayoutParams.leftMargin = 99999999;
     attacherLayoutParams.topMargin = 99999999;
     attacherGroup.setLayoutParams(attacherLayoutParams);
-    attacherGroup.setVisibility(VISIBLE);
-    attacherGroup.setAlpha(0.0f);
-    attacherGroup.setRemoveClippedSubviews(false);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-      attacherGroup.setClipBounds(new Rect(0, 0, 0, 0));
-    }
-    attacherGroup.setOverflow("hidden");
     addView(attacherGroup);
   }
 
