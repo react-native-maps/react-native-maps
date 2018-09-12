@@ -533,9 +533,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       annotation.addToMap(map);
       features.add(index, annotation);
 
+      // Allow visibility event to be triggered later
       int visibility = annotation.getVisibility();
       annotation.setVisibility(INVISIBLE);
+
+      // Add to the parent group
       attacherGroup.addView(annotation);
+
+      // Trigger visibility event if necessary.
+      // With some testing, seems like it is not always
+      //   triggered just by being added to a parent view.
       annotation.setVisibility(visibility);
 
       Marker marker = (Marker) annotation.getFeature();
