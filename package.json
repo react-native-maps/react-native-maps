@@ -32,8 +32,8 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": "^16.0",
-    "react-native": "^0.51 || ^0.52 || ^0.53 || ^0.54 || ^0.55",
+    "react": ">= 16.0 || < 17.0",
+    "react-native": ">= 0.51",
     "prop-types": "^15.0 || ^16.0"
   },
   "devDependencies": {
@@ -48,7 +48,7 @@
     "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
     "prop-types": "^15.5.10",
-    "react": "^16.3.0-alpha.1",
+    "react": "^16.3.2",
     "react-native": "^0.54"
   },
   "rnpm": {
