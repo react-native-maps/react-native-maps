@@ -259,6 +259,13 @@ public class AirMapMarker extends AirMapFeature {
       ViewChangesTracker.getInstance().addMarker(this);
     } else {
       ViewChangesTracker.getInstance().removeMarker(this);
+
+      // Let it render one more time to avoid race conditions.
+      // i.e. Image onLoad ->
+      //      ViewChangesTracker may not get a chance to render ->
+      //      setState({ tracksViewChanges: false }) ->
+      //      image loaded but not rendered.
+      updateMarkerIcon();
     }
   }
 
