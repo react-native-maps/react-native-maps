@@ -115,6 +115,26 @@ CGRect unionRect(CGRect a, CGRect b) {
   [_realMarker.map setSelectedMarker:Nil];
 }
 
+- (void)redraw {
+  if (!_realMarker.iconView) return;
+  
+  BOOL oldValue = _realMarker.tracksViewChanges;
+  
+  if (oldValue == YES)
+  {
+    // Immediate refresh, like right now. Not waiting for next frame.
+    UIView *view = _realMarker.iconView;
+    _realMarker.iconView = nil;
+    _realMarker.iconView = view;
+  }
+  else
+  {
+    // Refresh according to docs
+    _realMarker.tracksViewChanges = YES;
+    _realMarker.tracksViewChanges = NO;
+  }
+}
+
 - (UIView *)markerInfoContents {
   if (self.calloutView && !self.calloutView.tooltip) {
     return self.calloutView;

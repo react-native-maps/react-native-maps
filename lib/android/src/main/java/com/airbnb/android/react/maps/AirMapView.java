@@ -183,13 +183,6 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     attacherLayoutParams.leftMargin = 99999999;
     attacherLayoutParams.topMargin = 99999999;
     attacherGroup.setLayoutParams(attacherLayoutParams);
-    attacherGroup.setVisibility(VISIBLE);
-    attacherGroup.setAlpha(0.0f);
-    attacherGroup.setRemoveClippedSubviews(false);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-      attacherGroup.setClipBounds(new Rect(0, 0, 0, 0));
-    }
-    attacherGroup.setOverflow("hidden");
     addView(attacherGroup);
   }
 
@@ -540,9 +533,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       annotation.addToMap(map);
       features.add(index, annotation);
 
+      // Allow visibility event to be triggered later
       int visibility = annotation.getVisibility();
       annotation.setVisibility(INVISIBLE);
+
+      // Add to the parent group
       attacherGroup.addView(annotation);
+
+      // Trigger visibility event if necessary.
+      // With some testing, seems like it is not always
+      //   triggered just by being added to a parent view.
       annotation.setVisibility(visibility);
 
       Marker marker = (Marker) annotation.getFeature();

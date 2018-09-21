@@ -60,7 +60,7 @@ public class ViewChangesTracker {
 
   public void update() {
     for (AirMapMarker marker : markers) {
-      if (!marker.updateCustomMarkerIcon()) {
+      if (!marker.updateCustomForTracking()) {
         markersToRemove.add(marker);
       }
     }
@@ -68,7 +68,7 @@ public class ViewChangesTracker {
     // Remove markers that are not active anymore
     if (markersToRemove.size() > 0) {
       markers.removeAll(markersToRemove);
-      markersToRemove.clear();;
+      markersToRemove.clear();
     }
   }
 
