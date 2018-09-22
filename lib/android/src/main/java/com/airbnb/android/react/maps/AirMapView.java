@@ -703,7 +703,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
-  public void fitToSuppliedMarkers(ReadableArray markerIDsArray, boolean animated) {
+  public void fitToSuppliedMarkers(ReadableArray markerIDsArray, ReadableMap edgePadding, boolean animated) {
     if (map == null) return;
 
     LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -731,6 +731,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     if (addedPosition) {
       LatLngBounds bounds = builder.build();
       CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+      
+      if (edgePadding != null) {
+        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+      }   
+      
       if (animated) {
         map.animateCamera(cu);
       } else {
