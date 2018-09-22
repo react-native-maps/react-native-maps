@@ -76,7 +76,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `animateToViewingAngle` | `angle: Number`, `duration: Number` |
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | `GoogleMaps only`
 | `fitToElements` | `animated: Boolean` |
-| `fitToSuppliedMarkers` | `markerIDs: String[]`, `animated: Boolean` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
+| `fitToSuppliedMarkers` | `markerIDs: String[], options: { edgePadding: EdgePadding, animated: Boolean }` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
 | `pointForCoordinate` | `coordinate: LatLng` | Converts a map coordinate to a view coordinate (`Point`). Returns a `Promise<Point>`.
 | `coordinateForPoint` | `point: Point` | Converts a view coordinate (`Point`) to a map coordinate. Returns a `Promise<Coordinate>`.

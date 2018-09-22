@@ -303,7 +303,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         break;
 
       case FIT_TO_SUPPLIED_MARKERS:
-        view.fitToSuppliedMarkers(args.getArray(0), args.getBoolean(1));
+        view.fitToSuppliedMarkers(args.getArray(0), args.getMap(1), args.getBoolean(2));
         break;
 
       case FIT_TO_COORDINATES:
