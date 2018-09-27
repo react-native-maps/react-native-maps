@@ -336,7 +336,10 @@ CGRect unionRect(CGRect a, CGRect b) {
   _calloutAnchor = calloutAnchor;
   _realMarker.infoWindowAnchor = calloutAnchor;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> add calloutAnchor google maps ios
 
 - (void)setZIndex:(NSInteger)zIndex
 {
