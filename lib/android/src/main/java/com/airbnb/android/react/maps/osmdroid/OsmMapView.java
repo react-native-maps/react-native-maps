@@ -242,10 +242,7 @@ public class OsmMapView extends MapView implements MapView.OnFirstLayoutListener
         Double lat = region.getDouble("latitude");
         Double lngDelta = region.getDouble("longitudeDelta");
         Double latDelta = region.getDouble("latitudeDelta");
-        BoundingBox bounds = new BoundingBox(
-                lat + latDelta / 2, lng + lngDelta / 2,
-                lat - latDelta / 2, lng - lngDelta / 2
-        );
+        BoundingBox bounds = LatLngBoundsUtils.makeBoundsFromCenterDelta(lat, lng, latDelta, lngDelta);
         if (super.getHeight() <= 0 || super.getWidth() <= 0) {
             // in this case, our map has not been laid out yet, so we save the bounds in a local
             // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout

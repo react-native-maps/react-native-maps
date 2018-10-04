@@ -4,14 +4,25 @@ import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 
 public class LatLngBoundsUtils {
+
+    public static BoundingBox makeBoundsFromCenterDelta(Double lat,
+                                                        Double lng,
+                                                        Double latDelta,
+                                                        Double lngDelta) {
+        return new BoundingBox(
+                Math.min(lat + latDelta / 2, 90), Math.min(lng + lngDelta / 2, 180),
+                Math.max(lat - latDelta / 2, -90), Math.max(lng - lngDelta / 2, -180)
+        );
+    }
+
     public static boolean BoundsAreDifferent(BoundingBox a, BoundingBox b) {
-        GeoPoint centerA = a.getCenter();
+        GeoPoint centerA = a.getCenterWithDateLine();
         double latA = centerA.getLatitude();
         double lngA = centerA.getLongitude();
         double latDeltaA = a.getLatitudeSpan();
         double lngDeltaA = a.getLongitudeSpan();
 
-        GeoPoint centerB = b.getCenter();
+        GeoPoint centerB = b.getCenterWithDateLine();
         double latB = centerB.getLatitude();
         double lngB = centerB.getLongitude();
         double latDeltaB = b.getLatitudeSpan();

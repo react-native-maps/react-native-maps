@@ -4,6 +4,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.airbnb.android.react.maps.SizeReportingShadowNode;
+import com.airbnb.android.react.maps.osmdroid.utils.LatLngBoundsUtils;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -222,10 +223,7 @@ public class OsmMapManager extends ViewGroupManager<OsmMapView> {
                 lat = region.getDouble("latitude");
                 lngDelta = region.getDouble("longitudeDelta");
                 latDelta = region.getDouble("latitudeDelta");
-                BoundingBox bounds = new BoundingBox(
-                        lat + latDelta / 2, lng + lngDelta / 2, // northeast
-                        lat - latDelta / 2, lng - lngDelta / 2 // southwest
-                );
+                BoundingBox bounds = LatLngBoundsUtils.makeBoundsFromCenterDelta(lat, lng, latDelta, lngDelta);
                 view.animateToRegion(bounds, duration);
                 break;
 
