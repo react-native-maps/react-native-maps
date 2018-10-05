@@ -1,18 +1,32 @@
 # Change Log
 
 ## 0.22.0 (October 5, 2018)
-* Common: [#2207](https://github.com/react-community/react-native-maps/pull/2207) Add `timestamp` property to `onUserLocationChange` event callback
+* Common: [#2049](https://github.com/react-community/react-native-maps/pull/2049) Added `animateToNavigation` method to `MapView`
+* Common: [#2207](https://github.com/react-community/react-native-maps/pull/2207), [#2232](https://github.com/react-community/react-native-maps/pull/2232) Added `timestamp` property to `onUserLocationChange` event callback
+* Common: [#2238](https://github.com/react-community/react-native-maps/pull/2238) Support the `asset://` scheme for images
 * Common: [#2136](https://github.com/react-community/react-native-maps/pull/2136), [#2184](https://github.com/react-community/react-native-maps/pull/2184) Modifications/Enhancements to MapView.UrlTile
 * Common: [#2039](https://github.com/react-community/react-native-maps/pull/2039) Fix for `pointForCoordinate` and `coordinateForPoint`
-* Common: [bf915b3](https://github.com/todorone/react-native-maps/commit/bf915b3ae7124f76bb04fd4316fcb79375930df3) Fix color prop types
-* iOS: [2229](https://github.com/react-community/react-native-maps/pull/2229) Use global imports for new Pods dependencies in AIRGoogleMap
-* iOS: [#2185](https://github.com/react-community/react-native-maps/pull/2185) Fix Xcode warnings for format, pointer type, unused var
-* Android: [#2197](https://github.com/react-community/react-native-maps/pull/2197) Fix overlay removal bug
+* Common: [#2217](https://github.com/react-community/react-native-maps/pull/2217) Using `ColorPropType` to validate all color props more accurately
+* Common: [#2332](https://github.com/react-community/react-native-maps/pull/2332) Added react-native@^0.55 to peerDependencies
+* iOS: [#2243](https://github.com/react-community/react-native-maps/pull/2243) Added support of `lineDashPattern` polyline props to iOS Google Maps
+* iOS: [#2149](https://github.com/react-community/react-native-maps/pull/2149) Added `paddingAdjustmentBehavior` for Google Maps on iOS
+* iOS: [#2231](https://github.com/react-community/react-native-maps/pull/2231) Prefix DummyView class
+* iOS: [#2229](https://github.com/react-community/react-native-maps/pull/2229) Use global imports for new Pods dependencies in AIRGoogleMap
+* iOS: [#2248](https://github.com/react-community/react-native-maps/pull/2248) Make tiles display at the same physical size regardless of pixel density on iOS devices
+* iOS: [#2306](https://github.com/react-community/react-native-maps/pull/2306) Prefix or eliminate globals in AIRMapMarker
+* iOS: [#2351](https://github.com/react-community/react-native-maps/pull/2351) Added support for `calloutAnchor` with Google Maps on iOS
+* iOS: [#2359](https://github.com/react-community/react-native-maps/pull/2359) Fixed zIndex didn't work on map moving on iOS 11
+* iOS: [#2185](https://github.com/react-community/react-native-maps/pull/2185) Fixed Xcode warnings for format, pointer type, unused var
+* iOS: [#2154](https://github.com/react-community/react-native-maps/pull/2154) Fixed CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF warnings
+* Android: [#2224](https://github.com/react-community/react-native-maps/pull/2224) Respect `tappable` prop on Android
+* Android: [#2320](https://github.com/react-community/react-native-maps/pull/2320) Fixed custom marker updates on Android
+* Android: [#2197](https://github.com/react-community/react-native-maps/pull/2197) Fixed overlay removal bug
 * Android: [#2172](https://github.com/react-community/react-native-maps/pull/2172) Fixed crash for Android API level below 18 on isFromMockProvider
 * TypeScript: [#2165](https://github.com/react-community/react-native-maps/pull/2165) Typings improvements & fixes
 * Docs: [#2171](https://github.com/react-community/react-native-maps/pull/2171) Add 'none' option to docs for `mapType` of `MapView`
 * Docs: [#2174](https://github.com/react-community/react-native-maps/pull/2174) Add opacity to `Marker` API docs
 * Docs: [#2181](https://github.com/react-community/react-native-maps/pull/2181), [#2219](https://github.com/react-community/react-native-maps/pull/2219) Add note about mandatory `NSLocationWhenInUseUsageDescription`
+* Docs: [#2381](https://github.com/react-community/react-native-maps/pull/2381), [#2358](https://github.com/react-community/react-native-maps/pull/2358), [#2363](https://github.com/react-community/react-native-maps/pull/2363) Documentation improvements
 
 ## 0.21.0 (March 31, 2018)
 * Common: [#2030](https://github.com/react-community/react-native-maps/pull/2030) Broadened peer-dependency support
