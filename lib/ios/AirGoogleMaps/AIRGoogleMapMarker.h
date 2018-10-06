@@ -43,6 +43,7 @@
 - (UIView *)markerInfoContents;
 - (UIView *)markerInfoWindow;
 - (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker;
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCallout*)subview; //todo: AIRGoogleMapCalloutSubview*
 - (void)didBeginDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didEndDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didDragMarker:(AIRGMSMarker *)marker;
