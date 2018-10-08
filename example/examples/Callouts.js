@@ -5,10 +5,10 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
+import MapView, { Marker, Callout, CalloutSubview, ProviderPropType } from 'react-native-maps';
 import CustomCallout from './CustomCallout';
-
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
@@ -90,9 +90,19 @@ class Callouts extends React.Component {
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}
           >
-            <Callout tooltip style={styles.customView}>
+            <Callout tooltip onPress={(e) => {
+              if(e.nativeEvent.action == 'marker-inside-overlay-press' || e.nativeEvent.action == 'callout-inside-press')
+                return;
+
+              Alert.alert("callout pressed")
+            }} style={styles.customView}>
               <CustomCallout>
                 <Text>This is a custom callout bubble view</Text>
+                <CalloutSubview onPress={(e) => {
+                  Alert.alert("callout subview pressed");
+                }} style={[styles.calloutButton]}>
+                  <Text>Click me</Text>
+                </CalloutSubview>
               </CustomCallout>
             </Callout>
           </Marker>
@@ -122,7 +132,7 @@ Callouts.propTypes = {
 const styles = StyleSheet.create({
   customView: {
     width: 140,
-    height: 100,
+    height: 140,
   },
   plainView: {
     width: 60,
@@ -156,6 +166,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: 20,
     backgroundColor: 'transparent',
+  },
+  calloutButton: {
+    width: 'auto',
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginVertical: 10,
   },
 });
 

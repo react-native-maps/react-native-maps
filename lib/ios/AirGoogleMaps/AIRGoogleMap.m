@@ -593,14 +593,12 @@ id regionAsJSON(MKCoordinateRegion region) {
         
         //find real tap target subview
         UIView* realSubview = [(RCTView*)bubbleView hitTest:tapPointInBubble withEvent:nil];
-        AIRGoogleMapCallout* realPressableSubview = nil;
+        AIRGoogleMapCalloutSubview* realPressableSubview = nil;
         if (realSubview) {
             UIView* tmp = realSubview;
             while (tmp && tmp != win && tmp != bubbleView) {
-                //                BOOL isReactView = [tmp isKindOfClass:[RCTView class]] || [tmp isMemberOfClass:[RCTView class]];
-                //                RCTView* rv = isReactView ? (RCTView*) tmp : nil;
                 if ([tmp respondsToSelector:@selector(onPress)]) {
-                    realPressableSubview = (AIRGoogleMapCallout*) tmp;
+                    realPressableSubview = (AIRGoogleMapCalloutSubview*) tmp;
                     break;
                 }
                 tmp = tmp.superview;
