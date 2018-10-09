@@ -79,7 +79,6 @@ class Callouts extends React.Component {
             coordinate={markers[1].coordinate}
           >
             <Callout style={styles.plainView}>
-
               <View>
                 <Text>This is a plain view</Text>
               </View>

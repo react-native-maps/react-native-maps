@@ -229,7 +229,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)didPrepareMap {
   UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
-  [self monkeyPathGestureRecognizersForView:mapView];
+  [self overrideGestureRecognizersForView:mapView];
     
   if (_didCallOnMapReady) return;
   _didCallOnMapReady = true;
@@ -498,29 +498,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 
-#pragma mark - Monkey patches
+#pragma mark - Map gesture recognizers overrides
 
--(SEL)getActionForTarget:(NSObject*)target {
-    SEL action = nil;
-    uint32_t ivarCount;
-    Ivar *ivars = class_copyIvarList([target class], &ivarCount);
-    if (ivars) {
-        for (uint32_t i = 0 ; i < ivarCount ; i++) {
-            Ivar ivar = ivars[i];
-            const char* type = ivar_getTypeEncoding(ivar);
-            const char* ivarName = ivar_getName(ivar);
-            NSString* name = [NSString stringWithCString: ivarName encoding: NSASCIIStringEncoding];
-            if (type[0] == ':' && [name isEqualToString:@"_action"]) {
-                SEL sel = ((SEL (*)(id, Ivar))object_getIvar)(target, ivar);
-                action = sel;
-                break;
-            }
-        }
-    }
-    return action;
-}
-
--(void)monkeyPathGestureRecognizersForView:(UIView*)view {
+-(void)overrideGestureRecognizersForView:(UIView*)view {
     NSArray* grs = view.gestureRecognizers;
     for (UIGestureRecognizer* gestureRecognizer in grs) {
         NSNumber* grHash = [NSNumber numberWithUnsignedInteger:gestureRecognizer.hash];
@@ -544,16 +524,14 @@ id regionAsJSON(MKCoordinateRegion region) {
             SEL action = NSSelectorFromString(actionString);
             [gestureRecognizer removeTarget:target action:action];
         }
-        [gestureRecognizer addTarget:self action:@selector(monkeyGestureHandler:)];
-        //gestureRecognizer.delegate = self;
+        [gestureRecognizer addTarget:self action:@selector(ourMapGestureHandler:)];
         
         [_origGestureRecognizersMeta setObject:@{@"delegate": origDelegate, @"targets": origTargetsActions}
                                         forKey:grHash];
     }
 }
 
-
-- (id)monkeyGestureHandler:(UIGestureRecognizer*)gestureRecognizer {
+- (id)ourMapGestureHandler:(UIGestureRecognizer*)gestureRecognizer {
     NSNumber* grHash = [NSNumber numberWithUnsignedInteger:gestureRecognizer.hash];
     UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
     NSObject* bubbleProvider = [self valueForKey:@"bubbleProvider"]; //GMSbubbleEntityProvider
@@ -627,6 +605,27 @@ id regionAsJSON(MKCoordinateRegion region) {
     }
     
     return nil;
+}
+
+//helper
+-(SEL)getActionForTarget:(NSObject*)target {
+    SEL action = nil;
+    uint32_t ivarCount;
+    Ivar *ivars = class_copyIvarList([target class], &ivarCount);
+    if (ivars) {
+        for (uint32_t i = 0 ; i < ivarCount ; i++) {
+            Ivar ivar = ivars[i];
+            const char* type = ivar_getTypeEncoding(ivar);
+            const char* ivarName = ivar_getName(ivar);
+            NSString* name = [NSString stringWithCString: ivarName encoding: NSASCIIStringEncoding];
+            if (type[0] == ':' && [name isEqualToString:@"_action"]) {
+                SEL sel = ((SEL (*)(id, Ivar))object_getIvar)(target, ivar);
+                action = sel;
+                break;
+            }
+        }
+    }
+    return action;
 }
 
 /*

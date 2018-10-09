@@ -192,16 +192,16 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     UIView *calloutMaybe = [self.calloutView hitTest:touchPoint withEvent:event];
     if (calloutMaybe) {
         UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
-        AIRMapCalloutSubview* calloutSubview = nil;
+        AIRMapCalloutSubview* calloutSubviewMaybe = nil;
         UIView* tmp = calloutMaybe;
         while (tmp && tmp != win && tmp != self.calloutView) {
             if ([tmp respondsToSelector:@selector(onPress)]) {
-                calloutSubview = (AIRMapCalloutSubview*) tmp;
+                calloutSubviewMaybe = (AIRMapCalloutSubview*) tmp;
                 break;
             }
             tmp = tmp.superview;
         }
-        return calloutSubview ? calloutSubview : calloutMaybe;
+        return calloutSubviewMaybe ? calloutSubviewMaybe : calloutMaybe;
     }
 
     return [super hitTest:point withEvent:event];
