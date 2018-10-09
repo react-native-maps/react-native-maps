@@ -296,6 +296,17 @@ declare module "react-native-maps" {
     }
 
     // =======================================================================
+    //  CalloutSubview
+    // =======================================================================
+
+    export interface MapCalloutSubviewProps extends ViewProperties {
+        onPress?: (event: MapEvent<{ action: 'callout-inside-press' }>) => void;
+    }
+
+    export class CalloutSubview extends React.Component<MapCalloutSubviewProps, any> {
+    }
+
+    // =======================================================================
     //  Polyline
     // =======================================================================
 

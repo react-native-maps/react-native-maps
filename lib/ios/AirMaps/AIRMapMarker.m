@@ -205,13 +205,26 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     
     if (marker.selected) {
         CGPoint touchPoint = [recognizer locationInView:marker.map.calloutView];
-        if ([marker.map.calloutView hitTest:touchPoint withEvent:nil]) {
+        UIView *calloutMaybe = [marker.map.calloutView hitTest:touchPoint withEvent:nil];
+        if (calloutMaybe) {
+            // the callout (or its subview) got clicked, not the marker
+            UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
+            AIRMapCalloutSubview* calloutSubview = nil;
+            UIView* tmp = calloutMaybe;
+            while (tmp && tmp != win && tmp != self.calloutView) {
+                if ([tmp respondsToSelector:@selector(onPress)]) {
+                    calloutSubview = (AIRMapCalloutSubview*) tmp;
+                    break;
+                }
+                tmp = tmp.superview;
+            }
             
-            // the callout got clicked, not the marker
+            
             id event = @{
-                         @"action": @"callout-press",
+                         @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
                          };
             
+            if (calloutSubview) calloutSubview.onPress(event);
             if (marker.onCalloutPress) marker.onCalloutPress(event);
             if (marker.calloutView && marker.calloutView.onPress) marker.calloutView.onPress(event);
             if (marker.map.onCalloutPress) marker.map.onCalloutPress(event);

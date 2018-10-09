@@ -151,11 +151,24 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker {
   if (self.calloutView && self.calloutView.onPress) {
+      //todo: why not 'callout-press' ?
     id event = @{@"action": @"marker-overlay-press",
                  @"id": self.identifier ?: @"unknown",
                  };
     self.calloutView.onPress(event);
   }
+}
+
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCalloutSubview*)subview {
+    if (subview.onPress) {
+        //todo: why not 'callout-inside-press' ?
+        id event = @{@"action": @"marker-inside-overlay-press",
+                     @"id": self.identifier ?: @"unknown",
+                     };
+        subview.onPress(event);
+    } else {
+        [self didTapInfoWindowOfMarker:marker];
+    }
 }
 
 - (void)didBeginDraggingMarker:(AIRGMSMarker *)marker {
