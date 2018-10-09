@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import MapView, { Marker, Callout, CalloutSubview, ProviderPropType } from 'react-native-maps';
 import CustomCallout from './CustomCallout';
-const { width, height } = Dimensions.get('window');
 
+const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
@@ -89,17 +89,23 @@ class Callouts extends React.Component {
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}
           >
-            <Callout tooltip onPress={(e) => {
-              if(e.nativeEvent.action == 'marker-inside-overlay-press' || e.nativeEvent.action == 'callout-inside-press')
-                return;
+            <Callout
+              tooltip onPress={(e) => {
+                if (e.nativeEvent.action === 'marker-inside-overlay-press' ||
+                  e.nativeEvent.action === 'callout-inside-press') {
+                  return;
+                }
 
-              Alert.alert("callout pressed")
-            }} style={styles.customView}>
+                Alert.alert('callout pressed');
+              }} style={styles.customView}
+            >
               <CustomCallout>
                 <Text>This is a custom callout bubble view</Text>
-                <CalloutSubview onPress={(e) => {
-                  Alert.alert("callout subview pressed");
-                }} style={[styles.calloutButton]}>
+                <CalloutSubview
+                  onPress={() => {
+                    Alert.alert('callout subview pressed');
+                  }} style={[styles.calloutButton]}
+                >
                   <Text>Click me</Text>
                 </CalloutSubview>
               </CustomCallout>
