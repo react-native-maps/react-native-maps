@@ -507,9 +507,8 @@ id regionAsJSON(MKCoordinateRegion region) {
         if([_origGestureRecognizersMeta objectForKey:grHash] != nil)
             continue; //already patched
         
-        //get orig targets & delegates
+        //get orig targets
         NSArray* origTargets = [gestureRecognizer valueForKey:@"targets"];
-        NSObject<UIGestureRecognizerDelegate>* origDelegate = gestureRecognizer.delegate;
         NSMutableArray* origTargetsActions = [[NSMutableArray alloc] init];
         for (NSObject* trg in origTargets) {
             NSObject* target = [trg valueForKey:@"target"];
@@ -526,7 +525,7 @@ id regionAsJSON(MKCoordinateRegion region) {
         }
         [gestureRecognizer addTarget:self action:@selector(ourMapGestureHandler:)];
         
-        [_origGestureRecognizersMeta setObject:@{@"delegate": origDelegate, @"targets": origTargetsActions}
+        [_origGestureRecognizersMeta setObject:@{@"targets": origTargetsActions}
                                         forKey:grHash];
     }
 }
@@ -627,20 +626,6 @@ id regionAsJSON(MKCoordinateRegion region) {
     }
     return action;
 }
-
-/*
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    NSNumber* grHash = [NSNumber numberWithUnsignedInteger:gestureRecognizer.hash];
-    NSDictionary* origMeta = [_origGestureRecognizersMeta objectForKey:grHash];
-    NSObject<UIGestureRecognizerDelegate>* origDelegate = [origMeta objectForKey:@"delegate"];
-    
-    BOOL res = YES;
-    if (origDelegate && [origDelegate respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)]) {
-        res = [origDelegate gestureRecognizer:gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer];
-    }
-    return res;
-}
-*/
 
 
 #pragma mark - KVO updates
