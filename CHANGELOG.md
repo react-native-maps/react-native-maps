@@ -1,4 +1,46 @@
 # Change Log
+
+## 0.22.0 (October 11, 2018)
+* Common: [#2049](https://github.com/react-community/react-native-maps/pull/2049) Added `animateToNavigation` method to `MapView`
+* Common: [#2207](https://github.com/react-community/react-native-maps/pull/2207), [#2232](https://github.com/react-community/react-native-maps/pull/2232) Added `timestamp` property to `onUserLocationChange` event callback
+* Common: [#2479](https://github.com/react-community/react-native-maps/pull/2479), [#2524](https://github.com/react-community/react-native-maps/pull/2524) Added `edgePadding` to `fitToSuppliedMarkers` function
+* Common: [#2448](https://github.com/react-community/react-native-maps/pull/2448) Added custom indoor picker level
+* Common: [#2238](https://github.com/react-community/react-native-maps/pull/2238) Support the `asset://` scheme for images
+* Common: [#2136](https://github.com/react-community/react-native-maps/pull/2136), [#2184](https://github.com/react-community/react-native-maps/pull/2184) Modifications/Enhancements to MapView.UrlTile
+* Common: [#2039](https://github.com/react-community/react-native-maps/pull/2039) Fix for `pointForCoordinate` and `coordinateForPoint`
+* Common: [#2217](https://github.com/react-community/react-native-maps/pull/2217) Using `ColorPropType` to validate all color props more accurately
+* iOS: [#2396](https://github.com/react-community/react-native-maps/pull/2396) Added installation for iOS via `react-native link`
+* iOS: [#2243](https://github.com/react-community/react-native-maps/pull/2243) Added support of `lineDashPattern` polyline props to iOS Google Maps
+* iOS: [#2149](https://github.com/react-community/react-native-maps/pull/2149) Added `paddingAdjustmentBehavior` for Google Maps on iOS
+* iOS: [#2231](https://github.com/react-community/react-native-maps/pull/2231) Prefix DummyView class
+* iOS: [#2229](https://github.com/react-community/react-native-maps/pull/2229) Use global imports for new Pods dependencies in AIRGoogleMap
+* iOS: [#2248](https://github.com/react-community/react-native-maps/pull/2248) Make tiles display at the same physical size regardless of pixel density on iOS devices
+* iOS: [#2306](https://github.com/react-community/react-native-maps/pull/2306) Prefix or eliminate globals in AIRMapMarker
+* iOS: [#2351](https://github.com/react-community/react-native-maps/pull/2351) Added support for `calloutAnchor` with Google Maps on iOS
+* iOS: [#2501](https://github.com/react-community/react-native-maps/pull/2501) Fixed issue that app crashes after trigger Marker `onDragEnd`
+* iOS: [#2359](https://github.com/react-community/react-native-maps/pull/2359) Fixed zIndex didn't work on map moving on iOS 11
+* iOS: [#2185](https://github.com/react-community/react-native-maps/pull/2185) Fixed Xcode warnings for format, pointer type, unused var
+* iOS: [#2154](https://github.com/react-community/react-native-maps/pull/2154) Fixed CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF warnings
+* iOS: [#2341](https://github.com/react-community/react-native-maps/pull/2341) Fixed warnings about `self`
+* Android: [#2224](https://github.com/react-community/react-native-maps/pull/2224) Respect `tappable` prop on Android
+* Android: [#2390](https://github.com/react-community/react-native-maps/pull/2390) Consider pixel density in coordinate<->point conversion
+* Android: [#2477](https://github.com/react-community/react-native-maps/pull/2477), [#2487](https://github.com/react-community/react-native-maps/pull/2487) Implemented `tracksViewChanges` on Android
+* Android: [#2478](https://github.com/react-community/react-native-maps/pull/2478) Let `onVisibilityChanged()` be called on children (mainly fixes `Image` issues)
+* Android: [#2375](https://github.com/react-community/react-native-maps/pull/2375) Fixed `lineCap` of Polyline
+* Android: [#2320](https://github.com/react-community/react-native-maps/pull/2320) Fixed custom marker updates on Android
+* Android: [#2197](https://github.com/react-community/react-native-maps/pull/2197) Fixed overlay removal bug
+* Android: [#2317](https://github.com/react-community/react-native-maps/pull/2317) Fixed disabling the toolbar and my location button
+* Android: [#2472](https://github.com/react-community/react-native-maps/pull/2472) Fixed compilation error due to minSDK in manifest
+* Android: [#2172](https://github.com/react-community/react-native-maps/pull/2172) Fixed crash for Android API level below 18 on isFromMockProvider
+* Internal: [#2462](https://github.com/react-community/react-native-maps/pull/2462) Fixed packager script path in `pacakage.json`
+* Internal: [#2480](https://github.com/react-community/react-native-maps/pull/2480) Fix peer dependencies
+* TypeScript: [#2165](https://github.com/react-community/react-native-maps/pull/2165) Typings improvements & fixes
+* Docs: [#2541](https://github.com/react-community/react-native-maps/pull/2541) Vastly improved installation guideline
+* Docs: [#2171](https://github.com/react-community/react-native-maps/pull/2171) Add 'none' option to docs for `mapType` of `MapView`
+* Docs: [#2174](https://github.com/react-community/react-native-maps/pull/2174) Add opacity to `Marker` API docs
+* Docs: [#2181](https://github.com/react-community/react-native-maps/pull/2181), [#2219](https://github.com/react-community/react-native-maps/pull/2219) Add note about mandatory `NSLocationWhenInUseUsageDescription`
+* Docs: [#2381](https://github.com/react-community/react-native-maps/pull/2381), [#2358](https://github.com/react-community/react-native-maps/pull/2358), [#2363](https://github.com/react-community/react-native-maps/pull/2363), [#2429](https://github.com/react-community/react-native-maps/pull/2429), [#2425](https://github.com/react-community/react-native-maps/pull/2425) Documentation improvements
+
 ## 0.21.0 (March 31, 2018)
 * Common: [#2030](https://github.com/react-community/react-native-maps/pull/2030) Broadened peer-dependency support
 * Common: [#2035](https://github.com/react-community/react-native-maps/pull/2035), [#2113](https://github.com/react-community/react-native-maps/pull/2113), & [#2141](https://github.com/react-community/react-native-maps/pull/2141) Typescript improvements and fixes
@@ -21,7 +63,6 @@
 ## 0.20.1 (February 13, 2018)
 * Common: [hotfix PROVIDER_GOOGLE](https://github.com/react-community/react-native-maps/commit/cd868ea7b33a04c8bdd5e909cf134a133b2cb316)
 * iOS: [#2019](https://github.com/airbnb/react-native-maps/pull/2019) Exposing the maximumZ property to AIRMapUrlTile
-
 
 ## 0.20.0 (February 9, 2018)
 * Common: [#1889](https://github.com/airbnb/react-native-maps/pull/1889) Fix for 'Animated.Region undefined constructor' in recent react-native version.
