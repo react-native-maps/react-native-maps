@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.22.0 (October 5, 2018)
+## 0.22.0 (October 11, 2018)
 * Common: [#2049](https://github.com/react-community/react-native-maps/pull/2049) Added `animateToNavigation` method to `MapView`
 * Common: [#2207](https://github.com/react-community/react-native-maps/pull/2207), [#2232](https://github.com/react-community/react-native-maps/pull/2232) Added `timestamp` property to `onUserLocationChange` event callback
 * Common: [#2479](https://github.com/react-community/react-native-maps/pull/2479), [#2524](https://github.com/react-community/react-native-maps/pull/2524) Added `edgePadding` to `fitToSuppliedMarkers` function
