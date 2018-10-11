@@ -35,6 +35,7 @@
 * Internal: [#2462](https://github.com/react-community/react-native-maps/pull/2462) Fixed packager script path in `pacakage.json`
 * Internal: [#2480](https://github.com/react-community/react-native-maps/pull/2480) Fix peer dependencies
 * TypeScript: [#2165](https://github.com/react-community/react-native-maps/pull/2165) Typings improvements & fixes
+* Docs: [#2541](https://github.com/react-community/react-native-maps/pull/2541) Vastly improved installation guideline
 * Docs: [#2171](https://github.com/react-community/react-native-maps/pull/2171) Add 'none' option to docs for `mapType` of `MapView`
 * Docs: [#2174](https://github.com/react-community/react-native-maps/pull/2174) Add opacity to `Marker` API docs
 * Docs: [#2181](https://github.com/react-community/react-native-maps/pull/2181), [#2219](https://github.com/react-community/react-native-maps/pull/2219) Add note about mandatory `NSLocationWhenInUseUsageDescription`
