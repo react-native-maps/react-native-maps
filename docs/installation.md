@@ -130,7 +130,7 @@ The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 Then, do either of the following
 
 1. If you are using CocoaPods to manage your dependecies, uncomment the
-files related to Google Maps from the `Podfile` and run `pod install`.
+lines related to Google Maps from the `Podfile` and run `pod install`.
 
 2. If you used React Native link, you may include Google Maps manually as a
 XCode framework following the instructions from [SDK docs -> Install
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => (
-   <View style ={styles.container}>
+   <View style={styles.container}>
      <MapView
        style={styles.map}
        region={{
