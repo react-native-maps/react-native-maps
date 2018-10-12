@@ -416,12 +416,17 @@ public class AirMapMarker extends AirMapFeature {
       } else {
         return BitmapDescriptorFactory.fromBitmap(createDrawable());
       }
-    } else if (iconBitmapDescriptor != null) {
-      // use local image as a marker
-      return iconBitmapDescriptor;
-    } else {
-      // render the default marker pin
-      return BitmapDescriptorFactory.defaultMarker(this.markerHue);
+    } else if (iconBitmapDescriptor != null && this.width > 0 && this.height > 0) {
+        // use local image as a marker
+        Bitmap viewBitmap = createDrawable();
+        Bitmap combinedBitmap = Bitmap.createScaledBitmap(iconBitmap,this.width,this.height,false);
+        Canvas canvas = new Canvas(combinedBitmap);
+        return BitmapDescriptorFactory.fromBitmap(combinedBitmap);
+    } else if(iconBitmapDescriptor == null){
+        // render the default marker pin
+        return BitmapDescriptorFactory.defaultMarker(this.markerHue);
+    }else{
+        return BitmapDescriptorFactory.fromBitmap(createDrawable());
     }
   }
 
