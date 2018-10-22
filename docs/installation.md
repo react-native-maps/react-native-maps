@@ -140,16 +140,29 @@ manually](https://developers.google.com/maps/documentation/ios-sdk/start). Then,
 from your project root to the directory in which you installed the
 Google Maps frameworks:
 
-```json
-{
-  "name": "your-app",
-  "scripts": {
-    "postinstall": "./node_modules/react-native-maps/enable-google-maps REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL"
-  }
-}
-```
+    ```json
+    {
+      "name": "your-app",
+      "scripts": {
+        "postinstall": "./node_modules/react-native-maps/enable-google-maps REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL"
+      }
+    }
+    ```
 
-Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
+    Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
+
+3. Import and add `{PROVIDER_GOOGLE}` to your JavaScript:
+    ```javascript
+      import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+      ...
+      
+      <MapView
+         provider={PROVIDER_GOOGLE}
+         style={styles.map}
+         ...
+      >
+      
+    ```
 
 ## Build configuration on Android
 
