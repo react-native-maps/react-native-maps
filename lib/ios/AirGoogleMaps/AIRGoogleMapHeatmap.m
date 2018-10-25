@@ -29,6 +29,7 @@
     _points = w;
     [self.heatmap setWeightedData:w];
     [self.heatmap clearTileCache];
+    [self.heatmap setMap:self.heatmap.map];
 }
 
 - (void)setRadius:(NSUInteger)radius
