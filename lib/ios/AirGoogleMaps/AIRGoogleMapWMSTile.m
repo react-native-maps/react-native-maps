@@ -6,8 +6,6 @@
 //  Copyright © 2018. All rights reserved.
 //
 
-#ifdef HAVE_GOOGLE_MAPS
-
 #import "AIRGoogleMapWMSTile.h"
 
 @implementation AIRGoogleMapWMSTile
@@ -121,5 +119,3 @@
 }
 
 @end
-
-#endif

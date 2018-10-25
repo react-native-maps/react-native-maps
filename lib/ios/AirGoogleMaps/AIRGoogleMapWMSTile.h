@@ -6,8 +6,6 @@
 //  Copyright © 2018. All rights reserved.
 //
 
-#ifdef HAVE_GOOGLE_MAPS
-
 #import <Foundation/Foundation.h>
 #import <GoogleMaps/GoogleMaps.h>
 
@@ -27,7 +25,3 @@
 @property (nonatomic, assign) NSInteger tileSize;
 @property (nonatomic, assign) float opacity;
 @end
-
-#endif
-
-
