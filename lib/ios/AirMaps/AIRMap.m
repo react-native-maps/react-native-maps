@@ -17,6 +17,7 @@
 #import "AIRMapCircle.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AIRMapUrlTile.h"
+#import "AIRMapGSUrlTile.h"
 #import "AIRMapLocalTile.h"
 #import "AIRMapOverlay.h"
 
@@ -120,6 +121,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
         ((AIRMapUrlTile *)subview).map = self;
+        [self addOverlay:(id<MKOverlay>)subview];
+    }else if ([subview isKindOfClass:[AIRMapGSUrlTile class]]) {
+        ((AIRMapGSUrlTile *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapLocalTile class]]) {
         ((AIRMapLocalTile *)subview).map = self;
