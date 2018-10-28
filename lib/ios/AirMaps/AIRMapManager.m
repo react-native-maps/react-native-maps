@@ -112,6 +112,17 @@ RCT_CUSTOM_VIEW_PROPERTY(initialRegion, MKCoordinateRegion, AIRMap)
     [view setInitialRegion:[RCTConvert MKCoordinateRegion:json]];
     view.ignoreRegionChanges = originalIgnore;
 }
+RCT_CUSTOM_VIEW_PROPERTY(initialCamera, MKMapCamera, AIRMap)
+{
+    if (json == nil) return;
+    
+    // don't emit region change events when we are setting the initialCamera
+    BOOL originalIgnore = view.ignoreRegionChanges;
+    view.ignoreRegionChanges = YES;
+    [view setInitialCamera:[RCTConvert MKMapCamera:json]];
+    view.ignoreRegionChanges = originalIgnore;
+}
+
 
 RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
@@ -125,6 +136,17 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
     BOOL originalIgnore = view.ignoreRegionChanges;
     view.ignoreRegionChanges = YES;
     [view setRegion:[RCTConvert MKCoordinateRegion:json] animated:NO];
+    view.ignoreRegionChanges = originalIgnore;
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(camera, MKMapCamera*, AIRMap)
+{
+    if (json == nil) return;
+    
+    // don't emit region change events when we are setting the camera
+    BOOL originalIgnore = view.ignoreRegionChanges;
+    view.ignoreRegionChanges = YES;
+    [view setCamera:[RCTConvert MKMapCamera:json] animated:NO];
     view.ignoreRegionChanges = originalIgnore;
 }
 

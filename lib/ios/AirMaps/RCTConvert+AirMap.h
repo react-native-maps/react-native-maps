@@ -11,6 +11,7 @@
 
 + (MKCoordinateSpan)MKCoordinateSpan:(id)json;
 + (MKCoordinateRegion)MKCoordinateRegion:(id)json;
++ (MKMapCamera*)MKMapCamera:(id)json;
 + (MKMapType)MKMapType:(id)json;
 
 @end

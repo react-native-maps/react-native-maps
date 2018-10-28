@@ -27,6 +27,18 @@
   };
 }
 
++ (MKMapCamera*)MKMapCamera:(id)json
+{
+    json = [self NSDictionary:json];
+    MKMapCamera *cam = [[MKMapCamera alloc] init];
+    cam.centerCoordinate = [self CLLocationCoordinate2D:json[@"center"]];
+    cam.pitch = [self double:json[@"pitch"]];
+    cam.altitude = [self double:json[@"altitude"]];
+    cam.heading = [self double:json[@"heading"]];
+    return cam;
+}
+
+
 RCT_ENUM_CONVERTER(MKMapType, (@{
   @"standard": @(MKMapTypeStandard),
   @"satellite": @(MKMapTypeSatellite),
