@@ -14,6 +14,7 @@
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGoogleMapCircle.h"
 #import "AIRGoogleMapUrlTile.h"
+#import "AIRGoogleMapGSUrlTile.h"
 #import "AIRGoogleMapOverlay.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
@@ -134,6 +135,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
     tile.tileLayer.map = self;
     [self.tiles addObject:tile];
+  } else if ([subview isKindOfClass:[AIRGoogleMapGSUrlTile class]]) {
+    AIRGoogleMapGSUrlTile *tile = (AIRGoogleMapGSUrlTile*)subview;
+    tile.tileLayer.map = self;
+    [self.tiles addObject:tile];
   } else if ([subview isKindOfClass:[AIRGoogleMapOverlay class]]) {
     AIRGoogleMapOverlay *overlay = (AIRGoogleMapOverlay*)subview;
     overlay.overlay.map = self;
@@ -172,6 +177,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     [self.circles removeObject:circle];
   } else if ([subview isKindOfClass:[AIRGoogleMapUrlTile class]]) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
+    tile.tileLayer.map = nil;
+    [self.tiles removeObject:tile];
+  } else if ([subview isKindOfClass:[AIRGoogleMapGSUrlTile class]]) {
+    AIRGoogleMapGSUrlTile *tile = (AIRGoogleMapGSUrlTile*)subview;
     tile.tileLayer.map = nil;
     [self.tiles removeObject:tile];
   } else if ([subview isKindOfClass:[AIRGoogleMapOverlay class]]) {
