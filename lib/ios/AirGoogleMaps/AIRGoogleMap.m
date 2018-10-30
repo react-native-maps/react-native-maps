@@ -538,54 +538,56 @@ id regionAsJSON(MKCoordinateRegion region) {
     CGRect bubbleFrame = [win convertRect:bubbleAbsoluteFrame toView:self];
     UIView* bubbleView = [bubbleProvider valueForKey:@"view"];
     
-    BOOL isTap = [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || [gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]];
-    CGPoint tapPoint = CGPointZero;
-    CGPoint tapPointInBubble = CGPointZero;
-    BOOL isTapInsideBubble = NO;
     BOOL performOriginalActions = YES;
-    
-    NSArray* touches = [gestureRecognizer valueForKey:@"touches"];
-    UITouch* oneTouch = [touches firstObject];
-    NSArray* delayedTouches = [gestureRecognizer valueForKey:@"delayedTouches"];
-    NSObject* delayedTouch = [delayedTouches firstObject]; //UIGestureDeleayedTouch
-    UITouch* tapTouch = [delayedTouch valueForKey:@"stateWhenDelayed"];
-    if (!tapTouch)
-        tapTouch = oneTouch;
-    tapPoint = [tapTouch locationInView:self];
-    isTapInsideBubble = tapTouch != nil && CGRectContainsPoint(bubbleFrame, tapPoint);
-    if (isTapInsideBubble) {
-        tapPointInBubble = CGPointMake(tapPoint.x - bubbleFrame.origin.x, tapPoint.y - bubbleFrame.origin.y);
-    }
-    if (isTap && isTapInsideBubble) {
-        //find bubble's marker
-        AIRGoogleMapMarker* markerView = nil;
-        AIRGMSMarker* marker = nil;
-        for (AIRGoogleMapMarker* mrk in self.markers) {
-            if ([mrk.calloutView isEqual:bubbleView]) {
-                markerView = mrk;
-                marker = markerView.realMarker;
-                break;
-            }
+    BOOL isTap = [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || [gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]];
+    if (isTap) {
+        BOOL isTapInsideBubble = NO;
+        CGPoint tapPoint = CGPointZero;
+        CGPoint tapPointInBubble = CGPointZero;
+        NSArray* touches = [gestureRecognizer valueForKey:@"touches"];
+        UITouch* oneTouch = [touches firstObject];
+        NSArray* delayedTouches = [gestureRecognizer valueForKey:@"delayedTouches"];
+        NSObject* delayedTouch = [delayedTouches firstObject]; //UIGestureDeleayedTouch
+        UITouch* tapTouch = [delayedTouch valueForKey:@"stateWhenDelayed"];
+        if (!tapTouch)
+            tapTouch = oneTouch;
+        tapPoint = [tapTouch locationInView:self];
+        isTapInsideBubble = tapTouch != nil && CGRectContainsPoint(bubbleFrame, tapPoint);
+        if (isTapInsideBubble) {
+            tapPointInBubble = CGPointMake(tapPoint.x - bubbleFrame.origin.x, tapPoint.y - bubbleFrame.origin.y);
         }
         
-        //find real tap target subview
-        UIView* realSubview = [(RCTView*)bubbleView hitTest:tapPointInBubble withEvent:nil];
-        AIRGoogleMapCalloutSubview* realPressableSubview = nil;
-        if (realSubview) {
-            UIView* tmp = realSubview;
-            while (tmp && tmp != win && tmp != bubbleView) {
-                if ([tmp respondsToSelector:@selector(onPress)]) {
-                    realPressableSubview = (AIRGoogleMapCalloutSubview*) tmp;
+        if (isTapInsideBubble) {
+            //find bubble's marker
+            AIRGoogleMapMarker* markerView = nil;
+            AIRGMSMarker* marker = nil;
+            for (AIRGoogleMapMarker* mrk in self.markers) {
+                if ([mrk.calloutView isEqual:bubbleView]) {
+                    markerView = mrk;
+                    marker = markerView.realMarker;
                     break;
                 }
-                tmp = tmp.superview;
             }
-        }
-        
-        if (markerView && realPressableSubview) {
-            [markerView didTapInfoWindowOfMarker:marker subview:realPressableSubview];
             
-            performOriginalActions = NO;
+            //find real tap target subview
+            UIView* realSubview = [(RCTView*)bubbleView hitTest:tapPointInBubble withEvent:nil];
+            AIRGoogleMapCalloutSubview* realPressableSubview = nil;
+            if (realSubview) {
+                UIView* tmp = realSubview;
+                while (tmp && tmp != win && tmp != bubbleView) {
+                    if ([tmp respondsToSelector:@selector(onPress)]) {
+                        realPressableSubview = (AIRGoogleMapCalloutSubview*) tmp;
+                        break;
+                    }
+                    tmp = tmp.superview;
+                }
+            }
+            
+            if (markerView && realPressableSubview) {
+                [markerView didTapInfoWindowOfMarker:marker subview:realPressableSubview];
+                
+                performOriginalActions = NO;
+            }
         }
     }
     
