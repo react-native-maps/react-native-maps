@@ -88,6 +88,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.setInitialRegion(initialRegion);
   }
 
+  @ReactProp(name = "camera")
+  public void setCamera(AirMapView view, ReadableMap camera) {
+    view.setCamera(camera);
+  }
+
+  @ReactProp(name = "initialCamera")
+  public void setInitialCamera(AirMapView view, ReadableMap initialCamera) {
+    view.setInitialCamera(initialCamera);
+  }
+
   @ReactProp(name = "mapType")
   public void setMapType(AirMapView view, @Nullable String mapType) {
     int typeId = MAP_TYPES.get(mapType);
