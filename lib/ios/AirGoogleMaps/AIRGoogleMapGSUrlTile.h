@@ -11,23 +11,23 @@
 #import <Foundation/Foundation.h>
 #import <GoogleMaps/GoogleMaps.h>
 
-@interface AIRGoogleMapGSUrlTile : UIView
-
-@property (nonatomic, strong) GMSTileLayer *tileLayer;
-@property (nonatomic, assign) NSString *urlTemplate;
-@property (nonatomic, assign) int zIndex;
-@property NSInteger *maximumZ;
-@property NSInteger *minimumZ;
-@property NSInteger tileSize;
-
-@end
-
 @interface GoogleTileOverlay : GMSSyncTileLayer
 @property (nonatomic) double MapX,MapY,FULL;
 @property (nonatomic, strong) NSString *template;
-@property NSInteger maximumZ;
-@property NSInteger minimumZ;
+@property (nonatomic, assign) NSInteger maximumZ;
+@property (nonatomic, assign) NSInteger minimumZ;
 @end
+
+@interface AIRGoogleMapGSUrlTile : UIView
+@property (nonatomic, strong) GoogleTileOverlay *tileLayer;
+@property (nonatomic, assign) NSString *urlTemplate;
+@property (nonatomic, assign) int zIndex;
+@property (nonatomic, assign) NSInteger maximumZ;
+@property (nonatomic, assign) NSInteger minimumZ;
+@property (nonatomic, assign) NSInteger tileSize;
+@property (nonatomic, assign) float opacity;
+@end
+
 #endif
 
 
