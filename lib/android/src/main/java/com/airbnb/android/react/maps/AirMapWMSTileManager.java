@@ -10,10 +10,10 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-public class AirMapGSUrlTileManager extends ViewGroupManager<AirMapGSUrlTile> {
+public class AirMapWMSTileManager extends ViewGroupManager<AirMapWMSTile> {
   private DisplayMetrics metrics;
 
-  public AirMapGSUrlTileManager(ReactApplicationContext reactContext) {
+  public AirMapWMSTileManager(ReactApplicationContext reactContext) {
     super();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       metrics = new DisplayMetrics();
@@ -27,40 +27,41 @@ public class AirMapGSUrlTileManager extends ViewGroupManager<AirMapGSUrlTile> {
 
   @Override
   public String getName() {
-    return "AIRMapGSUrlTile";
+    return "AIRMapWMSTile";
   }
 
   @Override
-  public AirMapGSUrlTile createViewInstance(ThemedReactContext context) {
-    return new AirMapGSUrlTile(context);
+  public AirMapWMSTile createViewInstance(ThemedReactContext context) {
+    return new AirMapWMSTile(context);
   }
 
   @ReactProp(name = "urlTemplate")
-  public void setUrlTemplate(AirMapGSUrlTile view, String urlTemplate) {
+  public void setUrlTemplate(AirMapWMSTile view, String urlTemplate) {
     view.setUrlTemplate(urlTemplate);
   }
 
   @ReactProp(name = "zIndex", defaultFloat = -1.0f)
-  public void setZIndex(AirMapGSUrlTile view, float zIndex) {
+  public void setZIndex(AirMapWMSTile view, float zIndex) {
     view.setZIndex(zIndex);
   }
 
   @ReactProp(name = "minimumZ", defaultFloat = 0.0f)
-  public void setMinimumZ(AirMapGSUrlTile view, float minimumZ) {
+  public void setMinimumZ(AirMapWMSTile view, float minimumZ) {
     view.setMinimumZ(minimumZ);
   }
 
   @ReactProp(name = "maximumZ", defaultFloat = 100.0f)
-  public void setMaximumZ(AirMapGSUrlTile view, float maximumZ) {
+  public void setMaximumZ(AirMapWMSTile view, float maximumZ) {
     view.setMaximumZ(maximumZ);
   }
 
   @ReactProp(name = "tileSize", defaultInt = 512)
-  public void setTileSize(AirMapGSUrlTile view, int tileSize) {
+  public void setTileSize(AirMapWMSTile view, int tileSize) {
     view.setTileSize(tileSize);
   }
+
   @ReactProp(name = "opacity", defaultFloat = 1.0f)
-  public void setOpacity(AirMapGSUrlTile view, float opacity) {
+  public void setOpacity(AirMapWMSTile view, float opacity) {
     view.setOpacity(opacity);
   }
 }

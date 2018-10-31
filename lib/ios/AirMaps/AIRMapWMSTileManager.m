@@ -1,5 +1,5 @@
 //
-//  AIRMapGSUrlTileManager
+//  AIRMapWMSTileManager.m
 //  AirMaps
 //
 //  Created by nizam on 10/28/18.
@@ -14,22 +14,22 @@
 #import <React/RCTViewManager.h>
 #import <React/UIView+React.h>
 #import "AIRMapMarker.h"
-#import "AIRMapGSUrlTile.h"
+#import "AIRMapWMSTile.h"
 
-#import "AIRMapGSUrlTileManager.h"
+#import "AIRMapWMSTileManager.h"
 
-@interface AIRMapGSUrlTileManager()
+@interface AIRMapWMSTileManager()
 
 @end
 
-@implementation AIRMapGSUrlTileManager
+@implementation AIRMapWMSTileManager
 
 
 RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-    AIRMapGSUrlTile *tile = [AIRMapGSUrlTile new];
+    AIRMapWMSTile *tile = [AIRMapWMSTile new];
     return tile;
 }
 

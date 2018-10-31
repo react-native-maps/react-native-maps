@@ -1,15 +1,15 @@
 //
-//  AIRMapGSUrlTile
+//  AIRMapWMSTile.m
 //  AirMaps
 //
 //  Created by nizam on 10/28/18.
 //  Copyright © 2018. All rights reserved.
 //
 
-#import "AIRMapGSUrlTile.h"
+#import "AIRMapWMSTile.h"
 #import <React/UIView+React.h>
 
-@implementation AIRMapGSUrlTile {
+@implementation AIRMapWMSTile {
     BOOL _urlTemplateSet;
 }
 
@@ -81,7 +81,7 @@
     [_map removeOverlay:self];
     [_map addOverlay:self level:MKOverlayLevelAboveLabels];
     for (id<MKOverlay> overlay in _map.overlays) {
-        if ([overlay isKindOfClass:[AIRMapGSUrlTile class]]) {
+        if ([overlay isKindOfClass:[AIRMapWMSTile class]]) {
             continue;
         }
         [_map removeOverlay:overlay];

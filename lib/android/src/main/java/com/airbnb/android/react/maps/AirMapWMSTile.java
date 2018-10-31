@@ -1,7 +1,6 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -11,7 +10,7 @@ import com.google.android.gms.maps.model.UrlTileProvider;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class AirMapGSUrlTile extends AirMapFeature {
+public class AirMapWMSTile extends AirMapFeature {
   private static final double[] mapBound = {-20037508.34789244, 20037508.34789244};
   private static final double FULL = 20037508.34789244 * 2;
 
@@ -28,10 +27,10 @@ public class AirMapGSUrlTile extends AirMapFeature {
 
     @Override
     public synchronized URL getTileUrl(int x, int y, int zoom) {
-      if(AirMapGSUrlTile.this.maximumZ > 0 && zoom > maximumZ) {
+      if(AirMapWMSTile.this.maximumZ > 0 && zoom > maximumZ) {
           return null;
       }
-      if(AirMapGSUrlTile.this.minimumZ > 0 && zoom < minimumZ) {
+      if(AirMapWMSTile.this.minimumZ > 0 && zoom < minimumZ) {
           return null;
       }
       double[] bb = getBoundingBox(x, y, zoom);
@@ -77,7 +76,7 @@ public class AirMapGSUrlTile extends AirMapFeature {
   private int tileSize;
   private float opacity;
 
-  public AirMapGSUrlTile(Context context) {
+  public AirMapWMSTile(Context context) {
     super(context);
   }
 

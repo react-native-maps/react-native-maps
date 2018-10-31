@@ -14,7 +14,7 @@
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGoogleMapCircle.h"
 #import "AIRGoogleMapUrlTile.h"
-#import "AIRGoogleMapGSUrlTile.h"
+#import "AIRGoogleMapWMSTile.h"
 #import "AIRGoogleMapOverlay.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
@@ -135,8 +135,8 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
     tile.tileLayer.map = self;
     [self.tiles addObject:tile];
-  } else if ([subview isKindOfClass:[AIRGoogleMapGSUrlTile class]]) {
-    AIRGoogleMapGSUrlTile *tile = (AIRGoogleMapGSUrlTile*)subview;
+  } else if ([subview isKindOfClass:[AIRGoogleMapWMSTile class]]) {
+    AIRGoogleMapWMSTile *tile = (AIRGoogleMapWMSTile*)subview;
     tile.tileLayer.map = self;
     [self.tiles addObject:tile];
   } else if ([subview isKindOfClass:[AIRGoogleMapOverlay class]]) {
@@ -179,8 +179,8 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapUrlTile *tile = (AIRGoogleMapUrlTile*)subview;
     tile.tileLayer.map = nil;
     [self.tiles removeObject:tile];
-  } else if ([subview isKindOfClass:[AIRGoogleMapGSUrlTile class]]) {
-    AIRGoogleMapGSUrlTile *tile = (AIRGoogleMapGSUrlTile*)subview;
+  } else if ([subview isKindOfClass:[AIRGoogleMapWMSTile class]]) {
+    AIRGoogleMapWMSTile *tile = (AIRGoogleMapWMSTile*)subview;
     tile.tileLayer.map = nil;
     [self.tiles removeObject:tile];
   } else if ([subview isKindOfClass:[AIRGoogleMapOverlay class]]) {

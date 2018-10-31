@@ -1,5 +1,5 @@
 //
-//  AIRMapGSUrlTileManager
+//  AIRGoogleMapWMSTileManager.h
 //  AirMaps
 //
 //  Created by nizam on 10/28/18.
@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTViewManager.h>
 
-@interface AIRGoogleMapGSUrlTileManager : RCTViewManager
+@interface AIRGoogleMapWMSTileManager : RCTViewManager
 @end
 
 #endif

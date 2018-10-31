@@ -1,5 +1,5 @@
 //
-//  AIRMapGSUrlTileManager
+//  AIRGoogleMapWMSTileManager.m
 //  AirMaps
 //
 //  Created by nizam on 10/28/18.
@@ -8,20 +8,20 @@
 
 #ifdef HAVE_GOOGLE_MAPS
 
-#import "AIRGoogleMapGSUrlTileManager.h"
-#import "AIRGoogleMapGSUrlTile.h"
+#import "AIRGoogleMapWMSTileManager.h"
+#import "AIRGoogleMapWMSTile.h"
 
-@interface AIRGoogleMapGSUrlTileManager()
+@interface AIRGoogleMapWMSTileManager()
 
 @end
 
-@implementation AIRGoogleMapGSUrlTileManager
+@implementation AIRGoogleMapWMSTileManager
 
 RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-    AIRGoogleMapGSUrlTile *tileLayer = [AIRGoogleMapGSUrlTile new];
+    AIRGoogleMapWMSTile *tileLayer = [AIRGoogleMapWMSTile new];
     return tileLayer;
 }
 

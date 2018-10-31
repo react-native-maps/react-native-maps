@@ -1,5 +1,5 @@
 //
-//  AIRMapGSUrlTile
+//  AIRMapWMSTile.h
 //  AirMaps
 //
 //  Created by nizam on 10/28/18.
@@ -17,7 +17,7 @@
 #import "AIRMap.h"
 #import "RCTConvert+AirMap.h"
 
-@interface AIRMapGSUrlTile : MKAnnotationView <MKOverlay>
+@interface AIRMapWMSTile : MKAnnotationView <MKOverlay>
 
 @property (nonatomic, weak) AIRMap *map;
 
@@ -33,9 +33,7 @@
 
 @property(nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property(nonatomic, readonly) MKMapRect boundingMapRect;
-//- (BOOL)intersectsMapRect:(MKMapRect)mapRect;
 - (BOOL)canReplaceMapContent;
-
 @end
 
 @interface TileOverlay : MKTileOverlay

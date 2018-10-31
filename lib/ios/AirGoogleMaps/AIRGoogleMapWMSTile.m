@@ -1,5 +1,5 @@
 //
-//  AIRMapGSUrlTile
+//  AIRGoogleMapWMSTile.m
 //  AirMaps
 //
 //  Created by nizam on 10/28/18.
@@ -8,9 +8,9 @@
 
 #ifdef HAVE_GOOGLE_MAPS
 
-#import "AIRGoogleMapGSUrlTile.h"
+#import "AIRGoogleMapWMSTile.h"
 
-@implementation AIRGoogleMapGSUrlTile
+@implementation AIRGoogleMapWMSTile
 
 -(id) init
 {
@@ -61,7 +61,7 @@
 - (void)setUrlTemplate:(NSString *)urlTemplate
 {
     _urlTemplate = urlTemplate;
-    GoogleTileOverlay *tile = [[GoogleTileOverlay alloc] init];
+    WMSTileOverlay *tile = [[WMSTileOverlay alloc] init];
     [tile setTemplate:urlTemplate];
     [tile setMaximumZ:  _maximumZ];
     [tile setMinimumZ: _minimumZ];
@@ -72,7 +72,7 @@
 }
 @end
 
-@implementation GoogleTileOverlay
+@implementation WMSTileOverlay
 -(id) init
 {
     self = [super init];

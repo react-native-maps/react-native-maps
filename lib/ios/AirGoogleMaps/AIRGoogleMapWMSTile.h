@@ -1,5 +1,5 @@
 //
-//  AIRMapGSUrlTile
+//  AIRGoogleMapWMSTile.h
 //  AirMaps
 //
 //  Created by nizam on 10/28/18.
@@ -11,15 +11,15 @@
 #import <Foundation/Foundation.h>
 #import <GoogleMaps/GoogleMaps.h>
 
-@interface GoogleTileOverlay : GMSSyncTileLayer
+@interface WMSTileOverlay : GMSSyncTileLayer
 @property (nonatomic) double MapX,MapY,FULL;
 @property (nonatomic, strong) NSString *template;
 @property (nonatomic, assign) NSInteger maximumZ;
 @property (nonatomic, assign) NSInteger minimumZ;
 @end
 
-@interface AIRGoogleMapGSUrlTile : UIView
-@property (nonatomic, strong) GoogleTileOverlay *tileLayer;
+@interface AIRGoogleMapWMSTile : UIView
+@property (nonatomic, strong) WMSTileOverlay *tileLayer;
 @property (nonatomic, assign) NSString *urlTemplate;
 @property (nonatomic, assign) int zIndex;
 @property (nonatomic, assign) NSInteger maximumZ;
