@@ -796,20 +796,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     LatLng southWest = bounds.southwest;
 
     HashMap<String, HashMap<String, Double>> coordinates = new HashMap<>();
+    HashMap<String, Double> northEastHash = new HashMap<>();
+    HashMap<String, Double> southWestHash = new HashMap<>();
 
-    coordinates.put("northEast", new HashMap() {
-      {
-        put("longitude", northEast.longitude);
-        put("latitude", northEast.latitude);
-      }
-    });
+    northEastHash.put("longitude", northEast.longitude);
+    northEastHash.put("latitude", northEast.latitude);
+    southWestHash.put("longitude", southWest.longitude);
+    southWestHash.put("latitude", southWest.latitude);
 
-    coordinates.put("southWest", new HashMap() {
-      {
-        put("longitude", southWest.longitude);
-        put("latitude", southWest.latitude);
-      }
-    });
+    coordinates.put("northEast", northEastHash);
+    coordinates.put("southWest", southWestHash);
 
     return coordinates;
   }
