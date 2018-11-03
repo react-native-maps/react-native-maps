@@ -392,7 +392,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
 }
 
 RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
-                  resolver: (RCTPromiseResolveBlock)resolve
+                  resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {

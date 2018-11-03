@@ -132,7 +132,7 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
 #pragma mark exported MapView methods
 
 RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
-                  resolver: (RCTPromiseResolveBlock)resolve
+                  resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
