@@ -131,6 +131,35 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
 
 #pragma mark exported MapView methods
 
+RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+
+            MKMapRect mapRect = [mapView visibleMapRect];
+            CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
+            CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
+
+            resolve(@{
+                @"northEast" : @{
+                    @"longitude" : [NSNumber numberWithDouble:northEast.longitude],
+                    @"latitude" : [NSNumber numberWithDouble:northEast.latitude]
+                },
+                @"southWest" : @{
+                    @"longitude" : [NSNumber numberWithDouble:southWest.longitude],
+                    @"latitude" : [NSNumber numberWithDouble:southWest.latitude]
+                }
+            });
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
         withRegion:(MKCoordinateRegion)region
         withBearing:(CGFloat)bearing
