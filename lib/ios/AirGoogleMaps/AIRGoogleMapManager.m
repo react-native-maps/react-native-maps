@@ -400,24 +400,18 @@ RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
       RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
     } else {
-      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+        NSArray *boundingBox = [view getMapBoundaries];
 
-      GMSVisibleRegion visibleRegion = mapView.projection.visibleRegion;
-      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion:visibleRegion];
-
-      CLLocationCoordinate2D northEast = bounds.northEast;
-      CLLocationCoordinate2D southWest = bounds.southWest;
-
-      resolve(@{
-        @"northEast" : @{
-          @"longitude" : [NSNumber numberWithDouble:northEast.longitude],
-          @"latitude" : [NSNumber numberWithDouble:northEast.latitude]
-        },
-        @"southWest" : @{
-          @"longitude" : [NSNumber numberWithDouble:southWest.longitude],
-          @"latitude" : [NSNumber numberWithDouble:southWest.latitude]
-        }
-      });
+        resolve(@{
+          @"northEast" : @{
+            @"longitude" : boundingBox[0][0],
+            @"latitude" : boundingBox[0][1]
+          },
+          @"southWest" : @{
+            @"longitude" : boundingBox[1][0],
+            @"latitude" : boundingBox[1][1]
+          }
+        });
     }
   }];
 }

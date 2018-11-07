@@ -65,6 +65,7 @@
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position;
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position;
 - (void)didTapPOIWithPlaceID:(NSString *)placeID name:(NSString *) name location:(CLLocationCoordinate2D) location;
+- (NSArray *)getMapBoundaries;
 
 + (MKCoordinateRegion)makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position;
 + (GMSCameraPosition*)makeGMSCameraPositionFromMap:(GMSMapView *)map andMKCoordinateRegion:(MKCoordinateRegion)region;

@@ -40,7 +40,7 @@ static NSString *const RCTMapViewKey = @"MapView";
 @implementation AIRMapManager{
    BOOL _hasObserver;
 }
-  
+
 RCT_EXPORT_MODULE()
 
 - (UIView *)view
@@ -140,20 +140,16 @@ RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            AIRMap *mapView = (AIRMap *)view;
-
-            MKMapRect mapRect = [mapView visibleMapRect];
-            CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
-            CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
+            NSArray *boundingBox = [view getMapBoundaries];
 
             resolve(@{
                 @"northEast" : @{
-                    @"longitude" : [NSNumber numberWithDouble:northEast.longitude],
-                    @"latitude" : [NSNumber numberWithDouble:northEast.latitude]
+                    @"longitude" : boundingBox[0][0],
+                    @"latitude" : boundingBox[0][1]
                 },
                 @"southWest" : @{
-                    @"longitude" : [NSNumber numberWithDouble:southWest.longitude],
-                    @"latitude" : [NSNumber numberWithDouble:southWest.latitude]
+                    @"longitude" : boundingBox[1][0],
+                    @"latitude" : boundingBox[1][1]
                 }
             });
         }
@@ -301,7 +297,7 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
             NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
 
             [mapView showAnnotations:filteredMarkers animated:animated];
-            
+
         }
     }];
 }
@@ -391,7 +387,7 @@ RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
                                                              [coordinate[@"longitude"] doubleValue]
                                                              )
                                               toPointToView:mapView];
-            
+
             resolve(@{
                       @"x": @(touchPoint.x),
                       @"y": @(touchPoint.y),
@@ -417,7 +413,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                                                              [point[@"y"] doubleValue]
                                                              )
                                                  toCoordinateFromView:mapView];
-            
+
             resolve(@{
                       @"latitude": @(coordinate.latitude),
                       @"longitude": @(coordinate.longitude),
@@ -567,7 +563,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                 }
             }
         }
-        
+
         if ([overlay isKindOfClass:[AIRMapOverlay class]]) {
             AIRMapOverlay *imageOverlay = (AIRMapOverlay*) overlay;
             if (MKMapRectContainsPoint(imageOverlay.boundingMapRect, mapPoint)) {
