@@ -45,7 +45,7 @@ class MapBoundaries extends React.Component {
           onRegionChangeComplete={() => this.onRegionChangeComplete()}
         />
         <View style={styles.buttonContainer}>
-          <Text>{JSON.stringify(this.state.mapBoundaries)}</Text>
+          <Text style={styles.bubble}>{JSON.stringify(this.state.mapBoundaries)}</Text>
         </View>
       </View>
     );
