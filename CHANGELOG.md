@@ -1,6 +1,7 @@
 # Change Log
 
 ## 0.22.1 (November 8, 2018)
+* Common: [#2548](https://github.com/react-community/react-native-maps/pull/2548) Moved `babel-plugin-module-resolver` and `babel-preset-react-native` from dependencies to devDependencies
 * Android: [#2555](https://github.com/react-community/react-native-maps/pull/2555) Fixed [#2507](https://github.com/react-community/react-native-maps/issues/2507)
 * Android: [#2545](https://github.com/react-community/react-native-maps/pull/2545) Fixed “The specified child already has a parent”
 * Docs: [#2541](https://github.com/react-community/react-native-maps/pull/2541) Improve installation docs
