@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.22.1 (November 8, 2018)
+* Common: [#2548](https://github.com/react-community/react-native-maps/pull/2548) Moved `babel-plugin-module-resolver` and `babel-preset-react-native` from dependencies to devDependencies
+* Android: [#2555](https://github.com/react-community/react-native-maps/pull/2555) Fixed [#2507](https://github.com/react-community/react-native-maps/issues/2507)
+* Android: [#2545](https://github.com/react-community/react-native-maps/pull/2545) Fixed “The specified child already has a parent”
+* Docs: [#2541](https://github.com/react-community/react-native-maps/pull/2541) Improve installation docs
+* Docs: [#2550](https://github.com/react-community/react-native-maps/pull/2550) Specify how to use Google Maps
+* Docs: [#2559](https://github.com/react-community/react-native-maps/pull/2559) Clarify cacheEnabled is apple maps only
+
 ## 0.22.0 (October 11, 2018)
 * Common: [#2049](https://github.com/react-community/react-native-maps/pull/2049) Added `animateToNavigation` method to `MapView`
 * Common: [#2207](https://github.com/react-community/react-native-maps/pull/2207), [#2232](https://github.com/react-community/react-native-maps/pull/2232) Added `timestamp` property to `onUserLocationChange` event callback
