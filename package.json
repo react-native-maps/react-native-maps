@@ -38,7 +38,9 @@
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
+    "babel-plugin-module-resolver": "^2.3.0",
     "babel-preset-airbnb": "^1.1.1",
+    "babel-preset-react-native": "1.9.0",
     "eslint": "^3.3.1",
     "eslint-config-airbnb": "^10.0.1",
     "eslint-plugin-import": "^1.14.0",
@@ -55,9 +57,5 @@
     "android": {
       "sourceDir": "./lib/android"
     }
-  },
-  "dependencies": {
-    "babel-plugin-module-resolver": "^2.3.0",
-    "babel-preset-react-native": "1.9.0"
   }
 }
