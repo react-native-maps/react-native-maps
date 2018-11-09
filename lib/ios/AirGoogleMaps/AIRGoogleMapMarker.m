@@ -149,25 +149,38 @@ CGRect unionRect(CGRect a, CGRect b) {
   return nil;
 }
 
-- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker {
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker point:(CGPoint)point {
   if (self.calloutView && self.calloutView.onPress) {
       //todo: why not 'callout-press' ?
-    id event = @{@"action": @"marker-overlay-press",
-                 @"id": self.identifier ?: @"unknown",
-                 };
+    id event = @{
+               @"action": @"marker-overlay-press",
+               @"id": self.identifier ?: @"unknown",
+               @"point": @{
+                   @"x": @(point.x),
+                   @"y": @(point.y),
+                   }
+               };
     self.calloutView.onPress(event);
   }
 }
 
-- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCalloutSubview*)subview {
-    if (subview.onPress) {
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker {
+    [self didTapInfoWindowOfMarker:marker point:CGPointMake(-1, -1)];
+}
+
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCalloutSubview*)subview point:(CGPoint)point {
+    if (subview && subview.onPress) {
         //todo: why not 'callout-inside-press' ?
         id event = @{@"action": @"marker-inside-overlay-press",
                      @"id": self.identifier ?: @"unknown",
+                     @"point": @{
+                         @"x": @(point.x),
+                         @"y": @(point.y),
+                         }
                      };
         subview.onPress(event);
     } else {
-        [self didTapInfoWindowOfMarker:marker];
+        [self didTapInfoWindowOfMarker:marker point:point];
     }
 }
 

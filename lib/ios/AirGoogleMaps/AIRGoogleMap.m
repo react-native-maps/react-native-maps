@@ -583,8 +583,8 @@ id regionAsJSON(MKCoordinateRegion region) {
                 }
             }
             
-            if (markerView && realPressableSubview) {
-                [markerView didTapInfoWindowOfMarker:marker subview:realPressableSubview];
+            if (markerView) {
+                [markerView didTapInfoWindowOfMarker:marker subview:realPressableSubview point:tapPointInBubble];
                 
                 performOriginalActions = NO;
             }

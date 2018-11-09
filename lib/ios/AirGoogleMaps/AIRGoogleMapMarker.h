@@ -44,7 +44,8 @@
 - (UIView *)markerInfoContents;
 - (UIView *)markerInfoWindow;
 - (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker;
-- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCalloutSubview*)subview;
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker point:(CGPoint)point;
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCalloutSubview*)subview point:(CGPoint)point;
 - (void)didBeginDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didEndDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didDragMarker:(AIRGMSMarker *)marker;
