@@ -205,6 +205,12 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     
     if (marker.selected) {
         CGPoint touchPoint = [recognizer locationInView:marker.map.calloutView];
+        
+        //todo
+        CGRect bubbleFrame = [marker.map.calloutView convertRect:marker.map.calloutView.bounds toView:marker.map];
+        bubbleFrame.origin.x += marker.map.calloutView.calloutOffset.x;
+        bubbleFrame.origin.y += marker.map.calloutView.calloutOffset.y;
+        
         UIView *calloutMaybe = [marker.map.calloutView hitTest:touchPoint withEvent:nil];
         if (calloutMaybe) {
             // the callout (or its subview) got clicked, not the marker
@@ -219,14 +225,19 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
                 tmp = tmp.superview;
             }
             
-            
             id event = @{
                          @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
                          @"id": marker.identifier ?: @"unknown",
                          @"point": @{
                                  @"x": @(touchPoint.x),
                                  @"y": @(touchPoint.y),
-                                 }
+                                 },
+                         @"frame": @{
+                             @"x": @(bubbleFrame.origin.x),
+                             @"y": @(bubbleFrame.origin.y),
+                             @"width": @(bubbleFrame.size.width),
+                             @"height": @(bubbleFrame.size.height),
+                             }
                          };
             
             if (calloutSubview) calloutSubview.onPress(event);

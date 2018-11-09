@@ -149,7 +149,7 @@ CGRect unionRect(CGRect a, CGRect b) {
   return nil;
 }
 
-- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker point:(CGPoint)point {
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker point:(CGPoint)point frame:(CGRect)frame {
   if (self.calloutView && self.calloutView.onPress) {
       //todo: why not 'callout-press' ?
     id event = @{
@@ -158,6 +158,12 @@ CGRect unionRect(CGRect a, CGRect b) {
                @"point": @{
                    @"x": @(point.x),
                    @"y": @(point.y),
+                   },
+               @"frame": @{
+                   @"x": @(frame.origin.x),
+                   @"y": @(frame.origin.y),
+                   @"width": @(frame.size.width),
+                   @"height": @(frame.size.height),
                    }
                };
     self.calloutView.onPress(event);
@@ -165,22 +171,29 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker {
-    [self didTapInfoWindowOfMarker:marker point:CGPointMake(-1, -1)];
+    [self didTapInfoWindowOfMarker:marker point:CGPointMake(-1, -1) frame:CGRectZero];
 }
 
-- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCalloutSubview*)subview point:(CGPoint)point {
+- (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker subview:(AIRGoogleMapCalloutSubview*)subview point:(CGPoint)point frame:(CGRect)frame {
     if (subview && subview.onPress) {
         //todo: why not 'callout-inside-press' ?
-        id event = @{@"action": @"marker-inside-overlay-press",
-                     @"id": self.identifier ?: @"unknown",
-                     @"point": @{
-                         @"x": @(point.x),
-                         @"y": @(point.y),
-                         }
-                     };
+        id event = @{
+                   @"action": @"marker-inside-overlay-press",
+                   @"id": self.identifier ?: @"unknown",
+                   @"point": @{
+                       @"x": @(point.x),
+                       @"y": @(point.y),
+                       },
+                   @"frame": @{
+                       @"x": @(frame.origin.x),
+                       @"y": @(frame.origin.y),
+                       @"width": @(frame.size.width),
+                       @"height": @(frame.size.height),
+                       }
+                   };
         subview.onPress(event);
     } else {
-        [self didTapInfoWindowOfMarker:marker point:point];
+        [self didTapInfoWindowOfMarker:marker point:point frame:frame];
     }
 }
 
