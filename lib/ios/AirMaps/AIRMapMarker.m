@@ -222,6 +222,11 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             
             id event = @{
                          @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
+                         @"id": marker.identifier ?: @"unknown",
+                         @"point": @{
+                                 @"x": @(touchPoint.x),
+                                 @"y": @(touchPoint.y),
+                                 }
                          };
             
             if (calloutSubview) calloutSubview.onPress(event);
