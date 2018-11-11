@@ -525,7 +525,8 @@ id regionAsJSON(MKCoordinateRegion region) {
                                     @"y": @(point.y)
                                     };
         NSString* k = mrkView.identifier;
-        if (k != nil) {
+        BOOL isVisible = CGRectIntersectsRect(self.bounds, frame);
+        if (k != nil && (!onlyVisible || isVisible)) {
             [markersFrames setObject:@{ @"frame": frameDict, @"point": pointDict } forKey:k];
         }
     }
