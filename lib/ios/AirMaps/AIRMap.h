@@ -15,6 +15,8 @@
 #import "RCTConvert+AirMap.h"
 #import "AIRMapCalloutSubview.h"
 
+@class AIRMapMarker;
+
 extern const CLLocationDegrees AIRMapDefaultSpan;
 extern const NSTimeInterval AIRMapRegionChangeObserveInterval;
 extern const CGFloat AIRMapZoomBoundBuffer;
@@ -65,5 +67,8 @@ extern const NSInteger AIRMapMaxZoomLevel;
 - (void)cacheViewIfNeeded;
 - (void)beginLoading;
 - (void)finishLoading;
+
+- (AIRMapMarker*) markerAtPoint:(CGPoint)point;
+- (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
 
 @end

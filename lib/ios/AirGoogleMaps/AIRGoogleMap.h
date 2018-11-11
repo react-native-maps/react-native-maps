@@ -69,6 +69,8 @@
 + (MKCoordinateRegion)makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position;
 + (GMSCameraPosition*)makeGMSCameraPositionFromMap:(GMSMapView *)map andMKCoordinateRegion:(MKCoordinateRegion)region;
 
+- (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
+
 @end
 
 #endif

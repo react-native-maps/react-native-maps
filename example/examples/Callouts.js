@@ -38,14 +38,20 @@ class Callouts extends React.Component {
         },
         {
           coordinate: {
+            latitude: LATITUDE + SPACE,
+            longitude: LONGITUDE - SPACE,
+          },
+        },
+        {
+          coordinate: {
             latitude: LATITUDE,
             longitude: LONGITUDE,
           },
         },
         {
           coordinate: {
-            latitude: LATITUDE + SPACE,
-            longitude: LONGITUDE - SPACE,
+            latitude: LATITUDE,
+            longitude: LONGITUDE - SPACE / 2,
           },
         },
       ],
@@ -90,6 +96,7 @@ class Callouts extends React.Component {
             calloutAnchor={{ x: 0.5, y: 0.4 }}
           >
             <Callout
+              alphaHitTest={true}
               tooltip onPress={(e) => {
                 if (e.nativeEvent.action === 'marker-inside-overlay-press' ||
                   e.nativeEvent.action === 'callout-inside-press') {
@@ -111,6 +118,12 @@ class Callouts extends React.Component {
               </CustomCallout>
             </Callout>
           </Marker>
+          <Marker
+            ref={ref => { this.marker4 = ref; }}
+            coordinate={markers[3].coordinate}
+            title="You can also open this callout"
+            description="by pressing on transparent area of custom callout" // eslint-disable-line max-len
+          />
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>

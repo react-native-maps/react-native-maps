@@ -205,11 +205,21 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     
     if (marker.selected) {
         CGPoint touchPoint = [recognizer locationInView:marker.map.calloutView];
+        CGRect bubbleFrame = [self.calloutView convertRect:marker.map.calloutView.bounds toView:marker.map];
+        CGPoint touchPointReal = [recognizer locationInView:self.calloutView];
         
-        //todo
-        CGRect bubbleFrame = [marker.map.calloutView convertRect:marker.map.calloutView.bounds toView:marker.map];
-        bubbleFrame.origin.x += marker.map.calloutView.calloutOffset.x;
-        bubbleFrame.origin.y += marker.map.calloutView.calloutOffset.y;
+        // moved to [AIRMap hitTest:withEvent:]
+//        BOOL isInsideCallout = [self.calloutView isPointInside:touchPointReal];
+//        if (!isInsideCallout) {
+//            CGPoint touchPointMap = [recognizer locationInView:marker.map];
+//            AIRMapMarker* markerAtTapPoint = [self.map markerAtPoint:touchPointMap];
+//            if (markerAtTapPoint != nil) {
+//                [markerAtTapPoint showCalloutView];
+//            } else {
+//                [self.map.calloutView dismissCalloutAnimated:YES];
+//            }
+//            return;
+//        }
         
         UIView *calloutMaybe = [marker.map.calloutView hitTest:touchPoint withEvent:nil];
         if (calloutMaybe) {
@@ -217,7 +227,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
             AIRMapCalloutSubview* calloutSubview = nil;
             UIView* tmp = calloutMaybe;
-            while (tmp && tmp != win && tmp != self.calloutView) {
+            while (tmp && tmp != win && tmp != self.calloutView && tmp != self.map) {
                 if ([tmp respondsToSelector:@selector(onPress)]) {
                     calloutSubview = (AIRMapCalloutSubview*) tmp;
                     break;
@@ -229,8 +239,8 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
                          @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
                          @"id": marker.identifier ?: @"unknown",
                          @"point": @{
-                                 @"x": @(touchPoint.x),
-                                 @"y": @(touchPoint.y),
+                                 @"x": @(touchPointReal.x),
+                                 @"y": @(touchPointReal.y),
                                  },
                          @"frame": @{
                              @"x": @(bubbleFrame.origin.x),

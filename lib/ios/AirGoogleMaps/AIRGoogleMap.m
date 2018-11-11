@@ -497,8 +497,74 @@ id regionAsJSON(MKCoordinateRegion region) {
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
 }
 
+#pragma mark - Utils
 
-#pragma mark - Map gesture recognizers overrides
+- (CGRect) frameForMarker:(AIRGoogleMapMarker*) mrkView {
+    CGPoint mrkAnchor = mrkView.realMarker.groundAnchor;
+    CGPoint mrkPoint = [self.projection pointForCoordinate:mrkView.coordinate];
+    CGSize mrkSize = mrkView.realMarker.iconView ? mrkView.realMarker.iconView.bounds.size : CGSizeMake(20, 30);
+    CGRect mrkFrame = CGRectMake(mrkPoint.x, mrkPoint.y, mrkSize.width, mrkSize.height);
+    mrkFrame.origin.y -= mrkAnchor.y * mrkSize.height;
+    mrkFrame.origin.x -= mrkAnchor.x * mrkSize.width;
+    return mrkFrame;
+}
+
+- (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible {
+    NSMutableDictionary* markersFrames = [NSMutableDictionary new];
+    for (AIRGoogleMapMarker* mrkView in self.markers) {
+        CGRect frame = [self frameForMarker:mrkView];
+        CGPoint point = [self.projection pointForCoordinate:mrkView.coordinate];
+        NSDictionary* frameDict = @{
+                                    @"x": @(frame.origin.x),
+                                    @"y": @(frame.origin.y),
+                                    @"width": @(frame.size.width),
+                                    @"height": @(frame.size.height)
+                                    };
+        NSDictionary* pointDict = @{
+                                    @"x": @(point.x),
+                                    @"y": @(point.y)
+                                    };
+        NSString* k = mrkView.identifier;
+        if (k != nil) {
+            [markersFrames setObject:@{ @"frame": frameDict, @"point": pointDict } forKey:k];
+        }
+    }
+    return markersFrames;
+}
+
+- (AIRGoogleMapMarker*) markerAtPoint:(CGPoint)point {
+    AIRGoogleMapMarker* mrk = nil;
+    for (AIRGoogleMapMarker* mrkView in self.markers) {
+        CGRect frame = [self frameForMarker:mrkView];
+        if (CGRectContainsPoint(frame, point)) {
+            mrk = mrkView;
+            break;
+        }
+    }
+    return mrk;
+}
+
+-(SEL)getActionForTarget:(NSObject*)target {
+    SEL action = nil;
+    uint32_t ivarCount;
+    Ivar *ivars = class_copyIvarList([target class], &ivarCount);
+    if (ivars) {
+        for (uint32_t i = 0 ; i < ivarCount ; i++) {
+            Ivar ivar = ivars[i];
+            const char* type = ivar_getTypeEncoding(ivar);
+            const char* ivarName = ivar_getName(ivar);
+            NSString* name = [NSString stringWithCString: ivarName encoding: NSASCIIStringEncoding];
+            if (type[0] == ':' && [name isEqualToString:@"_action"]) {
+                SEL sel = ((SEL (*)(id, Ivar))object_getIvar)(target, ivar);
+                action = sel;
+                break;
+            }
+        }
+    }
+    return action;
+}
+
+#pragma mark - Overrides for Callout behavior
 
 -(void)overrideGestureRecognizersForView:(UIView*)view {
     NSArray* grs = view.gestureRecognizers;
@@ -538,11 +604,12 @@ id regionAsJSON(MKCoordinateRegion region) {
     CGRect bubbleFrame = [win convertRect:bubbleAbsoluteFrame toView:self];
     UIView* bubbleView = [bubbleProvider valueForKey:@"view"];
     
+    BOOL performOriginalActions = YES;
     BOOL isTap = [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || [gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]];
+    if (isTap) {
+        BOOL isTapInsideBubble = NO;
     CGPoint tapPoint = CGPointZero;
     CGPoint tapPointInBubble = CGPointZero;
-    BOOL isTapInsideBubble = NO;
-    BOOL performOriginalActions = YES;
     
     NSArray* touches = [gestureRecognizer valueForKey:@"touches"];
     UITouch* oneTouch = [touches firstObject];
@@ -551,41 +618,54 @@ id regionAsJSON(MKCoordinateRegion region) {
     UITouch* tapTouch = [delayedTouch valueForKey:@"stateWhenDelayed"];
     if (!tapTouch)
         tapTouch = oneTouch;
-    tapPoint = [tapTouch locationInView:self];
-    isTapInsideBubble = tapTouch != nil && CGRectContainsPoint(bubbleFrame, tapPoint);
-    if (isTapInsideBubble) {
-        tapPointInBubble = CGPointMake(tapPoint.x - bubbleFrame.origin.x, tapPoint.y - bubbleFrame.origin.y);
-    }
-    if (isTap && isTapInsideBubble) {
-        //find bubble's marker
-        AIRGoogleMapMarker* markerView = nil;
-        AIRGMSMarker* marker = nil;
-        for (AIRGoogleMapMarker* mrk in self.markers) {
-            if ([mrk.calloutView isEqual:bubbleView]) {
-                markerView = mrk;
-                marker = markerView.realMarker;
-                break;
-            }
+        tapPoint = [tapTouch locationInView:self];
+        isTapInsideBubble = tapTouch != nil && CGRectContainsPoint(bubbleFrame, tapPoint);
+        if (isTapInsideBubble) {
+            tapPointInBubble = CGPointMake(tapPoint.x - bubbleFrame.origin.x, tapPoint.y - bubbleFrame.origin.y);
         }
-        
-        //find real tap target subview
-        UIView* realSubview = [(RCTView*)bubbleView hitTest:tapPointInBubble withEvent:nil];
-        AIRGoogleMapCalloutSubview* realPressableSubview = nil;
-        if (realSubview) {
-            UIView* tmp = realSubview;
-            while (tmp && tmp != win && tmp != bubbleView) {
-                if ([tmp respondsToSelector:@selector(onPress)]) {
-                    realPressableSubview = (AIRGoogleMapCalloutSubview*) tmp;
+        if (isTapInsideBubble) {
+            //find bubble's marker
+            AIRGoogleMapMarker* markerView = nil;
+            AIRGMSMarker* marker = nil;
+            for (AIRGoogleMapMarker* mrk in self.markers) {
+                if ([mrk.calloutView isEqual:bubbleView]) {
+                    markerView = mrk;
+                    marker = markerView.realMarker;
                     break;
                 }
-                tmp = tmp.superview;
             }
-        }
-        
-        if (markerView) {
-            [markerView didTapInfoWindowOfMarker:marker subview:realPressableSubview point:tapPointInBubble frame:bubbleFrame];
             
-            performOriginalActions = NO;
+            //find real tap target subview
+            UIView* realSubview = [(RCTView*)bubbleView hitTest:tapPointInBubble withEvent:nil];
+            AIRGoogleMapCalloutSubview* realPressableSubview = nil;
+            if (realSubview) {
+                UIView* tmp = realSubview;
+                while (tmp && tmp != win && tmp != bubbleView) {
+                    if ([tmp respondsToSelector:@selector(onPress)]) {
+                        realPressableSubview = (AIRGoogleMapCalloutSubview*) tmp;
+                        break;
+                    }
+                    tmp = tmp.superview;
+                }
+            }
+            
+            if (markerView) {
+                BOOL isInsideCallout = [markerView.calloutView isPointInside:tapPointInBubble];
+                if (isInsideCallout) {
+                    [markerView didTapInfoWindowOfMarker:marker subview:realPressableSubview point:tapPointInBubble frame:bubbleFrame];
+                } else {
+                    AIRGoogleMapMarker* markerAtTapPoint = [self markerAtPoint:tapPoint];
+                    if (markerAtTapPoint != nil) {
+                        [self didTapMarker:markerAtTapPoint.realMarker];
+                    } else {
+                        CLLocationCoordinate2D coord = [self.projection coordinateForPoint:tapPoint];
+                        [markerView hideCalloutView];
+                        [self didTapAtCoordinate:coord];
+                    }
+                }
+                
+                performOriginalActions = NO;
+            }
         }
     }
     
@@ -604,27 +684,6 @@ id regionAsJSON(MKCoordinateRegion region) {
     }
     
     return nil;
-}
-
-//helper
--(SEL)getActionForTarget:(NSObject*)target {
-    SEL action = nil;
-    uint32_t ivarCount;
-    Ivar *ivars = class_copyIvarList([target class], &ivarCount);
-    if (ivars) {
-        for (uint32_t i = 0 ; i < ivarCount ; i++) {
-            Ivar ivar = ivars[i];
-            const char* type = ivar_getTypeEncoding(ivar);
-            const char* ivarName = ivar_getName(ivar);
-            NSString* name = [NSString stringWithCString: ivarName encoding: NSASCIIStringEncoding];
-            if (type[0] == ':' && [name isEqualToString:@"_action"]) {
-                SEL sel = ((SEL (*)(id, Ivar))object_getIvar)(target, ivar);
-                action = sel;
-                break;
-            }
-        }
-    }
-    return action;
 }
 
 

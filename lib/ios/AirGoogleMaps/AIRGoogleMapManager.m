@@ -391,6 +391,22 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
   }];
 }
 
+RCT_EXPORT_METHOD(getMarkersFrames:(nonnull NSNumber *)reactTag
+                  onlyVisible:(BOOL)onlyVisible
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRGoogleMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+            resolve([mapView getMarkersFramesWithOnlyVisible:onlyVisible]);
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
                   northEast:(CLLocationCoordinate2D)northEast
                   southWest:(CLLocationCoordinate2D)southWest)
