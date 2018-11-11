@@ -124,6 +124,15 @@ type Point {
 ```
 
 ```
+type Frame {
+  x: Number,
+  y: Number,
+  width: Number,
+  height: Number,
+}
+```
+
+```
 enum MapType : String {
   "standard",
   "satellite",

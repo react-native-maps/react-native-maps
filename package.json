@@ -11,6 +11,7 @@
     "start:android": "adb shell am start -n com.airbnb.android.react.maps.example/.MainActivity",
     "run:android": "./gradlew installDebug && npm run start:android",
     "lint": "eslint ./",
+    "format": "eslint ./ --fix",
     "build": "npm run build:js && npm run build:android && npm run build:ios",
     "build:js": "exit 0",
     "build:ios": "bundle install --path ./example/ios/bundles && bundle exec pod install --project-directory=./example/ios/",

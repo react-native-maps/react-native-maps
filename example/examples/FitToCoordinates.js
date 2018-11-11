@@ -36,10 +36,10 @@ const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
 
 class FitToCoordinates extends React.Component {
   async logFrames() {
-    let visMarkersFrames = await this.map.getMarkersFrames(true);
-    console.log('Visible markers frames:', visMarkersFrames)
-    let allMarkersFrames = await this.map.getMarkersFrames();
-    console.log('All markers frames:', allMarkersFrames)
+    const visMarkersFrames = await this.map.getMarkersFrames(true);
+    console.log('Visible markers frames:', visMarkersFrames);
+    const allMarkersFrames = await this.map.getMarkersFrames();
+    console.log('All markers frames:', allMarkersFrames);
   }
 
   fitPadding() {
@@ -79,7 +79,7 @@ class FitToCoordinates extends React.Component {
           {MARKERS.map((marker, i) => (
             <Marker
               key={i}
-              identifier={'id'+i}
+              identifier={`id${i}`}
               coordinate={marker}
             />
           ))}

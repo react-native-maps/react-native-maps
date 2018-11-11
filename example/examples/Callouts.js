@@ -51,7 +51,7 @@ class Callouts extends React.Component {
         {
           coordinate: {
             latitude: LATITUDE,
-            longitude: LONGITUDE - SPACE / 2,
+            longitude: LONGITUDE - (SPACE / 2),
           },
         },
       ],
@@ -96,7 +96,7 @@ class Callouts extends React.Component {
             calloutAnchor={{ x: 0.5, y: 0.4 }}
           >
             <Callout
-              alphaHitTest={true}
+              alphaHitTest
               tooltip onPress={(e) => {
                 if (e.nativeEvent.action === 'marker-inside-overlay-press' ||
                   e.nativeEvent.action === 'callout-inside-press') {
