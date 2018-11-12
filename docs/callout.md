@@ -5,7 +5,7 @@
 | Prop | Type | Default | Note |
 |---|---|---|---|
 | `tooltip` | `Boolean` | `false` | If `false`, a default "tooltip" bubble window will be drawn around this callouts children. If `true`, the child views can fully customize their appearance, including any "bubble" like styles. 
-| `alphaHitTest` | `Boolean` | `false` | If `true`, clicks on transparent areas in callout will be passed to map.
+| `alphaHitTest` | `Boolean` | `false` | If `true`, clicks on transparent areas in callout will be passed to map. **Note**: iOS only.
 
 ## Events
 
@@ -23,7 +23,7 @@
 
 # `<CalloutSubview />` Component API
 
-Supported on iOS only.
+**Note**: Supported on iOS only.
 Use to handle press on specific subview of callout.
 Put this component inside `<Callout />`.
 

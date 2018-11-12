@@ -74,6 +74,7 @@ class Callouts extends React.Component {
           provider={this.props.provider}
           style={styles.map}
           initialRegion={region}
+          zoomTapEnabled={false}
         >
           <Marker
             ref={ref => { this.marker1 = ref; }}

@@ -62,6 +62,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   BOOL _didCallOnMapReady;
   BOOL _didMoveToWindow;
   NSMutableDictionary<NSNumber *, NSDictionary*> *_origGestureRecognizersMeta;
+  BOOL _zoomTapEnabled;
 }
 
 - (instancetype)init
@@ -79,6 +80,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _initialRegionSetOnLoad = false;
     _didCallOnMapReady = false;
     _didMoveToWindow = false;
+    _zoomTapEnabled = YES;
 
     // Listen to the myLocation property of GMSMapView.
     [self addObserver:self
@@ -370,6 +372,14 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.zoomGestures;
 }
 
+- (void)setZoomTapEnabled:(BOOL)zoomTapEnabled {
+    _zoomTapEnabled = zoomTapEnabled;
+}
+
+- (BOOL)zoomTapEnabled {
+    return _zoomTapEnabled;
+}
+
 - (void)setRotateEnabled:(BOOL)rotateEnabled {
   self.settings.rotateGestures = rotateEnabled;
 }
@@ -577,10 +587,16 @@ id regionAsJSON(MKCoordinateRegion region) {
         //get orig targets
         NSArray* origTargets = [gestureRecognizer valueForKey:@"targets"];
         NSMutableArray* origTargetsActions = [[NSMutableArray alloc] init];
+        BOOL isZoomTapGesture = NO;
         for (NSObject* trg in origTargets) {
             NSObject* target = [trg valueForKey:@"target"];
             SEL action = [self getActionForTarget:trg];
+            isZoomTapGesture = [NSStringFromSelector(action) isEqualToString:@"handleZoomTapGesture:"];
             [origTargetsActions addObject:@{@"target": target, @"action": NSStringFromSelector(action)}];
+        }
+        if (isZoomTapGesture && self.zoomTapEnabled == NO) {
+            [view removeGestureRecognizer:gestureRecognizer];
+            continue;
         }
         
         //replace with ours
