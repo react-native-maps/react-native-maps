@@ -23,6 +23,7 @@ class Callouts extends React.Component {
     super(props);
 
     this.state = {
+      cnt: 0,
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -95,6 +96,7 @@ class Callouts extends React.Component {
             coordinate={markers[2].coordinate}
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}
+            ref={ref => { this.marker2 = ref; }}
           >
             <Callout
               alphaHitTest
@@ -108,10 +110,12 @@ class Callouts extends React.Component {
               }} style={styles.customView}
             >
               <CustomCallout>
-                <Text>This is a custom callout bubble view</Text>
+                <Text>{`This is a custom callout bubble view ${this.state.cnt}`}</Text>
                 <CalloutSubview
                   onPress={() => {
-                    Alert.alert('callout subview pressed');
+                    this.setState({ cnt: this.state.cnt + 1 }, () => {
+                      this.marker2.redrawCallout();
+                    });
                   }} style={[styles.calloutButton]}
                 >
                   <Text>Click me</Text>

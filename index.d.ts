@@ -168,6 +168,7 @@ declare module "react-native-maps" {
         showsPointsOfInterest?: boolean;
         showsCompass?: boolean;
         zoomEnabled?: boolean;
+        zoomTapEnabled?: boolean;
         zoomControlEnabled?: boolean;
         rotateEnabled?: boolean;
         cacheEnabled?: boolean;
@@ -273,6 +274,11 @@ declare module "react-native-maps" {
          * Hides the callout for this marker
          */
         hideCallout(): void;
+        /**
+         * Redraws the callout for this marker
+         * __iOS only__
+         */
+        redrawCallout(): void;
         /**
          * Animates marker movement.
          * __Android only__
