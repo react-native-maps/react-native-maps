@@ -2,25 +2,15 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Dimensions,
   TouchableOpacity,
   Text,
-  Alert
+  Alert,
 } from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, { ProviderPropType } from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
-
-const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
-
-
-const DEFAULT_PADDING = {top: 40, right: 40, bottom: 40, left: 40};
 
 
 class CameraControl extends React.Component {
@@ -30,10 +20,10 @@ class CameraControl extends React.Component {
       'Current camera',
       JSON.stringify(camera),
       [
-        {text: 'OK'},
+        { text: 'OK' },
       ],
       { cancelable: true }
-    )
+    );
   }
 
   async setCamera() {
@@ -41,18 +31,18 @@ class CameraControl extends React.Component {
     // Note that we do not have to pass a full camera object to setCamera().
     // Similar to setState(), we can pass only the properties you like to change.
     this.map.setCamera({
-      heading: camera.heading + 10
+      heading: camera.heading + 10,
     });
   }
 
   async animateCamera() {
     const camera = await this.map.getCamera();
-    camera.heading = camera.heading + 40;
-    camera.pitch = camera.pitch + 10;
-    camera.altitude = camera.altitude + 1000;
-    camera.zoom = camera.zoom + 1;
-    camera.center.latitude = camera.center.latitude + 0.5;
-    this.map.animateCamera(camera, {duration: 2000});
+    camera.heading += 40;
+    camera.pitch += 10;
+    camera.altitude += 1000;
+    camera.zoom -= 1;
+    camera.center.latitude += 0.5;
+    this.map.animateCamera(camera, { duration: 2000 });
   }
 
   render() {
@@ -72,10 +62,9 @@ class CameraControl extends React.Component {
             pitch: 45,
             heading: 90,
             altitude: 1000,
-            zoom: 10
+            zoom: 10,
           }}
-        >
-        </MapView>
+        />
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.getCamera()}
@@ -100,6 +89,11 @@ class CameraControl extends React.Component {
     );
   }
 }
+
+CameraControl.propTypes = {
+  provider: ProviderPropType,
+};
+
 
 const styles = StyleSheet.create({
   container: {
