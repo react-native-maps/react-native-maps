@@ -695,6 +695,33 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  public void animateToCamera(ReadableMap camera, int duration) {
+    if (map == null) return;
+    CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
+    if (camera.hasKey("zoom")) {
+      builder.zoom((float)camera.getDouble("zoom"));
+    }
+    if (camera.hasKey("heading")) {
+      builder.bearing((float)camera.getDouble("heading"));
+    }
+    if (camera.hasKey("pitch")) {
+      builder.tilt((float)camera.getDouble("pitch"));
+    }
+    if (camera.hasKey("center")) {
+      ReadableMap center = camera.getMap("center");
+      builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
+    }
+
+    CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
+
+    if (duration <= 0) {
+      map.moveCamera(update);
+    }
+    else {
+      map.animateCamera(update, duration, null);
+    }
+  }
+
   public void animateToNavigation(LatLng location, float bearing, float angle, int duration) {
     if (map == null) return;
     CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
