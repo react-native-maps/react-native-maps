@@ -411,8 +411,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     map.put(k6, v6);
     map.put(k7, v7);
     map.put(k8, v8);
-    map.put(k8, v8);
-    map.put(k8, v8);
+    map.put(k9, v9);
+    map.put(k10, v10);
     return map;
   }
 
