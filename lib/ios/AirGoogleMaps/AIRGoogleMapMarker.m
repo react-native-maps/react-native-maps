@@ -5,6 +5,8 @@
 //  Created by Gil Birman on 9/2/16.
 //
 
+#ifdef HAVE_GOOGLE_MAPS
+
 #import "AIRGoogleMapMarker.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTImageLoader.h>
@@ -111,6 +113,26 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (void)hideCalloutView {
   [_realMarker.map setSelectedMarker:Nil];
+}
+
+- (void)redraw {
+  if (!_realMarker.iconView) return;
+  
+  BOOL oldValue = _realMarker.tracksViewChanges;
+  
+  if (oldValue == YES)
+  {
+    // Immediate refresh, like right now. Not waiting for next frame.
+    UIView *view = _realMarker.iconView;
+    _realMarker.iconView = nil;
+    _realMarker.iconView = view;
+  }
+  else
+  {
+    // Refresh according to docs
+    _realMarker.tracksViewChanges = YES;
+    _realMarker.tracksViewChanges = NO;
+  }
 }
 
 - (UIView *)markerInfoContents {
@@ -319,3 +341,5 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 @end
+
+#endif
