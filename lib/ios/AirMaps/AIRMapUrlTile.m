@@ -60,6 +60,7 @@
     if (self.maximumZ) {
         self.tileOverlay.maximumZ = self.maximumZ;
     }
+    self.tileOverlay.tileSize = CGSizeMake(512, 512);
     self.renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:self.tileOverlay];
 }
 
