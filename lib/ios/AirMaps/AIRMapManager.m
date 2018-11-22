@@ -37,7 +37,9 @@ static NSString *const RCTMapViewKey = @"MapView";
 
 @end
 
-@implementation AIRMapManager
+@implementation AIRMapManager{
+   BOOL _hasObserver;
+}
   
 RCT_EXPORT_MODULE()
 
@@ -250,6 +252,7 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
 RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
                   markers:(nonnull NSArray *)markers
+                  edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -269,6 +272,7 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
             NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
 
             [mapView showAnnotations:filteredMarkers animated:animated];
+            
         }
     }];
 }
@@ -354,8 +358,8 @@ RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
         } else {
             CGPoint touchPoint = [mapView convertCoordinate:
                                   CLLocationCoordinate2DMake(
-                                                             [coordinate[@"lat"] doubleValue],
-                                                             [coordinate[@"lng"] doubleValue]
+                                                             [coordinate[@"latitude"] doubleValue],
+                                                             [coordinate[@"longitude"] doubleValue]
                                                              )
                                               toPointToView:mapView];
             
@@ -386,8 +390,8 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                                                  toCoordinateFromView:mapView];
             
             resolve(@{
-                      @"lat": @(coordinate.latitude),
-                      @"lng": @(coordinate.longitude),
+                      @"latitude": @(coordinate.latitude),
+                      @"longitude": @(coordinate.longitude),
                       });
         }
     }];
@@ -704,11 +708,12 @@ static int kDragCenterContext;
         if (mapView.onMarkerDragEnd) mapView.onMarkerDragEnd(event);
         if (marker.onDragEnd) marker.onDragEnd(event);
 
-        [view removeObserver:self forKeyPath:@"center"];
+       if(_hasObserver) [view removeObserver:self forKeyPath:@"center"];
+        _hasObserver = NO;
     } else if (newState == MKAnnotationViewDragStateStarting) {
         // MapKit doesn't emit continuous drag events. To get around this, we are going to use KVO.
         [view addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:&kDragCenterContext];
-
+        _hasObserver = YES;
         if (mapView.onMarkerDragStart) mapView.onMarkerDragStart(event);
         if (marker.onDragStart) marker.onDragStart(event);
     }

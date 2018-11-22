@@ -31,7 +31,7 @@
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
 | `pitchEnabled` | `Boolean` | `true` | If `false` the user won't be able to adjust the camera’s pitch angle.
 | `toolbarEnabled` | `Boolean` | `true` | `Android only` If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
-| `cacheEnabled` | `Boolean` | `false` | If `true` map will be cached and displayed as an image instead of being interactable, for performance usage.
+| `cacheEnabled` | `Boolean` | `false` | If `true` map will be cached and displayed as an image instead of being interactable, for performance usage. **Note:** Apple Maps only
 | `loadingEnabled` | `Boolean` | `false` | If `true` a loading indicator will show while the map is loading.
 | `loadingIndicatorColor` | `Color` | `#606060` | Sets loading indicator color, default to `#606060`.
 | `loadingBackgroundColor` | `Color` | `#FFFFFF` | Sets loading background color, default to `#FFFFFF`.
@@ -79,7 +79,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | `GoogleMaps only`
 | `setIndoorActiveLevelIndex` | `levelIndex: Number` |
 | `fitToElements` | `animated: Boolean` |
-| `fitToSuppliedMarkers` | `markerIDs: String[]`, `animated: Boolean` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
+| `fitToSuppliedMarkers` | `markerIDs: String[], options: { edgePadding: EdgePadding, animated: Boolean }` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
 | `pointForCoordinate` | `coordinate: LatLng` | Converts a map coordinate to a view coordinate (`Point`). Returns a `Promise<Point>`.
 | `coordinateForPoint` | `point: Point` | Converts a view coordinate (`Point`) to a map coordinate. Returns a `Promise<Coordinate>`.

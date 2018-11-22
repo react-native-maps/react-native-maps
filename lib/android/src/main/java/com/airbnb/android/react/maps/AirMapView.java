@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
@@ -30,6 +31,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -104,6 +106,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private final ThemedReactContext context;
   private final EventDispatcher eventDispatcher;
 
+  private ViewAttacherGroup attacherGroup;
+
   private static boolean contextHasBug(Context context) {
     return context == null ||
         context.getResources() == null ||
@@ -173,6 +177,17 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     });
 
     eventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+
+    // Set up a parent view for triggering visibility in subviews that depend on it.
+    // Mainly ReactImageView depends on Fresco which depends on onVisibilityChanged() event
+    attacherGroup = new ViewAttacherGroup(context);
+    LayoutParams attacherLayoutParams = new LayoutParams(0, 0);
+    attacherLayoutParams.width = 0;
+    attacherLayoutParams.height = 0;
+    attacherLayoutParams.leftMargin = 99999999;
+    attacherLayoutParams.topMargin = 99999999;
+    attacherGroup.setLayoutParams(attacherLayoutParams);
+    addView(attacherGroup);
   }
 
   @Override
@@ -522,6 +537,26 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       AirMapMarker annotation = (AirMapMarker) child;
       annotation.addToMap(map);
       features.add(index, annotation);
+
+      // Allow visibility event to be triggered later
+      int visibility = annotation.getVisibility();
+      annotation.setVisibility(INVISIBLE);
+
+      // Remove from a view group if already present, prevent "specified child
+      // already had a parent" error.
+      ViewGroup annotationParent = (ViewGroup)annotation.getParent();
+      if (annotationParent != null) {
+        annotationParent.removeView(annotation);
+      }
+
+      // Add to the parent group
+      attacherGroup.addView(annotation);
+
+      // Trigger visibility event if necessary.
+      // With some testing, seems like it is not always
+      //   triggered just by being added to a parent view.
+      annotation.setVisibility(visibility);
+
       Marker marker = (Marker) annotation.getFeature();
       markerMap.put(marker, annotation);
     } else if (child instanceof AirMapPolyline) {
@@ -680,7 +715,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
-  public void fitToSuppliedMarkers(ReadableArray markerIDsArray, boolean animated) {
+  public void fitToSuppliedMarkers(ReadableArray markerIDsArray, ReadableMap edgePadding, boolean animated) {
     if (map == null) return;
 
     LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -708,6 +743,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     if (addedPosition) {
       LatLngBounds bounds = builder.build();
       CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+      
+      if (edgePadding != null) {
+        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+      }   
+      
       if (animated) {
         map.animateCamera(cu);
       } else {

@@ -5,6 +5,8 @@
 //  Created by Gil Birman on 9/1/16.
 //
 
+#ifdef HAVE_GOOGLE_MAPS
+
 
 #import "AIRGoogleMapManager.h"
 #import <React/RCTViewManager.h>
@@ -205,6 +207,7 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
 RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
                   markers:(nonnull NSArray *)markers
+                  edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -227,7 +230,13 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
       for (AIRGoogleMapMarker *marker in filteredMarkers)
         bounds = [bounds includingCoordinate:marker.realMarker.position];
 
-      [mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:bounds withPadding:55.0f]];
+      // Set Map viewport
+      CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+      CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+      CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+      CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+
+      [mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)]];
     }
   }];
 }
@@ -556,3 +565,5 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
     [googleMapView didTapPOIWithPlaceID:placeID name:name location:location];
 }
 @end
+
+#endif
