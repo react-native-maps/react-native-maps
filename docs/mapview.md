@@ -76,6 +76,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `animateToCoordinate` | `coordinate: LatLng`, `duration: Number` |
 | `animateToBearing` | `bearing: Number`, `duration: Number` |
 | `animateToViewingAngle` | `angle: Number`, `duration: Number` |
+| `getMapBoundaries` | | `Promise<{northEast: LatLng, southWest: LatLng}>`
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | `GoogleMaps only`
 | `setIndoorActiveLevelIndex` | `levelIndex: Number` |
 | `fitToElements` | `animated: Boolean` |

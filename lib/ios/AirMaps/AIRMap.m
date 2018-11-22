@@ -223,6 +223,25 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 #pragma mark Accessors
 
+- (NSArray *)getMapBoundaries
+{
+    MKMapRect mapRect = self.visibleMapRect;
+    
+    CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
+    CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
+
+    return @[
+        @[
+            [NSNumber numberWithDouble:northEast.longitude],
+            [NSNumber numberWithDouble:northEast.latitude]
+        ],
+        @[
+            [NSNumber numberWithDouble:southWest.longitude],
+            [NSNumber numberWithDouble:southWest.latitude]
+        ]
+    ];
+}
+
 - (void)setShowsUserLocation:(BOOL)showsUserLocation
 {
     if (self.showsUserLocation != showsUserLocation) {
