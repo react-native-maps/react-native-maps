@@ -215,4 +215,43 @@ public class AirMapModule extends ReactContextBaseJavaModule {
       }
     });
   }
+
+  @ReactMethod
+  public void getMapBoundaries(final int tag, final Promise promise) {
+    final ReactApplicationContext context = getReactApplicationContext();
+
+    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+    uiManager.addUIBlock(new UIBlock()
+    {
+      @Override
+      public void execute(NativeViewHierarchyManager nvhm)
+      {
+        AirMapView view = (AirMapView) nvhm.resolveView(tag);
+        if (view == null) {
+          promise.reject("AirMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("AirMapView.map is not valid");
+          return;
+        }
+
+        double[][] boundaries = view.getMapBoundaries();
+
+        WritableMap coordinates = new WritableNativeMap();
+        WritableMap northEastHash = new WritableNativeMap();
+        WritableMap southWestHash = new WritableNativeMap();
+
+        northEastHash.putDouble("longitude", boundaries[0][0]);
+        northEastHash.putDouble("latitude", boundaries[0][1]);
+        southWestHash.putDouble("longitude", boundaries[1][0]);
+        southWestHash.putDouble("latitude", boundaries[1][1]);
+
+        coordinates.putMap("northEast", northEastHash);
+        coordinates.putMap("southWest", southWestHash);
+
+        promise.resolve(coordinates);
+      }
+    });
+  }
 }

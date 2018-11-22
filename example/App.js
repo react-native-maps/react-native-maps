@@ -25,6 +25,7 @@ import DefaultMarkers from './examples/DefaultMarkers';
 import CustomMarkers from './examples/CustomMarkers';
 import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
+import MapBoundaries from './examples/MapBoundaries';
 import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 import FitToCoordinates from './examples/FitToCoordinates';
@@ -148,6 +149,7 @@ class App extends React.Component {
       [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
+      [MapBoundaries, 'Get visible map boundaries', true],
       [FitToSuppliedMarkers, 'Focus Map On Markers', true],
       [FitToCoordinates, 'Fit Map To Coordinates', true],
       [LiteMapView, 'Android Lite MapView'],
