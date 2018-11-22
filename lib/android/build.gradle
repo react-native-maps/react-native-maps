@@ -42,7 +42,7 @@ android {
 
 dependencies {
   def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : DEFAULT_GOOGLE_PLAY_SERVICES_VERSION
-  // googlePlayServicesMapsVersion > googlePlayServicesVersion > DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION (16.0.0)
+  // Variable lookup order : googlePlayServicesMapsVersion > googlePlayServicesVersion > DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION (16.0.0)
   def googlePlayServicesMapsVersion = rootProject.hasProperty('googlePlayServicesMapsVersion') ? rootProject.googlePlayServicesMapsVersion : rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION
   def androidMapsUtilsVersion = rootProject.hasProperty('androidMapsUtilsVersion') ? rootProject.androidMapsUtilsVersion : DEFAULT_ANDROID_MAPS_UTILS_VERSION
 
