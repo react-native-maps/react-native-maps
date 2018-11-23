@@ -19,6 +19,7 @@ import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
@@ -136,6 +137,43 @@ public class AirMapModule extends ReactContextBaseJavaModule {
             }
           }
         });
+      }
+    });
+  }
+
+  @ReactMethod
+  public void getCamera(final int tag, final Promise promise) {
+    final ReactApplicationContext context = getReactApplicationContext();
+
+    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+    uiManager.addUIBlock(new UIBlock()
+    {
+      @Override
+      public void execute(NativeViewHierarchyManager nvhm)
+      {
+        AirMapView view = (AirMapView) nvhm.resolveView(tag);
+        if (view == null) {
+          promise.reject("AirMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("AirMapView.map is not valid");
+          return;
+        }
+
+        CameraPosition position = view.map.getCameraPosition();
+
+        WritableMap centerJson = new WritableNativeMap();
+        centerJson.putDouble("latitude", position.target.latitude);
+        centerJson.putDouble("longitude", position.target.longitude);
+
+        WritableMap cameraJson = new WritableNativeMap();
+        cameraJson.putMap("center", centerJson);
+        cameraJson.putDouble("heading", (double)position.bearing);
+        cameraJson.putDouble("zoom", (double)position.zoom);
+        cameraJson.putDouble("pitch", (double)position.tilt);
+
+        promise.resolve(cameraJson);
       }
     });
   }
