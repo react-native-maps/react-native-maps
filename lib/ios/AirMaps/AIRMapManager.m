@@ -112,6 +112,17 @@ RCT_CUSTOM_VIEW_PROPERTY(initialRegion, MKCoordinateRegion, AIRMap)
     [view setInitialRegion:[RCTConvert MKCoordinateRegion:json]];
     view.ignoreRegionChanges = originalIgnore;
 }
+RCT_CUSTOM_VIEW_PROPERTY(initialCamera, MKMapCamera, AIRMap)
+{
+    if (json == nil) return;
+    
+    // don't emit region change events when we are setting the initialCamera
+    BOOL originalIgnore = view.ignoreRegionChanges;
+    view.ignoreRegionChanges = YES;
+    [view setInitialCamera:[RCTConvert MKMapCamera:json]];
+    view.ignoreRegionChanges = originalIgnore;
+}
+
 
 RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
@@ -125,6 +136,17 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
     BOOL originalIgnore = view.ignoreRegionChanges;
     view.ignoreRegionChanges = YES;
     [view setRegion:[RCTConvert MKCoordinateRegion:json] animated:NO];
+    view.ignoreRegionChanges = originalIgnore;
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(camera, MKMapCamera*, AIRMap)
+{
+    if (json == nil) return;
+    
+    // don't emit region change events when we are setting the camera
+    BOOL originalIgnore = view.ignoreRegionChanges;
+    view.ignoreRegionChanges = YES;
+    [view setCamera:[RCTConvert MKMapCamera:json] animated:NO];
     view.ignoreRegionChanges = originalIgnore;
 }
 
@@ -155,6 +177,83 @@ RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
         }
     }];
 }
+
+
+
+RCT_EXPORT_METHOD(getCamera:(nonnull NSNumber *)reactTag
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        AIRMap *mapView = (AIRMap *)view;
+        if (![view isKindOfClass:[AIRMap class]]) {
+            reject(@"Invalid argument", [NSString stringWithFormat:@"Invalid view returned from registry, expecting AIRMap, got: %@", view], NULL);
+        } else {
+            MKMapCamera *camera = [mapView camera];
+            resolve(@{
+                      @"center": @{
+                              @"latitude": @(camera.centerCoordinate.latitude),
+                              @"longitude": @(camera.centerCoordinate.longitude),
+                      },
+                      @"pitch": @(camera.pitch),
+                      @"heading": @(camera.heading),
+                      @"altitude": @(camera.altitude),
+            });
+        }
+    }];
+}
+
+
+RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
+                  camera:(id)json)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+
+            // Merge the changes given with the current camera
+            MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:json existingCamera:[mapView camera]];
+
+            // don't emit region change events when we are setting the camera
+            BOOL originalIgnore = mapView.ignoreRegionChanges;
+            mapView.ignoreRegionChanges = YES;
+            [mapView setCamera:camera animated:NO];
+            mapView.ignoreRegionChanges = originalIgnore;
+        }
+    }];
+}
+
+
+RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
+                  withCamera:(id)json
+                  withDuration:(CGFloat)duration)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRMap *mapView = (AIRMap *)view;
+
+            // Merge the changes given with the current camera
+            MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:json existingCamera:[mapView camera]];
+
+            // don't emit region change events when we are setting the camera
+            BOOL originalIgnore = mapView.ignoreRegionChanges;
+            mapView.ignoreRegionChanges = YES;
+            [AIRMap animateWithDuration:duration/1000 animations:^{
+                [mapView setCamera:camera animated:YES];
+            } completion:^(BOOL finished){
+                mapView.ignoreRegionChanges = originalIgnore;
+            }];
+        }
+    }];
+}
+
 
 RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
         withRegion:(MKCoordinateRegion)region

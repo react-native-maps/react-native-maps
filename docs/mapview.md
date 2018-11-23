@@ -7,6 +7,8 @@
 | `provider` | `string` |  | The map framework to use. <br/><br/>Either `"google"` for GoogleMaps, otherwise `null` or `undefined` to use the native map framework (`MapKit` in iOS and `GoogleMaps` in android).
 | `region` | `Region` |  | The region to be displayed by the map. <br/><br/>The region is defined by the center coordinates and the span of coordinates to display.
 | `initialRegion` | `Region` |  | The initial region to be displayed by the map.  Use this prop instead of `region` only if you don't want to control the viewport of the map besides the initial region.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
+| `camera` | `Camera` |  | The camera view the map should display. If you use this, the `region` property is ignored.
+| `initialCamera` | `Camera` |  | Like `initialRegion`, use this prop instead of `camera` only if you don't want to control the viewport of the map besides the initial camera setting.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
 | `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured. **Note** Google Maps only.
 | `paddingAdjustmentBehavior` | 'always'\|'automatic'\|'never' | 'never' | Indicates how/when to affect padding with safe area insets (`GoogleMaps` in iOS only)
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
@@ -71,11 +73,14 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 
 | Method Name | Arguments | Notes
 |---|---|---|
-| `animateToNavigation` | `location: LatLng`, `bearing: Number`, `angle: Number`, `duration: Number` |
+| `getCamera` | | Returns a `Camera` structure indicating the current camera configuration.
+| `animateCamera` | `camera: Camera`, `{ duration: Number }` | Animate the camera to a new view. You can pass a partial camera object here; any property not given will remain unmodified.
+| `setCamera` | `camera: Camera`, `{ duration: Number }` | Like `animateCamera`, but sets the new view instantly, without an animation.
 | `animateToRegion` | `region: Region`, `duration: Number` |
-| `animateToCoordinate` | `coordinate: LatLng`, `duration: Number` |
-| `animateToBearing` | `bearing: Number`, `duration: Number` |
-| `animateToViewingAngle` | `angle: Number`, `duration: Number` |
+| `animateToNavigation` | `location: LatLng`, `bearing: Number`, `angle: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
+| `animateToCoordinate` | `coordinate: LatLng`, `duration: Number` | Deprecated. Use `animateCamera` instead.
+| `animateToBearing` | `bearing: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
+| `animateToViewingAngle` | `angle: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
 | `getMapBoundaries` | | `Promise<{northEast: LatLng, southWest: LatLng}>`
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | `GoogleMaps only`
 | `setIndoorActiveLevelIndex` | `levelIndex: Number` |
@@ -97,6 +102,26 @@ type Region {
   longitudeDelta: Number,
 }
 ```
+
+```
+type Camera = {
+    center: {
+       latitude: number,
+       longitude: number,
+   },
+   pitch: number,
+   heading: number
+
+   // Only on iOS MapKit, in meters. The property is ignored by Google Maps.
+   altitude: number.
+
+   // Only when using Google Maps.
+   zoom: number
+}
+```
+
+Note that when using the `Camera`, MapKit on iOS and Google Maps differ in how the height is specified. For a cross-platform app, it is necessary
+to specify both the zoom level and the altitude separately.
 
 ```
 type LatLng {

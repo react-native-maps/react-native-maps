@@ -44,6 +44,7 @@ import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
 import AnimatedNavigation from './examples/AnimatedNavigation';
 import OnPoiClick from './examples/OnPoiClick';
 import IndoorMap from './examples/IndoorMap';
+import CameraControl from './examples/CameraControl';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -166,6 +167,7 @@ class App extends React.Component {
       [AnimatedNavigation, 'Animated Map Navigation', true],
       [OnPoiClick, 'On Poi Click', true],
       [IndoorMap, 'Indoor Map', true],
+      [CameraControl, 'CameraControl', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))

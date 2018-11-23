@@ -21,6 +21,8 @@
 @property (nonatomic, weak) RCTBridge *bridge;
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
 @property (nonatomic, assign) MKCoordinateRegion region;
+@property (nonatomic, assign) GMSCameraPosition *cameraProp;   // Because the base class already has a "camera" prop.
+@property (nonatomic, assign) GMSCameraPosition *initialCamera;
 @property (nonatomic, assign) NSString *customMapStyleString;
 @property (nonatomic, assign) UIEdgeInsets mapPadding;
 @property (nonatomic, assign) NSString *paddingAdjustmentBehaviorString;
