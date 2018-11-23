@@ -1189,7 +1189,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   
   @Override
   public void onIndoorLevelActivated(IndoorBuilding building) {
+    if (building == null) {
+      return;
+    }
     int activeLevelIndex = building.getActiveLevelIndex();
+    if (activeLevelIndex < 0 || activeLevelIndex >= building.getLevels().size()) {
+      return;
+    }
     IndoorLevel level = building.getLevels().get(activeLevelIndex);
 
     WritableMap event = Arguments.createMap();
