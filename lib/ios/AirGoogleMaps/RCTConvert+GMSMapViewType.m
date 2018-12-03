@@ -42,8 +42,8 @@
         viewingAngle = existingCamera.viewingAngle;
         latitude = existingCamera.target.latitude;
         longitude = existingCamera.target.longitude;
-        zoom = 0;
-        bearing = 0;
+        zoom = existingCamera.zoom;
+        bearing = existingCamera.bearing;
     }
 
     if (json[@"center"]) {
