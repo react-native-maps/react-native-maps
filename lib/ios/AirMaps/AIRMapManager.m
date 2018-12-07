@@ -939,7 +939,7 @@ static int kDragCenterContext;
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView
 {
     if (!mapView.hasStartedRendering) {
-      mapView.onMapReady(@{}); 
+      mapView.onMapReady(@{});
       mapView.hasStartedRendering = YES;
     }
     [mapView beginLoading];
