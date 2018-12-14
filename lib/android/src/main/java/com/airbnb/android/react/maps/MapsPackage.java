@@ -7,6 +7,7 @@ import com.airbnb.android.react.maps.osmdroid.OsmMapManager;
 import com.airbnb.android.react.maps.osmdroid.OsmMapMarkerManager;
 import com.airbnb.android.react.maps.osmdroid.OsmMapPolygonManager;
 import com.airbnb.android.react.maps.osmdroid.OsmMapPolylineManager;
+import com.airbnb.android.react.maps.osmdroid.OsmMapUrlTileManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -63,6 +64,7 @@ public class MapsPackage implements ReactPackage {
     );
 
     if (hasOsmdroidOnClasspath()) {
+      OsmMapUrlTileManager osmUrlTileManager = new OsmMapUrlTileManager();
       OsmMapCalloutManager osmCalloutManager = new OsmMapCalloutManager();
       OsmMapMarkerManager osmMarkerManager = new OsmMapMarkerManager();
       OsmMapPolylineManager osmPolylineManager = new OsmMapPolylineManager(reactContext);
@@ -71,6 +73,7 @@ public class MapsPackage implements ReactPackage {
 
       List<ViewManager> managers = new ArrayList<>(airMapManagers);
       managers.addAll(Arrays.<ViewManager>asList(
+          osmUrlTileManager,
           osmCalloutManager,
           osmMarkerManager,
           osmPolylineManager,

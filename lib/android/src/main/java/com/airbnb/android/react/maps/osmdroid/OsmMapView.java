@@ -1,15 +1,20 @@
 package com.airbnb.android.react.maps.osmdroid;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.WindowManager;
 
+import com.airbnb.android.react.maps.AirMapUrlTile;
 import com.airbnb.android.react.maps.osmdroid.overlays.InterceptDoubleTapOverlay;
 import com.airbnb.android.react.maps.osmdroid.overlays.InterceptScrollOverlay;
 import com.airbnb.android.react.maps.osmdroid.utils.LatLngBoundsUtils;
@@ -110,7 +115,8 @@ public class OsmMapView extends MapView implements MapView.OnFirstLayoutListener
                 });
 
         eventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-        this.setTileSource(TileSourceFactory.MAPNIK);
+        this.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        this.setTilesScaledToDpi(true);
     }
 
     /*
@@ -297,15 +303,15 @@ public class OsmMapView extends MapView implements MapView.OnFirstLayoutListener
             features.add(index, polygonView);
             Polygon polygon = (Polygon) polygonView.getFeature();
             polygonMap.put(polygon, polygonView);
-        } /*else if (child instanceof AirMapCircle) {
+        } else if (child instanceof OsmMapUrlTile) {
+            OsmMapUrlTile urlTileView = (OsmMapUrlTile) child;
+            urlTileView.addToMap(this);
+            features.add(index, urlTileView);
+        }/*else if (child instanceof AirMapCircle) {
             AirMapCircle circleView = (AirMapCircle) child;
             circleView.addToMap(map);
             features.add(index, circleView);
-        } else if (child instanceof AirMapUrlTile) {
-            AirMapUrlTile urlTileView = (AirMapUrlTile) child;
-            urlTileView.addToMap(map);
-            features.add(index, urlTileView);
-        } else {
+        }  else {
             ViewGroup children = (ViewGroup) child;
             for (int i = 0; i < children.getChildCount(); i++) {
                 addFeature(children.getChildAt(i), index);
