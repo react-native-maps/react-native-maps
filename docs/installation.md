@@ -138,7 +138,8 @@ manually](https://developers.google.com/maps/documentation/ios-sdk/start). Then,
 `package.json` and replace the
 `REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL` with the relative path
 from your project root to the directory in which you installed the
-Google Maps frameworks:
+Google Maps frameworks. You might need to specify a recursive search path 
+by adding a `/**` at the end of the provided path (e.g. `"./node_modules/react-native-maps/enable-google-maps 'ios/my-frameworks/GoogleMaps/**'"
 
     ```json
     {
