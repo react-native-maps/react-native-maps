@@ -1,19 +1,24 @@
 apply plugin: 'com.android.library'
 apply from: 'gradle-maven-push.gradle'
 
-def DEFAULT_COMPILE_SDK_VERSION             = 25
-def DEFAULT_BUILD_TOOLS_VERSION             = "25.0.3"
-def DEFAULT_TARGET_SDK_VERSION              = 25
-def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION    = "10.2.4"
-def DEFAULT_ANDROID_MAPS_UTILS_VERSION      = "0.5+"
+def DEFAULT_COMPILE_SDK_VERSION               = 27
+def DEFAULT_BUILD_TOOLS_VERSION               = "27.0.3"
+def DEFAULT_TARGET_SDK_VERSION                = 27
+def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION      = "16.0.1"
+def DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION = "16.0.0"
+def DEFAULT_ANDROID_MAPS_UTILS_VERSION        = "0.5+"
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
 
 android {
-  compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
-  buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
+  compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+  buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
 
   defaultConfig {
     minSdkVersion 16
-    targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
+    targetSdkVersion safeExtGet('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
   }
 
   packagingOptions {
@@ -40,11 +45,13 @@ android {
 }
 
 dependencies {
-  def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion')  ? rootProject.googlePlayServicesVersion : DEFAULT_GOOGLE_PLAY_SERVICES_VERSION
-  def androidMapsUtilsVersion   = rootProject.hasProperty('androidMapsUtilsVersion')    ? rootProject.androidMapsUtilsVersion   : DEFAULT_ANDROID_MAPS_UTILS_VERSION
+  def googlePlayServicesVersion = safeExtGet('googlePlayServicesVersion', DEFAULT_GOOGLE_PLAY_SERVICES_VERSION)
+  // Variable lookup order : googlePlayServicesMapsVersion > googlePlayServicesVersion > DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION
+  def googlePlayServicesMapsVersion = safeExtGet('googlePlayServicesMapsVersion', safeExtGet('googlePlayServicesVersion', DEFAULT_GOOGLE_PLAY_SERVICES_VERSION))
+  def androidMapsUtilsVersion = safeExtGet('androidMapsUtilsVersion', DEFAULT_ANDROID_MAPS_UTILS_VERSION)
 
   compileOnly "com.facebook.react:react-native:+"
   implementation "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
-  implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
+  implementation "com.google.android.gms:play-services-maps:$googlePlayServicesMapsVersion"
   implementation "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
 }
