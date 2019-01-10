@@ -47,7 +47,7 @@ android {
 dependencies {
   def googlePlayServicesVersion = safeExtGet('googlePlayServicesVersion', DEFAULT_GOOGLE_PLAY_SERVICES_VERSION)
   // Variable lookup order : googlePlayServicesMapsVersion > googlePlayServicesVersion > DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION
-  def googlePlayServicesMapsVersion = safeExtGet('googlePlayServicesMapsVersion', safeExtGet('googlePlayServicesVersion', DEFAULT_GOOGLE_PLAY_SERVICES_VERSION))
+  def googlePlayServicesMapsVersion = safeExtGet('googlePlayServicesMapsVersion', safeExtGet('googlePlayServicesVersion', DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION))
   def androidMapsUtilsVersion = safeExtGet('androidMapsUtilsVersion', DEFAULT_ANDROID_MAPS_UTILS_VERSION)
 
   compileOnly "com.facebook.react:react-native:+"
