@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.23.0 (January 17, 2019)
+* Common: [#2651](https://github.com/react-native-community/react-native-maps/pull/2651) Use `resolveAssetSource` method from Image
+* Common: [#2576](https://github.com/react-native-community/react-native-maps/pull/2576) Fix import error for `MapMarker` and `MapOverlay`
+* Common: [#2615](https://github.com/react-native-community/react-native-maps/pull/2615) Added helper method for calculating bounding box from region
+* Common: [#2607](https://github.com/react-native-community/react-native-maps/pull/2607) Fix camera type definition error
+* Common: [#2563](https://github.com/react-native-community/react-native-maps/pull/2563) Added camera system and deprecate `animateTo` methods
+* Common: [#2571](https://github.com/react-native-community/react-native-maps/pull/2571) Added `getMapBoundaries` to `MapView`
+* Common/iOS: [#2650](https://github.com/react-native-community/react-native-maps/pull/2650) Added `icon` prop for `MapMarker`
+* iOS: [#2414](https://github.com/react-native-community/react-native-maps/pull/2414) Fix path for yoga in Podfile
+* iOS: [#2627](https://github.com/react-native-community/react-native-maps/pull/2627) Added `tileSize` prop for `MapUrlTile`
+* iOS: [#2608](https://github.com/react-native-community/react-native-maps/pull/2608) Fix `animateToCamera`
+* Android: [#2653](https://github.com/react-native-community/react-native-maps/pull/2653) Defaults to the map services version instead of play services
+* Android: [#2587](https://github.com/react-native-community/react-native-maps/pull/2587) Allow specifying a different version for base and maps on android
+* Android: [#2598](https://github.com/react-native-community/react-native-maps/pull/2598) Fix crash for cannot getActiveLevelIndex
+* Docs: [#2639](https://github.com/react-native-community/react-native-maps/pull/2639) Added note about recursive framework search paths
+* Docs: [#2631](https://github.com/react-native-community/react-native-maps/pull/2631) Added notes for Google Play Services
+
 ## 0.22.1 (November 8, 2018)
 * Common: [#2548](https://github.com/react-community/react-native-maps/pull/2548) Moved `babel-plugin-module-resolver` and `babel-preset-react-native` from dependencies to devDependencies
 * Android: [#2555](https://github.com/react-community/react-native-maps/pull/2555) Fixed [#2507](https://github.com/react-community/react-native-maps/issues/2507)

@@ -29,11 +29,11 @@ PODS:
     - GoogleMaps/Base
   - React (0.54.2):
     - React/Core (= 0.54.2)
-  - react-native-google-maps (0.22.1):
+  - react-native-google-maps (0.23.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 2.5.0)
     - React
-  - react-native-maps (0.22.1):
+  - react-native-maps (0.23.0):
     - React
   - React/Core (0.54.2):
     - yoga (= 0.54.2.React)

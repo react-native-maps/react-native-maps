@@ -138,7 +138,8 @@ manually](https://developers.google.com/maps/documentation/ios-sdk/start). Then,
 `package.json` and replace the
 `REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL` with the relative path
 from your project root to the directory in which you installed the
-Google Maps frameworks:
+Google Maps frameworks. You might need to specify a recursive search path 
+by adding a `/**` at the end of the provided path (e.g. `"./node_modules/react-native-maps/enable-google-maps 'ios/my-frameworks/GoogleMaps/**'"
 
     ```json
     {
@@ -412,3 +413,24 @@ import com.airbnb.android.react.maps.MapsPackage;
   are not supported by your device.`, you need to change the emulator
   CPU/ABI setting to a system image that includes Google APIs.  These may
   need to be downloaded from the Android SDK Manager first.
+  
+  
+  ### Google Play Services conflicting issues with other modules
+  
+  In case you have multiple modules using Google Play Services such as `react-native-onesignal`, Make sure to exclude all the Google Play Services dependencies from the modules and import all the Google Play Services dependencies for all the modules in the project-wide `build.gradle` file like the following example:
+  ```
+   implementation(project(':react-native-onesignal')){
+        exclude group: 'com.google.android.gms'
+    }
+    
+   implementation(project(':react-native-maps')){
+        exclude group: 'com.google.android.gms'
+    }
+    implementation 'com.google.android.gms:play-services-base:12.0.1'
+    implementation 'com.google.android.gms:play-services-basement:12.0.1'
+    implementation 'com.google.android.gms:play-services-location:12.0.1'
+    implementation 'com.google.android.gms:play-services-tasks:12.0.1'
+    implementation 'com.google.android.gms:play-services-maps:12.0.1'
+    
+    
+  ```
