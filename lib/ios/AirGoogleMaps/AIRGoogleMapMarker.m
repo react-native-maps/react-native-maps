@@ -225,7 +225,7 @@ CGRect unionRect(CGRect a, CGRect b) {
   }
 
   if (!_iconImageView) {
-    // prevent glitch with marker (cf. https://github.com/airbnb/react-native-maps/issues/738)
+    // prevent glitch with marker (cf. https://github.com/react-native-community/react-native-maps/issues/738)
     UIImageView *empyImageView = [[UIImageView alloc] init];
     _iconImageView = empyImageView;
     [self iconViewInsertSubview:_iconImageView atIndex:0];

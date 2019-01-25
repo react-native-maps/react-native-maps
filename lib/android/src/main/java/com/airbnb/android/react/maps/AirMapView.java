@@ -117,10 +117,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   // We do this to fix this bug:
-  // https://github.com/airbnb/react-native-maps/issues/271
+  // https://github.com/react-native-community/react-native-maps/issues/271
   //
   // which conflicts with another bug regarding the passed in context:
-  // https://github.com/airbnb/react-native-maps/issues/1147
+  // https://github.com/react-native-community/react-native-maps/issues/1147
   //
   // Doing this allows us to avoid both bugs.
   private static Context getNonBuggyContext(ThemedReactContext reactContext,
@@ -678,7 +678,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       int width = data.get("width") == null ? 0 : data.get("width").intValue();
       int height = data.get("height") == null ? 0 : data.get("height").intValue();
 
-      //fix for https://github.com/airbnb/react-native-maps/issues/245,
+      //fix for https://github.com/react-native-community/react-native-maps/issues/245,
       //it's not guaranteed the passed-in height and width would be greater than 0.
       if (width <= 0 || height <= 0) {
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
