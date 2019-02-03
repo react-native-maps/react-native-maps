@@ -81,7 +81,7 @@ target '_YOUR_PROJECT_TARGET_' do
 
   # react-native-maps dependencies
   pod 'react-native-maps', path: rn_maps_path
-  # pod 'react-native-google-maps', path: rn_maps_path  # Unomment this line if you want to support GoogleMaps on iOS
+  # pod 'react-native-google-maps', path: rn_maps_path  # Uncomment this line if you want to support GoogleMaps on iOS
   # pod 'GoogleMaps'  # Uncomment this line if you want to support GoogleMaps on iOS
   # pod 'Google-Maps-iOS-Utils' # Uncomment this line if you want to support GoogleMaps on iOS
 end
