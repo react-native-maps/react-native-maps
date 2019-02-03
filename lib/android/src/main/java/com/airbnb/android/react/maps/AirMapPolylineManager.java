@@ -62,6 +62,11 @@ public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
     view.setColor(color);
   }
 
+  @ReactProp(name = "tappable", defaultBoolean = false)
+  public void setTappable(AirMapPolyline view, boolean tapabble) {
+    view.setTappable(tapabble);
+  }
+
   @ReactProp(name = "geodesic", defaultBoolean = false)
   public void setGeodesic(AirMapPolyline view, boolean geodesic) {
     view.setGeodesic(geodesic);
