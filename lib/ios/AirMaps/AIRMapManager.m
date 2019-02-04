@@ -68,6 +68,8 @@ RCT_EXPORT_MODULE()
 
     // disable drag by default
     drag.enabled = NO;
+    rotate.enabled = NO;
+    pinch.enabled = NO;
     
     pinch.delegate = self;
     rotate.delegate = self;
@@ -1228,7 +1230,7 @@ static int kDragCenterContext;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return true;
+    return YES;
 }
 
 @end
