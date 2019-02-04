@@ -265,7 +265,12 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     for (UIGestureRecognizer *recognizer in [self gestureRecognizers]) {
         if ([recognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
             recognizer.enabled = handleMapDrag;
-            break;
+        }
+        if ([recognizer isKindOfClass:[UIRotationGestureRecognizer class]]) {
+            recognizer.enabled = handleMapDrag;
+        }
+        if ([recognizer isKindOfClass:[UIPinchGestureRecognizer class]]) {
+            recognizer.enabled = handleMapDrag;
         }
     }
 }
