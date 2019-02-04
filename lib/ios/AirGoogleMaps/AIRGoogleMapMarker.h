@@ -5,6 +5,8 @@
 //  Created by Gil Birman on 9/2/16.
 //
 
+#ifdef HAVE_GOOGLE_MAPS
+
 #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTBridge.h>
 #import "AIRGMSMarker.h"
@@ -24,6 +26,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onDrag;
 @property (nonatomic, copy) RCTDirectEventBlock onDragEnd;
 @property (nonatomic, copy) NSString *imageSrc;
+@property (nonatomic, copy) NSString *iconSrc;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, strong) UIColor *pinColor;
@@ -37,6 +40,7 @@
 
 - (void)showCalloutView;
 - (void)hideCalloutView;
+- (void)redraw;
 - (UIView *)markerInfoContents;
 - (UIView *)markerInfoWindow;
 - (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker;
@@ -44,3 +48,5 @@
 - (void)didEndDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didDragMarker:(AIRGMSMarker *)marker;
 @end
+
+#endif

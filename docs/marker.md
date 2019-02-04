@@ -7,7 +7,8 @@
 | `title` | `String` |  | The title of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
 | `description` | `String` |  | The description of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
 | `image` | `ImageSource` |  | A custom image to be used as the marker's icon. Only local image resources are allowed to be used.
-| `pinColor` | `Color` |  | If no custom marker view or custom image is provided, the platform default pin will be used, which can be customized by this color. Ignored if a custom marker is being used.
+| `icon` | `ImageSource` |  | Marker icon to render (equivalent to `icon` property of GMSMarker Class).
+| `pinColor` | `Color` |  | If no custom marker view or custom image is provided, the platform default pin will be used, which can be customized by this color. Ignored if a custom marker is being used.<br/><br/> For Android, the set of available colors is limited. Unsupported colors will fall back to red. See [#887](https://github.com/react-community/react-native-maps/issues/887) for more information.
 | `coordinate` | `LatLng` |  | The coordinate for the marker.
 | `centerOffset` | `Point` | (0, 0) | The offset (in points) at which to display the view.<br/><br/> By default, the center point of an annotation view is placed at the coordinate point of the associated annotation. You can use this property to reposition the annotation view as needed. This x and y offset values are measured in points. Positive offset values move the annotation view down and to the right, while negative values move it up and to the left.<br/><br/> For Google Maps, see the `anchor` prop.
 | `calloutOffset` | `Point` | (0, 0) | The offset (in points) at which to place the callout bubble.<br/><br/> This property determines the additional distance by which to move the callout bubble. When this property is set to (0, 0), the anchor point of the callout bubble is placed on the top-center point of the marker view’s frame. Specifying positive offset values moves the callout bubble down and to the right, while specifying negative values moves it up and to the left.<br/><br/> For Google Maps, see the `calloutAnchor` prop.
@@ -17,7 +18,7 @@
 | `identifier` | `String` |  | An identifier used to reference this marker at a later date.
 | `rotation` | `Float` | 0 | A float number indicating marker's rotation angle, in degrees.
 | `draggable` | `<null>` |  | This is a non-value based prop. Adding this allows the marker to be draggable (re-positioned).
-| `tracksViewChanges` | `Boolean` | true | Sets whether this marker should track view changes. It's recommended to turn it off whenever it's possible to improve custom marker performance. **Note**: iOS Google Maps only.
+| `tracksViewChanges` | `Boolean` | true | Sets whether this marker should track view changes. It's recommended to turn it off whenever it's possible to improve custom marker performance.
 | `tracksInfoWindowChanges` | `Boolean` | false | Sets whether this marker should track view changes in info window. Enabling it will let marker change content of info window after first render pass, but will lead to decreased performance, so it's recommended to disable it whenever you don't need it. **Note**: iOS Google Maps only.
 | `stopPropagation` | `Boolean` | false | Sets whether this marker should propagate `onPress` events. Enabling it will stop the parent `MapView`'s `onPress` from being called. **Note**: iOS only. Android does not propagate `onPress` events. See [#1132](https://github.com/react-community/react-native-maps/issues/1132) for more information.
 | `opacity` | `Float` | 1.0 | The marker's opacity between 0.0 and 1.0.
@@ -44,6 +45,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `showCallout` |  | Shows the callout for this marker
 | `hideCallout` |  | Hides the callout for this marker
 | `animateMarkerToCoordinate` | `coordinate: LatLng, duration: number` | Animates marker movement. **Note**: Android only
+| `redraw` |  | Causes a redraw of the marker. Useful when there are updates to the marker and `tracksViewChanges` comes with a cost that is too high.
 
 
 

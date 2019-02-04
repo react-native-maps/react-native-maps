@@ -21,6 +21,14 @@ declare module "react-native-maps" {
         longitude: number;
     }
 
+    export interface Camera {
+        center: LatLng;
+        heading: number;
+        pitch: number;
+        zoom: number;
+        altitude: number;
+    }
+
     export interface Point {
         x: number;
         y: number;
@@ -186,6 +194,8 @@ declare module "react-native-maps" {
         mapType?: MapTypes;
         region?: Region;
         initialRegion?: Region;
+        camera?: Camera;
+        initialCamera?: Camera;
         liteMode?: boolean;
         mapPadding?: EdgePadding;
         maxDelta?: number;
@@ -215,15 +225,19 @@ declare module "react-native-maps" {
     }
 
     export default class MapView extends React.Component<MapViewProps, any> {
+        getCamera(): Promise<Camera>;
+        setCamera(camera: Partial<Camera>): void;
+        animateCamera(camera: Partial<Camera>, opts?: {duration?: number}): void;
         animateToNavigation(location: LatLng, bearing: number, angle: number, duration?: number): void;
         animateToRegion(region: Region, duration?: number): void;
         animateToCoordinate(latLng: LatLng, duration?: number): void;
         animateToBearing(bearing: number, duration?: number): void;
         animateToViewingAngle(angle: number, duration?: number): void;
         fitToElements(animated: boolean): void;
-        fitToSuppliedMarkers(markers: string[], animated: boolean): void;
+        fitToSuppliedMarkers(markers: string[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         fitToCoordinates(coordinates?: LatLng[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
+        getMapBoundaries(): {northEast: LatLng; southWest: LatLng};
         takeSnapshot(options?: SnapshotOptions): Promise<string>;
     }
 
@@ -373,6 +387,7 @@ declare module "react-native-maps" {
         urlTemplate: string;
         maximumZ?: number;
         zIndex?: number;
+        tileSize?: number;
     }
 
     export class UrlTile extends React.Component<MapUrlTileProps, any> {
