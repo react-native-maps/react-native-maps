@@ -33,8 +33,10 @@
 static NSString *const RCTMapViewKey = @"MapView";
 
 
-@interface AIRMapManager() <MKMapViewDelegate>
+@interface AIRMapManager() <MKMapViewDelegate, UIGestureRecognizerDelegate>
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
+	
 @end
 
 @implementation AIRMapManager{
@@ -52,18 +54,30 @@ RCT_EXPORT_MODULE()
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapLongPress:)];
     UIPanGestureRecognizer *drag = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
+    UIRotationGestureRecognizer *rotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
+    
     [drag setMinimumNumberOfTouches:1];
     [drag setMaximumNumberOfTouches:1];
     // setting this to NO allows the parent MapView to continue receiving marker selection events
     tap.cancelsTouchesInView = NO;
+    drag.cancelsTouchesInView = NO;
+    pinch.cancelsTouchesInView = NO;
+    rotate.cancelsTouchesInView = NO;
     longPress.cancelsTouchesInView = NO;
 
     // disable drag by default
     drag.enabled = NO;
+    
+    pinch.delegate = self;
+    rotate.delegate = self;
+    drag.delegate = self;
 
     [map addGestureRecognizer:tap];
     [map addGestureRecognizer:longPress];
     [map addGestureRecognizer:drag];
+    [map addGestureRecognizer:pinch];
+    [map addGestureRecognizer:rotate];
 
     return map;
 }
@@ -706,20 +720,19 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
 - (void)handleMapDrag:(UIPanGestureRecognizer*)recognizer {
     AIRMap *map = (AIRMap *)recognizer.view;
     if (!map.onPanDrag) return;
-
+    
     CGPoint touchPoint = [recognizer locationInView:map];
     CLLocationCoordinate2D coord = [map convertPoint:touchPoint toCoordinateFromView:map];
     map.onPanDrag(@{
-                  @"coordinate": @{
-                          @"latitude": @(coord.latitude),
-                          @"longitude": @(coord.longitude),
-                          },
-                  @"position": @{
-                          @"x": @(touchPoint.x),
-                          @"y": @(touchPoint.y),
-                          },
-                  });
-
+                    @"coordinate": @{
+                            @"latitude": @(coord.latitude),
+                            @"longitude": @(coord.longitude),
+                            },
+                    @"position": @{
+                            @"x": @(touchPoint.x),
+                            @"y": @(touchPoint.y),
+                            },
+                    });
 }
 
 
@@ -1212,6 +1225,10 @@ static int kDragCenterContext;
     double zoomLevel = AIRMapMaxZoomLevel - zoomExponent;
 
     return zoomLevel;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return true;
 }
 
 @end
