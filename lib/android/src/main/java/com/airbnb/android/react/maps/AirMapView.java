@@ -167,6 +167,14 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
             return false;
           }
+
+          @Override
+          public boolean onDoubleTap(MotionEvent e) {
+            if (handlePanDrag) {
+              onPanDrag(e);
+            }
+            return false;
+          }
         });
 
     this.addOnLayoutChangeListener(new OnLayoutChangeListener() {
@@ -903,6 +911,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   @Override
   public boolean dispatchTouchEvent(MotionEvent ev) {
     gestureDetector.onTouchEvent(ev);
+
+    if (handlePanDrag && ev.getPointerCount() > 1) {
+      onPanDrag(ev);
+    }
 
     int action = MotionEventCompat.getActionMasked(ev);
 
