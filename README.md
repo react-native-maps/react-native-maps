@@ -221,6 +221,23 @@ For Android: LocalTile is still just overlay over original map tiles. It means t
 
 See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) for how to download tiles for offline usage.
 
+### Overlaying other components on the map
+
+Place components you that wish to overlay `MapView` underneath the `MapView` closing tag. Absolutely position these elements.
+
+```jsx
+render() {
+  return (
+    <MapView
+      region={this.state.region}
+    />
+    <OverlayComponent
+      style={{position: “absolute”, bottom: 50}}
+    />
+  );
+}
+```
+
 ### Customizing the map style
 
 Create the json object, or download a generated one from the [google style generator](https://mapstyle.withgoogle.com/).
@@ -254,7 +271,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
 Then add the AirGoogleMaps directory:
 
-https://github.com/airbnb/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
+https://github.com/react-native-community/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
 
 An unofficial step-by-step guide is also available at https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
 

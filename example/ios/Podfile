@@ -9,7 +9,7 @@ target 'AirMapsExplorer' do
   rn_maps_path = '../../' # This path is likely to be `../node_modules/react-native-maps` in your own project.
 
   # See http://facebook.github.io/react-native/docs/integration-with-existing-apps.html#configuring-cocoapods-dependencies
-  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
+  pod 'yoga', path: "../../node_modules/react-native/ReactCommon/yoga"
   pod 'React', path: rn_path, subspecs: [
     'Core',
     'CxxBridge',

@@ -12,6 +12,34 @@
 
 @implementation AIRMapUrlTile {
     BOOL _urlTemplateSet;
+    BOOL _tileSizeSet;
+}
+
+- (void)setShouldReplaceMapContent:(BOOL)shouldReplaceMapContent
+{
+  _shouldReplaceMapContent = shouldReplaceMapContent;
+  if(self.tileOverlay) {
+    self.tileOverlay.canReplaceMapContent = _shouldReplaceMapContent;
+  }
+  [self update];
+}
+
+- (void)setMaximumZ:(NSUInteger)maximumZ
+{
+  _maximumZ = maximumZ;
+  if(self.tileOverlay) {
+    self.tileOverlay.maximumZ = _maximumZ;
+  }
+  [self update];
+}
+
+- (void)setMinimumZ:(NSUInteger)minimumZ
+{
+  _minimumZ = minimumZ;
+  if(self.tileOverlay) {
+    self.tileOverlay.minimumZ = _minimumZ;
+  }
+  [self update];
 }
 
 - (void)setUrlTemplate:(NSString *)urlTemplate{
@@ -21,12 +49,10 @@
     [self update];
 }
 
-- (void)setMaximumZ:(NSInteger)maximumZ
-{
-    _maximumZ = maximumZ;
-    if(self.tileOverlay) {
-        self.tileOverlay.maximumZ = maximumZ;
-    }
+- (void)setTileSize:(CGFloat)tileSize{
+    _tileSize = tileSize;
+    _tileSizeSet = YES;
+    [self createTileOverlayAndRendererIfPossible];
     [self update];
 }
 
@@ -48,23 +74,27 @@
     [self update];
 }
 
-
 - (void) createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
-    self.tileOverlay = [[AIRMapUrlTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
-    self.tileOverlay.canReplaceMapContent = YES;
-    
+    self.tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
+
+    self.tileOverlay.canReplaceMapContent = self.shouldReplaceMapContent;
+
+    if(self.minimumZ) {
+        self.tileOverlay.minimumZ = self.minimumZ;
+    }
+    if (self.maximumZ) {
+        self.tileOverlay.maximumZ = self.maximumZ;
+    }
+    if (_tileSizeSet) {
+        self.tileOverlay.tileSize = CGSizeMake(self.tileSize, self.tileSize);
+    }
     if (self.overzoomEnabled) {
         self.tileOverlay.overzoomEnabled = self.overzoomEnabled;
     }
-    
     if (self.overzoomThreshold) {
         self.tileOverlay.overzoomThreshold = self.overzoomThreshold;
-    }
-    
-    if (self.maximumZ) {
-        self.tileOverlay.maximumZ = self.maximumZ;
     }
     self.renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:self.tileOverlay];
 }

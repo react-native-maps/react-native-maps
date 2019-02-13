@@ -25,6 +25,7 @@ import DefaultMarkers from './examples/DefaultMarkers';
 import CustomMarkers from './examples/CustomMarkers';
 import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
+import MapBoundaries from './examples/MapBoundaries';
 import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 import FitToCoordinates from './examples/FitToCoordinates';
@@ -40,7 +41,10 @@ import MapKml from './examples/MapKml';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
+import AnimatedNavigation from './examples/AnimatedNavigation';
 import OnPoiClick from './examples/OnPoiClick';
+import IndoorMap from './examples/IndoorMap';
+import CameraControl from './examples/CameraControl';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -146,6 +150,7 @@ class App extends React.Component {
       [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
       [CachedMap, 'Cached Map'],
       [LoadingMap, 'Map with loading'],
+      [MapBoundaries, 'Get visible map boundaries', true],
       [FitToSuppliedMarkers, 'Focus Map On Markers', true],
       [FitToCoordinates, 'Fit Map To Coordinates', true],
       [LiteMapView, 'Android Lite MapView'],
@@ -159,7 +164,10 @@ class App extends React.Component {
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
       [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
+      [AnimatedNavigation, 'Animated Map Navigation', true],
       [OnPoiClick, 'On Poi Click', true],
+      [IndoorMap, 'Indoor Map', true],
+      [CameraControl, 'CameraControl', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
