@@ -100,7 +100,6 @@ public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
 
   @ReactProp(name = "lineDashPattern")
   public void setLineDashPattern(AirMapPolyline view, ReadableArray patternValues) {
-      Log.i("VANNA", "setLineDash " + patternValues);
       view.setLineDashPattern(patternValues);
   }
 
