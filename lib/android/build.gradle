@@ -4,6 +4,7 @@ apply from: 'gradle-maven-push.gradle'
 def DEFAULT_COMPILE_SDK_VERSION               = 27
 def DEFAULT_BUILD_TOOLS_VERSION               = "27.0.3"
 def DEFAULT_TARGET_SDK_VERSION                = 27
+def DEFAULT_ANDROID_SUPPORT_LIB_VERSION       = "27.0.2"
 def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION      = "16.0.1"
 def DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION = "16.0.0"
 def DEFAULT_ANDROID_MAPS_UTILS_VERSION        = "0.5+"
@@ -45,12 +46,14 @@ android {
 }
 
 dependencies {
+  def supportLibVersion = safeExtGet('supportLibVersion', DEFAULT_ANDROID_SUPPORT_LIB_VERSION)
   def googlePlayServicesVersion = safeExtGet('googlePlayServicesVersion', DEFAULT_GOOGLE_PLAY_SERVICES_VERSION)
   // Variable lookup order : googlePlayServicesMapsVersion > googlePlayServicesVersion > DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION
   def googlePlayServicesMapsVersion = safeExtGet('googlePlayServicesMapsVersion', safeExtGet('googlePlayServicesVersion', DEFAULT_GOOGLE_PLAY_SERVICES_MAPS_VERSION))
   def androidMapsUtilsVersion = safeExtGet('androidMapsUtilsVersion', DEFAULT_ANDROID_MAPS_UTILS_VERSION)
 
   compileOnly "com.facebook.react:react-native:+"
+  implementation "com.android.support:appcompat-v7:$supportLibVersion"
   implementation "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
   implementation "com.google.android.gms:play-services-maps:$googlePlayServicesMapsVersion"
   implementation "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
