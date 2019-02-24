@@ -254,6 +254,7 @@ declare module "react-native-maps" {
         title?: string;
         description?: string;
         image?: ImageURISource | ImageRequireSource;
+        icon?: ImageURISource | ImageRequireSource;
         opacity?: number;
         pinColor?: string;
         coordinate: LatLng | AnimatedRegion;
