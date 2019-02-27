@@ -23,6 +23,8 @@
 		1125B2F21C4AD445007D0023 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1125B2F11C4AD445007D0023 /* SMCalloutView.m */; };
 		19DABC7F1E7C9D3C00F41150 /* RCTConvert+AirMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 19DABC7E1E7C9D3C00F41150 /* RCTConvert+AirMap.m */; };
 		2163AA501FEAEDD100BBEC95 /* AIRMapPolylineRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2163AA4F1FEAEDD100BBEC95 /* AIRMapPolylineRenderer.m */; };
+		4C99C9DE2226CF2800A8693E /* AIRWeakTimerReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C99C9DD2226CF2800A8693E /* AIRWeakTimerReference.m */; };
+		4C99C9E12226D8C400A8693E /* AIRWeakMapReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C99C9E02226D8C400A8693E /* AIRWeakMapReference.m */; };
 		53D31636202E723B00B55447 /* AIRMapOverlayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D31635202E723B00B55447 /* AIRMapOverlayManager.m */; };
 		53D3163A202E72FC00B55447 /* AIRMapOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D31639202E72FC00B55447 /* AIRMapOverlay.m */; };
 		53D3163D202E734F00B55447 /* AIRMapOverlayRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D3163C202E734F00B55447 /* AIRMapOverlayRenderer.m */; };
@@ -99,6 +101,10 @@
 		19DABC7E1E7C9D3C00F41150 /* RCTConvert+AirMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+AirMap.m"; sourceTree = "<group>"; };
 		2163AA4E1FEAEDD100BBEC95 /* AIRMapPolylineRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRMapPolylineRenderer.h; sourceTree = "<group>"; };
 		2163AA4F1FEAEDD100BBEC95 /* AIRMapPolylineRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRMapPolylineRenderer.m; sourceTree = "<group>"; };
+		4C99C9DC2226CF2800A8693E /* AIRWeakTimerReference.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIRWeakTimerReference.h; sourceTree = "<group>"; };
+		4C99C9DD2226CF2800A8693E /* AIRWeakTimerReference.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRWeakTimerReference.m; sourceTree = "<group>"; };
+		4C99C9DF2226D8C400A8693E /* AIRWeakMapReference.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIRWeakMapReference.h; sourceTree = "<group>"; };
+		4C99C9E02226D8C400A8693E /* AIRWeakMapReference.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRWeakMapReference.m; sourceTree = "<group>"; };
 		53D31635202E723B00B55447 /* AIRMapOverlayManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRMapOverlayManager.m; sourceTree = "<group>"; };
 		53D31637202E725E00B55447 /* AIRMapOverlayManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIRMapOverlayManager.h; sourceTree = "<group>"; };
 		53D31638202E72D500B55447 /* AIRMapOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIRMapOverlay.h; sourceTree = "<group>"; };
@@ -236,6 +242,10 @@
 				53D31635202E723B00B55447 /* AIRMapOverlayManager.m */,
 				53D3163B202E732300B55447 /* AIRMapOverlayRenderer.h */,
 				53D3163C202E734F00B55447 /* AIRMapOverlayRenderer.m */,
+				4C99C9DC2226CF2800A8693E /* AIRWeakTimerReference.h */,
+				4C99C9DD2226CF2800A8693E /* AIRWeakTimerReference.m */,
+				4C99C9DF2226D8C400A8693E /* AIRWeakMapReference.h */,
+				4C99C9E02226D8C400A8693E /* AIRWeakMapReference.m */,
 			);
 			path = AirMaps;
 			sourceTree = "<group>";
@@ -346,6 +356,7 @@
 				62AEC4D41FD5A0AA003225E0 /* AIRMapLocalTileOverlay.m in Sources */,
 				9B9498DC2017EFB800158761 /* AIRGoogleMapPolygonManager.m in Sources */,
 				1125B2E31C4AD3DA007D0023 /* AIRMapPolygon.m in Sources */,
+				4C99C9DE2226CF2800A8693E /* AIRWeakTimerReference.m in Sources */,
 				1125B2E41C4AD3DA007D0023 /* AIRMapPolygonManager.m in Sources */,
 				9B9498CB2017EFB800158761 /* AIRGoogleMapURLTileManager.m in Sources */,
 				1125B2DB1C4AD3DA007D0023 /* AIRMapCallout.m in Sources */,
@@ -359,6 +370,7 @@
 				9B9498D72017EFB800158761 /* AIRGoogleMapManager.m in Sources */,
 				19DABC7F1E7C9D3C00F41150 /* RCTConvert+AirMap.m in Sources */,
 				1125B2E51C4AD3DA007D0023 /* AIRMapPolyline.m in Sources */,
+				4C99C9E12226D8C400A8693E /* AIRWeakMapReference.m in Sources */,
 				9B9498D52017EFB800158761 /* AIRGoogleMapPolyline.m in Sources */,
 				9B9498CF2017EFB800158761 /* AIRGMSPolyline.m in Sources */,
 				9B9498D42017EFB800158761 /* RCTConvert+GMSMapViewType.m in Sources */,
