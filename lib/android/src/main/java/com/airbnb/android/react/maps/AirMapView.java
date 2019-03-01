@@ -1110,7 +1110,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         options.title(title);
         options.snippet(snippet);
 
-        AirMapMarker marker = new AirMapMarker(context, options);
+        AirMapMarker marker = new AirMapMarker(context, options, this.manager.getMarkerManager());
 
         if (placemark.getInlineStyle() != null
             && placemark.getInlineStyle().getIconUrl() != null) {
