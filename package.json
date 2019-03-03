@@ -32,13 +32,15 @@
     "mapkit"
   ],
   "peerDependencies": {
+    "prop-types": "^15.0 || ^16.0",
     "react": ">= 16.0 || < 17.0",
-    "react-native": ">= 0.51",
-    "prop-types": "^15.0 || ^16.0"
+    "react-native": ">= 0.51"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
     "babel-eslint": "^6.1.2",
-    "babel-plugin-module-resolver": "^2.3.0",
+    "babel-plugin-module-resolver": "^3.2.0",
     "babel-preset-airbnb": "^1.1.1",
     "babel-preset-react-native": "1.9.0",
     "eslint": "^3.3.1",
@@ -49,9 +51,10 @@
     "eslint-plugin-react": "^6.1.2",
     "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
-    "prop-types": "^15.5.10",
-    "react": "^16.3.2",
-    "react-native": "^0.54"
+    "metro-react-native-babel-preset": "^0.53.1",
+    "prop-types": "^15.7.2",
+    "react": "16.8.3",
+    "react-native": "0.59.3"
   },
   "rnpm": {
     "android": {
