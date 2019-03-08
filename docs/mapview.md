@@ -82,7 +82,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `animateToBearing` | `bearing: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
 | `animateToViewingAngle` | `angle: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
 | `getMapBoundaries` | | `Promise<{northEast: LatLng, southWest: LatLng}>`
-| `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | `GoogleMaps only`
+| `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | The boundary is defined by the map's center coordinates, not the device's viewport itself. **Note:** Google Maps only.
 | `setIndoorActiveLevelIndex` | `levelIndex: Number` |
 | `fitToElements` | `animated: Boolean` |
 | `fitToSuppliedMarkers` | `markerIDs: String[], options: { edgePadding: EdgePadding, animated: Boolean }` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems.
