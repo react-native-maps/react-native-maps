@@ -97,6 +97,11 @@ public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
     view.setLineCap(cap);
   }
 
+  @ReactProp(name = "lineDashPattern")
+  public void setLineDashPattern(AirMapPolyline view, ReadableArray patternValues) {
+      view.setLineDashPattern(patternValues);
+  }
+
   @Override
   @Nullable
   public Map getExportedCustomDirectEventTypeConstants() {
