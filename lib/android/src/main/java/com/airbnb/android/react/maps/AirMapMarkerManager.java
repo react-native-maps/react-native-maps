@@ -96,14 +96,6 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
 //        view.setImage(image);
 //    }
 
-  @ReactProp(name = "pinColor", defaultInt = Color.RED, customType = "Color")
-  public void setPinColor(AirMapMarker view, int pinColor) {
-    float[] hsv = new float[3];
-    Color.colorToHSV(pinColor, hsv);
-    // NOTE: android only supports a hue
-    view.setMarkerHue(hsv[0]);
-  }
-
   @ReactProp(name = "rotation", defaultFloat = 0.0f)
   public void setMarkerRotation(AirMapMarker view, float rotation) {
     view.setRotation(rotation);
@@ -137,6 +129,40 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
   @ReactProp(name = "tracksViewChanges", defaultBoolean = true)
   public void setTracksViewChanges(AirMapMarker view, boolean tracksViewChanges) {
     view.setTracksViewChanges(tracksViewChanges);
+  }
+
+  @ReactProp(name = "pinColor", defaultInt = Color.RED, customType = "Color")
+  public void setPinColor(AirMapMarker view, int pinColor) {
+    float[] hsv = new float[3];
+    Color.colorToHSV(pinColor, hsv);
+    // NOTE: android only supports a hue
+    view.setMarkerHue(hsv[0]);
+    view.setMarkerColor(pinColor);
+  }
+
+  @ReactProp(name = "selected", defaultBoolean = false)
+  public void setSelected(AirMapMarker view, boolean selected) {
+    view.setSelected(selected);
+  }
+
+  @ReactProp(name = "innerIcon")
+  public void setInnerIcon(AirMapMarker view, @Nullable String source) {
+    view.setInnerIcon(source);
+  }
+
+  @ReactProp(name = "innerIconColor", defaultInt = Color.WHITE, customType = "Color")
+  public void setInnerIconColor(AirMapMarker view, @Nullable int innerIconColor) {
+    view.setInnerIconColor(innerIconColor);
+  }
+
+  @ReactProp(name = "text")
+  public void setText(AirMapMarker view, String text) {
+    view.setText(text);
+  }
+
+  @ReactProp(name = "textColor", defaultInt = Color.WHITE, customType = "Color")
+  public void setTextColor(AirMapMarker view, @Nullable int textColor) {
+    view.setTextColor(textColor);
   }
 
   @Override

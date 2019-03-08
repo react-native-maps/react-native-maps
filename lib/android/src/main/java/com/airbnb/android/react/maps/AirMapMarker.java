@@ -1,17 +1,30 @@
 package com.airbnb.android.react.maps;
 
+import java.net.URL;
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Rect;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
+import android.text.TextUtils;
+import android.text.TextPaint;
 import android.net.Uri;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.animation.ObjectAnimator;
 import android.util.Property;
+import android.util.Log;
+import android.util.DisplayMetrics;
 import android.animation.TypeEvaluator;
 
 import com.facebook.common.references.CloseableReference;
@@ -61,6 +74,12 @@ public class AirMapMarker extends AirMapFeature {
   private final Context context;
 
   private float markerHue = 0.0f; // should be between 0 and 360
+  private int markerColor = 0;
+  private boolean selected = false;
+  private Bitmap innerIcon;
+  private int innerIconColor = Color.WHITE;
+  private String text;
+  private int textColor = Color.WHITE;
   private BitmapDescriptor iconBitmapDescriptor;
   private Bitmap iconBitmap;
 
@@ -80,6 +99,22 @@ public class AirMapMarker extends AirMapFeature {
 
   private boolean hasCustomMarkerView = false;
 
+  private int markerWidth;
+  private int markerWidthSelected;
+  private int markerHeight;
+  private int markerHeightSelected;
+
+  private int innerIconWidth;
+  private int innerIconWidthSelected;
+  private int innerIconHeight;
+  private int innerIconHeightSelected;
+
+  private int innerIconYOffset;
+  private int innerIconYOffsetSelected;
+
+  private int textYOffset;
+  private int textYOffsetSelected;
+  
   private final DraweeHolder<?> logoHolder;
   private DataSource<CloseableReference<CloseableImage>> dataSource;
   private final ControllerListener<ImageInfo> mLogoControllerListener =
@@ -114,18 +149,83 @@ public class AirMapMarker extends AirMapFeature {
         }
       };
 
+  private final DraweeHolder<?> logoHolderInnerIcon;
+  private DataSource<CloseableReference<CloseableImage>> dataSourceInnerIcon;
+  private final ControllerListener<ImageInfo> mLogoControllerListenerInnerIcon =
+      new BaseControllerListener<ImageInfo>() {
+        @Override
+        public void onFinalImageSet(
+            String id,
+            @Nullable final ImageInfo imageInfo,
+            @Nullable Animatable animatable) {
+          CloseableReference<CloseableImage> imageReference = null;
+          try {
+            imageReference = dataSourceInnerIcon.getResult();
+            if (imageReference != null) {
+              CloseableImage image = imageReference.get();
+              if (image != null && image instanceof CloseableStaticBitmap) {
+                CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
+                Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
+                if (bitmap != null) {
+                  bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                  innerIcon = bitmap;
+                }
+              }
+            }
+          } finally {
+            dataSourceInnerIcon.close();
+            if (imageReference != null) {
+              CloseableReference.closeSafely(imageReference);
+            }
+          }
+          if (marker != null) {
+            marker.setIcon(getIcon());
+          }
+        }
+      };
+
+  private void InitializeAttributes() { 
+    this.markerWidth = convertDpToPixel(36, this.context);
+    this.markerWidthSelected = convertDpToPixel(66, this.context);
+    this.markerHeight = convertDpToPixel(40, this.context);
+    this.markerHeightSelected = convertDpToPixel(81, this.context);
+
+    this.innerIconWidth = convertDpToPixel(16, this.context);
+    this.innerIconWidthSelected = convertDpToPixel(28, this.context);
+    this.innerIconHeight = this.innerIconWidth;
+    this.innerIconHeightSelected = this.innerIconWidthSelected;
+
+    this.innerIconYOffset = convertDpToPixel(3, this.context);
+    this.innerIconYOffsetSelected = convertDpToPixel(7, this.context);
+
+    this.textYOffset = convertDpToPixel(-2, this.context);
+    this.textYOffsetSelected = convertDpToPixel(-7, this.context);
+  }
+
   public AirMapMarker(Context context) {
     super(context);
     this.context = context;
+
     logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
     logoHolder.onAttach();
+
+    logoHolderInnerIcon = DraweeHolder.create(createDraweeHierarchy(), context);
+    logoHolderInnerIcon.onAttach();
+    
+    InitializeAttributes();
   }
 
   public AirMapMarker(Context context, MarkerOptions options) {
     super(context);
     this.context = context;
+
     logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
     logoHolder.onAttach();
+
+    logoHolderInnerIcon = DraweeHolder.create(createDraweeHierarchy(), context);
+    logoHolderInnerIcon.onAttach();
+    
+    InitializeAttributes();
 
     position = options.getPosition();
     setAnchor(options.getAnchorU(), options.getAnchorV());
@@ -225,6 +325,83 @@ public class AirMapMarker extends AirMapFeature {
     update(false);
   }
 
+  public void setMarkerColor(int markerColor) {
+    this.markerColor = markerColor;
+    
+    if (marker != null) {
+      marker.setIcon(getIcon());
+    }
+  }
+
+  public void setSelected(boolean selected) {
+    this.selected = selected;
+
+    if (marker != null) {
+      marker.setIcon(getIcon());
+    }
+  }
+
+  public void setInnerIcon(String uri) {
+    hasViewChanges = true;
+
+    if (uri == null) {
+      if (marker != null) {
+        marker.setIcon(getIcon());
+      }
+    } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
+        uri.startsWith("file://") || uri.startsWith("asset://")) {
+          ImageRequest imageRequest = ImageRequestBuilder
+          .newBuilderWithSource(Uri.parse(uri))
+          .build();
+
+      ImagePipeline imagePipeline = Fresco.getImagePipeline();
+      dataSourceInnerIcon = imagePipeline.fetchDecodedImage(imageRequest, this);
+      DraweeController controller = Fresco.newDraweeControllerBuilder()
+          .setImageRequest(imageRequest)
+          .setControllerListener(mLogoControllerListenerInnerIcon)
+          .setOldController(logoHolderInnerIcon.getController())
+          .build();
+          logoHolderInnerIcon.setController(controller);
+    } else {
+        int drawableId = getDrawableResourceByName(uri);
+        innerIcon = BitmapFactory.decodeResource(getResources(), drawableId);
+        if (innerIcon == null) { // VectorDrawable or similar
+            Drawable drawable = getResources().getDrawable(drawableId);
+            innerIcon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            Canvas canvas = new Canvas(innerIcon);
+            drawable.draw(canvas);
+        }
+      if (marker != null) {
+        marker.setIcon(getIcon());
+      }
+    }
+  }
+
+  public void setInnerIconColor(int innerIconColor) {
+    this.innerIconColor = innerIconColor;
+    
+    if (marker != null) {
+      marker.setIcon(getIcon());
+    }
+  }
+
+  public void setText(String text) {
+    this.text = text;
+
+    if (marker != null) {
+      marker.setIcon(getIcon());
+    }
+  }
+
+  public void setTextColor(int textColor) {
+    this.textColor = textColor;
+    
+    if (marker != null) {
+      marker.setIcon(getIcon());
+    }
+  }
+
   public void setAnchor(double x, double y) {
     anchorIsSet = true;
     anchorX = (float) x;
@@ -321,7 +498,7 @@ public class AirMapMarker extends AirMapFeature {
       update(true);
     } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
         uri.startsWith("file://") || uri.startsWith("asset://")) {
-      ImageRequest imageRequest = ImageRequestBuilder
+          ImageRequest imageRequest = ImageRequestBuilder
           .newBuilderWithSource(Uri.parse(uri))
           .build();
 
@@ -402,6 +579,47 @@ public class AirMapMarker extends AirMapFeature {
     updateTracksViewChanges();
   }
 
+  private static Bitmap tintImage(Bitmap bitmap, int color) {
+    Paint paint = new Paint();
+    paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+    Bitmap bitmapResult = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmapResult);
+    canvas.drawBitmap(bitmap, 0, 0, paint);
+    return bitmapResult;
+  }
+
+  private static int convertDpToPixel(float dp, Context context) {
+    return (int) (dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+  }
+
+  private static void DrawText(Canvas canvas, String text, Context context, int color, int size, int yOffset) {
+    Typeface plain = Typeface.create(Typeface.createFromAsset(context.getAssets(), "Macho.otf"), Typeface.NORMAL); 
+    
+    TextPaint paint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+    paint.setTypeface(plain);
+    paint.setTextSize(convertDpToPixel(size, context));
+    paint.setColor(color);
+    
+    Rect r = new Rect();
+    canvas.getClipBounds(r);
+
+    int cWidth = r.width();
+    int cHeight = r.height();
+
+    paint.setTextAlign(Paint.Align.LEFT);
+    paint.getTextBounds(text, 0, text.length(), r);
+    float x = cWidth / 2f - r.width() / 2f - r.left;
+    float y = cHeight / 2f + r.height() / 2f - r.bottom;
+    canvas.drawText(text, x, y + yOffset, paint);
+  }
+
+  private static void DrawInnerIcon(Canvas canvas, Bitmap innerIcon, Context context, int color, int yOffset) {
+    Rect r = new Rect();
+    canvas.getClipBounds(r);
+
+    canvas.drawBitmap(tintImage(innerIcon, color), (r.width() - innerIcon.getWidth()) / 2, (r.height() - innerIcon.getHeight()) / 2 - yOffset, null);
+  }
+
   private BitmapDescriptor getIcon() {
     if (hasCustomMarkerView) {
       // creating a bitmap from an arbitrary view
@@ -421,8 +639,19 @@ public class AirMapMarker extends AirMapFeature {
       // use local image as a marker
       return iconBitmapDescriptor;
     } else {
-      // render the default marker pin
-      return BitmapDescriptorFactory.defaultMarker(this.markerHue);
+      // render the default Big City marker with color
+
+      Bitmap finalBitmap = Bitmap.createScaledBitmap(tintImage(BitmapFactory.decodeResource(this.context.getResources(), this.selected ? R.drawable.marker_selected : R.drawable.marker), this.markerColor), this.selected ? this.markerWidthSelected : this.markerWidth, this.selected ? this.markerHeightSelected : this.markerHeight, true);
+      Canvas canvas = new Canvas(finalBitmap);
+      
+      
+      if (this.innerIcon != null) {
+        DrawInnerIcon(canvas, Bitmap.createScaledBitmap(this.innerIcon, this.selected ? this.innerIconWidthSelected : this.innerIconWidth, this.selected ? this.innerIconHeightSelected : this.innerIconHeight, true), this.context, this.innerIconColor, this.selected ? this.innerIconYOffsetSelected : this.innerIconYOffset);
+      } else if (!TextUtils.isEmpty(this.text)) {
+        DrawText(canvas, this.text, this.context, this.textColor, this.selected ? 22 : 17, this.selected ? this.textYOffsetSelected : this.textYOffset);
+      }
+
+      return BitmapDescriptorFactory.fromBitmap(finalBitmap);
     }
   }
 
