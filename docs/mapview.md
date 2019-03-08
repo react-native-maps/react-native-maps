@@ -120,6 +120,13 @@ type Camera = {
 }
 ```
 
+Latitude and longitude are self explanatory while latitudeDelta and longitudeDelta may not.
+On the [developer.apple.com](https://developer.apple.com/reference/mapkit/mkcoordinatespan/1452417-latitudedelta) website this is how the "latitudeDelta" property is explained:
+
+> The amount of north-to-south distance (measured in degrees) to display on the map. Unlike longitudinal distances, which vary based on the latitude, one degree of latitude is always approximately 111 kilometers (69 miles).
+
+If this is not enough, you can find a [visual explanation on stackoverflow](https://stackoverflow.com/questions/36685372/how-to-zoom-in-out-in-react-native-map/36688156#36688156).
+
 Note that when using the `Camera`, MapKit on iOS and Google Maps differ in how the height is specified. For a cross-platform app, it is necessary
 to specify both the zoom level and the altitude separately.
 
