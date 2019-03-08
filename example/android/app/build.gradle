@@ -73,7 +73,6 @@ project.ext.react = [
     extraPackagerArgs: []
 ]
 
-
 apply from: "../../../node_modules/react-native/react.gradle"
 
 def enableSeparateBuildPerCPUArchitecture = false
@@ -84,13 +83,12 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "com.airbnb.android.react.maps.example"
-        minSdkVersion 16
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         ndk {
@@ -127,8 +125,7 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:0.51.+'
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support:support-annotations:25.3.0'
-    compile project(':react-native-maps-lib')
+    implementation project(":react-native-maps-lib")
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.facebook.react:react-native:+"  // From node_modules
 }
