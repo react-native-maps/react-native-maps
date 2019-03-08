@@ -6,7 +6,11 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Cap;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
@@ -26,6 +30,8 @@ public class AirMapPolyline extends AirMapFeature {
   private boolean geodesic;
   private float zIndex;
   private Cap lineCap = new RoundCap();
+  private ReadableArray patternValues;
+  private List<PatternItem> pattern;
 
   public AirMapPolyline(Context context) {
     super(context);
@@ -84,6 +90,38 @@ public class AirMapPolyline extends AirMapFeature {
       polyline.setStartCap(cap);
       polyline.setEndCap(cap);
     }
+    this.applyPattern();
+  }
+
+  public void setLineDashPattern(ReadableArray patternValues) {
+    this.patternValues = patternValues;
+    this.applyPattern();
+  }
+
+  private void applyPattern() {
+    if(patternValues == null) {
+      return;
+    }
+    this.pattern = new ArrayList<>(patternValues.size());
+    for (int i = 0; i < patternValues.size(); i++) {
+      float patternValue = (float) patternValues.getDouble(i);
+      boolean isGap = i % 2 != 0;
+      if(isGap) {
+        this.pattern.add(new Gap(patternValue));
+      }else {
+        PatternItem patternItem = null;
+        boolean isLineCapRound = this.lineCap instanceof RoundCap;
+        if(isLineCapRound) {
+          patternItem = new Dot();
+        }else {
+          patternItem = new Dash(patternValue);
+        }
+        this.pattern.add(patternItem);
+      }
+    }
+    if(polyline != null) {
+      polyline.setPattern(this.pattern);
+    }
   }
 
   public PolylineOptions getPolylineOptions() {
@@ -102,6 +140,7 @@ public class AirMapPolyline extends AirMapFeature {
     options.zIndex(zIndex);
     options.startCap(lineCap);
     options.endCap(lineCap);
+    options.pattern(this.pattern);
     return options;
   }
 
