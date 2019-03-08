@@ -30,8 +30,6 @@ AirMapsExplorer.xcworkspace/
 *.iml
 .gradle
 local.properties
-lib/android/src/main/gen
-example/android/app/src/main/gen
 
 # node.js
 #
