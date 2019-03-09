@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
-apply from: 'gradle-maven-push.gradle'
+if (project.hasProperty('POM_ARTIFACT_ID')) {
+  apply from: 'gradle-maven-push.gradle'
+}
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
