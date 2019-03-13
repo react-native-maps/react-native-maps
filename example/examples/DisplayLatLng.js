@@ -44,15 +44,15 @@ class DisplayLatLng extends React.Component {
   }
 
   animateRandomCoordinate() {
-    this.map.animateToCoordinate(this.randomCoordinate());
+    this.map.animateCamera({ center: this.randomCoordinate() });
   }
 
   animateToRandomBearing() {
-    this.map.animateToBearing(this.getRandomFloat(-360, 360));
+    this.map.animateCamera({ heading: this.getRandomFloat(-360, 360) });
   }
 
   animateToRandomViewingAngle() {
-    this.map.animateToViewingAngle(this.getRandomFloat(0, 90));
+    this.map.animateCamera({ pitch: this.getRandomFloat(0, 90) });
   }
 
   getRandomFloat(min, max) {
