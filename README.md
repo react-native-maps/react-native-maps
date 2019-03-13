@@ -178,8 +178,8 @@ import { UrlTile } from 'react-native-maps';
      */
     maximumZ={19}
     /**
-     * If using Google Maps, flipY allows tiles with inverted y coordinates
-     * (origin at bottom left of map) to be used
+     * flipY allows tiles with inverted y coordinates (origin at bottom left of map)
+     * to be used. Its default value is false.
      */
     flipY={false}
   />
