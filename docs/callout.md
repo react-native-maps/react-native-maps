@@ -14,11 +14,9 @@
 | `onPress` |  | Callback that is called when the user presses on the callout
 
 
-&NewLine;
 
 ---
 
-&NewLine;
 
 
 # `<CalloutSubview />` Component API
@@ -36,5 +34,5 @@ Put this component inside `<Callout />`.
 ## Notes
 Native press event has property `action`, which is:
 - `callout-press` (or `marker-overlay-press` for GoogleMaps on iOS) for press on `<Callout />`
-- `callout-inside-press` (or `marker-inside-overlay-press` for GoogleMaps on iOS) for press on `<CCalloutSubview />`
+- `callout-inside-press` (or `marker-inside-overlay-press` for GoogleMaps on iOS) for press on `<CalloutSubview />`
 

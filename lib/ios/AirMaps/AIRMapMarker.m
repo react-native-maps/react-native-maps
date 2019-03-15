@@ -208,25 +208,12 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         CGRect bubbleFrame = [self.calloutView convertRect:marker.map.calloutView.bounds toView:marker.map];
         CGPoint touchPointReal = [recognizer locationInView:self.calloutView];
         
-        // moved to [AIRMap hitTest:withEvent:]
-//        BOOL isInsideCallout = [self.calloutView isPointInside:touchPointReal];
-//        if (!isInsideCallout) {
-//            CGPoint touchPointMap = [recognizer locationInView:marker.map];
-//            AIRMapMarker* markerAtTapPoint = [self.map markerAtPoint:touchPointMap];
-//            if (markerAtTapPoint != nil) {
-//                [markerAtTapPoint showCalloutView];
-//            } else {
-//                [self.map.calloutView dismissCalloutAnimated:YES];
-//            }
-//            return;
-//        }
-        
-        UIView *calloutMaybe = [marker.map.calloutView hitTest:touchPoint withEvent:nil];
-        if (calloutMaybe) {
+        UIView *calloutView = [marker.map.calloutView hitTest:touchPoint withEvent:nil];
+        if (calloutView) {
             // the callout (or its subview) got clicked, not the marker
             UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
             AIRMapCalloutSubview* calloutSubview = nil;
-            UIView* tmp = calloutMaybe;
+            UIView* tmp = calloutView;
             while (tmp && tmp != win && tmp != self.calloutView && tmp != self.map) {
                 if ([tmp respondsToSelector:@selector(onPress)]) {
                     calloutSubview = (AIRMapCalloutSubview*) tmp;

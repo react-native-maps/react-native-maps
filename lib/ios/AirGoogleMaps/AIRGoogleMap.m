@@ -622,7 +622,7 @@ id regionAsJSON(MKCoordinateRegion region) {
         if([_origGestureRecognizersMeta objectForKey:grHash] != nil)
             continue; //already patched
         
-        //get orig targets
+        //get original handlers
         NSArray* origTargets = [gestureRecognizer valueForKey:@"targets"];
         NSMutableArray* origTargetsActions = [[NSMutableArray alloc] init];
         BOOL isZoomTapGesture = NO;
@@ -637,21 +637,21 @@ id regionAsJSON(MKCoordinateRegion region) {
             continue;
         }
         
-        //replace with ours
+        //replace with extendedMapGestureHandler
         for (NSDictionary* origTargetAction in origTargetsActions) {
             NSObject* target = [origTargetAction objectForKey:@"target"];
             NSString* actionString = [origTargetAction objectForKey:@"action"];
             SEL action = NSSelectorFromString(actionString);
             [gestureRecognizer removeTarget:target action:action];
         }
-        [gestureRecognizer addTarget:self action:@selector(ourMapGestureHandler:)];
+        [gestureRecognizer addTarget:self action:@selector(extendedMapGestureHandler:)];
         
         [_origGestureRecognizersMeta setObject:@{@"targets": origTargetsActions}
                                         forKey:grHash];
     }
 }
 
-- (id)ourMapGestureHandler:(UIGestureRecognizer*)gestureRecognizer {
+- (id)extendedMapGestureHandler:(UIGestureRecognizer*)gestureRecognizer {
     NSNumber* grHash = [NSNumber numberWithUnsignedInteger:gestureRecognizer.hash];
     UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
     NSObject* bubbleProvider = [self valueForKey:@"bubbleProvider"]; //GMSbubbleEntityProvider
