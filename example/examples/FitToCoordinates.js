@@ -35,6 +35,13 @@ const MARKERS = [
 const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
 
 class FitToCoordinates extends React.Component {
+  async logFrames() {
+    const visMarkersFrames = await this.map.getMarkersFrames(true);
+    console.log('Visible markers frames:', visMarkersFrames);
+    const allMarkersFrames = await this.map.getMarkersFrames();
+    console.log('All markers frames:', allMarkersFrames);
+  }
+
   fitPadding() {
     this.map.fitToCoordinates([MARKERS[2], MARKERS[3]], {
       edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
@@ -72,6 +79,7 @@ class FitToCoordinates extends React.Component {
           {MARKERS.map((marker, i) => (
             <Marker
               key={i}
+              identifier={`id${i}`}
               coordinate={marker}
             />
           ))}
@@ -94,6 +102,12 @@ class FitToCoordinates extends React.Component {
             style={[styles.bubble, styles.button]}
           >
             <Text>Fit All Markers</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.logFrames()}
+            style={[styles.bubble, styles.button]}
+          >
+            <Text>Log markers frames</Text>
           </TouchableOpacity>
         </View>
       </View>

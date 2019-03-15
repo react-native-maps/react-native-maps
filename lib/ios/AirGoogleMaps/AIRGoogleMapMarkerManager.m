@@ -72,6 +72,28 @@ RCT_EXPORT_METHOD(hideCallout:(nonnull NSNumber *)reactTag)
   }];
 }
 
+RCT_EXPORT_METHOD(redrawCallout:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRGoogleMapMarker class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            AIRGoogleMapMarker* marker = (AIRGoogleMapMarker *) view;
+            
+            [NSTimer scheduledTimerWithTimeInterval:0.0
+                                             target:[NSBlockOperation blockOperationWithBlock:^{
+                [marker hideCalloutView];
+                [marker showCalloutView];
+            }]
+                                           selector:@selector(main)
+                                           userInfo:nil
+                                            repeats:NO
+             ];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(redraw:(nonnull NSNumber *)reactTag)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
