@@ -26,6 +26,7 @@
 | `showsIndoors` | `Boolean` | `true` | A Boolean indicating whether indoor maps should be enabled.
 | `showsIndoorLevelPicker` | `Boolean` | `false` | A Boolean indicating whether indoor level picker should be enabled. **Note:** Google Maps only (either Android or iOS with `PROVIDER_GOOGLE`).
 | `zoomEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/zoom the map.
+| `zoomTapEnabled` | `Boolean` | `true` | If `false` the user won't be able to double tap to zoom the map. **Note:** But it will greatly decrease delay of tap gesture recognition. **Note:** Google Maps on iOS only
 | `zoomControlEnabled` | `Boolean` | `true` | If `false` the zoom control at the bottom right of the map won't be visible **Note:** Android only.
 | `minZoomLevel` | `Number` | `0` | Minimum zoom value for the map, must be between 0 and 20
 | `maxZoomLevel` | `Number` | `20` | Maximum zoom value for the map, must be between 0 and 20
@@ -89,6 +90,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
 | `pointForCoordinate` | `coordinate: LatLng` | Converts a map coordinate to a view coordinate (`Point`). Returns a `Promise<Point>`.
 | `coordinateForPoint` | `point: Point` | Converts a view coordinate (`Point`) to a map coordinate. Returns a `Promise<Coordinate>`.
+| `getMarkersFrames` | `onlyVisible: Boolean` | Get markers' centers and frames in view coordinates. Returns a `Promise<{ "markerID" : { point: Point, frame: Frame } }>`. **Note**: iOS only.
 
 
 
@@ -153,6 +155,15 @@ type Location {
 type Point {
   x: Number,
   y: Number,
+}
+```
+
+```
+type Frame {
+  x: Number,
+  y: Number,
+  width: Number,
+  height: Number,
 }
 ```
 
