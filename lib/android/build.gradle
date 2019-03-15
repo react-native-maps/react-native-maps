@@ -3,12 +3,16 @@ if (project.hasProperty('POM_ARTIFACT_ID')) {
   apply from: 'gradle-maven-push.gradle'
 }
 
+def safeExtGet(prop, fallback) {
+  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 android {
-  compileSdkVersion rootProject.ext.compileSdkVersion
+  compileSdkVersion safeExtGet('compileSdkVersion', 28)
 
   defaultConfig {
-    minSdkVersion rootProject.ext.minSdkVersion
-    targetSdkVersion rootProject.ext.targetSdkVersion
+    minSdkVersion safeExtGet('minSdkVersion', 16)
+    targetSdkVersion safeExtGet('targetSdkVersion', 27)
   }
 }
 
@@ -16,6 +20,7 @@ dependencies {
   compileOnly('com.facebook.react:react-native:+') {
     exclude group: 'com.android.support'
   }
+  implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', '28.0.0')}"
   implementation 'com.google.android.gms:play-services-base:16.1.0'
   implementation 'com.google.android.gms:play-services-maps:16.1.0'
   implementation 'com.google.maps.android:android-maps-utils:0.5'
