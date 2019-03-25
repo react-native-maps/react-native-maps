@@ -20,7 +20,7 @@
 | `showsMyLocationButton` | `Boolean` | `true` | If `false` hide the button to move map to the current user's location.
 | `showsPointsOfInterest` | `Boolean` | `true` | If `false` points of interest won't be displayed on the map.
 | `showsCompass` | `Boolean` | `true` | If `false` compass won't be displayed on the map.
-| `showsScale` | `Boolean` | `true` | A Boolean indicating whether the map shows scale information.
+| `showsScale` | `Boolean` | `true` | A Boolean indicating whether the map shows scale information. **Note**: Apple Maps only.
 | `showsBuildings` | `Boolean` | `true` | A Boolean indicating whether the map displays extruded building information.
 | `showsTraffic` | `Boolean` | `true` | A Boolean value indicating whether the map displays traffic information.
 | `showsIndoors` | `Boolean` | `true` | A Boolean indicating whether indoor maps should be enabled.
