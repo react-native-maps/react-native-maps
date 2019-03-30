@@ -24,7 +24,11 @@
     NSMutableArray<GMUWeightedLatLng *> *w = [NSMutableArray arrayWithCapacity:points.count];
     for (int i = 0; i < points.count; i++) {
         CLLocationCoordinate2D coord = [RCTConvert CLLocationCoordinate2D:points[i]];
-        [w addObject:[[GMUWeightedLatLng alloc] initWithCoordinate:coord intensity:1.0]];
+        float intensity = 1.0;
+        if (points[i][@"weight"] != nil) {
+            intensity = [RCTConvert float:points[i][@"weight"]];
+        }
+        [w addObject:[[GMUWeightedLatLng alloc] initWithCoordinate:coord intensity:intensity]];
     }
     _points = w;
     [self.heatmap setWeightedData:w];
