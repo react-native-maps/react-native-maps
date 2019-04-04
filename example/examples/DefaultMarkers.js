@@ -19,7 +19,12 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
 function randomColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    var ret = `${Math.floor(Math.random() * 16777215).toString(16)}`;
+    while (ret.length < 6) {
+        ret = '0' + ret;
+    }
+    ret = '#' + ret;
+    return ret;
 }
 
 class DefaultMarkers extends React.Component {
