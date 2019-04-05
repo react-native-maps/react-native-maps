@@ -59,7 +59,8 @@ function makeExampleMapper(useGoogleMaps) {
   return example => example;
 }
 
-class App extends React.Component {
+type Props = {};
+export default class App extends React.Component<Props> {
   constructor(props) {
     super(props);
 
@@ -206,5 +207,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default App;
