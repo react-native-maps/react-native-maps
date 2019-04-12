@@ -2,13 +2,13 @@
 ## 0.24.0 (April 11, 2019 )
 * Common: [#2740](https://github.com/react-native-community/react-native-maps/pull/2740) Fix deprecated UIManager usage when accessing component names
 * Common: [#2393](https://github.com/react-native-community/react-native-maps/pull/2393) add typings for pointForCoordinate & coordinateForPoint
-* Common: [#2732](https://github.com/react-native-community/react-native-maps/pull/2393) Implement ability to flip y coordinate for Google Map tiles.
-* Android: [#2765](https://github.com/react-native-community/react-native-maps/pull/2764) Allow setting of play-services version through ext
+* Common: [#2732](https://github.com/react-native-community/react-native-maps/pull/2732) Implement ability to flip y coordinate for Google Map tiles.
+* Android: [#2765](https://github.com/react-native-community/react-native-maps/pull/2765) Allow setting of play-services version through ext
 * Android: [#2702](https://github.com/react-native-community/react-native-maps/pull/2702) Enable RN projects to define the Android AppCompat Library version
 * Android: [#2720](https://github.com/react-native-community/react-native-maps/pull/2720) Fix Android dependencies and build errors
 * Android: [#2682](https://github.com/react-native-community/react-native-maps/pull/2682) Implement 'tappable' prop on polyline for Android
 * Android: [#2417](https://github.com/react-native-community/react-native-maps/pull/2417) Support for lineCap and lineDash pattern
-* Android: [#2727](https://github.com/react-native-community/react-native-maps/pull/2417) fix build: only apply mvn push gradle plugin if POM_ARTIFACT_ID is set
+* Android: [#2727](https://github.com/react-native-community/react-native-maps/pull/2427) fix build: only apply mvn push gradle plugin if POM_ARTIFACT_ID is set
 * iOS: [#2446](https://github.com/react-native-community/react-native-maps/pull/2446) fix iOS GoogleMaps camera always animate
 * iOS: [#2746](https://github.com/react-native-community/react-native-maps/pull/2746) onPanDrag support for iOS
 * iOS: [#2581](https://github.com/react-native-community/react-native-maps/pull/2581) Custom callout improvements 🎉
