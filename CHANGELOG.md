@@ -8,12 +8,12 @@
 * Android: [#2720](https://github.com/react-native-community/react-native-maps/pull/2720) Fix Android dependencies and build errors
 * Android: [#2682](https://github.com/react-native-community/react-native-maps/pull/2682) Implement 'tappable' prop on polyline for Android
 * Android: [#2417](https://github.com/react-native-community/react-native-maps/pull/2417) Support for lineCap and lineDash pattern
-* Android: [#2727](https://github.com/react-native-community/react-native-maps/pull/2427) fix build: only apply mvn push gradle plugin if POM_ARTIFACT_ID is set
+* Android: [#2727](https://github.com/react-native-community/react-native-maps/pull/2727) fix build: only apply mvn push gradle plugin if POM_ARTIFACT_ID is set
 * iOS: [#2446](https://github.com/react-native-community/react-native-maps/pull/2446) fix iOS GoogleMaps camera always animate
 * iOS: [#2746](https://github.com/react-native-community/react-native-maps/pull/2746) onPanDrag support for iOS
 * iOS: [#2581](https://github.com/react-native-community/react-native-maps/pull/2581) Custom callout improvements 🎉
 * iOS: [#2794](https://github.com/react-native-community/react-native-maps/pull/2794) Fix CalloutSubview on Apple maps
-* iOS: [#2716](https://github.com/react-native-community/react-native-maps/pull/2716) Fix Memory Leaks 
+* iOS: [#2716](https://github.com/react-native-community/react-native-maps/pull/2716) Fix Memory Leaks
 * Docs: [#2675](https://github.com/react-native-community/react-native-maps/pull/2675) [#2685](https://github.com/react-native-community/react-native-maps/pull/2685)  [#2707](https://github.com/react-native-community/react-native-maps/pull/2707) [#2704](https://github.com/react-native-community/react-native-maps/pull/2704)
 * Example: [#2792](https://github.com/react-native-community/react-native-maps/pull/2792) Upgrade Example to react-native to 0.59.3
 * TypeScript: [#2705](https://github.com/react-native-community/react-native-maps/pull/2705) Add Marker icon property introduced in [#2650](https://github.com/react-native-community/react-native-maps/pull/2650) to index.d.ts
