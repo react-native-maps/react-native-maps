@@ -566,25 +566,30 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
 
                       CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
 
-                      for (id <MKAnnotation> annotation in mapView.annotations) {
-                          CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
-
-                          MKAnnotationView* anView = [mapView viewForAnnotation: annotation];
-
-                          if (anView){
-                              pin = anView;
-                          }
-
-                          if (CGRectContainsPoint(rect, point)) {
-                              point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
-                              point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
-                              [pin.image drawAtPoint:point];
-                          }
-                      }
-
                       for (id <AIRMapSnapshot> overlay in mapView.overlays) {
                           if ([overlay respondsToSelector:@selector(drawToSnapshot:context:)]) {
                                   [overlay drawToSnapshot:snapshot context:UIGraphicsGetCurrentContext()];
+                          }
+                      }
+                      
+                      for (id <MKAnnotation> annotation in mapView.annotations) {
+                          CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
+                          
+                          MKAnnotationView* anView = [mapView viewForAnnotation: annotation];
+                          
+                          if (anView){
+                              pin = anView;
+                          }
+                          
+                          if (CGRectContainsPoint(rect, point)) {
+                              point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
+                              point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
+                              if (pin.image) {
+                                  [pin.image drawAtPoint:point];
+                              } else {
+                                  CGRect pinRect = CGRectMake(point.x, point.y, pin.bounds.size.width, pin.bounds.size.height);
+                                  [pin drawViewHierarchyInRect:pinRect afterScreenUpdates:NO];
+                              }
                           }
                       }
 
