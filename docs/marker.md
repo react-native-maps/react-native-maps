@@ -65,3 +65,16 @@ type Point {
   y: Number,
 }
 ```
+
+## Children Components
+
+Children components can be added within a Marker and rendered content will replace the marker symbol.  This is a way of creating custom markers and allowing use of native SVGs.
+
+Example:
+```
+<Marker ...>
+ <View style={{backgroundColor: "red", padding: 10}}>
+   <Text>SF</Text>
+ </View>
+</Marker>
+```
