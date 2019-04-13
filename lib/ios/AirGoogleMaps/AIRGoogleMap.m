@@ -277,6 +277,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (self.onMapReady) self.onMapReady(@{});
 }
 
+- (void)mapViewDidFinishTileRendering {
+  if (self.onMapLoaded) self.onMapLoaded(@{});
+}
+
 - (BOOL)didTapMarker:(GMSMarker *)marker {
   AIRGMSMarker *airMarker = (AIRGMSMarker *)marker;
 

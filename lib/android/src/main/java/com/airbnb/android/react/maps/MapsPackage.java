@@ -34,6 +34,7 @@ public class MapsPackage implements ReactPackage {
     AirMapCalloutManager calloutManager = new AirMapCalloutManager();
     AirMapMarkerManager annotationManager = new AirMapMarkerManager();
     AirMapPolylineManager polylineManager = new AirMapPolylineManager(reactContext);
+    AirMapGradientPolylineManager gradientPolylineManager = new AirMapGradientPolylineManager(reactContext);
     AirMapPolygonManager polygonManager = new AirMapPolygonManager(reactContext);
     AirMapCircleManager circleManager = new AirMapCircleManager(reactContext);
     AirMapManager mapManager = new AirMapManager(reactContext);
@@ -47,6 +48,7 @@ public class MapsPackage implements ReactPackage {
         calloutManager,
         annotationManager,
         polylineManager,
+        gradientPolylineManager,
         polygonManager,
         circleManager,
         mapManager,

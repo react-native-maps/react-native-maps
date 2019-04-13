@@ -1,9 +1,8 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
+import android.util.Log;
 
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -11,7 +10,7 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 import com.google.maps.android.heatmaps.Gradient;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AirMapHeatmap extends AirMapFeature {
@@ -30,6 +29,7 @@ public class AirMapHeatmap extends AirMapFeature {
     }
 
     public void setPoints(WeightedLatLng[] points) {
+        this.points = Arrays.asList(points);
         if (heatmapTileProvider != null) {
             heatmapTileProvider.setWeightedData(this.points);
         }
@@ -49,7 +49,7 @@ public class AirMapHeatmap extends AirMapFeature {
     }
     
     public void setOpacity(double opacity) {
-        this.opacity = Double(opacity);
+        this.opacity = new Double(opacity);
         if (heatmapTileProvider != null) {
             heatmapTileProvider.setOpacity(opacity);
         }
@@ -59,7 +59,7 @@ public class AirMapHeatmap extends AirMapFeature {
     }
 
     public void setRadius(int radius) {
-        this.radius = Integer(radius);
+        this.radius = new Integer(radius);
         if (heatmapTileProvider != null) {
             heatmapTileProvider.setRadius(radius);
         }
@@ -78,7 +78,8 @@ public class AirMapHeatmap extends AirMapFeature {
     private TileOverlayOptions createHeatmapOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         if (heatmapTileProvider == null) {
-            var builder = new HeatmapTileProvider.Builder().weightedData(this.points);
+            HeatmapTileProvider.Builder builder =
+                new HeatmapTileProvider.Builder().weightedData(this.points);
             if (radius != null) {
                 builder.radius(radius);
             }
@@ -101,6 +102,7 @@ public class AirMapHeatmap extends AirMapFeature {
 
     @Override
     public void addToMap(GoogleMap map) {
+        Log.d("AirMapHeatmap", "ADD TO MAP");
         heatmap = map.addTileOverlay(getHeatmapOptions());
     }
 

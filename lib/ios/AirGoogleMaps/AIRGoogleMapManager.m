@@ -526,6 +526,11 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
   [googleMapView didPrepareMap];
 }
 
+- (void)mapViewDidFinishTileRendering:(GMSMapView *)mapView {
+  AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
+  [googleMapView mapViewDidFinishTileRendering];
+}
+
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
   return [googleMapView didTapMarker:marker];
