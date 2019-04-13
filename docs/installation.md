@@ -81,7 +81,7 @@ target '_YOUR_PROJECT_TARGET_' do
 
   # react-native-maps dependencies
   pod 'react-native-maps', path: rn_maps_path
-  # pod 'react-native-google-maps', path: rn_maps_path  # Unomment this line if you want to support GoogleMaps on iOS
+  # pod 'react-native-google-maps', path: rn_maps_path  # Uncomment this line if you want to support GoogleMaps on iOS
   # pod 'GoogleMaps'  # Uncomment this line if you want to support GoogleMaps on iOS
   # pod 'Google-Maps-iOS-Utils' # Uncomment this line if you want to support GoogleMaps on iOS
 end
@@ -138,18 +138,32 @@ manually](https://developers.google.com/maps/documentation/ios-sdk/start). Then,
 `package.json` and replace the
 `REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL` with the relative path
 from your project root to the directory in which you installed the
-Google Maps frameworks:
+Google Maps frameworks. You might need to specify a recursive search path 
+by adding a `/**` at the end of the provided path (e.g. `"./node_modules/react-native-maps/enable-google-maps 'ios/my-frameworks/GoogleMaps/**'"
 
-```json
-{
-  "name": "your-app",
-  "scripts": {
-    "postinstall": "./node_modules/react-native-maps/enable-google-maps REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL"
-  }
-}
-```
+    ```json
+    {
+      "name": "your-app",
+      "scripts": {
+        "postinstall": "./node_modules/react-native-maps/enable-google-maps REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL"
+      }
+    }
+    ```
 
-Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
+    Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
+
+3. Import and add `{PROVIDER_GOOGLE}` to your JavaScript:
+    ```javascript
+      import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+      ...
+      
+      <MapView
+         provider={PROVIDER_GOOGLE}
+         style={styles.map}
+         ...
+      >
+      
+    ```
 
 ## Build configuration on Android
 
@@ -274,7 +288,7 @@ project from the URLs below:
 - [Google Maps SDK Android](https://console.developers.google.com/apis/library/maps-android-backend.googleapis.com/)
 - [Google Maps SDK iOS (if required)](https://console.developers.google.com/apis/library/maps-ios-backend.googleapis.com)
 
-For reference, you may read the relevant issue reports: ([#118](https://github.com/airbnb/react-native-maps/issues/118), [#176](https://github.com/airbnb/react-native-maps/issues/176), [#684](https://github.com/airbnb/react-native-maps/issues/684)).
+For reference, you may read the relevant issue reports: ([#118](https://github.com/react-native-community/react-native-maps/issues/118), [#176](https://github.com/react-native-community/react-native-maps/issues/176), [#684](https://github.com/react-native-community/react-native-maps/issues/684)).
 
 ### No map whatsoever
 
@@ -283,7 +297,7 @@ example is below:
 
 
 ```jsx
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 ...
 const styles = StyleSheet.create({
  container: {
@@ -301,6 +315,7 @@ const styles = StyleSheet.create({
 export default () => (
    <View style={styles.container}>
      <MapView
+       provider={PROVIDER_GOOGLE} // remove if not using Google Maps
        style={styles.map}
        region={{
          latitude: 37.78825,
@@ -398,3 +413,24 @@ import com.airbnb.android.react.maps.MapsPackage;
   are not supported by your device.`, you need to change the emulator
   CPU/ABI setting to a system image that includes Google APIs.  These may
   need to be downloaded from the Android SDK Manager first.
+  
+  
+  ### Google Play Services conflicting issues with other modules
+  
+  In case you have multiple modules using Google Play Services such as `react-native-onesignal`, Make sure to exclude all the Google Play Services dependencies from the modules and import all the Google Play Services dependencies for all the modules in the project-wide `build.gradle` file like the following example:
+  ```
+   implementation(project(':react-native-onesignal')){
+        exclude group: 'com.google.android.gms'
+    }
+    
+   implementation(project(':react-native-maps')){
+        exclude group: 'com.google.android.gms'
+    }
+    implementation 'com.google.android.gms:play-services-base:12.0.1'
+    implementation 'com.google.android.gms:play-services-basement:12.0.1'
+    implementation 'com.google.android.gms:play-services-location:12.0.1'
+    implementation 'com.google.android.gms:play-services-tasks:12.0.1'
+    implementation 'com.google.android.gms:play-services-maps:12.0.1'
+    
+    
+  ```

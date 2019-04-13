@@ -76,4 +76,16 @@ RCT_EXPORT_METHOD(hideCallout:(nonnull NSNumber *)reactTag)
     }];
 }
 
+RCT_EXPORT_METHOD(redrawCallout:(nonnull NSNumber *)reactTag)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMapMarker class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
+        } else {
+            //no need to do anything here
+        }
+    }];
+}
+
 @end
