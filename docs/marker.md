@@ -44,6 +44,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 |---|---|---|
 | `showCallout` |  | Shows the callout for this marker
 | `hideCallout` |  | Hides the callout for this marker
+| `redrawCallout` |  | Causes a redraw of the marker's callout. Useful for Google Maps on iOS. **Note**: iOS only.
 | `animateMarkerToCoordinate` | `coordinate: LatLng, duration: number` | Animates marker movement. **Note**: Android only
 | `redraw` |  | Causes a redraw of the marker. Useful when there are updates to the marker and `tracksViewChanges` comes with a cost that is too high.
 
@@ -63,4 +64,17 @@ type Point {
   x: Number,
   y: Number,
 }
+```
+
+## Children Components
+
+Children components can be added within a Marker and rendered content will replace the marker symbol.  This is a way of creating custom markers and allowing use of native SVGs.
+
+Example:
+```
+<Marker ...>
+ <View style={{backgroundColor: "red", padding: 10}}>
+   <Text>SF</Text>
+ </View>
+</Marker>
 ```

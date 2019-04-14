@@ -42,6 +42,7 @@ public class MapsPackage implements ReactPackage {
     AirMapWMSTileManager gsUrlTileManager = new AirMapWMSTileManager(reactContext);
     AirMapLocalTileManager localTileManager = new AirMapLocalTileManager(reactContext);
     AirMapOverlayManager overlayManager = new AirMapOverlayManager(reactContext);
+    mapManager.setMarkerManager(annotationManager);
 
     return Arrays.<ViewManager>asList(
         calloutManager,

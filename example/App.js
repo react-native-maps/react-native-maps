@@ -46,6 +46,7 @@ import AnimatedNavigation from './examples/AnimatedNavigation';
 import OnPoiClick from './examples/OnPoiClick';
 import IndoorMap from './examples/IndoorMap';
 import CameraControl from './examples/CameraControl';
+import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -60,7 +61,8 @@ function makeExampleMapper(useGoogleMaps) {
   return example => example;
 }
 
-class App extends React.Component {
+type Props = {};
+export default class App extends React.Component<Props> {
   constructor(props) {
     super(props);
 
@@ -170,6 +172,7 @@ class App extends React.Component {
       [OnPoiClick, 'On Poi Click', true],
       [IndoorMap, 'Indoor Map', true],
       [CameraControl, 'CameraControl', true],
+      [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
@@ -208,5 +211,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default App;

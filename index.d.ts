@@ -176,6 +176,7 @@ declare module "react-native-maps" {
         showsPointsOfInterest?: boolean;
         showsCompass?: boolean;
         zoomEnabled?: boolean;
+        zoomTapEnabled?: boolean;
         zoomControlEnabled?: boolean;
         rotateEnabled?: boolean;
         cacheEnabled?: boolean;
@@ -239,6 +240,8 @@ declare module "react-native-maps" {
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
         getMapBoundaries(): {northEast: LatLng; southWest: LatLng};
         takeSnapshot(options?: SnapshotOptions): Promise<string>;
+        pointForCoordinate(coordinate: LatLng): Promise<Point>;
+        coordinateForPoint(point: Point): Promise<LatLng>;
     }
 
     export class MapViewAnimated extends MapView {
@@ -254,6 +257,7 @@ declare module "react-native-maps" {
         title?: string;
         description?: string;
         image?: ImageURISource | ImageRequireSource;
+        icon?: ImageURISource | ImageRequireSource;
         opacity?: number;
         pinColor?: string;
         coordinate: LatLng | AnimatedRegion;
@@ -288,6 +292,11 @@ declare module "react-native-maps" {
          */
         hideCallout(): void;
         /**
+         * Redraws the callout for this marker
+         * __iOS only__
+         */
+        redrawCallout(): void;
+        /**
          * Animates marker movement.
          * __Android only__
          */
@@ -307,6 +316,17 @@ declare module "react-native-maps" {
     }
 
     export class Callout extends React.Component<MapCalloutProps, any> {
+    }
+
+    // =======================================================================
+    //  CalloutSubview
+    // =======================================================================
+
+    export interface MapCalloutSubviewProps extends ViewProperties {
+        onPress?: (event: MapEvent<{ action: 'callout-inside-press' }>) => void;
+    }
+
+    export class CalloutSubview extends React.Component<MapCalloutSubviewProps, any> {
     }
 
     // =======================================================================
