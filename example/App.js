@@ -165,7 +165,7 @@ export default class App extends React.Component<Props> {
       [LegalLabel, 'Reposition the legal label', true],
       [SetNativePropsOverlays, 'Update native props', true],
       [CustomOverlay, 'Custom Overlay Component', true],
-      [TestIdMarkers, 'Test ID for Automation', true]
+      [TestIdMarkers, 'Test ID for Automation', true],
       [MapKml, 'Load Map with KML', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
