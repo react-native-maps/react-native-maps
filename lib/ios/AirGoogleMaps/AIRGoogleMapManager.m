@@ -48,9 +48,11 @@ RCT_EXPORT_MODULE()
   AIRGoogleMap *map = [AIRGoogleMap new];
   map.bridge = self.bridge;
   map.delegate = self;
+  map.isAccessibilityElement = "YES";
+  map.accessibilityElementsHidden = "NO";
+  map.settings.consumesGesturesInView = NO;
   map.indoorDisplay.delegate = self;
   self.map = map;
-  map.settings.consumesGesturesInView = NO;
 
   UIPanGestureRecognizer *drag = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
   [drag setMinimumNumberOfTouches:1];
