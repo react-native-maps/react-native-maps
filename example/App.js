@@ -31,6 +31,7 @@ import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 import FitToCoordinates from './examples/FitToCoordinates';
 import LiteMapView from './examples/LiteMapView';
 import CustomTiles from './examples/CustomTiles';
+import WMSTiles from './examples/WMSTiles';
 import ZIndexMarkers from './examples/ZIndexMarkers';
 import StaticMap from './examples/StaticMap';
 import MapStyle from './examples/MapStyle';
@@ -157,6 +158,7 @@ export default class App extends React.Component<Props> {
       [FitToCoordinates, 'Fit Map To Coordinates', true],
       [LiteMapView, 'Android Lite MapView'],
       [CustomTiles, 'Custom Tiles', true],
+      [WMSTiles, 'WMS Tiles', true],
       [ZIndexMarkers, 'Position Markers with Z-index', true],
       [MapStyle, 'Customize the style of the map', true],
       [LegalLabel, 'Reposition the legal label', true],
