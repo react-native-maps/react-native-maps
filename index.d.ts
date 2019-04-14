@@ -423,6 +423,21 @@ declare module "react-native-maps" {
     }
 
     // =======================================================================
+    //  WMSTile
+    // =======================================================================
+
+    export interface MapWMSTileProps extends ViewProperties {
+        urlTemplate: string;
+        maximumZ?: number;
+        minimumZ?: number;
+        tileSize: number;
+        opacity: number;
+        zIndex?: number;
+    }
+
+    export class WMSTile extends React.Component<MapWMSTileProps, any> {
+    }
+    // =======================================================================
     //  Overlay
     // =======================================================================
 
