@@ -3,10 +3,10 @@
   "description": "React Native Mapview component for iOS + Android",
   "main": "index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
-  "version": "0.21.0",
+  "version": "0.24.0",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "run:packager": "./node_modules/react-native/packager/packager.sh",
+    "run:packager": "./node_modules/react-native/scripts/packager.sh",
     "run:ios": "react-native run-ios --project-path ./example/ios",
     "start:android": "adb shell am start -n com.airbnb.android.react.maps.example/.MainActivity",
     "run:android": "./gradlew installDebug && npm run start:android",
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/airbnb/react-native-maps"
+    "url": "https://github.com/react-native-community/react-native-maps"
   },
   "keywords": [
     "react",
@@ -32,13 +32,17 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": "^16.0",
-    "react-native": "^0.51 || ^0.52 || ^0.53 || ^0.54",
-    "prop-types": "^15.0 || ^16.0"
+    "prop-types": "^15.0 || ^16.0",
+    "react": ">= 16.0 || < 17.0",
+    "react-native": ">= 0.51"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
     "babel-eslint": "^6.1.2",
+    "babel-plugin-module-resolver": "^3.2.0",
     "babel-preset-airbnb": "^1.1.1",
+    "babel-preset-react-native": "1.9.0",
     "eslint": "^3.3.1",
     "eslint-config-airbnb": "^10.0.1",
     "eslint-plugin-import": "^1.14.0",
@@ -47,17 +51,14 @@
     "eslint-plugin-react": "^6.1.2",
     "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
-    "prop-types": "^15.5.10",
-    "react": "^16.3.0-alpha.1",
-    "react-native": "^0.54"
+    "metro-react-native-babel-preset": "^0.53.1",
+    "prop-types": "^15.7.2",
+    "react": "16.8.3",
+    "react-native": "0.59.3"
   },
   "rnpm": {
     "android": {
       "sourceDir": "./lib/android"
     }
-  },
-  "dependencies": {
-    "babel-plugin-module-resolver": "^2.3.0",
-    "babel-preset-react-native": "1.9.0"
   }
 }
