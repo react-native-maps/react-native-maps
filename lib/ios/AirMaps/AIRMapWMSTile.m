@@ -8,6 +8,7 @@
 
 #import "AIRMapWMSTile.h"
 #import <React/UIView+React.h>
+#import <EPSGBox/MXEPSGFactory.h>
 
 @implementation AIRMapWMSTile {
     BOOL _urlTemplateSet;
@@ -134,16 +135,7 @@
 }
 
 -(NSArray *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom{
-    double tile = FULL / pow(2.0, (double)zoom);
-    
-    NSArray *result  =[[NSArray alloc] initWithObjects:
-                       [NSNumber numberWithDouble:MapX + (double)x * tile ],
-                       [NSNumber numberWithDouble:MapY - (double)(y+1) * tile ],
-                       [NSNumber numberWithDouble:MapX + (double)(x+1) * tile ],
-                       [NSNumber numberWithDouble:MapY - (double)y * tile ],
-                       nil];
-    
-    return result;
-    
+    id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec:@"EPSG:900913"];
+    return [builder boundBoxForX:x Y:y Zoom:zoom ];
 }
 @end

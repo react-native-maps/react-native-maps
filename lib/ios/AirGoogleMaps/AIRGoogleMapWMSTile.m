@@ -9,6 +9,7 @@
 #ifdef HAVE_GOOGLE_MAPS
 
 #import "AIRGoogleMapWMSTile.h"
+#import <EPSGBox/MXEPSGFactory.h>
 
 @implementation AIRGoogleMapWMSTile
 
@@ -76,24 +77,13 @@
 -(id) init
 {
     self = [super init];
-    _MapX = -20037508.34789244;
-    _MapY = 20037508.34789244;
-    _FULL = 20037508.34789244 * 2;
     return self ;
 }
 
 -(NSArray *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom
 {
-    double tile = _FULL / pow(2.0, (double)zoom);
-    NSArray *result  =[[NSArray alloc] initWithObjects:
-                       [NSNumber numberWithDouble:_MapX + (double)x * tile ],
-                       [NSNumber numberWithDouble:_MapY - (double)(y+1) * tile ],
-                       [NSNumber numberWithDouble:_MapX + (double)(x+1) * tile ],
-                       [NSNumber numberWithDouble:_MapY - (double)y * tile ],
-                       nil];
-    
-    return result;
-    
+    id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec:@"EPSG:900913"];
+    return [builder boundBoxForX:x Y:y Zoom:zoom ];
 }
 
 - (UIImage *)tileForX:(NSUInteger)x y:(NSUInteger)y zoom:(NSUInteger)zoom

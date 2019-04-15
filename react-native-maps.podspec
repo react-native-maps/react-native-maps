@@ -16,4 +16,5 @@ Pod::Spec.new do |s|
   s.source_files  = "lib/ios/AirMaps/**/*.{h,m}"
 
   s.dependency 'React'
+  s.dependency 'EPSGBox'
 end

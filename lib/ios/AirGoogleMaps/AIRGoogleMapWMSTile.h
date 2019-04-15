@@ -12,7 +12,6 @@
 #import <GoogleMaps/GoogleMaps.h>
 
 @interface WMSTileOverlay : GMSSyncTileLayer
-@property (nonatomic) double MapX,MapY,FULL;
 @property (nonatomic, strong) NSString *template;
 @property (nonatomic, assign) NSInteger maximumZ;
 @property (nonatomic, assign) NSInteger minimumZ;
