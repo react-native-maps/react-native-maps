@@ -610,6 +610,7 @@ id regionAsJSON(MKCoordinateRegion region) {
             }
         }
     }
+    free(ivars);
     return action;
 }
 
