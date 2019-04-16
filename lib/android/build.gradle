@@ -24,4 +24,5 @@ dependencies {
   implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '16.1.0')}"
   implementation "com.google.android.gms:play-services-maps:${safeExtGet('playServicesVersion', '16.1.0')}"
   implementation 'com.google.maps.android:android-maps-utils:0.5'
+  implementation 'net.maxters:epsgbox:0.1.3'
 }

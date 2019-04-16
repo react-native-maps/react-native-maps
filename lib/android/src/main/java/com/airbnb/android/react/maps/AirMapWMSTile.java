@@ -6,21 +6,23 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.UrlTileProvider;
+import net.maxters.epsgbox.EPSGBoundBoxBuilder;
+import net.maxters.epsgbox.EPSGFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AirMapWMSTile extends AirMapFeature {
-  private static final double[] mapBound = {-20037508.34789244, 20037508.34789244};
-  private static final double FULL = 20037508.34789244 * 2;
 
     class AIRMapGSUrlTileProvider extends UrlTileProvider {
     private String urlTemplate;
+    private String epsgSpec;
     private int width;
     private int height;
-    public AIRMapGSUrlTileProvider(int width, int height, String urlTemplate) {
+    public AIRMapGSUrlTileProvider(int width, int height, String urlTemplate, String epsgSpec) {
       super(width, height);
       this.urlTemplate = urlTemplate;
+      this.epsgSpec = epsgSpec;
       this.width = width;
       this.height = height;
     }
@@ -34,34 +36,38 @@ public class AirMapWMSTile extends AirMapFeature {
           return null;
       }
       double[] bb = getBoundingBox(x, y, zoom);
-      String s = this.urlTemplate
-          .replace("{minX}", Double.toString(bb[0]))
-          .replace("{minY}", Double.toString(bb[1]))
-          .replace("{maxX}", Double.toString(bb[2]))
-          .replace("{maxY}", Double.toString(bb[3]))
-          .replace("{width}", Integer.toString(width))
-          .replace("{height}", Integer.toString(height));
-      URL url = null;
-      try {
-        url = new URL(s);
-      } catch (MalformedURLException e) {
-        throw new AssertionError(e);
+      if(bb!=null){
+        String s = this.urlTemplate
+                .replace("{minX}", Double.toString(bb[0]))
+                .replace("{minY}", Double.toString(bb[1]))
+                .replace("{maxX}", Double.toString(bb[2]))
+                .replace("{maxY}", Double.toString(bb[3]))
+                .replace("{width}", Integer.toString(width))
+                .replace("{height}", Integer.toString(height));
+        URL url = null;
+        try {
+          url = new URL(s);
+        } catch (MalformedURLException e) {
+          throw new AssertionError(e);
+        }
+        return url;
       }
-      return url;
+      return  null;
     }
 
     private double[] getBoundingBox(int x, int y, int zoom) {
-      double tile = FULL / Math.pow(2, zoom);
-      return new double[]{
-              mapBound[0] + x * tile,
-              mapBound[1] - (y + 1) * tile,
-              mapBound[0] + (x + 1) * tile,
-              mapBound[1] - y * tile
-      };
+      EPSGBoundBoxBuilder builder = EPSGFactory.get(this.epsgSpec);
+      if(builder!=null)
+        return builder.getBoundBoxFor(x,y,zoom);
+      return null;
     }
 
     public void setUrlTemplate(String urlTemplate) {
       this.urlTemplate = urlTemplate;
+    }
+
+    public void setEpsgSpec(String epsgSpec) {
+      this.epsgSpec = epsgSpec;
     }
   }
 
@@ -70,6 +76,7 @@ public class AirMapWMSTile extends AirMapFeature {
   private AIRMapGSUrlTileProvider tileProvider;
 
   private String urlTemplate;
+  private String epsgSpec;
   private float zIndex;
   private float maximumZ;
   private float minimumZ;
@@ -84,6 +91,16 @@ public class AirMapWMSTile extends AirMapFeature {
     this.urlTemplate = urlTemplate;
     if (tileProvider != null) {
       tileProvider.setUrlTemplate(urlTemplate);
+    }
+    if (tileOverlay != null) {
+      tileOverlay.clearTileCache();
+    }
+  }
+
+  public void setEpsgSpec(String epsgSpec) {
+    this.epsgSpec = epsgSpec;
+    if (tileProvider != null) {
+      tileProvider.setEpsgSpec(urlTemplate);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
@@ -134,7 +151,7 @@ public class AirMapWMSTile extends AirMapFeature {
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
     options.transparency(1-opacity);
-    this.tileProvider = new AIRMapGSUrlTileProvider(this.tileSize, this.tileSize, this.urlTemplate);
+    this.tileProvider = new AIRMapGSUrlTileProvider(this.tileSize, this.tileSize, this.urlTemplate, this.epsgSpec);
     options.tileProvider(this.tileProvider);
     return options;
   }

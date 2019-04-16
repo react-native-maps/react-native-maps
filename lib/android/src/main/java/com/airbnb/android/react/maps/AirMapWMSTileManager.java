@@ -40,6 +40,11 @@ public class AirMapWMSTileManager extends ViewGroupManager<AirMapWMSTile> {
     view.setUrlTemplate(urlTemplate);
   }
 
+  @ReactProp(name = "epsgSpec")
+  public void setEpsgSpec(AirMapWMSTile view, String epsgSpec) {
+    view.setEpsgSpec(epsgSpec);
+  }
+
   @ReactProp(name = "zIndex", defaultFloat = -1.0f)
   public void setZIndex(AirMapWMSTile view, float zIndex) {
     view.setZIndex(zIndex);
