@@ -25,8 +25,10 @@ import java.util.List;
 
 
 /**
- * Tile overlay used to display a colored polyline as a replacement for the non-existence of gradient
- * polylines for google maps
+ * Tile overlay used to display a colored polyline as a replacement for the
+ * non-existence of gradient polylines for google maps. Implementation borrowed
+ * from Dagothig/ColoredPolylineOverlay
+ * (https://gist.github.com/Dagothig/5f9cf0a4a7a42901a7b2)
  */
 public class AirMapGradientPolyline extends AirMapFeature {
   private List<LatLng> points;
@@ -174,7 +176,7 @@ public class AirMapGradientPolyline extends AirMapFeature {
       Matrix shaderMat = new Matrix();
       Paint gradientPaint = new Paint();
       gradientPaint.setStyle(Paint.Style.STROKE);
-      gradientPaint.setStrokeWidth(width * density);
+      gradientPaint.setStrokeWidth(width);
       gradientPaint.setStrokeCap(Paint.Cap.BUTT);
       gradientPaint.setStrokeJoin(Paint.Join.ROUND);
       gradientPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -184,7 +186,7 @@ public class AirMapGradientPolyline extends AirMapFeature {
 
       Paint colorPaint = new Paint();
       colorPaint.setStyle(Paint.Style.STROKE);
-      colorPaint.setStrokeWidth(3f * density);
+      colorPaint.setStrokeWidth(width);
       colorPaint.setStrokeCap(Paint.Cap.BUTT);
       colorPaint.setStrokeJoin(Paint.Join.ROUND);
       colorPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -217,7 +219,6 @@ public class AirMapGradientPolyline extends AirMapFeature {
       }
 
 
-      // Guard statement: if the trail is exactly 2 points long, just render a line from A to B at d(A, B) / t speed
       if (points.size() == 2) {
         pt1.set(projectedPts[0], scale, x, y, tileDimension);
         pt2.set(projectedPts[1], scale, x, y, tileDimension);
@@ -227,14 +228,6 @@ public class AirMapGradientPolyline extends AirMapFeature {
         return;
       }
 
-      // Because we want to be displaying speeds as color ratios, we need multiple points to do it properly:
-      // Since we use calculate the speed using the distance and the time, we need at least 2 points to calculate the distance;
-      // this means we know the speed for a segment, not a point.
-      // Furthermore, since we want to be easing the color changes between every segment, we have to use 3 points to do the easing;
-      // every line is split into two, and we ease over the corners
-      // This also means the first and last corners need to be extended to include the first and last points respectively
-      // Finally (you can see about that in getTile()) we need to offset the point projections based on the scale and x, y because
-      // weird display behaviour occurs
       for (int i = 2; i < points.size(); i++) {
         pt1.set(projectedPts[i - 2], scale, x, y, tileDimension);
         pt2.set(projectedPts[i - 1], scale, x, y, tileDimension);
@@ -244,10 +237,11 @@ public class AirMapGradientPolyline extends AirMapFeature {
         pt1mid2.set(projectedPtMids[i - 2], scale, x, y, tileDimension);
         pt2mid3.set(projectedPtMids[i - 1], scale, x, y, tileDimension);
 
-        // The speed is calculated in meters per second (same format as the speed clamps); because getTime() is in millis, we need to correct for that
-        float interp1 = (i - 2) / points.size();
-        float interp2 = (i - 1) / points.size();
+        float interp1 = ((float)i - 2) / points.size();
+        float interp2 = ((float)i - 1) / points.size();
         float interp1to2 = (interp1 + interp2) / 2;
+
+        Log.d("AirMapGradientPolyline", String.valueOf(interp1to2));
 
         // Circle for the corner (removes the weird empty corners that occur otherwise)
         colorPaint.setStyle(Paint.Style.FILL);
