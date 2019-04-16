@@ -8,7 +8,11 @@
 
 #import "AIRMapWMSTile.h"
 #import <React/UIView+React.h>
+#if __has_include(<EPSGBox/MXEPSGFactory.h>)
 #import <EPSGBox/MXEPSGFactory.h>
+#else
+#import "MXEPSGFactory.h"
+#endif
 
 @implementation AIRMapWMSTile {
     BOOL _urlTemplateSet;
@@ -49,6 +53,7 @@
     }
     [self update];
 }
+
 - (void)setUrlTemplate:(NSString *)urlTemplate{
     _urlTemplate = urlTemplate;
     _urlTemplateSet = YES;
@@ -56,12 +61,18 @@
     [self update];
 }
 
+- (void)setEpsgSpec:(NSString *) epsgSpec{
+    _epsgSpec = epsgSpec;
+    [self createTileOverlayAndRendererIfPossible];
+    [self update];
+}
+
 - (void) createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
-    self.tileOverlay  = [[TileOverlay alloc] initWithURLTemplate:self.urlTemplate];
+    self.tileOverlay  = [[TileOverlay alloc] initWithURLTemplate:self.urlTemplate Spec:self.epsgSpec];
     self.tileOverlay.canReplaceMapContent = self.shouldReplaceMapContent;
-
+    
     if(self.minimumZ) {
         self.tileOverlay.minimumZ = self.minimumZ;
     }
@@ -110,20 +121,16 @@
 @end
 
 @implementation TileOverlay
-@synthesize MapX;
-@synthesize MapY;
-@synthesize FULL;
 
--(id) initWithURLTemplate:(NSString *)URLTemplate {
+-(id) initWithURLTemplate:(NSString *)URLTemplate Spec:(NSString*) spec; {
     self = [super initWithURLTemplate:URLTemplate];
-    MapX = -20037508.34789244;
-    MapY = 20037508.34789244;
-    FULL = 20037508.34789244 * 2;
+    self.epsgSpec = spec;
     return self ;
 }
 
 -(NSURL *)URLForTilePath:(MKTileOverlayPath)path{
     NSArray *bb = [self getBoundBox:path.x yAxis:path.y zoom:path.z];
+    if(bb == NULL) return NULL;
     NSMutableString *url = [self.URLTemplate mutableCopy];
     [url replaceOccurrencesOfString: @"{minX}" withString:[NSString stringWithFormat:@"%@", bb[0]] options:0 range:NSMakeRange(0, url.length)];
     [url replaceOccurrencesOfString: @"{minY}" withString:[NSString stringWithFormat:@"%@", bb[1]] options:0 range:NSMakeRange(0, url.length)];
@@ -135,7 +142,9 @@
 }
 
 -(NSArray *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom{
-    id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec:@"EPSG:900913"];
-    return [builder boundBoxForX:x Y:y Zoom:zoom ];
+    id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec: self.epsgSpec];
+    if(builder)
+        return [builder boundBoxForX:x Y:y Zoom:zoom ];
+    return NULL;
 }
 @end

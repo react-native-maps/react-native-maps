@@ -9,7 +9,11 @@
 #ifdef HAVE_GOOGLE_MAPS
 
 #import "AIRGoogleMapWMSTile.h"
+#if __has_include(<EPSGBox/MXEPSGFactory.h>)
 #import <EPSGBox/MXEPSGFactory.h>
+#else
+#import "MXEPSGFactory.h"
+#endif
 
 @implementation AIRGoogleMapWMSTile
 
@@ -64,12 +68,21 @@
     _urlTemplate = urlTemplate;
     WMSTileOverlay *tile = [[WMSTileOverlay alloc] init];
     [tile setTemplate:urlTemplate];
+    [tile setEpsgSpec: _epsgSpec];
     [tile setMaximumZ:  _maximumZ];
     [tile setMinimumZ: _minimumZ];
     [tile setOpacity: _opacity];
     [tile setTileSize: _tileSize];
     [tile setZIndex: _zIndex];
     _tileLayer = tile;
+}
+- (void)setEpsgSpec:(NSString *)epsgSpec
+{
+    _epsgSpec = epsgSpec;
+    if(self.tileLayer) {
+        [self.tileLayer setEpsgSpec: _epsgSpec];
+        [self.tileLayer clearTileCache];
+    }
 }
 @end
 
@@ -82,7 +95,7 @@
 
 -(NSArray *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom
 {
-    id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec:@"EPSG:900913"];
+    id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec:self.epsgSpec];
     return [builder boundBoxForX:x Y:y Zoom:zoom ];
 }
 
