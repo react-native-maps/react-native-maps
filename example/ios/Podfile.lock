@@ -1,6 +1,7 @@
 PODS:
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
+  - EPSGBox (0.1.2)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -30,10 +31,12 @@ PODS:
   - React (0.59.3):
     - React/Core (= 0.59.3)
   - react-native-google-maps (0.24.0):
+    - EPSGBox
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.0.3)
     - React
   - react-native-maps (0.24.0):
+    - EPSGBox
     - React
   - React/Core (0.59.3):
     - yoga (= 0.59.3.React)
@@ -116,6 +119,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - boost-for-react-native
+    - EPSGBox
     - Google-Maps-iOS-Utils
     - GoogleMaps
 
@@ -138,6 +142,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
+  EPSGBox: 8c1c034ac97023f9446a71f7e726aa93de6a7326
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875

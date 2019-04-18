@@ -433,6 +433,7 @@ declare module "react-native-maps" {
         tileSize: number;
         opacity: number;
         zIndex?: number;
+        epsgSpec: "EPSG:900913" | "EPSG:4326" | string ;
     }
 
     export class WMSTile extends React.Component<MapWMSTileProps, any> {
