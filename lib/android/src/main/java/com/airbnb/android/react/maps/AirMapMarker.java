@@ -353,7 +353,7 @@ public class AirMapMarker extends AirMapFeature {
       iconBitmapDescriptor = null;
       update(true);
     } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
-        uri.startsWith("file://") || uri.startsWith("asset://")) {
+        uri.startsWith("file://") || uri.startsWith("asset://") || uri.startsWith("data:")) {
       ImageRequest imageRequest = ImageRequestBuilder
           .newBuilderWithSource(Uri.parse(uri))
           .build();
