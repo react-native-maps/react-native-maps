@@ -77,7 +77,7 @@
 - (void) createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
-    self.tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
+    self.tileOverlay = [[AIRMapUrlTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
 
     self.tileOverlay.canReplaceMapContent = self.shouldReplaceMapContent;
 
