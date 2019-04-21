@@ -120,6 +120,16 @@
     NSURL *uri =  [NSURL URLWithString:url];
     NSData *data = [NSData dataWithContentsOfURL:uri];
     UIImage *img = [[UIImage alloc] initWithData:data];
+    CGSize size = [img size];
+    UIGraphicsBeginImageContext(size);
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    [img drawInRect:rect blendMode:kCGBlendModeNormal alpha:1.0];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 0.0);
+    CGContextSetLineWidth(context, 5.0);
+    CGContextStrokeRect(context, rect);
+    img =  UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     return img;
 }
 
