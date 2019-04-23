@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
@@ -31,7 +30,6 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -49,7 +47,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.IndoorLevel;
 import com.google.maps.android.data.kml.KmlContainer;
@@ -81,6 +78,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private Integer loadingBackgroundColor = null;
   private Integer loadingIndicatorColor = null;
   private final int baseMapPadding = 50;
+
+  private int mapCenterOffsetY = 0;
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
@@ -252,6 +251,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
           return false;
         } else {
           marker.showInfoWindow();
+          LatLng centerTo = marker.getPosition();
+          if (Math.abs(view.mapCenterOffsetY) > 1) {
+            Point markerPoint = map.getProjection().toScreenLocation(centerTo);
+            markerPoint.offset(0, view.mapCenterOffsetY);
+            centerTo = map.getProjection().fromScreenLocation(markerPoint);
+          }
+          map.animateCamera(CameraUpdateFactory.newLatLng(centerTo), 250, null);
           return true;
         }
       }
@@ -533,6 +539,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         this.mapLoadingLayout.setBackgroundColor(this.loadingBackgroundColor);
       }
     }
+  }
+
+  public void setMapCenterOffsetY(float mapCenterOffsetY) {
+    this.mapCenterOffsetY = (int) mapCenterOffsetY;
   }
 
   public void setLoadingIndicatorColor(Integer loadingIndicatorColor) {

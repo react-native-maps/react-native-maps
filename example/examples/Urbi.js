@@ -74,6 +74,8 @@ class Urbi extends React.Component {
           initialRegion={this.state.region}
           onPress={this.onMapPress}
           onMapReady={this.onMapReady}
+          moveOnMarkerPress={false}
+          centerOffsetY={200}
         >
           {this.state.markers}
         </MapView>

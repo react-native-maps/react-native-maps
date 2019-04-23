@@ -187,6 +187,7 @@ declare module "react-native-maps" {
         pitchEnabled?: boolean;
         toolbarEnabled?: boolean;
         moveOnMarkerPress?: boolean;
+        centerOffsetY: number;
         showsScale?: boolean;
         showsBuildings?: boolean;
         showsTraffic?: boolean;

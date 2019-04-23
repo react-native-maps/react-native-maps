@@ -41,6 +41,9 @@ yarn-error.log
 # Bundle artifact
 *.jsbundle
 
+# VSCode
+#
 .project
 .settings
 .classpath
+.vscode/
