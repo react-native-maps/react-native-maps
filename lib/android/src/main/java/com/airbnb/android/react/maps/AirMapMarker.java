@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 public class AirMapMarker extends AirMapFeature {
 
   private MarkerOptions markerOptions;
+
   private Marker marker;
   private int width;
   private int height;
@@ -63,6 +64,8 @@ public class AirMapMarker extends AirMapFeature {
   private float markerHue = 0.0f; // should be between 0 and 360
   private BitmapDescriptor iconBitmapDescriptor;
   private Bitmap iconBitmap;
+  private BitmapDescriptor originalBitmapDescriptor;
+  private Bitmap originalIconBitmap;
 
   private float rotation = 0.0f;
   private boolean flat = false;
@@ -389,6 +392,10 @@ public class AirMapMarker extends AirMapFeature {
   public void setIconBitmapDescriptor(BitmapDescriptor bitmapDescriptor, Bitmap bitmap) {
     this.iconBitmapDescriptor = bitmapDescriptor;
     this.iconBitmap = bitmap;
+    if (this.originalBitmapDescriptor == null) {
+      this.originalBitmapDescriptor = bitmapDescriptor;
+      this.originalIconBitmap = bitmap;
+    }
     this.hasViewChanges = true;
     this.update(true);
   }
@@ -443,6 +450,13 @@ public class AirMapMarker extends AirMapFeature {
     updateTracksViewChanges();
   }
 
+  public void addToMap(GoogleMap map, int zIndex) {
+    MarkerOptions options = getMarkerOptions();
+    options.zIndex(zIndex);
+    marker = map.addMarker(options);
+    updateTracksViewChanges();
+  }
+
   @Override
   public void removeFromMap(GoogleMap map) {
     marker.remove();
@@ -472,6 +486,22 @@ public class AirMapMarker extends AirMapFeature {
       // render the default marker pin
       return BitmapDescriptorFactory.defaultMarker(this.markerHue);
     }
+  }
+
+  public Bitmap getIconBitmap() {
+    return iconBitmap;
+  }
+
+  public BitmapDescriptor getOriginalBitmapDescriptor() {
+    return originalBitmapDescriptor;
+  }
+
+  public Bitmap getOriginalIconBitmap() {
+    return originalIconBitmap;
+  }
+
+  public Marker getMarker() {
+    return marker;
   }
 
   private MarkerOptions fillMarkerOptions(MarkerOptions options) {

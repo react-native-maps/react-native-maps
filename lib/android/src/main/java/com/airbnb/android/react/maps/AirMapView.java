@@ -106,6 +106,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean destroyed = false;
   private final ThemedReactContext context;
   private final EventDispatcher eventDispatcher;
+  private AirMapMarker selectedMarker;
 
   private ViewAttacherGroup attacherGroup;
 
@@ -191,6 +192,24 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     addView(attacherGroup);
   }
 
+  private void rescaleIcon(AirMapMarker airMapMarker, double scaleFactor) {
+    airMapMarker.getMarker().remove();
+    markerMap.remove(airMapMarker.getMarker());
+    Bitmap b = airMapMarker.getIconBitmap();
+    Bitmap scaled = Bitmap.createScaledBitmap(b, (int) (b.getWidth() * scaleFactor), (int) (b.getHeight() * scaleFactor), false);
+    airMapMarker.setIconBitmapDescriptor(BitmapDescriptorFactory.fromBitmap(scaled), scaled);
+    airMapMarker.addToMap(map, 10);
+    markerMap.put(airMapMarker.getMarker(), airMapMarker);
+  }
+
+  private void resetIcon(AirMapMarker airMapMarker) {
+    airMapMarker.getMarker().remove();
+    markerMap.remove(airMapMarker.getMarker());
+    airMapMarker.setIconBitmapDescriptor(airMapMarker.getOriginalBitmapDescriptor(), airMapMarker.getOriginalIconBitmap());
+    airMapMarker.addToMap(map);
+    markerMap.put(airMapMarker.getMarker(), airMapMarker);
+  }
+
   @Override
   public void onMapReady(final GoogleMap map) {
     if (destroyed) {
@@ -244,6 +263,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         event.putString("id", airMapMarker.getIdentifier());
         manager.pushEvent(context, airMapMarker, "onPress", event);
 
+        if (selectedMarker != null) {
+            resetIcon(selectedMarker);
+        }
+        rescaleIcon(airMapMarker, 1.2);
+        selectedMarker = airMapMarker;
+
         // Return false to open the callout info window and center on the marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
         // .OnMarkerClickListener
@@ -252,11 +277,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         } else {
           marker.showInfoWindow();
           LatLng centerTo = marker.getPosition();
+
           if (Math.abs(view.mapCenterOffsetY) > 1) {
             Point markerPoint = map.getProjection().toScreenLocation(centerTo);
             markerPoint.offset(0, view.mapCenterOffsetY);
             centerTo = map.getProjection().fromScreenLocation(markerPoint);
           }
+
           map.animateCamera(CameraUpdateFactory.newLatLng(centerTo), 250, null);
           return true;
         }
@@ -308,6 +335,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         WritableMap event = makeClickEventData(point);
         event.putString("action", "press");
         manager.pushEvent(context, view, "onPress", event);
+        if (selectedMarker != null) {
+          resetIcon(selectedMarker);
+          selectedMarker = null;
+        }
       }
     });
 
@@ -582,31 +613,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     // Our desired API is to pass up annotations/overlays as children to the mapview component.
     // This is where we intercept them and do the appropriate underlying mapview action.
     if (child instanceof AirMapMarker) {
-      AirMapMarker annotation = (AirMapMarker) child;
-      annotation.addToMap(map);
-      features.add(index, annotation);
-
-      // Allow visibility event to be triggered later
-      int visibility = annotation.getVisibility();
-      annotation.setVisibility(INVISIBLE);
-
-      // Remove from a view group if already present, prevent "specified child
-      // already had a parent" error.
-      ViewGroup annotationParent = (ViewGroup)annotation.getParent();
-      if (annotationParent != null) {
-        annotationParent.removeView(annotation);
-      }
-
-      // Add to the parent group
-      attacherGroup.addView(annotation);
-
-      // Trigger visibility event if necessary.
-      // With some testing, seems like it is not always
-      //   triggered just by being added to a parent view.
-      annotation.setVisibility(visibility);
-
-      Marker marker = (Marker) annotation.getFeature();
-      markerMap.put(marker, annotation);
+      addMarker((AirMapMarker) child, index);
     } else if (child instanceof AirMapPolyline) {
       AirMapPolyline polylineView = (AirMapPolyline) child;
       polylineView.addToMap(map);
@@ -647,6 +654,34 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     } else {
       addView(child, index);
     }
+  }
+
+  private void addMarker(AirMapMarker annotation, int index) {
+
+    annotation.addToMap(map);
+    features.add(index, annotation);
+
+    // Allow visibility event to be triggered later
+    int visibility = annotation.getVisibility();
+    annotation.setVisibility(INVISIBLE);
+
+    // Remove from a view group if already present, prevent "specified child
+    // already had a parent" error.
+    ViewGroup annotationParent = (ViewGroup)annotation.getParent();
+    if (annotationParent != null) {
+      annotationParent.removeView(annotation);
+    }
+
+    // Add to the parent group
+    attacherGroup.addView(annotation);
+
+    // Trigger visibility event if necessary.
+    // With some testing, seems like it is not always
+    //   triggered just by being added to a parent view.
+    annotation.setVisibility(visibility);
+
+    Marker marker = (Marker) annotation.getFeature();
+    markerMap.put(marker, annotation);
   }
 
   public int getFeatureCount() {
