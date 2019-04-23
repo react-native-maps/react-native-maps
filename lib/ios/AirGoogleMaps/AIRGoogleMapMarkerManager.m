@@ -25,8 +25,8 @@ RCT_EXPORT_MODULE()
 //  tapGestureRecognizer.cancelsTouchesInView = NO;
 //  [marker addGestureRecognizer:tapGestureRecognizer];
   marker.bridge = self.bridge;
-  marker.isAccessibilityElement = "YES";
-  marker.accessibilityElementsHidden = "NO";
+  marker.isAccessibilityElement = YES;
+  marker.accessibilityElementsHidden = NO;
   return marker;
 }
 
