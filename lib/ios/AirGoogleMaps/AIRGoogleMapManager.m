@@ -48,8 +48,8 @@ RCT_EXPORT_MODULE()
   AIRGoogleMap *map = [AIRGoogleMap new];
   map.bridge = self.bridge;
   map.delegate = self;
-  map.isAccessibilityElement = "YES";
-  map.accessibilityElementsHidden = "NO";
+  map.isAccessibilityElement = YES;
+  map.accessibilityElementsHidden = NO;
   map.settings.consumesGesturesInView = NO;
   map.indoorDisplay.delegate = self;
   self.map = map;
