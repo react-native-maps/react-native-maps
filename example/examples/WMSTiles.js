@@ -11,9 +11,9 @@ import MapView, { MAP_TYPES, ProviderPropType, WMSTile } from 'react-native-maps
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 40.71095;
-const LONGITUDE = -74.00997;
-const LATITUDE_DELTA = 0.0152;
+const LATITUDE = 44.59;
+const LONGITUDE = -69.6210;
+const LATITUDE_DELTA = 2.0152;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class WMSTiles extends React.Component {
@@ -41,9 +41,9 @@ class WMSTiles extends React.Component {
           initialRegion={region}
         >
           <WMSTile
-            urlTemplate={'https://demo.geo-solutions.it/geoserver/tiger/wms?service=WMS&version=1.1.0&request=GetMap&layers=tiger:poi&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:4326&format=image/png&transparent=true&format_options=dpi:213'}
+            urlTemplate={'https://maps-public.geo.nyu.edu/geoserver/sdr/wms?service=WMS&version=1.1.0&request=GetMap&layers=sdr:nyu_2451_36011&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:4326&format=image/png&transparent=true&format_options=dpi:213'}
             zIndex={1}
-            opacity={0.5}
+            opacity={1}
             tileSize={512}
             epsgSpec={'EPSG:4326'}
           />
