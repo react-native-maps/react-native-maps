@@ -238,7 +238,7 @@ declare module "react-native-maps" {
         fitToSuppliedMarkers(markers: string[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         fitToCoordinates(coordinates?: LatLng[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
-        getMapBoundaries(): {northEast: LatLng; southWest: LatLng};
+        getMapBoundaries(): Promise<{northEast: LatLng; southWest: LatLng}>;
         takeSnapshot(options?: SnapshotOptions): Promise<string>;
         pointForCoordinate(coordinate: LatLng): Promise<Point>;
         coordinateForPoint(point: Point): Promise<LatLng>;
