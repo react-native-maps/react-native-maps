@@ -40,3 +40,7 @@ yarn-error.log
 
 # Bundle artifact
 *.jsbundle
+
+.project
+.settings
+.classpath
