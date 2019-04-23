@@ -11,6 +11,7 @@ import net.maxters.epsgbox.EPSGFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 
 public class AirMapWMSTile extends AirMapFeature {
 
@@ -38,10 +39,10 @@ public class AirMapWMSTile extends AirMapFeature {
       double[] bb = getBoundingBox(x, y, zoom);
       if(bb!=null){
         String s = this.urlTemplate
-                .replace("{minX}", Double.toString(bb[0]))
-                .replace("{minY}", Double.toString(bb[1]))
-                .replace("{maxX}", Double.toString(bb[2]))
-                .replace("{maxY}", Double.toString(bb[3]))
+                .replace("{minX}", String.format(Locale.US, "%.10f", bb[0]))
+                .replace("{minY}", String.format(Locale.US, "%.10f", bb[1]))
+                .replace("{maxX}", String.format(Locale.US, "%.10f", bb[2]))
+                .replace("{maxY}", String.format(Locale.US, "%.10f", bb[3]))
                 .replace("{width}", Integer.toString(width))
                 .replace("{height}", Integer.toString(height));
         URL url = null;

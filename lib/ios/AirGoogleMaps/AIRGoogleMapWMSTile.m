@@ -93,7 +93,7 @@
     return self ;
 }
 
--(NSArray *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom
+-(NSArray<NSNumber*> *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom
 {
     id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec:self.epsgSpec];
     return [builder boundBoxForX:x Y:y Zoom:zoom ];
@@ -109,12 +109,13 @@
     if(minimumZ && (long)zoom < (long)minimumZ) {
         return nil;
     }
-    NSArray *bb = [self getBoundBox:x yAxis:y zoom:zoom];
+    NSArray<NSNumber*> *bb = [self getBoundBox:x yAxis:y zoom:zoom];
     NSMutableString *url = [self.template mutableCopy];
-    [url replaceOccurrencesOfString: @"{minX}" withString:[NSString stringWithFormat:@"%@", bb[0]] options:0 range:NSMakeRange(0, url.length)];
-    [url replaceOccurrencesOfString: @"{minY}" withString:[NSString stringWithFormat:@"%@", bb[1]] options:0 range:NSMakeRange(0, url.length)];
-    [url replaceOccurrencesOfString: @"{maxX}" withString:[NSString stringWithFormat:@"%@", bb[2]] options:0 range:NSMakeRange(0, url.length)];
-    [url replaceOccurrencesOfString: @"{maxY}" withString:[NSString stringWithFormat:@"%@", bb[3]] options:0 range:NSMakeRange(0, url.length)];
+    NSString *format = @"%.10f";
+    [url replaceOccurrencesOfString: @"{minX}" withString:[NSString stringWithFormat:format, [bb[0] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
+    [url replaceOccurrencesOfString: @"{minY}" withString:[NSString stringWithFormat:format, [bb[1] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
+    [url replaceOccurrencesOfString: @"{maxX}" withString:[NSString stringWithFormat:format, [bb[2] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
+    [url replaceOccurrencesOfString: @"{maxY}" withString:[NSString stringWithFormat:format, [bb[3] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
     [url replaceOccurrencesOfString: @"{width}" withString:[NSString stringWithFormat:@"%d", (int)self.tileSize] options:0 range:NSMakeRange(0, url.length)];
     [url replaceOccurrencesOfString: @"{height}" withString:[NSString stringWithFormat:@"%d", (int)self.tileSize] options:0 range:NSMakeRange(0, url.length)];
     NSURL *uri =  [NSURL URLWithString:url];

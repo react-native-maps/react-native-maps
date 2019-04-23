@@ -129,19 +129,20 @@
 }
 
 -(NSURL *)URLForTilePath:(MKTileOverlayPath)path{
-    NSArray *bb = [self getBoundBox:path.x yAxis:path.y zoom:path.z];
+    NSArray<NSNumber*> *bb = [self getBoundBox:path.x yAxis:path.y zoom:path.z];
     if(bb == NULL) return NULL;
     NSMutableString *url = [self.URLTemplate mutableCopy];
-    [url replaceOccurrencesOfString: @"{minX}" withString:[NSString stringWithFormat:@"%@", bb[0]] options:0 range:NSMakeRange(0, url.length)];
-    [url replaceOccurrencesOfString: @"{minY}" withString:[NSString stringWithFormat:@"%@", bb[1]] options:0 range:NSMakeRange(0, url.length)];
-    [url replaceOccurrencesOfString: @"{maxX}" withString:[NSString stringWithFormat:@"%@", bb[2]] options:0 range:NSMakeRange(0, url.length)];
-    [url replaceOccurrencesOfString: @"{maxY}" withString:[NSString stringWithFormat:@"%@", bb[3]] options:0 range:NSMakeRange(0, url.length)];
+    NSString *format = @"%.10f";
+    [url replaceOccurrencesOfString: @"{minX}" withString:[NSString stringWithFormat:format, [bb[0] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
+    [url replaceOccurrencesOfString: @"{minY}" withString:[NSString stringWithFormat:format, [bb[1] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
+    [url replaceOccurrencesOfString: @"{maxX}" withString:[NSString stringWithFormat:format, [bb[2] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
+    [url replaceOccurrencesOfString: @"{maxY}" withString:[NSString stringWithFormat:format, [bb[3] doubleValue]] options:0 range:NSMakeRange(0, url.length)];
     [url replaceOccurrencesOfString: @"{width}" withString:[NSString stringWithFormat:@"%d", (int)self.tileSize.width] options:0 range:NSMakeRange(0, url.length)];
     [url replaceOccurrencesOfString: @"{height}" withString:[NSString stringWithFormat:@"%d", (int)self.tileSize.height] options:0 range:NSMakeRange(0, url.length)];
     return [NSURL URLWithString:url];
 }
 
--(NSArray *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom{
+-(NSArray<NSNumber*> *)getBoundBox:(NSInteger)x yAxis:(NSInteger)y zoom:(NSInteger)zoom{
     id<MXEPSGBoundBoxBuilder> builder = [MXEPSGFactory forSpec: self.epsgSpec];
     if(builder)
         return [builder boundBoxForX:x Y:y Zoom:zoom ];
