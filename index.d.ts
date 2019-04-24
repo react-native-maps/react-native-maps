@@ -231,7 +231,7 @@ declare module "react-native-maps" {
         onRegionChange?: (region: Region) => void;
         onRegionChangeComplete?: (region: Region) => void;
         onCityChange?: (value: CityChangeEvent) => void;
-        onPress?: (event: MapEvent) => void;
+        onPress?: (event: MapEvent<{ action: string }>) => void;
         onLongPress?: (event: MapEvent) => void;
         onUserLocationChange?: (event: EventUserLocation) => void;
         onPanDrag?: (event: MapEvent) => void;

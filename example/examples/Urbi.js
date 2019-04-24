@@ -1,5 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, Platform, Text, UIManager, ToastAndroid, Image } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Platform,
+  Text,
+  UIManager,
+  ToastAndroid,
+  Image,
+} from 'react-native';
 
 import MapView, { Marker, ProviderPropType } from 'react-native-maps';
 import berlinVehicleList from './assets/vehicles.json';
@@ -44,30 +52,52 @@ class Urbi extends React.Component {
       },
       markers: [],
       selected: null,
+      city: 'berlin',
     };
 
     this.onMapPress = this.onMapPress.bind(this);
     this.onMapReady = this.onMapReady.bind(this);
     this.onMarkerPress = this.onMarkerPress.bind(this);
+    this.generateMarker = this.generateMarker.bind(this);
     this.generateMarkers = this.generateMarkers.bind(this);
     this.onRegionChange = this.onRegionChange.bind(this);
     this.onCityChange = this.onCityChange.bind(this);
   }
 
   onMapReady() {
+    setTimeout(() => {
+      ToastAndroid.show('updating pins', ToastAndroid.SHORT);
+      const firstVehicle = vehicleLists[this.state.city].vehicles[0];
+      this.setState({
+        markers: [
+          ...this.state.markers,
+          this.generateMarker({
+            ...firstVehicle,
+            id: `rando-${Math.random()}`,
+            location: {
+              ...firstVehicle.location,
+              lat: firstVehicle.location.lat + 0.05 * Math.random(),
+            },
+          }),
+        ],
+      });
+      this.onMapReady();
+    }, 10000);
   }
 
+  generateMarker = (v) => (
+    <Marker
+      key={`${v.provider}-${v.id}`}
+      centerOffset={{ x: 0, y: -19.5 }}
+      coordinate={{ latitude: v.location.lat, longitude: v.location.lon }}
+      image={pins[`ic_pin_${v.provider}`]}
+      onPress={this.onMarkerPress(`${v.provider} - ${v.id}`)}
+      tracksViewChanges={false}
+    />
+  );
+
   generateMarkers(city) {
-    return vehicleLists[city].vehicles.map(v => (
-      <Marker
-        key={`${v.provider}-${v.id}`}
-        centerOffset={{ x: 0, y: -19.5 }}
-        coordinate={{ latitude: v.location.lat, longitude: v.location.lon }}
-        image={pins[`ic_pin_${v.provider}`]}
-        onPress={this.onMarkerPress(`${v.provider} - ${v.id}`)}
-        tracksViewChanges={false}
-      />
-    ));
+    return vehicleLists[city].vehicles.map(this.generateMarker);
   }
 
   onMapPress() {
@@ -86,7 +116,7 @@ class Urbi extends React.Component {
     const city = e.nativeEvent.city;
     ToastAndroid.show(`changed city to ${city}`, ToastAndroid.SHORT);
     if (city !== 'unset') {
-      this.setState({ markers: this.generateMarkers(city) });
+      this.setState({ markers: this.generateMarkers(city), city });
     }
   }
 

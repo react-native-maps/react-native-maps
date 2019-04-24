@@ -87,6 +87,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
    */
   private int mapCenterOffsetY = 0;
   private float switchToCityPinsDelta = Float.MAX_VALUE;
+  private final Set<AirMapMarker> allMarkers = new HashSet<>();
   private final Map<LatLng, AirMapCity> cities = new HashMap<>();
   private final Map<Marker, AirMapCity> cityPins = new HashMap<>();
   private AirMapCity lastCity;
@@ -106,6 +107,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
   private LatLngBounds lastCameraBounds; // urbi-specific
+  private double lastLatLng; // urbi-specific
   private int cameraMoveReason = 0;
 
   private static final String[] PERMISSIONS = new String[]{
@@ -432,6 +434,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
                 showingProviderPins = true;
               } else if (newCity != null) {
                 markerMap.clear();
+                allMarkers.clear();
               }
             }
           }
@@ -449,6 +452,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
           }
 
           lastCameraBounds = bounds;
+          lastLatLng = maxLatLng;
           cameraLastIdleBounds = bounds;
 
           eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, false));
@@ -510,7 +514,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   private void readdProviderPins() {
     Map<Marker, AirMapMarker> newMap = new HashMap<>();
-    for (AirMapMarker m : markerMap.values()) {
+    for (AirMapMarker m : allMarkers) {
       m.readdToMap(map);
       newMap.put(m.getMarker(), m);
     }
@@ -756,7 +760,11 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   private void addMarker(AirMapMarker annotation, int index) {
 
-    annotation.addToMap(map);
+    allMarkers.add(annotation);
+
+    if (lastLatLng < switchToCityPinsDelta) {
+      annotation.addToMap(map);
+    }
     features.add(index, annotation);
 
     // Allow visibility event to be triggered later
@@ -779,7 +787,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     annotation.setVisibility(visibility);
 
     Marker marker = (Marker) annotation.getFeature();
-    markerMap.put(marker, annotation);
+    if (marker != null) {
+      markerMap.put(marker, annotation);
+    }
   }
 
   public int getFeatureCount() {
