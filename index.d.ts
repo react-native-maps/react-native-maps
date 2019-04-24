@@ -34,6 +34,21 @@ declare module "react-native-maps" {
         y: number;
     }
 
+    export interface CityPin {
+        pos: LatLng;
+        image: string;
+        bounds: {
+            topLeft: {
+                lat: number;
+                lon: number;
+            },
+            bottomRight: {
+                lat: number;
+                lon: number;
+            },
+        }
+    }
+
     // helper interface
     export interface MapEvent<T = {}> extends NativeSyntheticEvent<T & {
         coordinate: LatLng;
@@ -163,6 +178,11 @@ declare module "react-native-maps" {
     export interface KmlMapEvent extends NativeSyntheticEvent<{ markers: KmlMarker[] }> {
     }
 
+    /**
+     * onCityChange parameter
+     */
+    export interface CityChangeEvent extends NativeSyntheticEvent<{ city: string }> {}
+
     type MapTypes = 'standard' | 'satellite' | 'hybrid' | 'terrain' | 'none' | 'mutedStandard';
 
     export interface MapViewProps extends ViewProperties {
@@ -187,7 +207,9 @@ declare module "react-native-maps" {
         pitchEnabled?: boolean;
         toolbarEnabled?: boolean;
         moveOnMarkerPress?: boolean;
-        centerOffsetY: number;
+        centerOffsetY?: number;
+        cityPins?: CityPin[];
+        switchToCityPinsDelta?: number;
         showsScale?: boolean;
         showsBuildings?: boolean;
         showsTraffic?: boolean;
@@ -208,6 +230,7 @@ declare module "react-native-maps" {
         onKmlReady?: (values: KmlMapEvent) => void;
         onRegionChange?: (region: Region) => void;
         onRegionChangeComplete?: (region: Region) => void;
+        onCityChange?: (value: CityChangeEvent) => void;
         onPress?: (event: MapEvent) => void;
         onLongPress?: (event: MapEvent) => void;
         onUserLocationChange?: (event: EventUserLocation) => void;
@@ -216,6 +239,7 @@ declare module "react-native-maps" {
         onMarkerPress?: (event: MapEvent<{ action: 'marker-press', id: string }>) => void;
         onMarkerSelect?: (event: MapEvent<{ action: 'marker-select', id: string }>) => void;
         onMarkerDeselect?: (event: MapEvent<{ action: 'marker-deselect', id: string }>) => void;
+        onCityPress?: (event: MapEvent<{ action: 'marker-press', id: string }>) => void;
         onCalloutPress?: (event: MapEvent<{ action: 'callout-press' }>) => void;
         onMarkerDragStart?: (event: MapEvent) => void;
         onMarkerDrag?: (event: MapEvent) => void;

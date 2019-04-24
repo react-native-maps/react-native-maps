@@ -53,6 +53,7 @@ import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
 import com.google.maps.android.data.kml.KmlStyle;
+import com.google.maps.android.quadtree.PointQuadTree;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -61,8 +62,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -79,7 +82,19 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private Integer loadingIndicatorColor = null;
   private final int baseMapPadding = 50;
 
+  /**
+   * urbi-specific fields
+   */
   private int mapCenterOffsetY = 0;
+  private float switchToCityPinsDelta = Float.MAX_VALUE;
+  private final Map<LatLng, AirMapCity> cities = new HashMap<>();
+  private final Map<Marker, AirMapCity> cityPins = new HashMap<>();
+  private AirMapCity lastCity;
+  private AirMapCity lastCityWithPins;
+  private boolean showingProviderPins;
+  /**
+   * end of urbi-specific fields
+   */
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
@@ -90,6 +105,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean initialRegionSet = false;
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
+  private LatLngBounds lastCameraBounds; // urbi-specific
   private int cameraMoveReason = 0;
 
   private static final String[] PERMISSIONS = new String[]{
@@ -251,6 +267,21 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       @Override
       public boolean onMarkerClick(Marker marker) {
         WritableMap event;
+        AirMapCity city;
+
+        if ((city = cityPins.get(marker)) != null) {
+          event = makeClickEventData(marker.getPosition());
+          event.putString("action", "marker-press");
+          event.putString("id", city.getId());
+          manager.pushEvent(context, view, "onCityPress", event);
+
+          // TODO check if user's location is within the city, if so, zoom there instead
+          // TODO check if there's a way to calculate the offset _after_ changing the zoom level
+          LatLng centerTo = city.getPinPosition();
+          map.animateCamera(CameraUpdateFactory.newLatLngZoom(centerTo, 15), 350, null);
+          return true;
+        }
+
         AirMapMarker airMapMarker = getMarkerMap(marker);
 
         event = makeClickEventData(marker.getPosition());
@@ -374,7 +405,52 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if ((cameraMoveReason != 0) &&
           ((cameraLastIdleBounds == null) ||
             LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
+
+          double maxLatLng = LatLngBoundsUtils.getMaxLatLng(bounds);
+          AirMapCity newCity = getCity(bounds);
+
+          if (lastCameraBounds != null) {
+            double lastMaxLatLng = LatLngBoundsUtils.getMaxLatLng(lastCameraBounds);
+
+            if (maxLatLng > switchToCityPinsDelta && lastMaxLatLng < switchToCityPinsDelta) {
+              // switch to city pins
+              map.clear();
+              showingProviderPins = false;
+              cityPins.clear();
+              if (lastCity != null) {
+                lastCityWithPins = lastCity;
+              }
+              for (AirMapCity city : cities.values()) {
+                cityPins.put(map.addMarker(city.getMarker().getMarkerOptions()), city);
+              }
+            } else if (lastMaxLatLng > switchToCityPinsDelta && maxLatLng < switchToCityPinsDelta) {
+              // switch to provider pins
+              map.clear();
+              // if we're still in the same city, add back all pins
+              if (lastCityWithPins != null && lastCityWithPins.equals(newCity) ) {
+                readdProviderPins();
+                showingProviderPins = true;
+              } else if (newCity != null) {
+                markerMap.clear();
+              }
+            }
+          }
+
+          if (maxLatLng < switchToCityPinsDelta &&
+                  (lastCity == null && newCity != null || lastCity != null && !lastCity.equals(newCity))) {
+            lastCity = newCity;
+            WritableMap map = new WritableNativeMap();
+            map.putString("city", newCity == null ? "unset" : newCity.getId());
+            manager.pushEvent(context, view, "onCityChange", map);
+            if (!showingProviderPins && maxLatLng < switchToCityPinsDelta && newCity != null && newCity.equals(lastCityWithPins)) {
+              readdProviderPins();
+              showingProviderPins = true;
+            }
+          }
+
+          lastCameraBounds = bounds;
           cameraLastIdleBounds = bounds;
+
           eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, false));
         }
       }
@@ -430,6 +506,28 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     };
 
     context.addLifecycleEventListener(lifecycleListener);
+  }
+
+  private void readdProviderPins() {
+    Map<Marker, AirMapMarker> newMap = new HashMap<>();
+    for (AirMapMarker m : markerMap.values()) {
+      m.readdToMap(map);
+      newMap.put(m.getMarker(), m);
+    }
+    markerMap.clear();
+    markerMap.putAll(newMap);
+  }
+
+  private AirMapCity getCity(LatLngBounds bounds) {
+
+    for (AirMapCity city : cities.values()) {
+      if (city.getBounds().contains(bounds.northeast) ||
+              city.getBounds().contains(bounds.southwest)) {
+        return city;
+      }
+    }
+
+    return null;
   }
 
   private boolean hasPermissions() {
@@ -1100,6 +1198,25 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     LatLng coords = this.map.getProjection().fromScreenLocation(point);
     WritableMap event = makeClickEventData(coords);
     manager.pushEvent(context, this, "onPanDrag", event);
+  }
+
+  public void setSwitchToCityPinsDelta(float switchDelta) {
+    switchToCityPinsDelta = switchDelta;
+  }
+
+  public void setCityPins(ReadableArray pins) {
+    if (pins != null) {
+      for (int i = 0; i < pins.size(); i++) {
+        ReadableMap encodedPin = pins.getMap(i);
+        AirMapCity city = new AirMapCity(encodedPin);
+        if (!cities.containsKey(city.getPinPosition())) {
+          cities.put(city.getPinPosition(), city);
+          city.setMarker(new AirMapMarker(context, null));
+          city.getMarker().setImage(city.getIconSrc());
+          city.getMarker().setCoordinate(encodedPin.getMap("pos"));
+        }
+      }
+    }
   }
 
   public void setKmlSrc(String kmlSrc) {

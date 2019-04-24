@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Platform, Text, UIManager } from 'react-native';
+import { StyleSheet, View, Platform, Text, UIManager, ToastAndroid, Image } from 'react-native';
 
 import MapView, { Marker, ProviderPropType } from 'react-native-maps';
-import vehicleList from './assets/vehicles.json';
-import pins from './UrbiImages';
+import berlinVehicleList from './assets/vehicles.json';
+import hamburgVehicleList from './assets/vehicles-hamburg.json';
+import cityList from './assets/cities.json';
+import pins, { cityIcons } from './UrbiImages';
 
 const LATITUDE = 52.520873;
 const LONGITUDE = 13.409419;
@@ -12,10 +14,22 @@ if (Platform.OS !== 'ios' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
+const vehicleLists = {
+  berlin: berlinVehicleList,
+  hamburg: hamburgVehicleList,
+};
+
 const SWITCH_TO_PINS_LAT_LON_DELTA = 0.04;
 export const DEFAULT_ZOOMED_IN_LAT_LON_DELTA = 0.0075;
 export const SHOW_BICYCLES_LAT_LON_DELTA = 0.025;
 const DEFAULT_ZOOMED_OUT_LAT_LON_DELTA = 20;
+
+const cityPins = cityList.cities.map(c => ({
+  id: c.id,
+  pos: { latitude: c.center.lat, longitude: c.center.lon },
+  image: Image.resolveAssetSource(cityIcons[c.id]).uri,
+  bounds: { topLeft: c.topLeft, bottomRight: c.bottomRight },
+}));
 
 class Urbi extends React.Component {
   constructor(props) {
@@ -36,16 +50,15 @@ class Urbi extends React.Component {
     this.onMapReady = this.onMapReady.bind(this);
     this.onMarkerPress = this.onMarkerPress.bind(this);
     this.generateMarkers = this.generateMarkers.bind(this);
+    this.onRegionChange = this.onRegionChange.bind(this);
+    this.onCityChange = this.onCityChange.bind(this);
   }
 
   onMapReady() {
-    setTimeout(() => {
-      this.setState({ markers: this.generateMarkers() });
-    }, 2000);
   }
 
-  generateMarkers() {
-    return vehicleList.vehicles.map(v => (
+  generateMarkers(city) {
+    return vehicleLists[city].vehicles.map(v => (
       <Marker
         key={`${v.provider}-${v.id}`}
         centerOffset={{ x: 0, y: -19.5 }}
@@ -65,6 +78,22 @@ class Urbi extends React.Component {
     return () => this.setState({ selected: key });
   }
 
+  onCityPress(e) {
+    ToastAndroid.show(`pressed ${e.nativeEvent.id}`, ToastAndroid.SHORT);
+  }
+
+  onCityChange(e) {
+    const city = e.nativeEvent.city;
+    ToastAndroid.show(`changed city to ${city}`, ToastAndroid.SHORT);
+    if (city !== 'unset') {
+      this.setState({ markers: this.generateMarkers(city) });
+    }
+  }
+
+  onRegionChange(region) {
+    const maxDelta = Math.max(region.latitudeDelta, region.longitudeDelta);
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -76,6 +105,11 @@ class Urbi extends React.Component {
           onMapReady={this.onMapReady}
           moveOnMarkerPress={false}
           centerOffsetY={200}
+          switchToCityPinsDelta={SWITCH_TO_PINS_LAT_LON_DELTA}
+          onRegionChangeComplete={this.onRegionChange}
+          cityPins={cityPins}
+          onCityPress={this.onCityPress}
+          onCityChange={this.onCityChange}
         >
           {this.state.markers}
         </MapView>

@@ -457,6 +457,11 @@ public class AirMapMarker extends AirMapFeature {
     updateTracksViewChanges();
   }
 
+  public void readdToMap(GoogleMap map) {
+    marker = map.addMarker(getMarkerOptions());
+    updateMarkerIcon();
+  }
+
   @Override
   public void removeFromMap(GoogleMap map) {
     marker.remove();

@@ -266,6 +266,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     }
   }
 
+  @ReactProp(name = "switchToCityPinsDelta")
+  public void setSwitchToCityPinsDelta(AirMapView view, float latLngDelta) {
+    view.setSwitchToCityPinsDelta(latLngDelta);
+  }
+
+  @ReactProp(name = "cityPins")
+  public void setCityPins(AirMapView view, @Nullable ReadableArray cityPins) {
+    view.setCityPins(cityPins);
+  }
+
   @Override
   public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
     Integer duration;
@@ -382,7 +392,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     map.putAll(MapBuilder.of(
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
-        "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused")
+        "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
+        "onCityPress", MapBuilder.of("registrationName", "onCityPress"),
+        "onCityChange", MapBuilder.of("registrationName", "onCityChange")
     ));
 
     return map;

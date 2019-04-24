@@ -44,4 +44,9 @@ public class LatLngBoundsUtils {
     double size = Math.min(Math.abs(sizeA), Math.abs(sizeB));
     return size / 2560;
   }
+
+  public static double getMaxLatLng(LatLngBounds bounds) {
+    return Math.max(bounds.northeast.latitude - bounds.southwest.latitude,
+            bounds.northeast.longitude - bounds.southwest.longitude);
+  }
 }
