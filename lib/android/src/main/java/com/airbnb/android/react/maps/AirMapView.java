@@ -85,6 +85,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   /**
    * urbi-specific fields
    */
+  private static final double SELECTED_PIN_SCALE_FACTOR = 1.2;
   private int mapCenterOffsetY = 0;
   private float switchToCityPinsDelta = Float.MAX_VALUE;
   private final Set<AirMapMarker> allMarkers = new HashSet<>();
@@ -211,7 +212,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   private void rescaleIcon(AirMapMarker airMapMarker, double scaleFactor) {
-    airMapMarker.getMarker().remove();
+    Marker m = airMapMarker.getMarker();
+    if (m != null && m.getTag() != null) {
+      airMapMarker.getMarker().remove();
+    }
     markerMap.remove(airMapMarker.getMarker());
     Bitmap b = airMapMarker.getIconBitmap();
     Bitmap scaled = Bitmap.createScaledBitmap(b, (int) (b.getWidth() * scaleFactor), (int) (b.getHeight() * scaleFactor), false);
@@ -221,7 +225,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   private void resetIcon(AirMapMarker airMapMarker) {
-    airMapMarker.getMarker().remove();
+    Marker m = airMapMarker.getMarker();
+    if (m != null && m.getTag() != null) {
+      airMapMarker.getMarker().remove();
+    }
     markerMap.remove(airMapMarker.getMarker());
     airMapMarker.setIconBitmapDescriptor(airMapMarker.getOriginalBitmapDescriptor(), airMapMarker.getOriginalIconBitmap());
     airMapMarker.addToMap(map);
@@ -299,7 +306,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if (selectedMarker != null) {
             resetIcon(selectedMarker);
         }
-        rescaleIcon(airMapMarker, 1.2);
+        rescaleIcon(airMapMarker, SELECTED_PIN_SCALE_FACTOR);
         selectedMarker = airMapMarker;
 
         // Return false to open the callout info window and center on the marker
@@ -804,6 +811,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     AirMapFeature feature = features.remove(index);
     if (feature instanceof AirMapMarker) {
       markerMap.remove(feature.getFeature());
+      allMarkers.remove(feature);
     }
     feature.removeFromMap(map);
   }

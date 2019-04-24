@@ -290,13 +290,13 @@ public class AirMapMarker extends AirMapFeature {
   }
 
   public void updateMarkerIcon() {
-    if (marker == null) return;
+    if (marker == null || marker.getTag() == null) return;
 
     if (!hasCustomMarkerView) {
       // No more updates for this, as it's a simple icon
       hasViewChanges = false;
     }
-    if (marker != null) {
+    if (marker != null && marker.getTag() != null) {
       marker.setIcon(getIcon());
     }
   }
@@ -447,6 +447,7 @@ public class AirMapMarker extends AirMapFeature {
   @Override
   public void addToMap(GoogleMap map) {
     marker = map.addMarker(getMarkerOptions());
+    marker.setTag("");
     updateTracksViewChanges();
   }
 
@@ -454,17 +455,21 @@ public class AirMapMarker extends AirMapFeature {
     MarkerOptions options = getMarkerOptions();
     options.zIndex(zIndex);
     marker = map.addMarker(options);
+    marker.setTag("");
     updateTracksViewChanges();
   }
 
   public void readdToMap(GoogleMap map) {
     marker = map.addMarker(getMarkerOptions());
+    marker.setTag("");
     updateMarkerIcon();
   }
 
   @Override
   public void removeFromMap(GoogleMap map) {
-    marker.remove();
+    if (marker != null && marker.getTag() != null) {
+      marker.remove();
+    }
     marker = null;
     updateTracksViewChanges();
   }
@@ -525,7 +530,7 @@ public class AirMapMarker extends AirMapFeature {
   }
 
   public void update(boolean updateIcon) {
-    if (marker == null) {
+    if (marker == null || marker.getTag() == null) {
       return;
     }
 
