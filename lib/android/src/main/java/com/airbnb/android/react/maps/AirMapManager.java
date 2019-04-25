@@ -41,6 +41,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int SET_CAMERA = 11;
   private static final int ANIMATE_CAMERA = 12;
 
+  // urbi-specific
+  private static final int CENTER_TO_USER_LOCATION = 666;
+
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
       "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -364,6 +367,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
       case SET_INDOOR_ACTIVE_LEVEL_INDEX:
         view.setIndoorActiveLevelIndex(args.getInt(0));
         break;
+
+      case CENTER_TO_USER_LOCATION:
+        view.centerToUserLocation();
+        break;
     }
   }
 
@@ -418,7 +425,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
     map.putAll(MapBuilder.of(
       "setMapBoundaries", SET_MAP_BOUNDARIES,
-      "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
+      "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX,
+      "centerToUserLocation", CENTER_TO_USER_LOCATION
     ));
 
     return map;

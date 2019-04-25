@@ -1,5 +1,6 @@
 package com.airbnb.android.react.maps;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
@@ -316,15 +318,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
           return false;
         } else {
           marker.showInfoWindow();
-          LatLng centerTo = marker.getPosition();
-
-          if (Math.abs(view.mapCenterOffsetY) > 1) {
-            Point markerPoint = map.getProjection().toScreenLocation(centerTo);
-            markerPoint.offset(0, view.mapCenterOffsetY);
-            centerTo = map.getProjection().fromScreenLocation(markerPoint);
-          }
-
-          map.animateCamera(CameraUpdateFactory.newLatLng(centerTo), 250, null);
+          centerCameraWithOffsetTo(marker.getPosition(), 250, null);
           return true;
         }
       }
@@ -484,10 +478,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     // module may
     // desire to shut-down location-services.
     lifecycleListener = new LifecycleEventListener() {
+      @SuppressLint("MissingPermission")
       @Override
       public void onHostResume() {
         if (hasPermissions()) {
-          //noinspection MissingPermission
           map.setMyLocationEnabled(showUserLocation);
         }
         synchronized (AirMapView.this) {
@@ -498,10 +492,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         }
       }
 
+      @SuppressLint("MissingPermission")
       @Override
       public void onHostPause() {
         if (hasPermissions()) {
-          //noinspection MissingPermission
           map.setMyLocationEnabled(false);
         }
         synchronized (AirMapView.this) {
@@ -519,6 +513,41 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     };
 
     context.addLifecycleEventListener(lifecycleListener);
+  }
+
+  private LatLng getPositionWithOffset(LatLng positionWithNoOffset) {
+
+    LatLng centerTo = new LatLng(positionWithNoOffset.latitude, positionWithNoOffset.longitude);
+
+    if (Math.abs(mapCenterOffsetY) > 1) {
+      Point markerPoint = map.getProjection().toScreenLocation(centerTo);
+      markerPoint.offset(0, mapCenterOffsetY);
+      centerTo = map.getProjection().fromScreenLocation(markerPoint);
+    }
+
+    return centerTo;
+  }
+
+  private void centerCameraWithOffsetTo(final LatLng positionWithNoOffset, final int delayMs, Integer newZoomLevel) {
+    if (newZoomLevel != null) {
+      map.animateCamera(CameraUpdateFactory.newLatLngZoom(positionWithNoOffset, newZoomLevel), delayMs, new GoogleMap.CancelableCallback() {
+        @Override
+        public void onFinish() {
+          map.animateCamera(
+                  CameraUpdateFactory.newLatLng(getPositionWithOffset(positionWithNoOffset)),
+                  400, null);
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+      });
+    } else {
+      map.animateCamera(
+              CameraUpdateFactory.newLatLng(getPositionWithOffset(positionWithNoOffset)),
+              delayMs, null);
+    }
   }
 
   private void readdProviderPins() {
@@ -636,10 +665,18 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  public void centerToUserLocation() {
+    if (hasPermissions()) {
+      LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+      @SuppressLint("MissingPermission") Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+      centerCameraWithOffsetTo(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()), 600, 15);
+    }
+  }
+
+  @SuppressLint("MissingPermission")
   public void setShowsUserLocation(boolean showUserLocation) {
     this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
     if (hasPermissions()) {
-      //noinspection MissingPermission
       map.setMyLocationEnabled(showUserLocation);
     }
   }

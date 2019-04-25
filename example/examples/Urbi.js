@@ -6,6 +6,7 @@ import {
   Text,
   UIManager,
   ToastAndroid,
+  TouchableHighlight,
   Image,
 } from 'react-native';
 
@@ -40,6 +41,7 @@ const cityPins = cityList.cities.map(c => ({
 }));
 
 class Urbi extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -55,6 +57,8 @@ class Urbi extends React.Component {
       city: 'berlin',
     };
 
+    this.map = React.createRef();
+
     this.onMapPress = this.onMapPress.bind(this);
     this.onMapReady = this.onMapReady.bind(this);
     this.onMarkerPress = this.onMarkerPress.bind(this);
@@ -62,6 +66,7 @@ class Urbi extends React.Component {
     this.generateMarkers = this.generateMarkers.bind(this);
     this.onRegionChange = this.onRegionChange.bind(this);
     this.onCityChange = this.onCityChange.bind(this);
+    this.onCenterPress = this.onCenterPress.bind(this);
   }
 
   onMapReady() {
@@ -124,10 +129,15 @@ class Urbi extends React.Component {
     const maxDelta = Math.max(region.latitudeDelta, region.longitudeDelta);
   }
 
+  onCenterPress() {
+    this.map.current.centerToUserLocation();
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <MapView
+          ref={this.map}
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
@@ -136,13 +146,20 @@ class Urbi extends React.Component {
           moveOnMarkerPress={false}
           centerOffsetY={200}
           switchToCityPinsDelta={SWITCH_TO_PINS_LAT_LON_DELTA}
+          showsMyLocationButton={false}
           onRegionChangeComplete={this.onRegionChange}
           cityPins={cityPins}
           onCityPress={this.onCityPress}
           onCityChange={this.onCityChange}
+          showsUserLocation
         >
           {this.state.markers}
         </MapView>
+        <View style={styles.locationButton}>
+          <TouchableHighlight style={styles.centerButton} onPress={this.onCenterPress}>
+            <Text style={styles.locationButtonText}>center</Text>
+          </TouchableHighlight>
+        </View>
         {this.state.selected && (
           <View style={styles.bottomPanel}>
             <Text style={styles.text}>Selected: {this.state.selected}</Text>
@@ -170,6 +187,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     height: 200,
     alignSelf: 'stretch',
+  },
+  locationButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  locationButtonText: {
+    fontSize: 10,
+    color: '#ffffff',
+  },
+  centerButton: {
+    backgroundColor: '#ec008b',
+    padding: 10,
+    borderRadius: 10,
   },
   bubble: {
     backgroundColor: 'rgba(255,255,255,0.7)',

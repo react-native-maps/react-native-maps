@@ -267,6 +267,7 @@ declare module "react-native-maps" {
         takeSnapshot(options?: SnapshotOptions): Promise<string>;
         pointForCoordinate(coordinate: LatLng): Promise<Point>;
         coordinateForPoint(point: Point): Promise<LatLng>;
+        centerToUserLocation(): void;
     }
 
     export class MapViewAnimated extends MapView {
