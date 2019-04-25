@@ -204,7 +204,7 @@ ext {
     targetSdkVersion    = 26
     buildToolsVersion   = "26.0.2"
     supportLibVersion   = "26.1.0"
-    googlePlayServicesVersion = "11.8.0"
+    googlePlayServicesVersion = "16.1.0" // or set latest version
     androidMapsUtilsVersion = "0.5+"
 }
 ```
@@ -272,7 +272,6 @@ import com.airbnb.android.react.maps.MapsPackage;
     from there you will see a button to update it (do not search within the
     Play Store).
 
-
 ## Troubleshooting
 
 ### The map background is blank (Google Maps)
@@ -294,7 +293,6 @@ For reference, you may read the relevant issue reports: ([#118](https://github.c
 
 Ensure the map component and its container have viewport dimensions. An
 example is below:
-
 
 ```jsx
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
@@ -434,3 +432,10 @@ import com.airbnb.android.react.maps.MapsPackage;
     
     
   ```
+
+### Trouble with Google Play services
+
+- Make sure that your emulator has Google Play (Go to Anroid studio -> Virtual Devices -> Check that you have icon in "Play Store" column)
+- Click to bottom dots icon in the emulator
+- Go to Google Play Tab and click Update
+
