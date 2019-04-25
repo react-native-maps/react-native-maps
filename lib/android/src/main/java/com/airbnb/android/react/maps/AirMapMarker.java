@@ -451,14 +451,6 @@ public class AirMapMarker extends AirMapFeature {
     updateTracksViewChanges();
   }
 
-  public void addToMap(GoogleMap map, int zIndex) {
-    MarkerOptions options = getMarkerOptions();
-    options.zIndex(zIndex);
-    marker = map.addMarker(options);
-    marker.setTag("");
-    updateTracksViewChanges();
-  }
-
   public void readdToMap(GoogleMap map) {
     marker = map.addMarker(getMarkerOptions());
     marker.setTag("");

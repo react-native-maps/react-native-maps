@@ -220,7 +220,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     Bitmap b = airMapMarker.getIconBitmap();
     Bitmap scaled = Bitmap.createScaledBitmap(b, (int) (b.getWidth() * scaleFactor), (int) (b.getHeight() * scaleFactor), false);
     airMapMarker.setIconBitmapDescriptor(BitmapDescriptorFactory.fromBitmap(scaled), scaled);
-    airMapMarker.addToMap(map, 10);
+    airMapMarker.addToMap(map);
     markerMap.put(airMapMarker.getMarker(), airMapMarker);
   }
 
@@ -455,6 +455,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             if (!showingProviderPins && maxLatLng < switchToCityPinsDelta && newCity != null && newCity.equals(lastCityWithPins)) {
               readdProviderPins();
               showingProviderPins = true;
+            } else if (newCity != null) {
+              allMarkers.clear();
             }
           }
 
