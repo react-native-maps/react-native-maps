@@ -669,7 +669,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     if (hasPermissions()) {
       LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
       @SuppressLint("MissingPermission") Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-      centerCameraWithOffsetTo(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()), 600, 15);
+      if (lastKnownLocation != null) {
+        centerCameraWithOffsetTo(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()), 600, 15);
+      }
     }
   }
 
