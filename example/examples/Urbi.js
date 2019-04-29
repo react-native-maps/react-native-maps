@@ -31,7 +31,6 @@ const vehicleLists = {
 const SWITCH_TO_PINS_LAT_LON_DELTA = 0.04;
 export const DEFAULT_ZOOMED_IN_LAT_LON_DELTA = 0.0075;
 export const SHOW_BICYCLES_LAT_LON_DELTA = 0.025;
-const DEFAULT_ZOOMED_OUT_LAT_LON_DELTA = 20;
 
 const cityPins = cityList.cities.map(c => ({
   id: c.id,
@@ -63,10 +62,10 @@ class Urbi extends React.Component {
     this.onMapReady = this.onMapReady.bind(this);
     this.onMarkerPress = this.onMarkerPress.bind(this);
     this.generateMarker = this.generateMarker.bind(this);
-    this.generateMarkers = this.generateMarkers.bind(this);
     this.onRegionChange = this.onRegionChange.bind(this);
     this.onCityChange = this.onCityChange.bind(this);
     this.onCenterPress = this.onCenterPress.bind(this);
+    this.onFilterPress = this.onFilterPress.bind(this);
   }
 
   onMapReady() {
@@ -76,14 +75,14 @@ class Urbi extends React.Component {
       this.setState({
         markers: [
           ...this.state.markers,
-          this.generateMarker({
+          {
             ...firstVehicle,
             id: `rando-${Math.random()}`,
             location: {
               ...firstVehicle.location,
               lat: firstVehicle.location.lat + 0.05 * Math.random(),
             },
-          }),
+          },
         ],
       });
       this.onMapReady();
@@ -98,12 +97,9 @@ class Urbi extends React.Component {
       image={pins[`ic_pin_${v.provider}`]}
       onPress={this.onMarkerPress(`${v.provider} - ${v.id}`)}
       tracksViewChanges={false}
+      off={v.off}
     />
   );
-
-  generateMarkers(city) {
-    return vehicleLists[city].vehicles.map(this.generateMarker);
-  }
 
   onMapPress() {
     this.setState({ selected: null });
@@ -121,7 +117,7 @@ class Urbi extends React.Component {
     const city = e.nativeEvent.city;
     ToastAndroid.show(`changed city to ${city}`, ToastAndroid.SHORT);
     if (city !== 'unset') {
-      this.setState({ markers: this.generateMarkers(city), city });
+      this.setState({ markers: vehicleLists[city].vehicles, city });
     }
   }
 
@@ -131,6 +127,11 @@ class Urbi extends React.Component {
 
   onCenterPress() {
     this.map.current.centerToUserLocation();
+  }
+
+  onFilterPress() {
+    this.state.markers.forEach(m => { m.off = Math.random() > 0.4; });
+    this.setState({ markers: [...this.state.markers] });
   }
 
   render() {
@@ -153,11 +154,16 @@ class Urbi extends React.Component {
           onCityChange={this.onCityChange}
           showsUserLocation
         >
-          {this.state.markers}
+          {this.state.markers.map(this.generateMarker)}
         </MapView>
         <View style={styles.locationButton}>
           <TouchableHighlight style={styles.centerButton} onPress={this.onCenterPress}>
             <Text style={styles.locationButtonText}>center</Text>
+          </TouchableHighlight>
+        </View>
+        <View style={styles.filterButton}>
+          <TouchableHighlight style={styles.centerButton} onPress={this.onFilterPress}>
+            <Text style={styles.locationButtonText}>filter</Text>
           </TouchableHighlight>
         </View>
         {this.state.selected && (
@@ -191,6 +197,16 @@ const styles = StyleSheet.create({
   locationButton: {
     position: 'absolute',
     top: 20,
+    right: 20,
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  filterButton: {
+    position: 'absolute',
+    top: 70,
     right: 20,
     height: 50,
     width: 50,

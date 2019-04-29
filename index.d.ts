@@ -306,6 +306,8 @@ declare module "react-native-maps" {
 
         rotation?: number;
         zIndex?: number;
+
+        off?: boolean;
     }
 
     export class Marker extends React.Component<MarkerProps, any> {

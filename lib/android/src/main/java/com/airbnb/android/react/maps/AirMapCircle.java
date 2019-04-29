@@ -89,7 +89,7 @@ public class AirMapCircle extends AirMapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
+  public void addToMap(GoogleMap map, AirMapView view) {
     circle = map.addCircle(getCircleOptions());
   }
 

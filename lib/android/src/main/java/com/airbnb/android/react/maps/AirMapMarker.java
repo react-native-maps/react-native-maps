@@ -43,11 +43,14 @@ import javax.annotation.Nullable;
 public class AirMapMarker extends AirMapFeature {
 
   private MarkerOptions markerOptions;
+  private AirMapView mapView;
 
   private Marker marker;
   private int width;
   private int height;
   private String identifier;
+
+  private boolean filteredOut;
 
   private LatLng position;
   private String title;
@@ -445,10 +448,17 @@ public class AirMapMarker extends AirMapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
+  public void addToMap(GoogleMap map, AirMapView view) {
+    this.mapView = view;
     marker = map.addMarker(getMarkerOptions());
     marker.setTag("");
     updateTracksViewChanges();
+  }
+
+  public void readdToMap() {
+    if (mapView != null) {
+      mapView.addMarkerToMap(this);
+    }
   }
 
   public void readdToMap(GoogleMap map) {
@@ -654,6 +664,19 @@ public class AirMapMarker extends AirMapFeature {
 
   private BitmapDescriptor getBitmapDescriptorByName(String name) {
     return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
+  }
+
+  public boolean isFilteredOut() {
+    return filteredOut;
+  }
+
+  public void setOff(boolean isFilteredOut) {
+    filteredOut = isFilteredOut;
+    if (filteredOut && marker != null && marker.getTag() != null)
+      marker.remove();
+    else if (!filteredOut) {
+      readdToMap();
+    }
   }
 
 }

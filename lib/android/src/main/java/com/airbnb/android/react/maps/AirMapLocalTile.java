@@ -137,7 +137,7 @@ public class AirMapLocalTile extends AirMapFeature {
     }
 
     @Override
-    public void addToMap(GoogleMap map) {
+    public void addToMap(GoogleMap map, AirMapView view) {
         this.tileOverlay = map.addTileOverlay(getTileOverlayOptions());
     }
 

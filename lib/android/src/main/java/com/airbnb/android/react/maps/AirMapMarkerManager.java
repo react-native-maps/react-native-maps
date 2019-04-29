@@ -270,6 +270,11 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     view.setTracksViewChanges(tracksViewChanges);
   }
 
+  @ReactProp(name = "off", defaultBoolean = true)
+  public void setOff(AirMapMarker view, boolean off) {
+    view.setOff(off);
+  }
+
   @Override
   public void addView(AirMapMarker parent, View child, int index) {
     // if an <Callout /> component is a child, then it is a callout view, NOT part of the

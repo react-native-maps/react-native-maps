@@ -10,7 +10,7 @@ public abstract class AirMapFeature extends ReactViewGroup {
     super(context);
   }
 
-  public abstract void addToMap(GoogleMap map);
+  public abstract void addToMap(GoogleMap map, AirMapView view);
 
   public abstract void removeFromMap(GoogleMap map);
 

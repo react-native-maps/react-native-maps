@@ -55,7 +55,6 @@ import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
 import com.google.maps.android.data.kml.KmlStyle;
-import com.google.maps.android.quadtree.PointQuadTree;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -222,7 +221,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     Bitmap b = airMapMarker.getIconBitmap();
     Bitmap scaled = Bitmap.createScaledBitmap(b, (int) (b.getWidth() * scaleFactor), (int) (b.getHeight() * scaleFactor), false);
     airMapMarker.setIconBitmapDescriptor(BitmapDescriptorFactory.fromBitmap(scaled), scaled);
-    airMapMarker.addToMap(map);
+    airMapMarker.addToMap(map, this);
     markerMap.put(airMapMarker.getMarker(), airMapMarker);
   }
 
@@ -233,7 +232,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
     markerMap.remove(airMapMarker.getMarker());
     airMapMarker.setIconBitmapDescriptor(airMapMarker.getOriginalBitmapDescriptor(), airMapMarker.getOriginalIconBitmap());
-    airMapMarker.addToMap(map);
+    airMapMarker.addToMap(map, this);
     markerMap.put(airMapMarker.getMarker(), airMapMarker);
   }
 
@@ -431,7 +430,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
               map.clear();
               // if we're still in the same city, add back all pins
               if (lastCityWithPins != null && lastCityWithPins.equals(newCity) ) {
-                readdProviderPins();
+                readdProviderMarkers();
                 showingProviderPins = true;
               } else if (newCity != null) {
                 markerMap.clear();
@@ -447,7 +446,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             map.putString("city", newCity == null ? "unset" : newCity.getId());
             manager.pushEvent(context, view, "onCityChange", map);
             if (!showingProviderPins && maxLatLng < switchToCityPinsDelta && newCity != null && newCity.equals(lastCityWithPins)) {
-              readdProviderPins();
+              readdProviderMarkers();
               showingProviderPins = true;
             } else if (newCity != null) {
               allMarkers.clear();
@@ -550,14 +549,14 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
-  private void readdProviderPins() {
-    Map<Marker, AirMapMarker> newMap = new HashMap<>();
+  private void readdProviderMarkers() {
+    markerMap.clear();
     for (AirMapMarker m : allMarkers) {
       m.readdToMap(map);
-      newMap.put(m.getMarker(), m);
+      Marker marker = m.getMarker();
+      if (marker != null)
+        markerMap.put(marker, m);
     }
-    markerMap.clear();
-    markerMap.putAll(newMap);
   }
 
   private AirMapCity getCity(LatLngBounds bounds) {
@@ -766,35 +765,35 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       addMarker((AirMapMarker) child, index);
     } else if (child instanceof AirMapPolyline) {
       AirMapPolyline polylineView = (AirMapPolyline) child;
-      polylineView.addToMap(map);
+      polylineView.addToMap(map, this);
       features.add(index, polylineView);
       Polyline polyline = (Polyline) polylineView.getFeature();
       polylineMap.put(polyline, polylineView);
     } else if (child instanceof AirMapPolygon) {
       AirMapPolygon polygonView = (AirMapPolygon) child;
-      polygonView.addToMap(map);
+      polygonView.addToMap(map, this);
       features.add(index, polygonView);
       Polygon polygon = (Polygon) polygonView.getFeature();
       polygonMap.put(polygon, polygonView);
     } else if (child instanceof AirMapCircle) {
       AirMapCircle circleView = (AirMapCircle) child;
-      circleView.addToMap(map);
+      circleView.addToMap(map, this);
       features.add(index, circleView);
     } else if (child instanceof AirMapUrlTile) {
       AirMapUrlTile urlTileView = (AirMapUrlTile) child;
-      urlTileView.addToMap(map);
+      urlTileView.addToMap(map, this);
       features.add(index, urlTileView);
     } else if (child instanceof AirMapWMSTile) {
       AirMapWMSTile urlTileView = (AirMapWMSTile) child;
-      urlTileView.addToMap(map);
+      urlTileView.addToMap(map, this);
       features.add(index, urlTileView);
     } else if (child instanceof AirMapLocalTile) {
       AirMapLocalTile localTileView = (AirMapLocalTile) child;
-      localTileView.addToMap(map);
+      localTileView.addToMap(map, this);
       features.add(index, localTileView);
     } else if (child instanceof AirMapOverlay) {
       AirMapOverlay overlayView = (AirMapOverlay) child;
-      overlayView.addToMap(map);
+      overlayView.addToMap(map, this);
       features.add(index, overlayView);
     } else if (child instanceof ViewGroup) {
       ViewGroup children = (ViewGroup) child;
@@ -806,12 +805,19 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  public void addMarkerToMap(AirMapMarker marker) {
+    if (lastLatLng < switchToCityPinsDelta) {
+      marker.addToMap(map, this);
+      markerMap.put(marker.getMarker(), marker);
+    }
+  }
+
   private void addMarker(AirMapMarker annotation, int index) {
 
     allMarkers.add(annotation);
 
-    if (lastLatLng < switchToCityPinsDelta) {
-      annotation.addToMap(map);
+    if (lastLatLng < switchToCityPinsDelta && !annotation.isFilteredOut()) {
+      annotation.addToMap(map, this);
     }
     features.add(index, annotation);
 
@@ -1455,8 +1461,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
 
     for (Map.Entry<Marker, AirMapMarker> entryMarker : markerMap.entrySet()) {
-      if (entryMarker.getKey().getPosition().equals(marker.getPosition())
-          && entryMarker.getKey().getTitle().equals(marker.getTitle())) {
+      Marker thisMarker = entryMarker.getKey();
+      if (thisMarker.getPosition() == null || thisMarker.getTitle() == null)
+        continue;
+
+      if (thisMarker.getPosition().equals(marker.getPosition())
+          && thisMarker.getTitle().equals(marker.getTitle())) {
         airMarker = entryMarker.getValue();
         break;
       }
