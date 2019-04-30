@@ -33,6 +33,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.EventDispatcher;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,6 +53,7 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.IndoorLevel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
@@ -74,6 +77,7 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
   public GoogleMap map;
+  private FusedLocationProviderClient fusedLocationClient;
   private KmlLayer kmlLayer;
   private ProgressBar mapLoadingProgressBar;
   private RelativeLayout mapLoadingLayout;
@@ -168,6 +172,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     this.manager = manager;
     this.context = reactContext;
+
+    fusedLocationClient = LocationServices.getFusedLocationProviderClient(appContext);
 
     super.onCreate(null);
     // TODO(lmr): what about onStart????
@@ -667,13 +673,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  @SuppressLint("MissingPermission")
   public void centerToUserLocation() {
     if (hasPermissions()) {
-      LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-      @SuppressLint("MissingPermission") Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-      if (lastKnownLocation != null) {
-        centerCameraWithOffsetTo(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()), 600, 15);
-      }
+      fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+        @Override
+        public void onSuccess(Location location) {
+          if (location != null)
+            centerCameraWithOffsetTo(new LatLng(location.getLatitude(), location.getLongitude()), 600, 15);
+        }
+      });
     }
   }
 
