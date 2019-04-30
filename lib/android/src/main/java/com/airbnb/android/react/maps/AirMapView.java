@@ -93,8 +93,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private final Map<LatLng, AirMapCity> cities = new HashMap<>();
   private final Map<Marker, AirMapCity> cityPins = new HashMap<>();
   private AirMapCity lastCity;
-  private AirMapCity lastCityWithPins;
-  private boolean showingProviderPins;
+  private AirMapCity lastCityWithMarkers;
+  private boolean showingProviderMarkers;
   /**
    * end of urbi-specific fields
    */
@@ -418,23 +418,23 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             double lastMaxLatLng = LatLngBoundsUtils.getMaxLatLng(lastCameraBounds);
 
             if (maxLatLng > switchToCityPinsDelta && lastMaxLatLng < switchToCityPinsDelta) {
-              // switch to city pins
+              // switch to city markers
               map.clear();
-              showingProviderPins = false;
+              showingProviderMarkers = false;
               cityPins.clear();
               if (lastCity != null) {
-                lastCityWithPins = lastCity;
+                lastCityWithMarkers = lastCity;
               }
               for (AirMapCity city : cities.values()) {
                 cityPins.put(map.addMarker(city.getMarker().getMarkerOptions()), city);
               }
             } else if (lastMaxLatLng > switchToCityPinsDelta && maxLatLng < switchToCityPinsDelta) {
-              // switch to provider pins
+              // switch to provider markers
               map.clear();
-              // if we're still in the same city, add back all pins
-              if (lastCityWithPins != null && lastCityWithPins.equals(newCity) ) {
+              // if we're still in the same city, add back all provider markers
+              if (lastCityWithMarkers != null && lastCityWithMarkers.equals(newCity) ) {
                 readdProviderMarkers();
-                showingProviderPins = true;
+                showingProviderMarkers = true;
               } else if (newCity != null) {
                 markerMap.clear();
                 allMarkers.clear();
@@ -448,9 +448,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             WritableMap map = new WritableNativeMap();
             map.putString("city", newCity == null ? "unset" : newCity.getId());
             manager.pushEvent(context, view, "onCityChange", map);
-            if (!showingProviderPins && maxLatLng < switchToCityPinsDelta && newCity != null && newCity.equals(lastCityWithPins)) {
+            if (!showingProviderMarkers && maxLatLng < switchToCityPinsDelta && newCity != null && newCity.equals(lastCityWithMarkers)) {
               readdProviderMarkers();
-              showingProviderPins = true;
+              showingProviderMarkers = true;
             } else if (newCity != null) {
               allMarkers.clear();
             }
