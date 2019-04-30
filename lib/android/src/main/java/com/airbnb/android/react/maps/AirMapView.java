@@ -555,7 +555,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private void readdProviderMarkers() {
     markerMap.clear();
     for (AirMapMarker m : allMarkers) {
-      m.readdToMap(map);
+      m.readdToMapIfNotFilteredOut(map);
       Marker marker = m.getMarker();
       if (marker != null)
         markerMap.put(marker, m);

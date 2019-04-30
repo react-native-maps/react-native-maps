@@ -455,16 +455,20 @@ public class AirMapMarker extends AirMapFeature {
     updateTracksViewChanges();
   }
 
-  public void readdToMap() {
-    if (mapView != null) {
+  public void readdToMapIfNotFilteredOut() {
+    if (!filteredOut && mapView != null) {
       mapView.addMarkerToMap(this);
     }
   }
 
-  public void readdToMap(GoogleMap map) {
-    marker = map.addMarker(getMarkerOptions());
-    marker.setTag("");
-    updateMarkerIcon();
+  public void readdToMapIfNotFilteredOut(GoogleMap map) {
+    if (filteredOut) {
+      marker = null;
+    } else {
+      marker = map.addMarker(getMarkerOptions());
+      marker.setTag("");
+      updateMarkerIcon();
+    }
   }
 
   @Override
@@ -675,7 +679,7 @@ public class AirMapMarker extends AirMapFeature {
     if (filteredOut && marker != null && marker.getTag() != null)
       marker.remove();
     else if (!filteredOut) {
-      readdToMap();
+      readdToMapIfNotFilteredOut();
     }
   }
 
