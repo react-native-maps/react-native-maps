@@ -439,3 +439,15 @@ import com.airbnb.android.react.maps.MapsPackage;
 - Click to bottom dots icon in the emulator
 - Go to Google Play Tab and click Update
 
+
+### Android build error: "Program type already present"
+
+If you **don't** use project-wide properties as per instructions above (not making changes to global android/build.gradle) and encounter at build time "Program type already present" error - add those lines to your android/app/build.gradle in the dependencies section:
+
+    dependencies {
+    ...
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:design:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+    }     
+
