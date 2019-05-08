@@ -43,7 +43,7 @@ export default class NavigationMap extends Component {
   updateMap() {
     const { curPos, prevPos, curAng } = this.state;
     const curRot = this.getRotation(prevPos, curPos);
-    this.map.animateToNavigation(curPos, curRot, curAng);
+    this.map.animateCamera({ heading: curRot, center: curPos, pitch: curAng });
   }
 
   render() {

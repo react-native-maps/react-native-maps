@@ -21,6 +21,14 @@ declare module "react-native-maps" {
         longitude: number;
     }
 
+    export interface Camera {
+        center: LatLng;
+        heading: number;
+        pitch: number;
+        zoom: number;
+        altitude: number;
+    }
+
     export interface Point {
         x: number;
         y: number;
@@ -168,6 +176,7 @@ declare module "react-native-maps" {
         showsPointsOfInterest?: boolean;
         showsCompass?: boolean;
         zoomEnabled?: boolean;
+        zoomTapEnabled?: boolean;
         zoomControlEnabled?: boolean;
         rotateEnabled?: boolean;
         cacheEnabled?: boolean;
@@ -186,6 +195,8 @@ declare module "react-native-maps" {
         mapType?: MapTypes;
         region?: Region;
         initialRegion?: Region;
+        camera?: Camera;
+        initialCamera?: Camera;
         liteMode?: boolean;
         mapPadding?: EdgePadding;
         maxDelta?: number;
@@ -215,16 +226,22 @@ declare module "react-native-maps" {
     }
 
     export default class MapView extends React.Component<MapViewProps, any> {
+        getCamera(): Promise<Camera>;
+        setCamera(camera: Partial<Camera>): void;
+        animateCamera(camera: Partial<Camera>, opts?: {duration?: number}): void;
         animateToNavigation(location: LatLng, bearing: number, angle: number, duration?: number): void;
         animateToRegion(region: Region, duration?: number): void;
         animateToCoordinate(latLng: LatLng, duration?: number): void;
         animateToBearing(bearing: number, duration?: number): void;
         animateToViewingAngle(angle: number, duration?: number): void;
         fitToElements(animated: boolean): void;
-        fitToSuppliedMarkers(markers: string[], animated: boolean): void;
+        fitToSuppliedMarkers(markers: string[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         fitToCoordinates(coordinates?: LatLng[], options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
         setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
+        getMapBoundaries(): Promise<{northEast: LatLng; southWest: LatLng}>;
         takeSnapshot(options?: SnapshotOptions): Promise<string>;
+        pointForCoordinate(coordinate: LatLng): Promise<Point>;
+        coordinateForPoint(point: Point): Promise<LatLng>;
     }
 
     export class MapViewAnimated extends MapView {
@@ -240,6 +257,7 @@ declare module "react-native-maps" {
         title?: string;
         description?: string;
         image?: ImageURISource | ImageRequireSource;
+        icon?: ImageURISource | ImageRequireSource;
         opacity?: number;
         pinColor?: string;
         coordinate: LatLng | AnimatedRegion;
@@ -274,6 +292,11 @@ declare module "react-native-maps" {
          */
         hideCallout(): void;
         /**
+         * Redraws the callout for this marker
+         * __iOS only__
+         */
+        redrawCallout(): void;
+        /**
          * Animates marker movement.
          * __Android only__
          */
@@ -293,6 +316,17 @@ declare module "react-native-maps" {
     }
 
     export class Callout extends React.Component<MapCalloutProps, any> {
+    }
+
+    // =======================================================================
+    //  CalloutSubview
+    // =======================================================================
+
+    export interface MapCalloutSubviewProps extends ViewProperties {
+        onPress?: (event: MapEvent<{ action: 'callout-inside-press' }>) => void;
+    }
+
+    export class CalloutSubview extends React.Component<MapCalloutSubviewProps, any> {
     }
 
     // =======================================================================
@@ -373,6 +407,7 @@ declare module "react-native-maps" {
         urlTemplate: string;
         maximumZ?: number;
         zIndex?: number;
+        tileSize?: number;
     }
 
     export class UrlTile extends React.Component<MapUrlTileProps, any> {
@@ -387,6 +422,21 @@ declare module "react-native-maps" {
     export class LocalTile extends React.Component<MapLocalTileProps, any> {
     }
 
+    // =======================================================================
+    //  WMSTile
+    // =======================================================================
+
+    export interface MapWMSTileProps extends ViewProperties {
+        urlTemplate: string;
+        maximumZ?: number;
+        minimumZ?: number;
+        tileSize: number;
+        opacity: number;
+        zIndex?: number;
+    }
+
+    export class WMSTile extends React.Component<MapWMSTileProps, any> {
+    }
     // =======================================================================
     //  Overlay
     // =======================================================================
