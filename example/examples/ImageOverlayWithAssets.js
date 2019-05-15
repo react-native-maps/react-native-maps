@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 
 import MapView from 'react-native-maps';
 import flagPinkImg from './assets/flag-pink.png';
@@ -21,7 +17,6 @@ const OVERLAY_BOTTOM_RIGHT_COORDINATE = [35.679609609368576, 139.76806640625];
 const IMAGE = flagPinkImg;
 
 export default class ImageOverlayWithURL extends Component {
-
   static propTypes = {
     provider: MapView.ProviderPropType,
   };

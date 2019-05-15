@@ -40,3 +40,6 @@ yarn-error.log
 
 # Bundle artifact
 *.jsbundle
+
+# VSCode workspace settings
+.vscode

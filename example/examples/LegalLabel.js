@@ -15,12 +15,12 @@ const screen = Dimensions.get('window');
 class LegalLabel extends React.Component {
   static propTypes = {
     provider: ProviderPropType,
-  }
+  };
 
   state = {
     _legalLabelPositionY: new Animated.Value(10),
     legalLabelPositionY: 10,
-  }
+  };
 
   componentDidMount() {
     this.state._legalLabelPositionY.addListener(({ value }) => {
@@ -43,7 +43,7 @@ class LegalLabel extends React.Component {
         toValue: 10,
       }),
     ]).start();
-  }
+  };
 
   render() {
     const latlng = {
@@ -60,7 +60,10 @@ class LegalLabel extends React.Component {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          legalLabelInsets={{ bottom: this.state.legalLabelPositionY, right: 10 }}
+          legalLabelInsets={{
+            bottom: this.state.legalLabelPositionY,
+            right: 10,
+          }}
           initialRegion={{
             ...latlng,
             latitudeDelta: LATITUDE_DELTA,
@@ -78,17 +81,14 @@ class LegalLabel extends React.Component {
 
         <View style={styles.bio}>
           <Text style={styles.bioText}>
-            Bio description lorem ipsum Ullamco exercitation
-            aliqua ullamco nostrud dolor et aliquip fugiat do
-            aute fugiat velit in aliqua sit.
+            Bio description lorem ipsum Ullamco exercitation aliqua ullamco
+            nostrud dolor et aliquip fugiat do aute fugiat velit in aliqua sit.
           </Text>
         </View>
 
         <View style={styles.photo}>
           <View style={styles.photoInner}>
-            <Text style={styles.photoText}>
-              Profile Photo
-            </Text>
+            <Text style={styles.photoText}>Profile Photo</Text>
           </View>
         </View>
       </View>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   photo: {
     padding: 2,
     position: 'absolute',
-    top: mapHeight - (photoSize / 2),
+    top: mapHeight - photoSize / 2,
     left: padding,
     borderRadius: 5,
     borderWidth: StyleSheet.hairlineWidth,
