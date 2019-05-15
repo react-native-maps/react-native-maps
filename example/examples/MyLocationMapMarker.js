@@ -117,7 +117,7 @@ export default class MyLocationMapMarker extends React.PureComponent {
             </View>
           )}
           <View style={styles.marker}>
-            <Text style={{ width: 0, height: 0 }}>
+            <Text style={styles.markerText}>
               {this.props.enableHack && rotate}
             </Text>
           </View>
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: Math.ceil(SIZE / 2),
     margin: (HEADING_BOX_SIZE - SIZE) / 2,
   },
+  markerText: { width: 0, height: 0 },
 });
 
 MyLocationMapMarker.propTypes = propTypes;

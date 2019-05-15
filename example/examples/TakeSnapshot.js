@@ -99,7 +99,7 @@ class MarkerTypes extends React.Component {
           >
             <Image
               source={{ uri: this.state.mapSnapshot.uri }}
-              style={{ width: 300, height: 300 }}
+              style={styles.mapSnapshot}
             />
           </TouchableOpacity>
         )}
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
   },
+  mapSnapshot: { width: 300, height: 300 },
 });
 
 export default MarkerTypes;

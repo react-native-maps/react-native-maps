@@ -90,7 +90,7 @@ class DisplayLatLng extends React.Component {
           onRegionChange={region => this.onRegionChange(region)}
         />
         <View style={[styles.bubble, styles.latlng]}>
-          <Text style={{ textAlign: 'center' }}>
+          <Text style={styles.centeredText}>
             {this.state.region.latitude.toPrecision(7)},
             {this.state.region.longitude.toPrecision(7)}
           </Text>
@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
   },
+  centeredText: { textAlign: 'center' },
 });
 
 export default DisplayLatLng;

@@ -91,7 +91,7 @@ export default class App extends React.Component<Props> {
         style={styles.back}
         onPress={() => this.setState({ Component: null })}
       >
-        <Text style={{ fontWeight: 'bold', fontSize: 30 }}>&larr;</Text>
+        <Text style={styles.backButton}>&larr;</Text>
       </TouchableOpacity>
     );
   }
@@ -102,7 +102,7 @@ export default class App extends React.Component<Props> {
         <Text>Use GoogleMaps?</Text>
         <Switch
           onValueChange={value => this.setState({ useGoogleMaps: value })}
-          style={{ marginBottom: 10 }}
+          style={styles.googleSwitch}
           value={this.state.useGoogleMaps}
         />
       </View>
@@ -217,4 +217,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  backButton: { fontWeight: 'bold', fontSize: 30 },
+  googleSwitch: { marginBottom: 10 },
 });
