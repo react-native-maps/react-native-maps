@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Animated,
-} from 'react-native';
+import { StyleSheet, View, Dimensions, Animated } from 'react-native';
 
 import {
   ProviderPropType,
@@ -25,7 +20,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const ITEM_SPACING = 10;
 const ITEM_PREVIEW = 10;
-const ITEM_WIDTH = screen.width - (2 * ITEM_SPACING) - (2 * ITEM_PREVIEW);
+const ITEM_WIDTH = screen.width - 2 * ITEM_SPACING - 2 * ITEM_PREVIEW;
 const SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
 const ITEM_PREVIEW_HEIGHT = 150;
 const SCALE_END = screen.width / ITEM_WIDTH;
@@ -34,8 +29,8 @@ const BREAKPOINT2 = 350;
 const ONE = new Animated.Value(1);
 
 function getMarkerState(panX, panY, scrollY, i) {
-  const xLeft = (-SNAP_WIDTH * i) + (SNAP_WIDTH / 2);
-  const xRight = (-SNAP_WIDTH * i) - (SNAP_WIDTH / 2);
+  const xLeft = -SNAP_WIDTH * i + SNAP_WIDTH / 2;
+  const xRight = -SNAP_WIDTH * i - SNAP_WIDTH / 2;
   const xPos = -SNAP_WIDTH * i;
 
   const isIndex = panX.interpolate({
@@ -66,17 +61,26 @@ function getMarkerState(panX, panY, scrollY, i) {
 
   const translateX = panX;
 
-  const anim = Animated.multiply(isIndex, scrollY.interpolate({
-    inputRange: [0, BREAKPOINT1],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  }));
+  const anim = Animated.multiply(
+    isIndex,
+    scrollY.interpolate({
+      inputRange: [0, BREAKPOINT1],
+      outputRange: [0, 1],
+      extrapolate: 'clamp',
+    })
+  );
 
-  const scale = Animated.add(ONE, Animated.multiply(isIndex, scrollY.interpolate({
-    inputRange: [BREAKPOINT1, BREAKPOINT2],
-    outputRange: [0, SCALE_END - 1],
-    extrapolate: 'clamp',
-  })));
+  const scale = Animated.add(
+    ONE,
+    Animated.multiply(
+      isIndex,
+      scrollY.interpolate({
+        inputRange: [BREAKPOINT1, BREAKPOINT2],
+        outputRange: [0, SCALE_END - 1],
+        extrapolate: 'clamp',
+      })
+    )
+  );
 
   // [0 => 1]
   let opacity = scrollY.interpolate({
@@ -88,7 +92,6 @@ function getMarkerState(panX, panY, scrollY, i) {
   // if i === index: [0 => 0]
   // if i !== index: [0 => 1]
   opacity = Animated.multiply(isNotIndex, opacity);
-
 
   // if i === index: [1 => 1]
   // if i !== index: [1 => 0]
@@ -183,7 +186,8 @@ class AnimatedViews extends React.Component {
     ];
 
     const animations = markers.map((m, i) =>
-      getMarkerState(panX, panY, scrollY, i));
+      getMarkerState(panX, panY, scrollY, i)
+    );
 
     this.state = {
       panX,
@@ -212,20 +216,22 @@ class AnimatedViews extends React.Component {
     panY.addListener(this.onPanYChange);
 
     region.stopAnimation();
-    region.timing({
-      latitude: scrollX.interpolate({
-        inputRange: markers.map((m, i) => i * SNAP_WIDTH),
-        outputRange: markers.map(m => m.coordinate.latitude),
-      }),
-      longitude: scrollX.interpolate({
-        inputRange: markers.map((m, i) => i * SNAP_WIDTH),
-        outputRange: markers.map(m => m.coordinate.longitude),
-      }),
-      duration: 0,
-    }).start();
+    region
+      .timing({
+        latitude: scrollX.interpolate({
+          inputRange: markers.map((m, i) => i * SNAP_WIDTH),
+          outputRange: markers.map(m => m.coordinate.latitude),
+        }),
+        longitude: scrollX.interpolate({
+          inputRange: markers.map((m, i) => i * SNAP_WIDTH),
+          outputRange: markers.map(m => m.coordinate.longitude),
+        }),
+        duration: 0,
+      })
+      .start();
   }
 
-  onStartShouldSetPanResponder = (e) => {
+  onStartShouldSetPanResponder = e => {
     // we only want to move the view if they are starting the gesture on top
     // of the view, so this calculates that and returns true if so. If we return
     // false, the gesture should get passed to the map view appropriately.
@@ -235,70 +241,81 @@ class AnimatedViews extends React.Component {
     const topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  }
+  };
 
-  onMoveShouldSetPanResponder = (e) => {
+  onMoveShouldSetPanResponder = e => {
     const { panY } = this.state;
     const { pageY } = e.nativeEvent;
     const topOfMainWindow = ITEM_PREVIEW_HEIGHT + panY.__getValue();
     const topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
-  }
+  };
 
   onPanXChange = ({ value }) => {
     const { index } = this.state;
-    const newIndex = Math.floor(((-1 * value) + (SNAP_WIDTH / 2)) / SNAP_WIDTH);
+    const newIndex = Math.floor((-1 * value + SNAP_WIDTH / 2) / SNAP_WIDTH);
     if (index !== newIndex) {
       this.setState({ index: newIndex });
     }
-  }
+  };
 
   onPanYChange = ({ value }) => {
-    const { canMoveHorizontal, region, scrollY, scrollX, markers, index } = this.state;
+    const {
+      canMoveHorizontal,
+      region,
+      scrollY,
+      scrollX,
+      markers,
+      index,
+    } = this.state;
     const shouldBeMovable = Math.abs(value) < 2;
     if (shouldBeMovable !== canMoveHorizontal) {
       this.setState({ canMoveHorizontal: shouldBeMovable });
       if (!shouldBeMovable) {
         const { coordinate } = markers[index];
         region.stopAnimation();
-        region.timing({
-          latitude: scrollY.interpolate({
-            inputRange: [0, BREAKPOINT1],
-            outputRange: [
-              coordinate.latitude,
-              coordinate.latitude - (LATITUDE_DELTA * 0.5 * 0.375),
-            ],
-            extrapolate: 'clamp',
-          }),
-          latitudeDelta: scrollY.interpolate({
-            inputRange: [0, BREAKPOINT1],
-            outputRange: [LATITUDE_DELTA, LATITUDE_DELTA * 0.5],
-            extrapolate: 'clamp',
-          }),
-          longitudeDelta: scrollY.interpolate({
-            inputRange: [0, BREAKPOINT1],
-            outputRange: [LONGITUDE_DELTA, LONGITUDE_DELTA * 0.5],
-            extrapolate: 'clamp',
-          }),
-          duration: 0,
-        }).start();
+        region
+          .timing({
+            latitude: scrollY.interpolate({
+              inputRange: [0, BREAKPOINT1],
+              outputRange: [
+                coordinate.latitude,
+                coordinate.latitude - LATITUDE_DELTA * 0.5 * 0.375,
+              ],
+              extrapolate: 'clamp',
+            }),
+            latitudeDelta: scrollY.interpolate({
+              inputRange: [0, BREAKPOINT1],
+              outputRange: [LATITUDE_DELTA, LATITUDE_DELTA * 0.5],
+              extrapolate: 'clamp',
+            }),
+            longitudeDelta: scrollY.interpolate({
+              inputRange: [0, BREAKPOINT1],
+              outputRange: [LONGITUDE_DELTA, LONGITUDE_DELTA * 0.5],
+              extrapolate: 'clamp',
+            }),
+            duration: 0,
+          })
+          .start();
       } else {
         region.stopAnimation();
-        region.timing({
-          latitude: scrollX.interpolate({
-            inputRange: markers.map((m, i) => i * SNAP_WIDTH),
-            outputRange: markers.map(m => m.coordinate.latitude),
-          }),
-          longitude: scrollX.interpolate({
-            inputRange: markers.map((m, i) => i * SNAP_WIDTH),
-            outputRange: markers.map(m => m.coordinate.longitude),
-          }),
-          duration: 0,
-        }).start();
+        region
+          .timing({
+            latitude: scrollX.interpolate({
+              inputRange: markers.map((m, i) => i * SNAP_WIDTH),
+              outputRange: markers.map(m => m.coordinate.latitude),
+            }),
+            longitude: scrollX.interpolate({
+              inputRange: markers.map((m, i) => i * SNAP_WIDTH),
+              outputRange: markers.map(m => m.coordinate.longitude),
+            }),
+            duration: 0,
+          })
+          .start();
       }
     }
-  }
+  };
 
   onRegionChange(/* region */) {
     // this.state.region.setValue(region);
@@ -336,23 +353,14 @@ class AnimatedViews extends React.Component {
             onRegionChange={this.onRegionChange}
           >
             {markers.map((marker, i) => {
-              const {
-                selected,
-                markerOpacity,
-                markerScale,
-              } = animations[i];
+              const { selected, markerOpacity, markerScale } = animations[i];
 
               return (
-                <Marker
-                  key={marker.id}
-                  coordinate={marker.coordinate}
-                >
+                <Marker key={marker.id} coordinate={marker.coordinate}>
                   <PriceMarker
                     style={{
                       opacity: markerOpacity,
-                      transform: [
-                        { scale: markerScale },
-                      ],
+                      transform: [{ scale: markerScale }],
                     }}
                     amount={marker.amount}
                     selected={selected}
@@ -363,24 +371,18 @@ class AnimatedViews extends React.Component {
           </AnimatedMap>
           <View style={styles.itemContainer}>
             {markers.map((marker, i) => {
-              const {
-                translateY,
-                translateX,
-                scale,
-                opacity,
-              } = animations[i];
+              const { translateY, translateX, scale, opacity } = animations[i];
 
               return (
                 <Animated.View
                   key={marker.id}
-                  style={[styles.item, {
-                    opacity,
-                    transform: [
-                      { translateY },
-                      { translateX },
-                      { scale },
-                    ],
-                  }]}
+                  style={[
+                    styles.item,
+                    {
+                      opacity,
+                      transform: [{ translateY }, { translateX }, { scale }],
+                    },
+                  ]}
                 />
               );
             })}
@@ -402,7 +404,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    paddingHorizontal: (ITEM_SPACING / 2) + ITEM_PREVIEW,
+    paddingHorizontal: ITEM_SPACING / 2 + ITEM_PREVIEW,
     position: 'absolute',
     // top: screen.height - ITEM_PREVIEW_HEIGHT - 64,
     paddingTop: screen.height - ITEM_PREVIEW_HEIGHT - 64,
@@ -414,7 +416,7 @@ const styles = StyleSheet.create({
   },
   item: {
     width: ITEM_WIDTH,
-    height: screen.height + (2 * ITEM_PREVIEW_HEIGHT),
+    height: screen.height + 2 * ITEM_PREVIEW_HEIGHT,
     backgroundColor: 'red',
     marginHorizontal: ITEM_SPACING / 2,
     overflow: 'hidden',

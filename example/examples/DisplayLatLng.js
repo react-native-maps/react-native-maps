@@ -56,14 +56,16 @@ class DisplayLatLng extends React.Component {
   }
 
   getRandomFloat(min, max) {
-    return (Math.random() * (max - min)) + min;
+    return Math.random() * (max - min) + min;
   }
 
   randomCoordinate() {
     const region = this.state.region;
     return {
-      latitude: region.latitude + ((Math.random() - 0.5) * (region.latitudeDelta / 2)),
-      longitude: region.longitude + ((Math.random() - 0.5) * (region.longitudeDelta / 2)),
+      latitude:
+        region.latitude + (Math.random() - 0.5) * (region.latitudeDelta / 2),
+      longitude:
+        region.longitude + (Math.random() - 0.5) * (region.longitudeDelta / 2),
     };
   }
 
@@ -79,7 +81,9 @@ class DisplayLatLng extends React.Component {
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-          ref={ref => { this.map = ref; }}
+          ref={ref => {
+            this.map = ref;
+          }}
           mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
           initialRegion={this.state.region}

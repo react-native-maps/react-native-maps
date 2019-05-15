@@ -11,7 +11,11 @@ import {
 import { Marker } from 'react-native-maps';
 import isEqual from 'lodash/isEqual';
 
-const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
+const GEOLOCATION_OPTIONS = {
+  enableHighAccuracy: true,
+  timeout: 20000,
+  maximumAge: 1000,
+};
 const ANCHOR = { x: 0.5, y: 0.5 };
 
 const colorOfmyLocationMapMarker = 'blue';
@@ -49,42 +53,56 @@ export default class MyLocationMapMarker extends React.PureComponent {
   componentDidMount() {
     this.mounted = true;
     // If you supply a coordinate prop, we won't try to track location automatically
-    if (this.props.coordinate) return;
+    if (this.props.coordinate) {
+      return;
+    }
 
     if (Platform.OS === 'android') {
-      PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-        .then(granted => {
-          if (granted && this.mounted) this.watchLocation();
-        });
+      PermissionsAndroid.requestPermission(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      ).then(granted => {
+        if (granted && this.mounted) {
+          this.watchLocation();
+        }
+      });
     } else {
       this.watchLocation();
     }
   }
   watchLocation() {
     // eslint-disable-next-line no-undef
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-      const myLastPosition = this.state.myPosition;
-      const myPosition = position.coords;
-      if (!isEqual(myPosition, myLastPosition)) {
-        this.setState({ myPosition });
-      }
-    }, null, this.props.geolocationOptions);
+    this.watchID = navigator.geolocation.watchPosition(
+      position => {
+        const myLastPosition = this.state.myPosition;
+        const myPosition = position.coords;
+        if (!isEqual(myPosition, myLastPosition)) {
+          this.setState({ myPosition });
+        }
+      },
+      null,
+      this.props.geolocationOptions
+    );
   }
   componentWillUnmount() {
     this.mounted = false;
     // eslint-disable-next-line no-undef
-    if (this.watchID) navigator.geolocation.clearWatch(this.watchID);
+    if (this.watchID) {
+      navigator.geolocation.clearWatch(this.watchID);
+    }
   }
   render() {
     let { heading, coordinate } = this.props;
     if (!coordinate) {
       const { myPosition } = this.state;
-      if (!myPosition) return null;
+      if (!myPosition) {
+        return null;
+      }
       coordinate = myPosition;
       heading = myPosition.heading;
     }
 
-    const rotate = (typeof heading === 'number' && heading >= 0) ? `${heading}deg` : null;
+    const rotate =
+      typeof heading === 'number' && heading >= 0 ? `${heading}deg` : null;
 
     return (
       <Marker
@@ -95,11 +113,11 @@ export default class MyLocationMapMarker extends React.PureComponent {
       >
         <View style={styles.container}>
           <View style={styles.markerHalo} />
-          {rotate &&
+          {rotate && (
             <View style={[styles.heading, { transform: [{ rotate }] }]}>
               <View style={styles.headingPointer} />
             </View>
-          }
+          )}
           <View style={styles.marker}>
             <Text style={{ width: 0, height: 0 }}>
               {this.props.enableHack && rotate}

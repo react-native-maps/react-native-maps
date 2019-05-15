@@ -1,4 +1,8 @@
-import MapView, { Animated, MAP_TYPES, ProviderPropType } from './lib/components/MapView';
+import MapView, {
+  Animated,
+  MAP_TYPES,
+  ProviderPropType,
+} from './lib/components/MapView';
 import Marker from './lib/components/MapMarker.js';
 import Overlay from './lib/components/MapOverlay.js';
 
@@ -9,7 +13,9 @@ export { default as UrlTile } from './lib/components/MapUrlTile.js';
 export { default as WMSTile } from './lib/components/MapWMSTile.js';
 export { default as LocalTile } from './lib/components/MapLocalTile.js';
 export { default as Callout } from './lib/components/MapCallout.js';
-export { default as CalloutSubview } from './lib/components/MapCalloutSubview.js';
+export {
+  default as CalloutSubview,
+} from './lib/components/MapCalloutSubview.js';
 export { default as AnimatedRegion } from './lib/components/AnimatedRegion.js';
 
 export { Marker, Overlay };
@@ -22,4 +28,3 @@ export const MarkerAnimated = Marker.Animated;
 export const OverlayAnimated = Overlay.Animated;
 
 export default MapView;
-

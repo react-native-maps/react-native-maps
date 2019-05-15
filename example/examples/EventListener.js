@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, View, Text, Dimensions, ScrollView } from 'react-native';
 // eslint-disable-next-line max-len
-import MapView, { PROVIDER_GOOGLE, Marker, ProviderPropType, Polygon, Polyline, Callout } from 'react-native-maps';
+import MapView, {
+  PROVIDER_GOOGLE,
+  Marker,
+  ProviderPropType,
+  Polygon,
+  Polyline,
+  Callout,
+} from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
 const { width, height } = Dimensions.get('window');
@@ -31,7 +32,9 @@ class Event extends React.Component {
     return (
       <View style={styles.event}>
         <Text style={styles.eventName}>{event.name}</Text>
-        <Text style={styles.eventData}>{JSON.stringify(event.data, null, 2)}</Text>
+        <Text style={styles.eventData}>
+          {JSON.stringify(event.data, null, 2)}
+        </Text>
       </View>
     );
   }
@@ -40,7 +43,6 @@ class Event extends React.Component {
 Event.propTypes = {
   event: PropTypes.object,
 };
-
 
 // eslint-disable-next-line react/no-multi-comp
 class EventListener extends React.Component {
@@ -69,13 +71,10 @@ class EventListener extends React.Component {
   recordEvent(name) {
     return e => {
       if (e.persist) {
-        e.persist();  // Avoids warnings relating to https://fb.me/react-event-pooling
+        e.persist(); // Avoids warnings relating to https://fb.me/react-event-pooling
       }
       this.setState(prevState => ({
-        events: [
-          this.makeEvent(e, name),
-          ...prevState.events.slice(0, 10),
-        ],
+        events: [this.makeEvent(e, name), ...prevState.events.slice(0, 10)],
       }));
     };
   }
@@ -98,7 +97,9 @@ class EventListener extends React.Component {
           showsUserLocation
           showsMyLocationButton
           onRegionChange={this.recordEvent('Map::onRegionChange')}
-          onRegionChangeComplete={this.recordEvent('Map::onRegionChangeComplete')}
+          onRegionChangeComplete={this.recordEvent(
+            'Map::onRegionChangeComplete'
+          )}
           onPress={this.recordEvent('Map::onPress')}
           onPanDrag={this.recordEvent('Map::onPanDrag')}
           onLongPress={this.recordEvent('Map::onLongPress')}
@@ -110,14 +111,14 @@ class EventListener extends React.Component {
         >
           <Marker
             coordinate={{
-              latitude: LATITUDE + (LATITUDE_DELTA / 2),
-              longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
+              latitude: LATITUDE + LATITUDE_DELTA / 2,
+              longitude: LONGITUDE + LONGITUDE_DELTA / 2,
             }}
           />
           <Marker
             coordinate={{
-              latitude: LATITUDE - (LATITUDE_DELTA / 2),
-              longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
+              latitude: LATITUDE - LATITUDE_DELTA / 2,
+              longitude: LONGITUDE - LONGITUDE_DELTA / 2,
             }}
           />
           <Marker
@@ -143,36 +144,46 @@ class EventListener extends React.Component {
             fillColor={'rgba(255,0,0,0.3)'}
             onPress={this.recordEvent('Polygon::onPress')}
             tappable
-            coordinates={[{
-              latitude: LATITUDE + (LATITUDE_DELTA / 5),
-              longitude: LONGITUDE + (LONGITUDE_DELTA / 4),
-            }, {
-              latitude: LATITUDE + (LATITUDE_DELTA / 3),
-              longitude: LONGITUDE + (LONGITUDE_DELTA / 4),
-            }, {
-              latitude: LATITUDE + (LATITUDE_DELTA / 4),
-              longitude: LONGITUDE + (LONGITUDE_DELTA / 2),
-            }]}
+            coordinates={[
+              {
+                latitude: LATITUDE + LATITUDE_DELTA / 5,
+                longitude: LONGITUDE + LONGITUDE_DELTA / 4,
+              },
+              {
+                latitude: LATITUDE + LATITUDE_DELTA / 3,
+                longitude: LONGITUDE + LONGITUDE_DELTA / 4,
+              },
+              {
+                latitude: LATITUDE + LATITUDE_DELTA / 4,
+                longitude: LONGITUDE + LONGITUDE_DELTA / 2,
+              },
+            ]}
           />
           <Polyline
             strokeColor={'rgba(255,0,0,1)'}
             onPress={this.recordEvent('Polyline::onPress')}
             tappable
-            coordinates={[{
-              latitude: LATITUDE + (LATITUDE_DELTA / 5),
-              longitude: LONGITUDE - (LONGITUDE_DELTA / 4),
-            }, {
-              latitude: LATITUDE + (LATITUDE_DELTA / 3),
-              longitude: LONGITUDE - (LONGITUDE_DELTA / 4),
-            }, {
-              latitude: LATITUDE + (LATITUDE_DELTA / 4),
-              longitude: LONGITUDE - (LONGITUDE_DELTA / 2),
-            }]}
+            coordinates={[
+              {
+                latitude: LATITUDE + LATITUDE_DELTA / 5,
+                longitude: LONGITUDE - LONGITUDE_DELTA / 4,
+              },
+              {
+                latitude: LATITUDE + LATITUDE_DELTA / 3,
+                longitude: LONGITUDE - LONGITUDE_DELTA / 4,
+              },
+              {
+                latitude: LATITUDE + LATITUDE_DELTA / 4,
+                longitude: LONGITUDE - LONGITUDE_DELTA / 2,
+              },
+            ]}
           />
         </MapView>
         <View style={styles.eventList}>
           <ScrollView>
-            {this.state.events.map(event => <Event key={event.id} event={event} />)}
+            {this.state.events.map(event => (
+              <Event key={event.id} event={event} />
+            ))}
           </ScrollView>
         </View>
       </View>
