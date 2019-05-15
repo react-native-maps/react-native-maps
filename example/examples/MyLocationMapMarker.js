@@ -70,7 +70,6 @@ export default class MyLocationMapMarker extends React.PureComponent {
     }
   }
   watchLocation() {
-    // eslint-disable-next-line no-undef
     this.watchID = navigator.geolocation.watchPosition(
       position => {
         const myLastPosition = this.state.myPosition;
@@ -85,7 +84,6 @@ export default class MyLocationMapMarker extends React.PureComponent {
   }
   componentWillUnmount() {
     this.mounted = false;
-    // eslint-disable-next-line no-undef
     if (this.watchID) {
       navigator.geolocation.clearWatch(this.watchID);
     }

@@ -88,7 +88,7 @@ class Callouts extends React.Component {
             }}
             coordinate={markers[0].coordinate}
             title="This is a native view"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation" // eslint-disable-line max-len
+            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation"
           />
           <Marker coordinate={markers[1].coordinate}>
             <Callout style={styles.plainView}>
@@ -143,7 +143,7 @@ class Callouts extends React.Component {
             }}
             coordinate={markers[3].coordinate}
             title="You can also open this callout"
-            description="by pressing on transparent area of custom callout" // eslint-disable-line max-len
+            description="by pressing on transparent area of custom callout"
           />
         </MapView>
         <View style={styles.buttonContainer}>

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StyleSheet, View, Text, Dimensions, ScrollView } from 'react-native';
-// eslint-disable-next-line max-len
 import MapView, {
   PROVIDER_GOOGLE,
   Marker,
@@ -44,7 +43,6 @@ Event.propTypes = {
   event: PropTypes.object,
 };
 
-// eslint-disable-next-line react/no-multi-comp
 class EventListener extends React.Component {
   constructor(props) {
     super(props);

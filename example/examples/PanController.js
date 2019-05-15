@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -157,13 +155,13 @@ class PanController extends React.Component {
         const dir = this._direction;
 
         if (this.props.onRelease) {
-          cancel = false === this.props.onRelease({ vx, vy, dx, dy });
+          cancel = this.props.onRelease({ vx, vy, dx, dy }) === false;
         }
 
         if (!cancel && horizontal && (!lockDirection || dir === 'x')) {
           let [xMin, xMax] = xBounds;
           if (this.props.onReleaseX) {
-            cancel = false === this.props.onReleaseX({ vx, vy, dx, dy });
+            cancel = this.props.onReleaseX({ vx, vy, dx, dy }) === false;
           }
           !cancel &&
             this.handleResponderRelease(
@@ -180,7 +178,7 @@ class PanController extends React.Component {
         if (!cancel && vertical && (!lockDirection || dir === 'y')) {
           let [yMin, yMax] = yBounds;
           if (this.props.onReleaseY) {
-            cancel = false === this.props.onReleaseY({ vx, vy, dx, dy });
+            cancel = this.props.onReleaseY({ vx, vy, dx, dy }) === false;
           }
           !cancel &&
             this.handleResponderRelease(
