@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": "@react-native-community",
   "plugins": [
     "prefer-object-spread"
   ],
