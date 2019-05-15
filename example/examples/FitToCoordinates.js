@@ -20,8 +20,8 @@ const SPACE = 0.01;
 
 function createMarker(modifier = 1) {
   return {
-    latitude: LATITUDE - (SPACE * modifier),
-    longitude: LONGITUDE - (SPACE * modifier),
+    latitude: LATITUDE - SPACE * modifier,
+    longitude: LONGITUDE - SPACE * modifier,
   };
 }
 
@@ -67,7 +67,9 @@ class FitToCoordinates extends React.Component {
     return (
       <View style={styles.container}>
         <MapView
-          ref={ref => { this.map = ref; }}
+          ref={ref => {
+            this.map = ref;
+          }}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -77,11 +79,7 @@ class FitToCoordinates extends React.Component {
           }}
         >
           {MARKERS.map((marker, i) => (
-            <Marker
-              key={i}
-              identifier={`id${i}`}
-              coordinate={marker}
-            />
+            <Marker key={i} identifier={`id${i}`} coordinate={marker} />
           ))}
         </MapView>
         <View style={styles.buttonContainer}>

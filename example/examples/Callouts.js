@@ -7,7 +7,12 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import MapView, { Marker, Callout, CalloutSubview, ProviderPropType } from 'react-native-maps';
+import MapView, {
+  Marker,
+  Callout,
+  CalloutSubview,
+  ProviderPropType,
+} from 'react-native-maps';
 import CustomCallout from './CustomCallout';
 
 const { width, height } = Dimensions.get('window');
@@ -52,7 +57,7 @@ class Callouts extends React.Component {
         {
           coordinate: {
             latitude: LATITUDE,
-            longitude: LONGITUDE - (SPACE / 2),
+            longitude: LONGITUDE - SPACE / 2,
           },
         },
       ],
@@ -78,14 +83,14 @@ class Callouts extends React.Component {
           zoomTapEnabled={false}
         >
           <Marker
-            ref={ref => { this.marker1 = ref; }}
+            ref={ref => {
+              this.marker1 = ref;
+            }}
             coordinate={markers[0].coordinate}
             title="This is a native view"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation" // eslint-disable-line max-len
+            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation"
           />
-          <Marker
-            coordinate={markers[1].coordinate}
-          >
+          <Marker coordinate={markers[1].coordinate}>
             <Callout style={styles.plainView}>
               <View>
                 <Text>This is a plain view</Text>
@@ -96,27 +101,36 @@ class Callouts extends React.Component {
             coordinate={markers[2].coordinate}
             calloutOffset={{ x: -8, y: 28 }}
             calloutAnchor={{ x: 0.5, y: 0.4 }}
-            ref={ref => { this.marker2 = ref; }}
+            ref={ref => {
+              this.marker2 = ref;
+            }}
           >
             <Callout
               alphaHitTest
-              tooltip onPress={(e) => {
-                if (e.nativeEvent.action === 'marker-inside-overlay-press' ||
-                  e.nativeEvent.action === 'callout-inside-press') {
+              tooltip
+              onPress={e => {
+                if (
+                  e.nativeEvent.action === 'marker-inside-overlay-press' ||
+                  e.nativeEvent.action === 'callout-inside-press'
+                ) {
                   return;
                 }
 
                 Alert.alert('callout pressed');
-              }} style={styles.customView}
+              }}
+              style={styles.customView}
             >
               <CustomCallout>
-                <Text>{`This is a custom callout bubble view ${this.state.cnt}`}</Text>
+                <Text>{`This is a custom callout bubble view ${
+                  this.state.cnt
+                }`}</Text>
                 <CalloutSubview
                   onPress={() => {
                     this.setState({ cnt: this.state.cnt + 1 }, () => {
                       this.marker2.redrawCallout();
                     });
-                  }} style={[styles.calloutButton]}
+                  }}
+                  style={[styles.calloutButton]}
                 >
                   <Text>Click me</Text>
                 </CalloutSubview>
@@ -124,10 +138,12 @@ class Callouts extends React.Component {
             </Callout>
           </Marker>
           <Marker
-            ref={ref => { this.marker4 = ref; }}
+            ref={ref => {
+              this.marker4 = ref;
+            }}
             coordinate={markers[3].coordinate}
             title="You can also open this callout"
-            description="by pressing on transparent area of custom callout" // eslint-disable-line max-len
+            description="by pressing on transparent area of custom callout"
           />
         </MapView>
         <View style={styles.buttonContainer}>
@@ -136,10 +152,16 @@ class Callouts extends React.Component {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.show()} style={[styles.bubble, styles.button]}>
+          <TouchableOpacity
+            onPress={() => this.show()}
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Show</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.hide()} style={[styles.bubble, styles.button]}>
+          <TouchableOpacity
+            onPress={() => this.hide()}
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Hide</Text>
           </TouchableOpacity>
         </View>

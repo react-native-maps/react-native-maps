@@ -61,13 +61,13 @@ class ViewsAsMarkers extends React.Component {
             onPress={() => this.decrement()}
             style={[styles.bubble, styles.button]}
           >
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>-</Text>
+            <Text style={styles.ammountButton}>-</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.increment()}
             style={[styles.bubble, styles.button]}
           >
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>+</Text>
+            <Text style={styles.ammountButton}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     backgroundColor: 'transparent',
   },
+  ammountButton: { fontSize: 20, fontWeight: 'bold' },
 });
 
 export default ViewsAsMarkers;
