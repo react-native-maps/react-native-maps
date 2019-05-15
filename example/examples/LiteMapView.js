@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 
 import MapView from 'react-native-maps';
 
@@ -36,9 +32,7 @@ class LiteMapView extends React.Component {
       );
     }
     return (
-      <ScrollView style={StyleSheet.absoluteFillObject}>
-        {maps}
-      </ScrollView>
+      <ScrollView style={StyleSheet.absoluteFillObject}>{maps}</ScrollView>
     );
   }
 }

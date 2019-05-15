@@ -42,8 +42,8 @@ class MassiveCustomMarkers extends React.Component {
     for (let i = 0; i < 100; i++) {
       const newMarker = {
         coordinate: {
-          latitude: latitude + (0.001 * i),
-          longitude: longitude + (0.001 * i),
+          latitude: latitude + 0.001 * i,
+          longitude: longitude + 0.001 * i,
         },
         key: `foo${id++}`,
       };

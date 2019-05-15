@@ -1,17 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": "@react-native-community",
   "plugins": [
     "prefer-object-spread"
-  ],
-  "rules": {
-    "prefer-object-spread/prefer-object-spread": 2,
-    "react/jsx-filename-extension": 0,
-    "react/prefer-stateless-function": 0,
-    "react/sort-comp": 0,
-    "no-use-before-define": 0,
-    "no-underscore-dangle": 0,
-    "import/no-extraneous-dependencies": 0,
-    "import/no-unresolved": [2, { "ignore": ["^react-native-maps"] }]
-  }
+  ]
 }

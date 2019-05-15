@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 
 import MapView from 'react-native-maps';
 
@@ -48,11 +44,11 @@ class MarkerTypes extends React.Component {
           <MapView.Marker
             testID="marker"
             coordinate={this.state.a}
-            onSelect={(e) => log('onSelect', e)}
-            onDrag={(e) => log('onDrag', e)}
-            onDragStart={(e) => log('onDragStart', e)}
-            onDragEnd={(e) => log('onDragEnd', e)}
-            onPress={(e) => log('onPress', e)}
+            onSelect={e => log('onSelect', e)}
+            onDrag={e => log('onDrag', e)}
+            onDragStart={e => log('onDragStart', e)}
+            onDragEnd={e => log('onDragEnd', e)}
+            onPress={e => log('onPress', e)}
             draggable
           />
         </MapView>
@@ -77,4 +73,3 @@ const styles = StyleSheet.create({
 });
 
 module.exports = MarkerTypes;
-
