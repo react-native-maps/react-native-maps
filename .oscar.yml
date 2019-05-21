@@ -1,0 +1,43 @@
+language: ruby
+dist: trusty
+cache:
+  bundler: true
+  directories:
+    - node_modules
+sudo: required
+
+addons:
+  chrome: stable
+
+before_install:
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+
+services:
+  - postgresql
+
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
+
+script:
+  - bundle exec bin/setup_travis
+  - bundle exec rake travis:ci
+env:
+  global:
+    - CI_NODE_TOTAL=4
+  matrix:
+    - CI_NODE_INDEX=0
+    - CI_NODE_INDEX=1
+    - CI_NODE_INDEX=2
+    - CI_NODE_INDEX=3
+    - JASMINE=true
+branches:
+  only: # Only build master and e2e-services. All pull requests also get built
+    - master
+    - e2e-services
+deploy:
+  provider: script
+  script: bin/ecc-sync
+  on:
+    branch: master
+    repo: nasa/earthdata-search
