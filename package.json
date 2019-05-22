@@ -51,7 +51,8 @@
     "lodash": "^4.17.2",
     "metro-react-native-babel-preset": "^0.53.1",
     "react": "16.8.3",
-    "react-native": "0.59.3"
+    "react-native": "0.59.3",
+    "@types/react-native-maps": "^0.24.0"
   },
   "rnpm": {
     "android": {
