@@ -446,6 +446,7 @@ declare module "react-native-maps" {
     pathTemplate: string;
     tileSize?: number;
     zIndex?: number;
+    flipY?: boolean;
   }
 
   export class LocalTile extends React.Component<MapLocalTileProps, any> {}
