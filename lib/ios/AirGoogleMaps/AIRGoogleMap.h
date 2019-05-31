@@ -61,6 +61,7 @@
 @property (nonatomic, assign) NSString *kmlSrc;
 
 - (void)didPrepareMap;
+- (void)mapViewDidFinishTileRendering;
 - (BOOL)didTapMarker:(GMSMarker *)marker;
 - (void)didTapPolyline:(GMSPolyline *)polyline;
 - (void)didTapPolygon:(GMSPolygon *)polygon;
