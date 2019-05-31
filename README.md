@@ -1,7 +1,10 @@
 # david-cako/react-native-maps
 
 ## Additions:
-**Google Maps/iOS**: Gradient polylines, heatmaps, and calloutAnchor
+**Google Maps**: onMapLoaded callback (tiles fully loaded)
+
+**Google Maps/iOS**: Gradient polylines, heatmaps, and calloutAnchor  
+
 **Google Maps/Android**: Heatmaps
 
 # react-native-maps [![npm version](https://img.shields.io/npm/v/react-native-maps.svg?style=flat)](https://www.npmjs.com/package/react-native-maps)
