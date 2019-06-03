@@ -29,6 +29,7 @@
 @property NSInteger overzoomThreshold;
 @property NSInteger maximumZ;
 @property NSInteger minimumZ;
+@property BOOL flipY;
 @property BOOL shouldReplaceMapContent;
 @property CGFloat tileSize;
 

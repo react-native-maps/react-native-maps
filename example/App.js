@@ -31,6 +31,7 @@ import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 import FitToCoordinates from './examples/FitToCoordinates';
 import LiteMapView from './examples/LiteMapView';
 import CustomTiles from './examples/CustomTiles';
+import WMSTiles from './examples/WMSTiles';
 import ZIndexMarkers from './examples/ZIndexMarkers';
 import StaticMap from './examples/StaticMap';
 import MapStyle from './examples/MapStyle';
@@ -43,8 +44,10 @@ import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
 import AnimatedNavigation from './examples/AnimatedNavigation';
 import OnPoiClick from './examples/OnPoiClick';
+import TestIdMarkers from './examples/TestIdMarkers';
 import IndoorMap from './examples/IndoorMap';
 import CameraControl from './examples/CameraControl';
+import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -59,7 +62,8 @@ function makeExampleMapper(useGoogleMaps) {
   return example => example;
 }
 
-class App extends React.Component {
+type Props = {};
+export default class App extends React.Component<Props> {
   constructor(props) {
     super(props);
 
@@ -155,11 +159,13 @@ class App extends React.Component {
       [FitToCoordinates, 'Fit Map To Coordinates', true],
       [LiteMapView, 'Android Lite MapView'],
       [CustomTiles, 'Custom Tiles', true],
+      [WMSTiles, 'WMS Tiles', true],
       [ZIndexMarkers, 'Position Markers with Z-index', true],
       [MapStyle, 'Customize the style of the map', true],
       [LegalLabel, 'Reposition the legal label', true],
       [SetNativePropsOverlays, 'Update native props', true],
       [CustomOverlay, 'Custom Overlay Component', true],
+      [TestIdMarkers, 'Test ID for Automation', true],
       [MapKml, 'Load Map with KML', true],
       [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
       [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
@@ -168,6 +174,7 @@ class App extends React.Component {
       [OnPoiClick, 'On Poi Click', true],
       [IndoorMap, 'Indoor Map', true],
       [CameraControl, 'CameraControl', true],
+      [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
     ]
     // Filter out examples that are not yet supported for Google Maps on iOS.
     .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
@@ -206,5 +213,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default App;

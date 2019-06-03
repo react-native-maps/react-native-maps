@@ -42,6 +42,14 @@
   [self update];
 }
 
+- (void)setFlipY:(BOOL)flipY
+{
+  _flipY = flipY;
+  if (self.tileOverlay) {
+    self.tileOverlay.geometryFlipped = _flipY;
+  }
+}
+
 - (void)setUrlTemplate:(NSString *)urlTemplate{
     _urlTemplate = urlTemplate;
     _urlTemplateSet = YES;
@@ -86,6 +94,9 @@
     }
     if (self.maximumZ) {
         self.tileOverlay.maximumZ = self.maximumZ;
+    }
+    if (self.flipY) {
+        self.tileOverlay.geometryFlipped = self.flipY;
     }
     if (_tileSizeSet) {
         self.tileOverlay.tileSize = CGSizeMake(self.tileSize, self.tileSize);
