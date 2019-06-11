@@ -6,7 +6,7 @@
 |---|---|---|---|
 | `coordinates` | `Array<LatLng>` | (Required) | An array of coordinates to describe the polyline
 | `strokeWidth` | `Number` | `1` | The stroke width to use for the path.
-| `strokeColor` | `String` | `#000` | The stroke color to use for the path.
+| `strokeColor` | `String` | `#000, rgba(r,g,b,0.5)` | The stroke color to use for the path.
 | `strokeColors` | `Array<String>` | `null` | The stroke colors to use for the path (iOS only). Must be the same length as `coordinates`.
 | `lineCap` | `String` | `round` | The line cap style to apply to the open ends of the path. Possible values are `butt`, `round` or `square`.  Note: lineCap is not yet supported for GoogleMaps provider on iOS.
 | `lineJoin` | `String` | `round` | The line join style to apply to corners of the path. Possible values are `miter`, `round` or `bevel`.
