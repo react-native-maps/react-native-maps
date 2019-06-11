@@ -594,6 +594,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       return;
     }
     destroyed = true;
+    map.clear();
 
     if (lifecycleListener != null && context != null) {
       context.removeLifecycleEventListener(lifecycleListener);
