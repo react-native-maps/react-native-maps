@@ -47,11 +47,10 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "gitbook-cli": "^2.3.0",
     "lodash": "^4.17.2",
-    "metro-react-native-babel-preset": "^0.53.1",
+    "metro-react-native-babel-preset": "^0.54.1",
     "react": "16.8.3",
-    "react-native": "0.59.3"
+    "react-native": "0.59.9"
   },
   "rnpm": {
     "android": {
