@@ -167,6 +167,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             }
             return false;
           }
+
+          @Override
+          public boolean onDoubleTap(MotionEvent ev) {
+            onDoublePress(ev);
+            return false;
+          }
         });
 
     this.addOnLayoutChangeListener(new OnLayoutChangeListener() {
@@ -1055,6 +1061,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     LatLng coords = this.map.getProjection().fromScreenLocation(point);
     WritableMap event = makeClickEventData(coords);
     manager.pushEvent(context, this, "onPanDrag", event);
+  }
+
+  public void onDoublePress(MotionEvent ev) {
+    Point point = new Point((int) ev.getX(), (int) ev.getY());
+    LatLng coords = this.map.getProjection().fromScreenLocation(point);
+    WritableMap event = makeClickEventData(coords);
+    manager.pushEvent(context, this, "onDoublePress", event);
   }
 
   public void setKmlSrc(String kmlSrc) {
