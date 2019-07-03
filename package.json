@@ -63,7 +63,9 @@
   },
   "dependencies": {
     "leaflet": "^1.5.1",
+    "mapbox-gl": "^1.1.0",
     "react-leaflet": "^2.4.0",
+    "react-mapbox-gl": "^4.4.0",
     "scriptjs": "^2.5.9"
   }
 }
