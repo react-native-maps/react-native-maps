@@ -1,5 +1,26 @@
 # Change Log
-## 0.24.0 (April 11, 2019 )
+
+## 0.25.0 (July 11, 2019)
+* Android: [#2941](https://github.com/react-native-community/react-native-maps/pull/2941) Fix build gradle to allow jettifier to run correctly
+* Android: [#2741](https://github.com/react-native-community/react-native-maps/pull/2741) Use a shared image icon for markers when they share the same image URI
+* Android: [#2557](https://github.com/react-native-community/react-native-maps/pull/2557) Fix bug when changing subview of Marker to icon
+* Android: [#2392](https://github.com/react-native-community/react-native-maps/pull/2392) Add support for loading base64 encoded image
+* iOS: [#2423](https://github.com/react-native-community/react-native-maps/pull/2423) Handle annotations without images on iOS map snapshot
+* iOS: [#2881](https://github.com/react-native-community/react-native-maps/pull/2881) Update podspec to use GoogleMaps 3.1.0
+* iOS: [#2253](https://github.com/react-native-community/react-native-maps/pull/2253) TestID's for e2e automation
+* iOS: [#2826](https://github.com/react-native-community/react-native-maps/pull/2826) Follow up for [#2253](https://github.com/react-native-community/react-native-maps/pull/2253)
+* iOS: [#2397](https://github.com/react-native-community/react-native-maps/pull/2397) Add compass location offsets for iOS maps
+* Common: [#2568](https://github.com/react-native-community/react-native-maps/pull/2568) Support for WMS Layer support 
+* Common: [#2017](https://github.com/react-native-community/react-native-maps/pull/2017) Update the Google Maps custom map style if changed after initialization
+* Common: [#2903](https://github.com/react-native-community/react-native-maps/pull/2903) Fix react snapshot undefined warning
+
+## 0.24.2 (April 17, 2019)
+* iOS: [#2818](https://github.com/react-native-community/react-native-maps/pull/2818) Google Maps - Weak refs to gesture targets to address memory leak
+
+## 0.24.1 (April 16, 2019)
+* iOS: [#2815](https://github.com/react-native-community/react-native-maps/pull/2815) Google Maps - Free instance variable in getActionForTarget to address memory leak
+
+## 0.24.0 (April 11, 2019)
 * Common: [#2740](https://github.com/react-native-community/react-native-maps/pull/2740) Fix deprecated UIManager usage when accessing component names
 * Common: [#2393](https://github.com/react-native-community/react-native-maps/pull/2393) add typings for pointForCoordinate & coordinateForPoint
 * Common: [#2732](https://github.com/react-native-community/react-native-maps/pull/2732) Implement ability to flip y coordinate for Google Map tiles.
