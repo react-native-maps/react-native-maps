@@ -480,6 +480,23 @@ declare module "react-native-maps" {
   export class OverlayAnimated extends Overlay {}
 
   // =======================================================================
+  //  Heatmap
+  // =======================================================================
+
+  export interface MapHeatmapProps extends ViewProperties {
+    points: LatLng[];
+    gradient?: {
+      colors: string[],
+      startPoints: number[],
+      colorMapSize: number
+    }
+    radius?: number;
+    opacity?: number;
+  }
+
+  export class Heatmap extends React.Component<MapHeatmapProps, any> {}
+
+  // =======================================================================
   //  Constants
   // =======================================================================
 
