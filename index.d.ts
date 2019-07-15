@@ -483,8 +483,14 @@ declare module "react-native-maps" {
   //  Heatmap
   // =======================================================================
 
+  export interface WeightedLatLng {
+    latitude: number;
+    longitude: number;
+    weight?: number;
+  }
+
   export interface MapHeatmapProps extends ViewProperties {
-    points: LatLng[];
+    points: WeightedLatLng[];
     gradient?: {
       colors: string[],
       startPoints: number[],
