@@ -214,13 +214,29 @@ allprojects {...}
  + Project-wide Gradle configuration properties
  */
 ext {
-    compileSdkVersion   = 26
-    targetSdkVersion    = 26
-    buildToolsVersion   = "26.0.2"
-    supportLibVersion   = "26.1.0"
-    googlePlayServicesVersion = "16.1.0" // or set latest version
-    androidMapsUtilsVersion = "0.5+"
+    compileSdkVersion   = xxx
+    targetSdkVersion    = xxx
+    buildToolsVersion   = "xxx"
+    minSdkVersion       = xxx
+    supportLibVersion   = "xxx"
+    googlePlayServicesVersion = "xxx" // or set latest version
+    androidMapsUtilsVersion = "xxx"
 }
+```
+or do
+```
+buildscript {
+    ext {
+        buildToolsVersion = "xxx"
+        minSdkVersion = xxx
+        compileSdkVersion = xxx
+        targetSdkVersion = xxx
+        supportLibVersion = "xxx"
+        googlePlayServicesVersion = "xxx" // or set latest version
+        androidMapsUtilsVersion = "xxx"
+    }
+}
+...
 ```
 
 3.2 (React Native all versions) If you do **not** have *project-wide properties* defined and have a
