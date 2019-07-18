@@ -166,7 +166,7 @@ by adding a `/**` at the end of the provided path (e.g. `"./node_modules/react-n
 
     Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
 
-c) (React Native 0.60 and higher) Add the following to your Podfile above the `use_native_modules!` function:
+c) (React Native 0.60 and higher) Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
   ```ruby
     # React Native Maps dependencies
     pod 'react-native-google-maps', path: rn_maps_path
