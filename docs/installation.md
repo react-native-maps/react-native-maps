@@ -240,7 +240,7 @@ dependencies {
 }
 ```
 
-3. (React Native all versions) Specify your Google Maps API Key:
+4. (React Native all versions) Specify your Google Maps API Key:
 
    Add your API key to your manifest file (`android/app/src/main/AndroidManifest.xml`):
 
@@ -264,7 +264,7 @@ dependencies {
 
 Source: https://developers.google.com/maps/documentation/android-api/signup
 
-4. (React Native 0.59 and lower) Add `import com.airbnb.android.react.maps.MapsPackage;` and `new MapsPackage()` in your `MainApplication.java` :
+5. (React Native 0.59 and lower) Add `import com.airbnb.android.react.maps.MapsPackage;` and `new MapsPackage()` in your `MainApplication.java` :
 
 ```java
 import com.airbnb.android.react.maps.MapsPackage;
@@ -278,7 +278,7 @@ import com.airbnb.android.react.maps.MapsPackage;
     }
 ```
 
-5. (React Native all versions) Ensure that you have Google Play Services installed:
+6. (React Native all versions) Ensure that you have Google Play Services installed:
 
   * For the Genymotion emulator, you can follow [these instructions](https://www.genymotion.com/help/desktop/faq/#google-play-services).
   * For a physical device you need to search on Google for 'Google Play
