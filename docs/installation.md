@@ -141,12 +141,12 @@ edit your `AppDelegate.m` as follows:
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
-Then, do either of the following
+Then, do either of the following:
 
-1. (React Native 0.59 and lower) If you are using CocoaPods to manage your dependecies, uncomment the
+a) (React Native 0.59 and lower) If you are using CocoaPods to manage your dependecies, uncomment the
 lines related to Google Maps from the `Podfile` and run `pod install`.
 
-2. (React Native 0.59 and lower) If you used React Native link, you may include Google Maps manually as a
+b) (React Native 0.59 and lower) If you used React Native link, you may include Google Maps manually as a
 XCode framework following the instructions from [SDK docs -> Install
 manually](https://developers.google.com/maps/documentation/ios-sdk/start). Then, to link this library to the framework, add the following to your
 `package.json` and replace the
@@ -166,25 +166,13 @@ by adding a `/**` at the end of the provided path (e.g. `"./node_modules/react-n
 
     Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
 
-3. (React Native 0.60 and higher) Add the following to your Podfile above the `use_native_modules!` function:
+c) (React Native 0.60 and higher) Add the following to your Podfile above the `use_native_modules!` function:
   ```ruby
     # React Native Maps dependencies
     pod 'react-native-google-maps', path: rn_maps_path
     pod 'GoogleMaps'
     pod 'Google-Maps-iOS-Utils'
   ```
-4. (React Native all versions) Import and add `{PROVIDER_GOOGLE}` to your JavaScript:
-    ```javascript
-      import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-      ...
-      
-      <MapView
-         provider={PROVIDER_GOOGLE}
-         style={styles.map}
-         ...
-      >
-      
-    ```
 
 That's it, you made it! 👍
     
