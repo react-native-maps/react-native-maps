@@ -217,6 +217,7 @@ ext {
     compileSdkVersion   = xxx
     targetSdkVersion    = xxx
     buildToolsVersion   = "xxx"
+    minSdkVersion       = xxx
     supportLibVersion   = "xxx"
     googlePlayServicesVersion = "xxx" // or set latest version
     androidMapsUtilsVersion = "xxx"
