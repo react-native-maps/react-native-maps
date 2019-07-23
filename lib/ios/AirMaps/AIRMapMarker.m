@@ -154,6 +154,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     
     MKAnnotationView *annotationView = [self getAnnotationView];
 
+    [self setSelected:YES animated:NO];
     [self.map selectAnnotation:self animated:NO];
 
     id event = @{
@@ -268,6 +269,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     // hide the callout view
     [self.map.calloutView dismissCalloutAnimated:YES];
 
+    [self setSelected:NO animated:NO];
     [self.map deselectAnnotation:self animated:NO];
 
     id event = @{
