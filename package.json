@@ -57,5 +57,8 @@
     "android": {
       "sourceDir": "./lib/android"
     }
+  },
+  "dependencies": {
+    "recompose": "^0.30.0"
   }
 }
