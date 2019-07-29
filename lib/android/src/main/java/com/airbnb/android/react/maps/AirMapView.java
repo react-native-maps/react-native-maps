@@ -500,6 +500,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  public void setUserLocationPriority(int priority){
+    fusedLocationSource.setPriority(priority);
+  }
+
   public void setShowsMyLocationButton(boolean showMyLocationButton) {
     if (hasPermissions() || !showMyLocationButton) {
       map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);

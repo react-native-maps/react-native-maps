@@ -17,7 +17,6 @@ public class FusedLocationSource implements LocationSource {
     private FusedLocationProviderClient fusedLocationClientProviderClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
-    private Context context;
 
     public FusedLocationSource(Context context){
         fusedLocationClientProviderClient =
@@ -27,26 +26,27 @@ public class FusedLocationSource implements LocationSource {
         locationRequest.setInterval(500);
     }
 
+    public void setPriority(int priority){
+        System.out.println("set Priority: " + priority);
+        locationRequest.setPriority(priority);
+    }
+
     @Override
     public void activate(final OnLocationChangedListener onLocationChangedListener) {
         fusedLocationClientProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                System.out.println("getLatitude(): " + location.getLatitude());
                 onLocationChangedListener.onLocationChanged(location);
             }
         });
-
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 for (Location location : locationResult.getLocations()) {
-                    System.out.println("getLatitude(): " + location.getLatitude());
                     onLocationChangedListener.onLocationChanged(location);
                 }
             }
         };
-
         fusedLocationClientProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
