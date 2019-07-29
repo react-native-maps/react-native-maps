@@ -160,6 +160,16 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.setShowsUserLocation(showUserLocation);
   }
 
+  @ReactProp(name = "userLocationUpdateInterval", defaultInt = 5000)
+  public void setUserLocationUpdateInterval(AirMapView view, int updateInterval) {
+    view.setUserLocationUpdateInterval(updateInterval);
+  }
+
+  @ReactProp(name = "userLocationPriority")
+  public void setUserLocationPriority(AirMapView view, @Nullable String accuracy) {
+    view.setUserLocationPriority(MY_LOCATION_PRIORITY.get(accuracy));
+  }
+
   @ReactProp(name = "showsMyLocationButton", defaultBoolean = true)
   public void setShowsMyLocationButton(AirMapView view, boolean showMyLocationButton) {
     view.setShowsMyLocationButton(showMyLocationButton);
@@ -205,11 +215,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   @ReactProp(name = "scrollEnabled", defaultBoolean = false)
   public void setScrollEnabled(AirMapView view, boolean scrollEnabled) {
     view.map.getUiSettings().setScrollGesturesEnabled(scrollEnabled);
-  }
-
-  @ReactProp(name = "userLocationPriority")
-  public void setUserLocationPriority(AirMapView view, @Nullable String accuracy) {
-    view.setUserLocationPriority(MY_LOCATION_PRIORITY.get(accuracy));
   }
 
   @ReactProp(name = "zoomEnabled", defaultBoolean = false)

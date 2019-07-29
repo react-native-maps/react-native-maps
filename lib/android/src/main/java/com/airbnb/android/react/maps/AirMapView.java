@@ -501,6 +501,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  public void setUserLocationUpdateInterval(int interval){
+    fusedLocationSource.setInterval(interval);
+  }
+
   public void setUserLocationPriority(int priority){
     fusedLocationSource.setPriority(priority);
   }
