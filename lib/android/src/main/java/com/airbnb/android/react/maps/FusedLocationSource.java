@@ -27,7 +27,6 @@ public class FusedLocationSource implements LocationSource {
     }
 
     public void setPriority(int priority){
-        System.out.println("set Priority: " + priority);
         locationRequest.setPriority(priority);
     }
 
