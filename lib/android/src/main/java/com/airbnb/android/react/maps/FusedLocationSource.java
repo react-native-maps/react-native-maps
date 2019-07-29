@@ -23,7 +23,7 @@ public class FusedLocationSource implements LocationSource {
                 LocationServices.getFusedLocationProviderClient(context);
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(500);
+        locationRequest.setInterval(5000);
     }
 
     public void setPriority(int priority){
