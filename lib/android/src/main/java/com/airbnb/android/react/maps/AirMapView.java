@@ -107,6 +107,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean destroyed = false;
   private final ThemedReactContext context;
   private final EventDispatcher eventDispatcher;
+  private FusedLocationSource fusedLocationSource;
 
   private ViewAttacherGroup attacherGroup;
 
@@ -155,6 +156,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     super.getMapAsync(this);
 
     final AirMapView view = this;
+
+    fusedLocationSource = new FusedLocationSource(context);
 
     gestureDetector =
         new GestureDetectorCompat(reactContext, new GestureDetector.SimpleOnGestureListener() {
@@ -361,6 +364,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       @Override
       public void onHostResume() {
         if (hasPermissions()) {
+          map.setLocationSource(fusedLocationSource);
           //noinspection MissingPermission
           map.setMyLocationEnabled(showUserLocation);
         }
