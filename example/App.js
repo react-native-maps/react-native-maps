@@ -25,11 +25,13 @@ import DefaultMarkers from './examples/DefaultMarkers';
 import CustomMarkers from './examples/CustomMarkers';
 import CachedMap from './examples/CachedMap';
 import LoadingMap from './examples/LoadingMap';
+import MapBoundaries from './examples/MapBoundaries';
 import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
 import FitToCoordinates from './examples/FitToCoordinates';
 import LiteMapView from './examples/LiteMapView';
 import CustomTiles from './examples/CustomTiles';
+import WMSTiles from './examples/WMSTiles';
 import ZIndexMarkers from './examples/ZIndexMarkers';
 import StaticMap from './examples/StaticMap';
 import MapStyle from './examples/MapStyle';
@@ -40,7 +42,12 @@ import MapKml from './examples/MapKml';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
+import AnimatedNavigation from './examples/AnimatedNavigation';
 import OnPoiClick from './examples/OnPoiClick';
+import TestIdMarkers from './examples/TestIdMarkers';
+import IndoorMap from './examples/IndoorMap';
+import CameraControl from './examples/CameraControl';
+import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -55,7 +62,8 @@ function makeExampleMapper(useGoogleMaps) {
   return example => example;
 }
 
-class App extends React.Component {
+type Props = {};
+export default class App extends React.Component<Props> {
   constructor(props) {
     super(props);
 
@@ -83,7 +91,7 @@ class App extends React.Component {
         style={styles.back}
         onPress={() => this.setState({ Component: null })}
       >
-        <Text style={{ fontWeight: 'bold', fontSize: 30 }}>&larr;</Text>
+        <Text style={styles.backButton}>&larr;</Text>
       </TouchableOpacity>
     );
   }
@@ -93,8 +101,8 @@ class App extends React.Component {
       <View>
         <Text>Use GoogleMaps?</Text>
         <Switch
-          onValueChange={(value) => this.setState({ useGoogleMaps: value })}
-          style={{ marginBottom: 10 }}
+          onValueChange={value => this.setState({ useGoogleMaps: value })}
+          style={styles.googleSwitch}
           value={this.state.useGoogleMaps}
         />
       </View>
@@ -102,16 +110,17 @@ class App extends React.Component {
   }
 
   renderExamples(examples) {
-    const {
-      Component,
-      useGoogleMaps,
-    } = this.state;
+    const { Component, useGoogleMaps } = this.state;
 
     return (
       <View style={styles.container}>
-        {Component && <Component provider={useGoogleMaps ? PROVIDER_GOOGLE : PROVIDER_DEFAULT} />}
+        {Component && (
+          <Component
+            provider={useGoogleMaps ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
+          />
+        )}
         {Component && this.renderBackButton()}
-        {!Component &&
+        {!Component && (
           <ScrollView
             style={StyleSheet.absoluteFill}
             contentContainerStyle={styles.scrollview}
@@ -120,50 +129,61 @@ class App extends React.Component {
             {IOS && this.renderGoogleSwitch()}
             {examples.map(example => this.renderExample(example))}
           </ScrollView>
-        }
+        )}
       </View>
     );
   }
 
   render() {
-    return this.renderExamples([
-      // [<component>, <component description>, <Google compatible>, <Google add'l description>]
-      [StaticMap, 'StaticMap', true],
-      [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
-      [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
-      [EventListener, 'Events', true, '(incomplete)'],
-      [MarkerTypes, 'Image Based Markers', true],
-      [DraggableMarkers, 'Draggable Markers', true],
-      [PolygonCreator, 'Polygon Creator', true],
-      [PolylineCreator, 'Polyline Creator', true],
-      [GradientPolylines, 'Gradient Polylines', true],
-      [AnimatedViews, 'Animating with MapViews'],
-      [AnimatedMarkers, 'Animated Marker Position'],
-      [Callouts, 'Custom Callouts', true],
-      [Overlays, 'Circles, Polygons, and Polylines', true],
-      [DefaultMarkers, 'Default Markers', true],
-      [CustomMarkers, 'Custom Markers', true],
-      [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
-      [CachedMap, 'Cached Map'],
-      [LoadingMap, 'Map with loading'],
-      [FitToSuppliedMarkers, 'Focus Map On Markers', true],
-      [FitToCoordinates, 'Fit Map To Coordinates', true],
-      [LiteMapView, 'Android Lite MapView'],
-      [CustomTiles, 'Custom Tiles', true],
-      [ZIndexMarkers, 'Position Markers with Z-index', true],
-      [MapStyle, 'Customize the style of the map', true],
-      [LegalLabel, 'Reposition the legal label', true],
-      [SetNativePropsOverlays, 'Update native props', true],
-      [CustomOverlay, 'Custom Overlay Component', true],
-      [MapKml, 'Load Map with KML', true],
-      [BugMarkerWontUpdate, 'BUG: Marker Won\'t Update (Android)', true],
-      [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
-      [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
-      [OnPoiClick, 'On Poi Click', true],
-    ]
-    // Filter out examples that are not yet supported for Google Maps on iOS.
-    .filter(example => ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)))
-    .map(makeExampleMapper(IOS && this.state.useGoogleMaps))
+    return this.renderExamples(
+      [
+        // [<component>, <component description>, <Google compatible>, <Google add'l description>]
+        [StaticMap, 'StaticMap', true],
+        [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
+        [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
+        [EventListener, 'Events', true, '(incomplete)'],
+        [MarkerTypes, 'Image Based Markers', true],
+        [DraggableMarkers, 'Draggable Markers', true],
+        [PolygonCreator, 'Polygon Creator', true],
+        [PolylineCreator, 'Polyline Creator', true],
+        [GradientPolylines, 'Gradient Polylines', true],
+        [AnimatedViews, 'Animating with MapViews'],
+        [AnimatedMarkers, 'Animated Marker Position'],
+        [Callouts, 'Custom Callouts', true],
+        [Overlays, 'Circles, Polygons, and Polylines', true],
+        [DefaultMarkers, 'Default Markers', true],
+        [CustomMarkers, 'Custom Markers', true],
+        [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
+        [CachedMap, 'Cached Map'],
+        [LoadingMap, 'Map with loading'],
+        [MapBoundaries, 'Get visible map boundaries', true],
+        [FitToSuppliedMarkers, 'Focus Map On Markers', true],
+        [FitToCoordinates, 'Fit Map To Coordinates', true],
+        [LiteMapView, 'Android Lite MapView'],
+        [CustomTiles, 'Custom Tiles', true],
+        [WMSTiles, 'WMS Tiles', true],
+        [ZIndexMarkers, 'Position Markers with Z-index', true],
+        [MapStyle, 'Customize the style of the map', true],
+        [LegalLabel, 'Reposition the legal label', true],
+        [SetNativePropsOverlays, 'Update native props', true],
+        [CustomOverlay, 'Custom Overlay Component', true],
+        [TestIdMarkers, 'Test ID for Automation', true],
+        [MapKml, 'Load Map with KML', true],
+        [BugMarkerWontUpdate, "BUG: Marker Won't Update (Android)", true],
+        [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
+        [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
+        [AnimatedNavigation, 'Animated Map Navigation', true],
+        [OnPoiClick, 'On Poi Click', true],
+        [IndoorMap, 'Indoor Map', true],
+        [CameraControl, 'CameraControl', true],
+        [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
+      ]
+        // Filter out examples that are not yet supported for Google Maps on iOS.
+        .filter(
+          example =>
+            ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps))
+        )
+        .map(makeExampleMapper(IOS && this.state.useGoogleMaps))
     );
   }
 }
@@ -197,6 +217,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  backButton: { fontWeight: 'bold', fontSize: 30 },
+  googleSwitch: { marginBottom: 10 },
 });
-
-export default App;

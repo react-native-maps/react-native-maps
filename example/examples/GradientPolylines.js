@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import MapView, { Polyline, ProviderPropType } from 'react-native-maps';
 

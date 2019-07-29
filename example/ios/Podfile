@@ -1,7 +1,7 @@
 # You Podfile should look similar to this file. React Native currently does not support use_frameworks!
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '8.0'
+platform :ios, '9.0'
 
 # Change 'AirMapsExplorer' to match the target in your Xcode project.
 target 'AirMapsExplorer' do

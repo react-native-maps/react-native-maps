@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  Dimensions,
-  StyleSheet,
-} from 'react-native';
+import { Text, View, Dimensions, StyleSheet } from 'react-native';
 
 import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
 import flagImg from './assets/flag-blue.png';

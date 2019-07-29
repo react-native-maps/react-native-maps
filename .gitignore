@@ -24,14 +24,13 @@ project.xcworkspace
 Pods/
 AirMapsExplorer.xcworkspace/
 
-# Android/IJ
+# Android/IntelliJ
 #
+build/
 .idea
-*.iml
 .gradle
 local.properties
-lib/android/src/main/gen
-example/android/app/src/main/gen
+*.iml
 
 # node.js
 #
@@ -39,6 +38,8 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# Rubygem bundles
-#
-bundles/
+# Bundle artifact
+*.jsbundle
+
+# VSCode workspace settings
+.vscode

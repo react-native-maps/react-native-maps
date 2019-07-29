@@ -4,19 +4,17 @@
  * Script that runs as part of `npm version`. It updates any files that have a
  * reference to the current package version:
  *
- * - android/gradle.properties
+ * - gradle.properties
  * x react-native-maps.podspec // <-- this is now dynamic
  * x react-native-google-maps.podspec // <-- this is now dynamic
  *
  * And `git add`s them.
-*/
+ */
 
 const { exec } = require('child_process');
 const pkg = require('../package.json');
 
-const filesToUpdate = [
-  'android/gradle.properties',
-];
+const filesToUpdate = ['gradle.properties'];
 
 function doExec(cmdString) {
   return new Promise((resolve, reject) => {
@@ -32,11 +30,11 @@ function doExec(cmdString) {
 
 function updateVersionInFile(currentVersion, nextVersion, relativePath) {
   process.stdout.write(`• ${relativePath}\n`);
-  return doExec(`sed -i '' 's/${
-    escapeDots(currentVersion)
-  }/${
-    escapeDots(nextVersion)
-  }/g' ./${relativePath}`);
+  return doExec(
+    `sed -i '' 's/${escapeDots(currentVersion)}/${escapeDots(
+      nextVersion
+    )}/g' ./${relativePath}`
+  );
 }
 
 function escapeDots(version) {
@@ -56,9 +54,11 @@ function run() {
 
 function updateFiles(currentVersion, nextVersion) {
   process.stdout.write(`Updating ${currentVersion} ➞ ${nextVersion}:\n`);
-  return Promise.all(filesToUpdate.map(relativePath =>
-    updateVersionInFile(currentVersion, nextVersion, relativePath)
-  ));
+  return Promise.all(
+    filesToUpdate.map(relativePath =>
+      updateVersionInFile(currentVersion, nextVersion, relativePath)
+    )
+  );
 }
 
 function gitAdd() {
