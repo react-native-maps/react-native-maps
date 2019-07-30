@@ -34,6 +34,10 @@ public class FusedLocationSource implements LocationSource {
         locationRequest.setInterval(interval);
     }
 
+    public void setFastestInterval(int fastestInterval){
+        locationRequest.setFastestInterval(fastestInterval);
+    }
+
     @Override
     public void activate(final OnLocationChangedListener onLocationChangedListener) {
         fusedLocationClientProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
