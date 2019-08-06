@@ -48,7 +48,7 @@ import TestIdMarkers from './examples/TestIdMarkers';
 import IndoorMap from './examples/IndoorMap';
 import CameraControl from './examples/CameraControl';
 import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
-import GeojsonMap from './examples/Geojson'
+import GeojsonMap from './examples/Geojson';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
