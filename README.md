@@ -40,6 +40,8 @@ versions you should add `react` as a dependency in your `package.json`.
 
 [`<Heatmap />` Component API](docs/heatmap.md)
 
+[`<Geojson />` Component API](docs/geojson.md)
+
 ## General Usage
 
 ```js
