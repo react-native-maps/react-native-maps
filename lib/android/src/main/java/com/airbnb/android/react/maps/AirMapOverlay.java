@@ -92,7 +92,7 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
     GroundOverlayOptions groundOverlayOptions = getGroundOverlayOptions();
     if (groundOverlayOptions != null) {
       this.groundOverlay = map.addGroundOverlay(groundOverlayOptions);
-      this.groundOverlay.setClickable(true);
+      this.groundOverlay.setClickable(false);
     } else {
       this.map = map;
     }
@@ -124,7 +124,7 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
     this.groundOverlay = getGroundOverlay();
     if (this.groundOverlay != null) {
       this.groundOverlay.setImage(this.iconBitmapDescriptor);
-      this.groundOverlay.setClickable(true);
+      this.groundOverlay.setClickable(false);
     }
   }
 
