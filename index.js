@@ -17,6 +17,7 @@ export {
   default as CalloutSubview,
 } from './lib/components/MapCalloutSubview.js';
 export { default as AnimatedRegion } from './lib/components/AnimatedRegion.js';
+export { default as Geojson } from './lib/components/Geojson.js';
 
 export { Marker, Overlay };
 export { Animated, MAP_TYPES, ProviderPropType };
