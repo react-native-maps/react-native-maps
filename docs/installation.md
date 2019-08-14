@@ -220,7 +220,7 @@ ext {
     buildToolsVersion   = "xxx"
     minSdkVersion       = xxx
     supportLibVersion   = "xxx"
-    googlePlayServicesVersion = "xxx" // or set latest version
+    playServicesVersion = "xxx" // or set latest version
     androidMapsUtilsVersion = "xxx"
 }
 ```
@@ -233,7 +233,7 @@ buildscript {
         compileSdkVersion = xxx
         targetSdkVersion = xxx
         supportLibVersion = "xxx"
-        googlePlayServicesVersion = "xxx" // or set latest version
+        playServicesVersion = "xxx" // or set latest version
         androidMapsUtilsVersion = "xxx"
     }
 }
