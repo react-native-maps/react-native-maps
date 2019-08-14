@@ -42,6 +42,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -101,6 +102,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private final Map<Marker, AirMapMarker> markerMap = new HashMap<>();
   private final Map<Polyline, AirMapPolyline> polylineMap = new HashMap<>();
   private final Map<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
+  private final Map<GroundOverlay, AirMapOverlay> overlayMap = new HashMap<>();
   private final Map<TileOverlay, AirMapHeatmap> heatmapMap = new HashMap<>();
   private final Map<TileOverlay, AirMapGradientPolyline> gradientPolylineMap = new HashMap<>();
   private final GestureDetectorCompat gestureDetector;
@@ -314,6 +316,15 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         WritableMap event = makeClickEventData(point);
         event.putString("action", "long-press");
         manager.pushEvent(context, view, "onLongPress", makeClickEventData(point));
+      }
+    });
+
+    map.setOnGroundOverlayClickListener(new GoogleMap.OnGroundOverlayClickListener() {
+      @Override
+      public void onGroundOverlayClick(GroundOverlay groundOverlay) {
+        WritableMap event = makeClickEventData(groundOverlay.getPosition());
+        event.putString("action", "overlay-press");
+        manager.pushEvent(context, overlayMap.get(groundOverlay), "onPress", event);
       }
     });
 
@@ -639,6 +650,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       AirMapOverlay overlayView = (AirMapOverlay) child;
       overlayView.addToMap(map);
       features.add(index, overlayView);
+      GroundOverlay overlay = (GroundOverlay) overlayView.getFeature();
+      overlayMap.put(overlay, overlayView);
     } else if (child instanceof AirMapHeatmap) {
       AirMapHeatmap heatmapView = (AirMapHeatmap) child;
       heatmapView.addToMap(map);
