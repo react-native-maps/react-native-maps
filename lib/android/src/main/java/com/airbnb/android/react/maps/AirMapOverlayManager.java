@@ -7,6 +7,7 @@ import android.view.WindowManager;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -57,8 +58,14 @@ public class AirMapOverlayManager extends ViewGroupManager<AirMapOverlay> {
   // }
 
   @ReactProp(name = "image")
-  public void setImage(AirMapOverlay view, @Nullable String source) {
-    view.setImage(source);
+  public void setImage(AirMapOverlay view, @Nullable ReadableMap source) {
+    ReadableMap headers = null;
+    String image = null;
+    if(source != null){
+      headers = source.hasKey("headers") ? source.getMap("headers") : null;
+      image = source.getString("uri");
+    }
+    view.setImage(image, headers);
   }
 
   @ReactProp(name = "tappable", defaultBoolean = false)

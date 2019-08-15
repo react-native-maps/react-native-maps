@@ -5,6 +5,7 @@
 
 #import "RCTConvert+AirMap.h"
 #import <React/RCTComponent.h>
+#import <React/RCTImageSource.h>
 #import "AIRMap.h"
 #import "AIRMapOverlayRenderer.h"
 
@@ -17,7 +18,7 @@
 @property (nonatomic, weak) RCTBridge *bridge;
 
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, copy) NSString *imageSrc;
+@property (nonatomic, copy) RCTImageSource *imageSrc;
 @property (nonatomic, strong, readonly) UIImage *overlayImage;
 @property (nonatomic, copy) NSArray *boundsRect;
 @property (nonatomic, assign) NSInteger rotation;

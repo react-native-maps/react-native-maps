@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class AirMapOverlay extends AirMapFeature implements ImageReadable {
@@ -57,8 +58,8 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
   //     }
   // }
 
-  public void setImage(String uri) {
-    this.mImageReader.setImage(uri);
+  public void setImage(String uri, @Nullable ReadableMap headers) {
+    this.mImageReader.setImage(uri, headers);
   }
 
   public void setTappable(boolean tapabble) {

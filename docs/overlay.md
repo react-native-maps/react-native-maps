@@ -22,3 +22,10 @@ type LatLng = [
   longitude: Number,
 ]
 ```
+
+```
+type ImageSource = {
+  uri?: string;
+  headers?: { [key: string]: string };
+}
+```

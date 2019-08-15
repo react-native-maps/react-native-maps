@@ -9,13 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTBridge.h>
+#import <React/RCTImageSource.h>
 #import "AIRMapCoordinate.h"
 #import "AIRGoogleMap.h"
 
 @interface AIRGoogleMapOverlay : UIView
 
 @property (nonatomic, strong) GMSGroundOverlay *overlay;
-@property (nonatomic, copy) NSString *imageSrc;
+@property (nonatomic, copy) RCTImageSource *imageSrc;
 @property (nonatomic, strong, readonly) UIImage *overlayImage;
 @property (nonatomic, copy) NSArray *boundsRect;
 @property (nonatomic, readonly) GMSCoordinateBounds *overlayBounds;

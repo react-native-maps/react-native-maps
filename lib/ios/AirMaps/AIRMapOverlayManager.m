@@ -3,6 +3,7 @@
 #import <React/RCTConvert+CoreLocation.h>
 #import <React/RCTUIManager.h>
 #import <React/UIView+React.h>
+#import <React/RCTImageSource.h>
 #import "AIRMapOverlay.h"
 
 @interface AIRMapOverlayManager () <MKMapViewDelegate>
@@ -21,7 +22,7 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_REMAP_VIEW_PROPERTY(bounds, boundsRect, NSArray)
-RCT_REMAP_VIEW_PROPERTY(image, imageSrc, NSString)
+RCT_REMAP_VIEW_PROPERTY(image, imageSrc, RCTImageSource)
 
 @end
 

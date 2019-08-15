@@ -9,6 +9,7 @@
 
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTImageLoader.h>
+#import <React/RCTImageSource.h>
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
 
@@ -31,34 +32,38 @@
   return self;
 }
 
-- (void)setImageSrc:(NSString *)imageSrc
+- (void)setImageSrc:(RCTImageSource *)imageSrc
 {
-  NSLog(@">>> SET IMAGESRC: %@", imageSrc);
-  _imageSrc = imageSrc;
+    NSLog(@">>> SET IMAGESRC: %@", imageSrc.request.URL.absoluteString);
 
-  if (_reloadImageCancellationBlock) {
-    _reloadImageCancellationBlock();
-    _reloadImageCancellationBlock = nil;
-  }
-
-  __weak typeof(self) weakSelf = self;
-  _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
-                                                                          size:weakSelf.bounds.size
-                                                                         scale:RCTScreenScale()
-                                                                       clipped:YES
-                                                                    resizeMode:RCTResizeModeCenter
-                                                                 progressBlock:nil
-                                                              partialLoadBlock:nil
-                                                               completionBlock:^(NSError *error, UIImage *image) {
-                                                                 if (error) {
-                                                                   NSLog(@"%@", error);
-                                                                 }
-                                                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                                                   NSLog(@">>> IMAGE: %@", image);
-                                                                   weakSelf.overlayImage = image;
-                                                                   weakSelf.overlay.icon = image;
-                                                                 });
-                                                               }];
+    if (![imageSrc isEqual:_imageSrc]) {
+        _imageSrc = imageSrc;
+        
+        if (_reloadImageCancellationBlock) {
+            _reloadImageCancellationBlock();
+            _reloadImageCancellationBlock = nil;
+        }
+        
+        __weak typeof(self) weakSelf = self;
+        _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:_imageSrc.request
+                                                                                size:weakSelf.bounds.size
+                                                                               scale:RCTScreenScale()
+                                                                             clipped:YES
+                                                                          resizeMode:RCTResizeModeCenter
+                                                                       progressBlock:nil
+                                                                    partialLoadBlock:nil
+                                                                     completionBlock:^(NSError *error, UIImage *image) {
+                                                                         if (error) {
+                                                                             NSLog(@"%@", error);
+                                                                         }
+                                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                                             NSLog(@">>> IMAGE: %@", image);
+                                                                             weakSelf.overlayImage = image;
+                                                                             weakSelf.overlay.icon = image;
+                                                                         });
+                                                                     }];
+        
+    }
 
 }
 

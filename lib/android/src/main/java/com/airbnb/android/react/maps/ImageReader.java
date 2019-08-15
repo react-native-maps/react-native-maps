@@ -23,6 +23,8 @@ import com.facebook.imagepipeline.image.CloseableStaticBitmap;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.modules.fresco.ReactNetworkImageRequest;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
@@ -84,16 +86,17 @@ public class ImageReader {
         .build();
   }
 
-  public void setImage(String uri) {
+  public void setImage(String uri, @Nullable ReadableMap headers) {
     if (uri == null) {
       imp.setIconBitmapDescriptor(null);
       imp.update();
     } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
         uri.startsWith("file://") || uri.startsWith("asset://")) {
-      ImageRequest imageRequest = ImageRequestBuilder
-          .newBuilderWithSource(Uri.parse(uri))
-          .build();
+      ImageRequestBuilder imageRequestBuilder = ImageRequestBuilder.newBuilderWithSource(Uri.parse(uri));
       ImagePipeline imagePipeline = Fresco.getImagePipeline();
+
+      ImageRequest imageRequest = ReactNetworkImageRequest.fromBuilderWithHeaders(imageRequestBuilder, headers);
+
       dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
 
       DraweeController controller = Fresco.newDraweeControllerBuilder()

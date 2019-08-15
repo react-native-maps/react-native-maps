@@ -1,6 +1,8 @@
 #import "AIRGoogleMapOverlayManager.h"
 #import "AIRGoogleMapOverlay.h"
 
+#import <React/RCTImageSource.h>
+
 @interface AIRGoogleMapOverlayManager()
 
 @end
@@ -17,6 +19,6 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_REMAP_VIEW_PROPERTY(bounds, boundsRect, NSArray)
-RCT_REMAP_VIEW_PROPERTY(image, imageSrc, NSString)
+RCT_REMAP_VIEW_PROPERTY(image, imageSrc, RCTImageSource)
 
 @end
