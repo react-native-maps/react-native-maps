@@ -14,8 +14,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class FusedLocationSource implements LocationSource {
 
-    private FusedLocationProviderClient fusedLocationClientProviderClient;
-    private LocationRequest locationRequest;
+    private final FusedLocationProviderClient fusedLocationClientProviderClient;
+    private final LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
     public FusedLocationSource(Context context){

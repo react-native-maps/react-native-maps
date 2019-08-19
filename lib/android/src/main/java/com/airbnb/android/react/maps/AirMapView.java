@@ -107,7 +107,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean destroyed = false;
   private final ThemedReactContext context;
   private final EventDispatcher eventDispatcher;
-  private FusedLocationSource fusedLocationSource;
+  private final FusedLocationSource fusedLocationSource;
 
   private ViewAttacherGroup attacherGroup;
 
