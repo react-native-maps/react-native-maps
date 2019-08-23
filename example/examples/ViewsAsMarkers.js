@@ -54,7 +54,7 @@ class ViewsAsMarkers extends React.Component {
           initialRegion={this.state.region}
         >
           <Marker coordinate={this.state.coordinate}>
-            <PriceMarker amount={this.state.amount}/>
+            <PriceMarker amount={this.state.amount} />
           </Marker>
 
           <Marker
@@ -66,28 +66,24 @@ class ViewsAsMarkers extends React.Component {
             tracksInfoWindowChanges={true}
           >
             <Image
-              style={{ width: 50, height: 50 }}
-              source={{ uri: 'https://media.tenor.com/images/c674ba98c40f6793eaf10a1356c1c36a/tenor.gif' }}/>
+              style={styles.image}
+              source={{
+                uri:
+                  'https://media.tenor.com/images/c674ba98c40f6793eaf10a1356c1c36a/tenor.gif',
+              }}
+            />
             <Callout tooltip>
-              <View style={{
-                width: 120,
-                backgroundColor: 'red',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 5,
-              }}>
+              <View style={styles.calloutContainer}>
                 <Text>this is callout</Text>
                 <Image
-                  style={{ width: 50, height: 50 }}
-                  source={{ uri: 'https://media.tenor.com/images/c674ba98c40f6793eaf10a1356c1c36a/tenor.gif' }}/>
+                  style={styles.image}
+                  source={{
+                    uri:
+                      'https://media.tenor.com/images/c674ba98c40f6793eaf10a1356c1c36a/tenor.gif',
+                  }}
+                />
               </View>
-              <View style={{
-                backgroundColor: 'transparent',
-                borderWidth: 8,
-                borderColor: 'transparent',
-                borderTopColor: 'red',
-                alignSelf: 'center',
-              }}/>
+              <View style={styles.arrow} />
             </Callout>
           </Marker>
         </MapView>
@@ -145,6 +141,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   ammountButton: { fontSize: 20, fontWeight: 'bold' },
+  image: { width: 50, height: 50 },
+  calloutContainer: {
+    width: 120,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+  },
+  arrow: {
+    backgroundColor: 'transparent',
+    borderWidth: 8,
+    borderColor: 'transparent',
+    borderTopColor: 'red',
+    alignSelf: 'center',
+  },
 });
 
 export default ViewsAsMarkers;
