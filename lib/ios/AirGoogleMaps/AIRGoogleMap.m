@@ -789,6 +789,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                     @"accuracy": @(location.horizontalAccuracy),
                     @"altitudeAccuracy": @(location.verticalAccuracy),
                     @"speed": @(location.speed),
+                    @"heading": @(location.course),
                     }
                 };
 
