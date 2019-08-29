@@ -57,19 +57,26 @@ RCT_EXPORT_MODULE()
     
     // MKMapView doesn't report tap events, so we attach gesture recognizers to it
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDoubleTap:)];
+    [doubleTap setNumberOfTapsRequired:2];
+    [tap requireGestureRecognizerToFail:doubleTap];
+    
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapLongPress:)];
     UIPanGestureRecognizer *drag = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
     [drag setMinimumNumberOfTouches:1];
     // setting this to NO allows the parent MapView to continue receiving marker selection events
     tap.cancelsTouchesInView = NO;
+    doubleTap.cancelsTouchesInView = NO;
     longPress.cancelsTouchesInView = NO;
-
+    
+    doubleTap.delegate = self;
+    
     // disable drag by default
     drag.enabled = NO;
-    
     drag.delegate = self;
-
+  
     [map addGestureRecognizer:tap];
+    [map addGestureRecognizer:doubleTap];
     [map addGestureRecognizer:longPress];
     [map addGestureRecognizer:drag];
 
@@ -105,6 +112,7 @@ RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onDoublePress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDeselect, RCTDirectEventBlock)
@@ -753,6 +761,25 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
                           },
                   });
 
+}
+
+- (void)handleMapDoubleTap:(UIPanGestureRecognizer*)recognizer {
+    AIRMap *map = (AIRMap *)recognizer.view;
+    if (!map.onDoublePress) return;
+    
+    CGPoint touchPoint = [recognizer locationInView:map];
+    CLLocationCoordinate2D coord = [map convertPoint:touchPoint toCoordinateFromView:map];
+    map.onDoublePress(@{
+                    @"coordinate": @{
+                            @"latitude": @(coord.latitude),
+                            @"longitude": @(coord.longitude),
+                            },
+                    @"position": @{
+                            @"x": @(touchPoint.x),
+                            @"y": @(touchPoint.y),
+                            },
+                    });
+    
 }
 
 
