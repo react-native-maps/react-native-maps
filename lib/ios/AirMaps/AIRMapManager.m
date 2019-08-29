@@ -64,7 +64,6 @@ RCT_EXPORT_MODULE()
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapLongPress:)];
     UIPanGestureRecognizer *drag = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
     [drag setMinimumNumberOfTouches:1];
-    [drag setMaximumNumberOfTouches:1];
     // setting this to NO allows the parent MapView to continue receiving marker selection events
     tap.cancelsTouchesInView = NO;
     doubleTap.cancelsTouchesInView = NO;
@@ -74,7 +73,8 @@ RCT_EXPORT_MODULE()
     
     // disable drag by default
     drag.enabled = NO;
-    
+    drag.delegate = self;
+  
     [map addGestureRecognizer:tap];
     [map addGestureRecognizer:doubleTap];
     [map addGestureRecognizer:longPress];

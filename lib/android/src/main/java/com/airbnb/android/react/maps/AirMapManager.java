@@ -378,7 +378,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     map.putAll(MapBuilder.of(
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
         "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
-        "onDoublePress", MapBuilder.of("registrationName", "onDoublePress")
+        "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
+        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded")
     ));
 
     return map;

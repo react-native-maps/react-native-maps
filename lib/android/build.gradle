@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-  compileOnly('com.facebook.react:react-native:+') {
+  implementation('com.facebook.react:react-native:+') {
     exclude group: 'com.android.support'
   }
   implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', '28.0.0')}"
