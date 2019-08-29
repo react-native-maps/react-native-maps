@@ -230,6 +230,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         coordinate.putDouble("timestamp", location.getTime());
         coordinate.putDouble("accuracy", location.getAccuracy());
         coordinate.putDouble("speed", location.getSpeed());
+        coordinate.putDouble("heading", location.getBearing());
         if(android.os.Build.VERSION.SDK_INT >= 18){
         coordinate.putBoolean("isFromMockProvider", location.isFromMockProvider());
         }
