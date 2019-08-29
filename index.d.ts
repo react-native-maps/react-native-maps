@@ -125,6 +125,7 @@ declare module "react-native-maps" {
         timestamp: number;
         accuracy: number;
         speed: number;
+        heading: number;
         isFromMockProvider: boolean;
       };
     };
