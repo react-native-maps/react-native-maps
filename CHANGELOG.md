@@ -1,4 +1,17 @@
 # Change Log
+## 0.26.0 (September 30, 2019)
+
+* iOS: [#2999](https://github.com/react-native-community/react-native-maps/pull/2999) Update GoogleMaps pod to 3.2.0 
+* iOS: [#2395](https://github.com/react-native-community/react-native-maps/pull/2395) Allow using onPanDrag while scrollEnabled=true
+* iOS: [#3051](https://github.com/react-native-community/react-native-maps/pull/3051) Add flat property binding on Marker for iOS
+* Android: [#3007](https://github.com/react-native-community/react-native-maps/pull/3007) Add Overlay onPress event
+* Android: [#3001](https://github.com/react-native-community/react-native-maps/pull/3001) Add @ReactModule annotation to help turbo modules processor
+* Common: [#3045](https://github.com/react-native-community/react-native-maps/pull/3045) Add heading to the onUserLocationChange listener
+* Common: [#2937](https://github.com/react-native-community/react-native-maps/pull/2937) Add onDoublePress callback
+* Common: [#2960](https://github.com/react-native-community/react-native-maps/pull/2959) Heatmaps for Android and iOS
+* Common: [#2959](https://github.com/react-native-community/react-native-maps/pull/2959) Added GeoJSON support by default 
+* Common: [#2975](https://github.com/react-native-community/react-native-maps/pull/2975) Convert to new react native config format (RN 0.60)
+* Common: [#2973](https://github.com/react-native-community/react-native-maps/pull/2973) Fix select annotation when show/hide callout view
 
 ## 0.25.0 (July 11, 2019)
 * Android: [#2941](https://github.com/react-native-community/react-native-maps/pull/2941) Fix build gradle to allow jettifier to run correctly
