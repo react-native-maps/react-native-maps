@@ -68,7 +68,7 @@ class BugMarkerWontUpdate extends React.Component {
             onPress={() => this.toggleHack()}
             style={[styles.bubble, styles.button, styles.hackButton]}
           >
-            <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
+            <Text style={styles.toggleHack}>
               {this.state.enableHack ? 'Disable Hack' : 'Enable Hack'}
             </Text>
           </TouchableOpacity>
@@ -78,13 +78,13 @@ class BugMarkerWontUpdate extends React.Component {
             onPress={() => this.decrement()}
             style={[styles.bubble, styles.button]}
           >
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>-</Text>
+            <Text style={styles.ammountButton}>-</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.increment()}
             style={[styles.bubble, styles.button]}
           >
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>+</Text>
+            <Text style={styles.ammountButton}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -129,6 +129,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     backgroundColor: 'transparent',
   },
+  toggleHack: { fontSize: 12, fontWeight: 'bold' },
+  ammountButton: { fontSize: 20, fontWeight: 'bold' },
 });
 
 export default BugMarkerWontUpdate;

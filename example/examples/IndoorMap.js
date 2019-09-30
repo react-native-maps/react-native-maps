@@ -20,10 +20,7 @@ class IndoorMap extends React.Component {
     const { defaultLevelIndex, levels } = indoorBuilding;
     const levelNames = levels.map(lv => lv.name || '');
     const msg = `Default Level: ${defaultLevelIndex}\nLevels: ${levelNames.toString()}`;
-    Alert.alert(
-      'Indoor building focused',
-      msg
-    );
+    Alert.alert('Indoor building focused', msg);
   }
 
   setIndoorLevel(level) {
@@ -45,10 +42,22 @@ class IndoorMap extends React.Component {
           showsIndoors
           showsIndoorLevelPicker
           onIndoorBuildingFocused={this.handleIndoorFocus}
-          ref={map => { this.map = map; }}
+          ref={map => {
+            this.map = map;
+          }}
         />
-        <Button title="go to level 5" onPress={() => { this.setIndoorLevel(5); }} />
-        <Button title="go to level 1" onPress={() => { this.setIndoorLevel(1); }} />
+        <Button
+          title="go to level 5"
+          onPress={() => {
+            this.setIndoorLevel(5);
+          }}
+        />
+        <Button
+          title="go to level 1"
+          onPress={() => {
+            this.setIndoorLevel(1);
+          }}
+        />
       </View>
     );
   }

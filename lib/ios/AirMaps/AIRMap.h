@@ -44,6 +44,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) MKMapCamera *initialCamera;
 @property (nonatomic, assign) CGFloat minZoomLevel;
 @property (nonatomic, assign) CGFloat maxZoomLevel;
+@property (nonatomic, assign) CGPoint compassOffset;
 
 @property (nonatomic, assign) CLLocationCoordinate2D pendingCenter;
 @property (nonatomic, assign) MKCoordinateSpan pendingSpan;
@@ -55,6 +56,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onPanDrag;
+@property (nonatomic, copy) RCTBubblingEventBlock onDoublePress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerPress;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerSelect;

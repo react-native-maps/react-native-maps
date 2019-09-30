@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 
 import MapView, { Marker, ProviderPropType } from 'react-native-maps';
 
@@ -34,16 +30,16 @@ class FocusOnMarkers extends React.Component {
         longitude: LONGITUDE - SPACE,
       },
       c: {
-        latitude: LATITUDE - (SPACE * 2),
-        longitude: LONGITUDE - (SPACE * 2),
+        latitude: LATITUDE - SPACE * 2,
+        longitude: LONGITUDE - SPACE * 2,
       },
       d: {
-        latitude: LATITUDE - (SPACE * 3),
-        longitude: LONGITUDE - (SPACE * 3),
+        latitude: LATITUDE - SPACE * 3,
+        longitude: LONGITUDE - SPACE * 3,
       },
       e: {
-        latitude: LATITUDE - (SPACE * 4),
-        longitude: LONGITUDE - (SPACE * 4),
+        latitude: LATITUDE - SPACE * 4,
+        longitude: LONGITUDE - SPACE * 4,
       },
     };
   }
@@ -67,10 +63,7 @@ class FocusOnMarkers extends React.Component {
 
   focus1() {
     animationTimeout = setTimeout(() => {
-      this.focusMap([
-        markerIDs[1],
-        markerIDs[4],
-      ], true);
+      this.focusMap([markerIDs[1], markerIDs[4]], true);
 
       this.focus2();
     }, timeout);
@@ -78,10 +71,7 @@ class FocusOnMarkers extends React.Component {
 
   focus2() {
     animationTimeout = setTimeout(() => {
-      this.focusMap([
-        markerIDs[2],
-        markerIDs[3],
-      ], false);
+      this.focusMap([markerIDs[2], markerIDs[3]], false);
 
       this.focus3();
     }, timeout);
@@ -89,10 +79,7 @@ class FocusOnMarkers extends React.Component {
 
   focus3() {
     animationTimeout = setTimeout(() => {
-      this.focusMap([
-        markerIDs[1],
-        markerIDs[2],
-      ], false);
+      this.focusMap([markerIDs[1], markerIDs[2]], false);
 
       this.focus4();
     }, timeout);
@@ -100,10 +87,7 @@ class FocusOnMarkers extends React.Component {
 
   focus4() {
     animationTimeout = setTimeout(() => {
-      this.focusMap([
-        markerIDs[0],
-        markerIDs[3],
-      ], true);
+      this.focusMap([markerIDs[0], markerIDs[3]], true);
 
       this.focus1();
     }, timeout);
@@ -114,7 +98,9 @@ class FocusOnMarkers extends React.Component {
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-          ref={ref => { this.map = ref; }}
+          ref={ref => {
+            this.map = ref;
+          }}
           style={styles.map}
           initialRegion={{
             latitude: LATITUDE,
@@ -123,26 +109,11 @@ class FocusOnMarkers extends React.Component {
             longitudeDelta: LONGITUDE_DELTA,
           }}
         >
-          <Marker
-            identifier="Marker1"
-            coordinate={this.state.a}
-          />
-          <Marker
-            identifier="Marker2"
-            coordinate={this.state.b}
-          />
-          <Marker
-            identifier="Marker3"
-            coordinate={this.state.c}
-          />
-          <Marker
-            identifier="Marker4"
-            coordinate={this.state.d}
-          />
-          <Marker
-            identifier="Marker5"
-            coordinate={this.state.e}
-          />
+          <Marker identifier="Marker1" coordinate={this.state.a} />
+          <Marker identifier="Marker2" coordinate={this.state.b} />
+          <Marker identifier="Marker3" coordinate={this.state.c} />
+          <Marker identifier="Marker4" coordinate={this.state.d} />
+          <Marker identifier="Marker5" coordinate={this.state.e} />
         </MapView>
       </View>
     );
