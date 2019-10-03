@@ -1,4 +1,9 @@
 # Change Log
+## 0.26.1 (October 3, 2019)
+
+* Android: [#3103](https://github.com/react-native-community/react-native-maps/pull/3103) Support for RN 0.60.5
+* Android: [#3103](https://github.com/react-native-community/react-native-maps/pull/3103) "AIRMap" was not found in the UIManager
+
 ## 0.26.0 (September 30, 2019)
 
 * iOS: [#2999](https://github.com/react-native-community/react-native-maps/pull/2999) Update GoogleMaps pod to 3.2.0 
