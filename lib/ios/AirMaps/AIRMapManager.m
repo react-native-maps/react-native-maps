@@ -83,6 +83,7 @@ RCT_EXPORT_MODULE()
     return map;
 }
 
+RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
 RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
