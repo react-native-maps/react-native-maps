@@ -52,7 +52,7 @@ RCT_EXPORT_MODULE()
     AIRMap *map = [AIRMap new];
     map.delegate = self;
 
-    map.isAccessibilityElement = YES;
+    map.isAccessibilityElement = NO;
     map.accessibilityElementsHidden = NO;
     
     // MKMapView doesn't report tap events, so we attach gesture recognizers to it
