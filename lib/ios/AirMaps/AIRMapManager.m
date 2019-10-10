@@ -52,7 +52,7 @@ RCT_EXPORT_MODULE()
     AIRMap *map = [AIRMap new];
     map.delegate = self;
 
-    map.isAccessibilityElement = YES;
+    map.isAccessibilityElement = NO;
     map.accessibilityElementsHidden = NO;
     
     // MKMapView doesn't report tap events, so we attach gesture recognizers to it
@@ -83,6 +83,7 @@ RCT_EXPORT_MODULE()
     return map;
 }
 
+RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
 RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
