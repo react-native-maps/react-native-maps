@@ -9,7 +9,7 @@
 | `initialRegion` | `Region` |  | The initial region to be displayed by the map.  Use this prop instead of `region` only if you don't want to control the viewport of the map besides the initial region.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
 | `camera` | `Camera` |  | The camera view the map should display. If you use this, the `region` property is ignored.
 | `initialCamera` | `Camera` |  | Like `initialRegion`, use this prop instead of `camera` only if you don't want to control the viewport of the map besides the initial camera setting.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
-| `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured. **Note** Google Maps only.
+| `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured.
 | `paddingAdjustmentBehavior` | 'always'\|'automatic'\|'never' | 'never' | Indicates how/when to affect padding with safe area insets (`GoogleMaps` in iOS only)
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
 | `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - none: no map **Note** Not available on MapKit<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: (Android only) topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
