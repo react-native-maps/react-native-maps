@@ -122,6 +122,7 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerDragStart, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDragEnd, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
 RCT_CUSTOM_VIEW_PROPERTY(initialRegion, MKCoordinateRegion, AIRMap)
 {
     if (json == nil) return;
@@ -951,6 +952,21 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView didUpdateUserLocation:(MKUserLocation *)location
 {
+    id event = @{@"coordinate": @{
+                         @"latitude": @(location.coordinate.latitude),
+                         @"longitude": @(location.coordinate.longitude),
+                         @"altitude": @(location.location.altitude),
+                         @"timestamp": @(location.location.timestamp.timeIntervalSinceReferenceDate * 1000),
+                         @"accuracy": @(location.location.horizontalAccuracy),
+                         @"altitudeAccuracy": @(location.location.verticalAccuracy),
+                         @"speed": @(location.location.speed),
+                         }
+                 };
+    
+    if (mapView.onUserLocationChange) {
+        mapView.onUserLocationChange(event);
+    }
+    
     if (mapView.followUserLocation) {
         MKCoordinateRegion region;
         region.span.latitudeDelta = AIRMapDefaultSpan;
@@ -961,6 +977,7 @@ static int kDragCenterContext;
         // Move to user location only for the first time it loads up.
         // mapView.followUserLocation = NO;
     }
+    
 }
 
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(__unused BOOL)animated
@@ -1280,6 +1297,15 @@ static int kDragCenterContext;
     double zoomLevel = AIRMapMaxZoomLevel - zoomExponent;
 
     return zoomLevel;
+}
+
+#pragma mark MKMapViewDelegate - Tracking the User Location
+
+- (void)mapView:(AIRMap *)mapView didFailToLocateUserWithError:(NSError *)error {
+    id event = @{@"error": @{ @"message": error.localizedDescription }};
+    if (mapView.onUserLocationChange) {
+        mapView.onUserLocationChange(event);
+    }
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
