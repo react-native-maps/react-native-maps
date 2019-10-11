@@ -470,6 +470,7 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
             AIRMap *mapView = (AIRMap *)view;
             MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
 
+            options.mapType = mapView.mapType;
             options.region = (region.center.latitude && region.center.longitude) ? region : mapView.region;
             options.size = CGSizeMake(
               ([width floatValue] == 0) ? mapView.bounds.size.width : [width floatValue],
