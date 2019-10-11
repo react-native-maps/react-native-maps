@@ -125,6 +125,7 @@ declare module "react-native-maps" {
         timestamp: number;
         accuracy: number;
         speed: number;
+        heading: number;
         isFromMockProvider: boolean;
       };
     };
@@ -221,6 +222,7 @@ declare module "react-native-maps" {
     onRegionChange?: (region: Region) => void;
     onRegionChangeComplete?: (region: Region) => void;
     onPress?: (event: MapEvent) => void;
+    onDoublePress?: (event: MapEvent) => void;
     onLongPress?: (event: MapEvent) => void;
     onUserLocationChange?: (event: EventUserLocation) => void;
     onPanDrag?: (event: MapEvent) => void;
@@ -446,6 +448,7 @@ declare module "react-native-maps" {
     pathTemplate: string;
     tileSize?: number;
     zIndex?: number;
+    flipY?: boolean;
   }
 
   export class LocalTile extends React.Component<MapLocalTileProps, any> {}
@@ -473,11 +476,36 @@ declare module "react-native-maps" {
   export interface MapOverlayProps extends ViewProperties {
     image?: ImageURISource | ImageRequireSource;
     bounds: [Coordinate, Coordinate];
+    tappable?: boolean;
+    onPress?: (event: MapEvent<{ action: "overlay-press"; }>) => void;
   }
 
   export class Overlay extends React.Component<MapOverlayProps, any> {}
 
   export class OverlayAnimated extends Overlay {}
+
+  // =======================================================================
+  //  Heatmap
+  // =======================================================================
+
+  export interface WeightedLatLng {
+    latitude: number;
+    longitude: number;
+    weight?: number;
+  }
+
+  export interface MapHeatmapProps extends ViewProperties {
+    points: WeightedLatLng[];
+    gradient?: {
+      colors: string[],
+      startPoints: number[],
+      colorMapSize: number
+    }
+    radius?: number;
+    opacity?: number;
+  }
+
+  export class Heatmap extends React.Component<MapHeatmapProps, any> {}
 
   // =======================================================================
   //  Constants
