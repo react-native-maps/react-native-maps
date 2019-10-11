@@ -581,6 +581,14 @@ const NSInteger AIRMapMaxZoomLevel = 20;
   [self updateLegalLabelInsets];
 }
 
+- (void)setMapPadding:(UIEdgeInsets)mapPadding {
+  self.layoutMargins = mapPadding;
+}
+
+- (UIEdgeInsets)mapPadding {
+  return self.layoutMargins;
+}
+
 - (void)beginLoading {
     if ((!self.hasShownInitialLoading && self.loadingEnabled) || (self.cacheEnabled && self.cacheImageView.image == nil)) {
         self.loadingView.hidden = NO;
