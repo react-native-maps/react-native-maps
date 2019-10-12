@@ -270,7 +270,7 @@ CGRect unionRect(CGRect a, CGRect b) {
     [self iconViewInsertSubview:_iconImageView atIndex:0];
   }
 
-  _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+  _reloadImageCancellationBlock = [[_bridge moduleForClass:[RCTImageLoader class]] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                           size:self.bounds.size
                                                                          scale:RCTScreenScale()
                                                                        clipped:YES
@@ -327,7 +327,7 @@ CGRect unionRect(CGRect a, CGRect b) {
   }
 
   _reloadImageCancellationBlock =
-  [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
+  [[_bridge moduleForClass:[RCTImageLoader class]] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
                                           size:self.bounds.size
                                          scale:RCTScreenScale()
                                        clipped:YES
