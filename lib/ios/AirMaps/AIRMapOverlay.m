@@ -27,7 +27,7 @@
         _reloadImageCancellationBlock = nil;
     }
     __weak typeof(self) weakSelf = self;
-    _reloadImageCancellationBlock = [_bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+    _reloadImageCancellationBlock = [[_bridge moduleForClass:[RCTImageLoader class]] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                             size:weakSelf.bounds.size
                                                                            scale:RCTScreenScale()
                                                                          clipped:YES
