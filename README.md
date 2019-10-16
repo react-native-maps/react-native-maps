@@ -612,8 +612,8 @@ Pass an array of coordinates to focus a map region on said coordinates.
 
 * Make sure that you have [properly installed](docs/installation.md) react-native-maps.
 * Check in the logs if there is more informations about the issue.
-* Try setting the style of the MapView to an absolute position with top, left, right and bottom values set.
-* Make sure you have enabled Google Maps API in ![Google developer console](https://console.developers.google.com/apis/library)
+* Try setting the style of the MapView to an absolute position with top, left, right and bottom  values set.
+*   Make sure you have enabled Google Maps API in [Google developer console](https://console.developers.google.com/apis/library)
 
 ```javascript
 const styles = StyleSheet.create({
