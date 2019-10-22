@@ -349,7 +349,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 }
 
 - (BOOL)isSelected {
-  return _isAlwaysSelected || [super isSelected];
+  return _isPreselected || [super isSelected];
 }
 
 - (void)dealloc {
