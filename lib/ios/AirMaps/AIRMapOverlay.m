@@ -2,7 +2,7 @@
 
 #import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
-#import <React/RCTImageLoader.h>
+#import <React/RCTImageLoaderProtocol.h>
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
 
@@ -27,7 +27,7 @@
         _reloadImageCancellationBlock = nil;
     }
     __weak typeof(self) weakSelf = self;
-    _reloadImageCancellationBlock = [[_bridge moduleForClass:[RCTImageLoader class]] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+    _reloadImageCancellationBlock = [[_bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                             size:weakSelf.bounds.size
                                                                            scale:RCTScreenScale()
                                                                          clipped:YES
