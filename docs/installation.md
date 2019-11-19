@@ -169,7 +169,8 @@ Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
 c) (React Native 0.60 and higher) Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
   ```ruby
     # React Native Maps dependencies
-    pod 'react-native-google-maps', path: rn_maps_path
+    rn_maps_path = '../node_modules/react-native-maps'
+    pod 'react-native-google-maps', :path => rn_maps_path
     pod 'GoogleMaps'
     pod 'Google-Maps-iOS-Utils'
   ```
@@ -219,7 +220,7 @@ ext {
     buildToolsVersion   = "xxx"
     minSdkVersion       = xxx
     supportLibVersion   = "xxx"
-    googlePlayServicesVersion = "xxx" // or set latest version
+    playServicesVersion = "xxx" // or set latest version
     androidMapsUtilsVersion = "xxx"
 }
 ```
@@ -232,7 +233,7 @@ buildscript {
         compileSdkVersion = xxx
         targetSdkVersion = xxx
         supportLibVersion = "xxx"
-        googlePlayServicesVersion = "xxx" // or set latest version
+        playServicesVersion = "xxx" // or set latest version
         androidMapsUtilsVersion = "xxx"
     }
 }

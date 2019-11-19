@@ -48,6 +48,7 @@ import TestIdMarkers from './examples/TestIdMarkers';
 import IndoorMap from './examples/IndoorMap';
 import CameraControl from './examples/CameraControl';
 import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
+import GeojsonMap from './examples/Geojson';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -177,6 +178,7 @@ export default class App extends React.Component<Props> {
         [IndoorMap, 'Indoor Map', true],
         [CameraControl, 'CameraControl', true],
         [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
+        [GeojsonMap, 'Geojson', true],
       ]
         // Filter out examples that are not yet supported for Google Maps on iOS.
         .filter(
