@@ -105,9 +105,6 @@ post_install do |installer|
         config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
       end
     end
-    if target.name == "React"
-      target.remove_from_project
-    end
   end
 end
 ```
