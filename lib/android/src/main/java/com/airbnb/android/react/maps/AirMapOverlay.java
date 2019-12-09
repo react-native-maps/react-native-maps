@@ -25,6 +25,12 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
   private boolean tappable;
   private float zIndex;
   private float transparency;
+  private LatLng location;
+  private float width;
+  private float height;
+  private float bearing;
+  private float[] anchor;
+
 
   private final ImageReader mImageReader;
   private GoogleMap map;
@@ -41,6 +47,26 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
     if (this.groundOverlay != null) {
       this.groundOverlay.setPositionFromBounds(this.bounds);
     }
+  }
+
+  public void setLocation(ReadableArray location){
+    this.location = new LatLng(location.getDouble(0), location.getDouble(1));
+  }
+
+  public void setWidth(float width) {
+    this.width = width;
+  }
+
+  public void setHeight(float height) {
+    this.height = height;
+  }
+
+  public void setBearing(float bearing){
+    this.bearing = bearing;
+  }
+
+  public void setAnchor(ReadableArray anchor){
+    this.anchor = new float[]{ (float)anchor.getDouble(0) , (float)anchor.getDouble(1) };
   }
 
   public void setZIndex(float zIndex) {
@@ -81,6 +107,7 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
       return this.groundOverlayOptions;
     }
     GroundOverlayOptions options = new GroundOverlayOptions();
+
     if (this.iconBitmapDescriptor != null) {
       options.image(iconBitmapDescriptor);
     } else {
@@ -90,7 +117,20 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
       // hide overlay until real image gets added
       options.visible(false);
     }
-    options.positionFromBounds(bounds);
+
+    // Two different ways of specifying postion of the groundOverlay
+    if(this.location != null){
+      if(this.height == 0.0f){
+        options.position(location, width);
+      } else {
+        options.position(location, width, height);
+      }
+      options.anchor(anchor[0], anchor[1]);
+      options.bearing(bearing);
+    } else {
+      options.positionFromBounds(bounds);
+    }
+
     options.zIndex(zIndex);
     return options;
   }

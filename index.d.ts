@@ -476,11 +476,17 @@ declare module "react-native-maps" {
   // =======================================================================
 
   type Coordinate = [number, number];
+  type Anchor = [number, number]
 
   export interface MapOverlayProps extends ViewProperties {
     image?: ImageURISource | ImageRequireSource;
-    bounds: [Coordinate, Coordinate];
+    bounds?: [Coordinate, Coordinate];
     tappable?: boolean;
+    location?: Coordinate;
+    width?: number;
+    height?: number;
+    anchor?: Anchor;
+    bearing?: number;
     onPress?: (event: MapEvent<{ action: "overlay-press"; }>) => void;
   }
 

@@ -18,5 +18,6 @@ RCT_EXPORT_MODULE()
 
 RCT_REMAP_VIEW_PROPERTY(bounds, boundsRect, NSArray)
 RCT_REMAP_VIEW_PROPERTY(image, imageSrc, NSString)
+RCT_EXPORT_VIEW_PROPERTY(bearing, double)
 
 @end

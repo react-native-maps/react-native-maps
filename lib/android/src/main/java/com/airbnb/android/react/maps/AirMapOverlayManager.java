@@ -11,6 +11,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Map;
 
@@ -46,6 +47,31 @@ public class AirMapOverlayManager extends ViewGroupManager<AirMapOverlay> {
     view.setBounds(bounds);
   }
 
+  @ReactProp(name = "location")
+  public void setLocation(AirMapOverlay view, ReadableArray location){
+    view.setLocation(location);
+  }
+
+  @ReactProp(name = "width")
+  public void setWidth(AirMapOverlay view, float width) {
+    view.setWidth(width);
+  }
+
+  @ReactProp(name = "height")
+  public void setHeight(AirMapOverlay view, float height) {
+    view.setHeight(height);
+  }
+
+  @ReactProp(name = "bearing")
+  public void setBearing(AirMapOverlay view, float bearing){
+    view.setBearing(bearing);
+  }
+
+  @ReactProp(name = "anchor")
+  public void setAnchor(AirMapOverlay view, ReadableArray anchor){
+    view.setAnchor(anchor);
+  }
+  
   @ReactProp(name = "zIndex", defaultFloat = 1.0f)
   public void setZIndex(AirMapOverlay view, float zIndex) {
     view.setZIndex(zIndex);
