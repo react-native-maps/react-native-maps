@@ -475,7 +475,7 @@ import com.airbnb.android.react.maps.MapsPackage;
 
 ### Trouble with Google Play services
 
-- Make sure that your emulator has Google Play (Go to Anroid studio -> Virtual Devices -> Check that you have icon in "Play Store" column)
+- Make sure that your emulator has Google Play (Go to Android studio -> Virtual Devices -> Check that you have icon in "Play Store" column)
 - Click to bottom dots icon in the emulator
 - Go to Google Play Tab and click Update
 
