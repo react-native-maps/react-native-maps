@@ -333,6 +333,11 @@ declare module "react-native-maps" {
      */
     redrawCallout(): void;
     /**
+     * Causes a redraw of the marker. Useful when there are updates to the 
+     * marker and `tracksViewChanges` comes with a cost that is too high.
+     */
+    redraw(): void
+    /**
      * Animates marker movement.
      * __Android only__
      */
