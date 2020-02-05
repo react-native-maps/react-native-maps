@@ -126,6 +126,9 @@ and open the produced workspace file (`.xcworkspace`) in XCode to build your pro
 cd ios
 pod install
 ```
+### App store submission
+
+The app's `Info.plist` file must contain a `NSLocationWhenInUseUsageDescription` with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission.
 
 ### Enabling Google Maps on iOS (React Native all versions)
 
