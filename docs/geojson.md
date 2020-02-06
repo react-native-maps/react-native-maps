@@ -5,6 +5,9 @@
 | Prop      | Type | Default                                                | Note |
 | --------- | ---- | ------------------------------------------------------ | ---- |
 | `geojson` |      | [Geojson](https://geojson.org/) description of object. |
+| `strokeColor` | String     | `#000` |
+| `fillColor` | String     |  |
+| `strokeWidth` | Number     | `1` |
 
 ## Example
 
@@ -28,7 +31,12 @@ const myPlace = {
 
 const Map = props => (
   <MapView>
-    <Geojson geojson={myPlace} />
+    <Geojson 
+      geojson={myPlace} 
+      strokeColor="red"
+      fillColor="green"
+      strokeWidth={2}
+    />
   </MapView>
 );
 ```
