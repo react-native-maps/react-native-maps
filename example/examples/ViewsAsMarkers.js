@@ -3,10 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
+  Image,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import MapView, { Marker, ProviderPropType } from 'react-native-maps';
+import MapView, { Callout, Marker, ProviderPropType } from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
 const { width, height } = Dimensions.get('window');
@@ -54,6 +55,36 @@ class ViewsAsMarkers extends React.Component {
         >
           <Marker coordinate={this.state.coordinate}>
             <PriceMarker amount={this.state.amount} />
+          </Marker>
+
+          <Marker
+            coordinate={{
+              latitude: LATITUDE,
+              longitude: LONGITUDE + 0.01,
+            }}
+            tracksViewChanges={true}
+            tracksInfoWindowChanges={true}
+          >
+            <Image
+              style={styles.image}
+              source={{
+                uri:
+                  'https://media.tenor.com/images/c674ba98c40f6793eaf10a1356c1c36a/tenor.gif',
+              }}
+            />
+            <Callout tooltip>
+              <View style={styles.calloutContainer}>
+                <Text>this is callout</Text>
+                <Image
+                  style={styles.image}
+                  source={{
+                    uri:
+                      'https://media.tenor.com/images/c674ba98c40f6793eaf10a1356c1c36a/tenor.gif',
+                  }}
+                />
+              </View>
+              <View style={styles.arrow} />
+            </Callout>
           </Marker>
         </MapView>
         <View style={styles.buttonContainer}>
@@ -110,6 +141,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   ammountButton: { fontSize: 20, fontWeight: 'bold' },
+  image: { width: 50, height: 50 },
+  calloutContainer: {
+    width: 120,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+  },
+  arrow: {
+    backgroundColor: 'transparent',
+    borderWidth: 8,
+    borderColor: 'transparent',
+    borderTopColor: 'red',
+    alignSelf: 'center',
+  },
 });
 
 export default ViewsAsMarkers;

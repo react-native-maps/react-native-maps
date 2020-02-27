@@ -9,7 +9,8 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.animation.ObjectAnimator;
 import android.util.Property;
 import android.animation.TypeEvaluator;
@@ -76,7 +77,7 @@ public class AirMapMarker extends AirMapFeature {
 
   private boolean tracksViewChanges = true;
   private boolean tracksViewChangesActive = false;
-  private boolean hasViewChanges = true;
+  private boolean tracksInfoWindowChanges = true;
 
   private boolean hasCustomMarkerView = false;
   private final AirMapMarkerManager markerManager;
@@ -120,12 +121,22 @@ public class AirMapMarker extends AirMapFeature {
         }
       };
 
+  private ViewAttacherGroup attacherGroup;
+
   public AirMapMarker(Context context, AirMapMarkerManager markerManager) {
     super(context);
     this.context = context;
     this.markerManager = markerManager;
     logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
     logoHolder.onAttach();
+    attacherGroup = new ViewAttacherGroup(context);
+    FrameLayout.LayoutParams attacherLayoutParams = new FrameLayout.LayoutParams(0, 0);
+    attacherLayoutParams.width = 0;
+    attacherLayoutParams.height = 0;
+    attacherLayoutParams.leftMargin = 99999999;
+    attacherLayoutParams.topMargin = 99999999;
+    attacherGroup.setLayoutParams(attacherLayoutParams);
+    addView(attacherGroup);
   }
 
   public AirMapMarker(Context context, MarkerOptions options, AirMapMarkerManager markerManager) {
@@ -258,8 +269,14 @@ public class AirMapMarker extends AirMapFeature {
     updateTracksViewChanges();
   }
 
+  public void setTracksInfoWindowChanges(boolean trackChanges){
+    tracksInfoWindowChanges = trackChanges;
+    updateTracksViewChanges();
+  }
+
   private void updateTracksViewChanges() {
-    boolean shouldTrack = tracksViewChanges && hasCustomMarkerView && marker != null;
+    boolean shouldTrack =( tracksInfoWindowChanges||tracksViewChanges )&&
+            (hasCustomMarkerView || calloutView!=null) && marker != null;
     if (shouldTrack == tracksViewChangesActive) return;
     tracksViewChangesActive = shouldTrack;
 
@@ -289,12 +306,11 @@ public class AirMapMarker extends AirMapFeature {
   public void updateMarkerIcon() {
     if (marker == null) return;
 
-    if (!hasCustomMarkerView) {
-      // No more updates for this, as it's a simple icon
-      hasViewChanges = false;
-    }
-    if (marker != null) {
+    if (tracksViewChanges) {
       marker.setIcon(getIcon());
+    }
+    if (tracksInfoWindowChanges && marker.isInfoWindowShown()) {
+      marker.showInfoWindow();
     }
   }
 
@@ -322,7 +338,6 @@ public class AirMapMarker extends AirMapFeature {
   }
 
   public void setImage(String uri) {
-    hasViewChanges = true;
 
     boolean shouldLoadImage = true;
 
@@ -389,7 +404,6 @@ public class AirMapMarker extends AirMapFeature {
   public void setIconBitmapDescriptor(BitmapDescriptor bitmapDescriptor, Bitmap bitmap) {
     this.iconBitmapDescriptor = bitmapDescriptor;
     this.iconBitmap = bitmap;
-    this.hasViewChanges = true;
     this.update(true);
   }
 
@@ -408,11 +422,14 @@ public class AirMapMarker extends AirMapFeature {
 
   @Override
   public void addView(View child, int index) {
-    super.addView(child, index);
+
     // if children are added, it means we are rendering a custom marker
     if (!(child instanceof AirMapCallout)) {
       hasCustomMarkerView = true;
       updateTracksViewChanges();
+      super.addView(child, index);
+    }else {
+      attacherGroup.addView(child);
     }
     update(true);
   }
@@ -561,11 +578,8 @@ public class AirMapMarker extends AirMapFeature {
   public View getCallout() {
     if (this.calloutView == null) return null;
 
-    if (this.wrappedCalloutView == null) {
-      this.wrapCalloutView();
-    }
-
     if (this.calloutView.getTooltip()) {
+      this.wrapCalloutView();
       return this.wrappedCalloutView;
     } else {
       return null;
@@ -575,17 +589,15 @@ public class AirMapMarker extends AirMapFeature {
   public View getInfoContents() {
     if (this.calloutView == null) return null;
 
-    if (this.wrappedCalloutView == null) {
-      this.wrapCalloutView();
-    }
-
     if (this.calloutView.getTooltip()) {
       return null;
     } else {
+      this.wrapCalloutView();
       return this.wrappedCalloutView;
     }
   }
 
+  private ImageView imageView;
   private void wrapCalloutView() {
     // some hackery is needed to get the arbitrary infowindow view to render centered, and
     // with only the width/height that it needs.
@@ -593,27 +605,16 @@ public class AirMapMarker extends AirMapFeature {
       return;
     }
 
-    LinearLayout LL = new LinearLayout(context);
-    LL.setOrientation(LinearLayout.VERTICAL);
-    LL.setLayoutParams(new LinearLayout.LayoutParams(
-        this.calloutView.width,
-        this.calloutView.height,
-        0f
-    ));
+    if(imageView == null){
+      imageView = new ImageView(context);
+    }
+    // draw callout as a ImageView
+    Bitmap bitmap = Bitmap.createBitmap(this.calloutView.width, this.calloutView.height, Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    this.calloutView.draw(canvas);
+    imageView.setImageBitmap(bitmap);
 
-
-    LinearLayout LL2 = new LinearLayout(context);
-    LL2.setOrientation(LinearLayout.HORIZONTAL);
-    LL2.setLayoutParams(new LinearLayout.LayoutParams(
-        this.calloutView.width,
-        this.calloutView.height,
-        0f
-    ));
-
-    LL.addView(LL2);
-    LL2.addView(this.calloutView);
-
-    this.wrappedCalloutView = LL;
+    this.wrappedCalloutView = imageView;
   }
 
   private int getDrawableResourceByName(String name) {
