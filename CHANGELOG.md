@@ -1,4 +1,19 @@
 # Change Log
+## 0.27.0 (March 4, 2020)
+
+* iOS: [#3115](https://github.com/react-native-community/react-native-maps/pull/3115) Expose isAccessibilityElement as a prop 
+* iOS: [#3119](https://github.com/react-native-community/react-native-maps/pull/3119) Add `mapPadding` prop
+* iOS: [#3134](https://github.com/react-native-community/react-native-maps/pull/3134) Add `isPreselected` prop
+* iOS: [#3120](https://github.com/react-native-community/react-native-maps/pull/3120) Keep current mapType when taking snapshot
+* iOS: [#2889](https://github.com/react-native-community/react-native-maps/pull/2889) Implement onUserLocationChange
+* iOS: [#3136](https://github.com/react-native-community/react-native-maps/pull/3136) Use RCTImageLoaderProtocol for RN v0.61.0
+* iOS: [#3125](https://github.com/react-native-community/react-native-maps/pull/3125) Replace deprecated bridge.imageLoader calls with moduleForClass API
+* iOS: [#3309](https://github.com/react-native-community/react-native-maps/pull/3309) Fixes for polygon custom styles not being applied when provider is Google maps
+* iOS: [#3104](https://github.com/react-native-community/react-native-maps/pull/3104) Only handle cacheEnable when app is active
+* Android: [#2993](https://github.com/react-native-community/react-native-maps/pull/2993) Improved user location
+* Common: [#3163](https://github.com/react-native-community/react-native-maps/pull/3163) Opacity prop for MapOverlay on Android and iOS (Google Maps)
+* Common: [#3131](https://github.com/react-native-community/react-native-maps/pull/3131) AnimatedRegion.addListener() property setting
+
 ## 0.26.1 (October 3, 2019)
 
 * Android: [#3103](https://github.com/react-native-community/react-native-maps/pull/3103) Support for RN 0.60.5
