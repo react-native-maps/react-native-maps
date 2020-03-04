@@ -75,6 +75,11 @@
   _overlay.bounds = _overlayBounds;
 }
 
+- (void)setOpacity:(CGFloat)opacity
+{
+  _overlay.opacity = opacity;
+}
+
 @end
 
 #endif
