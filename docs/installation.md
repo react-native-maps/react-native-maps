@@ -272,6 +272,9 @@ dependencies {
    <meta-data
      android:name="com.google.android.geo.API_KEY"
      android:value="Your Google maps API Key Here"/>
+  
+   <!-- You will also only need to add this uses-libray tag -->
+   <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 </application>
 ```
 > Note: As shown above, `com.google.android.geo.API_KEY` is the
