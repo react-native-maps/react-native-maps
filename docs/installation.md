@@ -225,7 +225,7 @@ ext {
     buildToolsVersion   = "xxx"
     minSdkVersion       = xxx
     supportLibVersion   = "xxx"
-    playServicesVersion = "xxx" // or set latest version
+    playServicesVersion = "17.0.0" // or find latest version
     androidMapsUtilsVersion = "xxx"
 }
 ```
@@ -238,12 +238,13 @@ buildscript {
         compileSdkVersion = xxx
         targetSdkVersion = xxx
         supportLibVersion = "xxx"
-        playServicesVersion = "xxx" // or set latest version
+        playServicesVersion = "17.0.0" // or find latest version
         androidMapsUtilsVersion = "xxx"
     }
 }
 ...
 ```
+You can find the latest `playServicesVersion` by checking [https://developers.google.com/android/guides/releases](https://developers.google.com/android/guides/releases) and searching for `gms:play-services-maps:`
 
 3.2 (React Native all versions) If you do **not** have *project-wide properties* defined and have a
 different play-services version than the one included in this library,
