@@ -1,1 +1,1 @@
-export { default } from './PanController'
+export { default } from './PanController';
