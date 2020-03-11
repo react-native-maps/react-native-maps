@@ -517,6 +517,21 @@ declare module "react-native-maps" {
   export class Heatmap extends React.Component<MapHeatmapProps, any> {}
 
   // =======================================================================
+  //  Geojson
+  // =======================================================================
+
+  import GeoJSON from 'geojson';
+
+  export interface GeojsonProps {
+    geojson: GeoJSON.GeoJSON;
+    strokeColor?: string;
+    fillColor?: string;
+    strokeWidth?: number;
+  }
+
+  export class Geojson extends React.Component<GeojsonProps, any> {}
+
+  // =======================================================================
   //  Constants
   // =======================================================================
 
