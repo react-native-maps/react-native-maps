@@ -43,7 +43,9 @@ public class FusedLocationSource implements LocationSource {
         fusedLocationClientProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                onLocationChangedListener.onLocationChanged(location);
+                if (location != null) {
+                    onLocationChangedListener.onLocationChanged(location);
+                }
             }
         });
         locationCallback = new LocationCallback() {
