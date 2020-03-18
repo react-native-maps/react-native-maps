@@ -9,7 +9,7 @@
 
 #import "AIRMapMarkerManager.h"
 
-#import <React/RCTConvert+CoreLocation.h>
+#import <Shared/RCTConvert+CoreLocation.h>
 #import <React/RCTUIManager.h>
 #import <React/UIView+React.h>
 #import "AIRMapMarker.h"

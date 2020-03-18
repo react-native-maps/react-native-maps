@@ -5,7 +5,7 @@
 
 #import "RCTConvert+AirMap.h"
 
-#import <React/RCTConvert+CoreLocation.h>
+#import <Shared/RCTConvert+CoreLocation.h>
 #import "AIRMapCoordinate.h"
 
 @implementation RCTConvert (AirMap)

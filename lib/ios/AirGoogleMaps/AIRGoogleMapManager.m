@@ -12,7 +12,7 @@
 #import <React/RCTViewManager.h>
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
-#import <React/RCTConvert+CoreLocation.h>
+#import <Shared/RCTConvert+CoreLocation.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTViewManager.h>
 #import <React/RCTConvert.h>
