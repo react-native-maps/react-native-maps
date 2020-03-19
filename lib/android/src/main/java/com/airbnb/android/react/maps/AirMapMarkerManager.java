@@ -270,18 +270,14 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     view.setTracksViewChanges(tracksViewChanges);
   }
 
-  @ReactProp(name = "tracksInfoWindowChanges", defaultBoolean = true)
-  public void setTracksInfoWindowChanges(AirMapMarker view, boolean trackChanges) {
-    view.setTracksInfoWindowChanges(trackChanges);
-  }
-
   @Override
   public void addView(AirMapMarker parent, View child, int index) {
-    // add callout to parent ,otherwise image can not show
-    super.addView(parent, child, index);
+    // if an <Callout /> component is a child, then it is a callout view, NOT part of the
+    // marker.
     if (child instanceof AirMapCallout) {
       parent.setCalloutView((AirMapCallout) child);
     } else {
+      super.addView(parent, child, index);
       parent.update(true);
     }
   }
