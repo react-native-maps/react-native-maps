@@ -1,4 +1,8 @@
 # Change Log
+## 0.27.1 (March 19, 2020)
+* Android: [#3345](https://github.com/react-native-community/react-native-maps/pull/3345) Protect against null Location in FusedLocationSource
+* Android: [#3351](https://github.com/react-native-community/react-native-maps/pull/3351) Revert "android google map callout support <Image/> 
+
 ## 0.27.0 (March 4, 2020)
 
 * iOS: [#3115](https://github.com/react-native-community/react-native-maps/pull/3115) Expose isAccessibilityElement as a prop 
