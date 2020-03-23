@@ -225,7 +225,7 @@ type IndoorBuilding {
 
 ```
 type IndoorLevel {
-  activeLevelIndex: Number,
+  index: Number,
   name: String,
   shortName: String,
 }
