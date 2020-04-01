@@ -69,8 +69,8 @@
 - (void)didTapPolygon:(GMSPolygon *)polygon;
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)didLongPressAtCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)didChangeCameraPosition:(GMSCameraPosition *)position;
-- (void)idleAtCameraPosition:(GMSCameraPosition *)position;
+- (void)didChangeCameraPosition:(GMSCameraPosition *)position reason:(BOOL)reason;
+- (void)idleAtCameraPosition:(GMSCameraPosition *)position reason:(BOOL)reason;
 - (void)didTapPOIWithPlaceID:(NSString *)placeID name:(NSString *) name location:(CLLocationCoordinate2D) location;
 - (NSArray *)getMapBoundaries;
 

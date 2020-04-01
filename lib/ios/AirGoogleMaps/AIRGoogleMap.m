@@ -349,9 +349,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.onLongPress([self eventFromCoordinate:coordinate]);
 }
 
-- (void)didChangeCameraPosition:(GMSCameraPosition *)position {
+- (void)didChangeCameraPosition:(GMSCameraPosition *)position reason:(BOOL)reason{
   id event = @{@"continuous": @YES,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+               @"reason": [NSNumber numberWithBool:reason],
                };
 
   if (self.onChange) self.onChange(event);
@@ -371,9 +372,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (self.onPoiClick) self.onPoiClick(event);
 }
 
-- (void)idleAtCameraPosition:(GMSCameraPosition *)position {
+- (void)idleAtCameraPosition:(GMSCameraPosition *)position  reason:(BOOL)reason{
   id event = @{@"continuous": @NO,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+               @"reason": [NSNumber numberWithBool:reason],
                };
   if (self.onChange) self.onChange(event);  // complete
 }
