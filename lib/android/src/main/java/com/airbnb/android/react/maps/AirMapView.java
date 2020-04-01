@@ -349,8 +349,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       @Override
       public void onCameraMove() {
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+
         cameraLastIdleBounds = null;
-        eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, cameraMoveReason, true));
+        boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+
+        RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, true, isGesture);
+        eventDispatcher.dispatchEvent(event);
       }
     });
 
@@ -361,8 +365,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         if ((cameraMoveReason != 0) &&
           ((cameraLastIdleBounds == null) ||
             LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
+
           cameraLastIdleBounds = bounds;
-          eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, cameraMoveReason, false));
+          boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+
+          RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, false, isGesture);
+          eventDispatcher.dispatchEvent(event);
         }
       }
     });

@@ -573,7 +573,7 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
 }
 
 - (void)mapView:(GMSMapView *)mapView willMove:(BOOL)gesture{
-    self.reason = gesture;
+    self.isGesture = gesture;
 }
 
 - (void)mapViewDidStartTileRendering:(GMSMapView *)mapView {
@@ -608,12 +608,12 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
 
 - (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
-  [googleMapView didChangeCameraPosition:position reason:self.reason];
+  [googleMapView didChangeCameraPosition:position isGesture:self.isGesture];
 }
 
 - (void)mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
-  [googleMapView idleAtCameraPosition:position reason:self.reason];
+  [googleMapView idleAtCameraPosition:position isGesture:self.isGesture];
 }
 
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
