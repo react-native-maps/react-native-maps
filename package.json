@@ -40,7 +40,6 @@
     "@babel/core": "^7.4.3",
     "@babel/runtime": "^7.4.3",
     "@react-native-community/eslint-config": "0.0.5",
-    "@types/geojson": "^7946.0.7",
     "babel-eslint": "^10.0.1",
     "babel-plugin-module-resolver": "^3.2.0",
     "eslint": "^5.16.0",
@@ -53,5 +52,8 @@
     "metro-react-native-babel-preset": "^0.53.1",
     "react": "16.8.3",
     "react-native": "0.59.3"
+  },
+  "dependencies": {
+    "@types/geojson": "^7946.0.7"
   }
 }
