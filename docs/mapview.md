@@ -19,7 +19,7 @@
 | `userLocationUpdateInterval` | `Number` | 5000 | Interval of user location updates in milliseconds. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
 | `userLocationFastestInterval` | `Number` |  | Fastest interval the application will actively acquire locations. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
 | `userLocationAnnotationTitle` | `String` | | The title of the annotation for current user location. This only works if `showsUserLocation` is true. There is a default value `My Location` set by MapView. **Note**: iOS only.
-| `followsUserLocation` | `Boolean` | `false` | If `true` the map will focus on the user's location. This only works if `showsUserLocation` is true and the user has shared their location. **Note**: iOS only.
+| `followsUserLocation` | `Boolean` | `false` | If `true` the map will focus on the user's location. This only works if `showsUserLocation` is true and the user has shared their location. **Note**: Apple Maps only.
 | `showsMyLocationButton` | `Boolean` | `true` | If `false` hide the button to move map to the current user's location.
 | `showsPointsOfInterest` | `Boolean` | `true` | If `false` points of interest won't be displayed on the map.
 | `showsCompass` | `Boolean` | `true` | If `false` compass won't be displayed on the map.
