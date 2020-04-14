@@ -358,6 +358,11 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
 }
 
+- (void)setTintColor:(UIColor *)tintColor
+{
+    super.tintColor = tintColor;
+}
+
 - (void)setFollowsUserLocation:(BOOL)followsUserLocation
 {
     _followUserLocation = followsUserLocation;
