@@ -652,6 +652,10 @@ Good:
 </View>
 ```
 
+### Children Components Not Re-Rendering
+Have them outside the MapView component and position absolute.
+
+Source: https://github.com/react-native-community/react-native-maps/issues/1901
 
 License
 --------
