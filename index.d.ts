@@ -197,6 +197,9 @@ declare module "react-native-maps" {
     provider?: "google" | null;
     customMapStyle?: MapStyleElement[];
     customMapStyleString?: string;
+    userLocationPriority?: "balanced" | "high" | "low" | "passive";
+    userLocationUpdateInterval?: number;
+    userLocationFastestInterval?: number;
     showsUserLocation?: boolean;
     userLocationAnnotationTitle?: string;
     showsMyLocationButton?: boolean;
