@@ -34,7 +34,8 @@
   "peerDependencies": {
     "prop-types": "^15.0 || ^16.0",
     "react": ">= 16.0 || < 17.0",
-    "react-native": ">= 0.51"
+    "react-native": ">= 0.51",
+    "react-native-web": "^0.11"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -51,7 +52,8 @@
     "lodash": "^4.17.2",
     "metro-react-native-babel-preset": "^0.53.1",
     "react": "16.8.3",
-    "react-native": "0.59.3"
+    "react-native": "0.59.3",
+    "react-native-web": "^0.11"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.7"
