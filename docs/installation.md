@@ -333,6 +333,15 @@ project from the URLs below:
 
 For reference, you may read the relevant issue reports: ([#118](https://github.com/react-native-community/react-native-maps/issues/118), [#176](https://github.com/react-native-community/react-native-maps/issues/176), [#684](https://github.com/react-native-community/react-native-maps/issues/684)).
 
+### The map background is gray (Google Maps)
+
+If you get grey screen on android device create google_maps_api.xml in android/app/src/main/values.
+```xml
+<resources>
+  <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">(api key here)</string>
+</resources>
+```
+
 ### No map whatsoever
 
 Ensure the map component and its container have viewport dimensions. An
