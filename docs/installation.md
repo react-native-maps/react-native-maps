@@ -248,7 +248,7 @@ You can find the latest `playServicesVersion` by checking [https://developers.go
 
 3.2 (React Native all versions) If you do **not** have *project-wide properties* defined and have a
 different play-services version than the one included in this library,
-use the following instead (switch 10.0.1 for the desired version):
+use the following instead (switch 17.0.0 and/or 17.2.1 for the desired versions):
 
 ```groovy
 ...
