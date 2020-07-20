@@ -119,10 +119,10 @@ type Camera = {
        longitude: number,
    },
    pitch: number,
-   heading: number
+   heading: number,
 
    // Only on iOS MapKit, in meters. The property is ignored by Google Maps.
-   altitude: number.
+   altitude: number,
 
    // Only when using Google Maps.
    zoom: number
