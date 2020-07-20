@@ -335,7 +335,7 @@ For reference, you may read the relevant issue reports: ([#118](https://github.c
 
 ### The map background is gray (Google Maps)
 
-If you get grey screen on android device create google_maps_api.xml in android/app/src/main/values.
+If you get grey screen on android device create google_maps_api.xml in android/app/src/main/res/values.
 ```xml
 <resources>
   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">(api key here)</string>
