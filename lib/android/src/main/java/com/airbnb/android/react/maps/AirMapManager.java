@@ -37,10 +37,14 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   private static final int FIT_TO_SUPPLIED_MARKERS = 6;
   private static final int FIT_TO_COORDINATES = 7;
   private static final int SET_MAP_BOUNDARIES = 8;
-  private static final int ANIMATE_TO_NAVIGATION = 9; 
+  private static final int ANIMATE_TO_NAVIGATION = 9;
   private static final int SET_INDOOR_ACTIVE_LEVEL_INDEX = 10;
   private static final int SET_CAMERA = 11;
   private static final int ANIMATE_CAMERA = 12;
+  private static final int ADD_CLUSTER_ITEM = 13;
+  private static final int ADD_CLUSTER_ITEMS = 14;
+  private static final int CLEAR_CLUSTER_ITEMS = 15;
+  private static final int CLUSTER_ITEMS = 16;
 
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
@@ -52,14 +56,15 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   );
 
   private final Map<String, Integer> MY_LOCATION_PRIORITY = MapBuilder.of(
-          "balanced", LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY,
-          "high", LocationRequest.PRIORITY_HIGH_ACCURACY,
-          "low", LocationRequest.PRIORITY_LOW_POWER,
-          "passive", LocationRequest.PRIORITY_NO_POWER
+      "balanced", LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY,
+      "high", LocationRequest.PRIORITY_HIGH_ACCURACY,
+      "low", LocationRequest.PRIORITY_LOW_POWER,
+      "passive", LocationRequest.PRIORITY_NO_POWER
   );
 
   private final ReactApplicationContext appContext;
   private AirMapMarkerManager markerManager;
+  private HashMap<String, AirMapClusterItem> clusterMap = new HashMap<>();
 
   protected GoogleMapOptions googleMapOptions;
 
@@ -71,6 +76,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   public AirMapMarkerManager getMarkerManager() {
     return this.markerManager;
   }
+
   public void setMarkerManager(AirMapMarkerManager markerManager) {
     this.markerManager = markerManager;
   }
@@ -313,8 +319,8 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         lng = region.getDouble("longitude");
         lat = region.getDouble("latitude");
         LatLng location = new LatLng(lat, lng);
-        bearing = (float)args.getDouble(1);
-        angle = (float)args.getDouble(2);
+        bearing = (float) args.getDouble(1);
+        angle = (float) args.getDouble(2);
         duration = args.getInt(3);
         view.animateToNavigation(location, bearing, angle, duration);
         break;
@@ -342,13 +348,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         break;
 
       case ANIMATE_TO_VIEWING_ANGLE:
-        angle = (float)args.getDouble(0);
+        angle = (float) args.getDouble(0);
         duration = args.getInt(1);
         view.animateToViewingAngle(angle, duration);
         break;
 
       case ANIMATE_TO_BEARING:
-        bearing = (float)args.getDouble(0);
+        bearing = (float) args.getDouble(0);
         duration = args.getInt(1);
         view.animateToBearing(bearing, duration);
         break;
@@ -372,6 +378,60 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
       case SET_INDOOR_ACTIVE_LEVEL_INDEX:
         view.setIndoorActiveLevelIndex(args.getInt(0));
         break;
+
+      case ADD_CLUSTER_ITEM: {
+        ReadableMap map = args.getMap(0);
+        String id = map.getString("id");
+
+        if (!clusterMap.containsKey(id)) {
+          double latitude = map.getDouble("lat");
+          double longitude = map.getDouble("lng");
+          String iconUrl = map.getString("iconUrl");
+          int iconWidth = map.getInt("iconWidth");
+
+          AirMapClusterItem item = new AirMapClusterItem(id, latitude, longitude, iconUrl, iconWidth);
+          clusterMap.put(id, item);
+          view.clusterManager.addItem(item);
+        }
+        break;
+      }
+
+      case ADD_CLUSTER_ITEMS: {
+        ReadableArray arr = args.getArray(0);
+        boolean newItemAdded = false;
+
+        for (int i = 0; i < arr.size(); i++) {
+          ReadableMap map = arr.getMap(i);
+          String id = map.getString("id");
+
+          if (!clusterMap.containsKey(id)) {
+            double latitude = map.getDouble("lat");
+            double longitude = map.getDouble("lng");
+            String iconUrl = map.getString("iconUrl");
+            int iconWidth = map.getInt("iconWidth");
+
+            AirMapClusterItem item = new AirMapClusterItem(id, latitude, longitude, iconUrl, iconWidth);
+            view.clusterManager.addItem(item);
+            clusterMap.put(id, item);
+            newItemAdded = true;
+          }
+        }
+
+        if (newItemAdded) {
+          view.clusterManager.cluster();
+        }
+
+        break;
+      }
+
+      case CLEAR_CLUSTER_ITEMS: {
+        clusterMap.clear();
+        view.clusterManager.clearItems();
+      }
+
+      case CLUSTER_ITEMS: {
+        view.clusterManager.cluster();
+      }
     }
   }
 
@@ -402,12 +462,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
         "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
         "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
-        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded")
+        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"),
+        "onClusterItemPress", MapBuilder.of("registrationName", "onClusterItemPress")
     ));
 
     return map;
   }
-  
+
   @Nullable
   @Override
   public Map<String, Integer> getCommandsMap() {
@@ -425,15 +486,19 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     );
 
     map.putAll(MapBuilder.of(
-      "setMapBoundaries", SET_MAP_BOUNDARIES,
-      "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
+        "setMapBoundaries", SET_MAP_BOUNDARIES,
+        "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX,
+        "addClusterItem", ADD_CLUSTER_ITEM,
+        "addClusterItems", ADD_CLUSTER_ITEMS,
+        "clearClusterItems", CLEAR_CLUSTER_ITEMS,
+        "clusterItems", CLUSTER_ITEMS
     ));
 
     return map;
   }
 
   public static <K, V> Map<K, V> CreateMap(
-  K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+      K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
     Map map = new HashMap<K, V>();
     map.put(k1, v1);
     map.put(k2, v2);
