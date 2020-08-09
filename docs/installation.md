@@ -246,6 +246,8 @@ buildscript {
 ```
 You can find the latest `playServicesVersion` by checking [https://developers.google.com/android/guides/releases](https://developers.google.com/android/guides/releases) and searching for `gms:play-services-maps:`
 
+You can find the latest `androidMapsUtilsVersion` by checking [https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils](https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils)
+
 3.2 (React Native all versions) If you do **not** have *project-wide properties* defined and have a
 different play-services version than the one included in this library,
 use the following instead (switch 17.0.0 and/or 17.2.1 for the desired versions):
