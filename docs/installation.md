@@ -40,7 +40,7 @@ Maps backend.
 
 ## Build configuration on iOS
 
-### Using React Native Link (React Native 0.59 and lower)
+### Using React Native Link (React Native 0.59 and higher)
 
 Run `react-native link react-native-maps` after which you should be able
 to use this library on iOS. Note that by default this will use Apple
