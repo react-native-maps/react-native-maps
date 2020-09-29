@@ -8,3 +8,6 @@ cache:
     - node_modules
 
 script: npm run ci
+
+install:
+  - yarn
