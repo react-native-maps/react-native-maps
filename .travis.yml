@@ -1,7 +1,10 @@
 language: node_js
 
+install:
+  - yarn
+
 node_js:
-  - "lts/*"
+  - 'lts/*'
 
 cache:
   directories:
