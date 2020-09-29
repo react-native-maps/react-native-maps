@@ -1,13 +1,13 @@
 language: node_js
 
+install:
+  - yarn
+
 node_js:
-  - "lts/*"
+  - 'lts/*'
 
 cache:
   directories:
     - node_modules
 
 script: npm run ci
-
-install:
-  - yarn
