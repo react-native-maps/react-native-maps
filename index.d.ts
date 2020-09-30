@@ -176,7 +176,7 @@ declare module "react-native-maps" {
     shortName: string,
   }
 
-  export interface IndoorBuildingEvent 
+  export interface IndoorBuildingEvent
     extends NativeSyntheticEvent<{IndoorBuilding:IndoorBuilding}> {}
 
   /**
@@ -235,6 +235,7 @@ declare module "react-native-maps" {
     minDelta?: number;
     legalLabelInsets?: EdgeInsets;
     compassOffset?: { x: number; y: number };
+    tintColor?: string;
 
     onMapReady?: () => void;
     onKmlReady?: (values: KmlMapEvent) => void;
@@ -259,7 +260,7 @@ declare module "react-native-maps" {
     onMarkerDragStart?: (event: MapEvent) => void;
     onMarkerDrag?: (event: MapEvent) => void;
     onMarkerDragEnd?: (event: MapEvent) => void;
-    onIndoorBuildingFocused?: (event: IndoorBuildingEvent) => void; 
+    onIndoorBuildingFocused?: (event: IndoorBuildingEvent) => void;
 
     minZoomLevel?: number;
     maxZoomLevel?: number;
@@ -353,7 +354,7 @@ declare module "react-native-maps" {
      */
     redrawCallout(): void;
     /**
-     * Causes a redraw of the marker. Useful when there are updates to the 
+     * Causes a redraw of the marker. Useful when there are updates to the
      * marker and `tracksViewChanges` comes with a cost that is too high.
      */
     redraw(): void
