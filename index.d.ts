@@ -548,6 +548,11 @@ declare module "react-native-maps" {
     strokeColor?: string;
     fillColor?: string;
     strokeWidth?: number;
+    lineDashPhase?: number;
+    lineDashPattern?:number[];
+    lineCap?:'butt'|'round' | 'square';
+    lineJoin?: 'miter'| 'round' | 'bevel';
+    miterLimit?: number;
   }
 
   export class Geojson extends React.Component<GeojsonProps, any> {}
