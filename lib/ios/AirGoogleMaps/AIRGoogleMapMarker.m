@@ -340,7 +340,7 @@ CGRect unionRect(CGRect a, CGRect b) {
                                    NSLog(@"%@", error);
                                  }
                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                   _realMarker.icon = image;
+                                   self->_realMarker.icon = image;
                                  });
                                }];
 }
