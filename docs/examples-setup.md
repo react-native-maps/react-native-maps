@@ -2,10 +2,10 @@
 
 ## iOS
 
-1. If you don't have bundler gem installed:
+1. If you don't have the bundler gem at version 1.17.2 installed (another version won't work):
 
 ```
-gem install bundler
+gem install bundler:1.17.2
 ```
 
 2. Install dependencies and open the workspace:
