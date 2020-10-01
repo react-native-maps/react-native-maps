@@ -487,7 +487,7 @@ componentWillReceiveProps(nextProps) {
   if (this.props.coordinate !== nextProps.coordinate) {
     if (Platform.OS === 'android') {
       if (this.marker) {
-        this.marker._component.animateMarkerToCoordinate(
+        this.marker.animateMarkerToCoordinate(
           nextProps.coordinate,
           duration
         );
@@ -524,7 +524,7 @@ componentWillReceiveProps(nextProps) {
   if (this.props.coordinate !== nextProps.coordinate) {
     if (Platform.OS === 'android') {
       if (this.marker) {
-        this.marker._component.animateMarkerToCoordinate(
+        this.marker.animateMarkerToCoordinate(
           nextProps.coordinate,
           duration
         );
