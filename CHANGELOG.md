@@ -1,97 +1,97 @@
 # Change Log
 ## 0.27.1 (March 19, 2020)
-* Android: [#3345](https://github.com/react-native-community/react-native-maps/pull/3345) Protect against null Location in FusedLocationSource
-* Android: [#3351](https://github.com/react-native-community/react-native-maps/pull/3351) Revert "android google map callout support <Image/> 
+* Android: [#3345](https://github.com/react-native-maps/react-native-maps/pull/3345) Protect against null Location in FusedLocationSource
+* Android: [#3351](https://github.com/react-native-maps/react-native-maps/pull/3351) Revert "android google map callout support <Image/> 
 
 ## 0.27.0 (March 4, 2020)
 
-* iOS: [#3115](https://github.com/react-native-community/react-native-maps/pull/3115) Expose isAccessibilityElement as a prop 
-* iOS: [#3119](https://github.com/react-native-community/react-native-maps/pull/3119) Add `mapPadding` prop
-* iOS: [#3134](https://github.com/react-native-community/react-native-maps/pull/3134) Add `isPreselected` prop
-* iOS: [#3120](https://github.com/react-native-community/react-native-maps/pull/3120) Keep current mapType when taking snapshot
-* iOS: [#2889](https://github.com/react-native-community/react-native-maps/pull/2889) Implement onUserLocationChange
-* iOS: [#3136](https://github.com/react-native-community/react-native-maps/pull/3136) Use RCTImageLoaderProtocol for RN v0.61.0
-* iOS: [#3125](https://github.com/react-native-community/react-native-maps/pull/3125) Replace deprecated bridge.imageLoader calls with moduleForClass API
-* iOS: [#3309](https://github.com/react-native-community/react-native-maps/pull/3309) Fixes for polygon custom styles not being applied when provider is Google maps
-* iOS: [#3104](https://github.com/react-native-community/react-native-maps/pull/3104) Only handle cacheEnable when app is active
-* Android: [#2993](https://github.com/react-native-community/react-native-maps/pull/2993) Improved user location
-* Common: [#3163](https://github.com/react-native-community/react-native-maps/pull/3163) Opacity prop for MapOverlay on Android and iOS (Google Maps)
-* Common: [#3131](https://github.com/react-native-community/react-native-maps/pull/3131) AnimatedRegion.addListener() property setting
+* iOS: [#3115](https://github.com/react-native-maps/react-native-maps/pull/3115) Expose isAccessibilityElement as a prop 
+* iOS: [#3119](https://github.com/react-native-maps/react-native-maps/pull/3119) Add `mapPadding` prop
+* iOS: [#3134](https://github.com/react-native-maps/react-native-maps/pull/3134) Add `isPreselected` prop
+* iOS: [#3120](https://github.com/react-native-maps/react-native-maps/pull/3120) Keep current mapType when taking snapshot
+* iOS: [#2889](https://github.com/react-native-maps/react-native-maps/pull/2889) Implement onUserLocationChange
+* iOS: [#3136](https://github.com/react-native-maps/react-native-maps/pull/3136) Use RCTImageLoaderProtocol for RN v0.61.0
+* iOS: [#3125](https://github.com/react-native-maps/react-native-maps/pull/3125) Replace deprecated bridge.imageLoader calls with moduleForClass API
+* iOS: [#3309](https://github.com/react-native-maps/react-native-maps/pull/3309) Fixes for polygon custom styles not being applied when provider is Google maps
+* iOS: [#3104](https://github.com/react-native-maps/react-native-maps/pull/3104) Only handle cacheEnable when app is active
+* Android: [#2993](https://github.com/react-native-maps/react-native-maps/pull/2993) Improved user location
+* Common: [#3163](https://github.com/react-native-maps/react-native-maps/pull/3163) Opacity prop for MapOverlay on Android and iOS (Google Maps)
+* Common: [#3131](https://github.com/react-native-maps/react-native-maps/pull/3131) AnimatedRegion.addListener() property setting
 
 ## 0.26.1 (October 3, 2019)
 
-* Android: [#3103](https://github.com/react-native-community/react-native-maps/pull/3103) Support for RN 0.60.5
-* Android: [#3103](https://github.com/react-native-community/react-native-maps/pull/3103) "AIRMap" was not found in the UIManager
+* Android: [#3103](https://github.com/react-native-maps/react-native-maps/pull/3103) Support for RN 0.60.5
+* Android: [#3103](https://github.com/react-native-maps/react-native-maps/pull/3103) "AIRMap" was not found in the UIManager
 
 ## 0.26.0 (September 30, 2019)
 
-* iOS: [#2999](https://github.com/react-native-community/react-native-maps/pull/2999) Update GoogleMaps pod to 3.2.0 
-* iOS: [#2395](https://github.com/react-native-community/react-native-maps/pull/2395) Allow using onPanDrag while scrollEnabled=true
-* iOS: [#3051](https://github.com/react-native-community/react-native-maps/pull/3051) Add flat property binding on Marker for iOS
-* Android: [#3007](https://github.com/react-native-community/react-native-maps/pull/3007) Add Overlay onPress event
-* Android: [#3001](https://github.com/react-native-community/react-native-maps/pull/3001) Add @ReactModule annotation to help turbo modules processor
-* Common: [#3045](https://github.com/react-native-community/react-native-maps/pull/3045) Add heading to the onUserLocationChange listener
-* Common: [#2937](https://github.com/react-native-community/react-native-maps/pull/2937) Add onDoublePress callback
-* Common: [#2960](https://github.com/react-native-community/react-native-maps/pull/2959) Heatmaps for Android and iOS
-* Common: [#2959](https://github.com/react-native-community/react-native-maps/pull/2959) Added GeoJSON support by default 
-* Common: [#2975](https://github.com/react-native-community/react-native-maps/pull/2975) Convert to new react native config format (RN 0.60)
-* Common: [#2973](https://github.com/react-native-community/react-native-maps/pull/2973) Fix select annotation when show/hide callout view
+* iOS: [#2999](https://github.com/react-native-maps/react-native-maps/pull/2999) Update GoogleMaps pod to 3.2.0 
+* iOS: [#2395](https://github.com/react-native-maps/react-native-maps/pull/2395) Allow using onPanDrag while scrollEnabled=true
+* iOS: [#3051](https://github.com/react-native-maps/react-native-maps/pull/3051) Add flat property binding on Marker for iOS
+* Android: [#3007](https://github.com/react-native-maps/react-native-maps/pull/3007) Add Overlay onPress event
+* Android: [#3001](https://github.com/react-native-maps/react-native-maps/pull/3001) Add @ReactModule annotation to help turbo modules processor
+* Common: [#3045](https://github.com/react-native-maps/react-native-maps/pull/3045) Add heading to the onUserLocationChange listener
+* Common: [#2937](https://github.com/react-native-maps/react-native-maps/pull/2937) Add onDoublePress callback
+* Common: [#2960](https://github.com/react-native-maps/react-native-maps/pull/2959) Heatmaps for Android and iOS
+* Common: [#2959](https://github.com/react-native-maps/react-native-maps/pull/2959) Added GeoJSON support by default 
+* Common: [#2975](https://github.com/react-native-maps/react-native-maps/pull/2975) Convert to new react native config format (RN 0.60)
+* Common: [#2973](https://github.com/react-native-maps/react-native-maps/pull/2973) Fix select annotation when show/hide callout view
 
 ## 0.25.0 (July 11, 2019)
-* Android: [#2941](https://github.com/react-native-community/react-native-maps/pull/2941) Fix build gradle to allow jettifier to run correctly
-* Android: [#2741](https://github.com/react-native-community/react-native-maps/pull/2741) Use a shared image icon for markers when they share the same image URI
-* Android: [#2557](https://github.com/react-native-community/react-native-maps/pull/2557) Fix bug when changing subview of Marker to icon
-* Android: [#2392](https://github.com/react-native-community/react-native-maps/pull/2392) Add support for loading base64 encoded image
-* iOS: [#2423](https://github.com/react-native-community/react-native-maps/pull/2423) Handle annotations without images on iOS map snapshot
-* iOS: [#2881](https://github.com/react-native-community/react-native-maps/pull/2881) Update podspec to use GoogleMaps 3.1.0
-* iOS: [#2253](https://github.com/react-native-community/react-native-maps/pull/2253) TestID's for e2e automation
-* iOS: [#2826](https://github.com/react-native-community/react-native-maps/pull/2826) Follow up for [#2253](https://github.com/react-native-community/react-native-maps/pull/2253)
-* iOS: [#2397](https://github.com/react-native-community/react-native-maps/pull/2397) Add compass location offsets for iOS maps
-* Common: [#2568](https://github.com/react-native-community/react-native-maps/pull/2568) Support for WMS Layer support 
-* Common: [#2017](https://github.com/react-native-community/react-native-maps/pull/2017) Update the Google Maps custom map style if changed after initialization
-* Common: [#2903](https://github.com/react-native-community/react-native-maps/pull/2903) Fix react snapshot undefined warning
+* Android: [#2941](https://github.com/react-native-maps/react-native-maps/pull/2941) Fix build gradle to allow jettifier to run correctly
+* Android: [#2741](https://github.com/react-native-maps/react-native-maps/pull/2741) Use a shared image icon for markers when they share the same image URI
+* Android: [#2557](https://github.com/react-native-maps/react-native-maps/pull/2557) Fix bug when changing subview of Marker to icon
+* Android: [#2392](https://github.com/react-native-maps/react-native-maps/pull/2392) Add support for loading base64 encoded image
+* iOS: [#2423](https://github.com/react-native-maps/react-native-maps/pull/2423) Handle annotations without images on iOS map snapshot
+* iOS: [#2881](https://github.com/react-native-maps/react-native-maps/pull/2881) Update podspec to use GoogleMaps 3.1.0
+* iOS: [#2253](https://github.com/react-native-maps/react-native-maps/pull/2253) TestID's for e2e automation
+* iOS: [#2826](https://github.com/react-native-maps/react-native-maps/pull/2826) Follow up for [#2253](https://github.com/react-native-maps/react-native-maps/pull/2253)
+* iOS: [#2397](https://github.com/react-native-maps/react-native-maps/pull/2397) Add compass location offsets for iOS maps
+* Common: [#2568](https://github.com/react-native-maps/react-native-maps/pull/2568) Support for WMS Layer support 
+* Common: [#2017](https://github.com/react-native-maps/react-native-maps/pull/2017) Update the Google Maps custom map style if changed after initialization
+* Common: [#2903](https://github.com/react-native-maps/react-native-maps/pull/2903) Fix react snapshot undefined warning
 
 ## 0.24.2 (April 17, 2019)
-* iOS: [#2818](https://github.com/react-native-community/react-native-maps/pull/2818) Google Maps - Weak refs to gesture targets to address memory leak
+* iOS: [#2818](https://github.com/react-native-maps/react-native-maps/pull/2818) Google Maps - Weak refs to gesture targets to address memory leak
 
 ## 0.24.1 (April 16, 2019)
-* iOS: [#2815](https://github.com/react-native-community/react-native-maps/pull/2815) Google Maps - Free instance variable in getActionForTarget to address memory leak
+* iOS: [#2815](https://github.com/react-native-maps/react-native-maps/pull/2815) Google Maps - Free instance variable in getActionForTarget to address memory leak
 
 ## 0.24.0 (April 11, 2019)
-* Common: [#2740](https://github.com/react-native-community/react-native-maps/pull/2740) Fix deprecated UIManager usage when accessing component names
-* Common: [#2393](https://github.com/react-native-community/react-native-maps/pull/2393) add typings for pointForCoordinate & coordinateForPoint
-* Common: [#2732](https://github.com/react-native-community/react-native-maps/pull/2732) Implement ability to flip y coordinate for Google Map tiles.
-* Android: [#2765](https://github.com/react-native-community/react-native-maps/pull/2765) Allow setting of play-services version through ext
-* Android: [#2702](https://github.com/react-native-community/react-native-maps/pull/2702) Enable RN projects to define the Android AppCompat Library version
-* Android: [#2720](https://github.com/react-native-community/react-native-maps/pull/2720) Fix Android dependencies and build errors
-* Android: [#2682](https://github.com/react-native-community/react-native-maps/pull/2682) Implement 'tappable' prop on polyline for Android
-* Android: [#2417](https://github.com/react-native-community/react-native-maps/pull/2417) Support for lineCap and lineDash pattern
-* Android: [#2727](https://github.com/react-native-community/react-native-maps/pull/2727) fix build: only apply mvn push gradle plugin if POM_ARTIFACT_ID is set
-* iOS: [#2446](https://github.com/react-native-community/react-native-maps/pull/2446) fix iOS GoogleMaps camera always animate
-* iOS: [#2746](https://github.com/react-native-community/react-native-maps/pull/2746) onPanDrag support for iOS
-* iOS: [#2581](https://github.com/react-native-community/react-native-maps/pull/2581) Custom callout improvements 🎉
-* iOS: [#2794](https://github.com/react-native-community/react-native-maps/pull/2794) Fix CalloutSubview on Apple maps
-* iOS: [#2716](https://github.com/react-native-community/react-native-maps/pull/2716) Fix Memory Leaks
-* Docs: [#2675](https://github.com/react-native-community/react-native-maps/pull/2675) [#2685](https://github.com/react-native-community/react-native-maps/pull/2685)  [#2707](https://github.com/react-native-community/react-native-maps/pull/2707) [#2704](https://github.com/react-native-community/react-native-maps/pull/2704)
-* Example: [#2792](https://github.com/react-native-community/react-native-maps/pull/2792) Upgrade Example to react-native to 0.59.3
-* TypeScript: [#2705](https://github.com/react-native-community/react-native-maps/pull/2705) Add Marker icon property introduced in [#2650](https://github.com/react-native-community/react-native-maps/pull/2650) to index.d.ts
+* Common: [#2740](https://github.com/react-native-maps/react-native-maps/pull/2740) Fix deprecated UIManager usage when accessing component names
+* Common: [#2393](https://github.com/react-native-maps/react-native-maps/pull/2393) add typings for pointForCoordinate & coordinateForPoint
+* Common: [#2732](https://github.com/react-native-maps/react-native-maps/pull/2732) Implement ability to flip y coordinate for Google Map tiles.
+* Android: [#2765](https://github.com/react-native-maps/react-native-maps/pull/2765) Allow setting of play-services version through ext
+* Android: [#2702](https://github.com/react-native-maps/react-native-maps/pull/2702) Enable RN projects to define the Android AppCompat Library version
+* Android: [#2720](https://github.com/react-native-maps/react-native-maps/pull/2720) Fix Android dependencies and build errors
+* Android: [#2682](https://github.com/react-native-maps/react-native-maps/pull/2682) Implement 'tappable' prop on polyline for Android
+* Android: [#2417](https://github.com/react-native-maps/react-native-maps/pull/2417) Support for lineCap and lineDash pattern
+* Android: [#2727](https://github.com/react-native-maps/react-native-maps/pull/2727) fix build: only apply mvn push gradle plugin if POM_ARTIFACT_ID is set
+* iOS: [#2446](https://github.com/react-native-maps/react-native-maps/pull/2446) fix iOS GoogleMaps camera always animate
+* iOS: [#2746](https://github.com/react-native-maps/react-native-maps/pull/2746) onPanDrag support for iOS
+* iOS: [#2581](https://github.com/react-native-maps/react-native-maps/pull/2581) Custom callout improvements 🎉
+* iOS: [#2794](https://github.com/react-native-maps/react-native-maps/pull/2794) Fix CalloutSubview on Apple maps
+* iOS: [#2716](https://github.com/react-native-maps/react-native-maps/pull/2716) Fix Memory Leaks
+* Docs: [#2675](https://github.com/react-native-maps/react-native-maps/pull/2675) [#2685](https://github.com/react-native-maps/react-native-maps/pull/2685)  [#2707](https://github.com/react-native-maps/react-native-maps/pull/2707) [#2704](https://github.com/react-native-maps/react-native-maps/pull/2704)
+* Example: [#2792](https://github.com/react-native-maps/react-native-maps/pull/2792) Upgrade Example to react-native to 0.59.3
+* TypeScript: [#2705](https://github.com/react-native-maps/react-native-maps/pull/2705) Add Marker icon property introduced in [#2650](https://github.com/react-native-maps/react-native-maps/pull/2650) to index.d.ts
 
 ## 0.23.0 (January 17, 2019)
-* Common: [#2651](https://github.com/react-native-community/react-native-maps/pull/2651) Use `resolveAssetSource` method from Image
-* Common: [#2576](https://github.com/react-native-community/react-native-maps/pull/2576) Fix import error for `MapMarker` and `MapOverlay`
-* Common: [#2615](https://github.com/react-native-community/react-native-maps/pull/2615) Added helper method for calculating bounding box from region
-* Common: [#2607](https://github.com/react-native-community/react-native-maps/pull/2607) Fix camera type definition error
-* Common: [#2563](https://github.com/react-native-community/react-native-maps/pull/2563) Added camera system and deprecate `animateTo` methods
-* Common: [#2571](https://github.com/react-native-community/react-native-maps/pull/2571) Added `getMapBoundaries` to `MapView`
-* Common/iOS: [#2650](https://github.com/react-native-community/react-native-maps/pull/2650) Added `icon` prop for `MapMarker`
-* iOS: [#2414](https://github.com/react-native-community/react-native-maps/pull/2414) Fix path for yoga in Podfile
-* iOS: [#2627](https://github.com/react-native-community/react-native-maps/pull/2627) Added `tileSize` prop for `MapUrlTile`
-* iOS: [#2608](https://github.com/react-native-community/react-native-maps/pull/2608) Fix `animateToCamera`
-* Android: [#2653](https://github.com/react-native-community/react-native-maps/pull/2653) Defaults to the map services version instead of play services
-* Android: [#2587](https://github.com/react-native-community/react-native-maps/pull/2587) Allow specifying a different version for base and maps on android
-* Android: [#2598](https://github.com/react-native-community/react-native-maps/pull/2598) Fix crash for cannot getActiveLevelIndex
-* Docs: [#2639](https://github.com/react-native-community/react-native-maps/pull/2639) Added note about recursive framework search paths
-* Docs: [#2631](https://github.com/react-native-community/react-native-maps/pull/2631) Added notes for Google Play Services
+* Common: [#2651](https://github.com/react-native-maps/react-native-maps/pull/2651) Use `resolveAssetSource` method from Image
+* Common: [#2576](https://github.com/react-native-maps/react-native-maps/pull/2576) Fix import error for `MapMarker` and `MapOverlay`
+* Common: [#2615](https://github.com/react-native-maps/react-native-maps/pull/2615) Added helper method for calculating bounding box from region
+* Common: [#2607](https://github.com/react-native-maps/react-native-maps/pull/2607) Fix camera type definition error
+* Common: [#2563](https://github.com/react-native-maps/react-native-maps/pull/2563) Added camera system and deprecate `animateTo` methods
+* Common: [#2571](https://github.com/react-native-maps/react-native-maps/pull/2571) Added `getMapBoundaries` to `MapView`
+* Common/iOS: [#2650](https://github.com/react-native-maps/react-native-maps/pull/2650) Added `icon` prop for `MapMarker`
+* iOS: [#2414](https://github.com/react-native-maps/react-native-maps/pull/2414) Fix path for yoga in Podfile
+* iOS: [#2627](https://github.com/react-native-maps/react-native-maps/pull/2627) Added `tileSize` prop for `MapUrlTile`
+* iOS: [#2608](https://github.com/react-native-maps/react-native-maps/pull/2608) Fix `animateToCamera`
+* Android: [#2653](https://github.com/react-native-maps/react-native-maps/pull/2653) Defaults to the map services version instead of play services
+* Android: [#2587](https://github.com/react-native-maps/react-native-maps/pull/2587) Allow specifying a different version for base and maps on android
+* Android: [#2598](https://github.com/react-native-maps/react-native-maps/pull/2598) Fix crash for cannot getActiveLevelIndex
+* Docs: [#2639](https://github.com/react-native-maps/react-native-maps/pull/2639) Added note about recursive framework search paths
+* Docs: [#2631](https://github.com/react-native-maps/react-native-maps/pull/2631) Added notes for Google Play Services
 
 ## 0.22.1 (November 8, 2018)
 * Common: [#2548](https://github.com/react-community/react-native-maps/pull/2548) Moved `babel-plugin-module-resolver` and `babel-preset-react-native` from dependencies to devDependencies

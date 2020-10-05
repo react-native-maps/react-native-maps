@@ -49,7 +49,7 @@
 
     react-native: 0.51.0
     react: 16.0.0
-	react-native-maps: 0.19.0 or "git+ssh://git@github.com/react-community/react-native-maps.git"
+	react-native-maps: 0.19.0 or "git+ssh://git@github.com/react-native-maps/react-native-maps.git"
 
   ***Make sure you are on v0.48.0 or greater of react-native, otherwise you may get this error:
 
