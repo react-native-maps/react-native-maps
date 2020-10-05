@@ -285,7 +285,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
 Then add the AirGoogleMaps directory:
 
-https://github.com/react-native-community/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
+https://github.com/react-native-maps/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
 
 An unofficial step-by-step guide is also available at https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
 
@@ -679,7 +679,7 @@ Good:
   </View>
 ```
 
-Source: https://github.com/react-native-community/react-native-maps/issues/1901
+Source: https://github.com/react-native-maps/react-native-maps/issues/1901
 
 License
 --------
