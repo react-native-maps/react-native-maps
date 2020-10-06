@@ -23,6 +23,7 @@
 | `stopPropagation` | `Boolean` | false | Sets whether this marker should propagate `onPress` events. Enabling it will stop the parent `MapView`'s `onPress` from being called. **Note**: iOS only. Android does not propagate `onPress` events. See [#1132](https://github.com/react-community/react-native-maps/issues/1132) for more information.
 | `opacity` | `Float` | 1.0 | The marker's opacity between 0.0 and 1.0.
 | `isPreselected` | `Boolean` | false | When true, the marker will be pre-selected. Setting this to true allows the user to drag the marker without needing to tap on it once to focus on it. **Note**: iOS Apple Maps only.
+| `key` | `String` | | If no key or non-unique `key` is specified, the `<Marker />` will be reused, therefore there is an animation when the position is changed. If you want to disable the animation, add a `key` prop with a unique value like `key_${item.longitude}_${item.latitude}`. **Note**: iOS only.
 
 ## Events
 
