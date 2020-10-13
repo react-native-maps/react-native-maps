@@ -298,7 +298,7 @@ declare module "react-native-maps" {
     setIndoorActiveLevelIndex(index:number): void;
   }
 
-  export class MapViewAnimated extends MapView {}
+  export class Animated extends MapView {}
 
   // =======================================================================
   //  Marker
