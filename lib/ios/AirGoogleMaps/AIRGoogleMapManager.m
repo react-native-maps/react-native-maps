@@ -572,6 +572,10 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
   return @{ @"legalNotice": [GMSServices openSourceLicenseInfo] };
 }
 
+- (void)mapView:(GMSMapView *)mapView willMove:(BOOL)gesture{
+    self.isGesture = gesture;
+}
+
 - (void)mapViewDidStartTileRendering:(GMSMapView *)mapView {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
   [googleMapView didPrepareMap];
@@ -604,12 +608,12 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
 
 - (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
-  [googleMapView didChangeCameraPosition:position];
+  [googleMapView didChangeCameraPosition:position isGesture:self.isGesture];
 }
 
 - (void)mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position {
   AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
-  [googleMapView idleAtCameraPosition:position];
+  [googleMapView idleAtCameraPosition:position isGesture:self.isGesture];
 }
 
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
