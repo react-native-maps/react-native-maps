@@ -93,7 +93,7 @@ id regionAsJSON(MKCoordinateRegion region) {
            forKeyPath:@"myLocation"
               options:NSKeyValueObservingOptionNew
               context:NULL];
-      
+
     self.origGestureRecognizersMeta = [[NSMutableDictionary alloc] init];
   }
   return self;
@@ -227,10 +227,10 @@ id regionAsJSON(MKCoordinateRegion region) {
 {
     GMSVisibleRegion visibleRegion = self.projection.visibleRegion;
     GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion:visibleRegion];
-    
+
     CLLocationCoordinate2D northEast = bounds.northEast;
     CLLocationCoordinate2D southWest = bounds.southWest;
-    
+
     return @[
         @[
             [NSNumber numberWithDouble:northEast.longitude],
@@ -290,7 +290,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 - (void)didPrepareMap {
   UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
   [self overrideGestureRecognizersForView:mapView];
-    
+
   if (_didCallOnMapReady) return;
   _didCallOnMapReady = true;
   if (self.onMapReady) self.onMapReady(@{});
@@ -349,9 +349,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.onLongPress([self eventFromCoordinate:coordinate]);
 }
 
-- (void)didChangeCameraPosition:(GMSCameraPosition *)position {
+- (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture{
   id event = @{@"continuous": @YES,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+               @"isGesture": [NSNumber numberWithBool:isGesture],
                };
 
   if (self.onChange) self.onChange(event);
@@ -371,9 +372,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (self.onPoiClick) self.onPoiClick(event);
 }
 
-- (void)idleAtCameraPosition:(GMSCameraPosition *)position {
+- (void)idleAtCameraPosition:(GMSCameraPosition *)position  isGesture:(BOOL)isGesture{
   id event = @{@"continuous": @NO,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+               @"isGesture": [NSNumber numberWithBool:isGesture],
                };
   if (self.onChange) self.onChange(event);  // complete
 }
@@ -412,7 +414,7 @@ id regionAsJSON(MKCoordinateRegion region) {
       return @"automatic";
     case kGMSMapViewPaddingAdjustmentBehaviorAlways:
       return @"always";
-      
+
     default:
       return @"unknown";
   }
@@ -646,7 +648,7 @@ id regionAsJSON(MKCoordinateRegion region) {
         NSNumber* grHash = [NSNumber numberWithUnsignedInteger:gestureRecognizer.hash];
         if([self.origGestureRecognizersMeta objectForKey:grHash] != nil)
             continue; //already patched
-        
+
         //get original handlers
         NSArray* origTargets = [gestureRecognizer valueForKey:@"targets"];
         NSMutableArray* origTargetsActions = [[NSMutableArray alloc] init];
@@ -664,7 +666,7 @@ id regionAsJSON(MKCoordinateRegion region) {
             [view removeGestureRecognizer:gestureRecognizer];
             continue;
         }
-        
+
         //replace with extendedMapGestureHandler
         for (NSDictionary* origTargetAction in origTargetsActions) {
             NSValue* targetValue = [origTargetAction objectForKey:@"target"];
@@ -674,7 +676,7 @@ id regionAsJSON(MKCoordinateRegion region) {
             [gestureRecognizer removeTarget:target action:action];
         }
         [gestureRecognizer addTarget:self action:@selector(extendedMapGestureHandler:)];
-        
+
         [self.origGestureRecognizersMeta setObject:@{@"targets": origTargetsActions}
                                             forKey:grHash];
     }
@@ -687,14 +689,14 @@ id regionAsJSON(MKCoordinateRegion region) {
     CGRect bubbleAbsoluteFrame = [bubbleProvider accessibilityFrame];
     CGRect bubbleFrame = [win convertRect:bubbleAbsoluteFrame toView:self];
     UIView* bubbleView = [bubbleProvider valueForKey:@"view"];
-    
+
     BOOL performOriginalActions = YES;
     BOOL isTap = [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || [gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]];
     if (isTap) {
         BOOL isTapInsideBubble = NO;
     CGPoint tapPoint = CGPointZero;
     CGPoint tapPointInBubble = CGPointZero;
-    
+
     NSArray* touches = [gestureRecognizer valueForKey:@"touches"];
     UITouch* oneTouch = [touches firstObject];
     NSArray* delayedTouches = [gestureRecognizer valueForKey:@"delayedTouches"];
@@ -718,7 +720,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                     break;
                 }
             }
-            
+
             //find real tap target subview
             UIView* realSubview = [(RCTView*)bubbleView hitTest:tapPointInBubble withEvent:nil];
             AIRGoogleMapCalloutSubview* realPressableSubview = nil;
@@ -732,7 +734,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                     tmp = tmp.superview;
                 }
             }
-            
+
             if (markerView) {
                 BOOL isInsideCallout = [markerView.calloutView isPointInside:tapPointInBubble];
                 if (isInsideCallout) {
@@ -747,12 +749,12 @@ id regionAsJSON(MKCoordinateRegion region) {
                         [self didTapAtCoordinate:coord];
                     }
                 }
-                
+
                 performOriginalActions = NO;
             }
         }
     }
-    
+
     if (performOriginalActions) {
         NSDictionary* origMeta = [self.origGestureRecognizersMeta objectForKey:grHash];
         NSDictionary* origTargets = [origMeta objectForKey:@"targets"];
@@ -767,7 +769,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 #pragma clang diagnostic pop
         }
     }
-    
+
     return nil;
 }
 
