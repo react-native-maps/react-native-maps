@@ -298,7 +298,7 @@ declare module "react-native-maps" {
     setIndoorActiveLevelIndex(index:number): void;
   }
 
-  export class MapViewAnimated extends MapView {}
+  export class AnimatedMapView extends MapView {}
 
   // =======================================================================
   //  Marker
@@ -541,7 +541,7 @@ declare module "react-native-maps" {
   //  Geojson
   // =======================================================================
 
-  import GeoJSON from 'geojson';
+  import { GeoJSON } from 'geojson';
 
   export interface GeojsonProps {
     geojson: GeoJSON.GeoJSON;
