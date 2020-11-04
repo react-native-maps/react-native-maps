@@ -1,6 +1,10 @@
 ---
-name: '🐛 Bug report'
+name: "\U0001F41B Bug report"
 about: Report a reproducible bug or regression in this library.
+title: ''
+labels: bug
+assignees: ''
+
 ---
 
 # Bug report

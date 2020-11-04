@@ -1,6 +1,10 @@
 ---
-name: "💡 Feature request"
+name: "\U0001F4A1 Feature request"
 about: Submit your idea for a change in the codebase.
+title: ''
+labels: Feature Request
+assignees: ''
+
 ---
 
 # Feature request
