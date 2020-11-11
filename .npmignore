@@ -1,2 +1,16 @@
 example
 .babelrc
+android/build
+.*ignore
+.eslintrc
+.flowconfig
+.watchmanconfig
+.github
+.prettierrc
+gradlew
+.travis.yml
+gradlew.bat
+scripts/
+docs/
+.gradle/
+build/
