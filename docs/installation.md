@@ -387,7 +387,7 @@ export default () => (
 If your XCode project uses dynamic frameworks (e.g. you also have Swift
 code in your project), you cannot install `Google-Maps-iOS-Utils` with
 CocoaPods. The issue and a workaround for it has been documented
-[here](https://github.com/googlemaps/google-maps-ios-utils/blob/master/Swift.md).
+[here](https://github.com/googlemaps/google-maps-ios-utils/blob/b721e95a500d0c9a4fd93738e83fc86c2a57ac89/Swift.md).
 
 ### Runtime errors on iOS (Apple Maps)
 
