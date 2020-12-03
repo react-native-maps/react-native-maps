@@ -126,7 +126,7 @@ import { Marker } from 'react-native-maps';
 ### Rendering a Marker with a custom view
 
 ```jsx
-<Marker coordinate={marker.latlng}>
+<Marker coordinate={{ latitude : latitude , longitude : longitude }}>
   <MyCustomMarkerView {...marker} />
 </Marker>
 ```
@@ -135,7 +135,7 @@ import { Marker } from 'react-native-maps';
 
 ```jsx
 <Marker
-  coordinate={marker.latlng}
+  coordinate={{ latitude : latitude , longitude : longitude }}
   image={require('../assets/pin.png')}
 />
 ```
