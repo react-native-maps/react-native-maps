@@ -349,12 +349,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
       @Override
       public void onCameraMove() {
+        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
 
         cameraLastIdleBounds = null;
         boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
 
-        RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, true, isGesture);
+        RegionChangeEvent event = new RegionChangeEvent(getId(), visibleRegion, true, isGesture);
         eventDispatcher.dispatchEvent(event);
       }
     });
@@ -362,6 +363,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
       @Override
       public void onCameraIdle() {
+        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
         if ((cameraMoveReason != 0) &&
           ((cameraLastIdleBounds == null) ||
@@ -370,7 +372,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
           cameraLastIdleBounds = bounds;
           boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
 
-          RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, false, isGesture);
+          RegionChangeEvent event = new RegionChangeEvent(getId(), visibleRegion, false, isGesture);
           eventDispatcher.dispatchEvent(event);
         }
       }
