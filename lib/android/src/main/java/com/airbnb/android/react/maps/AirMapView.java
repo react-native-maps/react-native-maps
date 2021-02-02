@@ -1122,6 +1122,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   public void onDoublePress(MotionEvent ev) {
+    if (this.map == null) return;
     Point point = new Point((int) ev.getX(), (int) ev.getY());
     LatLng coords = this.map.getProjection().fromScreenLocation(point);
     WritableMap event = makeClickEventData(coords);
