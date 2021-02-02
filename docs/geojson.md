@@ -5,9 +5,9 @@
 | Prop      | Type | Default                                                | Note |
 | --------- | ---- | ------------------------------------------------------ | ---- |
 | `geojson` |  `GeoJSON`    |  | [Geojson](https://geojson.org/) description of object. |
-| `strokeColor` | `String`     | `#000` | The stroke color to use for the path.  |
-| `fillColor` | `String`     |  | The fill color to use for the path. |
-| `strokeWidth` | `Number`     | `1` | The stroke width to use for the path. |
+| `strokeColor` | `String`     | stroke color in GeoJson if present else `#000` | The stroke color to use for the path.  |
+| `fillColor` | `String`     | fill color in GeoJson | The fill color to use for the path. |
+| `strokeWidth` | `Number`     | stroke width in Geojson if present else `1` | The stroke width to use for the path. |
 | `lineDashPhase` | `Number`     |  |  (iOS only) The offset (in points) at which to start drawing the dash pattern. Use this property to start drawing a dashed line partway through a segment or gap. For example, a phase value of 6 for the patter 5-2-3-2 would cause drawing to begin in the middle of the first gap. |
 | `lineDashPattern` | `Array<Number>`     |  | An array of numbers specifying the dash pattern to use for the path. The array contains one or more numbers that indicate the lengths (measured in points) of the  line segments and gaps in the pattern. The values in the array alternate, starting with the first line segment length, followed by the first gap length, followed by the second line segment length, and so on. |
 | `lineCap` |  `'butt' | 'round' | 'square'`     |  |  The line cap style to apply to the open ends of the path. Possible values are `butt`, `round` or `square`.  Note: lineCap is not yet supported for GoogleMaps provider on iOS. |
