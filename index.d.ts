@@ -281,7 +281,7 @@ declare module "react-native-maps" {
     animateToCoordinate(latLng: LatLng, duration?: number): void;
     animateToBearing(bearing: number, duration?: number): void;
     animateToViewingAngle(angle: number, duration?: number): void;
-    fitToElements(animated: boolean): void;
+    fitToElements(options?: { edgePadding?: EdgePadding, animated?: boolean }): void;
     fitToSuppliedMarkers(
       markers: string[],
       options?: { edgePadding?: EdgePadding; animated?: boolean }
