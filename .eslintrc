@@ -1,7 +1,3 @@
 {
-  "parser": "babel-eslint",
-  "extends": "@react-native-community",
-  "plugins": [
-    "prefer-object-spread"
-  ]
+  "extends": "@react-native-community"
 }

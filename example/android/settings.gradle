@@ -1,0 +1,6 @@
+rootProject.name = 'example'
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app'
+
+include ':react-native-maps'
+project(':react-native-maps').projectDir = new File('../../lib/android')
