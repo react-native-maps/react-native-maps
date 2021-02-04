@@ -13,11 +13,11 @@ module.exports = {
   ],
   resolver: {
   /**
-   * Why this extraNodeModules?  
+   * Why this extraNodeModules?
    */
     extraNodeModules: new Proxy({}, {
-      get: (target, name) => path.join(process.cwd(), `node_modules/${name}`)
-    })
+      get: (target, name) => path.join(process.cwd(), `node_modules/${name}`),
+    }),
   },
   transformer: {
     getTransformOptions: async () => ({
