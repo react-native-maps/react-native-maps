@@ -1,6 +1,7 @@
 # Change Log
 ## 0.28.0
 
+* Common: [#3705](https://github.com/react-native-maps/react-native-maps/pull/3705) Update example project
 * Common: [#3424](https://github.com/react-native-maps/react-native-maps/pull/3424) Bugfix for the "require cycles" warning
 * Common: [#3452](https://github.com/react-native-maps/react-native-maps/pull/3452) Ability to pass a Marker image as Geojson prop
 * Common: [#3516](https://github.com/react-native-maps/react-native-maps/pull/3516) Polyline props to obtain dashed/dotted lines in Geojson component
