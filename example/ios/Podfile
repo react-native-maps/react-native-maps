@@ -1,49 +1,39 @@
-# You Podfile should look similar to this file. React Native currently does not support use_frameworks!
-source 'https://github.com/CocoaPods/Specs.git'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '9.0'
+platform :ios, '10.0'
 
-# Change 'AirMapsExplorer' to match the target in your Xcode project.
-target 'AirMapsExplorer' do
-  rn_path = '../../node_modules/react-native' # This path is likely to be `../node_modules/react-native` in your own project.
-  rn_maps_path = '../../' # This path is likely to be `../node_modules/react-native-maps` in your own project.
+target 'example' do
+  config = use_native_modules!
 
-  # See http://facebook.github.io/react-native/docs/integration-with-existing-apps.html#configuring-cocoapods-dependencies
-  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
-  pod 'React', path: rn_path, subspecs: [
-    'Core',
-    'CxxBridge',
-    'DevSupport',
-    'RCTActionSheet',
-    'RCTAnimation',
-    'RCTGeolocation',
-    'RCTImage',
-    'RCTLinkingIOS',
-    'RCTNetwork',
-    'RCTSettings',
-    'RCTText',
-    'RCTVibration',
-    'RCTWebSocket',
-  ]
-
-  # React Native third party dependencies podspecs
-  pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
-  pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
-  pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
+  use_react_native!(:path => config["reactNativePath"])
 
   # react-native-maps dependencies
+  rn_maps_path = '../../' # This path is likely to be `../node_modules/react-native-maps` in your own project.
+
   pod 'react-native-maps', path: rn_maps_path
   pod 'react-native-google-maps', path: rn_maps_path  # Remove this line if you don't want to support GoogleMaps on iOS
-  pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
-  pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
+
+  target 'exampleTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable these next few lines.
+  use_flipper!
+  post_install do |installer|
+    flipper_post_install(installer)
+  end
 end
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    if target.name == 'react-native-google-maps'
-      target.build_configurations.each do |config|
-        config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
-      end
-    end
+target 'example-tvOS' do
+  # Pods for example-tvOS
+
+  target 'example-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
   end
 end
