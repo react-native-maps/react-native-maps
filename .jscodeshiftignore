@@ -1,9 +1,0 @@
-# To run a codeshift on the react-native-maps library, cd to the root dir and run:
-# jscodeshift -t PATH_TO_TRANSFORM . --ignore-config .jscodeshiftignore
-.idea
-android
-docs
-example
-gradle
-node_modules
-scripts
