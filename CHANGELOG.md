@@ -1,4 +1,16 @@
 # Change Log
+## 0.28.0
+
+* Common: [#3705](https://github.com/react-native-maps/react-native-maps/pull/3705) Update example project
+* Common: [#3424](https://github.com/react-native-maps/react-native-maps/pull/3424) Bugfix for the "require cycles" warning
+* Common: [#3452](https://github.com/react-native-maps/react-native-maps/pull/3452) Ability to pass a Marker image as Geojson prop
+* Common: [#3516](https://github.com/react-native-maps/react-native-maps/pull/3516) Polyline props to obtain dashed/dotted lines in Geojson component
+* Common: [#3358](https://github.com/react-native-maps/react-native-maps/pull/3358) onRegionChange sends a boolean indicating if the move was from the user (true) or an animation (false)
+* Common: [#3658](https://github.com/react-native-maps/react-native-maps/pull/#3658) Geojson stroke color, stroke width, fill color, and marker color properties preserved
+* Common: [#3695](https://github.com/react-native-maps/react-native-maps/pull/3695) AnimateCamera duration bugfixed
+* iOS: [#3383](https://github.com/react-native-maps/react-native-maps/pull/3383) Added tintColor prop for setting the color of the map
+* Android: [#3414](https://github.com/react-native-maps/react-native-maps/pull/3414) Play services version updated
+
 ## 0.27.1 (March 19, 2020)
 * Android: [#3345](https://github.com/react-native-maps/react-native-maps/pull/3345) Protect against null Location in FusedLocationSource
 * Android: [#3351](https://github.com/react-native-maps/react-native-maps/pull/3351) Revert "android google map callout support <Image/> 
