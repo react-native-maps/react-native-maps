@@ -8,7 +8,7 @@
 * Common: [#3358](https://github.com/react-native-maps/react-native-maps/pull/3358) onRegionChange sends a boolean indicating if the move was from the user (true) or an animation (false)
 * Common: [#3658](https://github.com/react-native-maps/react-native-maps/pull/#3658) Geojson stroke color, stroke width, fill color, and marker color properties preserved
 * Common: [#3695](https://github.com/react-native-maps/react-native-maps/pull/3695) AnimateCamera duration bugfixed
-* iOS: [#3383](https://github.com/react-native-maps/react-native-maps/pull/3383) Sets the tint color of the map
+* iOS: [#3383](https://github.com/react-native-maps/react-native-maps/pull/3383) Added tintColor prop for setting the color of the map
 * Android: [#3414](https://github.com/react-native-maps/react-native-maps/pull/3414) Play services version updated
 
 ## 0.27.1 (March 19, 2020)
