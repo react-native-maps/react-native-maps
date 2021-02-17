@@ -25,7 +25,7 @@
 | `showsCompass` | `Boolean` | `true` | If `false` compass won't be displayed on the map.
 | `showsScale` | `Boolean` | `true` | A Boolean indicating whether the map shows scale information. **Note**: Apple Maps only.
 | `showsBuildings` | `Boolean` | `true` | A Boolean indicating whether the map displays extruded building information.
-| `showsTraffic` | `Boolean` | `true` | A Boolean value indicating whether the map displays traffic information.
+| `showsTraffic` | `Boolean` | `false` | A Boolean value indicating whether the map displays traffic information.
 | `showsIndoors` | `Boolean` | `true` | A Boolean indicating whether indoor maps should be enabled.
 | `showsIndoorLevelPicker` | `Boolean` | `false` | A Boolean indicating whether indoor level picker should be enabled. **Note:** Google Maps only (either Android or iOS with `PROVIDER_GOOGLE`).
 | `zoomEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/zoom the map.
