@@ -42,6 +42,7 @@ import MapKml from './examples/MapKml';
 import BugMarkerWontUpdate from './examples/BugMarkerWontUpdate';
 import ImageOverlayWithAssets from './examples/ImageOverlayWithAssets';
 import ImageOverlayWithURL from './examples/ImageOverlayWithURL';
+import ImageOverlayWithBearing from './examples/ImageOverlayWithBearing';
 import AnimatedNavigation from './examples/AnimatedNavigation';
 import OnPoiClick from './examples/OnPoiClick';
 import TestIdMarkers from './examples/TestIdMarkers';
@@ -173,6 +174,7 @@ export default class App extends React.Component<Props> {
         [BugMarkerWontUpdate, "BUG: Marker Won't Update (Android)", true],
         [ImageOverlayWithAssets, 'Image Overlay Component with Assets', true],
         [ImageOverlayWithURL, 'Image Overlay Component with URL', true],
+        [ImageOverlayWithBearing, 'Image Overlay with Bearing', true],
         [AnimatedNavigation, 'Animated Map Navigation', true],
         [OnPoiClick, 'On Poi Click', true],
         [IndoorMap, 'Indoor Map', true],
