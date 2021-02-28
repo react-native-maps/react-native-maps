@@ -508,7 +508,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     builder.tilt((float)camera.getDouble("pitch"));
     builder.bearing((float)camera.getDouble("heading"));
-    builder.zoom(camera.getInt("zoom"));
+    builder.zoom((float)camera.getDouble("zoom"));
 
     CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
 
