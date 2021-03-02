@@ -152,6 +152,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
       }
     }
 
+    view.applyBaseMapPadding(left, top, right, bottom);
     view.map.setPadding(left, top, right, bottom);
   }
 
