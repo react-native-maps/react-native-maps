@@ -895,6 +895,19 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  int baseLeftMapPadding;
+  int baseRightMapPadding;
+  int baseTopMapPadding;
+  int baseBottomMapPadding;
+
+  public void applyBaseMapPadding(int left, int top, int right, int bottom){
+    this.map.setPadding(left, top, right, bottom);
+    baseLeftMapPadding = left;
+    baseRightMapPadding = right;
+    baseTopMapPadding = top;
+    baseBottomMapPadding = bottom;
+  }
+
   public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
       boolean animated) {
     if (map == null) return;
@@ -912,8 +925,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
 
     if (edgePadding != null) {
-      map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+      map.setPadding(edgePadding.getInt("left") + baseLeftMapPadding,
+              edgePadding.getInt("top") + baseTopMapPadding,
+              edgePadding.getInt("right") + baseRightMapPadding,
+              edgePadding.getInt("bottom") + baseBottomMapPadding);
     }
 
     if (animated) {
@@ -921,8 +936,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     } else {
       map.moveCamera(cu);
     }
-    map.setPadding(0, 0, 0,
-        0); // Without this, the Google logo is moved up by the value of edgePadding.bottom
+    // Move the google logo to the default base padding value.
+    map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
   }
 
   public double[][] getMapBoundaries() {
@@ -1315,4 +1330,19 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     return airMarker;
   }
+
+  @Override
+  public void requestLayout() {
+    super.requestLayout();
+    post(measureAndLayout);
+  }
+
+  private final Runnable measureAndLayout = new Runnable() {
+    @Override
+    public void run() {
+      measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+              MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+      layout(getLeft(), getTop(), getRight(), getBottom());
+    }
+  };
 }
