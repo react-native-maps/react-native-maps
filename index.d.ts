@@ -506,6 +506,7 @@ declare module "react-native-maps" {
   export interface MapOverlayProps extends ViewProperties {
     image?: ImageURISource | ImageRequireSource;
     bounds: [Coordinate, Coordinate];
+    bearing?: number;
     tappable?: boolean;
     onPress?: (event: MapEvent<{ action: "overlay-press"; }>) => void;
   }
