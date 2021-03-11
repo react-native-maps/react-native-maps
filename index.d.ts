@@ -239,8 +239,8 @@ declare module "react-native-maps" {
 
     onMapReady?: () => void;
     onKmlReady?: (values: KmlMapEvent) => void;
-    onRegionChange?: (region: Region) => void;
-    onRegionChangeComplete?: (region: Region) => void;
+    onRegionChange?: (region: Region, details?: { isGesture: boolean }) => void;
+    onRegionChangeComplete?: (region: Region, details?: { isGesture: boolean }) => void;
     onPress?: (event: MapEvent) => void;
     onDoublePress?: (event: MapEvent) => void;
     onLongPress?: (event: MapEvent) => void;
