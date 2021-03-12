@@ -562,6 +562,32 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
+                  withLatitude:(double)latitude
+                  withLongitude:(double)longitude
+                  callback:(RCTResponseSenderBlock)callback)
+{
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+    CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+    [geoCoder reverseGeocodeLocation:location
+                   completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (error == nil && [placemarks count] > 0){
+                CLPlacemark *placemark = placemarks[0];
+                NSDictionary *address = @{
+                    @"name" : placemark.name,
+                    @"thoroughfare" : placemark.thoroughfare,
+                    @"locality" : placemark.locality,
+                    @"subLocality" : placemark.subLocality,
+                    @"administrativeArea" : placemark.administrativeArea,
+                    @"postalCode" : placemark.postalCode,
+                    @"ISOcountryCode" : placemark.ISOcountryCode,
+                    @"country" : placemark.country,
+                };
+                callback(@[[NSNull null], address]);
+            }
+    }];
+}
+
 #pragma mark Take Snapshot
 - (void)takeMapSnapshot:(AIRMap *)mapView
         snapshotter:(MKMapSnapshotter *) snapshotter
