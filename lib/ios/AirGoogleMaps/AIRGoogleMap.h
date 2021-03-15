@@ -27,7 +27,6 @@
 @property (nonatomic, assign) UIEdgeInsets mapPadding;
 @property (nonatomic, assign) NSString *paddingAdjustmentBehaviorString;
 @property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
-@property (nonatomic, copy) RCTBubblingEventBlock onMapLoaded;
 @property (nonatomic, copy) RCTBubblingEventBlock onKmlReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
@@ -44,7 +43,6 @@
 @property (nonatomic, strong) NSMutableArray *polygons;
 @property (nonatomic, strong) NSMutableArray *polylines;
 @property (nonatomic, strong) NSMutableArray *circles;
-@property (nonatomic, strong) NSMutableArray *heatmaps;
 @property (nonatomic, strong) NSMutableArray *tiles;
 @property (nonatomic, strong) NSMutableArray *overlays;
 
@@ -63,14 +61,13 @@
 @property (nonatomic, assign) NSString *kmlSrc;
 
 - (void)didPrepareMap;
-- (void)mapViewDidFinishTileRendering;
 - (BOOL)didTapMarker:(GMSMarker *)marker;
 - (void)didTapPolyline:(GMSPolyline *)polyline;
 - (void)didTapPolygon:(GMSPolygon *)polygon;
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)didLongPressAtCoordinate:(CLLocationCoordinate2D)coordinate;
-- (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
-- (void)idleAtCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
+- (void)didChangeCameraPosition:(GMSCameraPosition *)position;
+- (void)idleAtCameraPosition:(GMSCameraPosition *)position;
 - (void)didTapPOIWithPlaceID:(NSString *)placeID name:(NSString *) name location:(CLLocationCoordinate2D) location;
 - (NSArray *)getMapBoundaries;
 

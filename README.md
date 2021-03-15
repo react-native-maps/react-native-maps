@@ -2,10 +2,6 @@
 
 React Native Map components for iOS + Android
 
-
-# :warning: Maintainers Wanted [![Maintainers Wanted](https://img.shields.io/badge/maintainers-wanted-red.svg)](https://github.com/react-native-maps/react-native-maps/issues/3564)
-We are in need of more people or companies willing to help. If you have enough time and knowledge, and want to become a maintainer, please let us know [here](https://github.com/react-native-maps/react-native-maps/issues/3564).
- 
 ## Installation
 
 See [Installation Instructions](docs/installation.md).
@@ -19,6 +15,12 @@ support this module on anything but the latest version of React Native. With tha
 our best to stay compatible with older versions as much that is practical, and the peer dependency
 of this requirement is set to `"react-native": "*"` explicitly for this reason. If you are using
 an older version of React Native with this module though, some features may be buggy.
+
+### Note about React requires
+
+Since react-native 0.25.0, `React` should be required from `node_modules`.
+React Native versions from 0.18 should be working out of the box, for lower
+versions you should add `react` as a dependency in your `package.json`.
 
 ## Component API
 
@@ -35,10 +37,6 @@ an older version of React Native with this module though, some features may be b
 [`<Circle />` Component API](docs/circle.md)
 
 [`<Overlay />` Component API](docs/overlay.md)
-
-[`<Heatmap />` Component API](docs/heatmap.md)
-
-[`<Geojson />` Component API](docs/geojson.md)
 
 ## General Usage
 
@@ -106,9 +104,8 @@ import { Marker } from 'react-native-maps';
   region={this.state.region}
   onRegionChange={this.onRegionChange}
 >
-  {this.state.markers.map((marker, index) => (
+  {this.state.markers.map(marker => (
     <Marker
-      key={index}
       coordinate={marker.latlng}
       title={marker.title}
       description={marker.description}
@@ -120,7 +117,7 @@ import { Marker } from 'react-native-maps';
 ### Rendering a Marker with a custom view
 
 ```jsx
-<Marker coordinate={{ latitude : latitude , longitude : longitude }}>
+<Marker coordinate={marker.latlng}>
   <MyCustomMarkerView {...marker} />
 </Marker>
 ```
@@ -129,7 +126,7 @@ import { Marker } from 'react-native-maps';
 
 ```jsx
 <Marker
-  coordinate={{ latitude : latitude , longitude : longitude }}
+  coordinate={marker.latlng}
   image={require('../assets/pin.png')}
 />
 ```
@@ -279,9 +276,25 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
 Then add the AirGoogleMaps directory:
 
-https://github.com/react-native-maps/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
+https://github.com/react-native-community/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
 
 An unofficial step-by-step guide is also available at https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
+
+## Examples
+
+To run examples:
+
+```bash
+npm i
+npm start
+
+#Android
+npm run run:android
+
+#iOS
+npm run build:ios
+npm run run:ios
+```
 
 ### MapView Events
 
@@ -469,7 +482,7 @@ componentWillReceiveProps(nextProps) {
   if (this.props.coordinate !== nextProps.coordinate) {
     if (Platform.OS === 'android') {
       if (this.marker) {
-        this.marker.animateMarkerToCoordinate(
+        this.marker._component.animateMarkerToCoordinate(
           nextProps.coordinate,
           duration
         );
@@ -506,7 +519,7 @@ componentWillReceiveProps(nextProps) {
   if (this.props.coordinate !== nextProps.coordinate) {
     if (Platform.OS === 'android') {
       if (this.marker) {
-        this.marker.animateMarkerToCoordinate(
+        this.marker._component.animateMarkerToCoordinate(
           nextProps.coordinate,
           duration
         );
@@ -595,8 +608,8 @@ Pass an array of coordinates to focus a map region on said coordinates.
 
 * Make sure that you have [properly installed](docs/installation.md) react-native-maps.
 * Check in the logs if there is more informations about the issue.
-* Try setting the style of the MapView to an absolute position with top, left, right and bottom  values set.
-*   Make sure you have enabled Google Maps API in [Google developer console](https://console.developers.google.com/apis/library)
+* Try setting the style of the MapView to an absolute position with top, left, right and bottom values set.
+* Make sure you have enabled Google Maps API in ![Google developer console](https://console.developers.google.com/apis/library)
 
 ```javascript
 const styles = StyleSheet.create({
@@ -635,29 +648,6 @@ Good:
 </View>
 ```
 
-### Children Components Not Re-Rendering
-Components that aren't declared by this library (Ex: Markers, Polyline) must not be children of the MapView component due to MapView's unique rendering methodology. Have your custom components / views outside the MapView component and position absolute to ensure they only re-render as needed.
-Example:
-Bad:
-
-```jsx
-  <View style={StyleSheet.absoluteFillObject}>
-    <MapView style={StyleSheet.absoluteFillObject}>
-      <View style={{ position: 'absolute', top: 100, left: 50 }}/>
-    </MapView>
-  </View>
-```
-
-Good:
-
-```jsx
-  <View style={StyleSheet.absoluteFillObject}>
-    <MapView style={StyleSheet.absoluteFillObject} />
-    <View style={{ position: 'absolute', top: 100, left: 50 }}/>
-  </View>
-```
-
-Source: https://github.com/react-native-maps/react-native-maps/issues/1901
 
 License
 --------

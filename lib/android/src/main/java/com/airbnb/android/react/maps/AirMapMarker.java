@@ -445,9 +445,6 @@ public class AirMapMarker extends AirMapFeature {
 
   @Override
   public void removeFromMap(GoogleMap map) {
-    if (marker == null) {
-      return;
-    }
     marker.remove();
     marker = null;
     updateTracksViewChanges();

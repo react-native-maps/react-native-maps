@@ -3,51 +3,39 @@
 Install the library from npm:
 
 ```sh
-npm install react-native-maps --save-exact
-```
-
-or 
-
-```sh
-yarn add react-native-maps -E
+npm install react-native-maps --save
 ```
 
 The library ships with platform native code that needs to be compiled
 together with React Native. This requires you to configure your build
 tools.
 
-Since React Native 0.60 and higher, [autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) makes the installation process simpler.
-
 The actual map implementation depends on the platform. On Android, one
 has to use [Google
 Maps](https://developers.google.com/maps/documentation/), which in turn
-requires you to obtain an [API key for the Android
+requires you to obtain an API key for the [Android
 SDK](https://developers.google.com/maps/documentation/android-sdk/signup).
 
 On iOS, one can choose between Google Maps or the native [Apple
 Maps](https://developer.apple.com/documentation/mapkit/) implementation. 
 
-When using Google Maps on iOS, you need also to obtain an [API key for the iOS
+When using Google Maps on iOS, you need to also register for the [iOS
 SDK](https://developers.google.com/maps/documentation/ios-sdk/get-api-key)
 and include the Google Maps library in your build. The native Apple Maps
 based implementation works out-of-the-box and is therefore simpler to
 use at the price of missing some of the features supported by the Google
 Maps backend.
 
-> **WARNING**: Before you can start using the Google Maps Platform APIs and SDKs, you must sign up and create a [billing account](https://developers.google.com/maps/gmp-get-started#create-billing-account)!
-
----
-
 ## Build configuration on iOS
 
-### Using React Native Link (React Native 0.59 and lower)
+### Using React Native Link
 
 Run `react-native link react-native-maps` after which you should be able
 to use this library on iOS. Note that by default this will use Apple
 Maps and you will miss some of the features provided by Google (see the
 instruction on manually enabling Google Maps below).
 
-### Using CocoaPods (React Native 0.59 and lower)
+### Using CocoaPods
 
 > If the CocoaPods package manager is new to you, please first review
 > its [installation guide](https://guides.cocoapods.org/using/getting-started.html)
@@ -105,6 +93,9 @@ post_install do |installer|
         config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
       end
     end
+    if target.name == "React"
+      target.remove_from_project
+    end
   end
 end
 ```
@@ -117,17 +108,7 @@ pod install
 
 and open the produced workspace file (`.xcworkspace`) in XCode to build your project.
 
-### Using CocoaPods (React Native 0.60 and higher)
-
-```sh
-cd ios
-pod install
-```
-### App store submission
-
-The app's `Info.plist` file must contain a `NSLocationWhenInUseUsageDescription` with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission.
-
-### Enabling Google Maps on iOS (React Native all versions)
+### Enabling Google Maps on iOS
 
 If you want to enable Google Maps on iOS, obtain the Google API key and
 edit your `AppDelegate.m` as follows:
@@ -146,50 +127,49 @@ edit your `AppDelegate.m` as follows:
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
-Then, do either of the following:
+Then, do either of the following
 
-a) (React Native 0.59 and lower) If you are using CocoaPods to manage your dependecies, uncomment the
+1. If you are using CocoaPods to manage your dependecies, uncomment the
 lines related to Google Maps from the `Podfile` and run `pod install`.
 
-b) (React Native 0.59 and lower) If you used React Native link, you may include Google Maps manually as a
+2. If you used React Native link, you may include Google Maps manually as a
 XCode framework following the instructions from [SDK docs -> Install
 manually](https://developers.google.com/maps/documentation/ios-sdk/start). Then, to link this library to the framework, add the following to your
 `package.json` and replace the
 `REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL` with the relative path
 from your project root to the directory in which you installed the
 Google Maps frameworks. You might need to specify a recursive search path 
-by adding a `/**` at the end of the provided path (e.g. "./node_modules/react-native-maps/enable-google-maps 'ios/my-frameworks/GoogleMaps/**'"
+by adding a `/**` at the end of the provided path (e.g. `"./node_modules/react-native-maps/enable-google-maps 'ios/my-frameworks/GoogleMaps/**'"
 
-```json
-{
-  "name": "your-app",
-  "scripts": {
-    "postinstall": "./node_modules/react-native-maps/enable-google-maps REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL"
-  }
-}
-```
+    ```json
+    {
+      "name": "your-app",
+      "scripts": {
+        "postinstall": "./node_modules/react-native-maps/enable-google-maps REPLACE_ME_RELATIVE_PATH_TO_GOOGLE_MAPS_INSTALL"
+      }
+    }
+    ```
 
-Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
+    Re-run `npm install` or `yarn` to ensure the `postinstall` script is run.
 
-c) (React Native 0.60 and higher) Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
-  ```ruby
-    # React Native Maps dependencies
-    rn_maps_path = '../node_modules/react-native-maps'
-    pod 'react-native-google-maps', :path => rn_maps_path
-    pod 'GoogleMaps'
-    pod 'Google-Maps-iOS-Utils'
-  ```
-
-That's it, you made it! 👍
-    
----
-
+3. Import and add `{PROVIDER_GOOGLE}` to your JavaScript:
+    ```javascript
+      import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+      ...
+      
+      <MapView
+         provider={PROVIDER_GOOGLE}
+         style={styles.map}
+         ...
+      >
+      
+    ```
 
 ## Build configuration on Android
 
 Ensure your build files match the following requirements:
 
-1. (React Native 0.59 and lower) Define the `react-native-maps` project in `android/settings.gradle`:
+1. Define the `react-native-maps` project in `android/settings.gradle`:
 
 ```groovy
 ...
@@ -197,7 +177,7 @@ include ':react-native-maps'
 project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
 ```
 
-2. (React Native 0.59 and lower) Add the `react-native-maps` as an dependency of your app in `android/app/build.gradle`:
+2. Add the `react-native-maps` as an dependency of your app in `android/app/build.gradle`:
 
 ```groovy
 ...
@@ -207,7 +187,7 @@ dependencies {
 }
 ```
 
-3.1 (React Native all versions) If you've defined *[project-wide
+If you've defined *[project-wide
 properties](https://developer.android.com/studio/build/gradle-tips.html)*
 (**recommended**) in your root `build.gradle`, this library will detect
 the presence of the following properties:
@@ -220,37 +200,18 @@ allprojects {...}
  + Project-wide Gradle configuration properties
  */
 ext {
-    compileSdkVersion   = xxx
-    targetSdkVersion    = xxx
-    buildToolsVersion   = "xxx"
-    minSdkVersion       = xxx
-    supportLibVersion   = "xxx"
-    playServicesVersion = "17.0.0" // or find latest version
-    androidMapsUtilsVersion = "xxx"
+    compileSdkVersion   = 26
+    targetSdkVersion    = 26
+    buildToolsVersion   = "26.0.2"
+    supportLibVersion   = "26.1.0"
+    googlePlayServicesVersion = "16.1.0" // or set latest version
+    androidMapsUtilsVersion = "0.5+"
 }
 ```
-or do
-```
-buildscript {
-    ext {
-        buildToolsVersion = "xxx"
-        minSdkVersion = xxx
-        compileSdkVersion = xxx
-        targetSdkVersion = xxx
-        supportLibVersion = "xxx"
-        playServicesVersion = "17.0.0" // or find latest version
-        androidMapsUtilsVersion = "xxx"
-    }
-}
-...
-```
-You can find the latest `playServicesVersion` by checking [https://developers.google.com/android/guides/releases](https://developers.google.com/android/guides/releases) and searching for `gms:play-services-maps:`
 
-You can find the latest `androidMapsUtilsVersion` by checking [https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils](https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils)
-
-3.2 (React Native all versions) If you do **not** have *project-wide properties* defined and have a
+If you do **not** have *project-wide properties* defined and have a
 different play-services version than the one included in this library,
-use the following instead (switch 17.0.0 and/or 17.2.1 for the desired versions):
+use the following instead (switch 10.0.1 for the desired version):
 
 ```groovy
 ...
@@ -260,12 +221,12 @@ dependencies {
        exclude group: 'com.google.android.gms', module: 'play-services-base'
        exclude group: 'com.google.android.gms', module: 'play-services-maps'
    }
-   implementation 'com.google.android.gms:play-services-base:17.2.1'
-   implementation 'com.google.android.gms:play-services-maps:17.0.0'
+   implementation 'com.google.android.gms:play-services-base:10.0.1'
+   implementation 'com.google.android.gms:play-services-maps:10.0.1'
 }
 ```
 
-4. (React Native all versions) Specify your Google Maps API Key:
+3. Specify your Google Maps API Key:
 
    Add your API key to your manifest file (`android/app/src/main/AndroidManifest.xml`):
 
@@ -275,9 +236,6 @@ dependencies {
    <meta-data
      android:name="com.google.android.geo.API_KEY"
      android:value="Your Google maps API Key Here"/>
-  
-   <!-- You will also only need to add this uses-library tag -->
-   <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 </application>
 ```
 > Note: As shown above, `com.google.android.geo.API_KEY` is the
@@ -292,7 +250,7 @@ dependencies {
 
 Source: https://developers.google.com/maps/documentation/android-api/signup
 
-5. (React Native 0.59 and lower) Add `import com.airbnb.android.react.maps.MapsPackage;` and `new MapsPackage()` in your `MainApplication.java` :
+4. Add `import com.airbnb.android.react.maps.MapsPackage;` and `new MapsPackage()` in your `MainApplication.java` :
 
 ```java
 import com.airbnb.android.react.maps.MapsPackage;
@@ -306,17 +264,13 @@ import com.airbnb.android.react.maps.MapsPackage;
     }
 ```
 
-6. (React Native all versions) Ensure that you have Google Play Services installed:
+5. Ensure that you have Google Play Services installed:
 
   * For the Genymotion emulator, you can follow [these instructions](https://www.genymotion.com/help/desktop/faq/#google-play-services).
   * For a physical device you need to search on Google for 'Google Play
     Services'. There will be a link that takes you to the Play Store and
     from there you will see a button to update it (do not search within the
     Play Store).
-
-That's it, you made it! :+1:
-
----
 
 ## Troubleshooting
 
@@ -333,16 +287,7 @@ project from the URLs below:
 - [Google Maps SDK Android](https://console.developers.google.com/apis/library/maps-android-backend.googleapis.com/)
 - [Google Maps SDK iOS (if required)](https://console.developers.google.com/apis/library/maps-ios-backend.googleapis.com)
 
-For reference, you may read the relevant issue reports: ([#118](https://github.com/react-native-maps/react-native-maps/issues/118), [#176](https://github.com/react-native-maps/react-native-maps/issues/176), [#684](https://github.com/react-native-maps/react-native-maps/issues/684)).
-
-### The map background is gray (Google Maps)
-
-If you get grey screen on android device create google_maps_api.xml in android/app/src/main/res/values.
-```xml
-<resources>
-  <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">(api key here)</string>
-</resources>
-```
+For reference, you may read the relevant issue reports: ([#118](https://github.com/react-native-community/react-native-maps/issues/118), [#176](https://github.com/react-native-community/react-native-maps/issues/176), [#684](https://github.com/react-native-community/react-native-maps/issues/684)).
 
 ### No map whatsoever
 
@@ -387,7 +332,7 @@ export default () => (
 If your XCode project uses dynamic frameworks (e.g. you also have Swift
 code in your project), you cannot install `Google-Maps-iOS-Utils` with
 CocoaPods. The issue and a workaround for it has been documented
-[here](https://github.com/googlemaps/google-maps-ios-utils/blob/b721e95a500d0c9a4fd93738e83fc86c2a57ac89/Swift.md).
+[here](https://github.com/googlemaps/google-maps-ios-utils/blob/master/Swift.md).
 
 ### Runtime errors on iOS (Apple Maps)
 
@@ -490,7 +435,7 @@ import com.airbnb.android.react.maps.MapsPackage;
 
 ### Trouble with Google Play services
 
-- Make sure that your emulator has Google Play (Go to Android studio -> Virtual Devices -> Check that you have icon in "Play Store" column)
+- Make sure that your emulator has Google Play (Go to Anroid studio -> Virtual Devices -> Check that you have icon in "Play Store" column)
 - Click to bottom dots icon in the emulator
 - Go to Google Play Tab and click Update
 

@@ -1,17 +1,55 @@
 {
-  "name": "react-native-maps",
+  "_from": "react-native-maps@^0.25.0",
+  "_id": "react-native-maps@0.25.0",
+  "_inBundle": false,
+  "_integrity": "sha512-PFJuW1pt+HnnnN0m0OGk29RSvICFVkK/DScX6cUk0SuCSN2DAHx0y6y57lZyYXcYqU4J4usNpfxgp/ccjASDiw==",
+  "_location": "/react-native-maps",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "react-native-maps@^0.25.0",
+    "name": "react-native-maps",
+    "escapedName": "react-native-maps",
+    "rawSpec": "^0.25.0",
+    "saveSpec": null,
+    "fetchSpec": "^0.25.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-maps/-/react-native-maps-0.25.0.tgz",
+  "_shasum": "81bc51eb50e33811a9e1c345cc48869413ead67d",
+  "_spec": "react-native-maps@^0.25.0",
+  "_where": "/Users/trungtin.dang/Documents/project/FRNSW_new",
+  "author": {
+    "name": "Leland Richardson",
+    "email": "leland.m.richardson@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/react-native-community/react-native-maps/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "React Native Mapview component for iOS + Android",
-  "main": "index.js",
-  "author": "Leland Richardson <leland.m.richardson@gmail.com>",
-  "version": "0.28.0",
-  "scripts": {
-    "lint": "./node_modules/eslint/bin/eslint.js .",
-    "ci": "npm run lint"
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "@react-native-community/eslint-config": "0.0.5",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prefer-object-spread": "^1.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "gitbook-cli": "^2.3.0",
+    "lodash": "^4.17.2",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react": "16.8.3",
+    "react-native": "0.59.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/react-native-maps/react-native-maps"
-  },
+  "homepage": "https://github.com/react-native-community/react-native-maps#readme",
   "keywords": [
     "react",
     "react-native",
@@ -21,16 +59,35 @@
     "google-maps",
     "mapkit"
   ],
+  "main": "index.js",
+  "name": "react-native-maps",
   "peerDependencies": {
+    "prop-types": "^15.0 || ^16.0",
     "react": ">= 16.0 || < 17.0",
-    "react-native": ">= 0.51",
-    "react-native-web": "^0.11"
+    "react-native": ">= 0.51"
   },
-  "devDependencies": {
-    "@react-native-community/eslint-config": "0.0.5",
-    "eslint": "5.16.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-native-community/react-native-maps.git"
   },
-  "dependencies": {
-    "@types/geojson": "^7946.0.7"
-  }
+  "rnpm": {
+    "android": {
+      "sourceDir": "./lib/android"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:js && npm run build:android && npm run build:ios",
+    "build:android": "./gradlew :react-native-maps:assembleDebug",
+    "build:ios": "bundle install --path ./example/ios/bundles && bundle exec pod install --project-directory=./example/ios/",
+    "build:js": "exit 0",
+    "ci": "npm run lint",
+    "lint": "./node_modules/eslint/bin/eslint.js .",
+    "preversion": "./scripts/update-version.js",
+    "run:android": "./gradlew installDebug && npm run start:android",
+    "run:ios": "react-native run-ios --project-path ./example/ios",
+    "run:packager": "./node_modules/react-native/scripts/packager.sh",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:android": "adb shell am start -n com.airbnb.android.react.maps.example/.MainActivity"
+  },
+  "version": "0.25.0"
 }

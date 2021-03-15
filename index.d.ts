@@ -125,7 +125,6 @@ declare module "react-native-maps" {
         timestamp: number;
         accuracy: number;
         speed: number;
-        heading: number;
         isFromMockProvider: boolean;
       };
     };
@@ -164,21 +163,6 @@ declare module "react-native-maps" {
     position: Point;
   };
 
-  export type IndoorBuilding = {
-    underground: boolean,
-    activeLevelIndex: number,
-    levels: Array<IndoorLevel>,
-  }
-
-  export type IndoorLevel = {
-    index: number,
-    name: string,
-    shortName: string,
-  }
-
-  export interface IndoorBuildingEvent
-    extends NativeSyntheticEvent<{IndoorBuilding:IndoorBuilding}> {}
-
   /**
    * onKmlReady parameter
    */
@@ -197,9 +181,6 @@ declare module "react-native-maps" {
     provider?: "google" | null;
     customMapStyle?: MapStyleElement[];
     customMapStyleString?: string;
-    userLocationPriority?: "balanced" | "high" | "low" | "passive";
-    userLocationUpdateInterval?: number;
-    userLocationFastestInterval?: number;
     showsUserLocation?: boolean;
     userLocationAnnotationTitle?: string;
     showsMyLocationButton?: boolean;
@@ -230,19 +211,16 @@ declare module "react-native-maps" {
     initialCamera?: Camera;
     liteMode?: boolean;
     mapPadding?: EdgePadding;
-    paddingAdjustmentBehavior?: "always" | "automatic" | "never";
     maxDelta?: number;
     minDelta?: number;
     legalLabelInsets?: EdgeInsets;
     compassOffset?: { x: number; y: number };
-    tintColor?: string;
 
     onMapReady?: () => void;
     onKmlReady?: (values: KmlMapEvent) => void;
-    onRegionChange?: (region: Region, details?: { isGesture: boolean }) => void;
-    onRegionChangeComplete?: (region: Region, details?: { isGesture: boolean }) => void;
+    onRegionChange?: (region: Region) => void;
+    onRegionChangeComplete?: (region: Region) => void;
     onPress?: (event: MapEvent) => void;
-    onDoublePress?: (event: MapEvent) => void;
     onLongPress?: (event: MapEvent) => void;
     onUserLocationChange?: (event: EventUserLocation) => void;
     onPanDrag?: (event: MapEvent) => void;
@@ -260,7 +238,6 @@ declare module "react-native-maps" {
     onMarkerDragStart?: (event: MapEvent) => void;
     onMarkerDrag?: (event: MapEvent) => void;
     onMarkerDragEnd?: (event: MapEvent) => void;
-    onIndoorBuildingFocused?: (event: IndoorBuildingEvent) => void;
 
     minZoomLevel?: number;
     maxZoomLevel?: number;
@@ -295,10 +272,9 @@ declare module "react-native-maps" {
     takeSnapshot(options?: SnapshotOptions): Promise<string>;
     pointForCoordinate(coordinate: LatLng): Promise<Point>;
     coordinateForPoint(point: Point): Promise<LatLng>;
-    setIndoorActiveLevelIndex(index:number): void;
   }
 
-  export class Animated extends MapView {}
+  export class MapViewAnimated extends MapView {}
 
   // =======================================================================
   //  Marker
@@ -353,11 +329,6 @@ declare module "react-native-maps" {
      * __iOS only__
      */
     redrawCallout(): void;
-    /**
-     * Causes a redraw of the marker. Useful when there are updates to the
-     * marker and `tracksViewChanges` comes with a cost that is too high.
-     */
-    redraw(): void
     /**
      * Animates marker movement.
      * __Android only__
@@ -464,12 +435,9 @@ declare module "react-native-maps" {
 
   export interface MapUrlTileProps extends ViewProperties {
     urlTemplate: string;
-    minimumZ?: number;
     maximumZ?: number;
     zIndex?: number;
     tileSize?: number;
-    shouldReplaceMapContent?:boolean;
-    flipY?: boolean;
   }
 
   export class UrlTile extends React.Component<MapUrlTileProps, any> {}
@@ -478,7 +446,6 @@ declare module "react-native-maps" {
     pathTemplate: string;
     tileSize?: number;
     zIndex?: number;
-    flipY?: boolean;
   }
 
   export class LocalTile extends React.Component<MapLocalTileProps, any> {}
@@ -494,7 +461,6 @@ declare module "react-native-maps" {
     tileSize: number;
     opacity: number;
     zIndex?: number;
-    shouldReplaceMapContent?: boolean;
   }
 
   export class WMSTile extends React.Component<MapWMSTileProps, any> {}
@@ -507,57 +473,11 @@ declare module "react-native-maps" {
   export interface MapOverlayProps extends ViewProperties {
     image?: ImageURISource | ImageRequireSource;
     bounds: [Coordinate, Coordinate];
-    bearing?: number;
-    tappable?: boolean;
-    onPress?: (event: MapEvent<{ action: "overlay-press"; }>) => void;
   }
 
   export class Overlay extends React.Component<MapOverlayProps, any> {}
 
   export class OverlayAnimated extends Overlay {}
-
-  // =======================================================================
-  //  Heatmap
-  // =======================================================================
-
-  export interface WeightedLatLng {
-    latitude: number;
-    longitude: number;
-    weight?: number;
-  }
-
-  export interface MapHeatmapProps extends ViewProperties {
-    points: WeightedLatLng[];
-    gradient?: {
-      colors: string[],
-      startPoints: number[],
-      colorMapSize: number
-    }
-    radius?: number;
-    opacity?: number;
-  }
-
-  export class Heatmap extends React.Component<MapHeatmapProps, any> {}
-
-  // =======================================================================
-  //  Geojson
-  // =======================================================================
-
-  import GeoJSON from 'geojson';
-
-  export interface GeojsonProps {
-    geojson: GeoJSON.GeoJSON;
-    strokeColor?: string;
-    fillColor?: string;
-    strokeWidth?: number;
-    lineDashPhase?: number;
-    lineDashPattern?:number[];
-    lineCap?:'butt'|'round' | 'square';
-    lineJoin?: 'miter'| 'round' | 'bevel';
-    miterLimit?: number;
-  }
-
-  export class Geojson extends React.Component<GeojsonProps, any> {}
 
   // =======================================================================
   //  Constants

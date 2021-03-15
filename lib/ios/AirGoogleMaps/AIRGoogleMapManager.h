@@ -12,7 +12,6 @@
 
 @interface AIRGoogleMapManager : RCTViewManager
 @property (nonatomic, assign) AIRGoogleMap *map;
-@property (nonatomic) BOOL isGesture;
 
 @end
 
