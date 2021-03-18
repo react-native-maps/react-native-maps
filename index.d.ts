@@ -78,6 +78,7 @@ declare module "react-native-maps" {
     longitude: Animated.Value;
     latitudeDelta: Animated.Value;
     longitudeDelta: Animated.Value;
+    useDefaultDriver?: boolean;
 
     constructor(region?: Region);
 
