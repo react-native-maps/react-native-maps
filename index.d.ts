@@ -8,6 +8,19 @@ declare module "react-native-maps" {
     ViewProperties
   } from "react-native";
 
+  export interface Address {
+    name: string;
+    thoroughfare: string;
+    subThoroughfare: string,
+    locality: string,
+    subLocality: string,
+    administrativeArea: string,
+    subAdministrativeArea: string,
+    postalCode: string,
+    countryCode: string,
+    country: string,
+  }
+
   export interface Region {
     latitude: number;
     longitude: number;
@@ -295,6 +308,7 @@ declare module "react-native-maps" {
     setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
     getMapBoundaries(): Promise<{ northEast: LatLng; southWest: LatLng }>;
     takeSnapshot(options?: SnapshotOptions): Promise<string>;
+    addressForCoordinate(coordinate: LatLng): Promise<Address>;
     pointForCoordinate(coordinate: LatLng): Promise<Point>;
     coordinateForPoint(point: Point): Promise<LatLng>;
     setIndoorActiveLevelIndex(index:number): void;
@@ -496,6 +510,7 @@ declare module "react-native-maps" {
     tileSize: number;
     opacity: number;
     zIndex?: number;
+    shouldReplaceMapContent?: boolean;
   }
 
   export class WMSTile extends React.Component<MapWMSTileProps, any> {}

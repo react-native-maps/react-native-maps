@@ -10,9 +10,9 @@ import MapView, {
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 40.71095;
-const LONGITUDE = -74.00997;
-const LATITUDE_DELTA = 0.0152;
+const LATITUDE = 63.5;
+const LONGITUDE = 23.5;
+const LATITUDE_DELTA = 0.152;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class WMSTiles extends React.Component {
@@ -26,7 +26,12 @@ class WMSTiles extends React.Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
+      isWMSTilesActive: false,
     };
+  }
+
+  toggleWMSTiles() {
+    this.setState({isWMSTilesActive: !this.state.isWMSTilesActive});
   }
 
   render() {
@@ -38,17 +43,22 @@ class WMSTiles extends React.Component {
           mapType={MAP_TYPES.SATELLITE}
           style={styles.map}
           initialRegion={region}
-        >
-          <WMSTile
-            urlTemplate="https://demo.geo-solutions.it/geoserver/tiger/wms?service=WMS&version=1.1.0&request=GetMap&layers=tiger:poi&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:900913&format=image/png&transparent=true&format_options=dpi:213"
-            zIndex={1}
-            opacity={0.5}
-            tileSize={512}
-          />
+          >
+          {this.state.isWMSTilesActive && (
+            <WMSTile
+              urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
+              zIndex={1}
+              opacity={0.5}
+              tileSize={512}
+            />
+          )}
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>
-            <Text>WMS Tiles</Text>
+            <Text onPress={() => this.toggleWMSTiles()}>
+              WMS Tiles: {this.state.isWMSTilesActive ? 'on' : 'off'} (click to
+              toggle)
+            </Text>
           </View>
         </View>
       </View>
