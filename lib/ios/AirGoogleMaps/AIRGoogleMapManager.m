@@ -260,6 +260,7 @@ RCT_EXPORT_METHOD(animateToBearing:(nonnull NSNumber *)reactTag
 }
 
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
+                  edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -274,9 +275,20 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
       for (AIRGoogleMapMarker *marker in mapView.markers)
         bounds = [bounds includingCoordinate:marker.realMarker.position];
-
-      GMSCameraUpdate *cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
-
+        
+        GMSCameraUpdate* cameraUpdate;
+        
+        if ([edgePadding count] != 0) {
+            // Set Map viewport
+            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+            
+            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
+        } else {
+            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
+        }
       if (animated) {
         [mapView animateWithCameraUpdate: cameraUpdate];
       } else {
