@@ -217,6 +217,7 @@ declare module "react-native-maps" {
     userLocationAnnotationTitle?: string;
     showsMyLocationButton?: boolean;
     followsUserLocation?: boolean;
+    userLocationCalloutEnabled?: boolean;
     showsPointsOfInterest?: boolean;
     showsCompass?: boolean;
     zoomEnabled?: boolean;
