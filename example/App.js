@@ -8,7 +8,7 @@ import {
   Text,
   Switch,
 } from 'react-native';
-import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from '../index';
+import {PROVIDER_GOOGLE, PROVIDER_DEFAULT} from '../index';
 import DisplayLatLng from './examples/DisplayLatLng';
 import ViewsAsMarkers from './examples/ViewsAsMarkers';
 import EventListener from './examples/EventListener';
@@ -34,6 +34,7 @@ import CustomTiles from './examples/CustomTiles';
 import WMSTiles from './examples/WMSTiles';
 import ZIndexMarkers from './examples/ZIndexMarkers';
 import StaticMap from './examples/StaticMap';
+import ThemeMap from './examples/ThemeMap';
 import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
@@ -56,12 +57,12 @@ const ANDROID = Platform.OS === 'android';
 
 function makeExampleMapper(useGoogleMaps) {
   if (useGoogleMaps) {
-    return example => [
+    return (example) => [
       example[0],
       [example[1], example[3]].filter(Boolean).join(' '),
     ];
   }
-  return example => example;
+  return (example) => example;
 }
 
 type Props = {};
@@ -80,8 +81,7 @@ export default class App extends React.Component<Props> {
       <TouchableOpacity
         key={title}
         style={styles.button}
-        onPress={() => this.setState({ Component })}
-      >
+        onPress={() => this.setState({Component})}>
         <Text>{title}</Text>
       </TouchableOpacity>
     );
@@ -91,8 +91,7 @@ export default class App extends React.Component<Props> {
     return (
       <TouchableOpacity
         style={styles.back}
-        onPress={() => this.setState({ Component: null })}
-      >
+        onPress={() => this.setState({Component: null})}>
         <Text style={styles.backButton}>&larr;</Text>
       </TouchableOpacity>
     );
@@ -103,7 +102,7 @@ export default class App extends React.Component<Props> {
       <View>
         <Text>Use GoogleMaps?</Text>
         <Switch
-          onValueChange={value => this.setState({ useGoogleMaps: value })}
+          onValueChange={(value) => this.setState({useGoogleMaps: value})}
           style={styles.googleSwitch}
           value={this.state.useGoogleMaps}
         />
@@ -112,7 +111,7 @@ export default class App extends React.Component<Props> {
   }
 
   renderExamples(examples) {
-    const { Component, useGoogleMaps } = this.state;
+    const {Component, useGoogleMaps} = this.state;
 
     return (
       <View style={styles.container}>
@@ -126,10 +125,9 @@ export default class App extends React.Component<Props> {
           <ScrollView
             style={StyleSheet.absoluteFill}
             contentContainerStyle={styles.scrollview}
-            showsVerticalScrollIndicator={false}
-          >
+            showsVerticalScrollIndicator={false}>
             {IOS && this.renderGoogleSwitch()}
-            {examples.map(example => this.renderExample(example))}
+            {examples.map((example) => this.renderExample(example))}
           </ScrollView>
         )}
       </View>
@@ -141,6 +139,7 @@ export default class App extends React.Component<Props> {
       [
         // [<component>, <component description>, <Google compatible>, <Google add'l description>]
         [StaticMap, 'StaticMap', true],
+        [ThemeMap, 'ThemeMap', true],
         [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
         [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
         [EventListener, 'Events', true, '(incomplete)'],
@@ -184,10 +183,10 @@ export default class App extends React.Component<Props> {
       ]
         // Filter out examples that are not yet supported for Google Maps on iOS.
         .filter(
-          example =>
-            ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps))
+          (example) =>
+            ANDROID || (IOS && (example[2] || !this.state.useGoogleMaps)),
         )
-        .map(makeExampleMapper(IOS && this.state.useGoogleMaps))
+        .map(makeExampleMapper(IOS && this.state.useGoogleMaps)),
     );
   }
 }
@@ -221,6 +220,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  backButton: { fontWeight: 'bold', fontSize: 30 },
-  googleSwitch: { marginBottom: 10 },
+  backButton: {fontWeight: 'bold', fontSize: 30},
+  googleSwitch: {marginBottom: 10},
 });

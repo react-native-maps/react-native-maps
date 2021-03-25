@@ -10,7 +10,7 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class StaticMap extends React.Component {
+class ThemeMap extends React.Component {
   constructor(props) {
     super(props);
 
@@ -27,17 +27,9 @@ class StaticMap extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={StyleSheet.absoluteFill}
-          contentContainerStyle={styles.scrollview}>
-          <Text>Clicking</Text>
-          <Text>and</Text>
-          <Text>dragging</Text>
-          <Text>the</Text>
-          <Text>map</Text>
-          <Text>will</Text>
-          <Text>cause</Text>
-          <Text>the</Text>
+        <ScrollView contentContainerStyle={styles.scrollview}>
+          <Text>MAPKIT ONLY{'\n'}</Text>
+          <Text>System</Text>
           <MapView
             provider={this.props.provider}
             style={styles.map}
@@ -52,42 +44,46 @@ class StaticMap extends React.Component {
               coordinate={this.state.region}
             />
           </MapView>
-          <Text>parent</Text>
-          <Text>ScrollView</Text>
-          <Text>to</Text>
-          <Text>scroll.</Text>
-          <Text>When</Text>
-          <Text>using</Text>
-          <Text>a Google</Text>
-          <Text>Map</Text>
-          <Text>this only</Text>
-          <Text>works</Text>
-          <Text>if you</Text>
-          <Text>disable:</Text>
-          <Text>scroll,</Text>
-          <Text>zoom,</Text>
-          <Text>pitch,</Text>
-          <Text>rotate.</Text>
-          <Text>...</Text>
-          <Text>It</Text>
-          <Text>would</Text>
-          <Text>be</Text>
-          <Text>nice</Text>
-          <Text>to</Text>
-          <Text>have</Text>
-          <Text>an</Text>
-          <Text>option</Text>
-          <Text>that</Text>
-          <Text>still</Text>
-          <Text>allows</Text>
-          <Text>zooming.</Text>
+
+          <Text>{'\n'}Light</Text>
+          <MapView
+            provider={this.props.provider}
+            style={styles.map}
+            scrollEnabled={false}
+            zoomEnabled={false}
+            pitchEnabled={false}
+            rotateEnabled={false}
+            initialRegion={this.state.region}
+            userInterfaceStyle="light">
+            <Marker
+              title="This is a title"
+              description="This is a description"
+              coordinate={this.state.region}
+            />
+          </MapView>
+          <Text>{'\n'}Dark</Text>
+          <MapView
+            provider={this.props.provider}
+            style={styles.map}
+            scrollEnabled={false}
+            zoomEnabled={false}
+            pitchEnabled={false}
+            rotateEnabled={false}
+            initialRegion={this.state.region}
+            userInterfaceStyle="dark">
+            <Marker
+              title="This is a title"
+              description="This is a description"
+              coordinate={this.state.region}
+            />
+          </MapView>
         </ScrollView>
       </View>
     );
   }
 }
 
-StaticMap.propTypes = {
+ThemeMap.propTypes = {
   provider: ProviderPropType,
 };
 
@@ -99,12 +95,12 @@ const styles = StyleSheet.create({
   },
   scrollview: {
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 70,
   },
   map: {
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 200,
   },
 });
 
-export default StaticMap;
+export default ThemeMap;
