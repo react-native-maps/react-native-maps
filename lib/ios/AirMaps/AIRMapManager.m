@@ -90,6 +90,7 @@ RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(userInterfaceStyle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(followsUserLocation, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(userLocationCalloutEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsPointsOfInterest, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsCompass, BOOL)
@@ -882,6 +883,18 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 #pragma mark Annotation Stuff
 
+- (void)mapView:(AIRMap *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views
+{
+    if(!mapView.userLocationCalloutEnabled){
+        for(MKAnnotationView* view in views){
+            if ([view.annotation isKindOfClass:[MKUserLocation class]]){
+                [view setEnabled:NO];
+                [view setCanShowCallout:NO];
+                break;
+            }
+        }
+    }
+}
 
 
 - (void)mapView:(AIRMap *)mapView didSelectAnnotationView:(MKAnnotationView *)view

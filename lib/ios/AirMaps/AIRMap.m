@@ -385,6 +385,11 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     _followUserLocation = followsUserLocation;
 }
 
+- (void)setUserLocationCalloutEnabled:(BOOL)calloutEnabled
+{
+    _userLocationCalloutEnabled = calloutEnabled;
+}
+
 - (void)setHandlePanDrag:(BOOL)handleMapDrag {
     for (UIGestureRecognizer *recognizer in [self gestureRecognizers]) {
         if ([recognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
