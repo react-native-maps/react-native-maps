@@ -360,6 +360,21 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
 }
 
+- (void)setUserInterfaceStyle:(NSString*)userInterfaceStyle
+{
+    if (@available(iOS 13.0, *)) {
+        if([userInterfaceStyle isEqualToString:@"light"]) {
+            self.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+        } else if([userInterfaceStyle isEqualToString:@"dark"]) {
+            self.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+        } else {
+            self.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
+        }
+    } else {
+        NSLog(@"UserInterfaceStyle not supported below iOS 13");
+    }
+}
+
 - (void)setTintColor:(UIColor *)tintColor
 {
     super.tintColor = tintColor;
