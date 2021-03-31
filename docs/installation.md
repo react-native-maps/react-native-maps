@@ -60,8 +60,6 @@ Add the following to your Podfile above the `use_native_modules!` function and r
 # React Native Maps dependencies
 rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-google-maps', :path => rn_maps_path
-pod 'GoogleMaps'
-pod 'Google-Maps-iOS-Utils'
 ```
 
 That's it, you made it! 👍
