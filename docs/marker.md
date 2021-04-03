@@ -6,8 +6,8 @@
 |---|---|---|---|
 | `title` | `String` |  | The title of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
 | `description` | `String` |  | The description of the marker. This is only used if the <Marker /> component has no children that are a `<Callout />`, in which case the default callout behavior will be used, which will show both the `title` and the `description`, if provided.
-| `image` | `ImageSource` |  | A custom image to be used as the marker's icon. Only local image resources are allowed to be used.
-| `icon` | `ImageSource` |  | Marker icon to render (equivalent to `icon` property of GMSMarker Class).
+| `image` | `ImageSource`* |  | A custom image to be used as the marker's icon. Only local image resources are allowed to be used.
+| `icon` | `ImageSource`* |  | Marker icon to render (equivalent to `icon` property of GMSMarker Class). **Note:** Google maps only!
 | `pinColor` | `Color` |  | If no custom marker view or custom image is provided, the platform default pin will be used, which can be customized by this color. Ignored if a custom marker is being used.<br/><br/> For Android, the set of available colors is limited. Unsupported colors will fall back to red. See [#887](https://github.com/react-community/react-native-maps/issues/887) for more information.
 | `coordinate` | `LatLng` |  | The coordinate for the marker.
 | `centerOffset` | `Point` | (0, 0) | The offset (in points) at which to display the view.<br/><br/> By default, the center point of an annotation view is placed at the coordinate point of the associated annotation. You can use this property to reposition the annotation view as needed. This x and y offset values are measured in points. Positive offset values move the annotation view down and to the right, while negative values move it up and to the left.<br/><br/> For Google Maps, see the `anchor` prop.
@@ -24,6 +24,8 @@
 | `opacity` | `Float` | 1.0 | The marker's opacity between 0.0 and 1.0.
 | `isPreselected` | `Boolean` | false | When true, the marker will be pre-selected. Setting this to true allows the user to drag the marker without needing to tap on it once to focus on it. **Note**: iOS Apple Maps only.
 | `key` | `String` | | If no key or non-unique `key` is specified, the `<Marker />` will be reused, therefore there is an animation when the position is changed. If you want to disable the animation, add a `key` prop with a unique value like `key_${item.longitude}_${item.latitude}`. **Note**: iOS only.
+
+\* `ImageSource` [docs](https://reactnative.dev/docs/image#imagesource)
 
 ## Events
 
