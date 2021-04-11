@@ -20,37 +20,42 @@
     if (!self.tileCachePath) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
-        self.tileCachePath = [NSString stringWithFormat:@"%@/tileCache", documentsDirectory];
+        NSString *tileCacheBaseDirectory = [NSString stringWithFormat:@"%@/tileCache", documentsDirectory];
+        self.tileCachePath = [NSURL fileURLWithPath:tileCacheBaseDirectory isDirectory:YES];
         
-        if (![[NSFileManager defaultManager] fileExistsAtPath:self.tileCachePath])
-            [[NSFileManager defaultManager] createDirectoryAtPath:self.tileCachePath withIntermediateDirectories:NO attributes:nil error:&error];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[self.tileCachePath path]])
+            [[NSFileManager defaultManager] createDirectoryAtPath:[self.tileCachePath path] withIntermediateDirectories:NO attributes:nil error:&error];
         
     }
     
-    NSString* tileCacheFileDirectory = [NSString stringWithFormat:@"%@/%d/%d", self.tileCachePath, (int)path.z, (int)path.x];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:tileCacheFileDirectory])
-        [[NSFileManager defaultManager] createDirectoryAtPath:tileCacheFileDirectory withIntermediateDirectories:YES attributes:nil error:&error];
+    NSURL *tileCacheFileDirectory = [NSURL URLWithString:[NSString stringWithFormat:@"%d/%d/", (int)path.z, (int)path.x] relativeToURL:self.tileCachePath];
+    NSLog(@"Directory NSURL for tile: %@", [tileCacheFileDirectory path]);
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[tileCacheFileDirectory path]]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:[tileCacheFileDirectory path] withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error) NSLog(@"Error: %@", error);
+    }
 
-    NSString* tileCacheFilePath = [NSString stringWithFormat:@"%@/%d", tileCacheFileDirectory, (int)path.y];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:tileCacheFilePath]) {
+    NSURL *tileCacheFilePath = [NSURL URLWithString:[NSString stringWithFormat:@"%d", (int)path.y] relativeToURL:tileCacheFileDirectory];
+    NSLog(@"Final NSURL for tile: %@", [tileCacheFilePath path]);
+
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[tileCacheFilePath path]]) {
         NSLog(@"tile cache MISS for %d_%d_%d", (int)path.z, (int)path.x, (int)path.y);
         NSURLRequest *request = [NSURLRequest requestWithURL:[self URLForTilePath:path]];
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
             if (result) result(data, connectionError);
-            if (!connectionError) [[NSFileManager defaultManager] createFileAtPath:tileCacheFilePath contents:data attributes:nil];
+            if (!connectionError) [[NSFileManager defaultManager] createFileAtPath:[tileCacheFilePath path] contents:data attributes:nil];
         }];
     } else {
         NSLog(@"tile cache HIT for %d_%d_%d", (int)path.z, (int)path.x, (int)path.y);
 
         // If we use a tile, update its modified time so that our cache is purging only unused items.
         if (![[NSFileManager defaultManager] setAttributes:@{NSFileModificationDate:[NSDate date]}
-                           ofItemAtPath:tileCacheFilePath
+                           ofItemAtPath:[tileCacheFilePath path]
                                   error:&error]) {
             NSLog(@"Couldn't update modification date: %@", error);
         }
 
-        NSData* tile = [NSData dataWithContentsOfFile:tileCacheFilePath];
+        NSData* tile = [NSData dataWithContentsOfFile:[tileCacheFilePath path]];
         if (result) result(tile, nil);
     }
 }

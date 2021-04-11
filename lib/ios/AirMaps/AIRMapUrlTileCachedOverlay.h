@@ -9,6 +9,6 @@
 
 @interface AIRMapUrlTileCachedOverlay : MKTileOverlay
 
-@property (nonatomic, copy) NSString *tileCachePath;
+@property (nonatomic, copy) NSURL *tileCachePath;
 
 @end

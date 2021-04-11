@@ -78,7 +78,16 @@
     if (!_urlTemplateSet) return;
     if (_tileCachePathSet) {
       self.tileOverlay = [[AIRMapUrlTileCachedOverlay alloc] initWithURLTemplate:self.urlTemplate];
-      self.tileOverlay.tileCachePath = self.tileCachePath;
+      NSURL *urlPath = [NSURL URLWithString:self.tileCachePath];
+      NSLog(@"NSURL: %@", urlPath);
+      NSLog(@"Is NSURL File URL: %s", urlPath.fileURL ? "true" : "false");
+      if (urlPath.fileURL) {
+        self.tileOverlay.tileCachePath = urlPath;
+      } else {
+        NSURL *filePath = [NSURL fileURLWithPath:self.tileCachePath isDirectory:YES];
+        NSLog(@"Is it NOW NSURL File URL: %s", filePath.fileURL ? "true" : "false");
+        self.tileOverlay.tileCachePath = filePath;
+      }
     } else {
       self.tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
     }
