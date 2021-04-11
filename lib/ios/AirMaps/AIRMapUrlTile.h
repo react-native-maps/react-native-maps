@@ -15,12 +15,13 @@
 #import "AIRMapCoordinate.h"
 #import "AIRMap.h"
 #import "RCTConvert+AirMap.h"
+#import "AIRMapUrlTileCachedOverlay.h"
 
 @interface AIRMapUrlTile : MKAnnotationView <MKOverlay>
 
 @property (nonatomic, weak) AIRMap *map;
 
-@property (nonatomic, strong) MKTileOverlay *tileOverlay;
+@property (nonatomic, strong) AIRMapUrlTileCachedOverlay *tileOverlay;
 @property (nonatomic, strong) MKTileOverlayRenderer *renderer;
 @property (nonatomic, copy) NSString *urlTemplate;
 @property NSInteger maximumZ;
@@ -28,6 +29,7 @@
 @property BOOL flipY;
 @property BOOL shouldReplaceMapContent;
 @property CGFloat tileSize;
+@property (nonatomic, copy) NSString *tileCachePath;
 
 #pragma mark MKOverlay protocol
 
