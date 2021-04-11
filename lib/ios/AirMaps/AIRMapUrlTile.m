@@ -8,10 +8,12 @@
 
 #import "AIRMapUrlTile.h"
 #import <React/UIView+React.h>
+#import "AIRMapUrlTileCachedOverlay.h"
 
 @implementation AIRMapUrlTile {
     BOOL _urlTemplateSet;
     BOOL _tileSizeSet;
+    BOOL _tileCachePathSet;
 }
 
 - (void)setShouldReplaceMapContent:(BOOL)shouldReplaceMapContent
@@ -63,10 +65,23 @@
     [self update];
 }
 
+- (void)setTileCachePath:(NSString *)tileCachePath{
+    _tileCachePath = tileCachePath;
+    _tileCachePathSet = YES;
+    NSLog(@"tileCachePath %@", tileCachePath);
+    [self createTileOverlayAndRendererIfPossible];
+    [self update];
+}
+
 - (void) createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
-    self.tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
+    if (_tileCachePathSet) {
+      self.tileOverlay = [[AIRMapUrlTileCachedOverlay alloc] initWithURLTemplate:self.urlTemplate];
+      self.tileOverlay.tileCachePath = self.tileCachePath;
+    } else {
+      self.tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
+    }
 
     self.tileOverlay.canReplaceMapContent = self.shouldReplaceMapContent;
 
@@ -82,6 +97,7 @@
     if (_tileSizeSet) {
         self.tileOverlay.tileSize = CGSizeMake(self.tileSize, self.tileSize);
     }
+
     self.renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:self.tileOverlay];
 }
 
