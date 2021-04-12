@@ -48,7 +48,7 @@
     } else {
         NSLog(@"tile cache HIT for %d_%d_%d", (int)path.z, (int)path.x, (int)path.y);
 
-        // If we use a tile, update its modified time so that our cache is purging only unused items.
+        // If we use a tile, update its modified time so that we can do cache purging for unused tiles
         if (![[NSFileManager defaultManager] setAttributes:@{NSFileModificationDate:[NSDate date]}
                            ofItemAtPath:[tileCacheFilePath path]
                                   error:&error]) {
