@@ -60,4 +60,14 @@ public class AirMapUrlTileManager extends ViewGroupManager<AirMapUrlTile> {
     view.setFlipY(flipY);
   }
 
+  @ReactProp(name = "tileSize", defaultFloat = 256.0f)
+  public void setTileSize(AirMapUrlTile view, float tileSize) {
+    view.setTileSize(tileSize);
+  }
+
+   @ReactProp(name = "tileCachePath")
+  public void setTileCachePath(AirMapUrlTile view, String tileCachePath) {
+    view.setTileCachePath(tileCachePath);
+  }
+
 }
