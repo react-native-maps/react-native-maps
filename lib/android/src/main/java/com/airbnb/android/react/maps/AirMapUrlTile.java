@@ -41,12 +41,16 @@ public class AirMapUrlTile extends AirMapFeature {
     public Tile getTile(int x, int y, int zoom) {
       byte[] image = null;
       
-      image = readTileImage(x, y, zoom); 
+      if (this.tileCachePath != null) {
+        image = readTileImage(x, y, zoom); 
+      }
 
       if (image == null) {
         image = fetchTile(x, y, zoom);
-        boolean success = writeTileImage(image, x, y, zoom);
-        Log.d("xxxwriteTileImage: ", String.valueOf(success));
+        if (this.tileCachePath != null && image != null) {
+          boolean success = writeTileImage(image, x, y, zoom);
+          Log.d("xxxwriteTileImage: ", String.valueOf(success));
+        }
       }
 
       return image == null ? TileProvider.NO_TILE : new Tile(this.tileSize, this.tileSize, image);
@@ -130,6 +134,7 @@ public class AirMapUrlTile extends AirMapFeature {
 
       try {
         File file = new File(fileName);
+        file.getParentFile().mkdirs();
         out = new FileOutputStream(file);
         out.write(image);
 
