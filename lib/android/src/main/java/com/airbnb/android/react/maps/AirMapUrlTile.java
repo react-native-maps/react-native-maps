@@ -10,6 +10,8 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
+import java.lang.System;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,7 +83,6 @@ public class AirMapUrlTile extends AirMapFeature {
         if (in != null) try { in.close(); } catch (Exception ignored) {}
         if (buffer != null) try { buffer.close(); } catch (Exception ignored) {}
       }
-
     }
     
     private byte[] readTileImage(int x, int y, int zoom) {
@@ -105,6 +106,7 @@ public class AirMapUrlTile extends AirMapFeature {
           buffer.write(data, 0, nRead);
         }
         buffer.flush();
+        file.setLastModified(System.currentTimeMillis());
 
         return buffer.toByteArray();
       } catch (IOException e) {
@@ -258,7 +260,15 @@ public class AirMapUrlTile extends AirMapFeature {
   }
 
   public void setTileCachePath(String tileCachePath) {
-    this.tileCachePath = tileCachePath;
+    try {
+      URL url = new URL(tileCachePath);
+      this.tileCachePath = url.getPath();
+    } catch (MalformedURLException e) {
+      this.tileCachePath = tileCachePath;
+    } catch (Exception e) {
+      return;
+    }
+
     if (tileProvider != null) {
       tileProvider.setTileCachePath(tileCachePath);
     }
