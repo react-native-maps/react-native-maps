@@ -42,18 +42,27 @@ public class AirMapUrlTile extends AirMapFeature {
       byte[] image = null;
       
       if (this.tileCachePath != null) {
-        image = readTileImage(x, y, zoom); 
+        image = readTileImage(x, y, zoom);
+        if (image != null) {
+          Log.d("tileCachePath: tile cache HIT for ", Integer.toString(zoom) + 
+        "/" + Integer.toString(x) + "/" + Integer.toString(y));
+        } else {
+          Log.d("tileCachePath: tile cache MISS for ", Integer.toString(zoom) + 
+        "/" + Integer.toString(x) + "/" + Integer.toString(y));
+        }
       }
 
       if (image == null) {
         image = fetchTile(x, y, zoom);
         if (this.tileCachePath != null && image != null) {
           boolean success = writeTileImage(image, x, y, zoom);
-          Log.d("xxxwriteTileImage: ", String.valueOf(success));
+          if (!success) {
+            Log.d("tileCachePath: Saving to cache ", "failed");
+          }
         }
       }
 
-      return image == null ? TileProvider.NO_TILE : new Tile(this.tileSize, this.tileSize, image);
+      return image == null ? null : new Tile(this.tileSize, this.tileSize, image);
     }
 
     private byte[] fetchTile(int x, int y, int zoom) {
@@ -61,8 +70,8 @@ public class AirMapUrlTile extends AirMapFeature {
       ByteArrayOutputStream buffer = null;
       InputStream in = null;
 
-      Log.d("xxxfetchTile: ", '/' + Integer.toString(zoom) + 
-        "/" + Integer.toString(x) + "/" + Integer.toString(y));
+      //Log.d("tileCachePath: fetchTile: ", '/' + Integer.toString(zoom) + 
+      //  "/" + Integer.toString(x) + "/" + Integer.toString(y));
 
       try {
         in = url.openStream();
@@ -156,7 +165,7 @@ public class AirMapUrlTile extends AirMapFeature {
       }
       String s = this.tileCachePath + '/' + Integer.toString(zoom) + 
         "/" + Integer.toString(x) + "/" + Integer.toString(y);
-      Log.d("xxxgetTileFilename: ", s);
+      //Log.d("tileCachePath: getTileFilename: ", s);
       return s;
     }
     
@@ -197,6 +206,7 @@ public class AirMapUrlTile extends AirMapFeature {
 
     public void setTileCachePath(String tileCachePath) {
       this.tileCachePath = tileCachePath;
+      Log.d("tileCachePath: tile cache directory set ", tileCachePath);
     }
   }
 
@@ -266,6 +276,7 @@ public class AirMapUrlTile extends AirMapFeature {
 
   public void setTileCachePath(String tileCachePath) {
     try {
+      Log.d("tileCachePath: tile cache directory property ", tileCachePath);
       URL url = new URL(tileCachePath);
       this.tileCachePath = url.getPath();
     } catch (MalformedURLException e) {
@@ -280,7 +291,7 @@ public class AirMapUrlTile extends AirMapFeature {
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
     }
-    Log.d("xxxsetTileCachePath: ", tileCachePath);
+    Log.d("tileCachePath: setTileCachePath as ", tileCachePath);
   }
 
   public TileOverlayOptions getTileOverlayOptions() {

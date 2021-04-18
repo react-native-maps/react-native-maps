@@ -22,6 +22,7 @@
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString *tileCacheBaseDirectory = [NSString stringWithFormat:@"%@/tileCache", documentsDirectory];
         self.tileCachePath = [NSURL fileURLWithPath:tileCacheBaseDirectory isDirectory:YES];
+        NSLog(@"Directory for cached tiles: %@", [self.tileCachePath path]);
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:[self.tileCachePath path]])
             [[NSFileManager defaultManager] createDirectoryAtPath:[self.tileCachePath path] withIntermediateDirectories:NO attributes:nil error:&error];
@@ -29,14 +30,14 @@
     }
     
     NSURL *tileCacheFileDirectory = [NSURL URLWithString:[NSString stringWithFormat:@"%d/%d/", (int)path.z, (int)path.x] relativeToURL:self.tileCachePath];
-    NSLog(@"Directory NSURL for tile: %@", [tileCacheFileDirectory path]);
+    //NSLog(@"Directory NSURL for tile: %@", [tileCacheFileDirectory path]);
     if (![[NSFileManager defaultManager] fileExistsAtPath:[tileCacheFileDirectory path]]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[tileCacheFileDirectory path] withIntermediateDirectories:YES attributes:nil error:&error];
         if (error) NSLog(@"Error: %@", error);
     }
 
     NSURL *tileCacheFilePath = [NSURL URLWithString:[NSString stringWithFormat:@"%d", (int)path.y] relativeToURL:tileCacheFileDirectory];
-    NSLog(@"Final NSURL for tile: %@", [tileCacheFilePath path]);
+    //NSLog(@"Final NSURL for tile: %@", [tileCacheFilePath path]);
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:[tileCacheFilePath path]]) {
         NSLog(@"tile cache MISS for %d_%d_%d", (int)path.z, (int)path.x, (int)path.y);

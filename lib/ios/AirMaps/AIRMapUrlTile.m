@@ -86,6 +86,7 @@
       } else {
         NSURL *filePath = [NSURL fileURLWithPath:self.tileCachePath isDirectory:YES];
         NSLog(@"Is it NOW NSURL File URL: %s", filePath.fileURL ? "true" : "false");
+        NSLog(@"URL object: %@", filePath);
         self.tileOverlay.tileCachePath = filePath;
       }
     } else {

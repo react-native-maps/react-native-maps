@@ -51,6 +51,7 @@ import IndoorMap from './examples/IndoorMap';
 import CameraControl from './examples/CameraControl';
 import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
 import GeojsonMap from './examples/Geojson';
+import CacheURLTiles from './examples/CacheURLTiles';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -180,6 +181,7 @@ export default class App extends React.Component<Props> {
         [CameraControl, 'CameraControl', true],
         [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
         [GeojsonMap, 'Geojson', true],
+        [CacheURLTiles, 'CacheURLTiles', true ]
       ]
         // Filter out examples that are not yet supported for Google Maps on iOS.
         .filter(
