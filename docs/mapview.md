@@ -37,6 +37,7 @@
 | `maxZoomLevel` | `Number` | `20` | Maximum zoom value for the map, must be between 0 and 20
 | `rotateEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/rotate the map.
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
+| `scrollDuringRotateOrZoomEnabled` | `Boolean` | `true` | If `false` the map will stay centered while rotating or zooming. **Note:** Google Maps only
 | `pitchEnabled` | `Boolean` | `true` | If `false` the user won't be able to adjust the camera’s pitch angle.
 | `toolbarEnabled` | `Boolean` | `true` | `Android only` If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
 | `cacheEnabled` | `Boolean` | `false` | If `true` map will be cached and displayed as an image instead of being interactable, for performance usage. **Note:** Apple Maps only

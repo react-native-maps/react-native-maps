@@ -438,6 +438,14 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.zoomGestures;
 }
 
+- (void)setScrollDuringRotateOrZoomEnabled:(BOOL)enableScrollGesturesDuringRotateOrZoom {
+  self.settings.allowScrollGesturesDuringRotateOrZoom = enableScrollGesturesDuringRotateOrZoom;
+}
+
+- (BOOL)scrollDuringRotateOrZoomEnabled {
+  return self.settings.allowScrollGesturesDuringRotateOrZoom;
+}
+
 - (void)setZoomTapEnabled:(BOOL)zoomTapEnabled {
     _zoomTapEnabled = zoomTapEnabled;
 }
