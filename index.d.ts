@@ -225,6 +225,7 @@ declare module 'react-native-maps' {
     zoomTapEnabled?: boolean;
     zoomControlEnabled?: boolean;
     rotateEnabled?: boolean;
+    scrollDuringRotateOrZoomEnabled?: boolean;
     cacheEnabled?: boolean;
     loadingEnabled?: boolean;
     loadingBackgroundColor?: string;
