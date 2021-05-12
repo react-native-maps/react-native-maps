@@ -10,5 +10,6 @@
 @interface AIRMapUrlTileCachedOverlay : MKTileOverlay
 
 @property (nonatomic, copy) NSURL *tileCachePath;
+@property NSInteger tileCacheMaxAge;
 
 @end

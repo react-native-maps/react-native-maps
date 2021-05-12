@@ -30,6 +30,7 @@
 @property BOOL shouldReplaceMapContent;
 @property CGFloat tileSize;
 @property (nonatomic, copy) NSString *tileCachePath;
+@property NSInteger tileCacheMaxAge;
 
 #pragma mark MKOverlay protocol
 

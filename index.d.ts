@@ -493,6 +493,7 @@ declare module 'react-native-maps' {
     shouldReplaceMapContent?: boolean;
     flipY?: boolean;
     tileCachePath?: string; 
+    tileCacheMaxAge?: number;
   }
 
   export class UrlTile extends React.Component<MapUrlTileProps, any> {}

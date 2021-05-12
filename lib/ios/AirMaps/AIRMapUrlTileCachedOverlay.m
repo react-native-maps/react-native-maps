@@ -48,16 +48,42 @@
         }];
     } else {
         NSLog(@"tile cache HIT for %d_%d_%d", (int)path.z, (int)path.x, (int)path.y);
+        NSLog(@"tile cache HIT, with max age set at %d", self.tileCacheMaxAge);
 
-        // If we use a tile, update its modified time so that we can do cache purging for unused tiles
-        if (![[NSFileManager defaultManager] setAttributes:@{NSFileModificationDate:[NSDate date]}
-                           ofItemAtPath:[tileCacheFilePath path]
-                                  error:&error]) {
-            NSLog(@"Couldn't update modification date: %@", error);
+        // If no cache expiry control set, then when we use a tile, update its modified time so that we can do cache purging for unused tiles
+        if (!self.tileCacheMaxAge) {
+            if (![[NSFileManager defaultManager] setAttributes:@{NSFileModificationDate:[NSDate date]}
+                            ofItemAtPath:[tileCacheFilePath path]
+                                    error:&error]) {
+                NSLog(@"Couldn't update modification date: %@", error);
+            }
         }
 
-        NSData* tile = [NSData dataWithContentsOfFile:[tileCacheFilePath path]];
+        NSData *tile = [NSData dataWithContentsOfFile:[tileCacheFilePath path]];
         if (result) result(tile, nil);
+
+        NSDictionary<NSFileAttributeKey, id> *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[tileCacheFilePath path] error:&error]; 
+        if (!fileAttributes) {
+            NSLog(@"Couldn't get file attributes for tile file: %@", error);
+        } else {
+            NSDate *modificationDate = fileAttributes[@"NSFileModificationDate"];
+            if (modificationDate) {
+                NSLog(@"File age %d", -1 * (int)modificationDate.timeIntervalSinceNow);
+                if (-1 * (int)modificationDate.timeIntervalSinceNow > self.tileCacheMaxAge) {
+                    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^ {
+                        // This code runs asynchronously!
+                        //NSLog(@"Grand central dispatch %f", modificationDate.timeIntervalSinceNow);
+                        NSURLRequest *request = [NSURLRequest requestWithURL:[self URLForTilePath:path]];
+                        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                            if (!connectionError) {
+                                [[NSFileManager defaultManager] createFileAtPath:[tileCacheFilePath path] contents:data attributes:nil];
+                                NSLog(@"File refreshed at %@", [tileCacheFilePath path]);
+                            }
+                        }];
+                    });
+                }
+            }
+        }
     }
 }
 

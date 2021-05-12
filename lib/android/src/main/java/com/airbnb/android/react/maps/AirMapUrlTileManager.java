@@ -70,4 +70,8 @@ public class AirMapUrlTileManager extends ViewGroupManager<AirMapUrlTile> {
     view.setTileCachePath(tileCachePath);
   }
 
+  @ReactProp(name = "tileCacheMaxAge", defaultFloat = 0.0f)
+  public void setTileCacheMaxAge(AirMapUrlTile view, float tileCacheMaxAge) {
+    view.setTileCacheMaxAge(tileCacheMaxAge);
+  }
 }

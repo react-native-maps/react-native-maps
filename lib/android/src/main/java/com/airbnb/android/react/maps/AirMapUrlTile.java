@@ -4,6 +4,16 @@ import android.content.Context;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+import androidx.work.Data;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -24,17 +34,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AirMapUrlTile extends AirMapFeature {
-
   class AIRMapUrlTileProvider implements TileProvider {
     private static final int BUFFER_SIZE = 16 * 1024;
     private String urlTemplate;
     private int tileSize;
     private String tileCachePath;
+    private int tileCacheMaxAge;
+    private Context context;
 
-    public AIRMapUrlTileProvider(int tileSizet, String urlTemplate, String tileCachePath) {
+    public AIRMapUrlTileProvider(int tileSizet, String urlTemplate, String tileCachePath, int tileCacheMaxAge, Context context) {
       this.tileSize = tileSizet;
       this.urlTemplate = urlTemplate;
       this.tileCachePath = tileCachePath;
+      this.tileCacheMaxAge = tileCacheMaxAge;
+      this.context = context;
     }
 
     @Override
@@ -46,6 +59,7 @@ public class AirMapUrlTile extends AirMapFeature {
         if (image != null) {
           Log.d("tileCachePath: tile cache HIT for ", Integer.toString(zoom) + 
         "/" + Integer.toString(x) + "/" + Integer.toString(y));
+          checkForRefresh(x, y, zoom);
         } else {
           Log.d("tileCachePath: tile cache MISS for ", Integer.toString(zoom) + 
         "/" + Integer.toString(x) + "/" + Integer.toString(y));
@@ -63,6 +77,35 @@ public class AirMapUrlTile extends AirMapFeature {
       }
 
       return image == null ? null : new Tile(this.tileSize, this.tileSize, image);
+    }
+
+    void checkForRefresh(int x, int y, int zoom) {
+      String fileName =  getTileFilename(x, y, zoom);
+      File file = new File(fileName);
+      long lastModified = file.lastModified();
+      long now = System.currentTimeMillis();
+
+      if ((now - lastModified) / 1000 > this.tileCacheMaxAge) {
+        Constraints constraints = new Constraints.Builder()
+          .setRequiredNetworkType(NetworkType.CONNECTED)
+          .build();
+        WorkRequest tileRefreshWorkRequest = new OneTimeWorkRequest.Builder(AirMapUrlTileWorker.class)
+          .setConstraints(constraints)
+          .setInputData(
+            new Data.Builder()
+              .putString("url", getTileUrl(x, y, zoom).toString())
+              .putString("filename", fileName)
+              .build()
+            )
+          .build();
+          if (tileRefreshWorkRequest != null) {
+            WorkManager.getInstance(this.context.getApplicationContext()).enqueue(tileRefreshWorkRequest);
+          } else {
+            Log.d("tileCachePath: ", "WorkRequest null");
+          }
+      } else {
+        Log.d("tileCachePath: ", "Tile checked, no need to refresh");
+      }
     }
 
     private byte[] fetchTile(int x, int y, int zoom) {
@@ -119,7 +162,10 @@ public class AirMapUrlTile extends AirMapFeature {
           buffer.write(data, 0, nRead);
         }
         buffer.flush();
-        file.setLastModified(System.currentTimeMillis());
+
+        if (this.tileCacheMaxAge == 0) {
+          file.setLastModified(System.currentTimeMillis());
+        }
 
         return buffer.toByteArray();
       } catch (IOException e) {
@@ -208,6 +254,11 @@ public class AirMapUrlTile extends AirMapFeature {
       this.tileCachePath = tileCachePath;
       Log.d("tileCachePath: tile cache directory set ", tileCachePath);
     }
+
+    public void setTileCacheMaxAge(int tileCacheMaxAge) {
+      this.tileCacheMaxAge = tileCacheMaxAge;
+      Log.d("tileCachePath: tile cache max age set ", Integer.toString(tileCacheMaxAge));
+    }
   }
 
   private TileOverlayOptions tileOverlayOptions;
@@ -221,9 +272,12 @@ public class AirMapUrlTile extends AirMapFeature {
   private boolean flipY;
   private float tileSize = 256;
   private String tileCachePath;
+  private float tileCacheMaxAge;
+  private Context context;
 
   public AirMapUrlTile(Context context) {
     super(context);
+    this.context = context;
   }
 
   public void setUrlTemplate(String urlTemplate) {
@@ -294,6 +348,17 @@ public class AirMapUrlTile extends AirMapFeature {
     Log.d("tileCachePath: setTileCachePath as ", tileCachePath);
   }
 
+  public void setTileCacheMaxAge(float tileCacheMaxAge) {
+    Log.d("tileCachePath: tile cache max age property ", Float.toString(tileCacheMaxAge));
+    this.tileCacheMaxAge = tileCacheMaxAge;
+    if (tileProvider != null) {
+      tileProvider.setTileCacheMaxAge((int)tileCacheMaxAge);
+    }
+    if (tileOverlay != null) {
+      tileOverlay.clearTileCache();
+    }
+  }
+
   public TileOverlayOptions getTileOverlayOptions() {
     if (tileOverlayOptions == null) {
       tileOverlayOptions = createTileOverlayOptions();
@@ -304,7 +369,7 @@ public class AirMapUrlTile extends AirMapFeature {
   private TileOverlayOptions createTileOverlayOptions() {
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
-    this.tileProvider = new AIRMapUrlTileProvider((int)this.tileSize, this.urlTemplate, this.tileCachePath);
+    this.tileProvider = new AIRMapUrlTileProvider((int)this.tileSize, this.urlTemplate, this.tileCachePath, (int)this.tileCacheMaxAge, this.context);
     options.tileProvider(this.tileProvider);
     return options;
   }

@@ -14,6 +14,7 @@
     BOOL _urlTemplateSet;
     BOOL _tileSizeSet;
     BOOL _tileCachePathSet;
+    BOOL _tileCacheMaxAgeSet;
 }
 
 - (void)setShouldReplaceMapContent:(BOOL)shouldReplaceMapContent
@@ -59,6 +60,7 @@
 }
 
 - (void)setTileSize:(CGFloat)tileSize{
+    NSLog(@"Setting tile size at %d", (int)tileSize);
     _tileSize = tileSize;
     _tileSizeSet = YES;
     [self createTileOverlayAndRendererIfPossible];
@@ -69,6 +71,14 @@
     _tileCachePath = tileCachePath;
     _tileCachePathSet = YES;
     NSLog(@"tileCachePath %@", tileCachePath);
+    [self createTileOverlayAndRendererIfPossible];
+    [self update];
+}
+
+- (void)setTileCacheMaxAge:(NSUInteger)tileCacheMaxAge{
+    NSLog(@"Setting tile cache max age at %d", tileCacheMaxAge);
+    _tileCacheMaxAge = tileCacheMaxAge;
+    _tileCacheMaxAgeSet = YES;
     [self createTileOverlayAndRendererIfPossible];
     [self update];
 }
@@ -88,6 +98,11 @@
         NSLog(@"Is it NOW NSURL File URL: %s", filePath.fileURL ? "true" : "false");
         NSLog(@"URL object: %@", filePath);
         self.tileOverlay.tileCachePath = filePath;
+      }
+
+      if (_tileCacheMaxAgeSet) {
+        NSLog(@"Setting again tile cache max age at %d", (int)self.tileCacheMaxAge);
+        self.tileOverlay.tileCacheMaxAge = self.tileCacheMaxAge;
       }
     } else {
       self.tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:self.urlTemplate];
