@@ -50,7 +50,7 @@ class CustomTiles extends React.Component {
           <UrlTile
             urlTemplate="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
             zIndex={-1}
-						// Empty tileCachePath = defaults to Documents-directory on iOS, 
+						// Empty tileCachePath = defaults to Documents-directory on iOS,
 						// on Android empty string does not activate tileCachePath at all
 						tileCachePath={''}
 						//tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/tiles/"
