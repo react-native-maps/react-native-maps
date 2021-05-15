@@ -68,6 +68,7 @@
 }
 
 - (void)setTileCachePath:(NSString *)tileCachePath{
+    if (!tileCachePath) return;
     _tileCachePath = tileCachePath;
     _tileCachePathSet = YES;
     NSLog(@"tileCachePath %@", tileCachePath);

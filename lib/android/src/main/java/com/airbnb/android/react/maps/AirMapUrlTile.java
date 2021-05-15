@@ -329,6 +329,8 @@ public class AirMapUrlTile extends AirMapFeature {
   }
 
   public void setTileCachePath(String tileCachePath) {
+    if (!tileCachePath) return;
+    
     try {
       Log.d("tileCachePath: tile cache directory property ", tileCachePath);
       URL url = new URL(tileCachePath);
