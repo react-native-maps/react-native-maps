@@ -329,7 +329,7 @@ public class AirMapUrlTile extends AirMapFeature {
   }
 
   public void setTileCachePath(String tileCachePath) {
-    if (!tileCachePath) return;
+    if (tileCachePath == null || tileCachePath.isEmpty()) return;
     
     try {
       Log.d("tileCachePath: tile cache directory property ", tileCachePath);
