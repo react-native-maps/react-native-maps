@@ -479,7 +479,9 @@ declare module 'react-native-maps' {
     lineDashPattern?: number[];
   }
 
-  export class Circle extends React.Component<MapCircleProps, any> {}
+  export class Circle extends React.Component<MapCircleProps, any> {
+    setNativeProps: (props: any) => void;
+  }
 
   // =======================================================================
   //  UrlTile & LocalTile
