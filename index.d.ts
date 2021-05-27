@@ -46,12 +46,24 @@ declare module 'react-native-maps' {
     y: number;
   }
 
+  export type EventActionType =
+    | 'marker-press'
+    | 'polygon-press'
+    | 'polyline-press'
+    | 'callout-press'
+    | 'press'
+    | 'long-press'
+    | 'overlay-press'
+    | undefined;
+
   // helper interface
   export interface MapEvent<T = {}>
     extends NativeSyntheticEvent<
       T & {
         coordinate: LatLng;
         position: Point;
+        action: EventActionType;
+        id?: string;
       }
     > {}
 
