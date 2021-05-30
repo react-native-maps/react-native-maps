@@ -38,17 +38,26 @@ The app's `Info.plist` file must contain a `NSLocationWhenInUseUsageDescription`
 
 ### Enabling Google Maps
 
-If you want to enable Google Maps on iOS, obtain the Google API key and edit your `AppDelegate.m` as follows:
+If you want to enable Google Maps on iOS, obtain the Google API key and create a
+file named `ApiKeys.h` in the main app folder (the folder containing the
+`AppDelegate.m` file) :
+
+```
+NSString *MAPS_API_KEY = @"_YOUR_API_KEY_";
+```
+
+Then, edit your `AppDelegate.m` as follows:
 
 ```diff
 + #import <GoogleMaps/GoogleMaps.h>
++ #import "ApiKeys.h"
 
 @implementation AppDelegate
 ...
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-+  [GMSServices provideAPIKey:@"_YOUR_API_KEY_"]; // add this line using the api key obtained from Google Console
++  [GMSServices provideAPIKey:MAPS_API_KEY]; // add this line using the api key obtained from Google Console
 ...
 ```
 
@@ -63,6 +72,16 @@ pod 'react-native-google-maps', :path => rn_maps_path
 ```
 
 That's it, you made it! 👍
+
+#### Sharing your code
+
+It is not recommended to share your Google API key if you want to share your
+source code. Then, add the following to your `.gitignore` file :
+
+```
+# Google API Keys
+ApiKeys.h
+```
 
 ---
 
@@ -130,18 +149,37 @@ dependencies {
 
 2. **Specify your Google Maps API key:**
 
-Add your API key to your manifest file (`android/app/src/main/AndroidManifest.xml`):
+Create a file named `api_keys.xml` in the `android/app/src/main/res/values` folder
+with the following content:
+
+```xml
+<resources>
+    <string name="maps_api_key" translatable="false">_YOUR_API_KEY_</string>
+</resources>
+```
+
+Then edit the (`android/app/src/main/AndroidManifest.xml`) file like below:
 
 ```xml
 <application>
    <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
    <meta-data
      android:name="com.google.android.geo.API_KEY"
-     android:value="Your Google maps API Key Here"/>
+     android:value="@string/maps_api_key"/>
 
    <!-- You will also only need to add this uses-library tag -->
    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 </application>
+```
+
+3. **Add your Google MAPS API key to gitignore:**
+
+Edit your `.gitignore` file the following way in order not to share the Google
+Maps API key:
+
+```
+# Google API Keys
+api_keys.xml
 ```
 
 > Note: As shown above, `com.google.android.geo.API_KEY` is the
