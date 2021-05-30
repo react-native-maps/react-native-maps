@@ -33,7 +33,6 @@ public class AirMapUrlTileWorker extends Worker {
 		byte[] image = null;
 		URL url = null;
 
-		Log.d("tileCachePath: ", "Worker");
 		try {
       url = new URL(getInputData().getString("url"));
     } catch (MalformedURLException e) {
@@ -41,17 +40,14 @@ public class AirMapUrlTileWorker extends Worker {
     }
 		
 		String fileName = getInputData().getString("filename");
-		Log.d("tileCachePath: ", url.toString());      
 
 		image = fetchTile(url);
 		if (image != null) {
 			boolean success = writeTileImage(image, fileName);
 			if (!success) {
-				Log.d("tileCachePath:", "Worker saving to cache failed");
 				return Result.failure();
 			}
     } else {
-			Log.d("tileCachePath: ", "Worker fetching tile failed");
 			return Result.retry();
 		}
 
@@ -62,9 +58,6 @@ public class AirMapUrlTileWorker extends Worker {
 	private byte[] fetchTile(URL url) {
       ByteArrayOutputStream buffer = null;
       InputStream in = null;
-
-      //Log.d("tileCachePath: fetchTile: ", '/' + Integer.toString(zoom) + 
-      //  "/" + Integer.toString(x) + "/" + Integer.toString(y));
 
       try {
         in = url.openStream();

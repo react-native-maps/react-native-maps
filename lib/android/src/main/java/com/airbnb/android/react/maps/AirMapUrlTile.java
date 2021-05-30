@@ -57,12 +57,7 @@ public class AirMapUrlTile extends AirMapFeature {
       if (this.tileCachePath != null) {
         image = readTileImage(x, y, zoom);
         if (image != null) {
-          Log.d("tileCachePath: tile cache HIT for ", Integer.toString(zoom) + 
-        "/" + Integer.toString(x) + "/" + Integer.toString(y));
           checkForRefresh(x, y, zoom);
-        } else {
-          Log.d("tileCachePath: tile cache MISS for ", Integer.toString(zoom) + 
-        "/" + Integer.toString(x) + "/" + Integer.toString(y));
         }
       }
 
@@ -70,9 +65,6 @@ public class AirMapUrlTile extends AirMapFeature {
         image = fetchTile(x, y, zoom);
         if (this.tileCachePath != null && image != null) {
           boolean success = writeTileImage(image, x, y, zoom);
-          if (!success) {
-            Log.d("tileCachePath: Saving to cache ", "failed");
-          }
         }
       }
 
@@ -98,23 +90,16 @@ public class AirMapUrlTile extends AirMapFeature {
               .build()
             )
           .build();
-          if (tileRefreshWorkRequest != null) {
-            WorkManager.getInstance(this.context.getApplicationContext()).enqueue(tileRefreshWorkRequest);
-          } else {
-            Log.d("tileCachePath: ", "WorkRequest null");
-          }
-      } else {
-        Log.d("tileCachePath: ", "Tile checked, no need to refresh");
-      }
+        if (tileRefreshWorkRequest != null) {
+          WorkManager.getInstance(this.context.getApplicationContext()).enqueue(tileRefreshWorkRequest);
+        } 
+      } 
     }
 
     private byte[] fetchTile(int x, int y, int zoom) {
       URL url = getTileUrl(x, y, zoom);
       ByteArrayOutputStream buffer = null;
       InputStream in = null;
-
-      //Log.d("tileCachePath: fetchTile: ", '/' + Integer.toString(zoom) + 
-      //  "/" + Integer.toString(x) + "/" + Integer.toString(y));
 
       try {
         in = url.openStream();
@@ -211,7 +196,6 @@ public class AirMapUrlTile extends AirMapFeature {
       }
       String s = this.tileCachePath + '/' + Integer.toString(zoom) + 
         "/" + Integer.toString(x) + "/" + Integer.toString(y);
-      //Log.d("tileCachePath: getTileFilename: ", s);
       return s;
     }
     
@@ -252,12 +236,10 @@ public class AirMapUrlTile extends AirMapFeature {
 
     public void setTileCachePath(String tileCachePath) {
       this.tileCachePath = tileCachePath;
-      Log.d("tileCachePath: tile cache directory set ", tileCachePath);
     }
 
     public void setTileCacheMaxAge(int tileCacheMaxAge) {
       this.tileCacheMaxAge = tileCacheMaxAge;
-      Log.d("tileCachePath: tile cache max age set ", Integer.toString(tileCacheMaxAge));
     }
   }
 
@@ -332,7 +314,6 @@ public class AirMapUrlTile extends AirMapFeature {
     if (tileCachePath == null || tileCachePath.isEmpty()) return;
     
     try {
-      Log.d("tileCachePath: tile cache directory property ", tileCachePath);
       URL url = new URL(tileCachePath);
       this.tileCachePath = url.getPath();
     } catch (MalformedURLException e) {
@@ -347,11 +328,9 @@ public class AirMapUrlTile extends AirMapFeature {
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
     }
-    Log.d("tileCachePath: setTileCachePath as ", tileCachePath);
   }
 
   public void setTileCacheMaxAge(float tileCacheMaxAge) {
-    Log.d("tileCachePath: tile cache max age property ", Float.toString(tileCacheMaxAge));
     this.tileCacheMaxAge = tileCacheMaxAge;
     if (tileProvider != null) {
       tileProvider.setTileCacheMaxAge((int)tileCacheMaxAge);

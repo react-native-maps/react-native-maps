@@ -60,7 +60,6 @@
 }
 
 - (void)setTileSize:(CGFloat)tileSize{
-    NSLog(@"Setting tile size at %d", (int)tileSize);
     _tileSize = tileSize;
     _tileSizeSet = YES;
     [self createTileOverlayAndRendererIfPossible];
@@ -71,13 +70,11 @@
     if (!tileCachePath) return;
     _tileCachePath = tileCachePath;
     _tileCachePathSet = YES;
-    NSLog(@"tileCachePath %@", tileCachePath);
     [self createTileOverlayAndRendererIfPossible];
     [self update];
 }
 
 - (void)setTileCacheMaxAge:(NSUInteger)tileCacheMaxAge{
-    NSLog(@"Setting tile cache max age at %d", tileCacheMaxAge);
     _tileCacheMaxAge = tileCacheMaxAge;
     _tileCacheMaxAgeSet = YES;
     [self createTileOverlayAndRendererIfPossible];
@@ -90,19 +87,14 @@
     if (_tileCachePathSet) {
       self.tileOverlay = [[AIRMapUrlTileCachedOverlay alloc] initWithURLTemplate:self.urlTemplate];
       NSURL *urlPath = [NSURL URLWithString:self.tileCachePath];
-      NSLog(@"NSURL: %@", urlPath);
-      NSLog(@"Is NSURL File URL: %s", urlPath.fileURL ? "true" : "false");
       if (urlPath.fileURL) {
         self.tileOverlay.tileCachePath = urlPath;
       } else {
         NSURL *filePath = [NSURL fileURLWithPath:self.tileCachePath isDirectory:YES];
-        NSLog(@"Is it NOW NSURL File URL: %s", filePath.fileURL ? "true" : "false");
-        NSLog(@"URL object: %@", filePath);
         self.tileOverlay.tileCachePath = filePath;
       }
 
       if (_tileCacheMaxAgeSet) {
-        NSLog(@"Setting again tile cache max age at %d", (int)self.tileCacheMaxAge);
         self.tileOverlay.tileCacheMaxAge = self.tileCacheMaxAge;
       }
     } else {
