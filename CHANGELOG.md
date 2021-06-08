@@ -1,5 +1,25 @@
 # Change Log
-## 0.28.0
+
+## 0.29.0 - (June 8, 2021)
+
+* Common: [#3779](https://github.com/react-native-maps/react-native-maps/pull/3779) Polyline tappable feature on GeoJson
+* Common: [#3784](https://github.com/react-native-maps/react-native-maps/pull/3784) Implemented scrollDuringRotateOrZoom control for Google Maps
+* Common: [#3739](https://github.com/react-native-maps/react-native-maps/pull/3739) Use Default Geocoder to convert Coordinates by getting address
+* Common: [#3728](https://github.com/react-native-maps/react-native-maps/pull/3728) Add `onPress` for GeoJSON
+* Common: [#3737](https://github.com/react-native-maps/react-native-maps/pull/3737) Added support for overlay rotations in Google Maps API 
+* iOS: [#3754](https://github.com/react-native-maps/react-native-maps/pull/3754) Fix indoor events on iOS for multiple MapViews
+* iOS: [#3762](https://github.com/react-native-maps/react-native-maps/pull/3762) Add support for disabling userLocation callout
+* iOS: [#3746](https://github.com/react-native-maps/react-native-maps/pull/3746) Fix in WMSTile: typings & component removal on iOS
+* iOS: [#3764](https://github.com/react-native-maps/react-native-maps/pull/3764) Provide a way to override mapkit style 
+* Android: [#3726](https://github.com/react-native-maps/react-native-maps/pull/3726) Use double on `setCamera` to fix zoom precision.
+* Android: [#3308](https://github.com/react-native-maps/react-native-maps/pull/3308) Fix fitToCoordinates with preset mapPadding
+* Android: [#3797](https://github.com/react-native-maps/react-native-maps/pull/3797) Allow a previously dashed line to be made solid
+* Docs: [#3768](https://github.com/react-native-maps/react-native-maps/pull/3768) Clean up old installation instructions
+* Docs: [#3771](https://github.com/react-native-maps/react-native-maps/pull/3771) Better docs for custom markers
+* Docs: [#3716](https://github.com/react-native-maps/react-native-maps/pull/3716) Update Mapview docs
+* Docs: [#3793](https://github.com/react-native-maps/react-native-maps/pull/3793) Update Polygon docs
+
+## 0.28.0 (April 20, 2021)
 
 * Common: [#3705](https://github.com/react-native-maps/react-native-maps/pull/3705) Update example project
 * Common: [#3424](https://github.com/react-native-maps/react-native-maps/pull/3424) Bugfix for the "require cycles" warning
