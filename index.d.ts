@@ -265,6 +265,7 @@ declare module 'react-native-maps' {
     compassOffset?: { x: number; y: number };
     tintColor?: string;
 
+    onMapLoaded?: () => void;
     onMapReady?: () => void;
     onKmlReady?: (values: KmlMapEvent) => void;
     onRegionChange?: (region: Region, details?: { isGesture: boolean }) => void;
