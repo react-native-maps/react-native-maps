@@ -22,8 +22,8 @@ declare module 'react-native-maps' {
   }
 
   export interface Region {
-    latitude: number;
-    longitude: number;
+    latitude: number | string;
+    longitude: number | string;
     latitudeDelta: number;
     longitudeDelta: number;
   }
