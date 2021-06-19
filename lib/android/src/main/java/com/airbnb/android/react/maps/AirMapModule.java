@@ -214,6 +214,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
                   geocoder.getFromLocation(coordinate.getDouble("latitude"),coordinate.getDouble("longitude"),1);
           if (list.isEmpty()) {
             promise.reject("Can not get address location");
+            return;
           }
           Address address = list.get(0);
 
