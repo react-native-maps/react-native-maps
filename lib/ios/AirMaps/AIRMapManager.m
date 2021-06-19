@@ -599,6 +599,8 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                             @"countryCode" : [NSString stringWithFormat:@"%@", placemark.ISOcountryCode],
                             @"country" : [NSString stringWithFormat:@"%@", placemark.country],
                         });
+                    } else {
+                        reject(@"Invalid argument", [NSString stringWithFormat:@"Can not get address location"], NULL);
                     }
             }];
         }
