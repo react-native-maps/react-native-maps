@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.29.2 - (July 5, 2021)
+
+* Android: **Revert** [#3797](https://github.com/react-native-maps/react-native-maps/pull/3797) Allow a previously dashed line to be made solid
+
 ## 0.29.1 - (July 5, 2021)
 
 * Common: [#3855](https://github.com/react-native-maps/react-native-maps/pull/3855) Fix crashes related to getAddressFromCoordinates for android and iOS
