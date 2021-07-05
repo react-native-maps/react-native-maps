@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.29.1 - (July 5, 2021)
+
+* Common: [#3855](https://github.com/react-native-maps/react-native-maps/pull/3855) Fix crashes related to getAddressFromCoordinates for android and iOS
+* Common: [#3871](https://github.com/react-native-maps/react-native-maps/pull/3871) Allow React 17 peer dependency
+
 ## 0.29.0 - (June 8, 2021)
 
 * Common: [#3779](https://github.com/react-native-maps/react-native-maps/pull/3779) Polyline tappable feature on GeoJson
