@@ -236,7 +236,7 @@ See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) fo
 
 ### Overlaying other components on the map
 
-Place components you that wish to overlay `MapView` underneath the `MapView` closing tag. Absolutely position these elements.
+Place components that you wish to overlay `MapView` underneath the `MapView` closing tag. Absolutely position these elements.
 
 ```jsx
 render() {
