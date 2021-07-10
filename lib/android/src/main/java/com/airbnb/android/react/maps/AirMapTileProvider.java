@@ -3,6 +3,9 @@ package com.airbnb.android.react.maps;
 import android.content.Context;
 
 import android.util.Log;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
+import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,12 +23,16 @@ import androidx.work.WorkerParameters;
 import androidx.work.Data;
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.UrlTileProvider;
 
 import java.lang.System;
 
@@ -39,10 +46,55 @@ import java.io.IOException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 public class AirMapTileProvider implements TileProvider {
+
+	class AIRMapUrlTileProvider extends UrlTileProvider {
+    private String urlTemplate;
+
+    public AIRMapUrlTileProvider(int width, int height, String urlTemplate) {
+      super(width, height);
+      this.urlTemplate = urlTemplate;
+    }
+
+    @Override
+    public URL getTileUrl(int x, int y, int zoom) {
+
+      if (AirMapTileProvider.this.flipY == true) {
+        y = (1 << zoom) - y - 1;
+      }
+
+      String s = this.urlTemplate
+          .replace("{x}", Integer.toString(x))
+          .replace("{y}", Integer.toString(y))
+          .replace("{z}", Integer.toString(zoom));
+      URL url = null;
+
+      if(AirMapTileProvider.this.maximumZ > 0 && zoom > AirMapTileProvider.this.maximumZ) {
+        return url;
+      }
+
+      if(AirMapTileProvider.this.minimumZ > 0 && zoom < AirMapTileProvider.this.minimumZ) {
+        return url;
+      }
+
+      try {
+        url = new URL(s);
+      } catch (MalformedURLException e) {
+        throw new AssertionError(e);
+      }
+      return url;
+    }
+
+    public void setUrlTemplate(String urlTemplate) {
+      this.urlTemplate = urlTemplate;
+    }
+  }
+
 	protected static final int BUFFER_SIZE = 16 * 1024;
-  protected static final int TARGET_TILE_SIZE = 512;
+	protected static final int TARGET_TILE_SIZE = 512;
+	protected UrlTileProvider tileProvider;
 	protected String urlTemplate;
 	protected int tileSize;
   protected boolean doubleTileSize;
@@ -54,10 +106,13 @@ public class AirMapTileProvider implements TileProvider {
 	protected int tileCacheMaxAge;
   protected boolean offlineMode;
 	protected Context context;
+	protected boolean customMode;
 
 	public AirMapTileProvider(int tileSizet, boolean doubleTileSize, String urlTemplate, 
     int maximumZ, int maximumNativeZ, int minimumZ, boolean flipY, String tileCachePath, 
-    int tileCacheMaxAge, boolean offlineMode, Context context) {
+    int tileCacheMaxAge, boolean offlineMode, Context context, boolean customMode) {
+		this.tileProvider = new AIRMapUrlTileProvider(tileSizet, tileSizet, urlTemplate);
+
 		this.tileSize = tileSizet;
     this.doubleTileSize = doubleTileSize;
 		this.urlTemplate = urlTemplate;
@@ -69,13 +124,17 @@ public class AirMapTileProvider implements TileProvider {
 		this.tileCacheMaxAge = tileCacheMaxAge;
     this.offlineMode = offlineMode;
 		this.context = context;
+		this.customMode = customMode;
 	}
 
 	@Override
 	public Tile getTile(int x, int y, int zoom) {
+		if (!this.customMode) return this.tileProvider.getTile(x, y, zoom);
+
 		byte[] image = null;
+		int maximumZ = this.maximumZ > 0 ? this.maximumZ : Integer.MAX_VALUE;
 		
-		if (this.tileSize == 256 && this.doubleTileSize && zoom + 1 <= this.maximumNativeZ && zoom + 1 <= this.maximumZ) {
+		if (this.tileSize == 256 && this.doubleTileSize && zoom + 1 <= this.maximumNativeZ && zoom + 1 <= maximumZ) {
       Log.d("urlTile", "pullTilesFromHigherZoom");
 			image = pullTilesFromHigherZoom(x, y, zoom);      
 		} 
@@ -84,8 +143,8 @@ public class AirMapTileProvider implements TileProvider {
       Log.d("urlTile", "scaleLowerZoomTile");
 			image = scaleLowerZoomTile(x, y, zoom, this.maximumNativeZ);
 		}
-    
-    if (image == null && zoom <= this.maximumZ) {
+
+    if (image == null && zoom <= maximumZ) {
       Log.d("urlTile", "getTileImage");
 			image = getTileImage(x, y, zoom);
 		}
@@ -93,7 +152,8 @@ public class AirMapTileProvider implements TileProvider {
     if (image == null && this.tileCachePath != null && this.offlineMode) {
       Log.d("urlTile", "findLowerZoomTileForScaling");
       int zoomLevelToStart = (zoom > this.maximumNativeZ) ? this.maximumNativeZ - 1 : zoom - 1; 
-      for (int tryZoom = zoomLevelToStart; tryZoom >= this.minimumZ; tryZoom--) {
+      int minimumZoomToSearch = this.minimumZ >= zoom - 3 ? this.minimumZ : zoom - 3;
+      for (int tryZoom = zoomLevelToStart; tryZoom >= minimumZoomToSearch; tryZoom--) {
   			image = scaleLowerZoomTile(x, y, zoom, tryZoom);
 	  		if (image != null) {
 		  		break;
@@ -103,22 +163,74 @@ public class AirMapTileProvider implements TileProvider {
 
 		return image == null ? null : new Tile(this.tileSize, this.tileSize, image);
 	}
-	
+
 	byte[] getTileImage(int x, int y, int zoom) {
 		byte[] image = null;
+		boolean fallbackOnSyncFetch = false;
 		
 		if (this.tileCachePath != null) {
 			image = readTileImage(x, y, zoom);
+			if (image != null) {
+				Log.d("urlTile: tile cache HIT for ", Integer.toString(zoom) + 
+					"/" + Integer.toString(x) + "/" + Integer.toString(y));
+			} else {
+				Log.d("urlTile: tile cache MISS for ", Integer.toString(zoom) + 
+        	"/" + Integer.toString(x) + "/" + Integer.toString(y));
+			}
 			if (image != null && !this.offlineMode) {
-        Log.d("urlTile", "Refreshing");
 				checkForRefresh(x, y, zoom);
 			}
 		}
 
-		if (image == null && !this.offlineMode) {
+		if (image == null && !this.offlineMode && this.tileCachePath != null) {
+			String fileName = getTileFilename(x, y, zoom);
+			Constraints constraints = new Constraints.Builder()
+				.setRequiredNetworkType(NetworkType.CONNECTED)
+				.build();
+			OneTimeWorkRequest tileRefreshWorkRequest = new OneTimeWorkRequest.Builder(AirMapTileWorker.class)
+				.setConstraints(constraints)
+				.addTag(fileName)
+				.setInputData(
+					new Data.Builder()
+						.putString("url", getTileUrl(x, y, zoom).toString())
+						.putString("filename", fileName)
+						.putInt("maxAge", -1)
+						.build()
+					)
+				.build();
+			if (tileRefreshWorkRequest != null) {
+				WorkManager workManager = WorkManager.getInstance(this.context.getApplicationContext());
+				Operation fetchOperation = workManager
+					.enqueueUniqueWork(fileName, ExistingWorkPolicy.KEEP, tileRefreshWorkRequest);
+				Future<Operation.State.SUCCESS> operationFuture = fetchOperation.getResult();
+				try {
+					operationFuture.get(1L, TimeUnit.SECONDS);
+					Thread.sleep(500);
+					Future<List<WorkInfo>> fetchFuture = workManager.getWorkInfosByTag(fileName);
+					List<WorkInfo> workInfo = fetchFuture.get(1L, TimeUnit.SECONDS);
+					Log.d("urlTile: ", workInfo.get(0).toString());
+					if (this.tileCachePath != null) {
+						image = readTileImage(x, y, zoom);
+						if (image != null) {
+							Log.d("urlTile: tile cache fetch HIT for ", Integer.toString(zoom) + 
+								"/" + Integer.toString(x) + "/" + Integer.toString(y));
+						} else {
+								Log.d("urlTile: tile cache fetch MISS for ", Integer.toString(zoom) + 
+									"/" + Integer.toString(x) + "/" + Integer.toString(y));
+						}
+					}
+				} catch (Exception e) {
+      			e.printStackTrace();
+				}
+			} else {
+				fallbackOnSyncFetch = true;
+			}
+		} else if (fallbackOnSyncFetch || (image == null && !this.offlineMode)) {
+			Log.d("urlTile", "Normal fetch");
 			image = fetchTile(x, y, zoom);
-			if (this.tileCachePath != null && image != null) {
-				boolean success = writeTileImage(image, x, y, zoom);
+			if (image == null) {
+				Log.d("urlTile: tile fetch TIMEOUT / FAIL for ", Integer.toString(zoom) + 
+					"/" + Integer.toString(x) + "/" + Integer.toString(y));
 			}
 		}
 
@@ -165,13 +277,13 @@ public class AirMapTileProvider implements TileProvider {
     return data;
   }
 
-  protected Bitmap getNewBitmap() {
+  Bitmap getNewBitmap() {
     Bitmap image = Bitmap.createBitmap(TARGET_TILE_SIZE, TARGET_TILE_SIZE, Bitmap.Config.ARGB_8888);
     image.eraseColor(Color.TRANSPARENT);
     return image;
   }
 
-  protected byte[] bitmapToByteArray(Bitmap bm) {
+  byte[] bitmapToByteArray(Bitmap bm) {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     bm.compress(Bitmap.CompressFormat.PNG, 100, bos);
 
@@ -188,14 +300,12 @@ public class AirMapTileProvider implements TileProvider {
     int overZoomLevel = zoom - maximumZoom;
     int zoomFactor = 1 << overZoomLevel;
     
-    int[] parentTile = getTileParent(x, y, zoom, overZoomLevel);
-    int xParent = parentTile[0];
-    int yParent = parentTile[1];
-    int zoomParent = parentTile[2];
+    int xParent = x >> overZoomLevel;
+    int yParent = y >> overZoomLevel;
+    int zoomParent = zoom - overZoomLevel;
     
-    int[] offsetInParent = getOffsetInParent(x, y, zoomFactor);
-    int xOffset = offsetInParent[0];
-    int yOffset = offsetInParent[1];
+    int xOffset = x % zoomFactor;;
+    int yOffset = y % zoomFactor;
 
     byte[] data;
     Bitmap image = getNewBitmap();
@@ -219,21 +329,6 @@ public class AirMapTileProvider implements TileProvider {
     return data;
 	} 
 
-  protected int[] getTileParent(int x, int y, int zoom, int overZoomLevel) {
-    int[] tileParent = new int[3];
-    tileParent[0] = x >> overZoomLevel;
-    tileParent[1] = y >> overZoomLevel;
-    tileParent[2] = zoom - overZoomLevel;
-	  return tileParent;
-  }
-
-  protected int[] getOffsetInParent(int x, int y, int zoomFactor) {
-    int[] offsetInParent = new int[2];
-    offsetInParent[0] = x % zoomFactor;
-    offsetInParent[1] = y % zoomFactor;
-	  return offsetInParent;
-  }
-
 	void checkForRefresh(int x, int y, int zoom) {
 		String fileName =  getTileFilename(x, y, zoom);
 		File file = new File(fileName);
@@ -241,31 +336,36 @@ public class AirMapTileProvider implements TileProvider {
 		long now = System.currentTimeMillis();
 
 		if ((now - lastModified) / 1000 > this.tileCacheMaxAge) {
+      Log.d("urlTile", "Refreshing");
 			Constraints constraints = new Constraints.Builder()
 				.setRequiredNetworkType(NetworkType.CONNECTED)
 				.build();
-			WorkRequest tileRefreshWorkRequest = new OneTimeWorkRequest.Builder(AirMapUrlTileWorker.class)
+			OneTimeWorkRequest tileRefreshWorkRequest = new OneTimeWorkRequest.Builder(AirMapTileWorker.class)
 				.setConstraints(constraints)
+				.addTag(fileName)
 				.setInputData(
 					new Data.Builder()
 						.putString("url", getTileUrl(x, y, zoom).toString())
 						.putString("filename", fileName)
+						.putInt("maxAge", this.tileCacheMaxAge)
 						.build()
 					)
 				.build();
 			if (tileRefreshWorkRequest != null) {
-				WorkManager.getInstance(this.context.getApplicationContext()).enqueue(tileRefreshWorkRequest);
+				WorkManager.getInstance(this.context.getApplicationContext())
+				.enqueueUniqueWork(fileName, ExistingWorkPolicy.KEEP, tileRefreshWorkRequest);
 			} 
 		} 
 	}
 
-	protected byte[] fetchTile(int x, int y, int zoom) {
+	byte[] fetchTile(int x, int y, int zoom) {
 		URL url = getTileUrl(x, y, zoom);
 		ByteArrayOutputStream buffer = null;
 		InputStream in = null;
 
 		try {
-			in = url.openStream();
+			URLConnection conn = url.openConnection();
+			in = conn.getInputStream();
 			buffer = new ByteArrayOutputStream();
 
 			int nRead;
@@ -289,7 +389,7 @@ public class AirMapTileProvider implements TileProvider {
 		}
 	}
 	
-	protected byte[] readTileImage(int x, int y, int zoom) {
+	byte[] readTileImage(int x, int y, int zoom) {
 		InputStream in = null;
 		ByteArrayOutputStream buffer = null;
 		String fileName = getTileFilename(x, y, zoom);
@@ -328,7 +428,7 @@ public class AirMapTileProvider implements TileProvider {
 		}
 	}
 
-	protected boolean writeTileImage(byte[] image, int x, int y, int zoom) {
+	boolean writeTileImage(byte[] image, int x, int y, int zoom) {
 		OutputStream out = null;
 		String fileName = getTileFilename(x, y, zoom);
 		if (fileName == null) {
@@ -353,7 +453,7 @@ public class AirMapTileProvider implements TileProvider {
 		}
 	}
 
-	protected String getTileFilename(int x, int y, int zoom) {
+	String getTileFilename(int x, int y, int zoom) {
 		if (this.tileCachePath == null) {
 			return null;
 		}
@@ -363,30 +463,7 @@ public class AirMapTileProvider implements TileProvider {
 	}
 	
 	protected URL getTileUrl(int x, int y, int zoom) {
-		if (this.flipY == true) {
-			y = (1 << zoom) - y - 1;
-		}
-
-		String s = this.urlTemplate
-				.replace("{x}", Integer.toString(x))
-				.replace("{y}", Integer.toString(y))
-				.replace("{z}", Integer.toString(zoom));
-		URL url = null;
-
-		if(this.maximumZ > 0 && zoom > maximumZ) {
-			return url;
-		}
-
-		if(this.minimumZ > 0 && zoom < minimumZ) {
-			return url;
-		}
-
-		try {
-			url = new URL(s);
-		} catch (MalformedURLException e) {
-			throw new AssertionError(e);
-		}
-		return url;
+		return this.tileProvider.getTileUrl(x, y, zoom);
 	}
 	
 	public void setUrlTemplate(String urlTemplate) {
@@ -394,10 +471,13 @@ public class AirMapTileProvider implements TileProvider {
 	}
 
 	public void setTileSize(int tileSize) {
+		if (this.tileSize != tileSize) {
+			this.tileProvider = new AIRMapUrlTileProvider(tileSize, tileSize, urlTemplate);
+		}
 		this.tileSize = tileSize;
 	}
 
-  public void setDoubleTileSize(Boolean doubleTileSize) {
+  public void setDoubleTileSize(boolean doubleTileSize) {
 		this.doubleTileSize = doubleTileSize;
 	}
 
@@ -413,7 +493,7 @@ public class AirMapTileProvider implements TileProvider {
 		this.minimumZ = minimumZ;
 	}
 
-	public void setFlipY(Boolean flipY) {
+	public void setFlipY(boolean flipY) {
 		this.flipY = flipY;
 	}
 
@@ -425,7 +505,11 @@ public class AirMapTileProvider implements TileProvider {
 		this.tileCacheMaxAge = tileCacheMaxAge;
 	}
 
-  public void setOfflineMode(Boolean offlineMode) {
+  public void setOfflineMode(boolean offlineMode) {
 		this.offlineMode = offlineMode;
+	}
+
+	public void setCustomMode() {
+		this.customMode = customMode;
 	}
 }

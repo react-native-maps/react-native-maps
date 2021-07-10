@@ -2,10 +2,11 @@ package com.airbnb.android.react.maps;
 
 import android.content.Context;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 
 import java.net.MalformedURLException;
@@ -17,15 +18,18 @@ public class AirMapWMSTile extends AirMapUrlTile {
 
   class AIRMapGSUrlTileProvider extends AirMapTileProvider {
 
-    public AIRMapGSUrlTileProvider(int tileSizet, String urlTemplate, 
-    int maximumZ, int maximumNativeZ, int minimumZ, String tileCachePath, 
-    int tileCacheMaxAge, boolean offlineMode, Context context) {
-      super(tileSizet, false, urlTemplate, maximumZ, maximumNativeZ, minimumZ, false,
-        tileCachePath, tileCacheMaxAge, offlineMode, context);
+    class AIRMapWMSTileProvider extends UrlTileProvider {
+    private String urlTemplate;
+    private int tileSize;
+
+    public AIRMapWMSTileProvider(int width, int height, String urlTemplate) {
+      super(width, height);
+      this.urlTemplate = urlTemplate;
+      this.tileSize = width;
     }
 
     @Override
-    protected URL getTileUrl(int x, int y, int zoom) {
+    public URL getTileUrl(int x, int y, int zoom) {
       if(AirMapWMSTile.this.maximumZ > 0 && zoom > maximumZ) {
           return null;
       }
@@ -61,6 +65,19 @@ public class AirMapWMSTile extends AirMapUrlTile {
               mapBound[1] - y * tile
       };
     }
+
+    public void setUrlTemplate(String urlTemplate) {
+      this.urlTemplate = urlTemplate;
+    }
+  }
+
+  public AIRMapGSUrlTileProvider(int tileSizet, String urlTemplate, 
+    int maximumZ, int maximumNativeZ, int minimumZ, String tileCachePath, 
+    int tileCacheMaxAge, boolean offlineMode, Context context, boolean customMode) {
+      super(tileSizet, false, urlTemplate, maximumZ, maximumNativeZ, minimumZ, false,
+        tileCachePath, tileCacheMaxAge, offlineMode, context, customMode);
+      this.tileProvider = new AIRMapWMSTileProvider(tileSizet, tileSizet, urlTemplate);
+    }
   }
 
   private AIRMapGSUrlTileProvider tileProvider;
@@ -76,7 +93,7 @@ public class AirMapWMSTile extends AirMapUrlTile {
     options.transparency(1 - this.opacity);
     this.tileProvider = new AIRMapGSUrlTileProvider((int)this.tileSize, this.urlTemplate, 
       (int)this.maximumZ, (int)this.maximumNativeZ, (int)this.minimumZ, this.tileCachePath, 
-      (int)this.tileCacheMaxAge, this.offlineMode, this.context);
+      (int)this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded);
     options.tileProvider(this.tileProvider);
     return options;
   }

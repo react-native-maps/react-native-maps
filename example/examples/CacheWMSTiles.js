@@ -5,15 +5,15 @@ import MapView, {
   MAP_TYPES,
   PROVIDER_DEFAULT,
   ProviderPropType,
-  UrlTile,
+  WMSTile,
 } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE = 63.5;
+const LONGITUDE = 23.5;
+const LATITUDE_DELTA = 0.152;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class CustomTiles extends React.Component {
@@ -43,38 +43,37 @@ class CustomTiles extends React.Component {
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-          mapType={this.mapType}
+         	mapType={MAP_TYPES.SATELLITE}
           style={styles.map}
           initialRegion={region}
         >
-          <UrlTile
-            urlTemplate="https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
-            zIndex={-1}
+          <WMSTile
+					  urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
+            zIndex={2}
+						tileSize={256}
             // Test steps:
             // 1) Without new tile provider properties: comment out tileCachePath & maximumNativeZ
             // 2) With maximumNativeZ only to test scaling past maxNativeZoom level
-            // 3) With doubleTileSize (only on Android)
-            // 4) With tileCachePath too - test caching performance with cutting & throttling network connectivity
-            // 5) With tileCacheMaxAge too
-            // 6) With offlineMode=true too - test zoom in to test scaling of lower zoom level tiles to higher zoom levels
+            // 3) With tileCachePath too - test caching performance with cutting & throttling network connectivity
+            // 4) With tileCacheMaxAge too
+            // 5) With offlineMode=true too - zoom in to test scaling of lower zoom level tiles to higher zoom levels
             //
-            maximumNativeZ={15}
-						
-            // For testing activate different tile cache paths, examples below
+            //maximumNativeZ={12}
+
+						// For testing activate different tile cache paths, examples below
             // work for simulator / emulator testing
             // This is for iOS simulator
-						//tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/tiles"
+						//tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/wms_tiles"
             // This is for Android simulator
-            tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/tiles"
-            
+            tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/wms_tiles"
+
             tileCacheMaxAge={20}
-            doubleTileSize={true}
             //offlineMode={true}
           />
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.bubble}>
-            <Text>Cached URLTiles</Text>
+            <Text>Cached WMSTiles</Text>
           </View>
         </View>
       </View>

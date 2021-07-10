@@ -9,7 +9,9 @@
 
 @interface AIRMapUrlTileCachedOverlay : MKTileOverlay
 
+@property NSInteger maximumNativeZ;
 @property (nonatomic, copy) NSURL *tileCachePath;
 @property NSInteger tileCacheMaxAge;
+@property BOOL offlineMode;
 
 @end

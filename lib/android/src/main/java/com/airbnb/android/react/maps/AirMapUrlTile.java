@@ -1,12 +1,12 @@
 package com.airbnb.android.react.maps;
 
+import android.util.Log;
+
 import android.content.Context;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.TileProvider;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,6 +29,7 @@ public class AirMapUrlTile extends AirMapFeature {
   protected boolean offlineMode = false;
   protected float opacity = 1;
   protected Context context;
+  protected boolean customTileProviderNeeded = false;
 
   public AirMapUrlTile(Context context) {
     super(context);
@@ -67,6 +68,7 @@ public class AirMapUrlTile extends AirMapFeature {
     if (tileProvider != null) {
       tileProvider.setMaximumNativeZ((int)maximumNativeZ);
     }
+    setCustomTileProviderMode();
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
     }
@@ -85,7 +87,7 @@ public class AirMapUrlTile extends AirMapFeature {
   public void setFlipY(boolean flipY) {
     this.flipY = flipY;
     if (tileProvider != null) {
-      tileProvider.setFlipY((Boolean)flipY);
+      tileProvider.setFlipY((boolean)flipY);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
@@ -95,8 +97,9 @@ public class AirMapUrlTile extends AirMapFeature {
   public void setDoubleTileSize(boolean doubleTileSize) {
     this.doubleTileSize = doubleTileSize;
     if (tileProvider != null) {
-      tileProvider.setDoubleTileSize((Boolean)doubleTileSize);
+      tileProvider.setDoubleTileSize((boolean)doubleTileSize);
     }
+    setCustomTileProviderMode();
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
     }
@@ -127,6 +130,7 @@ public class AirMapUrlTile extends AirMapFeature {
     if (tileProvider != null) {
       tileProvider.setTileCachePath(tileCachePath);
     }
+    setCustomTileProviderMode();
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
     }
@@ -145,7 +149,7 @@ public class AirMapUrlTile extends AirMapFeature {
   public void setOfflineMode(boolean offlineMode) {
     this.offlineMode = offlineMode;
     if (tileProvider != null) {
-      tileProvider.setOfflineMode((Boolean)offlineMode);
+      tileProvider.setOfflineMode((boolean)offlineMode);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
@@ -166,13 +170,22 @@ public class AirMapUrlTile extends AirMapFeature {
     return tileOverlayOptions;
   }
 
+  protected void setCustomTileProviderMode() {
+    Log.d("urlTile ", "creating new mode TileProvider");
+    this.customTileProviderNeeded = true;
+    if (tileProvider != null) {
+      tileProvider.setCustomMode();
+    }
+  } 
+
   protected TileOverlayOptions createTileOverlayOptions() {
+    Log.d("urlTile ", "creating TileProvider");
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
     options.transparency(1 - this.opacity);
     this.tileProvider = new AirMapTileProvider((int)this.tileSize, this.doubleTileSize, this.urlTemplate, 
       (int)this.maximumZ, (int)this.maximumNativeZ, (int)this.minimumZ, this.flipY, this.tileCachePath, 
-      (int)this.tileCacheMaxAge, this.offlineMode, this.context);
+      (int)this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded);
     options.tileProvider(this.tileProvider);
     return options;
   }
