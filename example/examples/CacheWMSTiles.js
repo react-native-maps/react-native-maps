@@ -43,12 +43,12 @@ class CustomTiles extends React.Component {
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-         	mapType={MAP_TYPES.SATELLITE}
+					mapType={MAP_TYPES.SATELLITE}
           style={styles.map}
           initialRegion={region}
         >
           <WMSTile
-					  urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
+						urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
             zIndex={2}
 						tileSize={256}
             // Test steps:
@@ -58,8 +58,7 @@ class CustomTiles extends React.Component {
             // 4) With tileCacheMaxAge too
             // 5) With offlineMode=true too - zoom in to test scaling of lower zoom level tiles to higher zoom levels
             //
-            //maximumNativeZ={12}
-
+            maximumNativeZ={12}
 						// For testing activate different tile cache paths, examples below
             // work for simulator / emulator testing
             // This is for iOS simulator

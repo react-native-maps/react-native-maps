@@ -59,14 +59,12 @@ class CustomTiles extends React.Component {
             // 6) With offlineMode=true too - test zoom in to test scaling of lower zoom level tiles to higher zoom levels
             //
             maximumNativeZ={15}
-						
             // For testing activate different tile cache paths, examples below
             // work for simulator / emulator testing
             // This is for iOS simulator
 						//tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/tiles"
             // This is for Android simulator
             tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/tiles"
-            
             tileCacheMaxAge={20}
             doubleTileSize={true}
             //offlineMode={true}

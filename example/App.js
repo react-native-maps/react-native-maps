@@ -183,7 +183,7 @@ export default class App extends React.Component<Props> {
         [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
         [GeojsonMap, 'Geojson', true],
         [CacheURLTiles, 'CacheURLTiles', true ],
-        [CacheWMSTiles, 'CacheWMSTiles', true ]
+        [CacheWMSTiles, 'CacheWMSTiles', true ],
       ]
         // Filter out examples that are not yet supported for Google Maps on iOS.
         .filter(
