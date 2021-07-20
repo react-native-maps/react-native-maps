@@ -5,8 +5,6 @@
 //  Created by Gil Birman on 9/2/16.
 //
 
-#ifdef HAVE_GOOGLE_MAPS
-
 #import "AIRGoogleMapMarker.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTImageLoaderProtocol.h>
@@ -416,5 +414,3 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 @end
-
-#endif

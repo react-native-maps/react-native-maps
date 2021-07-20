@@ -28,9 +28,22 @@
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "0.0.5",
-    "eslint": "5.16.0"
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prefer-object-spread": "^1.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "gitbook-cli": "^2.3.0",
+    "lodash": "^4.17.2",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react": "16.8.3",
+    "react-native": "0.59.3"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.7"
+    "leaflet": "^1.5.1",
+    "react-leaflet": "^2.4.0",
+    "scriptjs": "^2.5.9"
   }
 }

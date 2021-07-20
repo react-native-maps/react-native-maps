@@ -5,8 +5,6 @@
 //  Created by Gil Birman on 9/1/16.
 //
 
-#ifdef HAVE_GOOGLE_MAPS
-
 #import "AIRGoogleMap.h"
 #import "AIRGoogleMapMarker.h"
 #import "AIRGoogleMapMarkerManager.h"
@@ -24,20 +22,11 @@
 #import "RCTConvert+AirMap.h"
 #import <objc/runtime.h>
 
-#ifdef HAVE_GOOGLE_MAPS_UTILS
 #import <Google-Maps-iOS-Utils/GMUKMLParser.h>
 #import <Google-Maps-iOS-Utils/GMUPlacemark.h>
 #import <Google-Maps-iOS-Utils/GMUPoint.h>
 #import <Google-Maps-iOS-Utils/GMUGeometryRenderer.h>
 #define REQUIRES_GOOGLE_MAPS_UTILS(feature) do {} while (0)
-#else
-#define GMUKMLParser void
-#define GMUPlacemark void
-#define REQUIRES_GOOGLE_MAPS_UTILS(feature) do { \
- [NSException raise:@"ReactNativeMapsDependencyMissing" \
-             format:@"Use of " feature "requires Google-Maps-iOS-Utils, you  must install via CocoaPods to use this feature"]; \
-} while (0)
-#endif
 
 
 id regionAsJSON(MKCoordinateRegion region) {
@@ -813,7 +802,6 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 + (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
-#ifdef HAVE_GOOGLE_MAPS_UTILS
   if (marker.style.styleID != nil) {
     for (GMUStyle *style in parser.styles) {
       if (style.styleID == marker.style.styleID) {
@@ -823,9 +811,6 @@ id regionAsJSON(MKCoordinateRegion region) {
   }
 
   return marker.style.iconUrl;
-#else
-    REQUIRES_GOOGLE_MAPS_UTILS("GetIconUrl:parser:"); return @"";
-#endif
 }
 
 - (NSString *)KmlSrc {
@@ -833,7 +818,6 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setKmlSrc:(NSString *)kmlUrl {
-#ifdef HAVE_GOOGLE_MAPS_UTILS
 
   _kmlSrc = kmlUrl;
 
@@ -885,9 +869,6 @@ id regionAsJSON(MKCoordinateRegion region) {
 
   id event = @{@"markers": markers};
   if (self.onKmlReady) self.onKmlReady(event);
-#else
-    REQUIRES_GOOGLE_MAPS_UTILS();
-#endif
 }
 
 
@@ -948,5 +929,3 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 
 @end
-
-#endif
