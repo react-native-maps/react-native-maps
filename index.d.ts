@@ -593,6 +593,7 @@ declare module 'react-native-maps' {
     lineCap?: 'butt' | 'round' | 'square';
     lineJoin?: 'miter' | 'round' | 'bevel';
     miterLimit?: number;
+    zIndex?: number;
   }
 
   export class Geojson extends React.Component<GeojsonProps, any> {}
