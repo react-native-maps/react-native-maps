@@ -26,7 +26,6 @@ declare module 'react-native-maps' {
     longitude: number;
     latitudeDelta: number;
     longitudeDelta: number;
-    useNativeDriver?: boolean;
   }
 
   export interface LatLng {
@@ -81,6 +80,7 @@ declare module 'react-native-maps' {
     easing?: (value: number) => number;
     duration?: number;
     delay?: number;
+    useNativeDriver?: boolean;
   }
 
   interface AnimatedRegionSpringConfig
@@ -97,6 +97,7 @@ declare module 'react-native-maps' {
     stiffness?: number;
     mass?: number;
     damping?: number;
+    useNativeDriver?: boolean;
   }
 
   export class AnimatedRegion extends Animated.AnimatedWithChildren {
@@ -104,7 +105,6 @@ declare module 'react-native-maps' {
     longitude: Animated.Value;
     latitudeDelta: Animated.Value;
     longitudeDelta: Animated.Value;
-    useNativeDriver?: boolean;
 
     constructor(region?: Region);
 
