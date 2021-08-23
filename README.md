@@ -117,21 +117,26 @@ import { Marker } from 'react-native-maps';
 </MapView>
 ```
 
+### Rendering a Marker with a custom image
+1. You need to generate an `png` image with various resolution (lets call them `custom_pin`) - for more infromation go to [Android](https://developer.android.com/studio/write/image-asset-studio#access), [iOS](https://developer.apple.com/library/archive/documentation/ToolsLanguages/Conceptual/Xcode_Overview/AddingImages.html)
+2. put all images in Android drawables and iOS assets dir 
+3. Now you can use the following code:
+```jsx
+<Marker
+  coordinate={{ latitude : latitude , longitude : longitude }}
+  image={{uri: 'custom_pin'}}
+/>
+```
+
+Note: You can also pass the image binary data like `image={require('custom_pin.png')}`, but this will not scale good with the different screen sizes.
+
 ### Rendering a Marker with a custom view
+Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the head ache)
 
 ```jsx
 <Marker coordinate={{ latitude : latitude , longitude : longitude }}>
   <MyCustomMarkerView {...marker} />
 </Marker>
-```
-
-### Rendering a Marker with a custom image
-
-```jsx
-<Marker
-  coordinate={{ latitude : latitude , longitude : longitude }}
-  image={require('../assets/pin.png')}
-/>
 ```
 
 ### Rendering a custom Marker with a custom Callout
@@ -231,7 +236,7 @@ See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Category:Tile_downloading) fo
 
 ### Overlaying other components on the map
 
-Place components you that wish to overlay `MapView` underneath the `MapView` closing tag. Absolutely position these elements.
+Place components that you wish to overlay `MapView` underneath the `MapView` closing tag. Absolutely position these elements.
 
 ```jsx
 render() {
@@ -452,7 +457,7 @@ render() {
 Markers can also accept an `AnimatedRegion` value as a coordinate.
 
 ```jsx
-import Mapview, { AnimatedRegion, Marker } from 'react-native-maps';
+import Mapview, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
 
 getInitialState() {
   return {
@@ -486,44 +491,7 @@ componentWillReceiveProps(nextProps) {
 render() {
   return (
     <MapView initialRegion={...}>
-      <MapView.Marker.Animated
-        ref={marker => { this.marker = marker }}
-        coordinate={this.state.coordinate}
-      />
-    </MapView>
-  );
-}
-```
-
-If you need a smoother animation to move the marker on Android, you can modify the previous example:
-
-```jsx
-// ...
-
-componentWillReceiveProps(nextProps) {
-  const duration = 500
-
-  if (this.props.coordinate !== nextProps.coordinate) {
-    if (Platform.OS === 'android') {
-      if (this.marker) {
-        this.marker.animateMarkerToCoordinate(
-          nextProps.coordinate,
-          duration
-        );
-      }
-    } else {
-      this.state.coordinate.timing({
-        ...nextProps.coordinate,
-        duration
-      }).start();
-    }
-  }
-}
-
-render() {
-  return (
-    <MapView initialRegion={...}>
-      <Marker.Animated
+      <MarkerAnimated
         ref={marker => { this.marker = marker }}
         coordinate={this.state.coordinate}
       />

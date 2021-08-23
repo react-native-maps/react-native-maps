@@ -238,6 +238,11 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
   }
 
+  @ReactProp(name = "scrollDuringRotateOrZoomEnabled", defaultBoolean = true)
+  public void setScrollDuringRotateOrZoomEnabled(AirMapView view, boolean scrollDuringRotateOrZoomEnabled) {
+    view.map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollDuringRotateOrZoomEnabled);
+  }
+
   @ReactProp(name = "cacheEnabled", defaultBoolean = false)
   public void setCacheEnabled(AirMapView view, boolean cacheEnabled) {
     view.setCacheEnabled(cacheEnabled);
@@ -355,7 +360,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         break;
 
       case FIT_TO_ELEMENTS:
-        view.fitToElements(args.getBoolean(0));
+        view.fitToElements(args.getMap(0), args.getBoolean(1));
         break;
 
       case FIT_TO_SUPPLIED_MARKERS:

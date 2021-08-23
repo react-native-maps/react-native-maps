@@ -14,12 +14,14 @@
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
 | `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - none: no map **Note** Not available on MapKit<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
 | `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/react-native-maps/react-native-maps#customizing-the-map-style) for more information.
+| `userInterfaceStyle` | 'light' \| 'dark'  |  | Sets the map to the style selected.  Default is whatever the system settings is. **Note:** iOS Maps only (aka MapKit).
 | `showsUserLocation` | `Boolean` | `false` | If `true` the app will ask for the user's location. **NOTE**: You need to add `NSLocationWhenInUseUsageDescription` key in Info.plist to enable geolocation, otherwise it is going to *fail silently*! You will also need to add an explanation for why you need the users location against `NSLocationWhenInUseUsageDescription` in Info.plist. Otherwise Apple may reject your app submission.
 | `userLocationPriority` | 'balanced'\|'high'\|'low'\|'passive' | 'high' | Set power priority of user location tracking. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
 | `userLocationUpdateInterval` | `Number` | 5000 | Interval of user location updates in milliseconds. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
 | `userLocationFastestInterval` | `Number` | 5000 | Fastest interval the application will actively acquire locations. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
 | `userLocationAnnotationTitle` | `String` | | The title of the annotation for current user location. This only works if `showsUserLocation` is true. There is a default value `My Location` set by MapView. **Note**: iOS only.
 | `followsUserLocation` | `Boolean` | `false` | If `true` the map will focus on the user's location. This only works if `showsUserLocation` is true and the user has shared their location. **Note**: Apple Maps only.
+| `userLocationCalloutEnabled` | `Boolean` | `false` |  If `true` clicking user location will show the default callout for userLocation annotation. **Note**: Apple Maps only.
 | `showsMyLocationButton` | `Boolean` | `true` | If `false` hide the button to move map to the current user's location.
 | `showsPointsOfInterest` | `Boolean` | `true` | If `false` points of interest won't be displayed on the map.
 | `showsCompass` | `Boolean` | `true` | If `false` compass won't be displayed on the map.
@@ -35,6 +37,7 @@
 | `maxZoomLevel` | `Number` | `20` | Maximum zoom value for the map, must be between 0 and 20
 | `rotateEnabled` | `Boolean` | `true` | If `false` the user won't be able to pinch/rotate the map.
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
+| `scrollDuringRotateOrZoomEnabled` | `Boolean` | `true` | If `false` the map will stay centered while rotating or zooming. **Note:** Google Maps only
 | `pitchEnabled` | `Boolean` | `true` | If `false` the user won't be able to adjust the camera’s pitch angle.
 | `toolbarEnabled` | `Boolean` | `true` | `Android only` If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
 | `cacheEnabled` | `Boolean` | `false` | If `true` map will be cached and displayed as an image instead of being interactable, for performance usage. **Note:** Apple Maps only
@@ -92,7 +95,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `getMapBoundaries` | | `Promise<{northEast: LatLng, southWest: LatLng}>`
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | The boundary is defined by the map's center coordinates, not the device's viewport itself. **Note:** Google Maps only.
 | `setIndoorActiveLevelIndex` | `levelIndex: Number` |
-| `fitToElements` | `animated: Boolean` |
+| `fitToElements` | `options: { edgePadding: EdgePadding, animated: Boolean }` | **Note** edgePadding is Google Maps only
 | `fitToSuppliedMarkers` | `markerIDs: String[], options: { edgePadding: EdgePadding, animated: Boolean }` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems. **Note** edgePadding is Google Maps only
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
 | `addressForCoordinate` | `coordinate: LatLng` | Converts a map coordinate to a address (`Address`). Returns a `Promise<Address>`.

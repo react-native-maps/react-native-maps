@@ -88,7 +88,9 @@ RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
+RCT_EXPORT_VIEW_PROPERTY(userInterfaceStyle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(followsUserLocation, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(userLocationCalloutEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsPointsOfInterest, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsCompass, BOOL)
@@ -380,6 +382,7 @@ RCT_EXPORT_METHOD(animateToBearing:(nonnull NSNumber *)reactTag
 }
 
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
+        edgePadding:(nonnull NSDictionary *)edgePadding
         animated:(BOOL)animated)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -572,7 +575,7 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRMap class]]) {
             reject(@"Invalid argument", [NSString stringWithFormat:@"Invalid view returned from registry, expecting AIRMap, got: %@", view], NULL);
         } else {
-            if (coordinate != nil ||
+            if (coordinate == nil ||
                 ![[coordinate allKeys] containsObject:@"latitude"] ||
                 ![[coordinate allKeys] containsObject:@"longitude"]) {
                 reject(@"Invalid argument", [NSString stringWithFormat:@"Invalid coordinate format"], NULL);
@@ -596,6 +599,8 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                             @"countryCode" : [NSString stringWithFormat:@"%@", placemark.ISOcountryCode],
                             @"country" : [NSString stringWithFormat:@"%@", placemark.country],
                         });
+                    } else {
+                        reject(@"Invalid argument", [NSString stringWithFormat:@"Can not get address location"], NULL);
                     }
             }];
         }
@@ -880,6 +885,18 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 #pragma mark Annotation Stuff
 
+- (void)mapView:(AIRMap *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views
+{
+    if(!mapView.userLocationCalloutEnabled){
+        for(MKAnnotationView* view in views){
+            if ([view.annotation isKindOfClass:[MKUserLocation class]]){
+                [view setEnabled:NO];
+                [view setCanShowCallout:NO];
+                break;
+            }
+        }
+    }
+}
 
 
 - (void)mapView:(AIRMap *)mapView didSelectAnnotationView:(MKAnnotationView *)view
