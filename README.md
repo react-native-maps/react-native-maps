@@ -482,6 +482,7 @@ componentWillReceiveProps(nextProps) {
     } else {
       this.state.coordinate.timing({
         ...nextProps.coordinate,
+        useNativeDriver: true, // defaults to false if not passed explicitly
         duration
       }).start();
     }
