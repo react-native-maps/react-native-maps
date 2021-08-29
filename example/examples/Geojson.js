@@ -1,6 +1,6 @@
 import React from 'react';
 import MapView, { Geojson } from 'react-native-maps';
-
+import { StyleSheet, Text } from 'react-native';
 const myPlace = {
   type: 'FeatureCollection',
   features: [
@@ -16,7 +16,7 @@ const myPlace = {
 };
 
 const GeojsonMap = props => (
-  <MapView>
+  <MapView style={{...StyleSheet.absoluteFillObject}}>
     <Geojson geojson={myPlace} />
   </MapView>
 );
