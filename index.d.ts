@@ -594,6 +594,8 @@ declare module 'react-native-maps' {
     lineJoin?: 'miter' | 'round' | 'bevel';
     miterLimit?: number;
     zIndex?: number;
+    onPress?: (event: MapEvent) => void;
+    markerComponent?: React.ReactNode
   }
 
   export class Geojson extends React.Component<GeojsonProps, any> {}
