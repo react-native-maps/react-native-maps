@@ -72,7 +72,7 @@ type Point {
 
 ## Children Components
 
-Children components can be added within a Marker and rendered content will replace the marker symbol.  This is a way of creating custom markers and allowing use of native SVGs.
+Children components can be added within a Marker and rendered content will replace the marker symbol. This is a way of creating custom markers and allowing use of native SVGs.
 
 Example:
 ```
