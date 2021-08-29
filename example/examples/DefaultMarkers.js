@@ -74,7 +74,7 @@ class DefaultMarkers extends React.Component {
             onPress={() => this.setState({ markers: [] })}
             style={styles.bubble}
           >
-            <Text>Tap to create a marker of random color</Text>
+            <Text>Tap map to create a marker of random color</Text>
           </TouchableOpacity>
         </View>
       </View>

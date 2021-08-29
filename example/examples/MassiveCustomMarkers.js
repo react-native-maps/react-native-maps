@@ -84,7 +84,7 @@ class MassiveCustomMarkers extends React.Component {
             onPress={() => this.setState({ markers: [] })}
             style={styles.bubble}
           >
-            <Text>Tap to create 100 markers</Text>
+            <Text>Tap map to create 100 markers</Text>
           </TouchableOpacity>
         </View>
       </View>
