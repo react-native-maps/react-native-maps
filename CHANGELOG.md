@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.29.3 - (August 29, 2021)
+
+* Common: [#3920](https://github.com/react-native-maps/react-native-maps/pull/3920) GeoJSON onPress Crash Fix and Marker Customization Options
+* Common: [#3930](https://github.com/react-native-maps/react-native-maps/pull/3930) Updated peer deps to maintain compatibility with expo init
+
 ## 0.29.2 - (July 5, 2021)
 
 * Android: **Revert** [#3797](https://github.com/react-native-maps/react-native-maps/pull/3797) Allow a previously dashed line to be made solid
