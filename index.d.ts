@@ -504,10 +504,16 @@ declare module 'react-native-maps' {
     urlTemplate: string;
     minimumZ?: number;
     maximumZ?: number;
+    maximumNativeZ?: number;
     zIndex?: number;
     tileSize?: number;
+    doubleTileSize?: boolean;
     shouldReplaceMapContent?: boolean;
     flipY?: boolean;
+    tileCachePath?: string; 
+    tileCacheMaxAge?: number;
+    offlineMode?: boolean;
+    opacity?: number;
   }
 
   export class UrlTile extends React.Component<MapUrlTileProps, any> {}
@@ -527,12 +533,16 @@ declare module 'react-native-maps' {
 
   export interface MapWMSTileProps extends ViewProperties {
     urlTemplate: string;
-    maximumZ?: number;
     minimumZ?: number;
-    tileSize: number;
-    opacity: number;
+    maximumZ?: number;
+    maximumNativeZ?: number;
     zIndex?: number;
+    tileSize?: number;
     shouldReplaceMapContent?: boolean;
+    tileCachePath?: string; 
+    tileCacheMaxAge?: number;
+    offlineMode?: boolean;
+    opacity?: number;
   }
 
   export class WMSTile extends React.Component<MapWMSTileProps, any> {}
