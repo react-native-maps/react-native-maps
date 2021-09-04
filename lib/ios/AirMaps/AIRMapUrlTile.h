@@ -25,6 +25,7 @@
 	BOOL _tileCacheMaxAgeSet;
 	BOOL _maximumNativeZSet;
 	BOOL _cachedOverlayCreated;
+	BOOL _opacitySet;
 }
 
 @property (nonatomic, weak) AIRMap *map;
@@ -41,6 +42,7 @@
 @property (nonatomic, copy) NSString *tileCachePath;
 @property NSInteger tileCacheMaxAge;
 @property BOOL offlineMode;
+@property CGFloat opacity;
 
 - (void)updateProperties;
 - (void)update;
