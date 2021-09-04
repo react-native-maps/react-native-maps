@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import {StyleSheet, View, Text, Dimensions} from 'react-native';
 
 import MapView, {
   MAP_TYPES,
@@ -8,7 +8,7 @@ import MapView, {
   WMSTile,
 } from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 63.5;
@@ -38,19 +38,18 @@ class CustomTiles extends React.Component {
   }
 
   render() {
-    const { region } = this.state;
+    const {region} = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-					mapType={MAP_TYPES.SATELLITE}
+          mapType={MAP_TYPES.SATELLITE}
           style={styles.map}
-          initialRegion={region}
-        >
+          initialRegion={region}>
           <WMSTile
-						urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
+            urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
             zIndex={2}
-						tileSize={256}
+            tileSize={256}
             // Test steps:
             // 1) Without new tile provider properties: comment out tileCachePath & maximumNativeZ
             // 2) With maximumNativeZ only to test scaling past maxNativeZoom level
@@ -59,16 +58,16 @@ class CustomTiles extends React.Component {
             // 5) With offlineMode=true too - zoom in to test scaling of lower zoom level tiles to higher zoom levels
             //
             maximumNativeZ={12}
-						// For testing activate different tile cache paths, examples below
+            // For testing activate different tile cache paths, examples below
             // work for simulator / emulator testing
             // This is for iOS simulator, both as fileURL and directory paths to be tested separately
-						tileCachePath="file:///Users/suomimar/Library/Developer/CoreSimulator/wms_tiles"
+            tileCachePath="file:///Users/suomimar/Library/Developer/CoreSimulator/wms_tiles"
             //tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/wms_tiles"
             // This is for Android simulator, both as fileURL and directory paths to be tested separately
             //tileCachePath="file:///data/user/0/com.airbnb.android.react.maps.example/files/wms_tiles"
             //tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/wms_tiles"
-
             tileCacheMaxAge={20}
+            opacity={1.0}
             //offlineMode={true}
           />
         </MapView>
