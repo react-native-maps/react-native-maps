@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import {StyleSheet, View, Text, Dimensions} from 'react-native';
 
 import MapView, {
   MAP_TYPES,
@@ -8,7 +8,7 @@ import MapView, {
   UrlTile,
 } from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -38,15 +38,14 @@ class CustomTiles extends React.Component {
   }
 
   render() {
-    const { region } = this.state;
+    const {region} = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
           mapType={this.mapType}
           style={styles.map}
-          initialRegion={region}
-        >
+          initialRegion={region}>
           <UrlTile
             urlTemplate="https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
             zIndex={-1}
@@ -61,10 +60,12 @@ class CustomTiles extends React.Component {
             maximumNativeZ={15}
             // For testing activate different tile cache paths, examples below
             // work for simulator / emulator testing
-            // This is for iOS simulator
-						//tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/tiles"
-            // This is for Android simulator
-            tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/tiles"
+            // This is for iOS simulator, both as fileURL and directory paths to be tested separately
+            tileCachePath="file:///Users/suomimar/Library/Developer/CoreSimulator/tiles/"
+            //tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/tiles"
+            // This is for Android simulator, both as fileURL and directory paths to be tested separately
+            //tileCachePath="file:///data/user/0/com.airbnb.android.react.maps.example/files/tiles"
+            //tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/tiles"
             tileCacheMaxAge={20}
             doubleTileSize={true}
             //offlineMode={true}

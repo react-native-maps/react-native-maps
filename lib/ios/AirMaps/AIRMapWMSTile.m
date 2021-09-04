@@ -21,7 +21,7 @@
         self.tileOverlay = [[AIRMapWMSTileCachedOverlay alloc] initWithURLTemplate:self.urlTemplate];
         _cachedOverlayCreated = YES;
         if (_tileCachePathSet) {
-            NSURL *urlPath = [NSURL URLWithString:self.tileCachePath];
+            NSURL *urlPath = [NSURL URLWithString:[self.tileCachePath stringByAppendingString:@"/"]];
             if (urlPath.fileURL) {
                 self.tileOverlay.tileCachePath = urlPath;
             } else {
