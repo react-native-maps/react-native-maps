@@ -68,6 +68,7 @@ class CustomTiles extends React.Component {
             //tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/tiles"
             tileCacheMaxAge={20}
             doubleTileSize={true}
+            opacity={1.0}
             //offlineMode={true}
           />
         </MapView>

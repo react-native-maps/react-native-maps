@@ -42,6 +42,9 @@
     [self updateProperties];
 
     self.renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:self.tileOverlay];
+    if (_opacitySet) {
+        self.renderer.alpha = self.opacity;
+    }
 }
 
 @end

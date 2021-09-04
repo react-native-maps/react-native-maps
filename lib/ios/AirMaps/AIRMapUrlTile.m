@@ -105,6 +105,18 @@
     if (self.renderer) [self.renderer reloadData];
 }
 
+- (void)setOpacity:(CGFloat)opacity
+{
+    _opacity = opacity;
+    _opacitySet = YES;
+    if (self.renderer) {
+        self.renderer.alpha = opacity;
+    } else {
+        [self createTileOverlayAndRendererIfPossible];
+    }
+    [self update];
+}
+
 - (void)createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
@@ -134,6 +146,9 @@
     [self updateProperties];
 
     self.renderer = [[MKTileOverlayRenderer alloc] initWithTileOverlay:self.tileOverlay];
+    if (_opacitySet) {
+        self.renderer.alpha = self.opacity;
+    }
 }
 
 - (void)updateProperties
