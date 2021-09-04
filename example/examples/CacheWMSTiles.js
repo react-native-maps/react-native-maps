@@ -61,10 +61,12 @@ class CustomTiles extends React.Component {
             maximumNativeZ={12}
 						// For testing activate different tile cache paths, examples below
             // work for simulator / emulator testing
-            // This is for iOS simulator
-						//tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/wms_tiles"
-            // This is for Android simulator
-            tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/wms_tiles"
+            // This is for iOS simulator, both as fileURL and directory paths to be tested separately
+						tileCachePath="file:///Users/suomimar/Library/Developer/CoreSimulator/wms_tiles"
+            //tileCachePath="/Users/suomimar/Library/Developer/CoreSimulator/wms_tiles"
+            // This is for Android simulator, both as fileURL and directory paths to be tested separately
+            //tileCachePath="file:///data/user/0/com.airbnb.android.react.maps.example/files/wms_tiles"
+            //tileCachePath="/data/user/0/com.airbnb.android.react.maps.example/files/wms_tiles"
 
             tileCacheMaxAge={20}
             //offlineMode={true}
