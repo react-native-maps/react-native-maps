@@ -11,7 +11,7 @@ android {
   compileSdkVersion safeExtGet('compileSdkVersion', 28)
 
   defaultConfig {
-    minSdkVersion safeExtGet('minSdkVersion', 16)
+    minSdkVersion safeExtGet('minSdkVersion', 21)
     targetSdkVersion safeExtGet('targetSdkVersion', 27)
   }
 }
