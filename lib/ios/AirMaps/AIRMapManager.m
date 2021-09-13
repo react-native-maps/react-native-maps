@@ -1018,6 +1018,7 @@ static int kDragCenterContext;
                          @"accuracy": @(location.location.horizontalAccuracy),
                          @"altitudeAccuracy": @(location.location.verticalAccuracy),
                          @"speed": @(location.location.speed),
+                         @"heading": @(location.location.course),
                          }
                  };
     
