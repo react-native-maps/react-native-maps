@@ -78,14 +78,6 @@ class EventListener extends React.Component {
   }
 
   render() {
-    // Events that are dependent on
-    let googleProviderProps = {};
-    if (this.props.provider === PROVIDER_GOOGLE) {
-      googleProviderProps = {
-        onUserLocationChange: this.recordEvent('Map::onUserLocationChange'),
-      };
-    }
-
     return (
       <View style={styles.container}>
         <MapView
@@ -105,7 +97,7 @@ class EventListener extends React.Component {
           onMarkerSelect={this.recordEvent('Map::onMarkerSelect')}
           onMarkerDeselect={this.recordEvent('Map::onMarkerDeselect')}
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
-          {...googleProviderProps}
+          onUserLocationChange={this.recordEvent('Map::onUserLocationChange')}
         >
           <Marker
             coordinate={{
