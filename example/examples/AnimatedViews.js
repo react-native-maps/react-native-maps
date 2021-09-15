@@ -226,6 +226,7 @@ class AnimatedViews extends React.Component {
           inputRange: markers.map((m, i) => i * SNAP_WIDTH),
           outputRange: markers.map(m => m.coordinate.longitude),
         }),
+        useNativeDriver: true, // defaults to false if not passed explicitly
         duration: 0,
       })
       .start();
@@ -295,6 +296,7 @@ class AnimatedViews extends React.Component {
               outputRange: [LONGITUDE_DELTA, LONGITUDE_DELTA * 0.5],
               extrapolate: 'clamp',
             }),
+            useNativeDriver: true, // defaults to false if not passed explictly
             duration: 0,
           })
           .start();
@@ -310,6 +312,7 @@ class AnimatedViews extends React.Component {
               inputRange: markers.map((m, i) => i * SNAP_WIDTH),
               outputRange: markers.map(m => m.coordinate.longitude),
             }),
+            useNativeDriver: true, // defaults to false if not passed explictly
             duration: 0,
           })
           .start();

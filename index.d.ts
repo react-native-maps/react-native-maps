@@ -80,6 +80,7 @@ declare module 'react-native-maps' {
     easing?: (value: number) => number;
     duration?: number;
     delay?: number;
+    useNativeDriver?: boolean;
   }
 
   interface AnimatedRegionSpringConfig
@@ -96,13 +97,14 @@ declare module 'react-native-maps' {
     stiffness?: number;
     mass?: number;
     damping?: number;
+    useNativeDriver?: boolean;
   }
 
-  export class AnimatedRegion extends RNAnimated.AnimatedWithChildren {
-    latitude: RNAnimated.Value;
-    longitude: RNAnimated.Value;
-    latitudeDelta: RNAnimated.Value;
-    longitudeDelta: RNAnimated.Value;
+  export class AnimatedRegion extends Animated.AnimatedWithChildren {
+    latitude: Animated.Value;
+    longitude: Animated.Value;
+    latitudeDelta: Animated.Value;
+    longitudeDelta: Animated.Value;
 
     constructor(region?: Region);
 
