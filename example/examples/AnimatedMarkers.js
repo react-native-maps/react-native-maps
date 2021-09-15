@@ -46,7 +46,8 @@ class AnimatedMarkers extends React.Component {
         this.marker._component.animateMarkerToCoordinate(newCoordinate, 500);
       }
     } else {
-      coordinate.timing(newCoordinate).start();
+      // `useNativeDriver` defaults to false if not passed explicitly
+      coordinate.timing({ ...newCoordinate, useNativeDriver: true }).start();
     }
   }
 
