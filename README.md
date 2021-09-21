@@ -607,7 +607,7 @@ Source: https://github.com/react-native-maps/react-native-maps/issues/1901
 
 #### Crashing with EXC_BAD_ACCESS on iOS when switching apps
 
-`<MapView>` using Apple Maps in `mapType: "standard"` will sometimes crash when you background the app or switch into another app. This is only an issue in XCode using Metal API Validation, and won't happen in production. To eliminate this problem even while debugging in XCode, go to `Edit Scheme... -> Run (Debug) -> Diagnostics` and uncheck `Metal -> API Validation`. (h/t @Simon-TechForm).
+`<MapView>` using Apple Maps in `mapType: "standard"` will sometimes crash when you background the app or switch into another app. This is only an issue in XCode using Metal API Validation, and won't happen in production. To eliminate this problem even while debugging in XCode, go to `Edit Scheme... -> Run (Debug) -> Diagnostics` and uncheck `Metal -> API Validation`. (h/t [@Simon-TechForm](https://github.com/Simon-TechForm)).
 
 Source: https://github.com/react-native-maps/react-native-maps/issues/3957#issuecomment-924161121
 
