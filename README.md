@@ -604,7 +604,7 @@ Good:
 </View>
 ```
 
-### Children Components Not Re-Rendering
+#### Children Components Not Re-Rendering
 Components that aren't declared by this library (Ex: Markers, Polyline) must not be children of the MapView component due to MapView's unique rendering methodology. Have your custom components / views outside the MapView component and position absolute to ensure they only re-render as needed.
 Example:
 Bad:
@@ -627,6 +627,12 @@ Good:
 ```
 
 Source: https://github.com/react-native-maps/react-native-maps/issues/1901
+
+#### Crashing with EXC_BAD_ACCESS on iOS when switching apps
+
+`<MapView>` using Apple Maps in `mapType: "standard"` will sometimes crash when you background the app or switch into another app. This is only an issue in XCode using Metal API Validation, and won't happen in production. To eliminate this problem even while debugging in XCode, go to `Edit Scheme... -> Run (Debug) -> Diagnostics` and uncheck `Metal -> API Validation`. (h/t [@Simon-TechForm](https://github.com/Simon-TechForm)).
+
+Source: https://github.com/react-native-maps/react-native-maps/issues/3957#issuecomment-924161121
 
 License
 --------
