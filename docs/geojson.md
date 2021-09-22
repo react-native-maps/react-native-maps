@@ -16,6 +16,7 @@
 | `zIndex` | `Number`     |  | Layer level of the z-index value |
 | `onPress` | `Function`     |  | returns the selected overlay value with the onPress functionality |
 | `markerComponent` | `React Node`     |  | Component to render in place of the default marker when the overlay type is a `point` 
+| `title` | `string`     |  | The title of the marker. This is only used if the <Marker /> component has no children that  are a `<Callout />` 
 
 ## Example
 
