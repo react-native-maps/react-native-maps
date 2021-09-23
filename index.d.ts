@@ -334,6 +334,8 @@ declare module 'react-native-maps' {
     pointForCoordinate(coordinate: LatLng): Promise<Point>;
     coordinateForPoint(point: Point): Promise<LatLng>;
     setIndoorActiveLevelIndex(index: number): void;
+
+    __lastRegion?: Region;
   }
 
   export class Animated extends MapView {}
@@ -512,7 +514,7 @@ declare module 'react-native-maps' {
     doubleTileSize?: boolean;
     shouldReplaceMapContent?: boolean;
     flipY?: boolean;
-    tileCachePath?: string; 
+    tileCachePath?: string;
     tileCacheMaxAge?: number;
     offlineMode?: boolean;
     opacity?: number;
@@ -541,7 +543,7 @@ declare module 'react-native-maps' {
     zIndex?: number;
     tileSize?: number;
     shouldReplaceMapContent?: boolean;
-    tileCachePath?: string; 
+    tileCachePath?: string;
     tileCacheMaxAge?: number;
     offlineMode?: boolean;
     opacity?: number;
@@ -607,7 +609,7 @@ declare module 'react-native-maps' {
     miterLimit?: number;
     zIndex?: number;
     onPress?: (event: MapEvent) => void;
-    markerComponent?: React.ReactNode
+    markerComponent?: React.ReactNode;
   }
 
   export class Geojson extends React.Component<GeojsonProps, any> {}
