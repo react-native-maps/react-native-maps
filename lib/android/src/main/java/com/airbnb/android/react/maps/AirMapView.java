@@ -286,7 +286,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     map.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
       @Override
       public void onPolylineClick(Polyline polyline) {
-        WritableMap event = makeClickEventData(tapLocation);
+        WritableMap event = makeClickEventData(polyline.getPoints().get(0));
         event.putString("action", "polyline-press");
         manager.pushEvent(context, polylineMap.get(polyline), "onPress", event);
       }
