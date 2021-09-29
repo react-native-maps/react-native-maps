@@ -512,7 +512,7 @@ declare module 'react-native-maps' {
     doubleTileSize?: boolean;
     shouldReplaceMapContent?: boolean;
     flipY?: boolean;
-    tileCachePath?: string; 
+    tileCachePath?: string;
     tileCacheMaxAge?: number;
     offlineMode?: boolean;
     opacity?: number;
@@ -541,7 +541,7 @@ declare module 'react-native-maps' {
     zIndex?: number;
     tileSize?: number;
     shouldReplaceMapContent?: boolean;
-    tileCachePath?: string; 
+    tileCachePath?: string;
     tileCacheMaxAge?: number;
     offlineMode?: boolean;
     opacity?: number;
@@ -606,8 +606,10 @@ declare module 'react-native-maps' {
     lineJoin?: 'miter' | 'round' | 'bevel';
     miterLimit?: number;
     zIndex?: number;
+    tappable?: boolean;
+    title?: string;
     onPress?: (event: MapEvent) => void;
-    markerComponent?: React.ReactNode
+    markerComponent?: React.ReactNode;
   }
 
   export class Geojson extends React.Component<GeojsonProps, any> {}
