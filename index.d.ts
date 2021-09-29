@@ -596,7 +596,7 @@ declare module 'react-native-maps' {
   import GeoJSON from 'geojson';
 
   export interface GeojsonProps {
-    geojson: GeoJSON.GeoJSON;
+    geojson: GeoJSON.FeatureCollection;
     strokeColor?: string;
     fillColor?: string;
     strokeWidth?: number;
