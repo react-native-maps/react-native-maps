@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.compiler_flags = '-DHAVE_GOOGLE_MAPS=1', '-DHAVE_GOOGLE_MAPS_UTILS=1', '-fno-modules'
 
   s.dependency 'React-Core'
-  s.dependency 'GoogleMaps', '3.7.0'
-  s.dependency 'Google-Maps-iOS-Utils', '3.0.0'
+  s.dependency 'GoogleMaps', '5.1.0'
+  s.dependency 'Google-Maps-iOS-Utils', '3.10.3'
 end
