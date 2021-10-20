@@ -1,22 +1,22 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { StyleSheet, ViewPropTypes, View } from 'react-native';
+import { NativeSyntheticEvent, StyleSheet, ViewProps } from 'react-native';
+import { Frame, Point } from '../types';
 import decorateMapComponent, {
   SUPPORTED,
   NOT_SUPPORTED,
+  AirComponent,
+  UIManagerCommand,
+  MapManagerCommand,
+  ProviderContext,
 } from './decorateMapComponent';
 
-// if ViewPropTypes is not defined fall back to View.propType (to support RN < 0.44)
-const viewPropTypes = ViewPropTypes || View.propTypes;
+export class MapCalloutSubview extends React.Component<Props> {
+  // declaration only, as they are set through decorateMap
+  declare context: React.ContextType<typeof ProviderContext>;
+  getAirComponent!: () => AirComponent<NativeProps>;
+  getMapManagerCommand!: (name: string) => MapManagerCommand;
+  getUIManagerCommand!: (name: string) => UIManagerCommand;
 
-const propTypes = {
-  ...viewPropTypes,
-  onPress: PropTypes.func,
-};
-
-const defaultProps = {};
-
-class MapCalloutSubview extends React.Component {
   render() {
     const AIRMapCalloutSubview = this.getAirComponent();
     return (
@@ -27,9 +27,6 @@ class MapCalloutSubview extends React.Component {
     );
   }
 }
-
-MapCalloutSubview.propTypes = propTypes;
-MapCalloutSubview.defaultProps = defaultProps;
 
 const styles = StyleSheet.create({
   calloutSubview: {},
@@ -44,3 +41,27 @@ export default decorateMapComponent(MapCalloutSubview, {
     },
   },
 });
+
+type Props = ViewProps & {
+  /**
+   * Callback that is called when the user presses on this subview inside callout
+   *
+   * @platform iOS: Supported
+   * @platform Android: Not supported
+   */
+  onPress?: (event: CalloutSubviewPressEvent) => void;
+};
+
+export type NativeProps = Props;
+
+type CalloutSubviewPressEvent = NativeSyntheticEvent<{
+  /**
+   * Apple Maps: `callout-inside-press`
+   *
+   * Google Maps: `marker-inside-overlay-press`
+   */
+  action: 'callout-inside-press' | 'marker-inside-overlay-press';
+  frame: Frame;
+  id: string;
+  point: Point;
+}>;
