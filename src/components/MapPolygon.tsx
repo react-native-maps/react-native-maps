@@ -1,160 +1,48 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { ColorPropType, ViewPropTypes, View } from 'react-native';
+import { NativeSyntheticEvent, View, ViewProps } from 'react-native';
+import { LatLng, LineCapType, LineJoinType, Point } from '../types';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
+  AirComponent,
+  UIManagerCommand,
+  MapManagerCommand,
+  ProviderContext,
 } from './decorateMapComponent';
 import * as ProviderConstants from './ProviderConstants';
 
-// if ViewPropTypes is not defined fall back to View.propType (to support RN < 0.44)
-const viewPropTypes = ViewPropTypes || View.propTypes;
-
-const propTypes = {
-  ...viewPropTypes,
-
-  /**
-   * An array of coordinates to describe the polygon
-   */
-  coordinates: PropTypes.arrayOf(
-    PropTypes.shape({
-      /**
-       * Latitude/Longitude coordinates
-       */
-      latitude: PropTypes.number.isRequired,
-      longitude: PropTypes.number.isRequired,
-    })
-  ),
-
-  /**
-   * An array of array of coordinates to describe the polygon holes
-   */
-  holes: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        /**
-         * Latitude/Longitude coordinates
-         */
-        latitude: PropTypes.number.isRequired,
-        longitude: PropTypes.number.isRequired,
-      })
-    )
-  ),
-
-  /**
-   * Callback that is called when the user presses on the polygon
-   */
-  onPress: PropTypes.func,
-
-  /**
-   * Boolean to allow a polygon to be tappable and use the
-   * onPress function
-   */
-  tappable: PropTypes.bool,
-
-  /**
-   * The stroke width to use for the path.
-   */
-  strokeWidth: PropTypes.number,
-
-  /**
-   * The stroke color to use for the path.
-   */
-  strokeColor: ColorPropType,
-
-  /**
-   * The fill color to use for the path.
-   */
-  fillColor: ColorPropType,
-
-  /**
-   * The order in which this tile overlay is drawn with respect to other overlays. An overlay
-   * with a larger z-index is drawn over overlays with smaller z-indices. The order of overlays
-   * with the same z-index is arbitrary. The default zIndex is 0.
-   *
-   * @platform android
-   */
-  zIndex: PropTypes.number,
-
-  /**
-   * The line cap style to apply to the open ends of the path.
-   * The default style is `round`.
-   *
-   * @platform ios
-   */
-  lineCap: PropTypes.oneOf(['butt', 'round', 'square']),
-
-  /**
-   * The line join style to apply to corners of the path.
-   * The default style is `round`.
-   *
-   * @platform ios
-   */
-  lineJoin: PropTypes.oneOf(['miter', 'round', 'bevel']),
-
-  /**
-   * The limiting value that helps avoid spikes at junctions between connected line segments.
-   * The miter limit helps you avoid spikes in paths that use the `miter` `lineJoin` style. If
-   * the ratio of the miter length—that is, the diagonal length of the miter join—to the line
-   * thickness exceeds the miter limit, the joint is converted to a bevel join. The default
-   * miter limit is 10, which results in the conversion of miters whose angle at the joint
-   * is less than 11 degrees.
-   *
-   * @platform ios
-   */
-  miterLimit: PropTypes.number,
-
-  /**
-   * Boolean to indicate whether to draw each segment of the line as a geodesic as opposed to
-   * straight lines on the Mercator projection. A geodesic is the shortest path between two
-   * points on the Earth's surface. The geodesic curve is constructed assuming the Earth is
-   * a sphere.
-   *
-   */
-  geodesic: PropTypes.bool,
-
-  /**
-   * The offset (in points) at which to start drawing the dash pattern.
-   *
-   * Use this property to start drawing a dashed line partway through a segment or gap. For
-   * example, a phase value of 6 for the patter 5-2-3-2 would cause drawing to begin in the
-   * middle of the first gap.
-   *
-   * The default value of this property is 0.
-   *
-   * @platform ios
-   */
-  lineDashPhase: PropTypes.number,
-
-  /**
-   * An array of numbers specifying the dash pattern to use for the path.
-   *
-   * The array contains one or more numbers that indicate the lengths (measured in points) of the
-   * line segments and gaps in the pattern. The values in the array alternate, starting with the
-   * first line segment length, followed by the first gap length, followed by the second line
-   * segment length, and so on.
-   *
-   * This property is set to `null` by default, which indicates no line dash pattern.
-   *
-   * @platform ios
-   */
-  lineDashPattern: PropTypes.arrayOf(PropTypes.number),
-};
-
-const defaultProps = {
+const defaultProps: Partial<Props> = {
   strokeColor: '#000',
   strokeWidth: 1,
 };
 
-class MapPolygon extends React.Component {
-  setNativeProps(props) {
-    this.polygon.setNativeProps(props);
+export class MapPolygon extends React.Component<Props> {
+  static defaultProps = defaultProps;
+  private polygon: NativeProps['ref'];
+
+  // declaration only, as they are set through decorateMap
+  declare context: React.ContextType<typeof ProviderContext>;
+  getAirComponent!: () => AirComponent<NativeProps>;
+  getMapManagerCommand!: (name: string) => MapManagerCommand;
+  getUIManagerCommand!: (name: string) => UIManagerCommand;
+
+  constructor(props: Props) {
+    super(props);
+    this.polygon = React.createRef<View>();
+  }
+
+  setNativeProps(props: Partial<NativeProps>) {
+    this.polygon.current?.setNativeProps(props);
   }
 
   updateNativeProps() {
     return () => {
       const { fillColor, strokeColor, strokeWidth } = this.props;
-      let polygonNativeProps = {};
+      let polygonNativeProps: {
+        fillColor?: string;
+        strokeColor?: string;
+        strokeWidth?: number;
+      } = {};
       if (fillColor) {
         polygonNativeProps.fillColor = fillColor;
       }
@@ -164,9 +52,8 @@ class MapPolygon extends React.Component {
       if (strokeWidth) {
         polygonNativeProps.strokeWidth = strokeWidth;
       }
-      if (polygonNativeProps) {
-        this.setNativeProps(polygonNativeProps);
-      }
+
+      this.setNativeProps(polygonNativeProps);
     };
   }
 
@@ -175,11 +62,9 @@ class MapPolygon extends React.Component {
     return (
       <AIRMapPolygon
         {...this.props}
-        ref={(ref) => {
-          this.polygon = ref;
-        }}
+        ref={this.polygon}
         onLayout={
-          this.context.provider === ProviderConstants.PROVIDER_GOOGLE
+          this.context === ProviderConstants.PROVIDER_GOOGLE
             ? this.updateNativeProps()
             : undefined
         }
@@ -187,9 +72,6 @@ class MapPolygon extends React.Component {
     );
   }
 }
-
-MapPolygon.propTypes = propTypes;
-MapPolygon.defaultProps = defaultProps;
 
 export default decorateMapComponent(MapPolygon, {
   componentType: 'Polygon',
@@ -200,3 +82,159 @@ export default decorateMapComponent(MapPolygon, {
     },
   },
 });
+
+export type Props = ViewProps & {
+  /**
+   * An array of coordinates to describe the polygon
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  coordinates: LatLng[];
+
+  /**
+   * The fill color to use for the path.
+   *
+   * @default `#000`, `rgba(r,g,b,0.5)`
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  fillColor?: string;
+
+  /**
+   * Boolean to indicate whether to draw each segment of the line as a geodesic as opposed to straight lines on the Mercator projection.
+   * A geodesic is the shortest path between two points on the Earth's surface.
+   * The geodesic curve is constructed assuming the Earth is a sphere.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  geodesic?: boolean;
+
+  /**
+   * A 2d array of coordinates to describe holes of the polygon where each hole has at least 3 points.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  holes?: LatLng[][];
+
+  /**
+   * The line cap style to apply to the open ends of the path
+   *
+   * @default `round`
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  lineCap?: LineCapType;
+
+  /**
+   * An array of numbers specifying the dash pattern to use for the path.
+   * The array contains one or more numbers that indicate the lengths (measured in points)
+   * of the line segments and gaps in the pattern.
+   * The values in the array alternate, starting with the first line segment length,
+   * followed by the first gap length, followed by the second line segment length, and so on.
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  lineDashPattern?: number[];
+
+  /**
+   * The offset (in points) at which to start drawing the dash pattern.
+   * Use this property to start drawing a dashed line partway through a segment or gap.
+   * For example, a phase value of 6 for the patter 5-2-3-2 would cause drawing to begin in the middle of the first gap.
+   *
+   * @default 0
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  lineDashPhase?: number;
+
+  /**
+   * The line join style to apply to corners of the path.
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  lineJoin?: LineJoinType;
+
+  /**
+   * The limiting value that helps avoid spikes at junctions between connected line segments.
+   * The miter limit helps you avoid spikes in paths that use the `miter` `lineJoin` style.
+   * If the ratio of the miter length—that is, the diagonal length of the miter join—to the line thickness exceeds the miter limit,
+   * the joint is converted to a bevel join.
+   * The default miter limit is 10, which results in the conversion of miters whose angle at the joint is less than 11 degrees.
+   *
+   * @default 10
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  miterLimit?: number;
+
+  /**
+   * Callback that is called when the user presses on the polygon
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  onPress?: (event: PolygonPressEvent) => void;
+
+  /**
+   * The stroke color to use for the path.
+   *
+   * @default `#000`, `rgba(r,g,b,0.5)`
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  strokeColor?: string;
+
+  /**
+   * The stroke width to use for the path.
+   *
+   * @default 1
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  strokeWidth?: number;
+
+  /**
+   * Boolean to allow a polygon to be tappable and use the onPress function.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  tappable?: boolean;
+
+  /**
+   * The order in which this tile overlay is drawn with respect to other overlays.
+   * An overlay with a larger z-index is drawn over overlays with smaller z-indices.
+   * The order of overlays with the same z-index is arbitrary.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  zIndex?: number;
+};
+
+type PolygonPressEvent = NativeSyntheticEvent<{
+  action: 'polygon-press';
+
+  /**
+   * @platform iOS: Google Maps
+   */
+  id?: string;
+
+  /**
+   * @platform iOS: Apple Maps
+   * @platform Android
+   */
+  coordinate?: LatLng;
+
+  /**
+   * @platform Android
+   */
+  position?: Point;
+}>;
+
+type NativeProps = Props & { ref: React.RefObject<View> };
