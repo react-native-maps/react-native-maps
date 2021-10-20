@@ -163,29 +163,6 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
-                  withRegion:(MKCoordinateRegion)region
-                  withBearing:(CGFloat)bearing
-                  withAngle:(double)angle
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[AIRGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
-    } else {
-      [CATransaction begin];
-      [CATransaction setAnimationDuration:duration/1000];
-      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-      GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:mapView andMKCoordinateRegion:region];
-      [mapView animateToCameraPosition:camera];
-      [mapView animateToViewingAngle:angle];
-      [mapView animateToBearing:bearing];
-      [CATransaction commit];
-    }
-  }];
-}
-
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
                   withRegion:(MKCoordinateRegion)region
                   withDuration:(CGFloat)duration)
@@ -202,59 +179,6 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
       GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:mapView andMKCoordinateRegion:region];
       [mapView animateToCameraPosition:camera];
-      [CATransaction commit];
-    }
-  }];
-}
-
-RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
-                  withRegion:(CLLocationCoordinate2D)latlng
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[AIRGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
-    } else {
-      [CATransaction begin];
-      [CATransaction setAnimationDuration:duration/1000];
-      [(AIRGoogleMap *)view animateToLocation:latlng];
-      [CATransaction commit];
-    }
-  }];
-}
-
-RCT_EXPORT_METHOD(animateToViewingAngle:(nonnull NSNumber *)reactTag
-                  withAngle:(double)angle
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[AIRGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
-    } else {
-      [CATransaction begin];
-      [CATransaction setAnimationDuration:duration/1000];
-      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-      [mapView animateToViewingAngle:angle];
-      [CATransaction commit];
-    }
-  }];
-}
-
-RCT_EXPORT_METHOD(animateToBearing:(nonnull NSNumber *)reactTag
-                  withBearing:(CGFloat)bearing
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[AIRGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
-    } else {
-      [CATransaction begin];
-      [CATransaction setAnimationDuration:duration/1000];
-      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-      [mapView animateToBearing:bearing];
       [CATransaction commit];
     }
   }];

@@ -691,41 +691,7 @@ class MapView extends React.Component {
     this._runCommand('animateCamera', [camera, opts ? opts.duration : 500]);
   }
 
-  animateToNavigation(location, bearing, angle, duration) {
-    console.warn(
-      'animateToNavigation() is deprecated, use animateCamera() instead'
-    );
-    this._runCommand('animateToNavigation', [
-      location,
-      bearing,
-      angle,
-      duration || 500,
-    ]);
-  }
-
-  animateToRegion(region, duration) {
-    this._runCommand('animateToRegion', [region, duration || 500]);
-  }
-
-  animateToCoordinate(latLng, duration) {
-    console.warn(
-      'animateToCoordinate() is deprecated, use animateCamera() instead'
-    );
-    this._runCommand('animateToCoordinate', [latLng, duration || 500]);
-  }
-
-  animateToBearing(bearing, duration) {
-    console.warn(
-      'animateToBearing() is deprecated, use animateCamera() instead'
-    );
-    this._runCommand('animateToBearing', [bearing, duration || 500]);
-  }
-
-  animateToViewingAngle(angle, duration) {
-    console.warn(
-      'animateToViewingAngle() is deprecated, use animateCamera() instead'
-    );
-    this._runCommand('animateToViewingAngle', [angle, duration || 500]);
+    this._runCommand('animateToRegion', [region, duration]);
   }
 
   fitToElements(options = {}) {

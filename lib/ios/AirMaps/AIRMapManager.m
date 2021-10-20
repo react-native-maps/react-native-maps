@@ -278,31 +278,6 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-
-RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
-        withRegion:(MKCoordinateRegion)region
-        withBearing:(CGFloat)bearing
-        withAngle:(double)angle
-        withDuration:(CGFloat)duration)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[AIRMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-        } else {
-            AIRMap *mapView = (AIRMap *)view;
-            MKMapCamera *mapCamera = [[mapView camera] copy];
-             [mapCamera setPitch:angle];
-             [mapCamera setHeading:bearing];
-
-            [AIRMap animateWithDuration:duration/1000 animations:^{
-                [(AIRMap *)view setRegion:region animated:YES];
-                [mapView setCamera:mapCamera animated:YES];
-            }];
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
         withRegion:(MKCoordinateRegion)region
         withDuration:(CGFloat)duration)
@@ -317,68 +292,6 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
             }];
         }
     }];
-}
-
-RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
-        withRegion:(CLLocationCoordinate2D)latlng
-        withDuration:(CGFloat)duration)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[AIRMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-        } else {
-            AIRMap *mapView = (AIRMap *)view;
-            MKCoordinateRegion region;
-            region.span = mapView.region.span;
-            region.center = latlng;
-            [AIRMap animateWithDuration:duration/1000 animations:^{
-                [mapView setRegion:region animated:YES];
-            }];
-        }
-    }];
-}
-
-RCT_EXPORT_METHOD(animateToViewingAngle:(nonnull NSNumber *)reactTag
-                  withAngle:(double)angle
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-      id view = viewRegistry[reactTag];
-      if (![view isKindOfClass:[AIRMap class]]) {
-          RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-      } else {
-          AIRMap *mapView = (AIRMap *)view;
-
-          MKMapCamera *mapCamera = [[mapView camera] copy];
-          [mapCamera setPitch:angle];
-
-          [AIRMap animateWithDuration:duration/1000 animations:^{
-              [mapView setCamera:mapCamera animated:YES];
-          }];
-      }
-  }];
-}
-
-RCT_EXPORT_METHOD(animateToBearing:(nonnull NSNumber *)reactTag
-                  withBearing:(CGFloat)bearing
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-      id view = viewRegistry[reactTag];
-      if (![view isKindOfClass:[AIRMap class]]) {
-          RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-      } else {
-          AIRMap *mapView = (AIRMap *)view;
-
-          MKMapCamera *mapCamera = [[mapView camera] copy];
-          [mapCamera setHeading:bearing];
-
-          [AIRMap animateWithDuration:duration/1000 animations:^{
-              [mapView setCamera:mapCamera animated:YES];
-          }];
-      }
-  }];
 }
 
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
