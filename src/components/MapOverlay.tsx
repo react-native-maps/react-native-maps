@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { View, StyleSheet, Image, Animated } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  Animated as RNAnimated,
+  ViewProps,
+  ImageURISource,
+  ImageRequireSource,
+  NativeSyntheticEvent,
+} from 'react-native';
+import { LatLng, Modify, Point } from '../types';
 
 import decorateMapComponent, {
+  AirComponent,
+  MapManagerCommand,
+  ProviderContext,
   SUPPORTED,
+  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
 
@@ -14,37 +26,25 @@ const viewConfig = {
   },
 };
 
-const propTypes = {
-  ...View.propTypes,
-  // A custom image to be used as overlay.
-  image: PropTypes.any.isRequired,
-  // Top left and bottom right coordinates for the overlay
-  bounds: PropTypes.arrayOf(PropTypes.array.isRequired).isRequired,
-  // The bearing in degrees clockwise from north.
-  bearing: PropTypes.number,
-  /* Boolean to allow an overlay to be tappable and use the
-   * onPress function
-   */
-  tappable: PropTypes.bool,
-  // Callback that is called when the user presses on the overlay
-  onPress: PropTypes.func,
-  // The opacity of the overlay.
-  opacity: PropTypes.number,
+const defaultProps: Partial<Props> = {
+  opacity: 1.0,
 };
 
-class MapOverlay extends Component {
+export class MapOverlay extends Component<Props> {
+  static defaultProps = defaultProps;
+  static viewConfig = viewConfig;
+
+  // declaration only, as they are set through decorateMap
+  declare context: React.ContextType<typeof ProviderContext>;
+  getAirComponent!: () => AirComponent<NativeProps>;
+  getMapManagerCommand!: (name: string) => MapManagerCommand;
+  getUIManagerCommand!: (name: string) => UIManagerCommand;
+
   render() {
     let image;
     if (this.props.image) {
-      if (
-        typeof this.props.image.startsWith === 'function' &&
-        this.props.image.startsWith('http')
-      ) {
-        image = this.props.image;
-      } else {
-        image = Image.resolveAssetSource(this.props.image) || {};
-        image = image.uri;
-      }
+      image = Image.resolveAssetSource(this.props.image) || {};
+      image = image.uri;
     }
 
     const AIRMapOverlay = this.getAirComponent();
@@ -59,12 +59,6 @@ class MapOverlay extends Component {
   }
 }
 
-MapOverlay.propTypes = propTypes;
-MapOverlay.viewConfig = viewConfig;
-MapOverlay.defaultProps = {
-  opacity: 1.0,
-};
-
 const styles = StyleSheet.create({
   overlay: {
     position: 'absolute',
@@ -72,7 +66,7 @@ const styles = StyleSheet.create({
   },
 });
 
-MapOverlay.Animated = Animated.createAnimatedComponent(MapOverlay);
+export const Animated = RNAnimated.createAnimatedComponent(MapOverlay);
 
 export default decorateMapComponent(MapOverlay, {
   componentType: 'Overlay',
@@ -83,3 +77,85 @@ export default decorateMapComponent(MapOverlay, {
     },
   },
 });
+
+type Coordinate = [number, number];
+
+type Props = ViewProps & {
+  /**
+   * The bearing in degrees clockwise from north. Values outside the range [0, 360) will be normalized.
+   *
+   * @default 0
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  bearing?: number;
+
+  /**
+   * The coordinates for the image (left-top corner, right-bottom corner). ie.```[[lat, long], [lat, long]]```
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  bounds: [Coordinate, Coordinate];
+
+  /**
+   * A custom image to be used as the overlay.
+   * Only required local image resources and uri (as for images located in the net) are allowed to be used.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  image: ImageURISource | ImageRequireSource;
+
+  /**
+   * Callback that is called when the user presses on the overlay
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Supported
+   */
+  onPress?: (event: OverlayPressEvent) => void;
+
+  /**
+   * The opacity of the overlay.
+   *
+   * @default 1
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  opacity?: number;
+
+  /**
+   * Boolean to allow an overlay to be tappable and use the onPress function.
+   *
+   * @default false
+   * @platform iOS: Not supported
+   * @platform Android: Supported
+   */
+  tappable?: boolean;
+};
+
+type OverlayPressEvent = NativeSyntheticEvent<{
+  /**
+   * @platform iOS: Apple Maps: `image-overlay-press`
+   * @platform Android: `overlay-press`
+   */
+  action: 'overlay-press' | 'image-overlay-press';
+
+  /**
+   * @platform iOS: Apple maps
+   */
+  name?: string;
+
+  /**
+   * @platform iOS: Apple Maps
+   * @platform Android
+   */
+  coordinate?: LatLng;
+
+  /**
+   * @platform Android
+   */
+  position?: Point;
+}>;
+
+type NativeProps = Modify<Props, { image?: string }>;
