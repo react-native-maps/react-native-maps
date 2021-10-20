@@ -1,4 +1,5 @@
 import { Animated } from 'react-native';
+import { Region } from '../types';
 
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 if (__DEV__) {
@@ -9,7 +10,9 @@ if (__DEV__) {
   }
 }
 
-const configTypes = [
+type Props = Partial<Region> | undefined;
+
+const configTypes: (keyof Region)[] = [
   'latitude',
   'longitude',
   'latitudeDelta',
@@ -26,14 +29,14 @@ const defaultValues = {
 
 let _uniqueId = 1;
 
-const getAnimatedValue = (valueIn, fallback) => {
+const getAnimatedValue = (valueIn: any, fallback: number) => {
   return valueIn instanceof Animated.Value
     ? valueIn
     : new Animated.Value(fallback);
 };
 
 export default class AnimatedMapRegion extends AnimatedWithChildren {
-  constructor(valueIn = {}) {
+  constructor(valueIn: Props = {}) {
     super();
     this.latitude = getAnimatedValue(valueIn.latitude, defaultValues.latitude);
     this.longitude = getAnimatedValue(
@@ -51,14 +54,14 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     this._regionListeners = {};
   }
 
-  setValue(value) {
+  setValue(value: Region) {
     this.latitude._value = value.latitude;
     this.longitude._value = value.longitude;
     this.latitudeDelta._value = value.latitudeDelta;
     this.longitudeDelta._value = value.longitudeDelta;
   }
 
-  setOffset(offset) {
+  setOffset(offset: Region) {
     this.latitude.setOffset(offset.latitude);
     this.longitude.setOffset(offset.longitude);
     this.latitudeDelta.setOffset(offset.latitudeDelta);
@@ -72,7 +75,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     this.longitudeDelta.flattenOffset();
   }
 
-  __getValue() {
+  private __getValue() {
     return {
       latitude: this.latitude.__getValue(),
       longitude: this.longitude.__getValue(),
@@ -81,21 +84,23 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     };
   }
 
-  __attach() {
+  // Unused?
+  private __attach() {
     this.latitude.__addChild(this);
     this.longitude.__addChild(this);
     this.latitudeDelta.__addChild(this);
     this.longitudeDelta.__addChild(this);
   }
 
-  __detach() {
+  // Unused?
+  private __detach() {
     this.latitude.__removeChild(this);
     this.longitude.__removeChild(this);
     this.latitudeDelta.__removeChild(this);
     this.longitudeDelta.__removeChild(this);
   }
 
-  stopAnimation(callback) {
+  stopAnimation(callback: (region: Region) => void) {
     this.latitude.stopAnimation();
     this.longitude.stopAnimation();
     this.latitudeDelta.stopAnimation();
@@ -103,7 +108,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     callback && callback(this.__getValue());
   }
 
-  addListener(callback) {
+  addListener(callback: (region: Region) => void) {
     const id = String(_uniqueId++);
     const jointCallback = () => /*{value}*/ callback(this.__getValue());
     this._regionListeners[id] = {
@@ -115,7 +120,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     return id;
   }
 
-  removeListener(id) {
+  removeListener(id: string) {
     this.latitude.removeListener(this._regionListeners[id].latitude);
     this.longitude.removeListener(this._regionListeners[id].longitude);
     this.latitudeDelta.removeListener(this._regionListeners[id].latitudeDelta);
@@ -125,7 +130,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     delete this._regionListeners[id];
   }
 
-  spring(config) {
+  spring(config: Animated.SpringAnimationConfig & Region) {
     const animations = [];
     for (const type of configTypes) {
       if (config.hasOwnProperty(type)) {
@@ -142,7 +147,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     return Animated.parallel(animations);
   }
 
-  timing(config) {
+  timing(config: Animated.TimingAnimationConfig & Region) {
     const animations = [];
     for (const type of configTypes) {
       if (config.hasOwnProperty(type)) {
