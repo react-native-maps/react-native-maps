@@ -23,8 +23,8 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": ">= 16.0 || < 18.0",
-    "react-native": ">= 0.51",
+    "react": ">= 16.13.1 || < 18.0",
+    "react-native": ">= 0.63.4",
     "react-native-web": "^0.13"
   },
   "devDependencies": {
