@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { StyleSheet, ViewPropTypes, View } from 'react-native';
+import { StyleSheet, ViewProps } from 'react-native';
+import { CalloutPressEvent } from '../types';
 import decorateMapComponent, {
+  AirComponent,
+  MapManagerCommand,
+  ProviderContext,
   SUPPORTED,
+  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
 
-// if ViewPropTypes is not defined fall back to View.propType (to support RN < 0.44)
-const viewPropTypes = ViewPropTypes || View.propTypes;
-
-const propTypes = {
-  ...viewPropTypes,
-  tooltip: PropTypes.bool,
-  onPress: PropTypes.func,
-  alphaHitTest: PropTypes.bool,
-};
-
-const defaultProps = {
+const defaultProps: Partial<Props> = {
   tooltip: false,
   alphaHitTest: false,
 };
 
-class MapCallout extends React.Component {
+export class MapCallout extends React.Component<Props> {
+  static defaultProps = defaultProps;
+
+  // declaration only, as they are set through decorateMap
+  declare context: React.ContextType<typeof ProviderContext>;
+  getAirComponent!: () => AirComponent<NativeProps>;
+  getMapManagerCommand!: (name: string) => MapManagerCommand;
+  getUIManagerCommand!: (name: string) => UIManagerCommand;
+
   render() {
     const AIRMapCallout = this.getAirComponent();
     return (
@@ -32,9 +34,6 @@ class MapCallout extends React.Component {
     );
   }
 }
-
-MapCallout.propTypes = propTypes;
-MapCallout.defaultProps = defaultProps;
 
 const styles = StyleSheet.create({
   callout: {
@@ -51,3 +50,33 @@ export default decorateMapComponent(MapCallout, {
     },
   },
 });
+
+type Props = ViewProps & {
+  /**
+   * If `true`, clicks on transparent areas in callout will be passed to map.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Not supported
+   */
+  alphaHitTest?: boolean;
+
+  /**
+   * Callback that is called when the user presses on the callout
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Supported
+   */
+  onPress?: (event: CalloutPressEvent) => void;
+
+  /**
+   * If `false`, a default "tooltip" bubble window will be drawn around this callouts children.
+   * If `true`, the child views can fully customize their appearance, including any "bubble" like styles.
+   *
+   * @default false
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  tooltip?: boolean;
+};
+
+type NativeProps = Props;
