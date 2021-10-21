@@ -415,8 +415,10 @@ export type Props = ViewProps & {
 
   /**
    * Sets whether this marker should propagate `onPress` events.
-   * Enabling it will stop the parent `MapView`'s `onPress` from being called. **Note**: iOS only.
+   * Enabling it will stop the parent `MapView`'s `onPress` from being called.
+   *
    * Android does not propagate `onPress` events.
+   *
    * See [#1132](https://github.com/react-community/react-native-maps/issues/1132) for more information.
    *
    * @default false

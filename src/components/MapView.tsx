@@ -127,7 +127,7 @@ class MapView extends React.Component<Props, State, SnapShot> {
     this._updateStyle(this.props.customMapStyle);
     this.setState({ isReady: true }, () => {
       if (onMapReady) {
-        onMapReady(event);
+        onMapReady();
       }
     });
   }
@@ -752,11 +752,14 @@ type Props = ViewProps & {
   onMapLoaded?: (event: NativeSyntheticEvent<{}>) => void;
   /**
    * Callback that is called once the map is ready.
+   * 
+   * Event is optional, as the first onMapReady callback is intercepted
+   * on Android, and the event is not passed on.
    *
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onMapReady?: (event: NativeSyntheticEvent<{}>) => void;
+  onMapReady?: (event?: NativeSyntheticEvent<{}>) => void;
 
   /**
    * Callback that is called when a marker on the map becomes deselected.
