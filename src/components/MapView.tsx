@@ -117,7 +117,7 @@ class MapView extends React.Component<Props, State, SnapShot> {
     });
   }
 
-  private _onMapReady(event: NativeSyntheticEvent<{}>) {
+  private _onMapReady() {
     const { region, initialRegion, onMapReady } = this.props;
     if (region) {
       this.map.current?.setNativeProps({ region });
@@ -750,9 +750,10 @@ type Props = ViewProps & {
    * @platform Android: Supported
    */
   onMapLoaded?: (event: NativeSyntheticEvent<{}>) => void;
+
   /**
    * Callback that is called once the map is ready.
-   * 
+   *
    * Event is optional, as the first onMapReady callback is intercepted
    * on Android, and the event is not passed on.
    *
