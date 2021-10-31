@@ -18,6 +18,7 @@
 | `identifier` | `String` |  | An identifier used to reference this marker at a later date.
 | `rotation` | `Float` | 0 | A float number indicating marker's rotation angle, in degrees.
 | `draggable` | `<null>` |  | This is a non-value based prop. Adding this allows the marker to be draggable (re-positioned).
+| `tappable` | `Boolean` | true | Sets whether marker should be tappable. If set to false, the marker will not have onPress events. **Note**: iOS Google Maps only.
 | `tracksViewChanges` | `Boolean` | true | Sets whether this marker should track view changes. It's recommended to turn it off whenever it's possible to improve custom marker performance.
 | `tracksInfoWindowChanges` | `Boolean` | false | Sets whether this marker should track view changes in info window. Enabling it will let marker change content of info window after first render pass, but will lead to decreased performance, so it's recommended to disable it whenever you don't need it. **Note**: iOS Google Maps only.
 | `stopPropagation` | `Boolean` | false | Sets whether this marker should propagate `onPress` events. Enabling it will stop the parent `MapView`'s `onPress` from being called. **Note**: iOS only. Android does not propagate `onPress` events. See [#1132](https://github.com/react-community/react-native-maps/issues/1132) for more information.
