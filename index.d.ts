@@ -358,6 +358,7 @@ declare module 'react-native-maps' {
     calloutAnchor?: Point;
     flat?: boolean;
     draggable?: boolean;
+    tappable?: boolean;
     tracksViewChanges?: boolean;
     tracksInfoWindowChanges?: boolean;
     stopPropagation?: boolean;
