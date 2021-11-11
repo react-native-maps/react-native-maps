@@ -1,5 +1,9 @@
 # Change Log
-## 0.28.0
+
+## 0.28.1 (November 10, 2021)
+* Common: [#3996](https://github.com/react-native-maps/react-native-maps/pull/3996) Allow wider version range for react-native-web peer dependency
+
+## 0.28.0 (April 20, 2021)
 
 * Common: [#3705](https://github.com/react-native-maps/react-native-maps/pull/3705) Update example project
 * Common: [#3424](https://github.com/react-native-maps/react-native-maps/pull/3424) Bugfix for the "require cycles" warning
