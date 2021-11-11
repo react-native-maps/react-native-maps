@@ -24,7 +24,7 @@
   "peerDependencies": {
     "react": ">= 16.0 || < 18.0",
     "react-native": ">= 0.51",
-    "react-native-web": "^0.13"
+    "react-native-web": ">= 0.11"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "3.0.1",
