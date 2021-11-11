@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.30.0 - (November 10, 2021)
+* Common: [#3789](https://github.com/react-native-maps/react-native-maps/pull/3789) URLTile tile caching
+* Common: [#3938](https://github.com/react-native-maps/react-native-maps/pull/3938) Add URLTile & WMSTile opacity property
+* Common: [#3996](https://github.com/react-native-maps/react-native-maps/pull/3996) Allow wider version range for react-native-web peer dependency
+* Common: [#3977](https://github.com/react-native-maps/react-native-maps/pull/3977) Upgrade example app to React Native 0.65.1
+* Common: [#3972](https://github.com/react-native-maps/react-native-maps/pull/3972) Fix default color and stroke width properties for Geojson component
+* Common: [#3965](https://github.com/react-native-maps/react-native-maps/pull/3965) GeoJSON Marker Title Prop & A bit Refactor
+* Common: [#3744](https://github.com/react-native-maps/react-native-maps/pull/3744) Updates AnimatedRegion component
+* Common: [#3966](https://github.com/react-native-maps/react-native-maps/pull/3966) Fix polygon on press wrong coordinates
+* iOS: [#3997](https://github.com/react-native-maps/react-native-maps/pull/3997) Allow markers to be un-tappable on ios gmaps
+* iOS: [#3944](https://github.com/react-native-maps/react-native-maps/pull/3944) Add heading to onUserLocationChange
+* iOS: [#3956](https://github.com/react-native-maps/react-native-maps/pull/3956) Add missing export for AIRMapMarker isPreselected view property
+* iOS: [#3973](https://github.com/react-native-maps/react-native-maps/pull/3973) Version bump googleMaps and Google-Maps-iOS-Utils 
+* Android: [#3945](https://github.com/react-native-maps/react-native-maps/pull/3945) Bump minSDKVersion to 21
+  
+## 0.29.4 - (November 10, 2021)
+* Common: [#3996](https://github.com/react-native-maps/react-native-maps/pull/3996) Allow wider version range for react-native-web peer dependency
+
 ## 0.29.3 - (August 29, 2021)
 
 * Common: [#3920](https://github.com/react-native-maps/react-native-maps/pull/3920) GeoJSON onPress Crash Fix and Marker Customization Options
@@ -32,6 +50,10 @@
 * Docs: [#3771](https://github.com/react-native-maps/react-native-maps/pull/3771) Better docs for custom markers
 * Docs: [#3716](https://github.com/react-native-maps/react-native-maps/pull/3716) Update Mapview docs
 * Docs: [#3793](https://github.com/react-native-maps/react-native-maps/pull/3793) Update Polygon docs
+
+## 0.28.1 - (November 10, 2021)
+* Common: [#3996](https://github.com/react-native-maps/react-native-maps/pull/3996) Allow wider version range for react-native-web peer dependency
+
 
 ## 0.28.0 (April 20, 2021)
 
