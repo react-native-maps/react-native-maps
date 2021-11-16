@@ -12,12 +12,10 @@ describe('AnimatedRegion', () => {
   it('converts numbers to instances of Animated.Value', () => {
     const animatedRegion = new AnimatedRegion(VALUES);
 
-    const { latitude, longitude, latitudeDelta, longitudeDelta } = animatedRegion;
-
-    expect(latitude instanceof Animated.Value).toBe(true);
-    expect(longitude instanceof Animated.Value).toBe(true);
-    expect(latitudeDelta instanceof Animated.Value).toBe(true);
-    expect(longitudeDelta instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.latitude instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.longitude instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.latitudeDelta instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.longitudeDelta instanceof Animated.Value).toBe(true);
 
     const values = animatedRegion.__getValue();
 
@@ -33,12 +31,10 @@ describe('AnimatedRegion', () => {
       longitude: new Animated.Value(VALUES.longitude),
     });
 
-    const { latitude, longitude, latitudeDelta, longitudeDelta } = animatedRegion;
-
-    expect(latitude instanceof Animated.Value).toBe(true);
-    expect(longitude instanceof Animated.Value).toBe(true);
-    expect(latitudeDelta instanceof Animated.Value).toBe(true);
-    expect(longitudeDelta instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.latitude instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.longitude instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.latitudeDelta instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.longitudeDelta instanceof Animated.Value).toBe(true);
 
     const values = animatedRegion.__getValue();
 
@@ -51,12 +47,10 @@ describe('AnimatedRegion', () => {
   it('uses defaults converted to Animated.Value instances when none are supplied', () => {
     const animatedRegion = new AnimatedRegion({});
 
-    const { latitude, longitude, latitudeDelta, longitudeDelta } = animatedRegion;
-
-    expect(latitude instanceof Animated.Value).toBe(true);
-    expect(longitude instanceof Animated.Value).toBe(true);
-    expect(latitudeDelta instanceof Animated.Value).toBe(true);
-    expect(longitudeDelta instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.latitude instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.longitude instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.latitudeDelta instanceof Animated.Value).toBe(true);
+    expect(animatedRegion.longitudeDelta instanceof Animated.Value).toBe(true);
 
     const values = animatedRegion.__getValue();
 
