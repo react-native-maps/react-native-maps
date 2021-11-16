@@ -11,12 +11,8 @@ const VALUES = {
 describe('AnimatedRegion', () => {
   it('converts numbers to instances of Animated.Value', () => {
     const animatedRegion = new AnimatedRegion(VALUES);
-    const {
-      latitude,
-      longitude,
-      latitudeDelta,
-      longitudeDelta,
-    } = animatedRegion;
+
+    const { latitude, longitude, latitudeDelta, longitudeDelta } = animatedRegion;
 
     expect(latitude instanceof Animated.Value).toBe(true);
     expect(longitude instanceof Animated.Value).toBe(true);
@@ -36,6 +32,7 @@ describe('AnimatedRegion', () => {
       latitude: new Animated.Value(VALUES.latitude),
       longitude: new Animated.Value(VALUES.longitude),
     });
+
     const { latitude, longitude, latitudeDelta, longitudeDelta } = animatedRegion;
 
     expect(latitude instanceof Animated.Value).toBe(true);
@@ -53,6 +50,7 @@ describe('AnimatedRegion', () => {
 
   it('uses defaults converted to Animated.Value instances when none are supplied', () => {
     const animatedRegion = new AnimatedRegion({});
+
     const { latitude, longitude, latitudeDelta, longitudeDelta } = animatedRegion;
 
     expect(latitude instanceof Animated.Value).toBe(true);
