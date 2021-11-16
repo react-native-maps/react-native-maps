@@ -30,14 +30,14 @@
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.1",
     "babel-jest": "^27.3.1",
-    "eslint": "^8.2.0",
+    "eslint": "7.32.0",
+    "jest": "^27.3.1",
     "react": "^17.0.2",
     "react-native": "^0.66.3",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.7",
-    "jest": "^27.3.1"
+    "@types/geojson": "^7946.0.7"
   },
   "jest": {
     "preset": "react-native",
