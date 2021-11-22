@@ -428,6 +428,16 @@ export type Props = ViewProps & {
   stopPropagation?: boolean;
 
   /**
+   * Sets whether marker should be tappable.
+   * If set to false, the marker will not have onPress events.
+   *
+   * @default true
+   * @platform iOS: Google Maps only
+   * @platform Android: Not supported
+   */
+  tappable?: boolean;
+
+  /**
    * The title of the marker.
    * This is only used if the <Marker /> component has no `<Callout />` children.
    *
