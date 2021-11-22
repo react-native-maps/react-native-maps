@@ -29,10 +29,13 @@ const defaultValues = {
 
 let _uniqueId = 1;
 
-const getAnimatedValue = (valueIn: any, fallback: number) => {
-  return valueIn instanceof Animated.Value
-    ? valueIn
-    : new Animated.Value(fallback);
+const getAnimatedValue = (valueIn: unknown, fallback: number) => {
+  if (valueIn instanceof Animated.Value) {
+    return valueIn;
+  } else if (typeof valueIn === 'number') {
+    return new Animated.Value(valueIn);
+  }
+  return new Animated.Value(fallback);
 };
 
 export default class AnimatedMapRegion extends AnimatedWithChildren {
