@@ -3,11 +3,12 @@
   "description": "React Native Mapview component for iOS + Android",
   "main": "index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
-  "version": "0.29.3",
+  "version": "0.30.0",
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js .",
     "ci": "npm run lint",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,15 +26,32 @@
   "peerDependencies": {
     "react": ">= 16.13.1 || < 18.0",
     "react-native": ">= 0.63.4",
-    "react-native-web": "^0.13"
+    "react-native-web": ">= 0.11"
   },
   "devDependencies": {
-    "@react-native-community/eslint-config": "3.0.1",
+    "@react-native-community/eslint-config": "^3.0.1",
     "@types/react-native": "^0.63.52",
+    "babel-jest": "^27.3.1",
     "eslint": "7.32.0",
+    "jest": "^27.3.1",
+    "react": "^17.0.2",
+    "react-native": "^0.66.3",
     "typescript": "^4.4.3"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.7"
+  },
+  "jest": {
+    "preset": "react-native",
+    "testRegex": "<rootDir>/__tests__/.*|(\\.|/)(test|spec)\\.jsx?$",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    },
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!@react-native|react-native)"
+    ]
   }
 }
