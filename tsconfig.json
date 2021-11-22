@@ -6,11 +6,12 @@
     "jsx": "react-native",
     "lib": ["es2017"],
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
     "declaration": true,
     "noEmit": false,
-    "outDir": "dist"
+    // "outDir": "dist"
   },
-  "include": ["src/**/*"]
+  "include": ["lib/components", "index.ts", "lib/types.ts"]
 }
