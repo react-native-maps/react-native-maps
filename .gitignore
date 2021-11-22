@@ -45,4 +45,9 @@ yarn-error.log
 .vscode
 
 # TS outDir
-dist
+lib/components/*.js
+lib/components/*.d.ts
+lib/*.js
+lib/*.d.ts
+index.js
+index.d.ts
