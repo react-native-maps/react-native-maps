@@ -29,7 +29,9 @@ const defaultValues = {
 
 let _uniqueId = 1;
 
-const getAnimatedValue = (valueIn: unknown, fallback: number) => {
+type TValueIn = number | Animated.Value | undefined;
+
+const getAnimatedValue = (valueIn: TValueIn, fallback: number) => {
   if (valueIn instanceof Animated.Value) {
     return valueIn;
   } else if (typeof valueIn === 'number') {
