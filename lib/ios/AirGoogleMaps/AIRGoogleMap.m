@@ -331,6 +331,7 @@ id regionAsJSON(MKCoordinateRegion region) {
    if (airPolyline.onPress) airPolyline.onPress(event);
 }
 
+// Suggestion to remove this method
 - (void)didTapPolygon:(GMSOverlay *)polygon {
     AIRGMSPolygon *airPolygon = (AIRGMSPolygon *)polygon;
 
@@ -338,14 +339,13 @@ id regionAsJSON(MKCoordinateRegion region) {
                  @"id": airPolygon.identifier ?: @"unknown",
                  };
 
-    // Suggestion to remove and use didTapAtCoordinate instead
-    // if (airPolygon.onPress) airPolygon.onPress(event);
+    if (airPolygon.onPress) airPolygon.onPress(event);
 }
 
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
   for (AIRGoogleMapPolygon *airPolygon in _polygons){
     AIRGMSPolygon *polygon = airPolygon.polygon;
-    if(GMSGeometryContainsLocation(coordinate, polygon.path, polygon.geodesic)){
+    if(GMSGeometryContainsLocation(coordinate, polygon.path, polygon.geodesic) && airPolygon.tappable){
         id event = @{@"action": @"polygon-press",
                       @"id": polygon.identifier ?: @"unknown",
                       @"coordinate": @{
