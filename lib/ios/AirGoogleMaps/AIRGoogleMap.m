@@ -338,7 +338,8 @@ id regionAsJSON(MKCoordinateRegion region) {
                  @"id": airPolygon.identifier ?: @"unknown",
                  };
 
-    if (airPolygon.onPress) airPolygon.onPress(event);
+    // Suggestion to remove and use didTapAtCoordinate instead
+    // if (airPolygon.onPress) airPolygon.onPress(event);
 }
 
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -354,6 +355,8 @@ id regionAsJSON(MKCoordinateRegion region) {
                       };
 
         if (polygon.onPress) polygon.onPress(event);
+        // Currently returning after the first match
+        // how do we want to handle overlaying polygons? Call one or all? Can change to accomodate
         return;
     }
   }

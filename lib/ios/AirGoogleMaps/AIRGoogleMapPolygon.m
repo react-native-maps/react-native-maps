@@ -87,8 +87,9 @@
 
 -(void)setTappable:(BOOL)tappable
 {
-  _tappable = tappable;
-  _polygon.tappable = tappable;
+  // If tappable is off didTapAtCoordinate gets called, if it's on didTapOverlay get called instead
+  _tappable = !tappable;
+  _polygon.tappable = !tappable;
 }
 
 - (void)setOnPress:(RCTBubblingEventBlock)onPress {
