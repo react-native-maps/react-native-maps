@@ -342,6 +342,21 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
+  for (AIRGoogleMapPolygon *airPolygon in _polygons){
+    AIRGMSPolygon *polygon = airPolygon.polygon;
+    if(GMSGeometryContainsLocation(coordinate, polygon.path, polygon.geodesic)){
+        id event = @{@"action": @"polygon-press",
+                      @"id": polygon.identifier ?: @"unknown",
+                      @"coordinate": @{
+                          @"latitude": @(coordinate.latitude),
+                          @"longitude": @(coordinate.longitude),
+                        },
+                      };
+
+        if (polygon.onPress) polygon.onPress(event);
+        return;
+    }
+  }
   if (!self.onPress) return;
   self.onPress([self eventFromCoordinate:coordinate]);
 }
