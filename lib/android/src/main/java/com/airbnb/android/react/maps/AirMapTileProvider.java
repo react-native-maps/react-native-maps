@@ -365,6 +365,7 @@ public class AirMapTileProvider implements TileProvider {
 
 		try {
 			URLConnection conn = url.openConnection();
+			conn.addRequestProperty("User-Agent", "glonasssoft.mobile");
 			in = conn.getInputStream();
 			buffer = new ByteArrayOutputStream();
 
