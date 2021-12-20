@@ -1045,11 +1045,7 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(__unused BOOL)animated
 {
-    // Don't send region did change events until map has
-    // started rendering, as these won't represent the final location
-    if(mapView.hasStartedRendering){
-        [self _regionChanged:mapView];
-    }
+    [self _regionChanged:mapView];
 
     AIRWeakTimerReference *weakTarget = [[AIRWeakTimerReference alloc] initWithTarget:self andSelector:@selector(_onTick:)];
     
@@ -1068,11 +1064,7 @@ static int kDragCenterContext;
     [mapView.regionChangeObserveTimer invalidate];
     mapView.regionChangeObserveTimer = nil;
 
-    // Don't send region did change events until map has
-    // started rendering, as these won't represent the final location
-    if(mapView.hasStartedRendering){
-        [self _regionChanged:mapView];
-    }
+    [self _regionChanged:mapView];
 
     if (zoomLevel < mapView.minZoomLevel) {
       [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
