@@ -63,7 +63,9 @@
 -(void)setGeodesic:(BOOL)geodesic
 {
   _geodesic = geodesic;
-  [self setCoordinates:_coordinates];
+    if(_coordinates){
+        [self setCoordinates:_coordinates];
+    }
 }
 
 - (void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates {
