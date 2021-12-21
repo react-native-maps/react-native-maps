@@ -259,6 +259,7 @@ declare module 'react-native-maps' {
     camera?: Camera;
     initialCamera?: Camera;
     liteMode?: boolean;
+    useNewRenderer?: boolean;
     mapPadding?: EdgePadding;
     paddingAdjustmentBehavior?: 'always' | 'automatic' | 'never';
     maxDelta?: number;

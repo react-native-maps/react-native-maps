@@ -12,6 +12,7 @@
 | `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured.
 | `paddingAdjustmentBehavior` | 'always' \| 'automatic' \| 'never' | 'never' | Indicates how/when to affect padding with safe area insets (`GoogleMaps` in iOS only)
 | `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
+| `useNewRenderer` | `Boolean` | `false` | Enables the new [android renderer](https://developers.google.com/maps/documentation/android-sdk/renderer). The renderer can only be set once in your application, if this prop is true/false in the first rendered map all subsequent maps will be using the latest/legacy renderer. **Note**: Android only.
 | `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - none: no map **Note** Not available on MapKit<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
 | `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/react-native-maps/react-native-maps#customizing-the-map-style) for more information.
 | `userInterfaceStyle` | 'light' \| 'dark'  |  | Sets the map to the style selected.  Default is whatever the system settings is. **Note:** iOS Maps only (aka MapKit).

@@ -53,6 +53,7 @@ import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
 import GeojsonMap from './examples/Geojson';
 import CacheURLTiles from './examples/CacheURLTiles';
 import CacheWMSTiles from './examples/CacheWMSTiles';
+import NewRendererMap from './examples/NewRendererMap';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -163,6 +164,7 @@ export default class App extends React.Component<Props> {
         [FitToSuppliedMarkers, 'Focus Map On Markers', true],
         [FitToCoordinates, 'Fit Map To Coordinates', true],
         [LiteMapView, 'Android Lite MapView'],
+        [NewRendererMap, 'Android new renderer MapView'],
         [CustomTiles, 'Custom Tiles', true],
         [WMSTiles, 'WMS Tiles', true],
         [ZIndexMarkers, 'Position Markers with Z-index', true],
