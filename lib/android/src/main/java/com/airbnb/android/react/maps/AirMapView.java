@@ -749,9 +749,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
       //fix for https://github.com/react-native-maps/react-native-maps/issues/245,
       //it's not guaranteed the passed-in height and width would be greater than 0.
-      if (width <= 0 || height <= 0) {
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
-      } else {
+      if (width > 0 && height > 0) {
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
       }
 
