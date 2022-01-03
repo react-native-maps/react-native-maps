@@ -178,7 +178,7 @@ import { useLatestRenderer } from 'react-native-maps';
 useLatestRenderer();
 ```
 
-`useLatestRenderer` returns a promise (on android) specifying the map renderer being used, either `'LATEST' | 'LEGACY'`.
+`useLatestRenderer` returns a promise (on android) specifying the map renderer being used, either `'LATEST' | 'LEGACY'`. It can be called at any point to get the renderer that is being used, but it won't change it after the first map has been rendered.
 
 ---
 
