@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.30.1 - (January 3, 2022)
+* Common: [#4011](https://github.com/react-native-maps/react-native-maps/pull/4011) Feature fix AnimatedRegion getAnimatedValue Issue
+
 ## 0.30.0 - (November 10, 2021)
 * Common: [#3789](https://github.com/react-native-maps/react-native-maps/pull/3789) URLTile tile caching
 * Common: [#3938](https://github.com/react-native-maps/react-native-maps/pull/3938) Add URLTile & WMSTile opacity property
