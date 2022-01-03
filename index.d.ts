@@ -628,6 +628,8 @@ declare module 'react-native-maps' {
     MUTEDSTANDARD: MapTypes;
   };
 
+  export const useLatestRenderer: () => Promise<'LATEST' | 'LEGACY'> | void;
+
   export const PROVIDER_DEFAULT: null;
   export const PROVIDER_GOOGLE: 'google';
 }
