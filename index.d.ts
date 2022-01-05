@@ -254,7 +254,7 @@ declare module 'react-native-maps' {
     showsIndoors?: boolean;
     showsIndoorLevelPicker?: boolean;
     mapType?: MapTypes;
-    region?: Region;
+    region?: Region | AnimatedRegion;
     initialRegion?: Region;
     camera?: Camera;
     initialCamera?: Camera;
