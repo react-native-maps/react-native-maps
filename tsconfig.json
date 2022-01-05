@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-native",
+    "lib": ["es2017"],
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "target": "esnext",
+    "declaration": false,
+    "allowJs": true,
+    "removeComments": true,
+    "outDir": "lib",
+  },
+  "include": ["src"]
+}
