@@ -366,7 +366,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
       public void execute(NativeViewHierarchyManager nvhm)
       {
         MapsInitializer.initialize(context, MapsInitializer.Renderer.LATEST, (MapsInitializer.Renderer renderer) -> {
-          Log.d("AirMapNewRenderer", renderer.toString());
+          Log.d("AirMapRenderer", renderer.toString());
           promise.resolve(renderer.toString());
         });
       }
