@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { StyleSheet, View, Text, Dimensions, ScrollView } from 'react-native';
 import MapView, {
-  PROVIDER_GOOGLE,
   Marker,
   ProviderPropType,
   Polygon,
