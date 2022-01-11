@@ -71,29 +71,29 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Google-Maps-iOS-Utils (3.10.3):
-    - Google-Maps-iOS-Utils/Clustering (= 3.10.3)
-    - Google-Maps-iOS-Utils/Geometry (= 3.10.3)
-    - Google-Maps-iOS-Utils/GeometryUtils (= 3.10.3)
-    - Google-Maps-iOS-Utils/Heatmap (= 3.10.3)
-    - Google-Maps-iOS-Utils/QuadTree (= 3.10.3)
+  - Google-Maps-iOS-Utils (4.0.0):
+    - Google-Maps-iOS-Utils/Clustering (= 4.0.0)
+    - Google-Maps-iOS-Utils/Geometry (= 4.0.0)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 4.0.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 4.0.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 4.0.0)
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (3.10.3):
+  - Google-Maps-iOS-Utils/Clustering (4.0.0):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (3.10.3):
+  - Google-Maps-iOS-Utils/Geometry (4.0.0):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/GeometryUtils (3.10.3):
+  - Google-Maps-iOS-Utils/GeometryUtils (4.0.0):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (3.10.3):
+  - Google-Maps-iOS-Utils/Heatmap (4.0.0):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (3.10.3):
+  - Google-Maps-iOS-Utils/QuadTree (4.0.0):
     - GoogleMaps
-  - GoogleMaps (5.1.0):
-    - GoogleMaps/Maps (= 5.1.0)
-  - GoogleMaps/Base (5.1.0)
-  - GoogleMaps/Maps (5.1.0):
+  - GoogleMaps (6.0.1):
+    - GoogleMaps/Maps (= 6.0.1)
+  - GoogleMaps/Base (6.0.1)
+  - GoogleMaps/Maps (6.0.1):
     - GoogleMaps/Base
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.180)
@@ -292,11 +292,11 @@ PODS:
     - React-jsi (= 0.65.1)
     - React-perflogger (= 0.65.1)
   - React-jsinspector (0.65.1)
-  - react-native-google-maps (0.29.3):
-    - Google-Maps-iOS-Utils (= 3.10.3)
-    - GoogleMaps (= 5.1.0)
+  - react-native-google-maps (0.30.1):
+    - Google-Maps-iOS-Utils (= 4.0.0)
+    - GoogleMaps (= 6.0.1)
     - React-Core
-  - react-native-maps (0.29.3):
+  - react-native-maps (0.30.1):
     - React-Core
   - React-perflogger (0.65.1)
   - React-RCTActionSheet (0.65.1):
@@ -520,8 +520,8 @@ SPEC CHECKSUMS:
   FlipperKit: 651f50a42eb95c01b3e89a60996dd6aded529eeb
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
-  Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
-  GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
+  Google-Maps-iOS-Utils: a06cb5c3a0e5b2a505fed82d936ba1b935f8971f
+  GoogleMaps: c213fc2334b7374144cede914da779b99be0ab74
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: 0dd9e1eb86348ecab5ba76f910b56f4b5fef3c46
@@ -535,8 +535,8 @@ SPEC CHECKSUMS:
   React-jsi: 12913c841713a15f64eabf5c9ad98592c0ec5940
   React-jsiexecutor: 43f2542aed3c26e42175b339f8d37fe3dd683765
   React-jsinspector: 41e58e5b8e3e0bf061fdf725b03f2144014a8fb0
-  react-native-google-maps: c3c9e5e1e0eefabb9c5da32dc6461c0a8b266eef
-  react-native-maps: 41d01d8e0afcebe32bec9eea3bd945adc1b18f7a
+  react-native-google-maps: abae7a731a7f1eff7d9a7cf33020497c50a66ba0
+  react-native-maps: 85a3dc2fe4e9b9bb7b3bc7b976b79d65137e894f
   React-perflogger: fd28ee1f2b5b150b00043f0301d96bd417fdc339
   React-RCTActionSheet: 7f3fa0855c346aa5d7c60f9ced16e067db6d29fa
   React-RCTAnimation: 2119a18ee26159004b001bc56404ca5dbaae6077
@@ -552,6 +552,6 @@ SPEC CHECKSUMS:
   Yoga: aa0cb45287ebe1004c02a13f279c55a95f1572f4
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 946fd66a3f622c64dfb19b965c250df957e88acf
+PODFILE CHECKSUM: 3e75f15a762d95604cf07c140bd34642e2243406
 
 COCOAPODS: 1.10.1
