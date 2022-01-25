@@ -1,6 +1,7 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Tile;
@@ -20,11 +21,13 @@ public class AirMapLocalTile extends AirMapFeature {
         private static final int BUFFER_SIZE = 16 * 1024;
         private int tileSize;
         private String pathTemplate;
+        private boolean useAssetsAndroidOnly;
 
 
-        public AIRMapLocalTileProvider(int tileSizet, String pathTemplate) {
+        public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, boolean useAssetsAndroidOnly) {
             this.tileSize = tileSizet;
             this.pathTemplate = pathTemplate;
+            this.useAssetsAndroidOnly = useAssetsAndroidOnly;
         }
 
         @Override
@@ -44,10 +47,11 @@ public class AirMapLocalTile extends AirMapFeature {
         private byte[] readTileImage(int x, int y, int zoom) {
             InputStream in = null;
             ByteArrayOutputStream buffer = null;
-            File file = new File(getTileFilename(x, y, zoom));
+
+            String tileFilename = getTileFilename(x, y, zoom);
 
             try {
-                in = new FileInputStream(file);
+                in = useAssetsAndroidOnly ? getContext().getAssets().open(tileFilename) : new FileInputStream(new File(tileFilename));
                 buffer = new ByteArrayOutputStream();
 
                 int nRead;
@@ -87,6 +91,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private String pathTemplate;
     private float tileSize;
     private float zIndex;
+    private boolean useAssetsAndroidOnly;
 
     public AirMapLocalTile(Context context) {
         super(context);
@@ -116,6 +121,10 @@ public class AirMapLocalTile extends AirMapFeature {
         }
     }
 
+    public void setUseAssetsAndroidOnly(boolean useAssetsAndroidOnly) {
+      this.useAssetsAndroidOnly = useAssetsAndroidOnly;
+    }
+
     public TileOverlayOptions getTileOverlayOptions() {
         if (tileOverlayOptions == null) {
             tileOverlayOptions = createTileOverlayOptions();
@@ -126,7 +135,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
-        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate);
+        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate, this.useAssetsAndroidOnly);
         options.tileProvider(this.tileProvider);
         return options;
     }
