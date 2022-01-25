@@ -1,7 +1,6 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Tile;
