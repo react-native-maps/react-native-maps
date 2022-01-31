@@ -87,6 +87,10 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             _pinView.annotation = self;
         }
 
+        if (_isPreselected) {
+          [_pinView setSelected:YES animated:NO];
+        }
+
         _pinView.draggable = self.draggable;
         _pinView.layer.zPosition = self.zIndex;
 
