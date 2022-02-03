@@ -28,6 +28,11 @@
     "react-native": ">= 0.51",
     "react-native-web": ">= 0.11"
   },
+  "peerDependenciesMeta": {
+    "react-native-web": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.1",
     "babel-jest": "^27.3.1",
