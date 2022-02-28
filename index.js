@@ -2,7 +2,7 @@ import MapView, {
   Animated,
   MAP_TYPES,
   ProviderPropType,
-  useLatestRenderer,
+  enableLatestRenderer,
 } from './lib/components/MapView';
 import Marker from './lib/components/MapMarker.js';
 import Overlay from './lib/components/MapOverlay.js';
@@ -20,7 +20,7 @@ export { default as AnimatedRegion } from './lib/components/AnimatedRegion.js';
 export { default as Geojson } from './lib/components/Geojson.js';
 
 export { Marker, Overlay };
-export { Animated, MAP_TYPES, ProviderPropType, useLatestRenderer };
+export { Animated, MAP_TYPES, ProviderPropType, enableLatestRenderer };
 
 export const PROVIDER_GOOGLE = MapView.PROVIDER_GOOGLE;
 export const PROVIDER_DEFAULT = MapView.PROVIDER_DEFAULT;

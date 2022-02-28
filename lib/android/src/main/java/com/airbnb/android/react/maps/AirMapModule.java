@@ -356,7 +356,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void useLatestRenderer(final Promise promise) {
+  public void enableLatestRenderer(final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
 
     UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);

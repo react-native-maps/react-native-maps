@@ -173,12 +173,12 @@ As of version 18.0.0 of the Maps SDK for Android an upgraded map renderer is ava
 To opt in to the new renderer add the following code in your entry file (e.g. App.js):
 
 ```javascript
-import { useLatestRenderer } from 'react-native-maps';
+import { enableLatestRenderer } from 'react-native-maps';
 
-useLatestRenderer();
+enableLatestRenderer();
 ```
 
-`useLatestRenderer` returns a promise (on android) specifying the map renderer being used, either `'LATEST' | 'LEGACY'`. It can be called at any point to get the renderer being used, but it won't change after the first map has been rendered.
+`enableLatestRenderer` returns a promise (on android) specifying the map renderer being used, either `'LATEST' | 'LEGACY'`. It can be called at any point to get the renderer being used, but it won't change after the first map has been rendered.
 
 ---
 
