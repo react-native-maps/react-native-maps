@@ -395,7 +395,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     lifecycleListener = new LifecycleEventListener() {
       @Override
       public void onHostResume() {
-        if (hasPermissions()) {
+        if (hasPermissions() && map != null) {
           //noinspection MissingPermission
           map.setMyLocationEnabled(showUserLocation);
           map.setLocationSource(fusedLocationSource);
@@ -410,7 +410,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
       @Override
       public void onHostPause() {
-        if (hasPermissions()) {
+        if (hasPermissions() && map != null) {
           //noinspection MissingPermission
           map.setMyLocationEnabled(false);
         }
@@ -1011,7 +1011,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     int X = (int)ev.getX();          
     int Y = (int)ev.getY();
-    tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
+    if(map != null) {
+      tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
+    }
 
     int action = MotionEventCompat.getActionMasked(ev);
 
