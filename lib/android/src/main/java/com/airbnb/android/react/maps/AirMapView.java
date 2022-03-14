@@ -91,6 +91,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean handlePanDrag = false;
   private boolean moveOnMarkerPress = true;
   private boolean cacheEnabled = false;
+  private ReadableMap initialRegion;
   private boolean initialRegionSet = false;
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
@@ -218,6 +219,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     this.map.setOnMarkerDragListener(this);
     this.map.setOnPoiClickListener(this);
     this.map.setOnIndoorStateChangeListener(this);
+    if(initialRegion != null) {
+      setRegion(initialRegion);
+      initialRegionSet = true;
+    }
 
     manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
@@ -458,7 +463,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   public void setInitialRegion(ReadableMap initialRegion) {
-    if (!initialRegionSet && initialRegion != null) {
+    this.initialRegion = initialRegion;
+    // Theoretically onMapReady might be called before setInitialRegion
+    // In that case, trigger setRegion manually
+    if (!initialRegionSet && map != null) {
       setRegion(initialRegion);
       initialRegionSet = true;
     }
