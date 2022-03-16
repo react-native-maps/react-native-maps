@@ -10,6 +10,18 @@
     "ci": "npm run lint",
     "test": "jest"
   },
+  "files": [
+    "index.d.ts",
+    "lib",
+    "react-native-google-maps.podspec",
+    "react-native-maps.podspec",
+    "react-native.config.js",
+    "!lib/android/build",
+    "!lib/ios/build",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/react-native-maps/react-native-maps"
