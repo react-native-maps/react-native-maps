@@ -302,6 +302,7 @@ declare module 'react-native-maps' {
   }
 
   export default class MapView extends React.Component<MapViewProps, any> {
+    private __lastRegion?: Region;
     getCamera(): Promise<Camera>;
     setCamera(camera: Partial<Camera>): void;
     animateCamera(camera: Partial<Camera>, opts?: { duration?: number }): void;

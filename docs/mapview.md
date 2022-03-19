@@ -98,7 +98,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `fitToElements` | `options: { edgePadding: EdgePadding, animated: Boolean }` | **Note** edgePadding is Google Maps only
 | `fitToSuppliedMarkers` | `markerIDs: String[], options: { edgePadding: EdgePadding, animated: Boolean }` | If you need to use this in `ComponentDidMount`, make sure you put it in a timeout or it will cause performance problems. **Note** edgePadding is Google Maps only
 | `fitToCoordinates` | `coordinates: Array<LatLng>, options: { edgePadding: EdgePadding, animated: Boolean }` | If called in `ComponentDidMount` in android, it will cause an exception. It is recommended to call it from the MapView `onLayout` event.
-| `addressForCoordinate` | `coordinate: LatLng` | Converts a map coordinate to a address (`Address`). Returns a `Promise<Address>`.
+| `addressForCoordinate` | `coordinate: LatLng` | Converts a map coordinate to a address (`Address`). Returns a `Promise<Address>` **Note** Not supported on Google Maps for iOS.
 | `pointForCoordinate` | `coordinate: LatLng` | Converts a map coordinate to a view coordinate (`Point`). Returns a `Promise<Point>`.
 | `coordinateForPoint` | `point: Point` | Converts a view coordinate (`Point`) to a map coordinate. Returns a `Promise<Coordinate>`.
 | `getMarkersFrames` | `onlyVisible: Boolean` | Get markers' centers and frames in view coordinates. Returns a `Promise<{ "markerID" : { point: Point, frame: Frame } }>`. **Note**: iOS only.
