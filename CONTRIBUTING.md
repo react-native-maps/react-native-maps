@@ -2,9 +2,13 @@
 
 Thank you for helping this project become a better library :)
 
+- [Triage](#triage)
 - [Reporting Bugs](#reporting-bugs)
 - [Providing a feature request](#providing-a-feature-request)
 - [Pull requests](#pull-requests)
+
+## Triage
+This is one of the easiest and most effective ways of helping out. If you see an open issue, try and reproduce the bug yourself, and comment with the result. If the issue is lacking any information to reproduce the bug, let the author know.
 
 ## Reporting Bugs
 
