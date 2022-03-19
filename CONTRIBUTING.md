@@ -2,25 +2,35 @@
 
 Thank you for helping this project become a better library :)
 
-- [Styleguide](#styleguide)
 - [Reporting Bugs](#reporting-bugs)
+- [Providing a feature request](#providing-a-feature-request)
+- [Pull requests](#pull-requests)
 
-## Styleguide
+## Reporting Bugs
 
-This project uses Husky and eslint to ensure a specific JS codestyle.
-Husky runs a hook before each commit, ensuring that the commit message and committed code follows these guidelines.
+Open an issue, making sure to follow the bug report template.
 
-### Git Commit Messages
+## Providing a feature request
 
-This repository follows [Angular conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/), follow these guidelines when committing, as we use your commits when releasing new versions.
+Open an issue, making sure to follow the Feature request template.
 
-When committing do the following:
+## Pull requests
+
+### Getting started
+
+- If there isn't one already, open an issue describing the bug or feature request that you are going to solve in your pull request.
+- Create a fork of react-native-maps
+  - If you already have a fork, make sure it is up to date
+- Git clone your fork and run `yarn` in the base of the cloned repo to setup your local development environment.
+- Create a branch from the master branch to start working on your changes.
+
+### Committing
+
+- When you made your changes, run `yarn lint` & `yarn test` to make sure the code you introduced doesn't cause any obvious issues.
+- When you are ready to commit your changes, use the [Angular conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/#summary) convention for you commit messages, as we use your commits when releasing new versions.
 - Use present tense: "add awesome component" not "added awesome component"
 - Limit the first line of the commit message to 100 characters
 - Reference issues and pull requests before committing
 
-## Reporting Bugs
-Please make sure to follow the Bug report template when opening a new issue.
-
-## Feature Requests
-Please make sure to follow the Feature request template when opening a new issue.
+### Creating the pull request
+Creating the pull request against the master branch is mostly fine. But if you are doing large or breaking changes, you might be asked to open the pull request against our beta branch instead.
