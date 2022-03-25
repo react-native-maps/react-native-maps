@@ -6,7 +6,7 @@
   "version": "0.30.1",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "test": "jest",
     "prepare": "husky install",
     "release": "semantic-release"
