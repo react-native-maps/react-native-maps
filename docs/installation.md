@@ -180,6 +180,8 @@ enableLatestRenderer();
 
 `enableLatestRenderer` returns a promise (on android) specifying the map renderer being used, either `'LATEST' | 'LEGACY'`. It can be called at any point to get the renderer being used, but it won't change after the first map has been rendered.
 
+Make sure to test your app thoroughly after enabling the new renderer, as it seems to cause some behavioural changes, e.g. [this](https://github.com/react-native-maps/react-native-maps/pull/4055#issuecomment-1063358886).
+
 ---
 
 ## Troubleshooting
