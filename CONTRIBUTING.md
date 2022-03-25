@@ -37,4 +37,5 @@ Open an issue, making sure to follow the Feature request template.
 - Reference issues and pull requests before committing
 
 ### Creating the pull request
-Creating the pull request against the master branch is mostly fine. But if you are doing large or breaking changes, you might be asked to open the pull request against our beta branch instead.
+- The title of the PR needs to follow the same conventions as your commit messages, as it might be used in case of a squash merge.
+- Creating the pull request against the master branch is mostly fine. But if you are doing large or breaking changes, you might be asked to open the pull request against our beta branch instead.
