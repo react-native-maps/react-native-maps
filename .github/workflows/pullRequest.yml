@@ -29,7 +29,7 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: Lint PR title
-        run: echo ${{ github.event.pull_request.title }} | yarn commitlint
+        run: echo "${{ github.event.pull_request.title }}" | yarn commitlint
 
       - name: Lint
         run: yarn lint
