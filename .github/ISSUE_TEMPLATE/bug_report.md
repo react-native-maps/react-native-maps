@@ -22,7 +22,7 @@ For bug reports, it is REQUIRED to fill the rest of this template, or the issue 
 Before submitting a new issue, please:
 
 - Test using the latest release of the library, as maybe your bug has been already fixed.
-- Check the existing [Issues](https://github.com/react-community/react-native-maps/issues?utf8=%E2%9C%93&q=) or on StackOverflow if there isn't a fix already for your problem.
+- Check the existing [Issues](https://github.com/react-native-maps/react-native-maps/issues?q=is%3Aissue) or on StackOverflow if there isn't a fix already for your problem.
 
 Make sure you have followed the [Installation Instructions](https://github.com/react-community/react-native-maps/blob/master/docs/installation.md) too.
 
@@ -40,11 +40,10 @@ Provide a clear and concise description of what the bug is.
 <!--
   Please specify the react, react-native, react-native-maps versions, eg:
 
-      react-native: 0.51.0
-      react: 16.0.0
-      react-native-maps: 0.19.0 or "git+ssh://git@github.com/react-native-maps/react-native-maps.git"
+      react-native: 0.67.0
+      react: 17.0.2
+      react-native-maps: 0.30.1 or "git+ssh://git@github.com/react-native-maps/react-native-maps.git"
 
-    ***Make sure you are on v0.48.0 or greater of react-native, otherwise you may get this error:
 
     Target Platform: eg: iOS - 11.2 Simulator/iPhone 6, Android 7.1.1/Galaxy S6/Genymotion etc
 
@@ -81,7 +80,7 @@ Describe what you expected to happen:
 1. …
 2. …
 
-Describe what you actually happens:
+Describe what actually happens:
 
 <!--
   Did something go wrong?
@@ -109,3 +108,6 @@ Describe what you actually happens:
 
   Once you’re done, copy and paste the link to the Snack or a public GitHub repository below:
 -->
+```js
+Insert sample code here
+```
