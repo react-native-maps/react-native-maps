@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -21,6 +22,7 @@ import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -349,6 +351,24 @@ public class AirMapModule extends ReactContextBaseJavaModule {
         coordinates.putMap("southWest", southWestHash);
 
         promise.resolve(coordinates);
+      }
+    });
+  }
+
+  @ReactMethod
+  public void enableLatestRenderer(final Promise promise) {
+    final ReactApplicationContext context = getReactApplicationContext();
+
+    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+    uiManager.addUIBlock(new UIBlock()
+    {
+      @Override
+      public void execute(NativeViewHierarchyManager nvhm)
+      {
+        MapsInitializer.initialize(context, MapsInitializer.Renderer.LATEST, (MapsInitializer.Renderer renderer) -> {
+          Log.d("AirMapRenderer", renderer.toString());
+          promise.resolve(renderer.toString());
+        });
       }
     });
   }
