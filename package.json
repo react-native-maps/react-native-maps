@@ -1,7 +1,8 @@
 {
   "name": "react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
-  "main": "index.js",
+  "main": "src/index.js",
+  "types": "index.d.ts",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "version": "0.30.1",
   "license": "MIT",
@@ -13,12 +14,13 @@
   },
   "files": [
     "index.d.ts",
-    "lib",
+    "android",
+    "ios",
+    "src",
     "react-native-google-maps.podspec",
     "react-native-maps.podspec",
-    "react-native.config.js",
-    "!lib/android/build",
-    "!lib/ios/build",
+    "!android/build",
+    "!ios/build",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
