@@ -88,8 +88,35 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
+        [self listenToMemoryWarnings];
+
     }
     return self;
+}
+
+- (void) listenToMemoryWarnings
+{
+    __weak typeof(self) weakSelf = self;
+    static dispatch_once_t onceToken;
+    static dispatch_source_t source;
+    dispatch_once(&onceToken, ^{
+            source = dispatch_source_create(DISPATCH_SOURCE_TYPE_MEMORYPRESSURE, 0, DISPATCH_MEMORYPRESSURE_WARN|DISPATCH_MEMORYPRESSURE_CRITICAL, dispatch_get_main_queue());
+            dispatch_source_set_event_handler(source, ^{
+                [weakSelf handleMemoryWarning];
+            });
+            dispatch_resume(source);
+    });
+}
+
+- (void) handleMemoryWarning
+{
+    MKMapType type = self.mapType;
+    if (type == MKMapTypeSatellite){
+        self.mapType = MKMapTypeStandard;
+    } else {
+        self.mapType = MKMapTypeSatellite;
+    }
+    self.mapType = type;
 }
 
 - (void)dealloc
