@@ -87,7 +87,7 @@ ext {
     buildToolsVersion   = "xxx"
     minSdkVersion       = xxx
     supportLibVersion   = "xxx"
-    playServicesVersion = "17.0.0" // or find latest version
+    playServicesVersion = "18.0.2" // or find latest version
     androidMapsUtilsVersion = "xxx"
 }
 ```
@@ -113,7 +113,7 @@ You can find the latest `playServicesVersion` by checking [https://developers.go
 
 You can find the latest `androidMapsUtilsVersion` by checking [https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils](https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils)
 
-**If you do _not_ have _project-wide properties_ defined and have a different play-services version than the one included in this library, use the following instead (switch 17.0.0 and/or 17.2.1 for the desired versions):**
+**If you do _not_ have _project-wide properties_ defined and have a different play-services version than the one included in this library, use the following instead (switch 18.0.2 and/or 18.0.1 for the desired versions):**
 
 ```groovy
 ...
@@ -123,8 +123,8 @@ dependencies {
        exclude group: 'com.google.android.gms', module: 'play-services-base'
        exclude group: 'com.google.android.gms', module: 'play-services-maps'
    }
-   implementation 'com.google.android.gms:play-services-base:17.2.1'
-   implementation 'com.google.android.gms:play-services-maps:17.0.0'
+   implementation 'com.google.android.gms:play-services-base:18.0.2'
+   implementation 'com.google.android.gms:play-services-maps:18.0.2'
 }
 ```
 
@@ -320,7 +320,7 @@ In case you have multiple modules using Google Play Services such as `react-nati
   implementation(project(':react-native-maps')){
       exclude group: 'com.google.android.gms'
   }
-  implementation 'com.google.android.gms:play-services-base:12.0.1'
+  implementation 'com.google.android.gms:play-services-base:18.0.2'
   implementation 'com.google.android.gms:play-services-basement:12.0.1'
   implementation 'com.google.android.gms:play-services-location:12.0.1'
   implementation 'com.google.android.gms:play-services-tasks:12.0.1'
