@@ -245,7 +245,7 @@ render() {
       region={this.state.region}
     />
     <OverlayComponent
-      style={{position: “absolute”, bottom: 50}}
+      style={{position: "absolute", bottom: 50}}
     />
   );
 }
