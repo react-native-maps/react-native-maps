@@ -750,6 +750,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   public void updateExtraData(Object extraData) {
     // if boundsToMove is not null, we now have the MapView's width/height, so we can apply
     // a proper camera move
+    if (getWidth() <= 0 || getHeight() <= 0){
+          // exception would be thrown otherwise  at line 765
+          return;
+    }
     if (boundsToMove != null) {
       HashMap<String, Float> data = (HashMap<String, Float>) extraData;
       int width = data.get("width") == null ? 0 : data.get("width").intValue();
@@ -1017,7 +1021,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   public boolean dispatchTouchEvent(MotionEvent ev) {
     gestureDetector.onTouchEvent(ev);
 
-    int X = (int)ev.getX();          
+    int X = (int)ev.getX();
     int Y = (int)ev.getY();
     if(map != null) {
       tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
