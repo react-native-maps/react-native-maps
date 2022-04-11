@@ -748,6 +748,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   public void updateExtraData(Object extraData) {
+    if (getWidth() <= 0 || getHeight() <= 0){
+          // exception would be thrown otherwise  at line 765
+          return;
+    }
     // if boundsToMove is not null, we now have the MapView's width/height, so we can apply
     // a proper camera move
     if (boundsToMove != null) {
