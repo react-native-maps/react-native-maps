@@ -84,7 +84,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 
 | Method Name | Arguments | Notes
 |---|---|---|
-| `getCamera` | | Returns a `Camera` structure indicating the current camera configuration.
+| `getCamera` | | Returns a `Promise<Camera>` structure indicating the current camera configuration.
 | `animateCamera` | `camera: Camera`, `{ duration: Number }` | Animate the camera to a new view. You can pass a partial camera object here; any property not given will remain unmodified.
 | `setCamera` | `camera: Camera`, `{ duration: Number }` | Like `animateCamera`, but sets the new view instantly, without an animation.
 | `animateToRegion` | `region: Region`, `duration: Number` |
