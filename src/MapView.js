@@ -1119,6 +1119,13 @@ if (!NativeModules.UIManager.getViewManagerConfig) {
 
 export const Animated = RNAnimated.createAnimatedComponent(MapView);
 
+export const enableLatestRenderer = () => {
+  if (Platform.OS !== 'android') {
+    return;
+  }
+  return NativeModules.AirMapModule.enableLatestRenderer();
+};
+
 export const ProviderPropType = PropTypes.oneOf(
   Object.values(ProviderConstants)
 );
