@@ -8,6 +8,7 @@ Thank you for helping this project become a better library :)
 - [Pull requests](#pull-requests)
 
 ## Triage
+
 This is one of the easiest and most effective ways of helping out. If you see an open issue, try and reproduce the bug yourself, and comment with the result. If the issue is lacking any information to reproduce the bug, let the author know.
 
 ## Reporting Bugs
@@ -37,5 +38,6 @@ Open an issue, making sure to follow the Feature request template.
 - Reference issues and pull requests before committing
 
 ### Creating the pull request
+
 - The title of the PR needs to follow the same conventions as your commit messages, as it might be used in case of a squash merge.
-- Creating the pull request against the master branch is mostly fine. But if you are doing large or breaking changes, you might be asked to open the pull request against our beta branch instead.
+- Create the pull request against the beta branch.
