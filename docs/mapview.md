@@ -23,7 +23,7 @@
 | `followsUserLocation` | `Boolean` | `false` | If `true` the map will focus on the user's location. This only works if `showsUserLocation` is true and the user has shared their location. **Note**: Apple Maps only.
 | `userLocationCalloutEnabled` | `Boolean` | `false` |  If `true` clicking user location will show the default callout for userLocation annotation. **Note**: Apple Maps only.
 | `showsMyLocationButton` | `Boolean` | `true` | If `false` hide the button to move map to the current user's location.
-| `showsPointsOfInterest` | `Boolean` | `true` | If `false` points of interest won't be displayed on the map.
+| `showsPointsOfInterest` | `Boolean` | `true` | If `false` points of interest won't be displayed on the map. **Note**: Apple Maps only.
 | `showsCompass` | `Boolean` | `true` | If `false` compass won't be displayed on the map.
 | `showsScale` | `Boolean` | `true` | A Boolean indicating whether the map shows scale information. **Note**: Apple Maps only.
 | `showsBuildings` | `Boolean` | `true` | A Boolean indicating whether the map displays extruded building information.
