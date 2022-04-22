@@ -10,6 +10,7 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Promise;
@@ -38,8 +39,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
-import javax.annotation.Nullable;
 
 @ReactModule(name = AirMapModule.NAME)
 public class AirMapModule extends ReactContextBaseJavaModule {
