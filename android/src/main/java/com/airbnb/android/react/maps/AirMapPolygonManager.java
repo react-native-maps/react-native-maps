@@ -6,25 +6,21 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.google.android.gms.maps.model.ButtCap;
-import com.google.android.gms.maps.model.Cap;
-import com.google.android.gms.maps.model.RoundCap;
-import com.google.android.gms.maps.model.SquareCap;
 
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
-public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
+public class AirMapPolygonManager extends ViewGroupManager<AirMapPolygon> {
   private final DisplayMetrics metrics;
 
-  public AirMapPolylineManager(ReactApplicationContext reactContext) {
+  public AirMapPolygonManager(ReactApplicationContext reactContext) {
     super();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       metrics = new DisplayMetrics();
@@ -38,68 +34,53 @@ public class AirMapPolylineManager extends ViewGroupManager<AirMapPolyline> {
 
   @Override
   public String getName() {
-    return "AIRMapPolyline";
+    return "AIRMapPolygon";
   }
 
   @Override
-  public AirMapPolyline createViewInstance(ThemedReactContext context) {
-    return new AirMapPolyline(context);
+  public AirMapPolygon createViewInstance(ThemedReactContext context) {
+    return new AirMapPolygon(context);
   }
 
   @ReactProp(name = "coordinates")
-  public void setCoordinate(AirMapPolyline view, ReadableArray coordinates) {
+  public void setCoordinate(AirMapPolygon view, ReadableArray coordinates) {
     view.setCoordinates(coordinates);
   }
 
+  @ReactProp(name = "holes")
+  public  void setHoles(AirMapPolygon view, ReadableArray holes) {
+    view.setHoles(holes);
+  }
+
   @ReactProp(name = "strokeWidth", defaultFloat = 1f)
-  public void setStrokeWidth(AirMapPolyline view, float widthInPoints) {
+  public void setStrokeWidth(AirMapPolygon view, float widthInPoints) {
     float widthInScreenPx = metrics.density * widthInPoints; // done for parity with iOS
-    view.setWidth(widthInScreenPx);
+    view.setStrokeWidth(widthInScreenPx);
+  }
+
+  @ReactProp(name = "fillColor", defaultInt = Color.RED, customType = "Color")
+  public void setFillColor(AirMapPolygon view, int color) {
+    view.setFillColor(color);
   }
 
   @ReactProp(name = "strokeColor", defaultInt = Color.RED, customType = "Color")
-  public void setStrokeColor(AirMapPolyline view, int color) {
-    view.setColor(color);
+  public void setStrokeColor(AirMapPolygon view, int color) {
+    view.setStrokeColor(color);
   }
 
   @ReactProp(name = "tappable", defaultBoolean = false)
-  public void setTappable(AirMapPolyline view, boolean tapabble) {
+  public void setTappable(AirMapPolygon view, boolean tapabble) {
     view.setTappable(tapabble);
   }
 
   @ReactProp(name = "geodesic", defaultBoolean = false)
-  public void setGeodesic(AirMapPolyline view, boolean geodesic) {
+  public void setGeodesic(AirMapPolygon view, boolean geodesic) {
     view.setGeodesic(geodesic);
   }
 
   @ReactProp(name = "zIndex", defaultFloat = 1.0f)
-  public void setZIndex(AirMapPolyline view, float zIndex) {
+  public void setZIndex(AirMapPolygon view, float zIndex) {
     view.setZIndex(zIndex);
-  }
-
-  @ReactProp(name = "lineCap")
-  public void setlineCap(AirMapPolyline view, String lineCap) {
-    Cap cap = null;
-    switch (lineCap) {
-      case "butt":
-        cap = new ButtCap();
-        break;
-      case "round":
-        cap = new RoundCap();
-        break;
-      case "square":
-        cap = new SquareCap();
-        break;
-      default:
-        cap = new RoundCap();
-        break;
-    }
-    view.setLineCap(cap);
-  }
-
-  @ReactProp(name = "lineDashPattern")
-  public void setLineDashPattern(AirMapPolyline view, ReadableArray patternValues) {
-      view.setLineDashPattern(patternValues);
   }
 
   @Override

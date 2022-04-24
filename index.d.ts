@@ -562,6 +562,7 @@ declare module 'react-native-maps' {
     bearing?: number;
     tappable?: boolean;
     onPress?: (event: MapEvent<{ action: 'overlay-press' }>) => void;
+    opacity?: number;
   }
 
   export class Overlay extends React.Component<MapOverlayProps, any> {}
@@ -628,6 +629,8 @@ declare module 'react-native-maps' {
     NONE: MapTypes;
     MUTEDSTANDARD: MapTypes;
   };
+
+  export const enableLatestRenderer: () => Promise<'LATEST' | 'LEGACY'> | void;
 
   export const PROVIDER_DEFAULT: null;
   export const PROVIDER_GOOGLE: 'google';

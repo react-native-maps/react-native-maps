@@ -3,9 +3,9 @@
 React Native Map components for iOS + Android
 
 
-# :warning: Maintainers Wanted [![Maintainers Wanted](https://img.shields.io/badge/maintainers-wanted-red.svg)](https://github.com/react-native-maps/react-native-maps/issues/3564)
-We are in need of more people or companies willing to help. If you have enough time and knowledge, and want to become a maintainer, please let us know [here](https://github.com/react-native-maps/react-native-maps/issues/3564).
- 
+## Contributing
+This project is being maintained by a small group of people, and any help with issues and pull requests are always appreciated. If you are able and willing to contribute, please read the [guidelines](./CONTRIBUTING.md).
+
 ## Installation
 
 See [Installation Instructions](docs/installation.md).

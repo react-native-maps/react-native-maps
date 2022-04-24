@@ -166,6 +166,22 @@ Source: https://developers.google.com/maps/documentation/android-api/signup
 
 That's it, you made it! :+1:
 
+## Using the new Google Maps Renderer
+
+As of version 18.0.0 of the Maps SDK for Android an upgraded map renderer is available. All of its improvements can be found [here](https://developers.google.com/maps/documentation/android-sdk/renderer). The new renderer will become the default through a progressive rollout starting in June 2022 at the earliest.
+
+To opt in to the new renderer add the following code in your entry file (e.g. App.js):
+
+```javascript
+import { enableLatestRenderer } from 'react-native-maps';
+
+enableLatestRenderer();
+```
+
+`enableLatestRenderer` returns a promise (on android) specifying the map renderer being used, either `'LATEST' | 'LEGACY'`. It can be called at any point to get the renderer being used, but it won't change after the first map has been rendered.
+
+Make sure to test your app thoroughly after enabling the new renderer, as it seems to cause some behavioural changes, e.g. [this](https://github.com/react-native-maps/react-native-maps/pull/4055#issuecomment-1063358886).
+
 ---
 
 ## Troubleshooting
