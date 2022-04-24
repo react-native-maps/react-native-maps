@@ -1,5 +1,5 @@
 import { Animated } from 'react-native';
-import AnimatedRegion from '../lib/components/AnimatedRegion';
+import AnimatedRegion from '../src/AnimatedRegion';
 
 const VALUES = {
   latitude: 5,
