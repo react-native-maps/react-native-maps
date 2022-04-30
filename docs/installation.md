@@ -50,6 +50,14 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
+Google Maps SDK for iOS requires iOS 12, so make sure that your deployment target is >= 12.0 in your iOS project settings.
+
+Also make sure that your Podfile deployment target is set to >= 12.0 at the top of your Podfile, eg:
+
+```ruby
+platform :ios, '12.0'
+```
+
 Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
 
 ```ruby
@@ -81,7 +89,8 @@ Add your API key to your manifest file (`android/app/src/main/AndroidManifest.xm
 
 The installation documentation previously specified adding `supportLibVersion`, `playServicesVersion` and `androidMapsUtilsVersion` to `build.gradle`.
 
-This is no longer supported, and should be removed when upgrading to v0.31.0 and above. If you have dependency conflicts with other modules, please refer to [this section](#Google-Play-Services-conflicting-issues-with-other-modules) instead.
+None of these keys are required anymore and can be removed, if not used by other modules in your project.
+> **ATTENTION**: If you leave `playServicesVersion` in `build.gradle`, the version must be at least `18.0.0`
 
 ### Ensure that you have Google Play Services installed
 
