@@ -21,9 +21,7 @@ declare module 'react-native-maps' {
     country: string;
   }
 
-  export interface Region {
-    latitude: number;
-    longitude: number;
+  export interface Region extends LatLng {
     latitudeDelta: number;
     longitudeDelta: number;
   }
@@ -145,9 +143,7 @@ declare module 'react-native-maps' {
    */
   export interface EventUserLocation extends NativeSyntheticEvent<{}> {
     nativeEvent: {
-      coordinate: {
-        latitude: number;
-        longitude: number;
+      coordinate: LatLng & {
         altitude: number;
         timestamp: number;
         accuracy: number;
@@ -295,6 +291,7 @@ declare module 'react-native-maps' {
     onMarkerDrag?: (event: MapEvent) => void;
     onMarkerDragEnd?: (event: MapEvent) => void;
     onIndoorBuildingFocused?: (event: IndoorBuildingEvent) => void;
+    isLatLngInRegion?: (coords: LatLng) => Boolean
 
     minZoomLevel?: number;
     maxZoomLevel?: number;

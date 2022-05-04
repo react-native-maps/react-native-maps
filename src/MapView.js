@@ -953,6 +953,30 @@ class MapView extends React.Component {
     };
   }
 
+  isLatLngInRegion({latitude, longitude}) {
+    const {region, initialRegion} = this.props
+    // We cannot determinate if the coords is within the viewport
+    if (!region || !initialRegion) return true
+
+    const { latitude: regLat, latitudeDelta, longitude: regLon, longitudeDelta } = region
+    const latMin = regLat - (latitudeDelta / 2)
+    const latMax = regLat + (latitudeDelta / 2)
+    const lonMin = regLon - (longitudeDelta / 2)
+    const lonMax = regLon + (longitudeDelta / 2)
+
+    let long = longitude
+
+    if (lonMin < -180 && longitude > 0) {
+      long = longitude - 360
+    }
+
+    if (lonMax > 180 && longitude < 0) {
+      long = longitude + 360
+    }
+
+    return (latitude >= latMin && latitude <= latMax) && (long >= lonMin && long <= lonMax)
+  }
+
   _uiManagerCommand(name) {
     const UIManager = NativeModules.UIManager;
     const componentName = getAirMapName(this.props.provider);
