@@ -8,10 +8,7 @@ import {
   Image,
   findNodeHandle,
 } from 'react-native';
-import {
-  ColorPropType,
-  ViewPropTypes,
-} from 'deprecated-react-native-prop-types';
+import {ColorPropType, ViewPropTypes} from 'deprecated-react-native-prop-types';
 
 import decorateMapComponent, {
   SUPPORTED,
@@ -303,7 +300,7 @@ class MapMarker extends React.Component {
         NativeModules.UIManager.dispatchViewManagerCommand(
           this._getHandle(),
           this.getUIManagerCommand(name),
-          args
+          args,
         );
         break;
 
@@ -333,14 +330,14 @@ class MapMarker extends React.Component {
 
     return (
       <AIRMapMarker
-        ref={(ref) => {
+        ref={ref => {
           this.marker = ref;
         }}
         {...this.props}
         image={image}
         icon={icon}
         style={[styles.marker, this.props.style]}
-        onPress={(event) => {
+        onPress={event => {
           if (this.props.stopPropagation) {
             event.stopPropagation();
           }

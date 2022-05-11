@@ -1,4 +1,4 @@
-import { Animated } from 'react-native';
+import {Animated} from 'react-native';
 import AnimatedRegion from '../src/AnimatedRegion';
 
 const VALUES = {

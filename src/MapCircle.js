@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  ColorPropType,
-  ViewPropTypes,
-} from 'deprecated-react-native-prop-types';
+import {ColorPropType, ViewPropTypes} from 'deprecated-react-native-prop-types';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
@@ -128,7 +125,7 @@ class MapCircle extends React.Component {
     return (
       <AIRMapCircle
         {...this.props}
-        ref={(ref) => {
+        ref={ref => {
           this.circle = ref;
         }}
       />

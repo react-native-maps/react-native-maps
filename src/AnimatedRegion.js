@@ -1,10 +1,10 @@
-import { Animated } from 'react-native';
+import {Animated} from 'react-native';
 
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 if (__DEV__) {
   if (AnimatedWithChildren.name !== 'AnimatedWithChildren') {
     console.error(
-      'AnimatedRegion could not obtain AnimatedWithChildren base class'
+      'AnimatedRegion could not obtain AnimatedWithChildren base class',
     );
   }
 }
@@ -41,15 +41,15 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     this.latitude = getAnimatedValue(valueIn.latitude, defaultValues.latitude);
     this.longitude = getAnimatedValue(
       valueIn.longitude,
-      defaultValues.longitude
+      defaultValues.longitude,
     );
     this.latitudeDelta = getAnimatedValue(
       valueIn.latitudeDelta,
-      defaultValues.latitudeDelta
+      defaultValues.latitudeDelta,
     );
     this.longitudeDelta = getAnimatedValue(
       valueIn.longitudeDelta,
-      defaultValues.longitudeDelta
+      defaultValues.longitudeDelta,
     );
     this._regionListeners = {};
   }
@@ -123,7 +123,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     this.longitude.removeListener(this._regionListeners[id].longitude);
     this.latitudeDelta.removeListener(this._regionListeners[id].latitudeDelta);
     this.longitudeDelta.removeListener(
-      this._regionListeners[id].longitudeDelta
+      this._regionListeners[id].longitudeDelta,
     );
     delete this._regionListeners[id];
   }
@@ -138,7 +138,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
             toValue: config[type],
             // may help to eliminate some dev warnings and perf issues
             useNativeDriver: !!config?.useNativeDriver,
-          })
+          }),
         );
       }
     }
@@ -155,7 +155,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
             toValue: config[type],
             // may help to eliminate some dev warnings and perf issues
             useNativeDriver: !!config?.useNativeDriver,
-          })
+          }),
         );
       }
     }

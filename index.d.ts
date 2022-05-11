@@ -204,13 +204,13 @@ declare module 'react-native-maps' {
   };
 
   export interface IndoorBuildingEvent
-    extends NativeSyntheticEvent<{ IndoorBuilding: IndoorBuilding }> {}
+    extends NativeSyntheticEvent<{IndoorBuilding: IndoorBuilding}> {}
 
   /**
    * onKmlReady parameter
    */
   export interface KmlMapEvent
-    extends NativeSyntheticEvent<{ markers: KmlMarker[] }> {}
+    extends NativeSyntheticEvent<{markers: KmlMarker[]}> {}
 
   type MapTypes =
     | 'standard'
@@ -264,33 +264,33 @@ declare module 'react-native-maps' {
     maxDelta?: number;
     minDelta?: number;
     legalLabelInsets?: EdgeInsets;
-    compassOffset?: { x: number; y: number };
+    compassOffset?: {x: number; y: number};
     tintColor?: string;
 
     onMapLoaded?: () => void;
     onMapReady?: () => void;
     onKmlReady?: (values: KmlMapEvent) => void;
-    onRegionChange?: (region: Region, details?: { isGesture: boolean }) => void;
+    onRegionChange?: (region: Region, details?: {isGesture: boolean}) => void;
     onRegionChangeComplete?: (
       region: Region,
-      details?: { isGesture: boolean }
+      details?: {isGesture: boolean},
     ) => void;
     onPress?: (event: MapEvent) => void;
     onDoublePress?: (event: MapEvent) => void;
     onLongPress?: (event: MapEvent) => void;
     onUserLocationChange?: (event: EventUserLocation) => void;
     onPanDrag?: (event: MapEvent) => void;
-    onPoiClick?: (event: MapEvent<{ placeId: string; name: string }>) => void;
+    onPoiClick?: (event: MapEvent<{placeId: string; name: string}>) => void;
     onMarkerPress?: (
-      event: MapEvent<{ action: 'marker-press'; id: string }>
+      event: MapEvent<{action: 'marker-press'; id: string}>,
     ) => void;
     onMarkerSelect?: (
-      event: MapEvent<{ action: 'marker-select'; id: string }>
+      event: MapEvent<{action: 'marker-select'; id: string}>,
     ) => void;
     onMarkerDeselect?: (
-      event: MapEvent<{ action: 'marker-deselect'; id: string }>
+      event: MapEvent<{action: 'marker-deselect'; id: string}>,
     ) => void;
-    onCalloutPress?: (event: MapEvent<{ action: 'callout-press' }>) => void;
+    onCalloutPress?: (event: MapEvent<{action: 'callout-press'}>) => void;
     onMarkerDragStart?: (event: MapEvent) => void;
     onMarkerDrag?: (event: MapEvent) => void;
     onMarkerDragEnd?: (event: MapEvent) => void;
@@ -305,12 +305,12 @@ declare module 'react-native-maps' {
     private __lastRegion?: Region;
     getCamera(): Promise<Camera>;
     setCamera(camera: Partial<Camera>): void;
-    animateCamera(camera: Partial<Camera>, opts?: { duration?: number }): void;
+    animateCamera(camera: Partial<Camera>, opts?: {duration?: number}): void;
     animateToNavigation(
       location: LatLng,
       bearing: number,
       angle: number,
-      duration?: number
+      duration?: number,
     ): void;
     animateToRegion(region: Region, duration?: number): void;
     animateToCoordinate(latLng: LatLng, duration?: number): void;
@@ -322,14 +322,14 @@ declare module 'react-native-maps' {
     }): void;
     fitToSuppliedMarkers(
       markers: string[],
-      options?: { edgePadding?: EdgePadding; animated?: boolean }
+      options?: {edgePadding?: EdgePadding; animated?: boolean},
     ): void;
     fitToCoordinates(
       coordinates?: LatLng[],
-      options?: { edgePadding?: EdgePadding; animated?: boolean }
+      options?: {edgePadding?: EdgePadding; animated?: boolean},
     ): void;
     setMapBoundaries(northEast: LatLng, southWest: LatLng): void;
-    getMapBoundaries(): Promise<{ northEast: LatLng; southWest: LatLng }>;
+    getMapBoundaries(): Promise<{northEast: LatLng; southWest: LatLng}>;
     takeSnapshot(options?: SnapshotOptions): Promise<string>;
     addressForCoordinate(coordinate: LatLng): Promise<Address>;
     pointForCoordinate(coordinate: LatLng): Promise<Point>;
@@ -363,14 +363,12 @@ declare module 'react-native-maps' {
     tracksViewChanges?: boolean;
     tracksInfoWindowChanges?: boolean;
     stopPropagation?: boolean;
-    onPress?: (event: MapEvent<{ action: 'marker-press'; id: string }>) => void;
-    onSelect?: (
-      event: MapEvent<{ action: 'marker-select'; id: string }>
-    ) => void;
+    onPress?: (event: MapEvent<{action: 'marker-press'; id: string}>) => void;
+    onSelect?: (event: MapEvent<{action: 'marker-select'; id: string}>) => void;
     onDeselect?: (
-      event: MapEvent<{ action: 'marker-deselect'; id: string }>
+      event: MapEvent<{action: 'marker-deselect'; id: string}>,
     ) => void;
-    onCalloutPress?: (event: MapEvent<{ action: 'callout-press' }>) => void;
+    onCalloutPress?: (event: MapEvent<{action: 'callout-press'}>) => void;
     onDragStart?: (event: MapEvent) => void;
     onDrag?: (event: MapEvent) => void;
     onDragEnd?: (event: MapEvent) => void;
@@ -413,7 +411,7 @@ declare module 'react-native-maps' {
 
   export interface MapCalloutProps extends ViewProperties {
     tooltip?: boolean;
-    onPress?: (event: MapEvent<{ action: 'callout-press' }>) => void;
+    onPress?: (event: MapEvent<{action: 'callout-press'}>) => void;
   }
 
   export class Callout extends React.Component<MapCalloutProps, any> {}
@@ -423,7 +421,7 @@ declare module 'react-native-maps' {
   // =======================================================================
 
   export interface MapCalloutSubviewProps extends ViewProperties {
-    onPress?: (event: MapEvent<{ action: 'callout-inside-press' }>) => void;
+    onPress?: (event: MapEvent<{action: 'callout-inside-press'}>) => void;
   }
 
   export class CalloutSubview extends React.Component<
@@ -561,7 +559,7 @@ declare module 'react-native-maps' {
     bounds: [Coordinate, Coordinate];
     bearing?: number;
     tappable?: boolean;
-    onPress?: (event: MapEvent<{ action: 'overlay-press' }>) => void;
+    onPress?: (event: MapEvent<{action: 'overlay-press'}>) => void;
     opacity?: number;
   }
 

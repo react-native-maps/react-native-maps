@@ -574,7 +574,7 @@ class MapView extends React.Component {
   }
 
   getChildContext() {
-    return { provider: this.props.provider };
+    return {provider: this.props.provider};
   }
 
   getSnapshotBeforeUpdate(prevProps) {
@@ -599,33 +599,33 @@ class MapView extends React.Component {
       a.latitudeDelta !== b.latitudeDelta ||
       a.longitudeDelta !== b.longitudeDelta
     ) {
-      this.map.setNativeProps({ region: b });
+      this.map.setNativeProps({region: b});
     }
   }
 
   componentDidMount() {
-    const { isReady } = this.state;
+    const {isReady} = this.state;
     if (isReady) {
       this._updateStyle(this.props);
     }
   }
 
   _updateStyle(props) {
-    const { customMapStyle } = props;
+    const {customMapStyle} = props;
     this.map.setNativeProps({
       customMapStyleString: JSON.stringify(customMapStyle),
     });
   }
 
   _onMapReady() {
-    const { region, initialRegion, onMapReady } = this.props;
+    const {region, initialRegion, onMapReady} = this.props;
     if (region) {
-      this.map.setNativeProps({ region });
+      this.map.setNativeProps({region});
     } else if (initialRegion) {
-      this.map.setNativeProps({ initialRegion });
+      this.map.setNativeProps({initialRegion});
     }
     this._updateStyle(this.props);
-    this.setState({ isReady: true }, () => {
+    this.setState({isReady: true}, () => {
       if (onMapReady) {
         onMapReady();
       }
@@ -633,18 +633,18 @@ class MapView extends React.Component {
   }
 
   _onLayout(e) {
-    const { layout } = e.nativeEvent;
+    const {layout} = e.nativeEvent;
     if (!layout.width || !layout.height) {
       return;
     }
     if (this.state.isReady && !this.__layoutCalled) {
-      const { region, initialRegion } = this.props;
+      const {region, initialRegion} = this.props;
       if (region) {
         this.__layoutCalled = true;
-        this.map.setNativeProps({ region });
+        this.map.setNativeProps({region});
       } else if (initialRegion) {
         this.__layoutCalled = true;
-        this.map.setNativeProps({ initialRegion });
+        this.map.setNativeProps({initialRegion});
       }
     }
     if (this.props.onLayout) {
@@ -658,10 +658,10 @@ class MapView extends React.Component {
     }
   }
 
-  _onChange({ nativeEvent }) {
+  _onChange({nativeEvent}) {
     this.__lastRegion = nativeEvent.region;
     const isGesture = nativeEvent.isGesture;
-    const details = { isGesture };
+    const details = {isGesture};
 
     if (nativeEvent.continuous) {
       if (this.props.onRegionChange) {
@@ -691,7 +691,7 @@ class MapView extends React.Component {
 
   animateToNavigation(location, bearing, angle, duration) {
     console.warn(
-      'animateToNavigation() is deprecated, use animateCamera() instead'
+      'animateToNavigation() is deprecated, use animateCamera() instead',
     );
     this._runCommand('animateToNavigation', [
       location,
@@ -707,28 +707,28 @@ class MapView extends React.Component {
 
   animateToCoordinate(latLng, duration) {
     console.warn(
-      'animateToCoordinate() is deprecated, use animateCamera() instead'
+      'animateToCoordinate() is deprecated, use animateCamera() instead',
     );
     this._runCommand('animateToCoordinate', [latLng, duration || 500]);
   }
 
   animateToBearing(bearing, duration) {
     console.warn(
-      'animateToBearing() is deprecated, use animateCamera() instead'
+      'animateToBearing() is deprecated, use animateCamera() instead',
     );
     this._runCommand('animateToBearing', [bearing, duration || 500]);
   }
 
   animateToViewingAngle(angle, duration) {
     console.warn(
-      'animateToViewingAngle() is deprecated, use animateCamera() instead'
+      'animateToViewingAngle() is deprecated, use animateCamera() instead',
     );
     this._runCommand('animateToViewingAngle', [angle, duration || 500]);
   }
 
   fitToElements(options = {}) {
     const {
-      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
 
@@ -737,7 +737,7 @@ class MapView extends React.Component {
 
   fitToSuppliedMarkers(markers, options = {}) {
     const {
-      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
 
@@ -746,7 +746,7 @@ class MapView extends React.Component {
 
   fitToCoordinates(coordinates = [], options = {}) {
     const {
-      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
 
@@ -761,7 +761,7 @@ class MapView extends React.Component {
   async getMapBoundaries() {
     if (Platform.OS === 'android') {
       return await NativeModules.AirMapModule.getMapBoundaries(
-        this._getHandle()
+        this._getHandle(),
       );
     } else if (Platform.OS === 'ios') {
       return await this._runCommand('getMapBoundaries', []);
@@ -797,7 +797,7 @@ class MapView extends React.Component {
     // new Promise style API shall be supported.
     if (Platform.OS === 'ios' && arguments.length === 4) {
       console.warn(
-        'Old takeSnapshot API has been deprecated; will be removed in the near future'
+        'Old takeSnapshot API has been deprecated; will be removed in the near future',
       );
       const width = arguments[0];
       const height = arguments[1];
@@ -869,7 +869,7 @@ class MapView extends React.Component {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.getAddressFromCoordinates(
         this._getHandle(),
-        coordinate
+        coordinate,
       );
     } else if (Platform.OS === 'ios') {
       return this._runCommand('getAddressFromCoordinates', [coordinate]);
@@ -890,7 +890,7 @@ class MapView extends React.Component {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.pointForCoordinate(
         this._getHandle(),
-        coordinate
+        coordinate,
       );
     } else if (Platform.OS === 'ios') {
       return this._runCommand('pointForCoordinate', [coordinate]);
@@ -911,7 +911,7 @@ class MapView extends React.Component {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.coordinateForPoint(
         this._getHandle(),
-        point
+        point,
       );
     } else if (Platform.OS === 'ios') {
       return this._runCommand('coordinateForPoint', [point]);
@@ -993,7 +993,7 @@ class MapView extends React.Component {
         return NativeModules.UIManager.dispatchViewManagerCommand(
           this._getHandle(),
           this._uiManagerCommand(name),
-          args
+          args,
         );
 
       case 'ios':
@@ -1042,7 +1042,7 @@ class MapView extends React.Component {
     if (Platform.OS === 'android' && this.props.liteMode) {
       return (
         <AIRMapLite
-          ref={(ref) => {
+          ref={ref => {
             this.map = ref;
           }}
           {...props}
@@ -1054,7 +1054,7 @@ class MapView extends React.Component {
 
     return (
       <AIRMap
-        ref={(ref) => {
+        ref={ref => {
           this.map = ref;
         }}
         {...props}
@@ -1069,7 +1069,7 @@ MapView.childContextTypes = childContextTypes;
 
 MapView.MAP_TYPES = MAP_TYPES;
 
-const nativeComponent = (Component) =>
+const nativeComponent = Component =>
   requireNativeComponent(Component, MapView, {
     nativeOnly: {
       onChange: true,
@@ -1087,10 +1087,10 @@ if (Platform.OS === 'android') {
   airMaps.google = googleMapIsInstalled
     ? nativeComponent('AIRGoogleMap')
     : createNotSupportedComponent(
-        'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.'
+        'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
       );
 }
-const getAirMapComponent = (provider) => airMaps[provider || 'default'];
+const getAirMapComponent = provider => airMaps[provider || 'default'];
 
 let AIRMapLite;
 if (!NativeModules.UIManager.getViewManagerConfig) {
@@ -1127,7 +1127,7 @@ export const enableLatestRenderer = () => {
 };
 
 export const ProviderPropType = PropTypes.oneOf(
-  Object.values(ProviderConstants)
+  Object.values(ProviderConstants),
 );
 
 /**
