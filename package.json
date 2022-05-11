@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "types": "index.d.ts",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
-  "version": "0.30.1",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -39,8 +39,8 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": ">= 16.0",
-    "react-native": ">= 0.51",
+    "react": ">= 17.0.1",
+    "react-native": ">= 0.64.3",
     "react-native-web": ">= 0.11"
   },
   "peerDependenciesMeta": {
