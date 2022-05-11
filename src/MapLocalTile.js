@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ViewPropTypes } from 'deprecated-react-native-prop-types';
+import {ViewPropTypes} from 'deprecated-react-native-prop-types';
 
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Marker from './MapMarker';
 import Polyline from './MapPolyline';
 import Polygon from './MapPolygon';
-import { ColorPropType } from 'deprecated-react-native-prop-types';
+import {ColorPropType} from 'deprecated-react-native-prop-types';
 
 const propTypes = {
   /**
@@ -115,7 +115,7 @@ const propTypes = {
   title: PropTypes.string,
 };
 
-const Geojson = (props) => {
+const Geojson = props => {
   const {
     title,
     image,
@@ -146,8 +146,7 @@ const Geojson = (props) => {
               title={title}
               pinColor={markerColor}
               zIndex={zIndex}
-              onPress={() => onPress && onPress(overlay)}
-            >
+              onPress={() => onPress && onPress(overlay)}>
               {markerComponent}
             </Marker>
           );
@@ -194,51 +193,51 @@ Geojson.propTypes = propTypes;
 
 export default Geojson;
 
-export const makeOverlays = (features) => {
+export const makeOverlays = features => {
   const points = features
     .filter(
-      (f) =>
+      f =>
         f.geometry &&
-        (f.geometry.type === 'Point' || f.geometry.type === 'MultiPoint')
+        (f.geometry.type === 'Point' || f.geometry.type === 'MultiPoint'),
     )
-    .map((feature) =>
-      makeCoordinates(feature).map((coordinates) =>
-        makeOverlay(coordinates, feature)
-      )
+    .map(feature =>
+      makeCoordinates(feature).map(coordinates =>
+        makeOverlay(coordinates, feature),
+      ),
     )
     .reduce(flatten, [])
-    .map((overlay) => ({ ...overlay, type: 'point' }));
+    .map(overlay => ({...overlay, type: 'point'}));
 
   const lines = features
     .filter(
-      (f) =>
+      f =>
         f.geometry &&
         (f.geometry.type === 'LineString' ||
-          f.geometry.type === 'MultiLineString')
+          f.geometry.type === 'MultiLineString'),
     )
-    .map((feature) =>
-      makeCoordinates(feature).map((coordinates) =>
-        makeOverlay(coordinates, feature)
-      )
+    .map(feature =>
+      makeCoordinates(feature).map(coordinates =>
+        makeOverlay(coordinates, feature),
+      ),
     )
     .reduce(flatten, [])
-    .map((overlay) => ({ ...overlay, type: 'polyline' }));
+    .map(overlay => ({...overlay, type: 'polyline'}));
 
   const multipolygons = features
-    .filter((f) => f.geometry && f.geometry.type === 'MultiPolygon')
-    .map((feature) =>
-      makeCoordinates(feature).map((coordinates) =>
-        makeOverlay(coordinates, feature)
-      )
+    .filter(f => f.geometry && f.geometry.type === 'MultiPolygon')
+    .map(feature =>
+      makeCoordinates(feature).map(coordinates =>
+        makeOverlay(coordinates, feature),
+      ),
     )
     .reduce(flatten, []);
 
   const polygons = features
-    .filter((f) => f.geometry && f.geometry.type === 'Polygon')
-    .map((feature) => makeOverlay(makeCoordinates(feature), feature))
+    .filter(f => f.geometry && f.geometry.type === 'Polygon')
+    .map(feature => makeOverlay(makeCoordinates(feature), feature))
     .reduce(flatten, [])
     .concat(multipolygons)
-    .map((overlay) => ({ ...overlay, type: 'polygon' }));
+    .map(overlay => ({...overlay, type: 'polygon'}));
 
   return points.concat(lines).concat(polygons);
 };
@@ -263,11 +262,11 @@ const makeOverlay = (coordinates, feature) => {
   return overlay;
 };
 
-const makePoint = (c) => ({ latitude: c[1], longitude: c[0] });
+const makePoint = c => ({latitude: c[1], longitude: c[0]});
 
-const makeLine = (l) => l.map(makePoint);
+const makeLine = l => l.map(makePoint);
 
-const makeCoordinates = (feature) => {
+const makeCoordinates = feature => {
   const g = feature.geometry;
   if (g.type === 'Point') {
     return [makePoint(g.coordinates)];
@@ -280,7 +279,7 @@ const makeCoordinates = (feature) => {
   } else if (g.type === 'Polygon') {
     return g.coordinates.map(makeLine);
   } else if (g.type === 'MultiPolygon') {
-    return g.coordinates.map((p) => p.map(makeLine));
+    return g.coordinates.map(p => p.map(makeLine));
   } else {
     return [];
   }
@@ -298,7 +297,7 @@ const doesOverlayContainProperty = (overlay, property) => {
 };
 
 const getRgbaFromHex = (hex, alpha = 1) => {
-  const [r, g, b] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
+  const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
   return `rgba(${r},${g},${b},${alpha})`;
 };
 
@@ -315,7 +314,7 @@ const getColor = (props, overlay, colorType, overrideColorProp) => {
     ) {
       color = getRgbaFromHex(
         color,
-        overlay.feature.properties[opacityProperty]
+        overlay.feature.properties[opacityProperty],
       );
     }
     return color;

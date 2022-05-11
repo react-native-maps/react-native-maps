@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  ColorPropType,
-  ViewPropTypes,
-} from 'deprecated-react-native-prop-types';
+import {ColorPropType, ViewPropTypes} from 'deprecated-react-native-prop-types';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
@@ -23,7 +20,7 @@ const propTypes = {
        */
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
-    })
+    }),
   ),
 
   /**
@@ -37,8 +34,8 @@ const propTypes = {
          */
         latitude: PropTypes.number.isRequired,
         longitude: PropTypes.number.isRequired,
-      })
-    )
+      }),
+    ),
   ),
 
   /**
@@ -153,7 +150,7 @@ class MapPolygon extends React.Component {
 
   updateNativeProps() {
     return () => {
-      const { fillColor, strokeColor, strokeWidth } = this.props;
+      const {fillColor, strokeColor, strokeWidth} = this.props;
       let polygonNativeProps = {};
       if (fillColor) {
         polygonNativeProps.fillColor = fillColor;
@@ -175,7 +172,7 @@ class MapPolygon extends React.Component {
     return (
       <AIRMapPolygon
         {...this.props}
-        ref={(ref) => {
+        ref={ref => {
           this.polygon = ref;
         }}
         onLayout={

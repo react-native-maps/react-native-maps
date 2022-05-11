@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { processColor } from 'react-native';
-import { ViewPropTypes } from 'deprecated-react-native-prop-types';
+import {processColor} from 'react-native';
+import {ViewPropTypes} from 'deprecated-react-native-prop-types';
 import decorateMapComponent, {
   SUPPORTED,
   USES_DEFAULT_IMPLEMENTATION,
@@ -21,7 +21,7 @@ const propTypes = {
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
       weight: PropTypes.number,
-    })
+    }),
   ),
 
   /**
@@ -71,13 +71,13 @@ class MapHeatmap extends React.Component {
     let gradient;
     if (this.props.gradient) {
       gradient = Object.assign({}, this.props.gradient);
-      gradient.colors = gradient.colors.map((c) => processColor(c));
+      gradient.colors = gradient.colors.map(c => processColor(c));
     }
     return (
       <AIRMapHeatmap
         {...this.props}
         gradient={gradient}
-        ref={(ref) => {
+        ref={ref => {
           this.heatmap = ref;
         }}
       />

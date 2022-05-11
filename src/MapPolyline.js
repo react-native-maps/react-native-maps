@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  ColorPropType,
-  ViewPropTypes,
-} from 'deprecated-react-native-prop-types';
+import {ColorPropType, ViewPropTypes} from 'deprecated-react-native-prop-types';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
@@ -22,7 +19,7 @@ const propTypes = {
        */
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
-    })
+    }),
   ),
 
   /**
@@ -146,7 +143,7 @@ class MapPolyline extends React.Component {
     return (
       <AIRMapPolyline
         {...this.props}
-        ref={(ref) => {
+        ref={ref => {
           this.polyline = ref;
         }}
       />
