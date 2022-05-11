@@ -66,16 +66,6 @@
     "deprecated-react-native-prop-types": "^2.3.0"
   },
   "jest": {
-    "preset": "react-native",
-    "testRegex": "<rootDir>/__tests__/.*|(\\.|/)(test|spec)\\.jsx?$",
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    },
-    "moduleFileExtensions": [
-      "js"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!@react-native|react-native)"
-    ]
+    "preset": "react-native"
   }
 }
