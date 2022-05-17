@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - '0.30.x'
 jobs:
   release:
     runs-on: ubuntu-latest
