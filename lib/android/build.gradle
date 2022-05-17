@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-  def work_version = "2.5.0"
+  def work_version = safeExtGet('targetSdkVersion', 27) < 31 ? "2.5.0" : "2.7.1"
   def supportLibVersion = safeExtGet('supportLibVersion', '28.0.0')
   def supportLibMajorVersion = supportLibVersion.split('\\.')[0] as int
   def appCompatLibName =  (supportLibMajorVersion < 20) ? "androidx.appcompat:appcompat" : "com.android.support:appcompat-v7"
