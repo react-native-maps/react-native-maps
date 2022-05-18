@@ -1,8 +1,7 @@
 {
   "name": "react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
-  "main": "src/index.js",
-  "types": "index.d.ts",
+  "main": "lib/index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "version": "1.0.0",
   "license": "MIT",
@@ -64,8 +63,7 @@
     "typescript": "4.6.4"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.7",
-    "deprecated-react-native-prop-types": "^2.3.0"
+    "@types/geojson": "^7946.0.7"
   },
   "jest": {
     "preset": "react-native"
