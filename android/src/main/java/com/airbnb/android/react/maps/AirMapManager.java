@@ -314,17 +314,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.animateToCamera(camera, duration);
         break;
 
-      case ANIMATE_TO_NAVIGATION:
-        region = args.getMap(0);
-        lng = region.getDouble("longitude");
-        lat = region.getDouble("latitude");
-        LatLng location = new LatLng(lat, lng);
-        bearing = (float)args.getDouble(1);
-        angle = (float)args.getDouble(2);
-        duration = args.getInt(3);
-        view.animateToNavigation(location, bearing, angle, duration);
-        break;
-
       case ANIMATE_TO_REGION:
         region = args.getMap(0);
         duration = args.getInt(1);
@@ -337,26 +326,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
             new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
         );
         view.animateToRegion(bounds, duration);
-        break;
-
-      case ANIMATE_TO_COORDINATE:
-        region = args.getMap(0);
-        duration = args.getInt(1);
-        lng = region.getDouble("longitude");
-        lat = region.getDouble("latitude");
-        view.animateToCoordinate(new LatLng(lat, lng), duration);
-        break;
-
-      case ANIMATE_TO_VIEWING_ANGLE:
-        angle = (float)args.getDouble(0);
-        duration = args.getInt(1);
-        view.animateToViewingAngle(angle, duration);
-        break;
-
-      case ANIMATE_TO_BEARING:
-        bearing = (float)args.getDouble(0);
-        duration = args.getInt(1);
-        view.animateToBearing(bearing, duration);
         break;
 
       case FIT_TO_ELEMENTS:
@@ -421,13 +390,9 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "setCamera", SET_CAMERA,
         "animateCamera", ANIMATE_CAMERA,
         "animateToRegion", ANIMATE_TO_REGION,
-        "animateToCoordinate", ANIMATE_TO_COORDINATE,
-        "animateToViewingAngle", ANIMATE_TO_VIEWING_ANGLE,
-        "animateToBearing", ANIMATE_TO_BEARING,
         "fitToElements", FIT_TO_ELEMENTS,
         "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
-        "fitToCoordinates", FIT_TO_COORDINATES,
-        "animateToNavigation", ANIMATE_TO_NAVIGATION
+        "fitToCoordinates", FIT_TO_COORDINATES
     );
 
     map.putAll(MapBuilder.of(
@@ -439,7 +404,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   }
 
   public static <K, V> Map<K, V> CreateMap(
-  K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+  K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
     Map map = new HashMap<K, V>();
     map.put(k1, v1);
     map.put(k2, v2);
@@ -447,10 +412,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
     map.put(k4, v4);
     map.put(k5, v5);
     map.put(k6, v6);
-    map.put(k7, v7);
-    map.put(k8, v8);
-    map.put(k9, v9);
-    map.put(k10, v10);
     return map;
   }
 
