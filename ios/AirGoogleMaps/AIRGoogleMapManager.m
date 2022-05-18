@@ -342,25 +342,6 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         else if ([result isEqualToString:@"base64"]) {
             callback(@[[NSNull null], [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]]);
         }
-        else if ([result isEqualToString:@"legacy"]) {
-
-            // In the initial (iOS only) implementation of takeSnapshot,
-            // both the uri and the base64 encoded string were returned.
-            // Returning both is rarely useful and in fact causes a
-            // performance penalty when only the file URI is desired.
-            // In that case the base64 encoded string was always marshalled
-            // over the JS-bridge (which is quite slow).
-            // A new more flexible API was created to cover this.
-            // This code should be removed in a future release when the
-            // old API is fully deprecated.
-            [data writeToFile:filePath atomically:YES];
-            NSDictionary *snapshotData = @{
-                                           @"uri": filePath,
-                                           @"data": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]
-                                           };
-            callback(@[[NSNull null], snapshotData]);
-        }
-
     }
     UIGraphicsEndImageContext();
   }];
