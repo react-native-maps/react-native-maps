@@ -67,8 +67,7 @@ function makeExampleMapper(useGoogleMaps) {
   return (example) => example;
 }
 
-type Props = {};
-export default class App extends React.Component<Props> {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
 
@@ -182,8 +181,8 @@ export default class App extends React.Component<Props> {
         [CameraControl, 'CameraControl', true],
         [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
         [GeojsonMap, 'Geojson', true],
-        [CacheURLTiles, 'CacheURLTiles', true ],
-        [CacheWMSTiles, 'CacheWMSTiles', true ],
+        [CacheURLTiles, 'CacheURLTiles', true],
+        [CacheWMSTiles, 'CacheWMSTiles', true],
       ]
         // Filter out examples that are not yet supported for Google Maps on iOS.
         .filter(
