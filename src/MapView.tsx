@@ -888,28 +888,7 @@ class MapView extends React.Component<Props, State, SnapShot> {
    *
    * @return Promise Promise with either the file-uri or base64 encoded string
    */
-  takeSnapshot(args: SnapshotOptions): Promise<string> | undefined {
-    // todo: remove native function
-    if (Platform.OS === 'ios' && arguments.length === 4) {
-      console.warn(
-        'Old takeSnapshot API has been deprecated; will be removed in the near future',
-      );
-      const width = arguments[0];
-      const height = arguments[1];
-      const region = arguments[2];
-      const callback = arguments[3];
-      this._runCommand('takeSnapshot', [
-        width || 0,
-        height || 0,
-        region || {},
-        'png',
-        1,
-        'legacy',
-        callback,
-      ]);
-      return undefined;
-    }
-
+  takeSnapshot(args: SnapshotOptions): Promise<string> {
     // Sanitize inputs
     const config = {
       width: args.width || 0,
