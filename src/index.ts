@@ -1,7 +1,6 @@
 import MapView, {
-  Animated,
+  AnimatedMapView as Animated,
   MAP_TYPES,
-  ProviderPropType,
   enableLatestRenderer,
 } from './MapView';
 import Marker from './MapMarker';
@@ -20,10 +19,9 @@ export {default as AnimatedRegion} from './AnimatedRegion';
 export {default as Geojson} from './Geojson';
 
 export {Marker, Overlay};
-export {Animated, MAP_TYPES, ProviderPropType, enableLatestRenderer};
+export {Animated, MAP_TYPES, enableLatestRenderer};
 
-export const PROVIDER_GOOGLE = MapView.PROVIDER_GOOGLE;
-export const PROVIDER_DEFAULT = MapView.PROVIDER_DEFAULT;
+export * from './ProviderConstants';
 
 export const MarkerAnimated = Marker.Animated;
 export const OverlayAnimated = Overlay.Animated;
