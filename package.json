@@ -15,10 +15,9 @@
     "release": "semantic-release"
   },
   "files": [
-    "index.d.ts",
+    "lib",
     "android",
     "ios",
-    "src",
     "react-native-google-maps.podspec",
     "react-native-maps.podspec",
     "!android/build",
