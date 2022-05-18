@@ -819,50 +819,8 @@ class MapView extends React.Component<Props, State, SnapShot> {
     this._runCommand('animateCamera', [camera, opts ? opts.duration : 500]);
   }
 
-  // todo: remove native function
-  animateToNavigation(
-    location: LatLng,
-    bearing: number,
-    angle: number,
-    duration?: number,
-  ) {
-    console.warn(
-      'animateToNavigation() is deprecated, use animateCamera() instead',
-    );
-    this._runCommand('animateToNavigation', [
-      location,
-      bearing,
-      angle,
-      duration || 500,
-    ]);
-  }
-
   animateToRegion(region: Region, duration: number = 500) {
     this._runCommand('animateToRegion', [region, duration]);
-  }
-
-  // todo: remove native function
-  animateToCoordinate(latLng: LatLng, duration?: number) {
-    console.warn(
-      'animateToCoordinate() is deprecated, use animateCamera() instead',
-    );
-    this._runCommand('animateToCoordinate', [latLng, duration || 500]);
-  }
-
-  // todo: remove native function
-  animateToBearing(bearing: number, duration?: number) {
-    console.warn(
-      'animateToBearing() is deprecated, use animateCamera() instead',
-    );
-    this._runCommand('animateToBearing', [bearing, duration || 500]);
-  }
-
-  // todo: remove native function
-  animateToViewingAngle(angle: number, duration?: number) {
-    console.warn(
-      'animateToViewingAngle() is deprecated, use animateCamera() instead',
-    );
-    this._runCommand('animateToViewingAngle', [angle, duration || 500]);
   }
 
   fitToElements(options: FitToOptions = {}) {
@@ -1404,8 +1362,4 @@ type NativeCommandName =
   | 'setCamera'
   | 'setIndoorActiveLevelIndex'
   | 'setMapBoundaries'
-  | 'takeSnapshot'
-  | 'animateToNavigation'
-  | 'animateToCoordinate'
-  | 'animateToBearing'
-  | 'animateToViewingAngle';
+  | 'takeSnapshot';

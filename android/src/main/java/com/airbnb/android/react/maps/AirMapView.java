@@ -799,41 +799,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
-  public void animateToNavigation(LatLng location, float bearing, float angle, int duration) {
-    if (map == null) return;
-    CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
-        .bearing(bearing)
-        .tilt(angle)
-        .target(location)
-        .build();
-    map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, null);
-  }
-
   public void animateToRegion(LatLngBounds bounds, int duration) {
     if (map == null) return;
     map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
-  }
-
-  public void animateToViewingAngle(float angle, int duration) {
-    if (map == null) return;
-
-    CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
-      .tilt(angle)
-      .build();
-    map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, null);
-  }
-
-  public void animateToBearing(float bearing, int duration) {
-    if (map == null) return;
-    CameraPosition cameraPosition = new CameraPosition.Builder(map.getCameraPosition())
-        .bearing(bearing)
-        .build();
-    map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, null);
-  }
-
-  public void animateToCoordinate(LatLng coordinate, int duration) {
-    if (map == null) return;
-    map.animateCamera(CameraUpdateFactory.newLatLng(coordinate), duration, null);
   }
 
   public void fitToElements(ReadableMap edgePadding, boolean animated) {
