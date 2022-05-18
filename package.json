@@ -49,21 +49,22 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "16.2.4",
-    "@commitlint/config-conventional": "16.2.4",
-    "@react-native-community/eslint-config": "^3.0.1",
-    "@types/react-native": "0.67.6",
+    "@commitlint/cli": "17.0.0",
+    "@commitlint/config-conventional": "17.0.0",
+    "@react-native-community/eslint-config": "^3.0.2",
+    "@types/react-native": "0.67.7",
     "babel-jest": "^27.3.1",
     "eslint": "7.32.0",
-    "husky": "7.0.4",
+    "husky": "8.0.1",
     "jest": "^27.3.1",
+    "prettier": "2.6.2",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "semantic-release": "19.0.2",
     "typescript": "4.6.4"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.7"
+    "@types/geojson": "^7946.0.8"
   },
   "jest": {
     "preset": "react-native"
