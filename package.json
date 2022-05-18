@@ -8,6 +8,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
+    "tscheck": "tsc --noEmit",
+    "build": "tsc",
     "test": "jest",
     "prepare": "husky install",
     "release": "semantic-release"
