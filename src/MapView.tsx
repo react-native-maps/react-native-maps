@@ -1107,7 +1107,11 @@ class MapView extends React.Component<Props, State, SnapShot> {
 
     const AIRMap = getNativeMapComponent(this.props.provider);
 
-    return <AIRMap {...props} />;
+    return (
+      <ProviderContext.Provider value={this.props.provider}>
+        <AIRMap {...props} />
+      </ProviderContext.Provider>
+    );
   }
 }
 
