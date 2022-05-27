@@ -24,6 +24,12 @@ type Props = ViewProps & {
   tileSize?: number;
 
   /**
+   * Set to true to use pathTemplate to open files from Android's AssetManager. The default is false.
+   * @platform android
+   */
+  useAssets?: boolean;
+
+  /**
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
