@@ -36,6 +36,36 @@ npx pod-install
 
 The app's `Info.plist` file must contain a `NSLocationWhenInUseUsageDescription` with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission.
 
+If your app doesn't need to get the user's location at all, and you don't want to add `NSLocationWhenInUseUsageDescription` ([see issue](https://github.com/react-native-maps/react-native-maps/issues/4166)). Then you can add the following code in the podfile to avoid being rejected by the apple store:
+```ruby
+# ...
+target 'your_app_project_name' do
+
+# ...
+
+  post_install do |installer|
+    react_native_post_install(installer)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+
+    # add code start
+    installer.pods_project.targets.each do |target|
+      if target.name == 'react-native-maps'
+        target.build_configurations.each do |config|
+          if config.build_settings['OTHER_CFLAGS'].kind_of?(Array)
+            config.build_settings['OTHER_CFLAGS'].push('-DNEVER_SHOW_USER_LOCATION=1')
+          else
+            config.build_settings['OTHER_CFLAGS'] = ['$(inherited)', '-DNEVER_SHOW_USER_LOCATION=1']
+          end
+        end
+      end
+    end
+    # add code end
+  end
+
+end
+```
+
+
 ### Enabling Google Maps
 
 If you want to enable Google Maps on iOS, obtain the Google API key and edit your `AppDelegate.m` as follows:
