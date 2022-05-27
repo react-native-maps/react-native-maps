@@ -349,6 +349,11 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (void)setShowsUserLocation:(BOOL)showsUserLocation
 {
+#ifdef NEVER_SHOW_USER_LOCATION
+     if (showsUserLocation == YES) {
+         [NSException raise:@"NEVER_SHOW_USER_LOCATION" format:@"If you want to enable user location, you can remove the 'NEVER_SHOW_USER_LOCATION' compile flag from the podfile."];
+     }
+#else
     if (self.showsUserLocation != showsUserLocation) {
         if (showsUserLocation && !_locationManager) {
             _locationManager = [CLLocationManager new];
@@ -358,6 +363,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         }
         super.showsUserLocation = showsUserLocation;
     }
+#endif
 }
 
 - (void)setUserInterfaceStyle:(NSString*)userInterfaceStyle
