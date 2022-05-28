@@ -35,7 +35,7 @@ const propTypes = {
    * Set to true to use pathTemplate to open files from Android's AssetManager. The default is false.
    * @platform android
    */
-   useAssets: PropTypes.bool,
+  useAssets: PropTypes.bool,
 };
 
 class MapLocalTile extends React.Component {
