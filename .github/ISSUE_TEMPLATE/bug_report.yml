@@ -1,0 +1,137 @@
+name: "\U0001F41B Bug Report"
+description: Report a reproducible bug or regression in this library.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Provide a clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducible-code
+    attributes:
+      label: Reproducible sample code
+      render: TSX
+      description: |
+        [Minimum amount of code](https://stackoverflow.com/help/minimal-reproducible-example) to reproduce the bug.
+        Please spend the time needed to trim down your code as much as possible and make sure the code you provide runs "as is",
+        as failing to do so will make reproducing every bug very time consuming for the maintainers.
+        **This will be automatically formatted into code, so no need for backticks.**
+
+      placeholder: |
+        import React from 'react';
+        import {StyleSheet} from 'react-native';
+        import MapView from 'react-native-maps';
+
+        export default function App() {
+          return (
+            <MapView
+              style={styles.mapView}
+              initialRegion={{
+                latitude: 42,
+                longitude: 30,
+                latitudeDelta: 1,
+                longitudeDelta: 1,
+              }}
+            />
+          );
+        }
+
+        const styles = StyleSheet.create({
+          mapView: {
+            flex: 1,
+          },
+        });
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Explain the steps we need to take to reproduce the issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: exptected
+    attributes:
+      label: Expected result
+      description: How did you expect your project to behave?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: |
+        How did it actually behave?
+        If you find that it would help understand the issue, please attach screenshot(s).
+        This is mostly relevant for issues regarding UI bugs.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: React Native Maps Version
+      description: What version of react-native-maps are you running?
+      placeholder: 0.31.1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: What platforms are you seeing the problem on?
+      description: You can select more than one option
+      multiple: true
+      options:
+        - Android
+        - iOS (Apple Maps)
+        - iOS (Google Maps)
+    validations:
+      required: true
+
+  - type: input
+    id: rn-version
+    attributes:
+      label: React Native Version
+      description: What version of react-native are you running?
+      placeholder: 0.68.2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: expo
+    attributes:
+      label: Are you using Expo?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device(s)
+      description: What device(s) are you able to reproduce this on?
+      placeholder: iPhone 14 Pro (12.4), Samsung Galaxy S10 (Android 11)
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional information
+      description: Anything else you want us to know about the bug?
