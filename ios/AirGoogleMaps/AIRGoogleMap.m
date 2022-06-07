@@ -65,6 +65,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   BOOL _initialRegionSet;
   BOOL _initialCameraSet;
   BOOL _didPrepareMap;
+  BOOL _didCallOnMapReady;
   BOOL _zoomTapEnabled;
 }
 
@@ -86,6 +87,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _initialRegionSet = false;
     _initialCameraSet = false;
     _didPrepareMap = false;
+    _didCallOnMapReady = false;
     _zoomTapEnabled = YES;
 
     // Listen to the myLocation property of GMSMapView.
@@ -272,6 +274,13 @@ id regionAsJSON(MKCoordinateRegion region) {
     self.camera = camera;
 }
 
+- (void)setOnMapReady:(RCTBubblingEventBlock)onMapReady {
+    _onMapReady = onMapReady;
+    if(!_didCallOnMapReady && _didPrepareMap) {
+      self.onMapReady(@{});
+      _didCallOnMapReady = true;
+    }
+}
 
 - (void)didPrepareMap {
   UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
@@ -285,7 +294,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   } else if(_region.span.latitudeDelta != 0.0 && _region.span.longitudeDelta != 0.0) {
     self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_region];
   }
-  if (self.onMapReady) self.onMapReady(@{});
+  if (!_didCallOnMapReady && self.onMapReady) {
+    self.onMapReady(@{});
+    _didCallOnMapReady = true;
+  }
   _didPrepareMap = true;
 }
 
