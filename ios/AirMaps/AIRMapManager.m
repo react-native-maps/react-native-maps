@@ -278,31 +278,6 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-
-RCT_EXPORT_METHOD(animateToNavigation:(nonnull NSNumber *)reactTag
-        withRegion:(MKCoordinateRegion)region
-        withBearing:(CGFloat)bearing
-        withAngle:(double)angle
-        withDuration:(CGFloat)duration)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[AIRMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-        } else {
-            AIRMap *mapView = (AIRMap *)view;
-            MKMapCamera *mapCamera = [[mapView camera] copy];
-             [mapCamera setPitch:angle];
-             [mapCamera setHeading:bearing];
-
-            [AIRMap animateWithDuration:duration/1000 animations:^{
-                [(AIRMap *)view setRegion:region animated:YES];
-                [mapView setCamera:mapCamera animated:YES];
-            }];
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
         withRegion:(MKCoordinateRegion)region
         withDuration:(CGFloat)duration)
@@ -317,68 +292,6 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
             }];
         }
     }];
-}
-
-RCT_EXPORT_METHOD(animateToCoordinate:(nonnull NSNumber *)reactTag
-        withRegion:(CLLocationCoordinate2D)latlng
-        withDuration:(CGFloat)duration)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[AIRMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-        } else {
-            AIRMap *mapView = (AIRMap *)view;
-            MKCoordinateRegion region;
-            region.span = mapView.region.span;
-            region.center = latlng;
-            [AIRMap animateWithDuration:duration/1000 animations:^{
-                [mapView setRegion:region animated:YES];
-            }];
-        }
-    }];
-}
-
-RCT_EXPORT_METHOD(animateToViewingAngle:(nonnull NSNumber *)reactTag
-                  withAngle:(double)angle
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-      id view = viewRegistry[reactTag];
-      if (![view isKindOfClass:[AIRMap class]]) {
-          RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-      } else {
-          AIRMap *mapView = (AIRMap *)view;
-
-          MKMapCamera *mapCamera = [[mapView camera] copy];
-          [mapCamera setPitch:angle];
-
-          [AIRMap animateWithDuration:duration/1000 animations:^{
-              [mapView setCamera:mapCamera animated:YES];
-          }];
-      }
-  }];
-}
-
-RCT_EXPORT_METHOD(animateToBearing:(nonnull NSNumber *)reactTag
-                  withBearing:(CGFloat)bearing
-                  withDuration:(CGFloat)duration)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-      id view = viewRegistry[reactTag];
-      if (![view isKindOfClass:[AIRMap class]]) {
-          RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-      } else {
-          AIRMap *mapView = (AIRMap *)view;
-
-          MKMapCamera *mapCamera = [[mapView camera] copy];
-          [mapCamera setHeading:bearing];
-
-          [AIRMap animateWithDuration:duration/1000 animations:^{
-              [mapView setCamera:mapCamera animated:YES];
-          }];
-      }
-  }];
 }
 
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
@@ -676,24 +589,6 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                       }
                       else if ([result isEqualToString:@"base64"]) {
                           callback(@[[NSNull null], [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]]);
-                      }
-                      else if ([result isEqualToString:@"legacy"]) {
-
-                          // In the initial (iOS only) implementation of takeSnapshot,
-                          // both the uri and the base64 encoded string were returned.
-                          // Returning both is rarely useful and in fact causes a
-                          // performance penalty when only the file URI is desired.
-                          // In that case the base64 encoded string was always marshalled
-                          // over the JS-bridge (which is quite slow).
-                          // A new more flexible API was created to cover this.
-                          // This code should be removed in a future release when the
-                          // old API is fully deprecated.
-                          [data writeToFile:filePath atomically:YES];
-                          NSDictionary *snapshotData = @{
-                                                         @"uri": filePath,
-                                                         @"data": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]
-                                                         };
-                          callback(@[[NSNull null], snapshotData]);
                       }
                   }
                   UIGraphicsEndImageContext();
