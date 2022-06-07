@@ -285,7 +285,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 - (void)didPrepareMap {
   UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
   [self overrideGestureRecognizersForView:mapView];
-  if(_initialRegion.span.latitudeDelta != 0.0 && _initialRegion.span.longitudeDelta != 0.0){
+
+  if(!_didPrepareMap && !_initialRegionSet && !_initialCameraSet){
+    if(_initialRegion.span.latitudeDelta != 0.0 && _initialRegion.span.longitudeDelta != 0.0){
     self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_initialRegion];
     _initialRegionSet = true;
   } else if(_initialCamera != nil) {
@@ -293,6 +295,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _initialCameraSet = true;
   } else if(_region.span.latitudeDelta != 0.0 && _region.span.longitudeDelta != 0.0) {
     self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_region];
+  }
   }
   if (!_didCallOnMapReady && self.onMapReady) {
     self.onMapReady(@{});
