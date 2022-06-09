@@ -17,9 +17,10 @@ import decorateMapComponent, {
   UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
-import {LatLng, Modify, Point} from './sharedTypes';
+import {LatLng, Point} from './sharedTypes';
+import {Modify} from './sharedTypesInternal';
 
-type Props = ViewProps & {
+export type MapOverlayProps = ViewProps & {
   /**
    * The bearing in degrees clockwise from north. Values outside the range [0, 360) will be normalized.
    *
@@ -73,9 +74,9 @@ type Props = ViewProps & {
   tappable?: boolean;
 };
 
-type NativeProps = Modify<Props, {image?: string}>;
+type NativeProps = Modify<MapOverlayProps, {image?: string}>;
 
-export class MapOverlay extends React.Component<Props> {
+export class MapOverlay extends React.Component<MapOverlayProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;

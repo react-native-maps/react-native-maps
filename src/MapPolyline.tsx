@@ -10,7 +10,7 @@ import decorateMapComponent, {
 } from './decorateMapComponent';
 import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
 
-export type Props = ViewProps & {
+export type MapPolylineProps = ViewProps & {
   /**
    * An array of coordinates to describe the polyline
    *
@@ -146,9 +146,9 @@ export type Props = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = Props & {ref: React.RefObject<View>};
+type NativeProps = MapPolylineProps & {ref: React.RefObject<View>};
 
-export class MapPolyline extends React.Component<Props> {
+export class MapPolyline extends React.Component<MapPolylineProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
@@ -157,7 +157,7 @@ export class MapPolyline extends React.Component<Props> {
 
   private polyline: NativeProps['ref'];
 
-  constructor(props: Props) {
+  constructor(props: MapPolylineProps) {
     super(props);
     this.polyline = React.createRef<View>();
   }

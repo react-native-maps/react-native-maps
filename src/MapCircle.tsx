@@ -10,7 +10,7 @@ import decorateMapComponent, {
 } from './decorateMapComponent';
 import {LatLng, LineCapType, LineJoinType} from './sharedTypes';
 
-type Props = ViewProps & {
+export type MapCircleProps = ViewProps & {
   /**
    * The coordinates of the center of the circle.
    *
@@ -119,9 +119,9 @@ type Props = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = Props & {ref: React.RefObject<View>};
+type NativeProps = MapCircleProps & {ref: React.RefObject<View>};
 
-export class MapCircle extends React.Component<Props> {
+export class MapCircle extends React.Component<MapCircleProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
@@ -130,7 +130,7 @@ export class MapCircle extends React.Component<Props> {
 
   private circle: NativeProps['ref'];
 
-  constructor(props: Props) {
+  constructor(props: MapCircleProps) {
     super(props);
     this.circle = React.createRef<View>();
   }

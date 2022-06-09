@@ -10,7 +10,7 @@ import decorateMapComponent, {
 } from './decorateMapComponent';
 import {ViewProps} from 'react-native';
 
-type Props = ViewProps & {
+export type MapUrlTileProps = ViewProps & {
   /**
    * Doubles tile size from 256 to 512 utilising higher zoom levels
    * i.e loading 4 higher zoom level tiles and combining them for one high-resolution tile.
@@ -145,9 +145,9 @@ type Props = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = Props;
+type NativeProps = MapUrlTileProps;
 
-export class MapUrlTile extends React.Component<Props> {
+export class MapUrlTile extends React.Component<MapUrlTileProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;

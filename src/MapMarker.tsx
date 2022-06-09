@@ -28,11 +28,11 @@ import {
   MarkerDragStartEndEvent,
   MarkerPressEvent,
   MarkerSelectEvent,
-  Modify,
   Point,
 } from './sharedTypes';
+import {Modify} from './sharedTypesInternal';
 
-export type Props = ViewProps & {
+export type MapMarkerProps = ViewProps & {
   /**
    * Sets the anchor point for the marker.
    * The anchor specifies the point in the icon image that is anchored to the marker's position on the Earth's surface.
@@ -317,16 +317,16 @@ export type Props = ViewProps & {
   zIndex?: number;
 };
 
-type OmittedProps = Omit<Props, 'stopPropagation'>;
+type OmittedProps = Omit<MapMarkerProps, 'stopPropagation'>;
 
 type NativeProps = Modify<
   OmittedProps,
-  {icon?: string; image?: Props['image'] | string}
+  {icon?: string; image?: MapMarkerProps['image'] | string}
 > & {
   ref: React.RefObject<View>;
 };
 
-export class MapMarker extends React.Component<Props> {
+export class MapMarker extends React.Component<MapMarkerProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
@@ -337,7 +337,7 @@ export class MapMarker extends React.Component<Props> {
 
   private marker: NativeProps['ref'];
 
-  constructor(props: Props) {
+  constructor(props: MapMarkerProps) {
     super(props);
 
     this.marker = React.createRef<View>();
