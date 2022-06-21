@@ -10,7 +10,7 @@ import decorateMapComponent, {
 } from './decorateMapComponent';
 import {Frame, Point} from './sharedTypes';
 
-type Props = ViewProps & {
+export type MapCalloutSubviewProps = ViewProps & {
   /**
    * Callback that is called when the user presses on this subview inside callout
    *
@@ -20,9 +20,9 @@ type Props = ViewProps & {
   onPress?: (event: CalloutSubviewPressEvent) => void;
 };
 
-type NativeProps = Props;
+type NativeProps = MapCalloutSubviewProps;
 
-export class MapCalloutSubview extends React.Component<Props> {
+export class MapCalloutSubview extends React.Component<MapCalloutSubviewProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;

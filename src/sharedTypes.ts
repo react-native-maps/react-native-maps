@@ -1,7 +1,5 @@
 import {NativeSyntheticEvent} from 'react-native';
 
-export type Modify<T, R> = Omit<T, keyof R> & R;
-
 export type Provider = 'google' | undefined;
 
 export type LatLng = {

@@ -11,7 +11,7 @@ import decorateMapComponent, {
 import * as ProviderConstants from './ProviderConstants';
 import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
 
-export type Props = ViewProps & {
+export type MapPolygonProps = ViewProps & {
   /**
    * An array of coordinates to describe the polygon
    *
@@ -145,9 +145,9 @@ export type Props = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = Props & {ref: React.RefObject<View>};
+type NativeProps = MapPolygonProps & {ref: React.RefObject<View>};
 
-export class MapPolygon extends React.Component<Props> {
+export class MapPolygon extends React.Component<MapPolygonProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
@@ -156,12 +156,12 @@ export class MapPolygon extends React.Component<Props> {
 
   private polygon: NativeProps['ref'];
 
-  constructor(props: Props) {
+  constructor(props: MapPolygonProps) {
     super(props);
     this.polygon = React.createRef<View>();
   }
 
-  setNativeProps(props: Partial<Props>) {
+  setNativeProps(props: Partial<MapPolygonProps>) {
     this.polygon.current?.setNativeProps(props);
   }
 
@@ -169,9 +169,9 @@ export class MapPolygon extends React.Component<Props> {
     return () => {
       const {fillColor, strokeColor, strokeWidth} = this.props;
       let polygonNativeProps: {
-        fillColor?: Props['fillColor'];
-        strokeColor?: Props['strokeColor'];
-        strokeWidth?: Props['strokeWidth'];
+        fillColor?: MapPolygonProps['fillColor'];
+        strokeColor?: MapPolygonProps['strokeColor'];
+        strokeWidth?: MapPolygonProps['strokeWidth'];
       } = {};
       if (fillColor) {
         polygonNativeProps.fillColor = fillColor;
