@@ -3,4 +3,4 @@ apply from: file("../node_modules/@react-native-community/cli-platform-android/n
 include ':app'
 
 include ':react-native-maps'
-project(':react-native-maps').projectDir = new File('../../lib/android')
+project(':react-native-maps').projectDir = new File('../../android')
