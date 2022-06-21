@@ -8,9 +8,10 @@ import decorateMapComponent, {
   UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
-import {LatLng, Modify} from './sharedTypes';
+import {LatLng} from './sharedTypes';
+import {Modify} from './sharedTypesInternal';
 
-type Props = ViewProps & {
+export type MapHeatmapProps = ViewProps & {
   gradient?: {
     /**
      * Resolution of color map -- number corresponding to the number of steps colors are interpolated into.
@@ -68,10 +69,10 @@ type Props = ViewProps & {
 };
 
 type NativeProps = Modify<
-  Props,
+  MapHeatmapProps,
   {
     gradient?: Modify<
-      Props['gradient'],
+      MapHeatmapProps['gradient'],
       {colors: (ProcessedColorValue | null | undefined)[]}
     >;
   }
@@ -79,7 +80,7 @@ type NativeProps = Modify<
   ref: React.RefObject<View>;
 };
 
-export class MapHeatmap extends React.Component<Props> {
+export class MapHeatmap extends React.Component<MapHeatmapProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
@@ -88,7 +89,7 @@ export class MapHeatmap extends React.Component<Props> {
 
   private heatmap: NativeProps['ref'];
 
-  constructor(props: Props) {
+  constructor(props: MapHeatmapProps) {
     super(props);
     this.heatmap = React.createRef<View>();
   }

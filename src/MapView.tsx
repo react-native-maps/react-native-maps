@@ -1,24 +1,24 @@
 import * as React from 'react';
 import {
-  Platform,
   Animated as RNAnimated,
-  requireNativeComponent,
-  NativeModules,
+  Animated,
   findNodeHandle,
+  HostComponent,
+  LayoutChangeEvent,
+  NativeModules,
+  NativeSyntheticEvent,
+  Platform,
+  requireNativeComponent,
+  UIManager,
   View,
   ViewProps,
-  NativeSyntheticEvent,
-  LayoutChangeEvent,
-  UIManager,
-  HostComponent,
-  Animated,
 } from 'react-native';
 import {
+  createNotSupportedComponent,
   getNativeMapName,
   googleMapIsInstalled,
-  createNotSupportedComponent,
-  ProviderContext,
   NativeComponent,
+  ProviderContext,
 } from './decorateMapComponent';
 import * as ProviderConstants from './ProviderConstants';
 import {
@@ -31,11 +31,33 @@ import {
   MarkerDragStartEndEvent,
   MarkerPressEvent,
   MarkerSelectEvent,
-  Modify,
   Point,
   Provider,
   Region,
 } from './sharedTypes';
+import {
+  Address,
+  BoundingBox,
+  Camera,
+  ChangeEvent,
+  Details,
+  EdgePadding,
+  FitToOptions,
+  IndoorBuildingEvent,
+  IndoorLevelActivatedEvent,
+  KmlMapEvent,
+  LongPressEvent,
+  MapPressEvent,
+  MapStyleElement,
+  MapType,
+  MapTypes,
+  NativeCommandName,
+  PanDragEvent,
+  PoiClickEvent,
+  SnapshotOptions,
+  UserLocationChangeEvent,
+} from './MapView.types';
+import {Modify} from './sharedTypesInternal';
 
 export const MAP_TYPES: MapTypes = {
   STANDARD: 'standard',
@@ -48,7 +70,7 @@ export const MAP_TYPES: MapTypes = {
 
 const GOOGLE_MAPS_ONLY_TYPES: MapType[] = [MAP_TYPES.TERRAIN, MAP_TYPES.NONE];
 
-type Props = ViewProps & {
+export type MapViewProps = ViewProps & {
   /**
    * If `true` map will be cached and displayed as an image instead of being interactable, for performance usage.
    *
@@ -432,7 +454,7 @@ type Props = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  provider?: 'google';
+  provider?: Provider;
 
   /**
    * The region to be displayed by the map.
@@ -667,10 +689,10 @@ type Props = ViewProps & {
 };
 
 type ModifiedProps = Modify<
-  Props,
+  MapViewProps,
   {
-    region?: Props['region'] | null;
-    initialRegion?: Props['initialRegion'] | null;
+    region?: MapViewProps['region'] | null;
+    initialRegion?: MapViewProps['initialRegion'] | null;
   }
 >;
 
@@ -690,13 +712,13 @@ type State = {
 
 type SnapShot = Region | null;
 
-class MapView extends React.Component<Props, State, SnapShot> {
+class MapView extends React.Component<MapViewProps, State, SnapShot> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
   private __lastRegion: Region | undefined;
   private __layoutCalled: boolean | undefined;
 
-  constructor(props: Props) {
+  constructor(props: MapViewProps) {
     super(props);
 
     this.map = React.createRef<View>();
@@ -714,7 +736,7 @@ class MapView extends React.Component<Props, State, SnapShot> {
     this.map.current?.setNativeProps(props);
   }
 
-  getSnapshotBeforeUpdate(prevProps: Props) {
+  getSnapshotBeforeUpdate(prevProps: MapViewProps) {
     if (
       this.state.isReady &&
       this.props.customMapStyle !== prevProps.customMapStyle
@@ -724,7 +746,11 @@ class MapView extends React.Component<Props, State, SnapShot> {
     return this.props.region || null;
   }
 
-  componentDidUpdate(_prevProps: Props, _prevState: State, region: SnapShot) {
+  componentDidUpdate(
+    _prevProps: MapViewProps,
+    _prevState: State,
+    region: SnapShot,
+  ) {
     const a = this.__lastRegion;
     const b = region;
     if (!a || !b) {
@@ -747,7 +773,7 @@ class MapView extends React.Component<Props, State, SnapShot> {
     }
   }
 
-  private _updateStyle(customMapStyle: Props['customMapStyle']) {
+  private _updateStyle(customMapStyle: MapViewProps['customMapStyle']) {
     this.map.current?.setNativeProps({
       customMapStyleString: JSON.stringify(customMapStyle),
     });
@@ -878,13 +904,13 @@ class MapView extends React.Component<Props, State, SnapShot> {
    * Takes a snapshot of the map and saves it to a picture
    * file or returns the image as a base64 encoded string.
    *
-   * @param config Configuration options
-   * @param [config.width] Width of the rendered map-view (when omitted actual view width is used).
-   * @param [config.height] Height of the rendered map-view (when omitted actual height is used).
-   * @param [config.region] Region to render (Only supported on iOS).
-   * @param [config.format] Encoding format ('png', 'jpg') (default: 'png').
-   * @param [config.quality] Compression quality (only used for jpg) (default: 1.0).
-   * @param [config.result] Result format ('file', 'base64') (default: 'file').
+   * @param args Configuration options
+   * @param [args.width] Width of the rendered map-view (when omitted actual view width is used).
+   * @param [args.height] Height of the rendered map-view (when omitted actual height is used).
+   * @param [args.region] Region to render (Only supported on iOS).
+   * @param [args.format] Encoding format ('png', 'jpg') (default: 'png').
+   * @param [args.quality] Compression quality (only used for jpg) (default: 1.0).
+   * @param [args.result] Result format ('file', 'base64') (default: 'file').
    *
    * @return Promise Promise with either the file-uri or base64 encoded string
    */
@@ -1150,199 +1176,3 @@ export const enableLatestRenderer = () => {
 MapView.Animated = AnimatedMapView;
 
 export default MapView;
-
-type Camera = {
-  /**
-   * Apple Maps
-   */
-  altitude?: number;
-  center: LatLng;
-  heading: number;
-  pitch: number;
-
-  /**
-   * Google Maps
-   */
-  zoom?: number;
-};
-
-type MapStyleElement = {
-  featureType?: string;
-  elementType?: string;
-  stylers: object[];
-};
-
-type EdgePadding = {
-  top: Number;
-  right: Number;
-  bottom: Number;
-  left: Number;
-};
-
-type MapType =
-  | 'hybrid'
-  | 'mutedStandard'
-  | 'none'
-  | 'satellite'
-  | 'standard'
-  | 'terrain';
-
-type MapTypes = {
-  STANDARD: 'standard';
-  SATELLITE: 'satellite';
-  HYBRID: 'hybrid';
-  TERRAIN: 'terrain';
-  NONE: 'none';
-  MUTEDSTANDARD: 'mutedStandard';
-};
-
-type IndoorLevel = {
-  index: number;
-  name: string;
-  shortName: string;
-};
-
-type ActiveIndoorLevel = {
-  activeLevelIndex: number;
-  name: string;
-  shortName: string;
-};
-
-type IndoorLevelActivatedEvent = NativeSyntheticEvent<{
-  IndoorLevel: ActiveIndoorLevel;
-}>;
-
-type IndoorBuilding = {
-  underground: boolean;
-  activeLevelIndex: number;
-  levels: IndoorLevel[];
-};
-
-type IndoorBuildingEvent = NativeSyntheticEvent<{
-  IndoorBuilding: IndoorBuilding;
-}>;
-
-type KmlMarker = {
-  id: string;
-  title: string;
-  description: string;
-  coordinate: LatLng;
-  position: Point;
-};
-
-type KmlMapEvent = NativeSyntheticEvent<{markers: KmlMarker[]}>;
-
-type LongPressEvent = ClickEvent<{
-  /**
-   * @platform Android
-   */
-  action?: 'long-press';
-}>;
-
-type PanDragEvent = ClickEvent;
-
-type PoiClickEvent = NativeSyntheticEvent<{
-  placeId: string;
-  name: string;
-  coordinate: LatLng;
-
-  /**
-   * @platform Android
-   */
-  position?: Point;
-}>;
-
-type MapPressEvent = ClickEvent<{
-  /**
-   * @platform Android
-   */
-  action?: 'press';
-}>;
-
-type Details = {
-  isGesture?: boolean;
-};
-
-type UserLocationChangeEvent = NativeSyntheticEvent<{
-  coordinate?: LatLng & {
-    altitude: number;
-    timestamp: number;
-    accuracy: number;
-    speed: number;
-    heading: number;
-
-    /**
-     * @platform iOS
-     */
-    altitudeAccuracy?: number;
-
-    /**
-     * @platform Android
-     */
-    isFromMockProvider?: boolean;
-  };
-
-  /**
-   * @platform iOS
-   */
-  error?: {
-    message: string;
-  };
-}>;
-
-type ChangeEvent = NativeSyntheticEvent<{
-  continuous: boolean;
-  region: Region;
-  isGesture?: boolean;
-}>;
-
-type FitToOptions = {
-  edgePadding?: EdgePadding;
-  animated?: boolean;
-};
-
-type BoundingBox = {northEast: LatLng; southWest: LatLng};
-
-type SnapshotOptions = {
-  /** optional, when omitted the view-width is used */
-  width?: number;
-  /** optional, when omitted the view-height is used */
-  height?: number;
-  /** __iOS only__, optional region to render */
-  region?: Region;
-  /** image formats, defaults to 'png' */
-  format?: 'png' | 'jpg';
-  /** image quality: 0..1 (only relevant for jpg, default: 1) */
-  quality?: number;
-  /** result types, defaults to 'file' */
-  result?: 'file' | 'base64';
-};
-
-type Address = {
-  administrativeArea: string;
-  country: string;
-  countryCode: string;
-  locality: string;
-  name: string;
-  postalCode: string;
-  subAdministrativeArea: string;
-  subLocality: string;
-  thoroughfare: string;
-};
-
-type NativeCommandName =
-  | 'animateCamera'
-  | 'animateToRegion'
-  | 'coordinateForPoint'
-  | 'fitToCoordinates'
-  | 'fitToElements'
-  | 'fitToSuppliedMarkers'
-  | 'getAddressFromCoordinates'
-  | 'getCamera'
-  | 'getMapBoundaries'
-  | 'getMarkersFrames'
-  | 'pointForCoordinate'
-  | 'setCamera'
-  | 'setIndoorActiveLevelIndex'
-  | 'setMapBoundaries'
-  | 'takeSnapshot';

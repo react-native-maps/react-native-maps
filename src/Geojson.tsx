@@ -10,14 +10,14 @@ import {
   Polygon,
   MultiPolygon,
 } from 'geojson';
-import Marker, {Props as MarkerProps} from './MapMarker';
-import {Props as PolygonProps} from './MapPolygon';
-import {Props as PolylineProps} from './MapPolyline';
+import Marker, {MapMarkerProps as MarkerProps} from './MapMarker';
+import {MapPolygonProps as PolygonProps} from './MapPolygon';
+import {MapPolylineProps as PolylineProps} from './MapPolyline';
 import Polyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
 import {LatLng} from './sharedTypes';
 
-type Props = {
+export type GeojsonProps = {
   /**
    * The pincolor used on markers
    *
@@ -172,7 +172,7 @@ type Props = {
     | PolylineProps['zIndex'];
 };
 
-const Geojson = (props: Props) => {
+const Geojson = (props: GeojsonProps) => {
   const {
     geojson,
     strokeColor,
@@ -399,7 +399,10 @@ const getColor = (
   return undefined;
 };
 
-const getStrokeWidth = (prop: Props['strokeWidth'], overlay: Overlay) => {
+const getStrokeWidth = (
+  prop: GeojsonProps['strokeWidth'],
+  overlay: Overlay,
+) => {
   if (prop) {
     return prop;
   }

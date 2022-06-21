@@ -10,7 +10,7 @@ import decorateMapComponent, {
   UIManagerCommand,
 } from './decorateMapComponent';
 
-type Props = ViewProps & {
+export type MapWMSTileProps = ViewProps & {
   /**
    * The maximum native zoom level for this tile overlay i.e. the highest zoom level that the tile server provides.
    * Tiles are auto-scaled for higher zoom levels.
@@ -124,9 +124,9 @@ type Props = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = Props;
+type NativeProps = MapWMSTileProps;
 
-export class MapWMSTile extends React.Component<Props> {
+export class MapWMSTile extends React.Component<MapWMSTileProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;

@@ -10,7 +10,7 @@ import decorateMapComponent, {
 } from './decorateMapComponent';
 import {CalloutPressEvent} from './sharedTypes';
 
-type Props = ViewProps & {
+export type MapCalloutProps = ViewProps & {
   /**
    * If `true`, clicks on transparent areas in callout will be passed to map.
    *
@@ -39,9 +39,9 @@ type Props = ViewProps & {
   tooltip?: boolean;
 };
 
-type NativeProps = Props;
+type NativeProps = MapCalloutProps;
 
-export class MapCallout extends React.Component<Props> {
+export class MapCallout extends React.Component<MapCalloutProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;

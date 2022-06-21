@@ -10,7 +10,7 @@ import decorateMapComponent, {
   UIManagerCommand,
 } from './decorateMapComponent';
 
-type Props = ViewProps & {
+export type MapLocalTileProps = ViewProps & {
   /**
    * @platform iOS: Apple Maps only
    * @platform Android: Supported
@@ -36,9 +36,9 @@ type Props = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = Props;
+type NativeProps = MapLocalTileProps;
 
-export class MapLocalTile extends React.Component<Props> {
+export class MapLocalTile extends React.Component<MapLocalTileProps> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
