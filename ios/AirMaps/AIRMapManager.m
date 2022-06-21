@@ -28,8 +28,6 @@
 #import "AIRMapSnapshot.h"
 #import "RCTConvert+AirMap.h"
 #import "AIRMapOverlay.h"
-#import "AIRWeakTimerReference.h"
-#import "AIRWeakMapReference.h"
 #import <MapKit/MapKit.h>
 
 static NSString *const RCTMapViewKey = @"MapView";
@@ -943,30 +941,14 @@ static int kDragCenterContext;
     
 }
 
-- (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(__unused BOOL)animated
+- (void)mapViewDidChangeVisibleRegion:(AIRMap *)mapView
 {
-    // Don't send region did change events until map has
-    // started rendering, as these won't represent the final location
-    if(mapView.hasStartedRendering){
-        [self _regionChanged:mapView];
-    }
-
-    AIRWeakTimerReference *weakTarget = [[AIRWeakTimerReference alloc] initWithTarget:self andSelector:@selector(_onTick:)];
-    
-    mapView.regionChangeObserveTimer = [NSTimer timerWithTimeInterval:AIRMapRegionChangeObserveInterval
-                                                               target:weakTarget
-                                                             selector:@selector(timerDidFire:)
-                                                             userInfo:@{ RCTMapViewKey: [[AIRWeakMapReference alloc] initWithMapView: mapView] }
-                                                              repeats:YES];
-
-    [[NSRunLoop mainRunLoop] addTimer:mapView.regionChangeObserveTimer forMode:NSRunLoopCommonModes];
+    [self _regionChanged:mapView];
 }
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
     CGFloat zoomLevel = [self zoomLevel:mapView];
-    [mapView.regionChangeObserveTimer invalidate];
-    mapView.regionChangeObserveTimer = nil;
 
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
@@ -998,7 +980,6 @@ static int kDragCenterContext;
       mapView.hasStartedRendering = YES;
     }
     [mapView beginLoading];
-    [self _emitRegionChangeEvent:mapView continuous:NO];
 }
 
 - (void)mapViewDidFinishRenderingMap:(AIRMap *)mapView fullyRendered:(BOOL)fullyRendered
@@ -1007,12 +988,6 @@ static int kDragCenterContext;
 }
 
 #pragma mark Private
-
-- (void)_onTick:(NSTimer *)timer
-{
-    AIRWeakMapReference *weakRef = timer.userInfo[RCTMapViewKey];
-    [self _regionChanged:weakRef.mapView];
-}
 
 - (void)_regionChanged:(AIRMap *)mapView
 {

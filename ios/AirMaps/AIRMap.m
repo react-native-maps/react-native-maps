@@ -91,11 +91,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     return self;
 }
 
-- (void)dealloc
-{
-    [_regionChangeObserveTimer invalidate];
-}
-
 -(void)addSubview:(UIView *)view {
     if([view isKindOfClass:[AIRMapMarker class]]) {
         [self addAnnotation:(id <MKAnnotation>)view];
