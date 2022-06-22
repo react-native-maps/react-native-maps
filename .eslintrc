@@ -1,3 +1,4 @@
 {
-  "extends": "@react-native-community"
+  "extends": "@react-native-community",
+  "ignorePatterns": "lib" // ts outdir
 }
