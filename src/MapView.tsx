@@ -499,7 +499,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
-  showBuildings?: boolean;
+  showsBuildings?: boolean;
 
   /**
    * If `false` compass won't be displayed on the map.
