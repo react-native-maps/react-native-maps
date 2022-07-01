@@ -118,7 +118,7 @@ import { Marker } from 'react-native-maps';
 ```
 
 ### Rendering a Marker with a custom image
-1. You need to generate an `png` image with various resolution (lets call them `custom_pin`) - for more information go to [Android](https://developer.android.com/studio/write/image-asset-studio#access), [iOS](https://developer.apple.com/library/archive/documentation/ToolsLanguages/Conceptual/Xcode_Overview/AddingImages.html)
+1. You need to generate an `png` image with various resolution (lets call them `custom_pin`) - for more information go to [Android](https://developer.android.com/studio/write/image-asset-studio#access), [iOS](https://developer.apple.com/documentation/xcode/adding-images-to-your-xcode-project)
 2. put all images in Android drawables and iOS assets dir 
 3. Now you can use the following code:
 ```jsx
