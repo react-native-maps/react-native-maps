@@ -64,6 +64,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   MKCoordinateRegion _region;
   BOOL _initialRegionSet;
   BOOL _initialCameraSet;
+  BOOL _didLayoutSubviews;
   BOOL _didPrepareMap;
   BOOL _didCallOnMapReady;
   BOOL _zoomTapEnabled;
@@ -86,6 +87,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(0.0, 0.0), MKCoordinateSpanMake(0.0, 0.0));
     _initialRegionSet = false;
     _initialCameraSet = false;
+    _didLayoutSubviews = false;
     _didPrepareMap = false;
     _didCallOnMapReady = false;
     _zoomTapEnabled = YES;
@@ -247,9 +249,28 @@ id regionAsJSON(MKCoordinateRegion region) {
     ];
 }
 
+- (void)layoutSubviews {
+  [super layoutSubviews];
+  if(_didLayoutSubviews) return;
+  _didLayoutSubviews = true;
+
+  if (_initialCamera != nil) {
+    self.camera = _initialCamera;
+    _initialCameraSet = true;
+  }
+  else if (_initialRegion.span.latitudeDelta != 0.0 &&
+      _initialRegion.span.longitudeDelta != 0.0) {
+    self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_initialRegion];
+    _initialRegionSet = true;
+  } else if (_region.span.latitudeDelta != 0.0 &&
+      _region.span.longitudeDelta != 0.0) {
+    self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_region];
+  }
+}
+
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
   _initialRegion = initialRegion;
-  if(!_initialRegionSet && _didPrepareMap){
+  if(!_initialRegionSet && _didLayoutSubviews){
     self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:initialRegion];
     _initialRegionSet = true;
   }
@@ -257,7 +278,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setInitialCamera:(GMSCameraPosition*)initialCamera {
     _initialCamera = initialCamera;
-    if(!_initialCameraSet && _didPrepareMap){
+    if(!_initialCameraSet && _didLayoutSubviews){
       self.camera = initialCamera;
       _initialCameraSet = true;
     }
@@ -286,17 +307,6 @@ id regionAsJSON(MKCoordinateRegion region) {
   UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
   [self overrideGestureRecognizersForView:mapView];
 
-  if(!_didPrepareMap && !_initialRegionSet && !_initialCameraSet){
-    if(_initialRegion.span.latitudeDelta != 0.0 && _initialRegion.span.longitudeDelta != 0.0){
-    self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_initialRegion];
-    _initialRegionSet = true;
-  } else if(_initialCamera != nil) {
-    self.camera = _initialCamera;
-    _initialCameraSet = true;
-  } else if(_region.span.latitudeDelta != 0.0 && _region.span.longitudeDelta != 0.0) {
-    self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self andMKCoordinateRegion:_region];
-  }
-  }
   if (!_didCallOnMapReady && self.onMapReady) {
     self.onMapReady(@{});
     _didCallOnMapReady = true;
