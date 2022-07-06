@@ -287,7 +287,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 - (void)setRegion:(MKCoordinateRegion)region {
   // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
   _region = region;
-  self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
+  if(_didLayoutSubviews) {
+    self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
+  }
 }
 
 - (void)setCameraProp:(GMSCameraPosition*)camera {
