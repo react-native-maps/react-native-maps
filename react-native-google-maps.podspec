@@ -10,13 +10,13 @@ Pod::Spec.new do |s|
   s.authors      = { "intelligibabble" => "leland.m.richardson@gmail.com" }
   s.homepage     = "https://github.com/react-native-maps/react-native-maps#readme"
   s.license      = "MIT"
-  s.platform     = :ios, "12.0"
+  s.platform     = :ios, "13.0"
 
   s.source       = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
   s.source_files  = "ios/AirGoogleMaps/**/*.{h,m}"
   s.compiler_flags = '-DHAVE_GOOGLE_MAPS=1', '-DHAVE_GOOGLE_MAPS_UTILS=1', '-fno-modules'
 
   s.dependency 'React-Core'
-  s.dependency 'GoogleMaps', '6.2.1'
+  s.dependency 'GoogleMaps', '7.0.0'
   s.dependency 'Google-Maps-iOS-Utils', '4.1.0'
 end
