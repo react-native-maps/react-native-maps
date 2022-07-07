@@ -671,12 +671,11 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
     }
 
     if (nearestDistance <= maxMeters) {
-        AIRMapCoordinate *firstCoord = nearestPolyline.coordinates.firstObject;
         id event = @{
                    @"action": @"polyline-press",
                    @"coordinate": @{
-                       @"latitude": @(firstCoord.coordinate.latitude),
-                       @"longitude": @(firstCoord.coordinate.longitude)
+                       @"latitude": @(tapCoordinate.latitude),
+                       @"longitude": @(tapCoordinate.longitude)
                    }
                    };
         nearestPolyline.onPress(event);
