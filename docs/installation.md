@@ -46,12 +46,12 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
-Google Maps SDK for iOS requires iOS 12, so make sure that your deployment target is >= 12.0 in your iOS project settings.
+Google Maps SDK for iOS requires iOS 13, so make sure that your deployment target is >= 13.0 in your iOS project settings.
 
-Also make sure that your Podfile deployment target is set to >= 12.0 at the top of your Podfile, eg:
+Also make sure that your Podfile deployment target is set to >= 13.0 at the top of your Podfile, eg:
 
 ```ruby
-platform :ios, '12.0'
+platform :ios, '13.0'
 ```
 
 Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
