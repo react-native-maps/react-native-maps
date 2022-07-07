@@ -85,7 +85,7 @@ body:
     attributes:
       label: React Native Maps Version
       description: What version of react-native-maps are you running?
-      placeholder: 0.31.1
+      placeholder: 1.0.0
     validations:
       required: true
 
@@ -114,10 +114,12 @@ body:
   - type: dropdown
     id: expo
     attributes:
-      label: Are you using Expo?
+      label: What version of Expo are you using?
       options:
-        - "Yes"
-        - "No"
+        - "Not using Expo"
+        - "SDK 43"
+        - "SDK 44"
+        - "SDK 45"
     validations:
       required: true
 
