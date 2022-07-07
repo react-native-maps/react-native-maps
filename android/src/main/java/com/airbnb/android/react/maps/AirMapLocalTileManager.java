@@ -53,4 +53,8 @@ public class AirMapLocalTileManager extends ViewGroupManager<AirMapLocalTile> {
         view.setZIndex(zIndex);
     }
 
+    @ReactProp(name = "useAssets", defaultBoolean = false)
+    public void setUseAssets(AirMapLocalTile view, boolean useAssets) {
+        view.setUseAssets(useAssets);
+    }
 }

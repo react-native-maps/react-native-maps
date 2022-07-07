@@ -1,25 +1,29 @@
-name: Master Push
+name: Push
 concurrency:
-  group: masterpush
+  group: push
 on:
   push:
     branches:
       - master
+      - beta
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
           cache: yarn
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
+
+      - name: Build
+        run: yarn build
 
       - name: Release
         env:
