@@ -727,10 +727,6 @@ class MapView extends React.Component<MapViewProps, State> {
     this._onChange = this._onChange.bind(this);
   }
 
-  setNativeProps(props: Partial<NativeProps>) {
-    this.map.current?.setNativeProps(props);
-  }
-
   componentDidUpdate(_prevProps: MapViewProps, _prevState: State) {
     const a = this.__lastRegion;
     const b = this.props.region;
@@ -748,12 +744,7 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   private _onMapReady() {
-    const {region, initialRegion, onMapReady} = this.props;
-    if (region) {
-      this.map.current?.setNativeProps({region});
-    } else if (initialRegion) {
-      this.map.current?.setNativeProps({initialRegion});
-    }
+    const {onMapReady} = this.props;
     this.setState({isReady: true}, () => {
       if (onMapReady) {
         onMapReady();
