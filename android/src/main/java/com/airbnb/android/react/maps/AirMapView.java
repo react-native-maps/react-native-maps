@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Build;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.PermissionChecker;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.MotionEventCompat;
@@ -46,6 +47,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
@@ -93,6 +95,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean cacheEnabled = false;
   private ReadableMap initialRegion;
   private ReadableMap region;
+  private String customMapStyleString;
   private boolean initialRegionSet = false;
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
@@ -220,12 +223,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     this.map.setOnMarkerDragListener(this);
     this.map.setOnPoiClickListener(this);
     this.map.setOnIndoorStateChangeListener(this);
-    if(initialRegion != null) {
-      moveToRegion(initialRegion);
-      initialRegionSet = true;
-    } else {
-      moveToRegion(region);
-    }
+
+    applyBridgedProps();
 
     manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
 
@@ -482,6 +481,18 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  private void applyBridgedProps() {
+    if(initialRegion != null) {
+      moveToRegion(initialRegion);
+      initialRegionSet = true;
+    } else {
+      moveToRegion(region);
+    }
+    if(customMapStyleString != null) {
+      map.setMapStyle(new MapStyleOptions(customMapStyleString));
+    }
+  }
+
   private void moveToRegion(ReadableMap region) {
     if (region == null) return;
 
@@ -539,6 +550,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     } else {
       map.moveCamera(update);
       cameraToSet = null;
+    }
+  }
+
+  public void setMapStyle(@Nullable String customMapStyleString) {
+    this.customMapStyleString = customMapStyleString;
+    if(map != null && customMapStyleString != null) {
+      map.setMapStyle(new MapStyleOptions(customMapStyleString));
     }
   }
 

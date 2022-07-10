@@ -123,7 +123,7 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   @ReactProp(name = "customMapStyleString")
   public void setMapStyle(AirMapView view, @Nullable String customMapStyleString) {
-    view.map.setMapStyle(new MapStyleOptions(customMapStyleString));
+    view.setMapStyle(customMapStyleString);
   }
 
   @ReactProp(name = "mapPadding")
