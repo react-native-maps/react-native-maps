@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "react-native-maps": ["./src/index"]
+    },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
@@ -14,6 +18,5 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext"
-  },
-  "include": ["src"]
+  }
 }

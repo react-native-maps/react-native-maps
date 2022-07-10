@@ -1,29 +1,38 @@
-/**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
- */
+const path = require('path');
+const escape = require('escape-string-regexp');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+const pak = require('../package.json');
 
-var path = require('path');
+const root = path.resolve(__dirname, '..');
+
+const modules = Object.keys({
+  ...pak.peerDependencies,
+});
 
 module.exports = {
-  watchFolders: [
-    path.resolve(__dirname, '..'),
-  ],
+  projectRoot: __dirname,
+  watchFolders: [root],
+
+  // We need to make sure that only one version is loaded for peerDependencies
+  // So we block them at the root, and alias them to the versions in example's node_modules
   resolver: {
-  /**
-   * Why this extraNodeModules?
-   */
-    extraNodeModules: new Proxy({}, {
-      get: (target, name) => path.join(process.cwd(), `node_modules/${name}`),
-    }),
+    blacklistRE: exclusionList(
+      modules.map(
+        m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
+      ),
+    ),
+
+    extraNodeModules: modules.reduce((acc, name) => {
+      acc[name] = path.join(__dirname, 'node_modules', name);
+      return acc;
+    }, {}),
   },
+
   transformer: {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: false,
+        inlineRequires: true,
       },
     }),
   },
