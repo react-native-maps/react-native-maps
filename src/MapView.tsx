@@ -726,6 +726,10 @@ class MapView extends React.Component<MapViewProps, State> {
     this._onChange = this._onChange.bind(this);
   }
 
+  setNativeProps(props: Partial<NativeProps>) {
+    this.map.current?.setNativeProps(props);
+  }
+
   private _onMapReady() {
     const {onMapReady} = this.props;
     this.setState({isReady: true}, () => {
