@@ -92,6 +92,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean moveOnMarkerPress = true;
   private boolean cacheEnabled = false;
   private ReadableMap initialRegion;
+  private ReadableMap region;
   private boolean initialRegionSet = false;
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
@@ -220,8 +221,10 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     this.map.setOnPoiClickListener(this);
     this.map.setOnIndoorStateChangeListener(this);
     if(initialRegion != null) {
-      setRegion(initialRegion);
+      moveToRegion(initialRegion);
       initialRegionSet = true;
+    } else {
+      moveToRegion(region);
     }
 
     manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
@@ -465,9 +468,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   public void setInitialRegion(ReadableMap initialRegion) {
     this.initialRegion = initialRegion;
     // Theoretically onMapReady might be called before setInitialRegion
-    // In that case, trigger setRegion manually
+    // In that case, trigger moveToRegion manually
     if (!initialRegionSet && map != null) {
-      setRegion(initialRegion);
+      moveToRegion(initialRegion);
       initialRegionSet = true;
     }
   }
@@ -479,16 +482,16 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
-  public void setRegion(ReadableMap region) {
+  private void moveToRegion(ReadableMap region) {
     if (region == null) return;
 
-    Double lng = region.getDouble("longitude");
-    Double lat = region.getDouble("latitude");
-    Double lngDelta = region.getDouble("longitudeDelta");
-    Double latDelta = region.getDouble("latitudeDelta");
+    double lng = region.getDouble("longitude");
+    double lat = region.getDouble("latitude");
+    double lngDelta = region.getDouble("longitudeDelta");
+    double latDelta = region.getDouble("latitudeDelta");
     LatLngBounds bounds = new LatLngBounds(
-        new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-        new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
     );
     if (super.getHeight() <= 0 || super.getWidth() <= 0) {
       // in this case, our map has not been laid out yet, so we save the bounds in a local
@@ -500,6 +503,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     } else {
       map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
       boundsToMove = null;
+    }
+  }
+
+  public void setRegion(ReadableMap region) {
+    this.region = region;
+    if(region != null && map != null) {
+      moveToRegion(region);
     }
   }
 
