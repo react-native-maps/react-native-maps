@@ -4,7 +4,6 @@ import {
   Animated,
   findNodeHandle,
   HostComponent,
-  LayoutChangeEvent,
   NativeModules,
   NativeSyntheticEvent,
   Platform,
@@ -716,7 +715,6 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
   private __lastRegion: Region | undefined;
-  private __layoutCalled: boolean | undefined;
 
   constructor(props: MapViewProps) {
     super(props);
@@ -729,7 +727,6 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
 
     this._onMapReady = this._onMapReady.bind(this);
     this._onChange = this._onChange.bind(this);
-    this._onLayout = this._onLayout.bind(this);
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -792,26 +789,6 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
         onMapReady();
       }
     });
-  }
-
-  private _onLayout(e: LayoutChangeEvent) {
-    const {layout} = e.nativeEvent;
-    if (!layout.width || !layout.height) {
-      return;
-    }
-    if (this.state.isReady && !this.__layoutCalled) {
-      const {region, initialRegion} = this.props;
-      if (region) {
-        this.__layoutCalled = true;
-        this.map.current?.setNativeProps({region});
-      } else if (initialRegion) {
-        this.__layoutCalled = true;
-        this.map.current?.setNativeProps({initialRegion});
-      }
-    }
-    if (this.props.onLayout) {
-      this.props.onLayout(e);
-    }
   }
 
   private _onChange({nativeEvent}: ChangeEvent) {
@@ -1096,7 +1073,6 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
         initialRegion: null,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
-        onLayout: this._onLayout,
         ref: this.map,
         ...this.props,
       };
@@ -1119,7 +1095,6 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
         ref: this.map,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
-        onLayout: this._onLayout,
       };
     }
 
