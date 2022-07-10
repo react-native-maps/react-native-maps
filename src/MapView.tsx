@@ -712,7 +712,6 @@ type State = {
 class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
-  private __lastRegion: Region | undefined;
 
   constructor(props: MapViewProps) {
     super(props);
@@ -727,22 +726,6 @@ class MapView extends React.Component<MapViewProps, State> {
     this._onChange = this._onChange.bind(this);
   }
 
-  componentDidUpdate(_prevProps: MapViewProps, _prevState: State) {
-    const a = this.__lastRegion;
-    const b = this.props.region;
-    if (!a || !b) {
-      return;
-    }
-    if (
-      a.latitude !== b.latitude ||
-      a.longitude !== b.longitude ||
-      a.latitudeDelta !== b.latitudeDelta ||
-      a.longitudeDelta !== b.longitudeDelta
-    ) {
-      this.map.current?.setNativeProps({region: b});
-    }
-  }
-
   private _onMapReady() {
     const {onMapReady} = this.props;
     this.setState({isReady: true}, () => {
@@ -753,7 +736,6 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   private _onChange({nativeEvent}: ChangeEvent) {
-    this.__lastRegion = nativeEvent.region;
     const isGesture = nativeEvent.isGesture;
     const details = {isGesture};
 
