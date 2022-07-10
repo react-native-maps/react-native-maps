@@ -709,9 +709,7 @@ type State = {
   isReady: boolean;
 };
 
-type SnapShot = Region | null;
-
-class MapView extends React.Component<MapViewProps, State, SnapShot> {
+class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
   private __lastRegion: Region | undefined;
@@ -733,23 +731,9 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
     this.map.current?.setNativeProps(props);
   }
 
-  getSnapshotBeforeUpdate(prevProps: MapViewProps) {
-    if (
-      this.state.isReady &&
-      this.props.customMapStyle !== prevProps.customMapStyle
-    ) {
-      this._updateStyle(this.props.customMapStyle);
-    }
-    return this.props.region || null;
-  }
-
-  componentDidUpdate(
-    _prevProps: MapViewProps,
-    _prevState: State,
-    region: SnapShot,
-  ) {
+  componentDidUpdate(_prevProps: MapViewProps, _prevState: State) {
     const a = this.__lastRegion;
-    const b = region;
+    const b = this.props.region;
     if (!a || !b) {
       return;
     }
@@ -763,19 +747,6 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
     }
   }
 
-  componentDidMount() {
-    const {isReady} = this.state;
-    if (isReady) {
-      this._updateStyle(this.props.customMapStyle);
-    }
-  }
-
-  private _updateStyle(customMapStyle: MapViewProps['customMapStyle']) {
-    this.map.current?.setNativeProps({
-      customMapStyleString: JSON.stringify(customMapStyle),
-    });
-  }
-
   private _onMapReady() {
     const {region, initialRegion, onMapReady} = this.props;
     if (region) {
@@ -783,7 +754,6 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
     } else if (initialRegion) {
       this.map.current?.setNativeProps({initialRegion});
     }
-    this._updateStyle(this.props.customMapStyle);
     this.setState({isReady: true}, () => {
       if (onMapReady) {
         onMapReady();
@@ -1074,6 +1044,9 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
         onChange: this._onChange,
         onMapReady: this._onMapReady,
         ref: this.map,
+        customMapStyleString: this.props.customMapStyle
+          ? JSON.stringify(this.props.customMapStyle)
+          : undefined,
         ...this.props,
       };
       if (
@@ -1095,6 +1068,9 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
         ref: this.map,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
+        customMapStyleString: this.props.customMapStyle
+          ? JSON.stringify(this.props.customMapStyle)
+          : undefined,
       };
     }
 
