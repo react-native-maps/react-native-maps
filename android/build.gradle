@@ -45,7 +45,7 @@ repositories {
 dependencies {
   def work_version = safeExtGet('targetSdkVersion', 27) < 31 ? "2.5.0" : "2.7.1"
   implementation 'com.facebook.react:react-native:+'
-  implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '18.0.1')}"
+  implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '18.1.0')}"
   implementation "com.google.android.gms:play-services-maps:${safeExtGet('playServicesVersion', '18.0.2')}"
   implementation "com.google.android.gms:play-services-location:19.0.1"
   implementation 'com.google.maps.android:android-maps-utils:0.5'
