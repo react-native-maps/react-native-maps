@@ -16,7 +16,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -52,10 +52,10 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   );
 
   private final Map<String, Integer> MY_LOCATION_PRIORITY = MapBuilder.of(
-          "balanced", LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY,
-          "high", LocationRequest.PRIORITY_HIGH_ACCURACY,
-          "low", LocationRequest.PRIORITY_LOW_POWER,
-          "passive", LocationRequest.PRIORITY_NO_POWER
+          "balanced", Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+          "high", Priority.PRIORITY_HIGH_ACCURACY,
+          "low", Priority.PRIORITY_LOW_POWER,
+          "passive", Priority.PRIORITY_PASSIVE
   );
 
   private final ReactApplicationContext appContext;
