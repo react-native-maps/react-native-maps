@@ -171,10 +171,10 @@ public class AirMapTileProvider implements TileProvider {
 		if (this.tileCachePath != null) {
 			image = readTileImage(x, y, zoom);
 			if (image != null) {
-				Log.d("urlTile: tile cache HIT for ", Integer.toString(zoom) + 
+				Log.d("urlTile", "tile cache HIT for " + Integer.toString(zoom) +
 					"/" + Integer.toString(x) + "/" + Integer.toString(y));
 			} else {
-				Log.d("urlTile: tile cache MISS for ", Integer.toString(zoom) + 
+				Log.d("urlTile", "tile cache MISS for " + Integer.toString(zoom) +
         	"/" + Integer.toString(x) + "/" + Integer.toString(y));
 			}
 			if (image != null && !this.offlineMode) {
@@ -212,10 +212,10 @@ public class AirMapTileProvider implements TileProvider {
 					if (this.tileCachePath != null) {
 						image = readTileImage(x, y, zoom);
 						if (image != null) {
-							Log.d("urlTile: tile cache fetch HIT for ", Integer.toString(zoom) + 
+							Log.d("urlTile","tile cache fetch HIT for " + Integer.toString(zoom) +
 								"/" + Integer.toString(x) + "/" + Integer.toString(y));
 						} else {
-								Log.d("urlTile: tile cache fetch MISS for ", Integer.toString(zoom) + 
+								Log.d("urlTile","tile cache fetch MISS for " + Integer.toString(zoom) +
 									"/" + Integer.toString(x) + "/" + Integer.toString(y));
 						}
 					}
@@ -229,7 +229,7 @@ public class AirMapTileProvider implements TileProvider {
 			Log.d("urlTile", "Normal fetch");
 			image = fetchTile(x, y, zoom);
 			if (image == null) {
-				Log.d("urlTile: tile fetch TIMEOUT / FAIL for ", Integer.toString(zoom) + 
+				Log.d("urlTile", "tile fetch TIMEOUT / FAIL for " + Integer.toString(zoom) +
 					"/" + Integer.toString(x) + "/" + Integer.toString(y));
 			}
 		}

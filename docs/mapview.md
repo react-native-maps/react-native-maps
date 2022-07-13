@@ -11,11 +11,11 @@
 | `initialCamera` | `Camera` |  | Like `initialRegion`, use this prop instead of `camera` only if you don't want to control the viewport of the map besides the initial camera setting.<br/><br/> Changing this prop after the component has mounted will not result in a region change.<br/><br/> This is similar to the `initialValue` prop of a text input.
 | `mapPadding` | `EdgePadding` |  | Adds custom padding to each side of the map. Useful when map elements/markers are obscured.
 | `paddingAdjustmentBehavior` | 'always' \| 'automatic' \| 'never' | 'never' | Indicates how/when to affect padding with safe area insets (`GoogleMaps` in iOS only)
-| `liteMode` | `Boolean` | `false` | Enable lite mode. **Note**: Android only.
+| `liteMode` | `Boolean` | `false` | Enable [lite mode](https://developers.google.com/maps/documentation/android-sdk/lite#overview_of_lite_mode). **Note**: Android only.
 | `mapType` | `String` | `"standard"` | The map type to be displayed. <br/><br/> - standard: standard road map (default)<br/> - none: no map **Note** Not available on MapKit<br/> - satellite: satellite view<br/> - hybrid: satellite view with roads and points of interest overlayed<br/> - terrain: topographic view<br/> - mutedStandard: more subtle, makes markers/lines pop more (iOS 11.0+ only)
 | `customMapStyle` | `Array` |  | Adds custom styling to the map component. See [README](https://github.com/react-native-maps/react-native-maps#customizing-the-map-style) for more information.
 | `userInterfaceStyle` | 'light' \| 'dark'  |  | Sets the map to the style selected.  Default is whatever the system settings is. **Note:** iOS Maps only (aka MapKit).
-| `showsUserLocation` | `Boolean` | `false` | If `true` the app will ask for the user's location. **NOTE**: You need to add `NSLocationWhenInUseUsageDescription` key in Info.plist to enable geolocation, otherwise it is going to *fail silently*! You will also need to add an explanation for why you need the users location against `NSLocationWhenInUseUsageDescription` in Info.plist. Otherwise Apple may reject your app submission.
+| `showsUserLocation` | `Boolean` | `false` | If `true` the users location will be shown on the map. **NOTE**: You need runtime location permissions prior to setting this to true, otherwise it is going to *fail silently*! Checkout the excellent [react-native-permissions](https://github.com/zoontek/react-native-permissions) for this.
 | `userLocationPriority` | 'balanced'\|'high'\|'low'\|'passive' | 'high' | Set power priority of user location tracking. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
 | `userLocationUpdateInterval` | `Number` | 5000 | Interval of user location updates in milliseconds. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
 | `userLocationFastestInterval` | `Number` | 5000 | Fastest interval the application will actively acquire locations. See [Google APIs documentation](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html). **Note:** Android only.
@@ -64,7 +64,7 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `onRegionChangeComplete` | (`Region`, `{isGesture: boolean}`) | Callback that is called once when the region changes, such as when the user is done moving the map.  The second parameter is an object containing more details about the move. `isGesture` property indicates if the move was from the user (true) or an animation (false). **Note**: `isGesture` is supported by Google Maps only.
 | `onUserLocationChange` | `{ coordinate: Location }` | Callback that is called when the underlying map figures our users current location (coordinate also includes isFromMockProvider value for Android API 18 and above). Make sure **showsUserLocation** is set to *true*.
 | `onPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user taps on the map.
-| `onDoublePress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user double taps on the map.
+| `onDoublePress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user double taps on the map.  **NOTE**: Not supported on Google Maps iOS
 | `onPanDrag` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user presses and drags the map. **NOTE**: for iOS `scrollEnabled` should be set to false to trigger the event
 | `onPoiClick` | `{ coordinate: LatLng, position: Point, placeId: string, name: string }` | Callback that is called when user click on a POI.
 | `onLongPress` | `{ coordinate: LatLng, position: Point }` | Callback that is called when user makes a "long press" somewhere on the map.
@@ -88,10 +88,6 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `animateCamera` | `camera: Camera`, `{ duration: Number }` | Animate the camera to a new view. You can pass a partial camera object here; any property not given will remain unmodified.
 | `setCamera` | `camera: Camera`, `{ duration: Number }` | Like `animateCamera`, but sets the new view instantly, without an animation.
 | `animateToRegion` | `region: Region`, `duration: Number` |
-| `animateToNavigation` | `location: LatLng`, `bearing: Number`, `angle: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
-| `animateToCoordinate` | `coordinate: LatLng`, `duration: Number` | Deprecated. Use `animateCamera` instead.
-| `animateToBearing` | `bearing: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
-| `animateToViewingAngle` | `angle: Number`, `duration: Number` | Deprecated. Use `animateCamera` instead.
 | `getMapBoundaries` | | `Promise<{northEast: LatLng, southWest: LatLng}>`
 | `setMapBoundaries` | `northEast: LatLng`, `southWest: LatLng` | The boundary is defined by the map's center coordinates, not the device's viewport itself. **Note:** Google Maps only.
 | `setIndoorActiveLevelIndex` | `levelIndex: Number` |

@@ -14,11 +14,7 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 ## Compatibility
 
-Due to the rapid changes being made in the React Native ecosystem, we are not officially going to
-support this module on anything but the latest version of React Native. With that said, we will do
-our best to stay compatible with older versions as much that is practical, and the peer dependency
-of this requirement is set to `"react-native": "*"` explicitly for this reason. If you are using
-an older version of React Native with this module though, some features may be buggy.
+`react-native-maps` requires `react-native >= 0.64.3`.
 
 ## Component API
 
@@ -118,7 +114,7 @@ import { Marker } from 'react-native-maps';
 ```
 
 ### Rendering a Marker with a custom image
-1. You need to generate an `png` image with various resolution (lets call them `custom_pin`) - for more information go to [Android](https://developer.android.com/studio/write/image-asset-studio#access), [iOS](https://developer.apple.com/library/archive/documentation/ToolsLanguages/Conceptual/Xcode_Overview/AddingImages.html)
+1. You need to generate an `png` image with various resolution (lets call them `custom_pin`) - for more information go to [Android](https://developer.android.com/studio/write/image-asset-studio#access), [iOS](https://developer.apple.com/documentation/xcode/adding-images-to-your-xcode-project)
 2. put all images in Android drawables and iOS assets dir 
 3. Now you can use the following code:
 ```jsx
