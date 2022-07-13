@@ -964,8 +964,10 @@ static int kDragCenterContext;
 
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
-    if (mapView.hasStartedRendering) {
-        [self _emitRegionChangeEvent:mapView continuous:NO];
+    if (mapView.hasStartedRendering && animated) {
+        [self _emitRegionChangeEvent:mapView continuous:NO isGesture:NO];
+    } else if (mapView.hasStartedRendering && !animated) {
+        [self _emitRegionChangeEvent:mapView continuous:NO isGesture:YES];
     };
 
     mapView.pendingCenter = mapView.region.center;
@@ -1014,10 +1016,10 @@ static int kDragCenterContext;
     }
 
     // Continuously observe region changes
-    [self _emitRegionChangeEvent:mapView continuous:YES];
+    [self _emitRegionChangeEvent:mapView continuous:YES isGesture:NO];
 }
 
-- (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous
+- (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous isGesture:(BOOL)isGesture
 {
     if (!mapView.ignoreRegionChanges && mapView.onChange) {
         MKCoordinateRegion region = mapView.region;
@@ -1028,6 +1030,7 @@ static int kDragCenterContext;
 #define FLUSH_NAN(value) (isnan(value) ? 0 : value)
         mapView.onChange(@{
                 @"continuous": @(continuous),
+                @"isGesture": @(isGesture),
                 @"region": @{
                         @"latitude": @(FLUSH_NAN(region.center.latitude)),
                         @"longitude": @(FLUSH_NAN(region.center.longitude)),
