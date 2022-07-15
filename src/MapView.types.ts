@@ -109,7 +109,7 @@ export type MapPressEvent = ClickEvent<{
   /**
    * @platform Android
    */
-  action?: 'press';
+  action?: 'press' | 'marker-press';
 }>;
 
 export type Details = {
