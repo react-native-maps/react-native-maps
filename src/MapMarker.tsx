@@ -1,15 +1,12 @@
 import * as React from 'react';
 import {
   StyleSheet,
-  Platform,
   Animated,
   Image,
   findNodeHandle,
   ViewProps,
   ImageURISource,
   ImageRequireSource,
-  View,
-  UIManager,
 } from 'react-native';
 
 import decorateMapComponent, {
@@ -20,6 +17,10 @@ import decorateMapComponent, {
   UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
+import {
+  Commands,
+  MapMarkerNativeComponentType,
+} from './MapMarkerNativeComponent';
 import {
   CalloutPressEvent,
   LatLng,
@@ -319,11 +320,11 @@ export type MapMarkerProps = ViewProps & {
 
 type OmittedProps = Omit<MapMarkerProps, 'stopPropagation'>;
 
-type NativeProps = Modify<
+export type NativeProps = Modify<
   OmittedProps,
   {icon?: string; image?: MapMarkerProps['image'] | string}
 > & {
-  ref: React.RefObject<View>;
+  ref: (ref: React.ElementRef<MapMarkerNativeComponentType>) => void;
 };
 
 export class MapMarker extends React.Component<MapMarkerProps> {
@@ -335,12 +336,11 @@ export class MapMarker extends React.Component<MapMarkerProps> {
 
   static Animated: Animated.AnimatedComponent<typeof MapMarker>;
 
-  private marker: NativeProps['ref'];
+  private marker: React.ElementRef<MapMarkerNativeComponentType> | null = null;
 
   constructor(props: MapMarkerProps) {
     super(props);
 
-    this.marker = React.createRef<View>();
     this.showCallout = this.showCallout.bind(this);
     this.hideCallout = this.hideCallout.bind(this);
     this.redrawCallout = this.redrawCallout.bind(this);
@@ -348,51 +348,55 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   }
 
   setNativeProps(props: Partial<NativeProps>) {
-    this.marker.current?.setNativeProps(props);
+    if (this.marker) {
+      this.marker.setNativeProps(props);
+    }
   }
 
   showCallout() {
-    this._runCommand('showCallout', []);
+    if (!this.marker) {
+      throw new Error('Marker not mounted');
+    }
+    Commands.showCallout(this.marker);
   }
 
   hideCallout() {
-    this._runCommand('hideCallout', []);
+    if (!this.marker) {
+      throw new Error('Marker not mounted');
+    }
+    Commands.hideCallout(this.marker);
   }
 
   redrawCallout() {
-    this._runCommand('redrawCallout', []);
+    if (!this.marker) {
+      throw new Error('Marker not mounted');
+    }
+    Commands.redrawCallout(this.marker);
   }
 
   animateMarkerToCoordinate(coordinate: LatLng, duration: number = 500) {
-    this._runCommand('animateMarkerToCoordinate', [coordinate, duration]);
+    if (!this.marker) {
+      throw new Error('Marker not mounted');
+    }
+    Commands.animateMarkerToCoordinate(this.marker, coordinate, duration);
   }
 
   redraw() {
-    this._runCommand('redraw', []);
+    if (!this.marker) {
+      throw new Error('Marker not mounted');
+    }
+    Commands.redraw(this.marker);
   }
 
   _getHandle() {
-    return findNodeHandle(this.marker.current);
+    return findNodeHandle(this.marker);
   }
 
-  _runCommand(name: NativeCommandName, args: any[]) {
-    switch (Platform.OS) {
-      case 'android':
-        UIManager.dispatchViewManagerCommand(
-          this._getHandle(),
-          this.getUIManagerCommand(name),
-          args,
-        );
-        break;
-
-      case 'ios':
-        this.getMapManagerCommand(name)(this._getHandle(), ...args);
-        break;
-
-      default:
-        break;
-    }
-  }
+  private _captureRef = (
+    ref: React.ElementRef<MapMarkerNativeComponentType>,
+  ) => {
+    this.marker = ref;
+  };
 
   render() {
     const {stopPropagation = false} = this.props;
@@ -413,7 +417,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     return (
       <AIRMapMarker
         {...this.props}
-        ref={this.marker}
+        ref={this._captureRef}
         image={image}
         icon={icon}
         style={[styles.marker, this.props.style]}
@@ -445,10 +449,3 @@ export default decorateMapComponent(MapMarker, 'Marker', {
     android: USES_DEFAULT_IMPLEMENTATION,
   },
 });
-
-type NativeCommandName =
-  | 'showCallout'
-  | 'hideCallout'
-  | 'redrawCallout'
-  | 'animateMarkerToCoordinate'
-  | 'redraw';
