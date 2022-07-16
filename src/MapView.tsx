@@ -9,12 +9,10 @@ import {
   Platform,
   requireNativeComponent,
   UIManager,
-  View,
   ViewProps,
 } from 'react-native';
 import {
   createNotSupportedComponent,
-  getNativeMapName,
   googleMapIsInstalled,
   NativeComponent,
   ProviderContext,
@@ -50,13 +48,13 @@ import {
   MapStyleElement,
   MapType,
   MapTypes,
-  NativeCommandName,
   PanDragEvent,
   PoiClickEvent,
   SnapshotOptions,
   UserLocationChangeEvent,
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
+import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
 
 export const MAP_TYPES: MapTypes = {
   STANDARD: 'standard',
@@ -695,11 +693,11 @@ type ModifiedProps = Modify<
   }
 >;
 
-type NativeProps = Omit<
+export type NativeProps = Omit<
   ModifiedProps,
   'customMapStyle' | 'onRegionChange' | 'onRegionChangeComplete'
 > & {
-  ref: React.RefObject<View>;
+  ref: (ref: React.ElementRef<MapViewNativeComponentType>) => void;
   customMapStyleString?: string;
   handlePanDrag?: boolean;
   onChange?: (e: ChangeEvent) => void;
@@ -711,12 +709,10 @@ type State = {
 
 class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
-  private map: NativeProps['ref'];
+  private map: React.ElementRef<MapViewNativeComponentType> | null = null;
 
   constructor(props: MapViewProps) {
     super(props);
-
-    this.map = React.createRef<View>();
 
     this.state = {
       isReady: Platform.OS === 'ios',
@@ -727,7 +723,9 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setNativeProps(props: Partial<NativeProps>) {
-    this.map.current?.setNativeProps(props);
+    if (this.map) {
+      this.map.setNativeProps(props);
+    }
   }
 
   private _onMapReady() {
@@ -756,48 +754,70 @@ class MapView extends React.Component<MapViewProps, State> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.getCamera(this._getHandle());
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('getCamera', []);
+      if (!this.map) {
+        return Promise.reject('Map not mounted');
+      }
+      return Commands.getCamera(this.map);
     }
     return Promise.reject('getCamera not supported on this platform');
   }
 
   setCamera(camera: Partial<Camera>) {
-    this._runCommand('setCamera', [camera]);
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
+    Commands.setCamera(this.map, camera);
   }
 
   animateCamera(camera: Partial<Camera>, opts?: {duration?: number}) {
-    this._runCommand('animateCamera', [camera, opts ? opts.duration : 500]);
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
+    Commands.animateCamera(
+      this.map,
+      camera,
+      opts?.duration ? opts.duration : 500,
+    );
   }
 
   animateToRegion(region: Region, duration: number = 500) {
-    this._runCommand('animateToRegion', [region, duration]);
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
+    Commands.animateToRegion(this.map, region, duration);
   }
 
   fitToElements(options: FitToOptions = {}) {
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
     const {
       edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
-
-    this._runCommand('fitToElements', [edgePadding, animated]);
+    Commands.fitToElements(this.map, edgePadding, animated);
   }
 
   fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
     const {
       edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
-
-    this._runCommand('fitToSuppliedMarkers', [markers, edgePadding, animated]);
+    Commands.fitToSuppliedMarkers(this.map, markers, edgePadding, animated);
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
     const {
       edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
-
-    this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
+    Commands.fitToCoordinates(this.map, coordinates, edgePadding, animated);
   }
 
   /**
@@ -811,17 +831,26 @@ class MapView extends React.Component<MapViewProps, State> {
         this._getHandle(),
       );
     } else if (Platform.OS === 'ios') {
-      return await this._runCommand('getMapBoundaries', []);
+      if (!this.map) {
+        throw new Error('Map not mounted');
+      }
+      return await Commands.getMapBoundaries(this.map);
     }
     return Promise.reject('getMapBoundaries not supported on this platform');
   }
 
   setMapBoundaries(northEast: LatLng, southWest: LatLng) {
-    this._runCommand('setMapBoundaries', [northEast, southWest]);
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
+    Commands.setMapBoundaries(this.map, northEast, southWest);
   }
 
   setIndoorActiveLevelIndex(activeLevelIndex: number) {
-    this._runCommand('setIndoorActiveLevelIndex', [activeLevelIndex]);
+    if (!this.map) {
+      throw new Error('Map not mounted');
+    }
+    Commands.setIndoorActiveLevelIndex(this.map, activeLevelIndex);
   }
 
   /**
@@ -860,21 +889,25 @@ class MapView extends React.Component<MapViewProps, State> {
       return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
     } else if (Platform.OS === 'ios') {
       return new Promise((resolve, reject) => {
-        this._runCommand('takeSnapshot', [
+        if (!this.map) {
+          return reject('Map not mounted');
+        }
+        Commands.takeSnapshot(
+          this.map,
           config.width,
           config.height,
           config.region,
           config.format,
           config.quality,
           config.result,
-          (err: unknown, snapshot: string) => {
+          (err?: unknown, snapshot?: string) => {
             if (err) {
               reject(err);
-            } else {
+            } else if (snapshot) {
               resolve(snapshot);
             }
           },
-        ]);
+        );
       });
     }
     return Promise.reject('takeSnapshot not supported on this platform');
@@ -896,7 +929,10 @@ class MapView extends React.Component<MapViewProps, State> {
         coordinate,
       );
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('getAddressFromCoordinates', [coordinate]);
+      if (!this.map) {
+        throw new Error('Map not mounted');
+      }
+      return Commands.getAddressFromCoordinates(this.map, coordinate);
     }
     return Promise.reject('getAddress not supported on this platform');
   }
@@ -917,7 +953,10 @@ class MapView extends React.Component<MapViewProps, State> {
         coordinate,
       );
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('pointForCoordinate', [coordinate]);
+      if (!this.map) {
+        throw new Error('Map not mounted');
+      }
+      return Commands.pointForCoordinate(this.map, coordinate);
     }
     return Promise.reject('pointForCoordinate not supported on this platform');
   }
@@ -938,7 +977,10 @@ class MapView extends React.Component<MapViewProps, State> {
         point,
       );
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('coordinateForPoint', [point]);
+      if (!this.map) {
+        throw new Error('Map not mounted');
+      }
+      return Commands.coordinateForPoint(this.map, point);
     }
     return Promise.reject('coordinateForPoint not supported on this platform');
   }
@@ -954,7 +996,10 @@ class MapView extends React.Component<MapViewProps, State> {
     [key: string]: {point: Point; frame: Frame};
   }> {
     if (Platform.OS === 'ios') {
-      return this._runCommand('getMarkersFrames', [onlyVisible]);
+      if (!this.map) {
+        throw new Error('Map not mounted');
+      }
+      return Commands.getMarkersFrames(this.map, onlyVisible);
     }
     return Promise.reject('getMarkersFrames not supported on this platform');
   }
@@ -979,37 +1024,13 @@ class MapView extends React.Component<MapViewProps, State> {
     };
   }
 
-  private _uiManagerCommand(name: NativeCommandName) {
-    const componentName = getNativeMapName(this.props.provider);
-    return UIManager.getViewManagerConfig(componentName).Commands[name];
-  }
-
-  private _mapManagerCommand(name: NativeCommandName) {
-    return NativeModules[`${getNativeMapName(this.props.provider)}Manager`][
-      name
-    ];
-  }
-
   private _getHandle() {
-    return findNodeHandle(this.map.current);
+    return findNodeHandle(this.map);
   }
 
-  private _runCommand(name: NativeCommandName, args: any[]) {
-    switch (Platform.OS) {
-      case 'android':
-        return UIManager.dispatchViewManagerCommand(
-          this._getHandle(),
-          this._uiManagerCommand(name),
-          args,
-        );
-
-      case 'ios':
-        return this._mapManagerCommand(name)(this._getHandle(), ...args);
-
-      default:
-        return Promise.reject(`Invalid platform was passed: ${Platform.OS}`);
-    }
-  }
+  private _captureRef = (ref: React.ElementRef<MapViewNativeComponentType>) => {
+    this.map = ref;
+  };
 
   render() {
     let props: NativeProps;
@@ -1020,7 +1041,7 @@ class MapView extends React.Component<MapViewProps, State> {
         initialRegion: null,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
-        ref: this.map,
+        ref: this._captureRef,
         customMapStyleString: this.props.customMapStyle
           ? JSON.stringify(this.props.customMapStyle)
           : undefined,
@@ -1042,7 +1063,7 @@ class MapView extends React.Component<MapViewProps, State> {
         style: this.props.style,
         region: null,
         initialRegion: this.props.initialRegion || null,
-        ref: this.map,
+        ref: this._captureRef,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
         customMapStyleString: this.props.customMapStyle
