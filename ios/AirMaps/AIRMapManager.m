@@ -964,10 +964,8 @@ static int kDragCenterContext;
 
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
-    if (mapView.hasStartedRendering && animated) {
-        [self _emitRegionChangeEvent:mapView continuous:NO isGesture:NO];
-    } else if (mapView.hasStartedRendering && !animated) {
-        [self _emitRegionChangeEvent:mapView continuous:NO isGesture:YES];
+    if (mapView.hasStartedRendering) {
+        [self _emitRegionChangeEvent:mapView continuous:NO];
     };
 
     mapView.pendingCenter = mapView.region.center;
@@ -1016,10 +1014,23 @@ static int kDragCenterContext;
     }
 
     // Continuously observe region changes
-    [self _emitRegionChangeEvent:mapView continuous:YES isGesture:NO];
+    [self _emitRegionChangeEvent:mapView continuous:YES];
 }
 
-- (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous isGesture:(BOOL)isGesture
+- (BOOL)mapViewRegionDidChangeFromUserInteraction:(AIRMap *)mapView
+{
+    UIView *view = mapView.subviews.firstObject;
+    //  Look through gesture recognizers to determine whether this region change is from user interaction
+    for(UIGestureRecognizer *recognizer in view.gestureRecognizers) {
+        if(recognizer.state == UIGestureRecognizerStateChanged || recognizer.state == UIGestureRecognizerStateEnded) {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+- (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous
 {
     if (!mapView.ignoreRegionChanges && mapView.onChange) {
         MKCoordinateRegion region = mapView.region;
@@ -1030,7 +1041,7 @@ static int kDragCenterContext;
 #define FLUSH_NAN(value) (isnan(value) ? 0 : value)
         mapView.onChange(@{
                 @"continuous": @(continuous),
-                @"isGesture": @(isGesture),
+                @"isGesture": @([self mapViewRegionDidChangeFromUserInteraction: mapView]),
                 @"region": @{
                         @"latitude": @(FLUSH_NAN(region.center.latitude)),
                         @"longitude": @(FLUSH_NAN(region.center.longitude)),
