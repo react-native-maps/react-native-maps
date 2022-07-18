@@ -66,6 +66,8 @@ The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription wit
 
 That's it, you made it! 👍
 
+_Note_: [Metal renderer](https://developers.google.com/maps/documentation/ios-sdk/reference/interface_g_m_s_services#ab33c0e0f440dbb18b2c6f912050a2786) is now enabled by default on iOS. Google is [not fixing iOS crashes with OpenGL renderer](https://issuetracker.google.com/issues/221643638#comment11).
+
 ---
 
 ## Android
