@@ -480,6 +480,11 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
   }];
  }
 
+RCT_EXPORT_METHOD(setMetalRendererEnabled:(BOOL)enabled)
+{
+  [GMSServices setMetalRendererEnabled:enabled];
+}
+
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }

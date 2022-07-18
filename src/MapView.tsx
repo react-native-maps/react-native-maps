@@ -1173,6 +1173,13 @@ export const enableLatestRenderer = () => {
   return NativeModules.AirMapModule.enableLatestRenderer();
 };
 
+export const setMetalRendererEnabled = (enabled: boolean) => {
+  if (Platform.OS !== 'ios') {
+    return;
+  }
+  NativeModules.AIRGoogleMapManager.setMetalRendererEnabled(enabled);
+};
+
 MapView.Animated = AnimatedMapView;
 
 export default MapView;
