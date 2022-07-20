@@ -45,6 +45,8 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
+  [GMSServices setMetalRendererEnabled:YES];
+  
   AIRGoogleMap *map = [AIRGoogleMap new];
   map.bridge = self.bridge;
   map.delegate = self;

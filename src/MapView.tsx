@@ -4,7 +4,6 @@ import {
   Animated,
   findNodeHandle,
   HostComponent,
-  LayoutChangeEvent,
   NativeModules,
   NativeSyntheticEvent,
   Platform,
@@ -710,13 +709,9 @@ type State = {
   isReady: boolean;
 };
 
-type SnapShot = Region | null;
-
-class MapView extends React.Component<MapViewProps, State, SnapShot> {
+class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
-  private __lastRegion: Region | undefined;
-  private __layoutCalled: boolean | undefined;
 
   constructor(props: MapViewProps) {
     super(props);
@@ -729,64 +724,14 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
 
     this._onMapReady = this._onMapReady.bind(this);
     this._onChange = this._onChange.bind(this);
-    this._onLayout = this._onLayout.bind(this);
   }
 
   setNativeProps(props: Partial<NativeProps>) {
     this.map.current?.setNativeProps(props);
   }
 
-  getSnapshotBeforeUpdate(prevProps: MapViewProps) {
-    if (
-      this.state.isReady &&
-      this.props.customMapStyle !== prevProps.customMapStyle
-    ) {
-      this._updateStyle(this.props.customMapStyle);
-    }
-    return this.props.region || null;
-  }
-
-  componentDidUpdate(
-    _prevProps: MapViewProps,
-    _prevState: State,
-    region: SnapShot,
-  ) {
-    const a = this.__lastRegion;
-    const b = region;
-    if (!a || !b) {
-      return;
-    }
-    if (
-      a.latitude !== b.latitude ||
-      a.longitude !== b.longitude ||
-      a.latitudeDelta !== b.latitudeDelta ||
-      a.longitudeDelta !== b.longitudeDelta
-    ) {
-      this.map.current?.setNativeProps({region: b});
-    }
-  }
-
-  componentDidMount() {
-    const {isReady} = this.state;
-    if (isReady) {
-      this._updateStyle(this.props.customMapStyle);
-    }
-  }
-
-  private _updateStyle(customMapStyle: MapViewProps['customMapStyle']) {
-    this.map.current?.setNativeProps({
-      customMapStyleString: JSON.stringify(customMapStyle),
-    });
-  }
-
   private _onMapReady() {
-    const {region, initialRegion, onMapReady} = this.props;
-    if (region) {
-      this.map.current?.setNativeProps({region});
-    } else if (initialRegion) {
-      this.map.current?.setNativeProps({initialRegion});
-    }
-    this._updateStyle(this.props.customMapStyle);
+    const {onMapReady} = this.props;
     this.setState({isReady: true}, () => {
       if (onMapReady) {
         onMapReady();
@@ -794,28 +739,7 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
     });
   }
 
-  private _onLayout(e: LayoutChangeEvent) {
-    const {layout} = e.nativeEvent;
-    if (!layout.width || !layout.height) {
-      return;
-    }
-    if (this.state.isReady && !this.__layoutCalled) {
-      const {region, initialRegion} = this.props;
-      if (region) {
-        this.__layoutCalled = true;
-        this.map.current?.setNativeProps({region});
-      } else if (initialRegion) {
-        this.__layoutCalled = true;
-        this.map.current?.setNativeProps({initialRegion});
-      }
-    }
-    if (this.props.onLayout) {
-      this.props.onLayout(e);
-    }
-  }
-
   private _onChange({nativeEvent}: ChangeEvent) {
-    this.__lastRegion = nativeEvent.region;
     const isGesture = nativeEvent.isGesture;
     const details = {isGesture};
 
@@ -1096,8 +1020,10 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
         initialRegion: null,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
-        onLayout: this._onLayout,
         ref: this.map,
+        customMapStyleString: this.props.customMapStyle
+          ? JSON.stringify(this.props.customMapStyle)
+          : undefined,
         ...this.props,
       };
       if (
@@ -1119,7 +1045,9 @@ class MapView extends React.Component<MapViewProps, State, SnapShot> {
         ref: this.map,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
-        onLayout: this._onLayout,
+        customMapStyleString: this.props.customMapStyle
+          ? JSON.stringify(this.props.customMapStyle)
+          : undefined,
       };
     }
 
