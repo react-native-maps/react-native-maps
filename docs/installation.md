@@ -88,6 +88,7 @@ Add your API key to your manifest file (`android/app/src/main/AndroidManifest.xm
 The installation documentation previously specified adding `supportLibVersion`, `playServicesVersion` and `androidMapsUtilsVersion` to `build.gradle`.
 
 None of these keys are required anymore and can be removed, if not used by other modules in your project.
+
 > **ATTENTION**: If you leave `playServicesVersion` in `build.gradle`, the version must be at least `18.0.0`
 
 ### Ensure that you have Google Play Services installed
@@ -107,7 +108,7 @@ react-native-maps added support for the new renderer in v0.31.0.
 To opt in to the new renderer add the following code in your entry file (e.g. App.js):
 
 ```javascript
-import { enableLatestRenderer } from 'react-native-maps';
+import {enableLatestRenderer} from 'react-native-maps';
 
 enableLatestRenderer();
 ```
