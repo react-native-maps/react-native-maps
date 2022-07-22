@@ -1,4 +1,4 @@
-# Change Log
+# Changelog
 
 ## 0.30.1 - (January 3, 2022)
 * Common: [#4011](https://github.com/react-native-maps/react-native-maps/pull/4011) Feature fix AnimatedRegion getAnimatedValue Issue
