@@ -28,13 +28,12 @@ body:
 
       placeholder: |
         import React from 'react';
-        import {StyleSheet} from 'react-native';
         import MapView from 'react-native-maps';
 
         export default function App() {
           return (
             <MapView
-              style={styles.mapView}
+              style={{flex: 1}}
               initialRegion={{
                 latitude: 42,
                 longitude: 30,
@@ -44,12 +43,6 @@ body:
             />
           );
         }
-
-        const styles = StyleSheet.create({
-          mapView: {
-            flex: 1,
-          },
-        });
     validations:
       required: true
 
@@ -85,7 +78,7 @@ body:
     attributes:
       label: React Native Maps Version
       description: What version of react-native-maps are you running?
-      placeholder: 1.0.0
+      placeholder: 1.1.0
     validations:
       required: true
 
@@ -107,7 +100,7 @@ body:
     attributes:
       label: React Native Version
       description: What version of react-native are you running?
-      placeholder: 0.68.2
+      placeholder: 0.69.2
     validations:
       required: true
 
@@ -120,6 +113,7 @@ body:
         - "SDK 43"
         - "SDK 44"
         - "SDK 45"
+        - "SDK 46"
     validations:
       required: true
 
