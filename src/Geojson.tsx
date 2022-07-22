@@ -211,12 +211,13 @@ const Geojson = (props: GeojsonProps) => {
     <React.Fragment>
       {pointOverlays.map((overlay, index) => {
         const markerColor = getColor(color, overlay, 'marker-color');
-
+        const pointOverlayTracksViewChanges =
+          overlay?.feature?.properties?.tracksViewChanges || tracksViewChanges;
         return (
           <Marker
             key={index}
             coordinate={overlay.coordinates}
-            tracksViewChanges={tracksViewChanges}
+            tracksViewChanges={pointOverlayTracksViewChanges}
             image={image}
             title={title}
             pinColor={markerColor}
