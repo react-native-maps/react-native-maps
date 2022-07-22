@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.1.0...v1.1.1-beta.1) (2022-07-22)
+
+
+### Bug Fixes
+
+* **ci:** changelog.md generation ([c842a2b](https://github.com/react-native-maps/react-native-maps/commit/c842a2bb7cbbbc0ccee8322b9790c7d6829d253b))
+
 ## 0.30.1 - (January 3, 2022)
 * Common: [#4011](https://github.com/react-native-maps/react-native-maps/pull/4011) Feature fix AnimatedRegion getAnimatedValue Issue
 
