@@ -212,7 +212,7 @@ const Geojson = (props: GeojsonProps) => {
       {pointOverlays.map((overlay, index) => {
         const markerColor = getColor(color, overlay, 'marker-color');
         const pointOverlayTracksViewChanges =
-          overlay?.feature?.properties?.tracksViewChanges || tracksViewChanges;
+          overlay.feature.properties?.tracksViewChanges || tracksViewChanges;
         return (
           <Marker
             key={index}
