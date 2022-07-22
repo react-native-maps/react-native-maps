@@ -55,6 +55,8 @@
     "@commitlint/cli": "17.0.3",
     "@commitlint/config-conventional": "17.0.3",
     "@react-native-community/eslint-config": "3.0.3",
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/git": "10.0.1",
     "@types/react-native": "0.69.3",
     "babel-jest": "^27.3.1",
     "eslint": "^7.32.0",
