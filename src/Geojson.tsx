@@ -159,6 +159,18 @@ export type GeojsonProps = {
   title?: MarkerProps['title'];
 
   /**
+   * Sets whether this marker should track view changes.
+   * It's recommended to turn it off whenever it's possible to improve custom marker performance.
+   * This is the default value for all point markers in your geojson data. It can be overriden
+   * on a per point basis by adding a `trackViewChanges` property to the `properties` object on the point.
+   *
+   * @default true
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  tracksViewChanges?: boolean;
+
+  /**
    * The order in which this tile overlay is drawn with respect to other overlays. An overlay
    * with a larger z-index is drawn over overlays with smaller z-indices. The order of overlays
    * with the same z-index is arbitrary. The default zIndex is 0.
@@ -186,6 +198,7 @@ const Geojson = (props: GeojsonProps) => {
     lineCap,
     lineJoin,
     tappable,
+    tracksViewChanges,
     miterLimit,
     lineDashPhase,
     lineDashPattern,
@@ -203,6 +216,7 @@ const Geojson = (props: GeojsonProps) => {
           <Marker
             key={index}
             coordinate={overlay.coordinates}
+            tracksViewChanges={tracksViewChanges}
             image={image}
             title={title}
             pinColor={markerColor}
