@@ -9,6 +9,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
