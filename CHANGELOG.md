@@ -7,6 +7,126 @@
 
 * **ci:** changelog.md generation ([c842a2b](https://github.com/react-native-maps/react-native-maps/commit/c842a2bb7cbbbc0ccee8322b9790c7d6829d253b))
 
+# [1.1.0](https://github.com/react-native-maps/react-native-maps/compare/v1.0.3...v1.1.0) (2022-07-20)
+
+
+### Bug Fixes
+
+* **mapview:** re-add setNativeProps helper function ([c6e34ea](https://github.com/react-native-maps/react-native-maps/commit/c6e34ea3109784e1632981df6a00156904f9ce7c))
+
+
+### Features
+
+* **android:** bump play-services-base to 18.1.0 ([f90a3f6](https://github.com/react-native-maps/react-native-maps/commit/f90a3f66680988de0cadd04c71d062627fa66ce2))
+* **android:** bump play-services-location to 20.0.0 ([440f5b3](https://github.com/react-native-maps/react-native-maps/commit/440f5b332020a7e8909cb1658bc786b377b42dc4))
+* **ios-google:** enable metal renderer ([#4336](https://github.com/react-native-maps/react-native-maps/issues/4336)) ([d8770fa](https://github.com/react-native-maps/react-native-maps/commit/d8770faa36ddb8c8bb3057f95d3bf220c889ba47)), closes [#4130](https://github.com/react-native-maps/react-native-maps/issues/4130)
+* **mapview:** remove componentDidUpdate logic ([625e765](https://github.com/react-native-maps/react-native-maps/commit/625e765c132ef551588dcd25249c118702def751))
+* **mapview:** remove use of setNativeProps for customMapStyleString ([7d9ebf8](https://github.com/react-native-maps/react-native-maps/commit/7d9ebf8b3248518da6a2bf11b3d474cebc51abb6))
+* **mapview:** stop intercepting onLayout ([0554cdc](https://github.com/react-native-maps/react-native-maps/commit/0554cdcc666f8ace40b5e94de17598c2f1b5d528))
+* **mapview:** stop setting region and initialregion in onMapReady js side ([13817ca](https://github.com/react-native-maps/react-native-maps/commit/13817cad34062fe8bf997855367a140daaca87a9))
+
+## [1.0.3](https://github.com/react-native-maps/react-native-maps/compare/v1.0.2...v1.0.3) (2022-07-19)
+
+
+### Bug Fixes
+
+* **android:** animateToRegion not working with duration 0 ([#4339](https://github.com/react-native-maps/react-native-maps/issues/4339)) ([a6d9ce2](https://github.com/react-native-maps/react-native-maps/commit/a6d9ce2ec79f7ab256bfedb0f5f092f389b725be)), closes [#4338](https://github.com/react-native-maps/react-native-maps/issues/4338)
+
+## [1.0.2](https://github.com/react-native-maps/react-native-maps/compare/v1.0.1...v1.0.2) (2022-07-15)
+
+
+### Bug Fixes
+
+* **types:** missing marker-press action for MapPressEvent ([#4330](https://github.com/react-native-maps/react-native-maps/issues/4330)) ([7461e48](https://github.com/react-native-maps/react-native-maps/commit/7461e48409d6667a38f219bafc7b77a281cca35c)), closes [#4320](https://github.com/react-native-maps/react-native-maps/issues/4320)
+
+## [1.0.1](https://github.com/react-native-maps/react-native-maps/compare/v1.0.0...v1.0.1) (2022-07-15)
+
+
+### Bug Fixes
+
+* **ios-google:** crash when setting initialCamera prop ([2b80944](https://github.com/react-native-maps/react-native-maps/commit/2b809446286a0b922bb7f5643c69792eaf6cc90c)), closes [#4321](https://github.com/react-native-maps/react-native-maps/issues/4321)
+
+# [1.0.0](https://github.com/react-native-maps/react-native-maps/compare/v0.31.1...v1.0.0) (2022-07-07)
+
+
+### Bug Fixes
+
+* **android:** longLogTag debug error ([fa452ec](https://github.com/react-native-maps/react-native-maps/commit/fa452eca5559f79c73afec0afe387ca2f23cfd10)), closes [#4233](https://github.com/react-native-maps/react-native-maps/issues/4233)
+* **android:** wrong coordinates on press polyline ([1868b42](https://github.com/react-native-maps/react-native-maps/commit/1868b42e5003d99314b7570c0a2cdbc94b73b318))
+* **ios:** camera being set repeatedly in didPrepareMap ([46b52d4](https://github.com/react-native-maps/react-native-maps/commit/46b52d40b70e0ac146c92b24932e5e76fb839ef6)), closes [/github.com/react-native-maps/react-native-maps/pull/4241#issuecomment-1142160942](https://github.com//github.com/react-native-maps/react-native-maps/pull/4241/issues/issuecomment-1142160942)
+* **ios:** icon flash glitch from [#3657](https://github.com/react-native-maps/react-native-maps/issues/3657) and [#3418](https://github.com/react-native-maps/react-native-maps/issues/3418) ([#4229](https://github.com/react-native-maps/react-native-maps/issues/4229)) ([b734a5a](https://github.com/react-native-maps/react-native-maps/commit/b734a5a28ece0b21eef9b5ef7df8d9d25ab5cdde))
+* **ios:** initialRegion on Google Maps ([d6e0ce7](https://github.com/react-native-maps/react-native-maps/commit/d6e0ce7e2087022fe7d0922a008a02100fc65eab)), closes [#4244](https://github.com/react-native-maps/react-native-maps/issues/4244)
+* **ios:** onMapReady not always called with google provider ([e035c8d](https://github.com/react-native-maps/react-native-maps/commit/e035c8dc16361412f9b42674e96bca152a158d99)), closes [#4066](https://github.com/react-native-maps/react-native-maps/issues/4066)
+* **ios:** wrong coordinates on pressing polyline ([#4304](https://github.com/react-native-maps/react-native-maps/issues/4304)) ([27cc80a](https://github.com/react-native-maps/react-native-maps/commit/27cc80a046d84a88636b9e6af1c6ff40dd9c2eb0))
+* **mapkit:** onRegionChangeComplete called before region change completed ([7ea9658](https://github.com/react-native-maps/react-native-maps/commit/7ea9658c87ac0382157df47873444d803bd51dfe)), closes [#4265](https://github.com/react-native-maps/react-native-maps/issues/4265)
+* missing context provider ([b43c62e](https://github.com/react-native-maps/react-native-maps/commit/b43c62e4eb45e4368b635046bc9d05a3414da892))
+* **types:** export types that were present before v1 ([#4267](https://github.com/react-native-maps/react-native-maps/issues/4267)) ([fd798c9](https://github.com/react-native-maps/react-native-maps/commit/fd798c9826a9edfa936716e8ed78d40c07ccb9c7))
+* **types:** showsBuilding prop on MapView ([#4283](https://github.com/react-native-maps/react-native-maps/issues/4283)) ([593768f](https://github.com/react-native-maps/react-native-maps/commit/593768fae7a5ae2d8dcb863cc879078d8a24e4f7))
+
+
+### Features
+
+* **android:** remove internet & location permissions from AndroidManifest ([849b1bc](https://github.com/react-native-maps/react-native-maps/commit/849b1bc4859cf3667ae374fc597a4b9ebf67e865))
+* **android:** support files from AssetManager in LocalTile ([f885d4b](https://github.com/react-native-maps/react-native-maps/commit/f885d4b9b6ab09656cef3df008afe79665cd4f72)), closes [#4153](https://github.com/react-native-maps/react-native-maps/issues/4153)
+* **ios-google:** bump maps sdk to 7.0.0 ([32eb294](https://github.com/react-native-maps/react-native-maps/commit/32eb294ad551955efcbb7b9add380d3234930052))
+* **ios-google:** move initial region logic to layoutSubviews ([d8f20cd](https://github.com/react-native-maps/react-native-maps/commit/d8f20cdac7861ef3dc276c050e45a43bcb8df534))
+* **ios-google:** stop setting the camera if layoutSubviews wasn't triggered ([5b6b3bc](https://github.com/react-native-maps/react-native-maps/commit/5b6b3bc651eeff2fb4858273789337bbeea5b8c0))
+* **ios:** bump google maps sdk to 6.2.1 ([b1df2e2](https://github.com/react-native-maps/react-native-maps/commit/b1df2e2339e97c07011e72dad5566897d180d08e))
+* **ios:** remove deprecated snapshot method ([c0bb8f3](https://github.com/react-native-maps/react-native-maps/commit/c0bb8f37cea1aa515beb54a2a0070360d55d1c1c))
+* **ios:** stop requesting location permissions in showsUserLocation ([1d0e381](https://github.com/react-native-maps/react-native-maps/commit/1d0e381e4a2803f8e41e7d73516fff57a1b14cd5)), closes [#4166](https://github.com/react-native-maps/react-native-maps/issues/4166)
+* migrate to typescript ([adc7670](https://github.com/react-native-maps/react-native-maps/commit/adc76701cf3a0c076680441aa1cac7827a4d9f42))
+* remove deprecated mapview methods ([d053fd2](https://github.com/react-native-maps/react-native-maps/commit/d053fd2e7736e3e2ea9baf7376a947c3b0b92a58))
+* require react-native >= 0.64.3 ([8b852c1](https://github.com/react-native-maps/react-native-maps/commit/8b852c17b923e00970be8f462e76802eec8a1a3f))
+* use package.json as source of truth for podspecs ([d48fab5](https://github.com/react-native-maps/react-native-maps/commit/d48fab5c2527722e6fd19206cd49f4e9470dd0c3))
+
+
+### BREAKING CHANGES
+
+* **ios:** polyline onPress returns tapLocation instead of the first point in the polyline
+* **ios-google:** Using Google Maps on iOS now requires iOS >= 13.0 and XCode >= 13
+* **android:** polyline onPress returns tapLocation instead of the first point in the polyline
+* **ios:** Requesting location permissions manually is now needed for showsUserLocation.
+* **android:** internet & location permissions removed from AndroidManifest
+* **ios:** legacy iOS snapshot method removed
+* removed animateTo{Navigation,Coordinate,Bearing,ViewingAngle}.
+* types are now being emitted automatically and some might have changed.
+* react-native-maps now requires react-native >= 0.64.3.
+* Components are no longer exported as members of MapView. Import the components you need, e.g. `import MapView, {Marker} from 'react-native-maps';` instead.
+
+## [0.30.2](https://github.com/react-native-maps/react-native-maps/compare/v0.30.1...v0.30.2) (2022-05-17)
+
+
+### Bug Fixes
+
+* **android:** android 12 crash ([7cffb97](https://github.com/react-native-maps/react-native-maps/commit/7cffb9737244edf28b6682520cc28e1ef98160e3))
+* migrate to deprecated-react-native-prop-types ([4bfb8a1](https://github.com/react-native-maps/react-native-maps/commit/4bfb8a1f561d77dabf0e81ef4ff6a208fe3f5ae5))
+
+## [0.31.1](https://github.com/react-native-maps/react-native-maps/compare/v0.31.0...v0.31.1) (2022-04-30)
+
+
+### Bug Fixes
+
+* **ios:** pod install failing with deployment target 11.0 ([f7c8903](https://github.com/react-native-maps/react-native-maps/commit/f7c8903501f4adbf982462d605c5c8d548e777ff))
+
+# [0.31.0](https://github.com/react-native-maps/react-native-maps/compare/v0.30.0...v0.31.0) (2022-04-24)
+
+
+### Bug Fixes
+
+* **android:** add null checks for map in MapView ([585d89e](https://github.com/react-native-maps/react-native-maps/commit/585d89e84ba52f2e463300451693b53c3758e649)), closes [#4074](https://github.com/react-native-maps/react-native-maps/issues/4074)
+* **android:** android 12 crash ([7ccc65d](https://github.com/react-native-maps/react-native-maps/commit/7ccc65d83b409735034912279d72a7c6dc232066))
+* **android:** initialRegion delay ([609571f](https://github.com/react-native-maps/react-native-maps/commit/609571fa2dedd7670bd85596a60e26f9c0f27293)), closes [#4060](https://github.com/react-native-maps/react-native-maps/issues/4060)
+* **android:** opacity is ignored on first render of overlay ([#4141](https://github.com/react-native-maps/react-native-maps/issues/4141)) ([9a7621c](https://github.com/react-native-maps/react-native-maps/commit/9a7621c2ba957e574eb6f96b266a40dd76f7e262))
+* **android:** remove use of lambda expression ([4592499](https://github.com/react-native-maps/react-native-maps/commit/4592499c153804de5dca5a17c2015338baf2767b)), closes [#4160](https://github.com/react-native-maps/react-native-maps/issues/4160)
+* remove upper react version limit ([70e34a1](https://github.com/react-native-maps/react-native-maps/commit/70e34a13a9e7bb51f21a67df8f123ad930281212)), closes [#4167](https://github.com/react-native-maps/react-native-maps/issues/4167)
+
+
+### Features
+
+* **android:** add support for new google maps renderer ([#4055](https://github.com/react-native-maps/react-native-maps/issues/4055)) ([bb08557](https://github.com/react-native-maps/react-native-maps/commit/bb0855714895e5264f4f6b3ebc9f3cdc6350b39a))
+* **ios:** bump google maps pods ([73e6ef6](https://github.com/react-native-maps/react-native-maps/commit/73e6ef6cd3b1e448f1395cdec80cd19f354ab8f6)), closes [#4157](https://github.com/react-native-maps/react-native-maps/issues/4157)
+* migrate to deprecated-react-native-prop-types ([5bc1cc6](https://github.com/react-native-maps/react-native-maps/commit/5bc1cc67ab1a110e53bde238ccbb40d7dfef547f))
+
 ## 0.30.1 - (January 3, 2022)
 * Common: [#4011](https://github.com/react-native-maps/react-native-maps/pull/4011) Feature fix AnimatedRegion getAnimatedValue Issue
 
