@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.2.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.1.1-beta.1...v1.2.0-beta.1) (2022-07-24)
+
+
+### Features
+
+* **android:** code cleanup ([#4352](https://github.com/react-native-maps/react-native-maps/issues/4352)) ([e56c787](https://github.com/react-native-maps/react-native-maps/commit/e56c7873c990113cb4a92436297a56be1c194961))
+
 ## [1.1.1-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.1.0...v1.1.1-beta.1) (2022-07-22)
 
 
