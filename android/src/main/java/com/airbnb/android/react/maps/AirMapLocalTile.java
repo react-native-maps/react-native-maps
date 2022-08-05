@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +19,7 @@ public class AirMapLocalTile extends AirMapFeature {
         private static final int BUFFER_SIZE = 16 * 1024;
         private int tileSize;
         private String pathTemplate;
-        private boolean useAssets;
+        private final boolean useAssets;
 
 
         public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, boolean useAssets) {
@@ -61,10 +60,7 @@ public class AirMapLocalTile extends AirMapFeature {
                 buffer.flush();
 
                 return buffer.toByteArray();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            } catch (OutOfMemoryError e) {
+            } catch (IOException | OutOfMemoryError e) {
                 e.printStackTrace();
                 return null;
             } finally {

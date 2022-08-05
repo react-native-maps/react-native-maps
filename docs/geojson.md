@@ -18,6 +18,7 @@
 | `onPress` | `Function`     |  | returns the selected overlay value with the onPress functionality |
 | `markerComponent` | `React Node`     |  | Component to render in place of the default marker when the overlay type is a `point` 
 | `title` | `string`     |  | The title of the marker. This is only used if the <Marker /> component has no children that  are a `<Callout />` 
+| `tracksViewChanges` | `Boolean` | true | Sets whether this marker should track view changes. It's recommended to turn it off whenever it's possible to improve custom marker performance. This is the default value for all point markers in your geojson data. It can be overriden on a per point basis by adding a `trackViewChanges` property to the `properties` object on the point.
 
 ## Example
 

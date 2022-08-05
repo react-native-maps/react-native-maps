@@ -21,7 +21,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,17 +29,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   private static final String REACT_CLASS = "AIRMap";
   private static final int ANIMATE_TO_REGION = 1;
-  private static final int ANIMATE_TO_COORDINATE = 2;
-  private static final int ANIMATE_TO_VIEWING_ANGLE = 3;
-  private static final int ANIMATE_TO_BEARING = 4;
-  private static final int FIT_TO_ELEMENTS = 5;
-  private static final int FIT_TO_SUPPLIED_MARKERS = 6;
-  private static final int FIT_TO_COORDINATES = 7;
-  private static final int SET_MAP_BOUNDARIES = 8;
-  private static final int ANIMATE_TO_NAVIGATION = 9; 
-  private static final int SET_INDOOR_ACTIVE_LEVEL_INDEX = 10;
-  private static final int SET_CAMERA = 11;
-  private static final int ANIMATE_CAMERA = 12;
+  private static final int FIT_TO_ELEMENTS = 2;
+  private static final int FIT_TO_SUPPLIED_MARKERS = 3;
+  private static final int FIT_TO_COORDINATES = 4;
+  private static final int SET_MAP_BOUNDARIES = 5;
+  private static final int SET_INDOOR_ACTIVE_LEVEL_INDEX = 6;
+  private static final int SET_CAMERA = 7;
+  private static final int ANIMATE_CAMERA = 8;
 
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
