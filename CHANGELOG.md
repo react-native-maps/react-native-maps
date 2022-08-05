@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.2.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.2.0-beta.1...v1.2.0-beta.2) (2022-08-05)
+
+
+### Features
+
+* **geojson:** support for tracksViewChanges in Geojson component ([#4347](https://github.com/react-native-maps/react-native-maps/issues/4347)) ([d7046bb](https://github.com/react-native-maps/react-native-maps/commit/d7046bbc64afb66d12776fab79930c546f2d6674))
+
 # [1.2.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.1.1-beta.1...v1.2.0-beta.1) (2022-07-24)
 
 
