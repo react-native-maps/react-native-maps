@@ -5,10 +5,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.PermissionChecker;
 import androidx.core.view.GestureDetectorCompat;
@@ -33,7 +31,6 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,7 +51,6 @@ import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.TileOverlay;
-import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.IndoorLevel;
 import com.google.maps.android.data.kml.KmlContainer;
@@ -78,7 +74,6 @@ import static androidx.core.content.PermissionChecker.checkSelfPermission;
 public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
   public GoogleMap map;
-  private KmlLayer kmlLayer;
   private ProgressBar mapLoadingProgressBar;
   private RelativeLayout mapLoadingLayout;
   private ImageView cacheImageView;
@@ -118,9 +113,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean destroyed = false;
   private final ThemedReactContext context;
   private final EventDispatcher eventDispatcher;
-  private FusedLocationSource fusedLocationSource;
+  private final FusedLocationSource fusedLocationSource;
 
-  private ViewAttacherGroup attacherGroup;
+  private final ViewAttacherGroup attacherGroup;
   private LatLng tapLocation;
 
   private static boolean contextHasBug(Context context) {
@@ -147,9 +142,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         superContext = reactContext.getCurrentActivity();
       } else if (!contextHasBug(reactContext.getApplicationContext())) {
         superContext = reactContext.getApplicationContext();
-      } else {
-        // ¯\_(ツ)_/¯
       }
+
     }
     return superContext;
   }
@@ -214,7 +208,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   @Override
-  public void onMapReady(final GoogleMap map) {
+  public void onMapReady(@NonNull final GoogleMap map) {
     if (destroyed) {
       return;
     }
@@ -243,9 +237,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         coordinate.putDouble("accuracy", location.getAccuracy());
         coordinate.putDouble("speed", location.getSpeed());
         coordinate.putDouble("heading", location.getBearing());
-        if(android.os.Build.VERSION.SDK_INT >= 18){
         coordinate.putBoolean("isFromMockProvider", location.isFromMockProvider());
-        }
 
         event.putMap("coordinate", coordinate);
 
@@ -531,8 +523,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     ReadableMap center = camera.getMap("center");
     if (center != null) {
-      Double lng = center.getDouble("longitude");
-      Double lat = center.getDouble("latitude");
+      double lng = center.getDouble("longitude");
+      double lat = center.getDouble("latitude");
       builder.target(new LatLng(lat, lng));
     }
 
@@ -628,24 +620,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         color = Color.parseColor("#606060");
       }
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        ColorStateList progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-        ColorStateList secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-        ColorStateList indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
+      ColorStateList progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+      ColorStateList secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
+      ColorStateList indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
 
-        this.mapLoadingProgressBar.setProgressTintList(progressTintList);
-        this.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
-        this.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
-      } else {
-        PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-          mode = PorterDuff.Mode.MULTIPLY;
-        }
-        if (this.mapLoadingProgressBar.getIndeterminateDrawable() != null)
-          this.mapLoadingProgressBar.getIndeterminateDrawable().setColorFilter(color, mode);
-        if (this.mapLoadingProgressBar.getProgressDrawable() != null)
-          this.mapLoadingProgressBar.getProgressDrawable().setColorFilter(color, mode);
-      }
+      this.mapLoadingProgressBar.setProgressTintList(progressTintList);
+      this.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
+      this.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
     }
   }
 
@@ -931,8 +912,8 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     for (int i = 0; i < coordinatesArray.size(); i++) {
       ReadableMap latLng = coordinatesArray.getMap(i);
-      Double lat = latLng.getDouble("latitude");
-      Double lng = latLng.getDouble("longitude");
+      double lat = latLng.getDouble("latitude");
+      double lng = latLng.getDouble("longitude");
       builder.include(new LatLng(lat, lng));
     }
 
@@ -986,12 +967,12 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
     LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-    Double latNE = northEast.getDouble("latitude");
-    Double lngNE = northEast.getDouble("longitude");
+    double latNE = northEast.getDouble("latitude");
+    double lngNE = northEast.getDouble("longitude");
     builder.include(new LatLng(latNE, lngNE));
 
-    Double latSW = southWest.getDouble("latitude");
-    Double lngSW = southWest.getDouble("longitude");
+    double latSW = southWest.getDouble("latitude");
+    double lngSW = southWest.getDouble("longitude");
     builder.include(new LatLng(latSW, lngSW));
 
     LatLngBounds bounds = builder.build();
@@ -1188,7 +1169,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         return;
       }
 
-      kmlLayer = new KmlLayer(map, kmlStream, context);
+      KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context);
       kmlLayer.addLayerToMap();
 
       WritableMap pointers = new WritableNativeMap();
@@ -1211,7 +1192,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         container = container.getContainers().iterator().next();
       }
 
-      Integer index = 0;
+      int index = 0;
       for (KmlPlacemark placemark : container.getPlacemarks()) {
         MarkerOptions options = new MarkerOptions();
 
@@ -1265,13 +1246,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
       manager.pushEvent(context, this, "onKmlReady", pointers);
 
-    } catch (XmlPullParserException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } catch (ExecutionException e) {
+    } catch (XmlPullParserException | IOException | InterruptedException | ExecutionException e) {
       e.printStackTrace();
     }
   }
