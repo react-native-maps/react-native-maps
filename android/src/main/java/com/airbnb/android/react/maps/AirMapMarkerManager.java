@@ -32,7 +32,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
   public static class AirMapMarkerSharedIcon {
     private BitmapDescriptor iconBitmapDescriptor;
     private Bitmap bitmap;
-    private Map<AirMapMarker, Boolean> markers;
+    private final Map<AirMapMarker, Boolean> markers;
     private boolean loadImageStarted;
 
     public AirMapMarkerSharedIcon(){
@@ -113,7 +113,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
     }
   }
 
-  private Map<String, AirMapMarkerSharedIcon> sharedIcons = new ConcurrentHashMap<>();
+  private final Map<String, AirMapMarkerSharedIcon> sharedIcons = new ConcurrentHashMap<>();
 
   /**
    * get the shared icon object, if not existed, create a new one and store it.
