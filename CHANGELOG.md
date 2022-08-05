@@ -1,5 +1,18 @@
 # Changelog
 
+# [1.2.0](https://github.com/react-native-maps/react-native-maps/compare/v1.1.0...v1.2.0) (2022-08-05)
+
+
+### Bug Fixes
+
+* **ci:** changelog.md generation ([c842a2b](https://github.com/react-native-maps/react-native-maps/commit/c842a2bb7cbbbc0ccee8322b9790c7d6829d253b))
+
+
+### Features
+
+* **android:** code cleanup ([#4352](https://github.com/react-native-maps/react-native-maps/issues/4352)) ([e56c787](https://github.com/react-native-maps/react-native-maps/commit/e56c7873c990113cb4a92436297a56be1c194961))
+* **geojson:** support for tracksViewChanges in Geojson component ([#4347](https://github.com/react-native-maps/react-native-maps/issues/4347)) ([d7046bb](https://github.com/react-native-maps/react-native-maps/commit/d7046bbc64afb66d12776fab79930c546f2d6674))
+
 # [1.2.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.2.0-beta.1...v1.2.0-beta.2) (2022-08-05)
 
 
