@@ -1,15 +1,12 @@
 import * as React from 'react';
 import {
   StyleSheet,
-  Platform,
   Animated,
   Image,
   findNodeHandle,
   ViewProps,
   ImageURISource,
   ImageRequireSource,
-  View,
-  UIManager,
 } from 'react-native';
 
 import decorateMapComponent, {
@@ -20,6 +17,10 @@ import decorateMapComponent, {
   UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
+import {
+  Commands,
+  MapMarkerNativeComponentType,
+} from './MapMarkerNativeComponent';
 import {
   CalloutPressEvent,
   LatLng,
@@ -319,11 +320,11 @@ export type MapMarkerProps = ViewProps & {
 
 type OmittedProps = Omit<MapMarkerProps, 'stopPropagation'>;
 
-type NativeProps = Modify<
+export type NativeProps = Modify<
   OmittedProps,
   {icon?: string; image?: MapMarkerProps['image'] | string}
 > & {
-  ref: React.RefObject<View>;
+  ref: React.RefObject<MapMarkerNativeComponentType>;
 };
 
 export class MapMarker extends React.Component<MapMarkerProps> {
@@ -340,58 +341,61 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   constructor(props: MapMarkerProps) {
     super(props);
 
-    this.marker = React.createRef<View>();
+    this.marker = React.createRef<MapMarkerNativeComponentType>();
     this.showCallout = this.showCallout.bind(this);
     this.hideCallout = this.hideCallout.bind(this);
     this.redrawCallout = this.redrawCallout.bind(this);
     this.animateMarkerToCoordinate = this.animateMarkerToCoordinate.bind(this);
   }
 
+  /**
+   * @deprecated Will be removed in v2.0.0, as setNativeProps is not a thing in fabric.
+   * See https://reactnative.dev/docs/new-architecture-library-intro#migrating-off-setnativeprops
+   */
   setNativeProps(props: Partial<NativeProps>) {
+    console.warn(
+      'setNativeProps is deprecated and will be removed in next major release',
+    );
+    // @ts-ignore
     this.marker.current?.setNativeProps(props);
   }
 
   showCallout() {
-    this._runCommand('showCallout', []);
+    if (this.marker.current) {
+      Commands.showCallout(this.marker.current);
+    }
   }
 
   hideCallout() {
-    this._runCommand('hideCallout', []);
+    if (this.marker.current) {
+      Commands.hideCallout(this.marker.current);
+    }
   }
 
   redrawCallout() {
-    this._runCommand('redrawCallout', []);
+    if (this.marker.current) {
+      Commands.redrawCallout(this.marker.current);
+    }
   }
 
   animateMarkerToCoordinate(coordinate: LatLng, duration: number = 500) {
-    this._runCommand('animateMarkerToCoordinate', [coordinate, duration]);
+    if (this.marker.current) {
+      Commands.animateMarkerToCoordinate(
+        this.marker.current,
+        coordinate,
+        duration,
+      );
+    }
   }
 
   redraw() {
-    this._runCommand('redraw', []);
+    if (this.marker.current) {
+      Commands.redraw(this.marker.current);
+    }
   }
 
   _getHandle() {
     return findNodeHandle(this.marker.current);
-  }
-
-  _runCommand(name: NativeCommandName, args: any[]) {
-    switch (Platform.OS) {
-      case 'android':
-        UIManager.dispatchViewManagerCommand(
-          this._getHandle(),
-          this.getUIManagerCommand(name),
-          args,
-        );
-        break;
-
-      case 'ios':
-        this.getMapManagerCommand(name)(this._getHandle(), ...args);
-        break;
-
-      default:
-        break;
-    }
   }
 
   render() {
@@ -445,10 +449,3 @@ export default decorateMapComponent(MapMarker, 'Marker', {
     android: USES_DEFAULT_IMPLEMENTATION,
   },
 });
-
-type NativeCommandName =
-  | 'showCallout'
-  | 'hideCallout'
-  | 'redrawCallout'
-  | 'animateMarkerToCoordinate'
-  | 'redraw';
