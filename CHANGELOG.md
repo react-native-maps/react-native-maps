@@ -1,5 +1,13 @@
 # Changelog
 
+# [1.3.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.2.0...v1.3.0-beta.1) (2022-08-11)
+
+
+### Features
+
+* **MapMarker:** migrate off dispatchViewManagerCommand ([7b01625](https://github.com/react-native-maps/react-native-maps/commit/7b0162553a7a57e902f38d2b473116e62e8789e5))
+* **MapView:** migrate off dispatchViewManagerCommand ([794727e](https://github.com/react-native-maps/react-native-maps/commit/794727e59b53cf1a647098139ef0093ad30a74f9))
+
 # [1.2.0](https://github.com/react-native-maps/react-native-maps/compare/v1.1.0...v1.2.0) (2022-08-05)
 
 
