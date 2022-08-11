@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
@@ -23,11 +24,6 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
-
-  private static final int SHOW_INFO_WINDOW = 1;
-  private static final int HIDE_INFO_WINDOW = 2;
-  private static final int ANIMATE_MARKER_TO_COORDINATE = 3;
-  private static final int REDRAW = 4;
 
   public static class AirMapMarkerSharedIcon {
     private BitmapDescriptor iconBitmapDescriptor;
@@ -289,33 +285,25 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
   }
 
   @Override
-  @Nullable
-  public Map<String, Integer> getCommandsMap() {
-    return MapBuilder.of(
-        "showCallout", SHOW_INFO_WINDOW,
-        "hideCallout", HIDE_INFO_WINDOW,
-        "animateMarkerToCoordinate", ANIMATE_MARKER_TO_COORDINATE,
-        "redraw", REDRAW
-    );
-  }
-
-  @Override
-  public void receiveCommand(AirMapMarker view, int commandId, @Nullable ReadableArray args) {
-    Integer duration;
-    Double lat;
-    Double lng;
+  public void receiveCommand(@NonNull AirMapMarker view, String commandId, @Nullable ReadableArray args) {
+    int duration;
+    double lat;
+    double lng;
     ReadableMap region;
 
     switch (commandId) {
-      case SHOW_INFO_WINDOW:
+      case "showCallout":
         ((Marker) view.getFeature()).showInfoWindow();
         break;
 
-      case HIDE_INFO_WINDOW:
+      case "hideCallout":
         ((Marker) view.getFeature()).hideInfoWindow();
         break;
 
-      case ANIMATE_MARKER_TO_COORDINATE:
+      case "animateMarkerToCoordinate":
+        if(args == null) {
+          break;
+        }
         region = args.getMap(0);
         duration = args.getInt(1);
 
@@ -324,7 +312,7 @@ public class AirMapMarkerManager extends ViewGroupManager<AirMapMarker> {
         view.animateToCoodinate(new LatLng(lat, lng), duration);
         break;
 
-      case REDRAW:
+      case "redraw":
         view.updateMarkerIcon();
         break;
     }
