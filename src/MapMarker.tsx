@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Animated,
   Image,
-  findNodeHandle,
   ViewProps,
   ImageURISource,
   ImageRequireSource,
@@ -392,10 +391,6 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     if (this.marker.current) {
       Commands.redraw(this.marker.current);
     }
-  }
-
-  _getHandle() {
-    return findNodeHandle(this.marker.current);
   }
 
   render() {
