@@ -8,50 +8,66 @@ export type MapViewNativeComponentType = HostComponent<NativeProps>;
 
 interface NativeCommands {
   animateToRegion: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     region: Region,
     duration: number,
   ) => void;
 
   setCamera: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     camera: Partial<Camera>,
   ) => void;
 
   animateCamera: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     camera: Partial<Camera>,
     duration: number,
   ) => void;
 
   fitToElements: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     edgePadding: EdgePadding,
     animated: boolean,
   ) => void;
 
   fitToSuppliedMarkers: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     markers: string[],
     edgePadding: EdgePadding,
     animated: boolean,
   ) => void;
 
   fitToCoordinates: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     coordinates: LatLng[],
     edgePadding: EdgePadding,
     animated: boolean,
   ) => void;
 
   setMapBoundaries: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     northEast: LatLng,
     southWest: LatLng,
   ) => void;
 
   setIndoorActiveLevelIndex: (
-    viewRef: React.RefObject<MapViewNativeComponentType>['current'],
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
     activeLevelIndex: number,
   ) => void;
 }
