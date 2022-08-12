@@ -8,7 +8,6 @@ import decorateMapComponent, {
   MapManagerCommand,
   UIManagerCommand,
 } from './decorateMapComponent';
-import * as ProviderConstants from './ProviderConstants';
 import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
 
 export type MapPolygonProps = ViewProps & {
@@ -165,29 +164,6 @@ export class MapPolygon extends React.Component<MapPolygonProps> {
     this.polygon.current?.setNativeProps(props);
   }
 
-  updateNativeProps() {
-    return () => {
-      const {fillColor, strokeColor, strokeWidth} = this.props;
-      let polygonNativeProps: {
-        fillColor?: MapPolygonProps['fillColor'];
-        strokeColor?: MapPolygonProps['strokeColor'];
-        strokeWidth?: MapPolygonProps['strokeWidth'];
-      } = {};
-      if (fillColor) {
-        polygonNativeProps.fillColor = fillColor;
-      }
-      if (strokeColor) {
-        polygonNativeProps.strokeColor = strokeColor;
-      }
-      if (strokeWidth) {
-        polygonNativeProps.strokeWidth = strokeWidth;
-      }
-      if (polygonNativeProps) {
-        this.setNativeProps(polygonNativeProps);
-      }
-    };
-  }
-
   render() {
     const {strokeColor = '#000', strokeWidth = 1} = this.props;
     const AIRMapPolygon = this.getNativeComponent();
@@ -197,11 +173,6 @@ export class MapPolygon extends React.Component<MapPolygonProps> {
         strokeColor={strokeColor}
         strokeWidth={strokeWidth}
         ref={this.polygon}
-        onLayout={
-          this.context === ProviderConstants.PROVIDER_GOOGLE
-            ? this.updateNativeProps()
-            : undefined
-        }
       />
     );
   }

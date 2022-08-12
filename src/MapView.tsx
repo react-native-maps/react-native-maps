@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   Animated as RNAnimated,
   Animated,
-  findNodeHandle,
   HostComponent,
   NativeModules,
   NativeSyntheticEvent,
@@ -762,7 +761,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   getCamera(): Promise<Camera> {
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.getCamera(this._getHandle());
+      return NativeModules.AirMapModule.getCamera(this.map.current);
     } else if (Platform.OS === 'ios') {
       return this._runCommand('getCamera', []);
     }
@@ -842,7 +841,7 @@ class MapView extends React.Component<MapViewProps, State> {
   async getMapBoundaries(): Promise<BoundingBox> {
     if (Platform.OS === 'android') {
       return await NativeModules.AirMapModule.getMapBoundaries(
-        this._getHandle(),
+        this.map.current,
       );
     } else if (Platform.OS === 'ios') {
       return await this._runCommand('getMapBoundaries', []);
@@ -895,7 +894,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
     // Call native function
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
+      return NativeModules.AirMapModule.takeSnapshot(this.map.current, config);
     } else if (Platform.OS === 'ios') {
       return new Promise((resolve, reject) => {
         this._runCommand('takeSnapshot', [
@@ -930,7 +929,7 @@ class MapView extends React.Component<MapViewProps, State> {
   addressForCoordinate(coordinate: LatLng): Promise<Address> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.getAddressFromCoordinates(
-        this._getHandle(),
+        this.map.current,
         coordinate,
       );
     } else if (Platform.OS === 'ios') {
@@ -951,7 +950,7 @@ class MapView extends React.Component<MapViewProps, State> {
   pointForCoordinate(coordinate: LatLng): Promise<Point> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.pointForCoordinate(
-        this._getHandle(),
+        this.map.current,
         coordinate,
       );
     } else if (Platform.OS === 'ios') {
@@ -972,7 +971,7 @@ class MapView extends React.Component<MapViewProps, State> {
   coordinateForPoint(point: Point): Promise<LatLng> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.coordinateForPoint(
-        this._getHandle(),
+        this.map.current,
         point,
       );
     } else if (Platform.OS === 'ios') {
@@ -1023,13 +1022,9 @@ class MapView extends React.Component<MapViewProps, State> {
     ];
   }
 
-  private _getHandle() {
-    return findNodeHandle(this.map.current);
-  }
-
   private _runCommand(name: NativeCommandName, args: any[]) {
     if (Platform.OS === 'ios') {
-      return this._mapManagerCommand(name)(this._getHandle(), ...args);
+      return this._mapManagerCommand(name)(this.map.current, ...args);
     } else {
       return Promise.reject(`Invalid platform was passed: ${Platform.OS}`);
     }
