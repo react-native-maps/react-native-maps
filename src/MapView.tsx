@@ -1064,6 +1064,7 @@ class MapView extends React.Component<MapViewProps, State> {
         ref: this.map,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
+        onLayout: this.props.onLayout,
         customMapStyleString: this.props.customMapStyle
           ? JSON.stringify(this.props.customMapStyle)
           : undefined,
