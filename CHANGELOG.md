@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.3.0-beta.3](https://github.com/react-native-maps/react-native-maps/compare/v1.3.0-beta.2...v1.3.0-beta.3) (2022-08-18)
+
+
+### Bug Fixes
+
+* **android:** onLayout not being called ([#4404](https://github.com/react-native-maps/react-native-maps/issues/4404)) ([0596061](https://github.com/react-native-maps/react-native-maps/commit/0596061fc0712b732f0530403d489429110cc9a8)), closes [#4402](https://github.com/react-native-maps/react-native-maps/issues/4402)
+
 # [1.3.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.0-beta.1...v1.3.0-beta.2) (2022-08-12)
 
 
