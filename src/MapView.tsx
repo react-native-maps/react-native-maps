@@ -2,14 +2,12 @@ import * as React from 'react';
 import {
   Animated as RNAnimated,
   Animated,
-  findNodeHandle,
   HostComponent,
   NativeModules,
   NativeSyntheticEvent,
   Platform,
   requireNativeComponent,
   UIManager,
-  View,
   ViewProps,
 } from 'react-native';
 import {
@@ -57,6 +55,7 @@ import {
   UserLocationChangeEvent,
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
+import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
 
 export const MAP_TYPES: MapTypes = {
   STANDARD: 'standard',
@@ -695,11 +694,11 @@ type ModifiedProps = Modify<
   }
 >;
 
-type NativeProps = Omit<
+export type NativeProps = Omit<
   ModifiedProps,
   'customMapStyle' | 'onRegionChange' | 'onRegionChangeComplete'
 > & {
-  ref: React.RefObject<View>;
+  ref: React.RefObject<MapViewNativeComponentType>;
   customMapStyleString?: string;
   handlePanDrag?: boolean;
   onChange?: (e: ChangeEvent) => void;
@@ -716,7 +715,7 @@ class MapView extends React.Component<MapViewProps, State> {
   constructor(props: MapViewProps) {
     super(props);
 
-    this.map = React.createRef<View>();
+    this.map = React.createRef<MapViewNativeComponentType>();
 
     this.state = {
       isReady: Platform.OS === 'ios',
@@ -726,7 +725,15 @@ class MapView extends React.Component<MapViewProps, State> {
     this._onChange = this._onChange.bind(this);
   }
 
+  /**
+   * @deprecated Will be removed in v2.0.0, as setNativeProps is not a thing in fabric.
+   * See https://reactnative.dev/docs/new-architecture-library-intro#migrating-off-setnativeprops
+   */
   setNativeProps(props: Partial<NativeProps>) {
+    console.warn(
+      'setNativeProps is deprecated and will be removed in next major release',
+    );
+    // @ts-ignore
     this.map.current?.setNativeProps(props);
   }
 
@@ -754,7 +761,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   getCamera(): Promise<Camera> {
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.getCamera(this._getHandle());
+      return NativeModules.AirMapModule.getCamera(this.map.current);
     } else if (Platform.OS === 'ios') {
       return this._runCommand('getCamera', []);
     }
@@ -762,42 +769,68 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setCamera(camera: Partial<Camera>) {
-    this._runCommand('setCamera', [camera]);
+    if (this.map.current) {
+      Commands.setCamera(this.map.current, camera);
+    }
   }
 
   animateCamera(camera: Partial<Camera>, opts?: {duration?: number}) {
-    this._runCommand('animateCamera', [camera, opts ? opts.duration : 500]);
+    if (this.map.current) {
+      Commands.animateCamera(
+        this.map.current,
+        camera,
+        opts?.duration ? opts.duration : 500,
+      );
+    }
   }
 
   animateToRegion(region: Region, duration: number = 500) {
-    this._runCommand('animateToRegion', [region, duration]);
+    if (this.map.current) {
+      Commands.animateToRegion(this.map.current, region, duration);
+    }
   }
 
   fitToElements(options: FitToOptions = {}) {
-    const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-      animated = true,
-    } = options;
+    if (this.map.current) {
+      const {
+        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+        animated = true,
+      } = options;
 
-    this._runCommand('fitToElements', [edgePadding, animated]);
+      Commands.fitToElements(this.map.current, edgePadding, animated);
+    }
   }
 
   fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
-    const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-      animated = true,
-    } = options;
+    if (this.map.current) {
+      const {
+        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+        animated = true,
+      } = options;
 
-    this._runCommand('fitToSuppliedMarkers', [markers, edgePadding, animated]);
+      Commands.fitToSuppliedMarkers(
+        this.map.current,
+        markers,
+        edgePadding,
+        animated,
+      );
+    }
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
-    const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-      animated = true,
-    } = options;
+    if (this.map.current) {
+      const {
+        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+        animated = true,
+      } = options;
 
-    this._runCommand('fitToCoordinates', [coordinates, edgePadding, animated]);
+      Commands.fitToCoordinates(
+        this.map.current,
+        coordinates,
+        edgePadding,
+        animated,
+      );
+    }
   }
 
   /**
@@ -808,7 +841,7 @@ class MapView extends React.Component<MapViewProps, State> {
   async getMapBoundaries(): Promise<BoundingBox> {
     if (Platform.OS === 'android') {
       return await NativeModules.AirMapModule.getMapBoundaries(
-        this._getHandle(),
+        this.map.current,
       );
     } else if (Platform.OS === 'ios') {
       return await this._runCommand('getMapBoundaries', []);
@@ -817,11 +850,15 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setMapBoundaries(northEast: LatLng, southWest: LatLng) {
-    this._runCommand('setMapBoundaries', [northEast, southWest]);
+    if (this.map.current) {
+      Commands.setMapBoundaries(this.map.current, northEast, southWest);
+    }
   }
 
   setIndoorActiveLevelIndex(activeLevelIndex: number) {
-    this._runCommand('setIndoorActiveLevelIndex', [activeLevelIndex]);
+    if (this.map.current) {
+      Commands.setIndoorActiveLevelIndex(this.map.current, activeLevelIndex);
+    }
   }
 
   /**
@@ -857,7 +894,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
     // Call native function
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
+      return NativeModules.AirMapModule.takeSnapshot(this.map.current, config);
     } else if (Platform.OS === 'ios') {
       return new Promise((resolve, reject) => {
         this._runCommand('takeSnapshot', [
@@ -892,7 +929,7 @@ class MapView extends React.Component<MapViewProps, State> {
   addressForCoordinate(coordinate: LatLng): Promise<Address> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.getAddressFromCoordinates(
-        this._getHandle(),
+        this.map.current,
         coordinate,
       );
     } else if (Platform.OS === 'ios') {
@@ -913,7 +950,7 @@ class MapView extends React.Component<MapViewProps, State> {
   pointForCoordinate(coordinate: LatLng): Promise<Point> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.pointForCoordinate(
-        this._getHandle(),
+        this.map.current,
         coordinate,
       );
     } else if (Platform.OS === 'ios') {
@@ -934,7 +971,7 @@ class MapView extends React.Component<MapViewProps, State> {
   coordinateForPoint(point: Point): Promise<LatLng> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.coordinateForPoint(
-        this._getHandle(),
+        this.map.current,
         point,
       );
     } else if (Platform.OS === 'ios') {
@@ -979,35 +1016,17 @@ class MapView extends React.Component<MapViewProps, State> {
     };
   }
 
-  private _uiManagerCommand(name: NativeCommandName) {
-    const componentName = getNativeMapName(this.props.provider);
-    return UIManager.getViewManagerConfig(componentName).Commands[name];
-  }
-
   private _mapManagerCommand(name: NativeCommandName) {
     return NativeModules[`${getNativeMapName(this.props.provider)}Manager`][
       name
     ];
   }
 
-  private _getHandle() {
-    return findNodeHandle(this.map.current);
-  }
-
   private _runCommand(name: NativeCommandName, args: any[]) {
-    switch (Platform.OS) {
-      case 'android':
-        return UIManager.dispatchViewManagerCommand(
-          this._getHandle(),
-          this._uiManagerCommand(name),
-          args,
-        );
-
-      case 'ios':
-        return this._mapManagerCommand(name)(this._getHandle(), ...args);
-
-      default:
-        return Promise.reject(`Invalid platform was passed: ${Platform.OS}`);
+    if (Platform.OS === 'ios') {
+      return this._mapManagerCommand(name)(this.map.current, ...args);
+    } else {
+      return Promise.reject(`Invalid platform was passed: ${Platform.OS}`);
     }
   }
 
@@ -1045,6 +1064,7 @@ class MapView extends React.Component<MapViewProps, State> {
         ref: this.map,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
+        onLayout: this.props.onLayout,
         customMapStyleString: this.props.customMapStyle
           ? JSON.stringify(this.props.customMapStyle)
           : undefined,

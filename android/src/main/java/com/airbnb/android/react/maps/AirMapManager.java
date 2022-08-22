@@ -2,6 +2,7 @@ package com.airbnb.android.react.maps;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
@@ -22,21 +23,11 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class AirMapManager extends ViewGroupManager<AirMapView> {
 
   private static final String REACT_CLASS = "AIRMap";
-  private static final int ANIMATE_TO_REGION = 1;
-  private static final int FIT_TO_ELEMENTS = 2;
-  private static final int FIT_TO_SUPPLIED_MARKERS = 3;
-  private static final int FIT_TO_COORDINATES = 4;
-  private static final int SET_MAP_BOUNDARIES = 5;
-  private static final int SET_INDOOR_ACTIVE_LEVEL_INDEX = 6;
-  private static final int SET_CAMERA = 7;
-  private static final int ANIMATE_CAMERA = 8;
-
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
       "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -286,30 +277,37 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
   }
 
   @Override
-  public void receiveCommand(AirMapView view, int commandId, @Nullable ReadableArray args) {
-    Integer duration;
-    Double lat;
-    Double lng;
-    Double lngDelta;
-    Double latDelta;
-    float bearing;
-    float angle;
+  public void receiveCommand(@NonNull AirMapView view, String commandId, @Nullable ReadableArray args) {
+    int duration;
+    double lat;
+    double lng;
+    double lngDelta;
+    double latDelta;
     ReadableMap region;
     ReadableMap camera;
 
     switch (commandId) {
-      case SET_CAMERA:
+      case "setCamera":
+        if(args == null) {
+          break;
+        }
         camera = args.getMap(0);
         view.animateToCamera(camera, 0);
         break;
 
-      case ANIMATE_CAMERA:
+      case "animateCamera":
+        if(args == null) {
+          break;
+        }
         camera = args.getMap(0);
         duration = args.getInt(1);
         view.animateToCamera(camera, duration);
         break;
 
-      case ANIMATE_TO_REGION:
+      case "animateToRegion":
+        if(args == null) {
+          break;
+        }
         region = args.getMap(0);
         duration = args.getInt(1);
         lng = region.getDouble("longitude");
@@ -323,23 +321,38 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.animateToRegion(bounds, duration);
         break;
 
-      case FIT_TO_ELEMENTS:
+      case "fitToElements":
+        if(args == null) {
+          break;
+        }
         view.fitToElements(args.getMap(0), args.getBoolean(1));
         break;
 
-      case FIT_TO_SUPPLIED_MARKERS:
+      case "fitToSuppliedMarkers":
+        if(args == null) {
+          break;
+        }
         view.fitToSuppliedMarkers(args.getArray(0), args.getMap(1), args.getBoolean(2));
         break;
 
-      case FIT_TO_COORDINATES:
+      case "fitToCoordinates":
+        if(args == null) {
+          break;
+        }
         view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
         break;
 
-      case SET_MAP_BOUNDARIES:
+      case "setMapBoundaries":
+        if(args == null) {
+          break;
+        }
         view.setMapBoundaries(args.getMap(0), args.getMap(1));
         break;
 
-      case SET_INDOOR_ACTIVE_LEVEL_INDEX:
+      case "setIndoorActiveLevelIndex":
+        if(args == null) {
+          break;
+        }
         view.setIndoorActiveLevelIndex(args.getInt(0));
         break;
     }
@@ -375,38 +388,6 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded")
     ));
 
-    return map;
-  }
-  
-  @Nullable
-  @Override
-  public Map<String, Integer> getCommandsMap() {
-    Map<String, Integer> map = this.CreateMap(
-        "setCamera", SET_CAMERA,
-        "animateCamera", ANIMATE_CAMERA,
-        "animateToRegion", ANIMATE_TO_REGION,
-        "fitToElements", FIT_TO_ELEMENTS,
-        "fitToSuppliedMarkers", FIT_TO_SUPPLIED_MARKERS,
-        "fitToCoordinates", FIT_TO_COORDINATES
-    );
-
-    map.putAll(MapBuilder.of(
-      "setMapBoundaries", SET_MAP_BOUNDARIES,
-      "setIndoorActiveLevelIndex", SET_INDOOR_ACTIVE_LEVEL_INDEX
-    ));
-
-    return map;
-  }
-
-  public static <K, V> Map<K, V> CreateMap(
-  K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-    Map map = new HashMap<K, V>();
-    map.put(k1, v1);
-    map.put(k2, v2);
-    map.put(k3, v3);
-    map.put(k4, v4);
-    map.put(k5, v5);
-    map.put(k6, v6);
     return map;
   }
 
