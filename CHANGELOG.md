@@ -1,5 +1,33 @@
 # Changelog
 
+# [1.3.0-beta.3](https://github.com/react-native-maps/react-native-maps/compare/v1.3.0-beta.2...v1.3.0-beta.3) (2022-08-18)
+
+
+### Bug Fixes
+
+* **android:** onLayout not being called ([#4404](https://github.com/react-native-maps/react-native-maps/issues/4404)) ([0596061](https://github.com/react-native-maps/react-native-maps/commit/0596061fc0712b732f0530403d489429110cc9a8)), closes [#4402](https://github.com/react-native-maps/react-native-maps/issues/4402)
+
+# [1.3.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.0-beta.1...v1.3.0-beta.2) (2022-08-12)
+
+
+### Bug Fixes
+
+* **ios-google:** circle & polygon props not being applied ([ecc1a9a](https://github.com/react-native-maps/react-native-maps/commit/ecc1a9a33d9399eaf3c8a3bed7d68247c12fc8d9)), closes [#3057](https://github.com/react-native-maps/react-native-maps/issues/3057)
+* make viewRef for native commands NonNullable ([d35000e](https://github.com/react-native-maps/react-native-maps/commit/d35000e92528082bd4f16499bdd8278a2587bb3c))
+
+
+### Features
+
+* migrate off findNodeHandle ([08ffc4a](https://github.com/react-native-maps/react-native-maps/commit/08ffc4ac398b38e0efe7c4d8da52e56f924f028d))
+
+# [1.3.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.2.0...v1.3.0-beta.1) (2022-08-11)
+
+
+### Features
+
+* **MapMarker:** migrate off dispatchViewManagerCommand ([7b01625](https://github.com/react-native-maps/react-native-maps/commit/7b0162553a7a57e902f38d2b473116e62e8789e5))
+* **MapView:** migrate off dispatchViewManagerCommand ([794727e](https://github.com/react-native-maps/react-native-maps/commit/794727e59b53cf1a647098139ef0093ad30a74f9))
+
 # [1.2.0](https://github.com/react-native-maps/react-native-maps/compare/v1.1.0...v1.2.0) (2022-08-05)
 
 
