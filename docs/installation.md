@@ -54,12 +54,10 @@ Also make sure that your Podfile deployment target is set to >= 13.0 at the top 
 platform :ios, '13.0'
 ```
 
-Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
+Add the following to your Podfile below the `platform :ios, '13.0'` function and run `pod install` in the ios folder:
 
 ```ruby
-# React Native Maps dependencies
-rn_maps_path = '../node_modules/react-native-maps'
-pod 'react-native-google-maps', :path => rn_maps_path
+$RNMapsWithGoogleMapsSupport = true
 ```
 
 The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.

@@ -1,5 +1,8 @@
 # Changelog
 
+### BREAKING CHANGES
+* **ios:** added RNMapsWithGoogleMapsSupport variable
+
 # [1.3.0](https://github.com/react-native-maps/react-native-maps/compare/v1.2.0...v1.3.0) (2022-08-22)
 
 

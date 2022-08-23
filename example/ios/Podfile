@@ -3,6 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '13.0'
 install! 'cocoapods', :deterministic_uuids => false
+$RNMapsWithGoogleMapsSupport = true
 
 production = ENV["PRODUCTION"] == "1"
 
@@ -22,9 +23,6 @@ target 'example' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
-  rn_maps_path = '../../'
-  pod 'react-native-google-maps', :path => rn_maps_path
 
   target 'exampleTests' do
     inherit! :complete
