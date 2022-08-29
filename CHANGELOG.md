@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/react-native-maps/react-native-maps/compare/v1.3.0...v1.3.1) (2022-08-29)
+
+
+### Bug Fixes
+
+* **MapView:** invalid parameter passed to nativemodule methods ([#4423](https://github.com/react-native-maps/react-native-maps/issues/4423)) ([e4c6b86](https://github.com/react-native-maps/react-native-maps/commit/e4c6b8691375fb120abcc39bd20f0bf6703f10f1)), closes [#4415](https://github.com/react-native-maps/react-native-maps/issues/4415)
+
 # [1.3.0](https://github.com/react-native-maps/react-native-maps/compare/v1.2.0...v1.3.0) (2022-08-22)
 
 
