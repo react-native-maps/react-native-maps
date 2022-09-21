@@ -1066,6 +1066,7 @@ class MapView extends React.Component<MapViewProps, State> {
         style: this.props.style,
         region: null,
         initialRegion: this.props.initialRegion || null,
+        initialCamera: this.props.initialCamera,
         ref: this.map,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
