@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2-beta.1...v1.3.2-beta.2) (2022-09-21)
+
+
+### Bug Fixes
+
+* **android:** initialCamera delay ([b4c20b0](https://github.com/react-native-maps/react-native-maps/commit/b4c20b0882730e7a98477fb1e279120a103dc455)), closes [#4442](https://github.com/react-native-maps/react-native-maps/issues/4442)
+
 ## [1.3.2-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.3.1...v1.3.2-beta.1) (2022-09-18)
 
 
