@@ -89,7 +89,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   private boolean moveOnMarkerPress = true;
   private boolean cacheEnabled = false;
   private ReadableMap initialRegion;
+  private ReadableMap initialCamera;
   private ReadableMap region;
+  private ReadableMap camera;
   private String customMapStyleString;
   private boolean initialRegionSet = false;
   private boolean initialCameraSet = false;
@@ -467,8 +469,11 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   public void setInitialCamera(ReadableMap initialCamera) {
-    if (!initialCameraSet && initialCamera != null) {
-      setCamera(initialCamera);
+    this.initialCamera = initialCamera;
+    // Theoretically onMapReady might be called before setInitialCamera
+    // In that case, trigger moveToCamera manually
+    if (!initialCameraSet && map != null) {
+      moveToCamera(initialCamera);
       initialCameraSet = true;
     }
   }
@@ -477,8 +482,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     if(initialRegion != null) {
       moveToRegion(initialRegion);
       initialRegionSet = true;
-    } else {
+    } else if(initialCamera != null) {
+      moveToCamera(initialCamera);
+      initialCameraSet = true;
+    } else if(region != null) {
       moveToRegion(region);
+    } else {
+      moveToCamera(camera);
     }
     if(customMapStyleString != null) {
       map.setMapStyle(new MapStyleOptions(customMapStyleString));
@@ -517,6 +527,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   public void setCamera(ReadableMap camera) {
+    this.camera = camera;
+    if(camera != null && map != null) {
+      moveToCamera(camera);
+    }
+  }
+
+  public void moveToCamera(ReadableMap camera) {
     if (camera == null) return;
 
     CameraPosition.Builder builder = new CameraPosition.Builder();
