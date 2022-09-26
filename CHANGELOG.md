@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.1...v1.3.2) (2022-09-26)
+
+
+### Bug Fixes
+
+* **android:** initialCamera delay ([b4c20b0](https://github.com/react-native-maps/react-native-maps/commit/b4c20b0882730e7a98477fb1e279120a103dc455)), closes [#4442](https://github.com/react-native-maps/react-native-maps/issues/4442)
+* **ios:** add header paths required for use_frameworks compilation ([e98be83](https://github.com/react-native-maps/react-native-maps/commit/e98be837ab256c6b7f593182e754579779aebd92)), closes [/github.com/react-native-maps/react-native-maps/discussions/4389#discussioncomment-3658882](https://github.com//github.com/react-native-maps/react-native-maps/discussions/4389/issues/discussioncomment-3658882)
+
 ## [1.3.2-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2-beta.1...v1.3.2-beta.2) (2022-09-21)
 
 
