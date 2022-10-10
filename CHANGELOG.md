@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.4.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2...v1.4.0-beta.1) (2022-10-10)
+
+
+### Features
+
+* **android:** pin androidx.work version ([73f21c7](https://github.com/react-native-maps/react-native-maps/commit/73f21c7ef447340fb8632ea597232d01ab9ae3d7))
+
 ## [1.3.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.1...v1.3.2) (2022-09-26)
 
 
