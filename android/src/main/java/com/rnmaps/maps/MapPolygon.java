@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AirMapPolygon extends AirMapFeature {
+public class MapPolygon extends MapFeature {
 
   private PolygonOptions polygonOptions;
   private Polygon polygon;
@@ -26,7 +26,7 @@ public class AirMapPolygon extends AirMapFeature {
   private boolean tappable;
   private float zIndex;
 
-  public AirMapPolygon(Context context) {
+  public MapPolygon(Context context) {
     super(context);
   }
 

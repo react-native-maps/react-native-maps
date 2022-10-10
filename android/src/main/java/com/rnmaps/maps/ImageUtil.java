@@ -1,6 +1,5 @@
 package com.rnmaps.maps;
 
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;

@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-public class AirMapCircle extends AirMapFeature {
+public class MapCircle extends MapFeature {
 
   private CircleOptions circleOptions;
   private Circle circle;
@@ -19,7 +19,7 @@ public class AirMapCircle extends AirMapFeature {
   private float strokeWidth;
   private float zIndex;
 
-  public AirMapCircle(Context context) {
+  public MapCircle(Context context) {
     super(context);
   }
 

@@ -40,7 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class AirMapMarker extends AirMapFeature {
+public class MapMarker extends MapFeature {
 
   private MarkerOptions markerOptions;
   private Marker marker;
@@ -56,7 +56,7 @@ public class AirMapMarker extends AirMapFeature {
   private float anchorX;
   private float anchorY;
 
-  private AirMapCallout calloutView;
+  private MapCallout calloutView;
   private View wrappedCalloutView;
   private final Context context;
 
@@ -78,7 +78,7 @@ public class AirMapMarker extends AirMapFeature {
   private boolean tracksViewChangesActive = false;
 
   private boolean hasCustomMarkerView = false;
-  private final AirMapMarkerManager markerManager;
+  private final MapMarkerManager markerManager;
   private String imageUri;
 
   private final DraweeHolder<?> logoHolder;
@@ -111,15 +111,15 @@ public class AirMapMarker extends AirMapFeature {
               CloseableReference.closeSafely(imageReference);
             }
           }
-          if (AirMapMarker.this.markerManager != null && AirMapMarker.this.imageUri != null) {
-            AirMapMarker.this.markerManager.getSharedIcon(AirMapMarker.this.imageUri)
+          if (MapMarker.this.markerManager != null && MapMarker.this.imageUri != null) {
+            MapMarker.this.markerManager.getSharedIcon(MapMarker.this.imageUri)
                 .updateIcon(iconBitmapDescriptor, iconBitmap);
           }
           update(true);
         }
       };
 
-  public AirMapMarker(Context context, AirMapMarkerManager markerManager) {
+  public MapMarker(Context context, MapMarkerManager markerManager) {
     super(context);
     this.context = context;
     this.markerManager = markerManager;
@@ -127,7 +127,7 @@ public class AirMapMarker extends AirMapFeature {
     logoHolder.onAttach();
   }
 
-  public AirMapMarker(Context context, MarkerOptions options, AirMapMarkerManager markerManager) {
+  public MapMarker(Context context, MarkerOptions options, MapMarkerManager markerManager) {
     super(context);
     this.context = context;
     this.markerManager = markerManager;
@@ -332,7 +332,7 @@ public class AirMapMarker extends AirMapFeature {
       }
       if (uri != null) {
         // listening for marker bitmap descriptor update, as well as check whether to load the image.
-        AirMapMarkerManager.AirMapMarkerSharedIcon sharedIcon = this.markerManager.getSharedIcon(uri);
+        MapMarkerManager.AirMapMarkerSharedIcon sharedIcon = this.markerManager.getSharedIcon(uri);
         sharedIcon.addMarker(this);
         shouldLoadImage = sharedIcon.shouldLoadImage();
       }
@@ -399,7 +399,7 @@ public class AirMapMarker extends AirMapFeature {
   public void addView(View child, int index) {
     super.addView(child, index);
     // if children are added, it means we are rendering a custom marker
-    if (!(child instanceof AirMapCallout)) {
+    if (!(child instanceof MapCallout)) {
       hasCustomMarkerView = true;
       updateTracksViewChanges();
     }
@@ -539,11 +539,11 @@ public class AirMapMarker extends AirMapFeature {
     return bitmap;
   }
 
-  public void setCalloutView(AirMapCallout view) {
+  public void setCalloutView(MapCallout view) {
     this.calloutView = view;
   }
 
-  public AirMapCallout getCalloutView() {
+  public MapCallout getCalloutView() {
     return this.calloutView;
   }
 

@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.RoundCap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AirMapPolyline extends AirMapFeature {
+public class MapPolyline extends MapFeature {
 
   private PolylineOptions polylineOptions;
   private Polyline polyline;
@@ -33,7 +33,7 @@ public class AirMapPolyline extends AirMapFeature {
   private ReadableArray patternValues;
   private List<PatternItem> pattern;
 
-  public AirMapPolyline(Context context) {
+  public MapPolyline(Context context) {
     super(context);
   }
 

@@ -21,7 +21,7 @@ public class MapsPackage implements ReactPackage {
 
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-    return Arrays.<NativeModule>asList(new AirMapModule(reactContext));
+    return Arrays.<NativeModule>asList(new MapModule(reactContext));
   }
 
   // Deprecated RN 0.47
@@ -31,19 +31,19 @@ public class MapsPackage implements ReactPackage {
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    AirMapCalloutManager calloutManager = new AirMapCalloutManager();
-    AirMapMarkerManager annotationManager = new AirMapMarkerManager();
-    AirMapPolylineManager polylineManager = new AirMapPolylineManager(reactContext);
-    AirMapGradientPolylineManager gradientPolylineManager = new AirMapGradientPolylineManager(reactContext);
-    AirMapPolygonManager polygonManager = new AirMapPolygonManager(reactContext);
-    AirMapCircleManager circleManager = new AirMapCircleManager(reactContext);
-    AirMapManager mapManager = new AirMapManager(reactContext);
-    AirMapLiteManager mapLiteManager = new AirMapLiteManager(reactContext);
-    AirMapUrlTileManager urlTileManager = new AirMapUrlTileManager(reactContext);
-    AirMapWMSTileManager gsUrlTileManager = new AirMapWMSTileManager(reactContext);
-    AirMapLocalTileManager localTileManager = new AirMapLocalTileManager(reactContext);
-    AirMapOverlayManager overlayManager = new AirMapOverlayManager(reactContext);
-    AirMapHeatmapManager heatmapManager = new AirMapHeatmapManager();
+    MapCalloutManager calloutManager = new MapCalloutManager();
+    MapMarkerManager annotationManager = new MapMarkerManager();
+    MapPolylineManager polylineManager = new MapPolylineManager(reactContext);
+    MapGradientPolylineManager gradientPolylineManager = new MapGradientPolylineManager(reactContext);
+    MapPolygonManager polygonManager = new MapPolygonManager(reactContext);
+    MapCircleManager circleManager = new MapCircleManager(reactContext);
+    MapManager mapManager = new MapManager(reactContext);
+    MapLiteManager mapLiteManager = new MapLiteManager(reactContext);
+    MapUrlTileManager urlTileManager = new MapUrlTileManager(reactContext);
+    MapWMSTileManager gsUrlTileManager = new MapWMSTileManager(reactContext);
+    MapLocalTileManager localTileManager = new MapLocalTileManager(reactContext);
+    MapOverlayManager overlayManager = new MapOverlayManager(reactContext);
+    MapHeatmapManager heatmapManager = new MapHeatmapManager();
     mapManager.setMarkerManager(annotationManager);
 
     return Arrays.<ViewManager>asList(
