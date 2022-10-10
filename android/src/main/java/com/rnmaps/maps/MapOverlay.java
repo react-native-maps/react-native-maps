@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-public class AirMapOverlay extends AirMapFeature implements ImageReadable {
+public class MapOverlay extends MapFeature implements ImageReadable {
 
   private GroundOverlayOptions groundOverlayOptions;
   private GroundOverlay groundOverlay;
@@ -26,7 +26,7 @@ public class AirMapOverlay extends AirMapFeature implements ImageReadable {
   private final ImageReader mImageReader;
   private GoogleMap map;
 
-  public AirMapOverlay(Context context) {
+  public MapOverlay(Context context) {
     super(context);
     this.mImageReader = new ImageReader(context, getResources(), this);
   }

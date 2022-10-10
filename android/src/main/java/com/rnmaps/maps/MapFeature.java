@@ -5,8 +5,8 @@ import android.content.Context;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 
-public abstract class AirMapFeature extends ReactViewGroup {
-  public AirMapFeature(Context context) {
+public abstract class MapFeature extends ReactViewGroup {
+  public MapFeature(Context context) {
     super(context);
   }
 
