@@ -51,7 +51,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) MKCoordinateSpan pendingSpan;
 
 
-@property (nonatomic, assign) BOOL ignoreRegionChanges;
+@property (nonatomic, assign) NSInteger ignoreRegionChanges;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;

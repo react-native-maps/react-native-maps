@@ -87,6 +87,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
+        self.ignoreRegionChanges = 0;
     }
     return self;
 }
@@ -258,13 +259,13 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
     CGPoint touchPoint = [self.calloutView convertPoint:point fromView:self];
     UIView *touchedView = [self.calloutView hitTest:touchPoint withEvent:event];
-    
+
     if (touchedView) {
         UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
         AIRMapCalloutSubview* calloutSubview = nil;
         AIRMapCallout* callout = nil;
         AIRMapMarker* marker = nil;
-        
+
         UIView* tmp = touchedView;
         while (tmp && tmp != win && tmp != self.calloutView) {
             if ([tmp respondsToSelector:@selector(onPress)]) {
@@ -276,7 +277,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
             }
             tmp = tmp.superview;
         }
-        
+
         if (callout) {
             marker = [self markerForCallout:callout];
             if (marker) {
@@ -286,7 +287,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
                 }
             }
         }
-        
+
         return calloutSubview ? calloutSubview : touchedView;
     }
 
@@ -325,7 +326,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 - (NSArray *)getMapBoundaries
 {
     MKMapRect mapRect = self.visibleMapRect;
-    
+
     CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
     CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
 
