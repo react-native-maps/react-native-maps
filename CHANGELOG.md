@@ -3,6 +3,35 @@
 ### BREAKING CHANGES
 * **ios:** added RNMapsWithGoogleMapsSupport variable
 
+## [1.3.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.1...v1.3.2) (2022-09-26)
+
+
+### Bug Fixes
+
+* **android:** initialCamera delay ([b4c20b0](https://github.com/react-native-maps/react-native-maps/commit/b4c20b0882730e7a98477fb1e279120a103dc455)), closes [#4442](https://github.com/react-native-maps/react-native-maps/issues/4442)
+* **ios:** add header paths required for use_frameworks compilation ([e98be83](https://github.com/react-native-maps/react-native-maps/commit/e98be837ab256c6b7f593182e754579779aebd92)), closes [/github.com/react-native-maps/react-native-maps/discussions/4389#discussioncomment-3658882](https://github.com//github.com/react-native-maps/react-native-maps/discussions/4389/issues/discussioncomment-3658882)
+
+## [1.3.2-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2-beta.1...v1.3.2-beta.2) (2022-09-21)
+
+
+### Bug Fixes
+
+* **android:** initialCamera delay ([b4c20b0](https://github.com/react-native-maps/react-native-maps/commit/b4c20b0882730e7a98477fb1e279120a103dc455)), closes [#4442](https://github.com/react-native-maps/react-native-maps/issues/4442)
+
+## [1.3.2-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.3.1...v1.3.2-beta.1) (2022-09-18)
+
+
+### Bug Fixes
+
+* **ios:** add header paths required for use_frameworks compilation ([e98be83](https://github.com/react-native-maps/react-native-maps/commit/e98be837ab256c6b7f593182e754579779aebd92)), closes [/github.com/react-native-maps/react-native-maps/discussions/4389#discussioncomment-3658882](https://github.com//github.com/react-native-maps/react-native-maps/discussions/4389/issues/discussioncomment-3658882)
+
+## [1.3.1](https://github.com/react-native-maps/react-native-maps/compare/v1.3.0...v1.3.1) (2022-08-29)
+
+
+### Bug Fixes
+
+* **MapView:** invalid parameter passed to nativemodule methods ([#4423](https://github.com/react-native-maps/react-native-maps/issues/4423)) ([e4c6b86](https://github.com/react-native-maps/react-native-maps/commit/e4c6b8691375fb120abcc39bd20f0bf6703f10f1)), closes [#4415](https://github.com/react-native-maps/react-native-maps/issues/4415)
+
 # [1.3.0](https://github.com/react-native-maps/react-native-maps/compare/v1.2.0...v1.3.0) (2022-08-22)
 
 
@@ -216,9 +245,9 @@
 * iOS: [#3997](https://github.com/react-native-maps/react-native-maps/pull/3997) Allow markers to be un-tappable on ios gmaps
 * iOS: [#3944](https://github.com/react-native-maps/react-native-maps/pull/3944) Add heading to onUserLocationChange
 * iOS: [#3956](https://github.com/react-native-maps/react-native-maps/pull/3956) Add missing export for AIRMapMarker isPreselected view property
-* iOS: [#3973](https://github.com/react-native-maps/react-native-maps/pull/3973) Version bump googleMaps and Google-Maps-iOS-Utils 
+* iOS: [#3973](https://github.com/react-native-maps/react-native-maps/pull/3973) Version bump googleMaps and Google-Maps-iOS-Utils
 * Android: [#3945](https://github.com/react-native-maps/react-native-maps/pull/3945) Bump minSDKVersion to 21
-  
+
 ## 0.29.4 - (November 10, 2021)
 * Common: [#3996](https://github.com/react-native-maps/react-native-maps/pull/3996) Allow wider version range for react-native-web peer dependency
 
@@ -242,11 +271,11 @@
 * Common: [#3784](https://github.com/react-native-maps/react-native-maps/pull/3784) Implemented scrollDuringRotateOrZoom control for Google Maps
 * Common: [#3739](https://github.com/react-native-maps/react-native-maps/pull/3739) Use Default Geocoder to convert Coordinates by getting address
 * Common: [#3728](https://github.com/react-native-maps/react-native-maps/pull/3728) Add `onPress` for GeoJSON
-* Common: [#3737](https://github.com/react-native-maps/react-native-maps/pull/3737) Added support for overlay rotations in Google Maps API 
+* Common: [#3737](https://github.com/react-native-maps/react-native-maps/pull/3737) Added support for overlay rotations in Google Maps API
 * iOS: [#3754](https://github.com/react-native-maps/react-native-maps/pull/3754) Fix indoor events on iOS for multiple MapViews
 * iOS: [#3762](https://github.com/react-native-maps/react-native-maps/pull/3762) Add support for disabling userLocation callout
 * iOS: [#3746](https://github.com/react-native-maps/react-native-maps/pull/3746) Fix in WMSTile: typings & component removal on iOS
-* iOS: [#3764](https://github.com/react-native-maps/react-native-maps/pull/3764) Provide a way to override mapkit style 
+* iOS: [#3764](https://github.com/react-native-maps/react-native-maps/pull/3764) Provide a way to override mapkit style
 * Android: [#3726](https://github.com/react-native-maps/react-native-maps/pull/3726) Use double on `setCamera` to fix zoom precision.
 * Android: [#3308](https://github.com/react-native-maps/react-native-maps/pull/3308) Fix fitToCoordinates with preset mapPadding
 * Android: [#3797](https://github.com/react-native-maps/react-native-maps/pull/3797) Allow a previously dashed line to be made solid
@@ -273,11 +302,11 @@
 
 ## 0.27.1 (March 19, 2020)
 * Android: [#3345](https://github.com/react-native-maps/react-native-maps/pull/3345) Protect against null Location in FusedLocationSource
-* Android: [#3351](https://github.com/react-native-maps/react-native-maps/pull/3351) Revert "android google map callout support <Image/> 
+* Android: [#3351](https://github.com/react-native-maps/react-native-maps/pull/3351) Revert "android google map callout support <Image/>
 
 ## 0.27.0 (March 4, 2020)
 
-* iOS: [#3115](https://github.com/react-native-maps/react-native-maps/pull/3115) Expose isAccessibilityElement as a prop 
+* iOS: [#3115](https://github.com/react-native-maps/react-native-maps/pull/3115) Expose isAccessibilityElement as a prop
 * iOS: [#3119](https://github.com/react-native-maps/react-native-maps/pull/3119) Add `mapPadding` prop
 * iOS: [#3134](https://github.com/react-native-maps/react-native-maps/pull/3134) Add `isPreselected` prop
 * iOS: [#3120](https://github.com/react-native-maps/react-native-maps/pull/3120) Keep current mapType when taking snapshot
@@ -297,7 +326,7 @@
 
 ## 0.26.0 (September 30, 2019)
 
-* iOS: [#2999](https://github.com/react-native-maps/react-native-maps/pull/2999) Update GoogleMaps pod to 3.2.0 
+* iOS: [#2999](https://github.com/react-native-maps/react-native-maps/pull/2999) Update GoogleMaps pod to 3.2.0
 * iOS: [#2395](https://github.com/react-native-maps/react-native-maps/pull/2395) Allow using onPanDrag while scrollEnabled=true
 * iOS: [#3051](https://github.com/react-native-maps/react-native-maps/pull/3051) Add flat property binding on Marker for iOS
 * Android: [#3007](https://github.com/react-native-maps/react-native-maps/pull/3007) Add Overlay onPress event
@@ -305,7 +334,7 @@
 * Common: [#3045](https://github.com/react-native-maps/react-native-maps/pull/3045) Add heading to the onUserLocationChange listener
 * Common: [#2937](https://github.com/react-native-maps/react-native-maps/pull/2937) Add onDoublePress callback
 * Common: [#2960](https://github.com/react-native-maps/react-native-maps/pull/2959) Heatmaps for Android and iOS
-* Common: [#2959](https://github.com/react-native-maps/react-native-maps/pull/2959) Added GeoJSON support by default 
+* Common: [#2959](https://github.com/react-native-maps/react-native-maps/pull/2959) Added GeoJSON support by default
 * Common: [#2975](https://github.com/react-native-maps/react-native-maps/pull/2975) Convert to new react native config format (RN 0.60)
 * Common: [#2973](https://github.com/react-native-maps/react-native-maps/pull/2973) Fix select annotation when show/hide callout view
 
@@ -319,7 +348,7 @@
 * iOS: [#2253](https://github.com/react-native-maps/react-native-maps/pull/2253) TestID's for e2e automation
 * iOS: [#2826](https://github.com/react-native-maps/react-native-maps/pull/2826) Follow up for [#2253](https://github.com/react-native-maps/react-native-maps/pull/2253)
 * iOS: [#2397](https://github.com/react-native-maps/react-native-maps/pull/2397) Add compass location offsets for iOS maps
-* Common: [#2568](https://github.com/react-native-maps/react-native-maps/pull/2568) Support for WMS Layer support 
+* Common: [#2568](https://github.com/react-native-maps/react-native-maps/pull/2568) Support for WMS Layer support
 * Common: [#2017](https://github.com/react-native-maps/react-native-maps/pull/2017) Update the Google Maps custom map style if changed after initialization
 * Common: [#2903](https://github.com/react-native-maps/react-native-maps/pull/2903) Fix react snapshot undefined warning
 
@@ -545,40 +574,40 @@
 * Restructure project #1164
 
 * Add showsIndoorLevelPicker -> setIndoorLevelPickerEnabled to MapView #1019
-[#1188](https://github.com/airbnb/react-native-maps/pull/1188)
+  [#1188](https://github.com/airbnb/react-native-maps/pull/1188)
 
 * iOS - Added onPress support for Polygons on Google Maps
-[#1024](https://github.com/airbnb/react-native-maps/pull/1024)
+  [#1024](https://github.com/airbnb/react-native-maps/pull/1024)
 
 *  Add customized user location annotation text
-[#1049](https://github.com/airbnb/react-native-maps/pull/1049)
+   [#1049](https://github.com/airbnb/react-native-maps/pull/1049)
 
 * iOS - Google Maps - Add `showsMyLocationButton` support
-[#1157](https://github.com/airbnb/react-native-maps/pull/1157)
+  [#1157](https://github.com/airbnb/react-native-maps/pull/1157)
 
 
 ## Patches
 
 * Fix getResources() null crash in mapview
-[#1188](https://github.com/airbnb/react-native-maps/pull/1188)
+  [#1188](https://github.com/airbnb/react-native-maps/pull/1188)
 
 * Rename MapKit category to avoid conflicts with the one in RN
-[#1172](https://github.com/airbnb/react-native-maps/pull/1172)
+  [#1172](https://github.com/airbnb/react-native-maps/pull/1172)
 
 * Upgrade GMS dependencies to 10.2.0
-[#1169](https://github.com/airbnb/react-native-maps/pull/1169)
+  [#1169](https://github.com/airbnb/react-native-maps/pull/1169)
 
 * fix multiple-instance memory leak
-[#1130](https://github.com/airbnb/react-native-maps/pull/1130)
+  [#1130](https://github.com/airbnb/react-native-maps/pull/1130)
 
 * fix onSelected event for markers with custom view
-[#1079](https://github.com/airbnb/react-native-maps/pull/1079)
+  [#1079](https://github.com/airbnb/react-native-maps/pull/1079)
 
 * Crash in our App fix
-[#1096](https://github.com/airbnb/react-native-maps/pull/1096)
+  [#1096](https://github.com/airbnb/react-native-maps/pull/1096)
 
 * Use local RCTConvert+MapKit instead of the one in React Native
-[#1138](https://github.com/airbnb/react-native-maps/pull/1138)
+  [#1138](https://github.com/airbnb/react-native-maps/pull/1138)
 
 
 ## 0.13.1 (March 21, 2017)
@@ -587,38 +616,38 @@
 ## Enhancements
 
 * Add id identifier to marker-press event on Android
-[#1008](https://github.com/airbnb/react-native-maps/pull/1008)
+  [#1008](https://github.com/airbnb/react-native-maps/pull/1008)
   (@stan229)
 
 * setNativeProps, marker opacity, nested components
-[#940](https://github.com/airbnb/react-native-maps/pull/940)
+  [#940](https://github.com/airbnb/react-native-maps/pull/940)
   (@unboundfire)
 
 
 ## Patches
 
 * Update the android buildToolsVersion to 25.0.0
-[#1152](https://github.com/airbnb/react-native-maps/pull/1152)
+  [#1152](https://github.com/airbnb/react-native-maps/pull/1152)
   (@markusguenther)
 
 * use `provided` for RN gradle dependency
-[#1151](https://github.com/airbnb/react-native-maps/pull/1151)
+  [#1151](https://github.com/airbnb/react-native-maps/pull/1151)
   (@gpeal)
 
 * fix null activity crash
-[#1150](https://github.com/airbnb/react-native-maps/pull/1150)
+  [#1150](https://github.com/airbnb/react-native-maps/pull/1150)
   (@lelandrichardson)
 
 * Updated Google play services and gradle build plugin
-[#1023](https://github.com/airbnb/react-native-maps/pull/1023)
+  [#1023](https://github.com/airbnb/react-native-maps/pull/1023)
   (@chris-at-translate)
 
 * Sets the map value for the AirMapUrlTile so that it can be updated properly
-[#992](https://github.com/airbnb/react-native-maps/pull/992)
+  [#992](https://github.com/airbnb/react-native-maps/pull/992)
   (@jschloer)
 
 * onPress and onCalloutPress doesn't trigger on markers in iOS
-[#954](https://github.com/airbnb/react-native-maps/pull/954)
+  [#954](https://github.com/airbnb/react-native-maps/pull/954)
   (@RajkumarPunchh)
 
 
@@ -984,4 +1013,4 @@ This error is caused by a @providesModule declaration with the same name across 
 
 ## 0.4.0
 
- * Initial release
+* Initial release
