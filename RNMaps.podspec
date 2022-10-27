@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
 	s.source_files  = "ios/AirMaps/**/*.{h,m}"
 
 	s.dependency 'React-Core'
+	s.static_framework = true
 
 	if defined?($RNMapsWithGoogleMapsSupport) && ($RNMapsWithGoogleMapsSupport == true)
 		Pod::UI.puts "#{s.name}: GoogleMaps support enabled"
@@ -24,9 +25,9 @@ Pod::Spec.new do |s|
 
 			sp.source_files  = "ios/AirGoogleMaps/**/*.{h,m}"
 			sp.compiler_flags = '-DHAVE_GOOGLE_MAPS=1', '-DHAVE_GOOGLE_MAPS_UTILS=1', '-fno-modules'
-
+			sp.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 			sp.dependency 'React-Core'
-			sp.dependency 'GoogleMaps', '7.0.0'
+			sp.dependency 'GoogleMaps', '7.1.0'
 			sp.dependency 'Google-Maps-iOS-Utils', '4.1.0'
 		end
 	end
