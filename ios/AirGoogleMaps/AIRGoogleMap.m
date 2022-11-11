@@ -466,6 +466,21 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setZoomTapEnabled:(BOOL)zoomTapEnabled {
     _zoomTapEnabled = zoomTapEnabled;
+    
+    UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
+    NSArray* grs = mapView.gestureRecognizers;
+    for (UIGestureRecognizer* gestureRecognizer in grs) {
+        //get original handlers
+        NSArray* origTargets = [gestureRecognizer valueForKey:@"targets"];
+        for (NSObject* trg in origTargets) {
+            NSObject* target = [trg valueForKey:@"target"];
+            SEL action = [self getActionForTarget:trg];
+            if ([NSStringFromSelector(action) isEqualToString:@"handleZoomTapGesture:"]) {
+                [gestureRecognizer setEnabled:zoomTapEnabled];
+                continue;
+            }
+        }
+    }
 }
 
 - (BOOL)zoomTapEnabled {
@@ -677,23 +692,7 @@ id regionAsJSON(MKCoordinateRegion region) {
         if([self.origGestureRecognizersMeta objectForKey:grHash] != nil)
             continue; //already patched
 
-        //get original handlers
-        NSArray* origTargets = [gestureRecognizer valueForKey:@"targets"];
         NSMutableArray* origTargetsActions = [[NSMutableArray alloc] init];
-        BOOL isZoomTapGesture = NO;
-        for (NSObject* trg in origTargets) {
-            NSObject* target = [trg valueForKey:@"target"];
-            SEL action = [self getActionForTarget:trg];
-            isZoomTapGesture = [NSStringFromSelector(action) isEqualToString:@"handleZoomTapGesture:"];
-            [origTargetsActions addObject:@{
-                                            @"target": [NSValue valueWithNonretainedObject:target],
-                                            @"action": NSStringFromSelector(action)
-                                            }];
-        }
-        if (isZoomTapGesture && self.zoomTapEnabled == NO) {
-            [view removeGestureRecognizer:gestureRecognizer];
-            continue;
-        }
 
         //replace with extendedMapGestureHandler
         for (NSDictionary* origTargetAction in origTargetsActions) {
