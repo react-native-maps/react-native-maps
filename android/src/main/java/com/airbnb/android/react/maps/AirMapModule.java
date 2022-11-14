@@ -243,6 +243,52 @@ public class AirMapModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void getCoordinatesFromAddress(final int tag, final String address, final Promise promise) {
+    final ReactApplicationContext context = getReactApplicationContext();
+
+    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+    uiManager.addUIBlock(new UIBlock()
+    {
+      @Override
+      public void execute(NativeViewHierarchyManager nvhm)
+      {
+        AirMapView view = (AirMapView) nvhm.resolveView(tag);
+        if (view == null) {
+          promise.reject("AirMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("AirMapView.map is not valid");
+          return;
+        }
+        if (address == null) {
+          promise.reject("Invalid address format");
+          return;
+        }
+        Geocoder geocoder = new Geocoder(context);
+        try {
+          List<Address> list =
+                  geocoder.getFromLocationName(name, 1);
+          if (list.isEmpty()) {
+            promise.reject("Can not get address location");
+            return;
+          }
+          Address address = list.get(0);
+
+          WritableMap addressJson = new WritableNativeMap();
+
+          addressJson.putString("latitude", addressJson.getLatitude());
+          addressJson.putString("longitude", addressJson.getLongitude());
+
+          promise.resolve(addressJson);
+        } catch (IOException e) {
+          promise.reject("Can not get location for address");
+        }
+      }
+    });
+  }
+
+  @ReactMethod
   public void pointForCoordinate(final int tag, ReadableMap coordinate, final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
     final double density = (double) context.getResources().getDisplayMetrics().density;
