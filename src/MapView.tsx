@@ -939,6 +939,27 @@ class MapView extends React.Component<MapViewProps, State> {
     return Promise.reject('getAddress not supported on this platform');
   }
 
+    /**
+   * Convert a coordinate to address by using default Geocoder
+   *
+   * @param coordinate Coordinate
+   * @param [coordinate.latitude] Latitude
+   * @param [coordinate.longitude] Longitude
+   *
+   * @return Promise with return type Address
+   */
+    coordinateFromAddress(address: Address): Promise<LatLng> {
+      if (Platform.OS === 'android') {
+        return NativeModules.AirMapModule.getCoordinatesFromAddress(
+          this._getHandle(),
+          address,
+        );
+      } else if (Platform.OS === 'ios') {
+        return this._runCommand('getCoordinatesFromAddress', [address]);
+      }
+      return Promise.reject('getAddress not supported on this platform');
+    }
+
   /**
    * Convert a map coordinate to user-space point
    *
