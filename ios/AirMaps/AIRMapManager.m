@@ -518,6 +518,37 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(getCoordinatesFromAddress:(nonnull NSNumber *)reactTag
+                                 address: (NSString *)address
+                                   resolver: (RCTPromiseResolveBlock)resolve
+                                   rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMap class]]) {
+            reject(@"Invalid argument", [NSString stringWithFormat:@"Invalid view returned from registry, expecting AIRMap, got: %@", view], NULL);
+        } else {
+            if (address == nil) {
+                reject(@"Invalid argument", [NSString stringWithFormat:@"Invalid address format"], NULL);
+            }
+
+
+            CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+            [geocoder geocodeAddressString:address completionHandler:^(NSArray *placemarks, NSError *error) {
+                if (error) {
+                    reject(@"Invalid argument", [NSString stringWithFormat:@"Can not get address location"], NULL); 
+                } else {
+                    CLPlacemark *placemark = [placemarks lastObject];
+                    resolve(@{
+                        @"latitude" : [NSString stringWithFormat:@"%@", placemark.location.coordinate.latitude],
+                        @"longitude" : [NSString stringWithFormat:@"%@", placemark.location.coordinate.longitude],
+                    });
+                }
+            }];
+        }
+    }];
+}
+
 #pragma mark Take Snapshot
 - (void)takeMapSnapshot:(AIRMap *)mapView
         snapshotter:(MKMapSnapshotter *) snapshotter
