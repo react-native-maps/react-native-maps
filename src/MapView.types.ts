@@ -191,6 +191,7 @@ export type NativeCommandName =
   | 'fitToElements'
   | 'fitToSuppliedMarkers'
   | 'getAddressFromCoordinates'
+  | 'getCoordinatesFromAddress'
   | 'getCamera'
   | 'getMapBoundaries'
   | 'getMarkersFrames'
