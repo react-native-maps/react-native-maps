@@ -940,7 +940,7 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
     /**
-   * Convert a coordinate to address by using default Geocoder
+   * Convert an address to coordinates by using default Geocoder
    *
    * @param coordinate Coordinate
    * @param [coordinate.latitude] Latitude
