@@ -268,7 +268,7 @@ public class AirMapModule extends ReactContextBaseJavaModule {
         Geocoder geocoder = new Geocoder(context);
         try {
           List<Address> list =
-                  geocoder.getFromLocationName(name, 1);
+                  geocoder.getFromLocationName(address, 1);
           if (list.isEmpty()) {
             promise.reject("Can not get address location");
             return;
@@ -277,8 +277,8 @@ public class AirMapModule extends ReactContextBaseJavaModule {
 
           WritableMap addressJson = new WritableNativeMap();
 
-          addressJson.putString("latitude", addressJson.getLatitude());
-          addressJson.putString("longitude", addressJson.getLongitude());
+          addressJson.putString("latitude", String.valueOf(address.getLatitude()));
+          addressJson.putString("longitude", String.valueOf(address.getLongitude()));
 
           promise.resolve(addressJson);
         } catch (IOException e) {
