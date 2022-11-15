@@ -540,8 +540,8 @@ RCT_EXPORT_METHOD(getCoordinatesFromAddress:(nonnull NSNumber *)reactTag
                 } else {
                     CLPlacemark *placemark = [placemarks lastObject];
                     resolve(@{
-                        @"latitude" : [NSString stringWithFormat:@"%@", placemark.location.coordinate.latitude],
-                        @"longitude" : [NSString stringWithFormat:@"%@", placemark.location.coordinate.longitude],
+                        @"latitude" : [NSString stringWithFormat:@"%f", placemark.location.coordinate.latitude],
+                        @"longitude" : [NSString stringWithFormat:@"%f", placemark.location.coordinate.longitude],
                     });
                 }
             }];
