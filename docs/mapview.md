@@ -39,7 +39,7 @@
 | `scrollEnabled` | `Boolean` | `true` | If `false` the user won't be able to change the map region being displayed.
 | `scrollDuringRotateOrZoomEnabled` | `Boolean` | `true` | If `false` the map will stay centered while rotating or zooming. **Note:** Google Maps only
 | `pitchEnabled` | `Boolean` | `true` | If `false` the user won't be able to adjust the camera’s pitch angle.
-| `toolbarEnabled` | `Boolean` | `true` | `Android only` If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
+| `toolbarEnabled` | `Boolean` | `true` | `Android only` If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press. If you enable the toolbar, make sure to [edit your AndroidManifest.xml](https://github.com/react-native-maps/react-native-maps/issues/4403#issuecomment-1219856534)
 | `cacheEnabled` | `Boolean` | `false` | If `true` map will be cached and displayed as an image instead of being interactable, for performance usage. **Note:** Apple Maps only
 | `loadingEnabled` | `Boolean` | `false` | If `true` a loading indicator will show while the map is loading.
 | `loadingIndicatorColor` | `Color` | `#606060` | Sets loading indicator color, default to `#606060`.
