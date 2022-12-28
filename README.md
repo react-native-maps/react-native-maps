@@ -630,6 +630,23 @@ Source: https://github.com/react-native-maps/react-native-maps/issues/1901
 
 Source: https://github.com/react-native-maps/react-native-maps/issues/3957#issuecomment-924161121
 
+#### onRegionChangeComplete() callback is called infinitely 
+
+If changing the state in `onRegionChangeComplete` is called infinitely, add a condition to limit these calls to occur only when the region change was done as a result of a user's action. 
+```javascript
+onRegionChangeComplete={ (region, gesture) => {
+	if (!gesture.isGesture) { 
+    return; 
+  }
+	
+  // You can use 
+  dispatch({ type: "map_region", payload: { mapRegion: region }}); // if using useReducer 
+	// setMapRegionState(region); // if using useState 
+}}
+```
+
+Source: https://github.com/react-native-maps/react-native-maps/issues/846#issuecomment-1210079461 
+
 License
 --------
 
