@@ -40,6 +40,8 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 
 (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+// The plus sign '+' below is part of the statement. Do NOT remove it. 
+// Replace _YOUR_API_KEY_ below with your projcet's Google API Key
 +  [GMSServices provideAPIKey:@"_YOUR_API_KEY_"]; // add this line using the api key obtained from Google Console
 ...
 ```
@@ -52,17 +54,33 @@ Also make sure that your Podfile deployment target is set to >= 13.0 at the top 
 
 ```ruby
 platform :ios, '13.0'
+...
+# if you get erros because of missing react-native-google-maps files e.g. RCTConvert+AirMap.h, consider adding the following 2 statements 
+pod 'GoogleMaps'
+pod 'Google-Maps-iOS-Utils'
 ```
 
 Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
 
 ```ruby
+target 'casualjob' do
 # React Native Maps dependencies
 rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-google-maps', :path => rn_maps_path
+...
+post_install do |installer|
+  ...
+  # if you get erros because of missing react-native-google-maps files e.g. RCTConvert+AirMap.h, consider adding the following section
+  installer.pods_project.targets.each do |target|
+    if target.name == 'react-native-google-maps'
+        target.build_configurations.each do |config|
+          config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+        end
+    end
+  end
 ```
 
-The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.
+The app's `Info.plist` file must contain a `NSLocationWhenInUseUsageDescription` with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.
 
 That's it, you made it! 👍
 
