@@ -114,6 +114,7 @@ body:
         - "SDK 44"
         - "SDK 45"
         - "SDK 46"
+        - "SDK 47"
     validations:
       required: true
 
