@@ -213,7 +213,9 @@ public class MapTileProvider implements TileProvider {
 			} catch (Exception e) {
 			  e.printStackTrace();
 			}
-		} else if (image == null && !this.offlineMode) {
+		}
+
+		if (image == null && !this.offlineMode) {
 			Log.d("urlTile", "Normal fetch");
 			image = fetchTile(x, y, zoom);
 			if (image == null) {
