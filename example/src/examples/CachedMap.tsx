@@ -4,8 +4,8 @@ import {
   View,
   Dimensions,
   StyleSheet,
-  ListView,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 
 import MapView, {Marker} from 'react-native-maps';
@@ -19,23 +19,14 @@ class CachedMap extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-    });
     this.state = {
-      dataSource: ds.cloneWithRows(COUNTRIES),
       cache: true,
     };
   }
 
   toggleCache() {
-    // a hack to force listview to reload with the same data
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows([]),
-    });
     this.setState({
       cache: !this.state.cache,
-      dataSource: this.state.dataSource.cloneWithRows(COUNTRIES),
     });
   }
 
@@ -53,24 +44,24 @@ class CachedMap extends React.Component<any, any> {
             </Text>
           </TouchableOpacity>
         </View>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={region => (
+        <FlatList
+          data={COUNTRIES}
+          renderItem={region => (
             <View style={styles.item}>
-              <Text>{region.name}</Text>
+              <Text>{region.item.name}</Text>
               <MapView
                 provider={this.props.provider}
                 style={{
                   width: mapSize,
                   height: mapSize,
                 }}
-                initialRegion={region}
+                initialRegion={region.item}
                 cacheEnabled={this.state.cache}
                 zoomEnabled
                 loadingIndicatorColor="#666666"
                 loadingBackgroundColor="#eeeeee">
                 <Marker
-                  coordinate={region}
+                  coordinate={region.item}
                   centerOffset={{x: -18, y: -60}}
                   anchor={{x: 0.69, y: 1}}
                   image={flagImg}
