@@ -304,6 +304,13 @@ public class AirMapManager extends ViewGroupManager<AirMapView> {
         view.animateToCamera(camera, duration);
         break;
 
+      case "setMarkerPoints":
+        if(args == null) {
+          break;
+        }
+        view.setMarkerPoints(args.getArray(0), args.getString(1), args.getBoolean(2));
+        break;
+        
       case "animateToRegion":
         if(args == null) {
           break;

@@ -785,6 +785,12 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
+  setMarkerPoints(A: any[]) {
+    if (this.map.current) {
+      Commands.setMarkerPoints(this.map.current, A, 'marker', false);
+    }
+  }
+
   animateToRegion(region: Region, duration: number = 500) {
     if (this.map.current) {
       Commands.animateToRegion(this.map.current, region, duration);

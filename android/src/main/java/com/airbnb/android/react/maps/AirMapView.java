@@ -5,6 +5,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.widget.Toast;  
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -103,6 +105,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   private final List<AirMapFeature> features = new ArrayList<>();
   private final Map<Marker, AirMapMarker> markerMap = new HashMap<>();
+  private final Map<Marker, String> markerPointMap = new HashMap<>();
   private final Map<Polyline, AirMapPolyline> polylineMap = new HashMap<>();
   private final Map<Polygon, AirMapPolygon> polygonMap = new HashMap<>();
   private final Map<GroundOverlay, AirMapOverlay> overlayMap = new HashMap<>();
@@ -251,27 +254,31 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
       @Override
       public boolean onMarkerClick(Marker marker) {
         WritableMap event;
-        AirMapMarker airMapMarker = getMarkerMap(marker);
+        // AirMapMarker airMapMarker = getMarkerMap(marker);
+
+        Toast.makeText( view.context.getApplicationContext(),"clicked", Toast.LENGTH_SHORT).show();
 
         event = makeClickEventData(marker.getPosition());
-        event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
+        event.putString("action", "marker-press");    
+        event.putString("id", markerPointMap.get(marker));
+
         manager.pushEvent(context, view, "onMarkerPress", event);
 
-        event = makeClickEventData(marker.getPosition());
-        event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
-        manager.pushEvent(context, airMapMarker, "onPress", event);
+        // event = makeClickEventData(marker.getPosition());
+        // event.putString("action", "marker-press");
+        // event.putString("id", airMapMarker.getIdentifier());
+        // manager.pushEvent(context, airMapMarker, "onPress", event);
 
         // Return false to open the callout info window and center on the marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
         // .OnMarkerClickListener
-        if (view.moveOnMarkerPress) {
-          return false;
-        } else {
-          marker.showInfoWindow();
-          return true;
-        }
+        // if (view.moveOnMarkerPress) {
+        //   return false;
+        // } else {
+        //   marker.showInfoWindow();
+        //   return true;
+        // }
+        return true;
       }
     });
 
@@ -825,6 +832,35 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
     }
   }
 
+  
+  public void setMarkerPoints(ReadableArray markers, String image, boolean clear){
+    Context context = this.context.getApplicationContext();
+    Toast.makeText( this.context.getApplicationContext(), "set markers", Toast.LENGTH_SHORT).show();
+    image = image == null ? "marker" : image;
+    // remove all markers
+    if(clear){
+      map.clear();
+    }
+    if (markers != null && map != null) {
+      for (int i = 0; i < markers.size(); i++) {
+        ReadableMap markerPoint = markers.getMap(i);
+        LatLng latLng = new LatLng(markerPoint.getDouble("latitude"), markerPoint.getDouble("longitude"));
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(markerPoint.getString("title"));
+        markerOptions.snippet(markerPoint.getString("description"));
+        // add marker.png
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(getResources().getIdentifier(image,"drawable",this.context.getPackageName())));
+        Marker marker=map.addMarker(markerOptions);
+
+        String id=markerPoint.getString("id");
+        id=id==null?i+"":id;
+
+        markerPointMap.put(marker,id);
+      }
+    }
+  }
+
   public void animateToRegion(LatLngBounds bounds, int duration) {
     if (map == null) return;
     if(duration <= 0) {
@@ -1343,7 +1379,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
 
   private AirMapMarker getMarkerMap(Marker marker) {
     AirMapMarker airMarker = markerMap.get(marker);
-
+    
     if (airMarker != null) {
       return airMarker;
     }

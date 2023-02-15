@@ -7,6 +7,15 @@ import {LatLng, Region} from './sharedTypes';
 export type MapViewNativeComponentType = HostComponent<NativeProps>;
 
 interface NativeCommands {
+  setMarkerPoints: (
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
+    A: any[],
+    markerImage: string,
+    clear: boolean,
+  ) => void;
+
   animateToRegion: (
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
@@ -74,6 +83,7 @@ interface NativeCommands {
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   supportedCommands: [
+    'setMarkerPoints',
     'animateToRegion',
     'setCamera',
     'animateCamera',
