@@ -787,7 +787,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   setMarkerPoints(A: any[]) {
     if (this.map.current) {
-      Commands.setMarkerPoints(this.map.current, A, 'marker', false);
+      Commands.setMarkerPoints(this.map.current, A, 'marker', true);
     }
   }
 
