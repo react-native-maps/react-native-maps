@@ -2,18 +2,18 @@ import type {HostComponent} from 'react-native';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import {NativeProps} from './MapView';
 import {Camera, EdgePadding} from './MapView.types';
-import {LatLng, Region} from './sharedTypes';
+import {LatLng, MarkerPoints, Region} from './sharedTypes';
 
 export type MapViewNativeComponentType = HostComponent<NativeProps>;
 
 interface NativeCommands {
-  setMarkerPoints: (
+  setMarkerPoints: <T extends MarkerPoints>(
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
     >,
-    A: any[],
-    markerImage: string,
-    clear: boolean,
+    locations: T[],
+    imageDrawableName: string,
+    skipClear: boolean,
   ) => void;
 
   animateToRegion: (

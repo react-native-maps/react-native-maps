@@ -2,6 +2,12 @@ import {NativeSyntheticEvent} from 'react-native';
 
 export type Provider = 'google' | undefined;
 
+export type MarkerPoints = LatLng & {
+  id: string;
+  title: string;
+  description: string;
+};
+
 export type LatLng = {
   latitude: number;
   longitude: number;

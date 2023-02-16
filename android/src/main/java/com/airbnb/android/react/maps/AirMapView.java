@@ -833,12 +833,13 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
   }
 
   
-  public void setMarkerPoints(ReadableArray markers, String image, boolean clear){
+  public void setMarkerPoints(ReadableArray markers, String image, boolean skipClear){
     Context context = this.context.getApplicationContext();
-    Toast.makeText( this.context.getApplicationContext(), "set markers", Toast.LENGTH_SHORT).show();
+    // Toast.makeText( this.context.getApplicationContext(), "set markers", Toast.LENGTH_SHORT).show();
     image = image == null ? "marker" : image;
+
     // remove all markers
-    if(clear){
+    if(!skipClear){
       map.clear();
     }
     if (markers != null && map != null) {

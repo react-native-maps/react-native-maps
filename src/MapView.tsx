@@ -27,6 +27,7 @@ import {
   MarkerDeselectEvent,
   MarkerDragEvent,
   MarkerDragStartEndEvent,
+  MarkerPoints,
   MarkerPressEvent,
   MarkerSelectEvent,
   Point,
@@ -785,9 +786,18 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
-  setMarkerPoints(A: any[]) {
+  setMarkerPoints<T extends MarkerPoints>(
+    locations: T[],
+    imageDrawableName = 'marker',
+    skipClear = false,
+  ) {
     if (this.map.current) {
-      Commands.setMarkerPoints(this.map.current, A, 'marker', true);
+      Commands.setMarkerPoints(
+        this.map.current,
+        locations,
+        imageDrawableName,
+        skipClear,
+      );
     }
   }
 

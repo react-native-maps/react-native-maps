@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Animated as RNAnimated, Animated, NativeSyntheticEvent, ViewProps } from 'react-native';
-import { CalloutPressEvent, ClickEvent, Frame, LatLng, MarkerDeselectEvent, MarkerDragEvent, MarkerDragStartEndEvent, MarkerPressEvent, MarkerSelectEvent, Point, Provider, Region } from './sharedTypes';
+import { CalloutPressEvent, ClickEvent, Frame, LatLng, MarkerDeselectEvent, MarkerDragEvent, MarkerDragStartEndEvent, MarkerPoints, MarkerPressEvent, MarkerSelectEvent, Point, Provider, Region } from './sharedTypes';
 import { Address, BoundingBox, Camera, ChangeEvent, Details, EdgePadding, FitToOptions, IndoorBuildingEvent, IndoorLevelActivatedEvent, KmlMapEvent, LongPressEvent, MapPressEvent, MapStyleElement, MapType, MapTypes, PanDragEvent, PoiClickEvent, SnapshotOptions, UserLocationChangeEvent } from './MapView.types';
 import { Modify } from './sharedTypesInternal';
 import { MapViewNativeComponentType } from './MapViewNativeComponent';
@@ -585,7 +585,7 @@ declare class MapView extends React.Component<MapViewProps, State> {
     animateCamera(camera: Partial<Camera>, opts?: {
         duration?: number;
     }): void;
-    setMarkerPoints(A: any[]): void;
+    setMarkerPoints<T extends MarkerPoints>(locations: T[], imageDrawableName?: string, skipClear?: boolean): void;
     animateToRegion(region: Region, duration?: number): void;
     fitToElements(options?: FitToOptions): void;
     fitToSuppliedMarkers(markers: string[], options?: FitToOptions): void;
