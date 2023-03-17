@@ -67,6 +67,12 @@ pod 'react-native-google-maps', :path => rn_maps_path
 
 The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.
 
+Finally, set PROVIDER_GOOGLE as map privider.
+```jsx
+import MapView, { Circle, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+<MapView provider={PROVIDER_GOOGLE} ... />
+```
+
 That's it, you made it! 👍
 
 ---
