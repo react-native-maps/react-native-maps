@@ -22,7 +22,7 @@
 
 ## Example
 
-```
+```js
 import React from 'react';
 import MapView, {Geojson} from 'react-native-maps';
 
@@ -50,4 +50,6 @@ const Map = props => (
     />
   </MapView>
 );
+
+export default Map;
 ```
