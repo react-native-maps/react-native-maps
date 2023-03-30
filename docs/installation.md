@@ -69,7 +69,7 @@ The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription wit
 
 Finally, set PROVIDER_GOOGLE as map privider.
 ```jsx
-import MapView, { Circle, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 <MapView provider={PROVIDER_GOOGLE} ... />
 ```
 
