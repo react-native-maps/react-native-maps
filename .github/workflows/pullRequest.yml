@@ -4,6 +4,19 @@ on:
   pull_request:
 
 jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: ':wave: Thanks for submitting this PR! We are about to check the submitted code :rocket:'
+            })
   lint-test:
     runs-on: ubuntu-latest
 
@@ -21,13 +34,32 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: Lint
+        id: lint
+        continue-on-error: true
         run: yarn lint
 
+      - name: Comment on linting error
+        if: steps.lint.outcome != 'success'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Your PR seems to include linting errors :cry:'
+            })
+            core.setFailed('Linting failed');
+
       - name: TsCheck
+        id: tscheck
         run: yarn tscheck
 
       - name: Check formatting
+        id: checkformat
         run: yarn format-check
 
       - name: Test
+        id: test
         run: yarn test

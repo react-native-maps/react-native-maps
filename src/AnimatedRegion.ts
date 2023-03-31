@@ -81,6 +81,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
   }
 
   private __getValue() {
+    let something;
     return {
       latitude: this.latitude.__getValue(),
       longitude: this.longitude.__getValue(),
