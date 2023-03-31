@@ -10,6 +10,7 @@
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "tscheck": "tsc --noEmit",
+    "format-check": "prettier --check .",
     "build": "tsc --project tsconfig.build.json",
     "test": "jest",
     "prepare": "husky install",
