@@ -5,6 +5,8 @@ on:
 
 jobs:
   comment:
+    permissions:
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
@@ -18,6 +20,8 @@ jobs:
               body: ':wave: Thanks for submitting this PR! We are about to check the submitted code :rocket:'
             })
   lint-test:
+    permissions:
+      issues: write
     runs-on: ubuntu-latest
 
     steps:
