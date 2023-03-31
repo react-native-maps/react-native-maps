@@ -2,19 +2,19 @@
 
 ## Props
 
-| Prop | Type | Default | Note |
-|---|---|---|---|
-| `image` | `ImageSource` | A custom image to be used as the overlay. Only required local image resources and uri (as for images located in the net) are allowed to be used.
-| `bounds` | `Array<LatLng>` |  | The coordinates for the image (bottom-left corner, top-right corner). ie.```[[lat, long], [lat, long]]```
-| `bearing` | `Number ` | `0` | `Google Maps API only` The bearing in degrees clockwise from north. Values outside the range [0, 360) will be normalized.
-| `tappable` | `Bool` | `false` | `Android only` Boolean to allow an overlay to be tappable and use the onPress function.
-| `opacity` | `Number` | `1.0` | `Google maps only` The opacity of the overlay.
+| Prop       | Type            | Default                                                                                                                                          | Note                                                                                                                      |
+| ---------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `image`    | `ImageSource`   | A custom image to be used as the overlay. Only required local image resources and uri (as for images located in the net) are allowed to be used. |
+| `bounds`   | `Array<LatLng>` |                                                                                                                                                  | The coordinates for the image (bottom-left corner, top-right corner). ie.`[[lat, long], [lat, long]]`                     |
+| `bearing`  | `Number `       | `0`                                                                                                                                              | `Google Maps API only` The bearing in degrees clockwise from north. Values outside the range [0, 360) will be normalized. |
+| `tappable` | `Bool`          | `false`                                                                                                                                          | `Android only` Boolean to allow an overlay to be tappable and use the onPress function.                                   |
+| `opacity`  | `Number`        | `1.0`                                                                                                                                            | `Google maps only` The opacity of the overlay.                                                                            |
 
 ## Events
 
-| Event Name | Returns | Notes
-|---|---|---|
-| `onPress` |  | `Android only` Callback that is called when the user presses on the overlay
+| Event Name | Returns | Notes                                                                       |
+| ---------- | ------- | --------------------------------------------------------------------------- |
+| `onPress`  |         | `Android only` Callback that is called when the user presses on the overlay |
 
 ## Types
 
@@ -24,4 +24,3 @@ type LatLng = [
   longitude: Number,
 ]
 ```
-

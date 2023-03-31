@@ -109,11 +109,11 @@ body:
     attributes:
       label: What version of Expo are you using?
       options:
-        - "Not using Expo"
-        - "SDK 45"
-        - "SDK 46"
-        - "SDK 47"
-        - "SDK 48"
+        - 'Not using Expo'
+        - 'SDK 45'
+        - 'SDK 46'
+        - 'SDK 47'
+        - 'SDK 48'
     validations:
       required: true
 
