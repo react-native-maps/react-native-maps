@@ -26,5 +26,8 @@ jobs:
       - name: TsCheck
         run: yarn tscheck
 
+      - name: Check formatting
+        run: yarn format-check
+
       - name: Test
         run: yarn test
