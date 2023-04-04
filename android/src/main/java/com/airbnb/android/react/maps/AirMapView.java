@@ -256,7 +256,7 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
         WritableMap event;
         // AirMapMarker airMapMarker = getMarkerMap(marker);
 
-        Toast.makeText( view.context.getApplicationContext(),"clicked", Toast.LENGTH_SHORT).show();
+        // Toast.makeText( view.context.getApplicationContext(),"clicked", Toast.LENGTH_SHORT).show();
 
         event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");    
