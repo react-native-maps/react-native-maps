@@ -2,14 +2,6 @@ name: Pull Request
 
 on:
   pull_request:
-    types: 
-      - opened # default
-      - reopened # default
-      - synchronize # default
-      - edited # used to check pr title
-    branches:
-      - master
-      - beta
 
 jobs:
   lint-test:
@@ -28,14 +20,14 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Lint PR title
-        run: echo "${{ github.event.pull_request.title }}" | yarn commitlint
-
       - name: Lint
         run: yarn lint
 
       - name: TsCheck
         run: yarn tscheck
+
+      - name: Check formatting
+        run: yarn format-check
 
       - name: Test
         run: yarn test
