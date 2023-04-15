@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.5.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.4.0...v1.5.0-beta.1) (2023-04-15)
+
+
+### Features
+
+* **android:** pin androidx.work version ([73f21c7](https://github.com/react-native-maps/react-native-maps/commit/73f21c7ef447340fb8632ea597232d01ab9ae3d7))
+
 # [1.4.0](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2...v1.4.0) (2023-01-25)
 
 
@@ -7,10 +14,16 @@
 
 * **ios:** remove custom podspec xcconfig ([7f6ef12](https://github.com/react-native-maps/react-native-maps/commit/7f6ef121aeea4c4a0f662c017b0515f4ed92ac14))
 
-
 ### Features
 
 * **ios:** support apple silicon macs without rosetta ([da7ba81](https://github.com/react-native-maps/react-native-maps/commit/da7ba81c5d7bd202e10ab2e443a3ba4c2f0eba63))
+
+# [1.4.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2...v1.4.0-beta.1) (2022-10-10)
+
+
+### Features
+
+* **android:** pin androidx.work version ([73f21c7](https://github.com/react-native-maps/react-native-maps/commit/73f21c7ef447340fb8632ea597232d01ab9ae3d7))
 
 ## [1.3.2](https://github.com/react-native-maps/react-native-maps/compare/v1.3.1...v1.3.2) (2022-09-26)
 
