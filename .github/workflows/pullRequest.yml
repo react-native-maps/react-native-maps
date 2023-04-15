@@ -2,9 +2,6 @@ name: Pull Request
 
 on:
   pull_request:
-    branches:
-      - master
-      - beta
 
 jobs:
   lint-test:
@@ -28,6 +25,9 @@ jobs:
 
       - name: TsCheck
         run: yarn tscheck
+
+      - name: Check formatting
+        run: yarn format-check
 
       - name: Test
         run: yarn test
