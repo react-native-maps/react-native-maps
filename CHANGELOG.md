@@ -1,5 +1,16 @@
 # Changelog
 
+# [1.4.0](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2...v1.4.0) (2023-01-25)
+
+
+### Bug Fixes
+
+* **ios:** remove custom podspec xcconfig ([7f6ef12](https://github.com/react-native-maps/react-native-maps/commit/7f6ef121aeea4c4a0f662c017b0515f4ed92ac14))
+
+### Features
+
+* **ios:** support apple silicon macs without rosetta ([da7ba81](https://github.com/react-native-maps/react-native-maps/commit/da7ba81c5d7bd202e10ab2e443a3ba4c2f0eba63))
+
 # [1.4.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.3.2...v1.4.0-beta.1) (2022-10-10)
 
 
