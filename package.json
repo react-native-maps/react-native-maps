@@ -5,11 +5,12 @@
   "main": "lib/index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
-  "version": "1.4.0-beta.1",
+  "version": "1.4.0",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "tscheck": "tsc --noEmit",
+    "format-check": "prettier --check .",
     "build": "tsc --project tsconfig.build.json",
     "test": "jest",
     "prepare": "husky install",
@@ -52,24 +53,25 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "17.1.2",
-    "@commitlint/config-conventional": "17.1.0",
-    "@react-native-community/eslint-config": "3.1.0",
-    "@semantic-release/changelog": "6.0.1",
+    "@commitlint/cli": "17.6.1",
+    "@commitlint/config-conventional": "17.6.1",
+    "@react-native-community/eslint-config": "3.2.0",
+    "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@types/react-native": "0.70.4",
-    "babel-jest": "29.1.2",
-    "eslint": "8.25.0",
-    "husky": "8.0.1",
-    "jest": "29.1.2",
-    "prettier": "2.7.1",
+    "@types/jest": "29.5.0",
+    "@types/react-native": "0.70.13",
+    "babel-jest": "29.5.0",
+    "eslint": "8.38.0",
+    "husky": "8.0.3",
+    "jest": "29.5.0",
+    "prettier": "2.8.7",
     "react": "18.1.0",
-    "react-native": "0.70.2",
-    "semantic-release": "19.0.5",
-    "typescript": "4.8.4"
+    "react-native": "0.70.8",
+    "semantic-release": "21.0.1",
+    "typescript": "5.0.4"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.8"
+    "@types/geojson": "^7946.0.10"
   },
   "jest": {
     "preset": "react-native"

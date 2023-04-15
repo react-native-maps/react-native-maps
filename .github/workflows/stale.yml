@@ -7,7 +7,9 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v5
+      - uses: actions/stale@v7
         with:
-          stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. Thank you for your contributions.'
-          stale-pr-message: 'This PR has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. Thank you for your contributions.'
+          days-before-stale: 90
+          days-before-close: 14
+          stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. If the issue remains relevant, simply comment `Still relevant` and the issue will remain open. Thank you for your contributions.'
+          stale-pr-message: 'This PR has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. If the PR remains relevant, simply comment `Still relevant` and the PR will remain open. Thank you for your contributions.'
