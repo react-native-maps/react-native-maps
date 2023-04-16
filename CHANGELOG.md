@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.1-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.5.1-beta.1...v1.5.1-beta.2) (2023-04-16)
+
+
+### Bug Fixes
+
+* **ios:** crash on Apple Maps when loading large polylines ([#4468](https://github.com/react-native-maps/react-native-maps/issues/4468)) ([e48e1af](https://github.com/react-native-maps/react-native-maps/commit/e48e1afc9e045fc97044a4c2e8623ad2173ef7b6))
+
+## [1.5.1-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.5.0...v1.5.1-beta.1) (2023-04-16)
+
+
+### Bug Fixes
+
+* **types:** missing PolygonPressEvent type export ([#4410](https://github.com/react-native-maps/react-native-maps/issues/4410)) ([d3557a3](https://github.com/react-native-maps/react-native-maps/commit/d3557a39b9356c9d762c631bab6050f33967a510))
+
 # [1.5.0](https://github.com/react-native-maps/react-native-maps/compare/v1.4.0...v1.5.0) (2023-04-15)
 
 
