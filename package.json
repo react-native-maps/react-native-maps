@@ -15,7 +15,9 @@
     "test": "jest",
     "prepare": "husky install",
     "release": "semantic-release",
-    "bootstrap": "yarn --cwd example && yarn && (cd example && cd ios && pod install)"
+    "bundle-install": "cd example && bundle install",
+    "pod-install": "cd example/ios && bundle exec pod install",
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
   },
   "files": [
     "lib",
