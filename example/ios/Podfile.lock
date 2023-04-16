@@ -343,6 +343,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Google-Maps-iOS-Utils (from `https://github.com/Simon-TechForm/google-maps-ios-utils.git`, branch `feat/support-apple-silicon`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -380,7 +381,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - fmt
-    - Google-Maps-iOS-Utils
     - GoogleMaps
     - libevent
 
@@ -395,6 +395,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Google-Maps-iOS-Utils:
+    :branch: feat/support-apple-silicon
+    :git: https://github.com/Simon-TechForm/google-maps-ios-utils.git
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes/hermes-engine.podspec"
   RCT-Folly:
@@ -458,6 +461,11 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
+CHECKOUT OPTIONS:
+  Google-Maps-iOS-Utils:
+    :commit: 35d05d1eeb65682c1b271f4f3760d814fd946aa1
+    :git: https://github.com/Simon-TechForm/google-maps-ios-utils.git
+
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -465,7 +473,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: d8772db98ada3c2daf8f65e2105ada77bf209c02
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
+  Google-Maps-iOS-Utils: d3fdfd57db799771418f06189e33981597553aa8
   GoogleMaps: a146f275ee429d14822178c7a841c03366ec92a1
   hermes-engine: 0b19f33a9c2ec1dbdede3232606eeb1101db4cec
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -500,6 +508,6 @@ SPEC CHECKSUMS:
   ReactCommon: c440e7f15075e81eb29802521c58a1f38b1aa903
   Yoga: d6133108734e69e8c0becc6ba587294b94829687
 
-PODFILE CHECKSUM: 70008534637dd0a8c0dd64c4834759cf14d044bc
+PODFILE CHECKSUM: 15e516e6ea9242e306b39399bcbaa0a2ef67e968
 
 COCOAPODS: 1.12.0
