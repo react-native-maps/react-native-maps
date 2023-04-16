@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
