@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.5.0...v1.5.1-beta.1) (2023-04-16)
+
+
+### Bug Fixes
+
+* **types:** missing PolygonPressEvent type export ([#4410](https://github.com/react-native-maps/react-native-maps/issues/4410)) ([d3557a3](https://github.com/react-native-maps/react-native-maps/commit/d3557a39b9356c9d762c631bab6050f33967a510))
+
 # [1.5.0](https://github.com/react-native-maps/react-native-maps/compare/v1.4.0...v1.5.0) (2023-04-15)
 
 
