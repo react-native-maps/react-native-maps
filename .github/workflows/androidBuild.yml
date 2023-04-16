@@ -1,0 +1,24 @@
+name: Android build
+
+on:
+  pull_request:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn --cwd example --frozen-lockfile
+
+      - name: Build Android
+        run: cd example/android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug
