@@ -492,7 +492,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: bc8556d76f83a1a9075cdee207aad7c0b7b30a33
   React-jsinspector: 5e5497c844f2381e8648ec3a7d0ad25b3f27f23e
   React-logger: b277ad8f4473f2506fb30b762b6348534a3de10e
-  react-native-google-maps: d7fab5844a34e73824061ff4d7eabaa8ea6a5a6a
+  react-native-google-maps: ee3ad79c32fda4f29fe9949e70e259bb31d7f849
   react-native-maps: 30d24060fb0abe9998d31a4cf37421ff14c59e25
   React-perflogger: e9249a18e055cae96fdf685bf6145cbea62506c8
   React-RCTActionSheet: a6d2a544a4605a111ce80fa9319cc870ca3ea778
@@ -508,6 +508,6 @@ SPEC CHECKSUMS:
   ReactCommon: c440e7f15075e81eb29802521c58a1f38b1aa903
   Yoga: d6133108734e69e8c0becc6ba587294b94829687
 
-PODFILE CHECKSUM: 15e516e6ea9242e306b39399bcbaa0a2ef67e968
+PODFILE CHECKSUM: 1d755277e5648e128501c8fe0a40074bd2f373b1
 
 COCOAPODS: 1.12.0

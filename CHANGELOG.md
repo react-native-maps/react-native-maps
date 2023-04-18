@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1-beta.3](https://github.com/react-native-maps/react-native-maps/compare/v1.5.1-beta.2...v1.5.1-beta.3) (2023-04-18)
+
+
+### Bug Fixes
+
+* **ios:** support for use_frameworks! :linkage => :static ([b0c2d42](https://github.com/react-native-maps/react-native-maps/commit/b0c2d42454ef72ff2037103218f799801aa83ebf))
+
 ## [1.5.1-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.5.1-beta.1...v1.5.1-beta.2) (2023-04-16)
 
 
