@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.6.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.5.1-beta.3...v1.6.0-beta.1) (2023-04-18)
+
+
+### Features
+
+* **ios:** bump googlemaps to 7.4.0 ([#4679](https://github.com/react-native-maps/react-native-maps/issues/4679)) ([661cddb](https://github.com/react-native-maps/react-native-maps/commit/661cddb4b21ebe6aecb90d7f4e49be14285f1ec7))
+
 ## [1.5.1-beta.3](https://github.com/react-native-maps/react-native-maps/compare/v1.5.1-beta.2...v1.5.1-beta.3) (2023-04-18)
 
 
