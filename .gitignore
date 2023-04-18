@@ -48,3 +48,5 @@ yarn-error.log
 lib/
 
 example/vendor/bundle/
+
+example/ios/Config.xcconfig

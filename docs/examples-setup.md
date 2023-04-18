@@ -1,12 +1,12 @@
 # Examples Setup
 
 - Clone or download the repository.
-- If you're on an Apple silicon Mac, uncomment the following line in `example/ios/Podfile`:
-
-  `#pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'`
-
 - From the root of the project run `yarn bootstrap`
-- `cd example`
-- `yarn android` or `yarn ios`
-
-**Please note that if you are trying out Android or using Google Maps on iOS, it's very likely that you will have to add your own API key for Google Maps to work. Check out the [Installation Instructions](./installation.md) to see how this is done, and make sure to run `yarn bootstrap` again after adding your personal API key.**
+- Add your API key(s)
+  - Android
+    - Open `example/android/local.properties` (or create the file if it doesn't already exist)
+    - Add the following line: `MAPS_API_KEY=your_api_key_here`
+  - iOS
+    - Open `example/ios/Config.xcconfig` (or create the file if it doesn't already exist)
+    - Add the following line: `MAPS_API_KEY=your_api_key_here`
+- Run `yarn android` or `yarn ios` within the example folder
