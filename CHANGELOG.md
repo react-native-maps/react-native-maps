@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.6.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0-beta.1...v1.6.0-beta.2) (2023-04-18)
+
+
+### Bug Fixes
+
+* **marker:** remove spamming warning from MapMarker ([#4644](https://github.com/react-native-maps/react-native-maps/issues/4644)) ([8825312](https://github.com/react-native-maps/react-native-maps/commit/8825312bd267b4ed94a21c8793839146e3dd5563)), closes [#4536](https://github.com/react-native-maps/react-native-maps/issues/4536)
+
 # [1.6.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.5.1-beta.3...v1.6.0-beta.1) (2023-04-18)
 
 
