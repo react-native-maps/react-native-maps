@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps"' }
 
   s.dependency 'React-Core'
-  s.dependency 'GoogleMaps', '7.3.0'
+  s.dependency 'GoogleMaps', '7.4.0'
   s.dependency 'Google-Maps-iOS-Utils', '4.1.0'
 end
