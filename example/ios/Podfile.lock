@@ -492,7 +492,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: bc8556d76f83a1a9075cdee207aad7c0b7b30a33
   React-jsinspector: 5e5497c844f2381e8648ec3a7d0ad25b3f27f23e
   React-logger: b277ad8f4473f2506fb30b762b6348534a3de10e
-  react-native-google-maps: d6b4795e0cea1fd5ee68f5f5f90e2c5cf32f90f2
+  react-native-google-maps: 67d5cceac64e7b85e619be3a61c9a11e45ebdae6
   react-native-maps: 30d24060fb0abe9998d31a4cf37421ff14c59e25
   React-perflogger: e9249a18e055cae96fdf685bf6145cbea62506c8
   React-RCTActionSheet: a6d2a544a4605a111ce80fa9319cc870ca3ea778
