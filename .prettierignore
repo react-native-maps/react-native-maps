@@ -1,4 +1,7 @@
 # Add files here to ignore them from prettier formatting
 
 CHANGELOG.md
-example/ios/example/Images.xcassets
+example/ios
+example/android
+android/build
+example/vendor/bundle/
