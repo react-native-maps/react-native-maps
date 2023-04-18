@@ -4,7 +4,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '13.0'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'example' do
+target 'rnmshowcase' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -31,7 +31,7 @@ target 'example' do
   rn_maps_path = '../../'
   pod 'react-native-google-maps', :path => rn_maps_path
 
-  target 'exampleTests' do
+  target 'rnmshowcaseTests' do
     inherit! :complete
     # Pods for testing
   end
