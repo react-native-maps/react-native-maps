@@ -26,7 +26,6 @@ target 'rnmshowcase' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # The following line is only needed if building on an Apple silicon Mac without rosetta.
   pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
   rn_maps_path = '../../'
   pod 'react-native-google-maps', :path => rn_maps_path
