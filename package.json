@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
-  "version": "1.5.0",
+  "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -15,7 +15,9 @@
     "test": "jest",
     "prepare": "husky install",
     "release": "semantic-release",
-    "bootstrap": "yarn --cwd example && yarn && (cd example && cd ios && pod install)"
+    "bundle-install": "cd example && bundle install",
+    "pod-install": "cd example/ios && bundle exec pod install",
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
   },
   "files": [
     "lib",
@@ -61,6 +63,7 @@
     "@types/jest": "29.5.0",
     "@types/react-native": "0.70.13",
     "babel-jest": "29.5.0",
+    "detox": "20.7.0",
     "eslint": "8.38.0",
     "husky": "8.0.3",
     "jest": "29.5.0",
@@ -74,6 +77,10 @@
     "@types/geojson": "^7946.0.10"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "e2e"
+    ]
   }
 }
