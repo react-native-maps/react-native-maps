@@ -33,7 +33,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyAeHIC4IG7XKT2Ls5Ti_YZV-6DHQk6dVHE"];
+  [GMSServices provideAPIKey:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MAPS_API_KEY"]];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
@@ -47,7 +47,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #endif
 
   NSDictionary *initProps = [self prepareInitialProps];
-  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"example", initProps);
+  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"rnmshowcase", initProps);
 
   if (@available(iOS 13.0, *)) {
     rootView.backgroundColor = [UIColor systemBackgroundColor];
