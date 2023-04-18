@@ -30,5 +30,8 @@ jobs:
       - name: Install pods
         run: yarn pod-install
 
+      - name: Write Config.xcconfig
+        run: echo MAPS_API_KEY=your_api_key_here >> example/ios/Config.xcconfig
+
       - name: Build iOS
-        run: xcodebuild -workspace example/ios/example.xcworkspace -scheme example -configuration Debug -sdk iphonesimulator
+        run: xcodebuild -workspace example/ios/rnmshowcase.xcworkspace -scheme rnmshowcase -configuration Debug -sdk iphonesimulator
