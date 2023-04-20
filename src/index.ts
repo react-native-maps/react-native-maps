@@ -44,6 +44,7 @@ export {Animated, MAP_TYPES, enableLatestRenderer};
 
 export * from './ProviderConstants';
 export * from './MapView.types';
+export * from './MapPolygon.types';
 export * from './sharedTypes';
 
 export const MarkerAnimated = Marker.Animated;
