@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {NativeSyntheticEvent, View, ViewProps} from 'react-native';
+import {View, ViewProps} from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
@@ -8,7 +8,8 @@ import decorateMapComponent, {
   MapManagerCommand,
   UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
+import {PolygonPressEvent} from './MapPolygon.types';
+import {LatLng, LineCapType, LineJoinType} from './sharedTypes';
 
 export type MapPolygonProps = ViewProps & {
   /**
@@ -184,23 +185,3 @@ export default decorateMapComponent(MapPolygon, 'Polygon', {
     android: USES_DEFAULT_IMPLEMENTATION,
   },
 });
-
-type PolygonPressEvent = NativeSyntheticEvent<{
-  action: 'polygon-press';
-
-  /**
-   * @platform iOS: Google Maps
-   */
-  id?: string;
-
-  /**
-   * @platform iOS: Apple Maps
-   * @platform Android
-   */
-  coordinate?: LatLng;
-
-  /**
-   * @platform Android
-   */
-  position?: Point;
-}>;

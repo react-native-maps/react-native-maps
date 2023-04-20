@@ -6,9 +6,13 @@ on:
 jobs:
   stale:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/stale@v7
         with:
+          exempt-issue-labels: reproducible
           days-before-stale: 90
           days-before-close: 14
           stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. If the issue remains relevant, simply comment `Still relevant` and the issue will remain open. Thank you for your contributions.'
