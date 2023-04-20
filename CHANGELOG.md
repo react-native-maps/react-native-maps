@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.6.0-beta.3](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0-beta.2...v1.6.0-beta.3) (2023-04-20)
+
+
+### Features
+
+* enable npm provenance ([#4686](https://github.com/react-native-maps/react-native-maps/issues/4686)) ([3498c3f](https://github.com/react-native-maps/react-native-maps/commit/3498c3f8d9bf2184abdc01d00ff4a3ffb8ab28d3))
+
 # [1.6.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0-beta.1...v1.6.0-beta.2) (2023-04-18)
 
 
