@@ -29,8 +29,13 @@ jobs:
       - name: Build
         run: yarn build
 
+      # Latest version of npm needed for provenance
+      - name: Install latest npm
+        run: npm install -g npm@latest
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_CONFIG_PROVENANCE: true
         run: yarn release
