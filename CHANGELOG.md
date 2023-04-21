@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.7.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.6.1-beta.1...v1.7.0-beta.1) (2023-04-21)
+
+
+### Features
+
+* **android:** bump android-maps-utils to 3.4.0 ([#4699](https://github.com/react-native-maps/react-native-maps/issues/4699)) ([6b26c23](https://github.com/react-native-maps/react-native-maps/commit/6b26c235a26e2708497e5caf31176d8599441d9e))
+
 ## [1.6.1-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0...v1.6.1-beta.1) (2023-04-21)
 
 
