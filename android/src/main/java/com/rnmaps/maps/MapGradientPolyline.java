@@ -321,14 +321,13 @@ public class MapGradientPolyline extends MapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
-    Log.d("AirMapGradientPolyline", "ADDTOMAP");
-    this.map = map;
-    this.tileOverlay = map.addTileOverlay(createTileOverlayOptions());
+  public void addToMap(Object map) {
+    this.map = (GoogleMap) map;
+    this.tileOverlay = this.map.addTileOverlay(createTileOverlayOptions());
   }
 
   @Override
-  public void removeFromMap(GoogleMap map) {
+  public void removeFromMap(Object map) {
     tileOverlay.remove();
   }
 

@@ -2,10 +2,10 @@ package com.rnmaps.maps;
 
 import android.content.Context;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.collections.CircleManager;
 
 public class MapCircle extends MapFeature {
 
@@ -89,12 +89,14 @@ public class MapCircle extends MapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
-    circle = map.addCircle(getCircleOptions());
+  public void addToMap(Object collection) {
+    CircleManager.Collection circleCollection = (CircleManager.Collection) collection;
+    circle = circleCollection.addCircle(getCircleOptions());
   }
 
   @Override
-  public void removeFromMap(GoogleMap map) {
-    circle.remove();
+  public void removeFromMap(Object collection) {
+    CircleManager.Collection circleCollection = (CircleManager.Collection) collection;
+    circleCollection.remove(circle);
   }
 }
