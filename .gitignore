@@ -46,3 +46,7 @@ yarn-error.log
 
 # ts outDir
 lib/
+
+example/vendor/bundle/
+
+example/ios/Config.xcconfig
