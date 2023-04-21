@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0...v1.6.1-beta.1) (2023-04-21)
+
+
+### Bug Fixes
+
+* **ios:** followsUserLocation changes zoom level ([#4696](https://github.com/react-native-maps/react-native-maps/issues/4696)) ([3b9491e](https://github.com/react-native-maps/react-native-maps/commit/3b9491e39529f11b32b4da9eb4ef36353c0033d9)), closes [#4585](https://github.com/react-native-maps/react-native-maps/issues/4585)
+
 # [1.6.0](https://github.com/react-native-maps/react-native-maps/compare/v1.5.0...v1.6.0) (2023-04-20)
 
 
