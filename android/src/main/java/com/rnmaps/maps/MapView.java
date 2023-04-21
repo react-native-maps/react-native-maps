@@ -52,6 +52,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.IndoorLevel;
+import com.google.maps.android.collections.CircleManager;
+import com.google.maps.android.collections.GroundOverlayManager;
+import com.google.maps.android.collections.MarkerManager;
+import com.google.maps.android.collections.PolygonManager;
+import com.google.maps.android.collections.PolylineManager;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
@@ -73,6 +78,15 @@ import static androidx.core.content.PermissionChecker.checkSelfPermission;
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
     GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
   public GoogleMap map;
+  private MarkerManager markerManager;
+  private MarkerManager.Collection markerCollection;
+  private PolylineManager polylineManager;
+  private PolylineManager.Collection polylineCollection;
+  private PolygonManager polygonManager;
+  private PolygonManager.Collection polygonCollection;
+  private CircleManager.Collection circleCollection;
+  private GroundOverlayManager groundOverlayManager;
+  private GroundOverlayManager.Collection groundOverlayCollection;
   private ProgressBar mapLoadingProgressBar;
   private RelativeLayout mapLoadingLayout;
   private ImageView cacheImageView;
@@ -214,8 +228,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       return;
     }
     this.map = map;
-    this.map.setInfoWindowAdapter(this);
-    this.map.setOnMarkerDragListener(this);
+
+    markerManager = new MarkerManager(map);
+    markerCollection = markerManager.newCollection();
+    polylineManager = new PolylineManager(map);
+    polylineCollection = polylineManager.newCollection();
+    polygonManager = new PolygonManager(map);
+    polygonCollection = polygonManager.newCollection();
+    CircleManager circleManager = new CircleManager(map);
+    circleCollection = circleManager.newCollection();
+    groundOverlayManager = new GroundOverlayManager(map);
+    groundOverlayCollection = groundOverlayManager.newCollection();
+
+    markerCollection.setInfoWindowAdapter(this);
+    markerCollection.setOnMarkerDragListener(this);
     this.map.setOnPoiClickListener(this);
     this.map.setOnIndoorStateChangeListener(this);
 
@@ -246,13 +272,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       }
     });
 
-    map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+    markerCollection.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
-      public boolean onMarkerClick(Marker marker) {
-        WritableMap event;
+      public boolean onMarkerClick(@NonNull Marker marker) {
         MapMarker airMapMarker = getMarkerMap(marker);
 
-        event = makeClickEventData(marker.getPosition());
+        WritableMap event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
         event.putString("id", airMapMarker.getIdentifier());
         manager.pushEvent(context, view, "onMarkerPress", event);
@@ -274,30 +299,28 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       }
     });
 
-    map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+    polygonCollection.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
       @Override
-      public void onPolygonClick(Polygon polygon) {
+      public void onPolygonClick(@NonNull Polygon polygon) {
         WritableMap event = makeClickEventData(tapLocation);
         event.putString("action", "polygon-press");
         manager.pushEvent(context, polygonMap.get(polygon), "onPress", event);
       }
     });
 
-    map.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
+    polylineCollection.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
       @Override
-      public void onPolylineClick(Polyline polyline) {
+      public void onPolylineClick(@NonNull Polyline polyline) {
         WritableMap event = makeClickEventData(tapLocation);
         event.putString("action", "polyline-press");
         manager.pushEvent(context, polylineMap.get(polyline), "onPress", event);
       }
     });
 
-    map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+    markerCollection.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
       @Override
-      public void onInfoWindowClick(Marker marker) {
-        WritableMap event;
-
-        event = makeClickEventData(marker.getPosition());
+      public void onInfoWindowClick(@NonNull Marker marker) {
+        WritableMap event = makeClickEventData(marker.getPosition());
         event.putString("action", "callout-press");
         manager.pushEvent(context, view, "onCalloutPress", event);
 
@@ -315,7 +338,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
       @Override
-      public void onMapClick(LatLng point) {
+      public void onMapClick(@NonNull LatLng point) {
         WritableMap event = makeClickEventData(point);
         event.putString("action", "press");
         manager.pushEvent(context, view, "onPress", event);
@@ -324,16 +347,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
       @Override
-      public void onMapLongClick(LatLng point) {
+      public void onMapLongClick(@NonNull LatLng point) {
         WritableMap event = makeClickEventData(point);
         event.putString("action", "long-press");
         manager.pushEvent(context, view, "onLongPress", makeClickEventData(point));
       }
     });
 
-    map.setOnGroundOverlayClickListener(new GoogleMap.OnGroundOverlayClickListener() {
+    groundOverlayCollection.setOnGroundOverlayClickListener(new GoogleMap.OnGroundOverlayClickListener() {
       @Override
-      public void onGroundOverlayClick(GroundOverlay groundOverlay) {
+      public void onGroundOverlayClick(@NonNull GroundOverlay groundOverlay) {
         WritableMap event = makeClickEventData(groundOverlay.getPosition());
         event.putString("action", "overlay-press");
         manager.pushEvent(context, overlayMap.get(groundOverlay), "onPress", event);
@@ -655,7 +678,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     // This is where we intercept them and do the appropriate underlying mapview action.
     if (child instanceof MapMarker) {
       MapMarker annotation = (MapMarker) child;
-      annotation.addToMap(map);
+      annotation.addToMap(markerCollection);
       features.add(index, annotation);
 
       // Allow visibility event to be triggered later
@@ -681,7 +704,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       markerMap.put(marker, annotation);
     } else if (child instanceof MapPolyline) {
       MapPolyline polylineView = (MapPolyline) child;
-      polylineView.addToMap(map);
+      polylineView.addToMap(polylineCollection);
       features.add(index, polylineView);
       Polyline polyline = (Polyline) polylineView.getFeature();
       polylineMap.put(polyline, polylineView);
@@ -693,13 +716,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       gradientPolylineMap.put(tileOverlay, polylineView);
     } else if (child instanceof MapPolygon) {
       MapPolygon polygonView = (MapPolygon) child;
-      polygonView.addToMap(map);
+      polygonView.addToMap(polygonCollection);
       features.add(index, polygonView);
       Polygon polygon = (Polygon) polygonView.getFeature();
       polygonMap.put(polygon, polygonView);
     } else if (child instanceof MapCircle) {
       MapCircle circleView = (MapCircle) child;
-      circleView.addToMap(map);
+      circleView.addToMap(circleCollection);
       features.add(index, circleView);
     } else if (child instanceof MapUrlTile) {
       MapUrlTile urlTileView = (MapUrlTile) child;
@@ -715,7 +738,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       features.add(index, localTileView);
     } else if (child instanceof MapOverlay) {
       MapOverlay overlayView = (MapOverlay) child;
-      overlayView.addToMap(map);
+      overlayView.addToMap(groundOverlayCollection);
       features.add(index, overlayView);
       GroundOverlay overlay = (GroundOverlay) overlayView.getFeature();
       overlayMap.put(overlay, overlayView);
@@ -1185,7 +1208,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return;
       }
 
-      KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context);
+      KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context, markerManager, polygonManager, polylineManager, groundOverlayManager, null);
       kmlLayer.addLayerToMap();
 
       WritableMap pointers = new WritableNativeMap();

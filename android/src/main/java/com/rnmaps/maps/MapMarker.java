@@ -33,12 +33,12 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.collections.MarkerManager;
 
 public class MapMarker extends MapFeature {
 
@@ -427,17 +427,19 @@ public class MapMarker extends MapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
-    marker = map.addMarker(getMarkerOptions());
+  public void addToMap(Object collection) {
+    MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
+    marker = markerCollection.addMarker(getMarkerOptions());
     updateTracksViewChanges();
   }
 
   @Override
-  public void removeFromMap(GoogleMap map) {
+  public void removeFromMap(Object collection) {
     if (marker == null) {
       return;
     }
-    marker.remove();
+    MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
+    markerCollection.remove(marker);
     marker = null;
     updateTracksViewChanges();
   }

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.Dot;
@@ -14,6 +13,7 @@ import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.google.maps.android.collections.PolylineManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,13 +150,15 @@ public class MapPolyline extends MapFeature {
   }
 
   @Override
-  public void addToMap(GoogleMap map) {
-    polyline = map.addPolyline(getPolylineOptions());
+  public void addToMap(Object collection) {
+    PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+    polyline = polylineCollection.addPolyline(getPolylineOptions());
     polyline.setClickable(this.tappable);
   }
 
   @Override
-  public void removeFromMap(GoogleMap map) {
-    polyline.remove();
+  public void removeFromMap(Object collection) {
+    PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+    polylineCollection.remove(polyline);
   }
 }
