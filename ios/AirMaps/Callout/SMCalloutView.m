@@ -98,7 +98,11 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
             self.titleLabel.opaque = NO;
             self.titleLabel.backgroundColor = [UIColor clearColor];
             self.titleLabel.font = [UIFont systemFontOfSize:17];
-            self.titleLabel.textColor = [UIColor blackColor];
+            if (@available(iOS 13.0, *)) {
+                self.titleLabel.textColor = [UIColor labelColor];
+            } else {
+                self.titleLabel.textColor = [UIColor blackColor];
+            }
         }
         return self.titleLabel;
     }
@@ -116,7 +120,11 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
             self.subtitleLabel.opaque = NO;
             self.subtitleLabel.backgroundColor = [UIColor clearColor];
             self.subtitleLabel.font = [UIFont systemFontOfSize:12];
-            self.subtitleLabel.textColor = [UIColor blackColor];
+            if (@available(iOS 13.0, *)) {
+                self.subtitleLabel.textColor = [UIColor secondaryLabelColor];
+            } else {
+                self.subtitleLabel.textColor = [UIColor blackColor];
+            }
         }
         return self.subtitleLabel;
     }
@@ -156,24 +164,24 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 
 - (CGFloat)leftAccessoryVerticalMargin {
     if (self.leftAccessoryView.frameHeight < self.calloutContainerHeight)
-        return roundf((self.calloutContainerHeight - self.leftAccessoryView.frameHeight) / 2);
+        return round((self.calloutContainerHeight - self.leftAccessoryView.frameHeight) / 2);
     else
         return 0;
 }
 
 - (CGFloat)leftAccessoryHorizontalMargin {
-    return fminf(self.leftAccessoryVerticalMargin, TITLE_HMARGIN);
+    return fmin(self.leftAccessoryVerticalMargin, TITLE_HMARGIN);
 }
 
 - (CGFloat)rightAccessoryVerticalMargin {
     if (self.rightAccessoryView.frameHeight < self.calloutContainerHeight)
-        return roundf((self.calloutContainerHeight - self.rightAccessoryView.frameHeight) / 2);
+        return round((self.calloutContainerHeight - self.rightAccessoryView.frameHeight) / 2);
     else
         return 0;
 }
 
 - (CGFloat)rightAccessoryHorizontalMargin {
-    return fminf(self.rightAccessoryVerticalMargin, TITLE_HMARGIN);
+    return fmin(self.rightAccessoryVerticalMargin, TITLE_HMARGIN);
 }
 
 - (CGFloat)innerContentMarginLeft {
@@ -229,7 +237,7 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     else if (preferredTitleSize.width >= 0.000001 || preferredSubtitleSize.width >= 0.000001) {
 
         // if we have a title or subtitle, then our assumed margins are valid, and we can apply them
-        preferredWidth = fmaxf(preferredTitleSize.width, preferredSubtitleSize.width) + margin;
+        preferredWidth = fmax(preferredTitleSize.width, preferredSubtitleSize.width) + margin;
     }
     else {
         // ok we have no title or subtitle to speak of. In this case, the system callout would actually not display
@@ -241,18 +249,18 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     }
 
     // ensure we're big enough to fit our graphics!
-    preferredWidth = fmaxf(preferredWidth, CALLOUT_MIN_WIDTH);
+    preferredWidth = fmax(preferredWidth, CALLOUT_MIN_WIDTH);
 
     // ask to be smaller if we have space, otherwise we'll fit into what we have by truncating the title/subtitle.
-    return CGSizeMake(fminf(preferredWidth, size.width), self.calloutHeight);
+    return CGSizeMake(fmin(preferredWidth, size.width), self.calloutHeight);
 }
 
 - (CGSize)offsetToContainRect:(CGRect)innerRect inRect:(CGRect)outerRect {
-    CGFloat nudgeRight = fmaxf(0, CGRectGetMinX(outerRect) - CGRectGetMinX(innerRect));
-    CGFloat nudgeLeft = fminf(0, CGRectGetMaxX(outerRect) - CGRectGetMaxX(innerRect));
-    CGFloat nudgeTop = fmaxf(0, CGRectGetMinY(outerRect) - CGRectGetMinY(innerRect));
-    CGFloat nudgeBottom = fminf(0, CGRectGetMaxY(outerRect) - CGRectGetMaxY(innerRect));
-    return CGSizeMake(nudgeLeft ? nudgeLeft : nudgeRight, nudgeTop ? nudgeTop : nudgeBottom);
+    CGFloat nudgeRight = fmax(0, CGRectGetMinX(outerRect) - CGRectGetMinX(innerRect));
+    CGFloat nudgeLeft = fmin(0, CGRectGetMaxX(outerRect) - CGRectGetMaxX(innerRect));
+    CGFloat nudgeTop = fmax(0, CGRectGetMinY(outerRect) - CGRectGetMinY(innerRect));
+    CGFloat nudgeBottom = fmin(0, CGRectGetMaxY(outerRect) - CGRectGetMaxY(innerRect));
+    return CGSizeMake(nudgeLeft > 0 ? nudgeLeft : nudgeRight, nudgeTop > 0 ? nudgeTop : nudgeBottom);
 }
 
 - (void)presentCalloutFromRect:(CGRect)rect inView:(UIView *)view constrainedToView:(UIView *)constrainedView animated:(BOOL)animated {
@@ -269,8 +277,9 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     // Sanity check: dismiss this callout immediately if it's displayed somewhere
     if (self.layer.superlayer) [self dismissCalloutAnimated:NO];
 
-    // cancel any presenting animation that may be in progress
+    // cancel all animations that may be in progress
     [self.layer removeAnimationForKey:@"present"];
+    [self.layer removeAnimationForKey:@"dismiss"];
 
     // figure out the constrained view's rect in our popup view's coordinate system
     CGRect constrainedRect = [constrainedLayer convertRect:constrainedLayer.bounds toLayer:layer];
@@ -314,7 +323,7 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     CGFloat anchorY = self.calloutOffset.y + (bestDirection == SMCalloutArrowDirectionDown ? CGRectGetMinY(rect) : CGRectGetMaxY(rect));
 
     // we prefer to sit centered directly above our anchor
-    CGFloat calloutX = roundf(anchorX - self.frameWidth / 2);
+    CGFloat calloutX = round(anchorX - self.frameWidth / 2);
 
     // but not if it's going to get too close to the edge of our constraints
     if (calloutX < constrainedRect.origin.x)
@@ -339,8 +348,8 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         [layer addSublayer:self.layer];
 
     CGPoint calloutOrigin = {
-            .x = calloutX + adjustX,
-            .y = bestDirection == SMCalloutArrowDirectionDown ? (anchorY - self.calloutHeight) : anchorY
+        .x = calloutX + adjustX,
+        .y = bestDirection == SMCalloutArrowDirectionDown ? (anchorY - self.calloutHeight) : anchorY
     };
 
     self.frameOrigin = calloutOrigin;
@@ -361,8 +370,8 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 
     // make sure our frame is not on half-pixels or else we may be blurry!
     CGFloat scale = [UIScreen mainScreen].scale;
-    self.frameX = floorf(self.frameX*scale)/scale;
-    self.frameY = floorf(self.frameY*scale)/scale;
+    self.frameX = floor(self.frameX*scale)/scale;
+    self.frameY = floor(self.frameY*scale)/scale;
 
     // layout now so we can immediately start animating to the final position if needed
     [self setNeedsLayout];
@@ -480,7 +489,7 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         bounce.duration = 0.23;
         bounce.fromValue = presenting ? @0.7 : @1.0;
         bounce.toValue = presenting ? @1.0 : @0.7;
-        bounce.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.59367:0.12066:0.18878:1.5814];
+        bounce.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.59367f:0.12066f:0.18878f:1.5814f];
 
         CAAnimationGroup *group = [CAAnimationGroup animation];
         group.animations = @[fade, bounce];
@@ -593,32 +602,72 @@ NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 @property (nonatomic, strong) UIImageView *arrowImageView, *arrowHighlightedImageView, *arrowBorderView;
 @end
 
-static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage = nil;
+static UIImage *blackArrowImage = nil, *normalArrowImageLight = nil, *normalArrowImageDark = nil, *highlightedArrowImageLight = nil, *highlightedArrowImageDark = nil, *arrowBorderImageLight = nil, *arrowBorderImageDark = nil;
+static UIColor *normalBackgroundColor, *highlightedBackgroundColor, *borderColor;
 
 @implementation SMCalloutMaskedBackgroundView
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-
+        
+        UIColor *normalBackgroundColorLight = [UIColor whiteColor];
+        UIColor *normalBackgroundColorDark = [UIColor colorWithWhite:0.2 alpha:1.0];
+        UIColor *highlightedBackgroundColorLight = [UIColor colorWithWhite:0.85 alpha:1];
+        UIColor *highlightedBackgroundColorDark = [UIColor colorWithWhite:0.15 alpha:1];
+        UIColor *borderColorLight = [UIColor colorWithWhite:0 alpha:0.2];
+        UIColor *borderColorDark = [UIColor colorWithWhite:1 alpha:0.2];
+        
+        if (@available(iOS 13.0, *)) {
+            normalBackgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+                if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
+                    return normalBackgroundColorLight;
+                } else {
+                    return normalBackgroundColorDark;
+                }
+            }];
+            highlightedBackgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+                if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
+                    return highlightedBackgroundColorLight;
+                } else {
+                    return highlightedBackgroundColorDark;
+                }
+            }];
+            borderColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+                if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
+                    return borderColorLight;
+                } else {
+                    return borderColorDark;
+                }
+            }];
+        } else {
+            normalBackgroundColor = normalBackgroundColorLight;
+            highlightedBackgroundColor = highlightedBackgroundColorLight;
+            borderColor = borderColorLight;
+        }
+        
         // Here we're mimicking the very particular (and odd) structure of the system callout view.
         // The hierarchy and view/layer values were discovered by inspecting map kit using Reveal.app
 
         self.containerView = [UIView new];
-        self.containerView.backgroundColor = [UIColor whiteColor];
+        self.containerView.backgroundColor = normalBackgroundColor;
         self.containerView.alpha = 0.96;
         self.containerView.layer.cornerRadius = 8;
-        self.containerView.layer.shadowRadius = 30;
-        self.containerView.layer.shadowOpacity = 0.1;
+        self.layer.shadowRadius = 6;
+        self.layer.shadowOffset = CGSizeMake(0, 4);
+        self.layer.shadowOpacity = 0.1f;
 
         self.containerBorderView = [UIView new];
-        self.containerBorderView.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
         self.containerBorderView.layer.borderWidth = 0.5;
         self.containerBorderView.layer.cornerRadius = 8.5;
 
         if (!blackArrowImage) {
             blackArrowImage = [SMCalloutBackgroundView embeddedImageNamed:@"CalloutArrow"];
-            whiteArrowImage = [self image:blackArrowImage withColor:[UIColor whiteColor]];
-            grayArrowImage = [self image:blackArrowImage withColor:[UIColor colorWithWhite:0.85 alpha:1]];
+            normalArrowImageLight = [self image:blackArrowImage withColor:normalBackgroundColorLight];
+            normalArrowImageDark = [self image:blackArrowImage withColor:normalBackgroundColorDark];
+            highlightedArrowImageLight = [self image:blackArrowImage withColor:highlightedBackgroundColorLight];
+            highlightedArrowImageDark = [self image:blackArrowImage withColor:highlightedBackgroundColorDark];
+            arrowBorderImageLight = [self image:blackArrowImage withColor:borderColorLight];
+            arrowBorderImageDark = [self image:blackArrowImage withColor:borderColorDark];
         }
 
         self.anchorHeight = 13;
@@ -626,12 +675,12 @@ static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage =
 
         self.arrowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, blackArrowImage.size.width, blackArrowImage.size.height)];
         self.arrowView.alpha = 0.96;
-        self.arrowImageView = [[UIImageView alloc] initWithImage:whiteArrowImage];
-        self.arrowHighlightedImageView = [[UIImageView alloc] initWithImage:grayArrowImage];
+        self.arrowImageView = [[UIImageView alloc] initWithImage:normalArrowImageLight];
+        self.arrowHighlightedImageView = [[UIImageView alloc] initWithImage:highlightedArrowImageLight];
         self.arrowHighlightedImageView.hidden = YES;
-        self.arrowBorderView = [[UIImageView alloc] initWithImage:blackArrowImage];
-        self.arrowBorderView.alpha = 0.1;
+        self.arrowBorderView = [[UIImageView alloc] initWithImage:arrowBorderImageLight];
         self.arrowBorderView.frameY = 0.5;
+        [self updateColors];
 
         [self addSubview:self.containerView];
         [self.containerView addSubview:self.containerBorderView];
@@ -651,7 +700,7 @@ static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage =
 
 - (void)setHighlighted:(BOOL)highlighted {
     [super setHighlighted:highlighted];
-    self.containerView.backgroundColor = highlighted ? [UIColor colorWithWhite:0.85 alpha:1] : [UIColor whiteColor];
+    self.containerView.backgroundColor = highlighted ? highlightedBackgroundColor : normalBackgroundColor;
     self.arrowImageView.hidden = highlighted;
     self.arrowHighlightedImageView.hidden = !highlighted;
 }
@@ -681,7 +730,7 @@ static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage =
     self.containerView.frame = CGRectMake(0, dy, self.frameWidth, self.frameHeight - self.arrowView.frameHeight + 0.5);
     self.containerBorderView.frame = CGRectInset(self.containerView.bounds, -0.5, -0.5);
 
-    self.arrowView.frameX = roundf(self.arrowPoint.x - self.arrowView.frameWidth / 2);
+    self.arrowView.frameX = round(self.arrowPoint.x - self.arrowView.frameWidth / 2);
 
     if (pointingUp) {
         self.arrowView.frameY = 1;
@@ -690,6 +739,33 @@ static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage =
     else {
         self.arrowView.frameY = self.containerView.frameHeight - 0.5;
         self.arrowView.transform = CGAffineTransformIdentity;
+    }
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    [self updateColors];
+}
+
+- (void)updateColors {
+    if (@available(iOS 13.0, *)) {
+        [self.traitCollection performAsCurrentTraitCollection:^{
+            if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
+                self.arrowImageView.image = normalArrowImageLight;
+                self.arrowHighlightedImageView.image = highlightedArrowImageLight;
+                self.arrowBorderView.image = arrowBorderImageLight;
+            } else {
+                self.arrowImageView.image = normalArrowImageDark;
+                self.arrowHighlightedImageView.image = highlightedArrowImageDark;
+                self.arrowBorderView.image = arrowBorderImageDark;
+            }
+            self.containerBorderView.layer.borderColor = borderColor.CGColor;
+        }];
+    } else {
+        self.arrowImageView.image = normalArrowImageLight;
+        self.arrowHighlightedImageView.image = highlightedArrowImageLight;
+        self.arrowBorderView.image = arrowBorderImageLight;
+        self.containerBorderView.layer.borderColor = borderColor.CGColor;
     }
 }
 
@@ -712,83 +788,6 @@ static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage =
 
 @implementation SMCalloutBackgroundView
 
-+ (NSData *)dataWithBase64EncodedString:(NSString *)string {
-    //
-    //  NSData+Base64.m
-    //
-    //  Version 1.0.2
-    //
-    //  Created by Nick Lockwood on 12/01/2012.
-    //  Copyright (C) 2012 Charcoal Design
-    //
-    //  Distributed under the permissive zlib License
-    //  Get the latest version from here:
-    //
-    //  https://github.com/nicklockwood/Base64
-    //
-    //  This software is provided 'as-is', without any express or implied
-    //  warranty.  In no event will the authors be held liable for any damages
-    //  arising from the use of this software.
-    //
-    //  Permission is granted to anyone to use this software for any purpose,
-    //  including commercial applications, and to alter it and redistribute it
-    //  freely, subject to the following restrictions:
-    //
-    //  1. The origin of this software must not be misrepresented; you must not
-    //  claim that you wrote the original software. If you use this software
-    //  in a product, an acknowledgment in the product documentation would be
-    //  appreciated but is not required.
-    //
-    //  2. Altered source versions must be plainly marked as such, and must not be
-    //  misrepresented as being the original software.
-    //
-    //  3. This notice may not be removed or altered from any source distribution.
-    //
-    const char lookup[] = {
-            99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
-            99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
-            99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 62, 99, 99, 99, 63,
-            52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 99, 99, 99, 99, 99, 99,
-            99,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-            15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 99, 99, 99, 99, 99,
-            99, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-            41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 99, 99, 99, 99, 99
-    };
-
-    NSData *inputData = [string dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    long long inputLength = [inputData length];
-    const unsigned char *inputBytes = [inputData bytes];
-
-    long long maxOutputLength = (inputLength / 4 + 1) * 3;
-    NSMutableData *outputData = [NSMutableData dataWithLength:(NSUInteger)maxOutputLength];
-    unsigned char *outputBytes = (unsigned char *)[outputData mutableBytes];
-
-    int accumulator = 0;
-    long long outputLength = 0;
-    unsigned char accumulated[] = {0, 0, 0, 0};
-    for (long long i = 0; i < inputLength; i++) {
-        unsigned char decoded = lookup[inputBytes[i] & 0x7F];
-        if (decoded != 99) {
-            accumulated[accumulator] = decoded;
-            if (accumulator == 3) {
-                outputBytes[outputLength++] = (accumulated[0] << 2) | (accumulated[1] >> 4);
-                outputBytes[outputLength++] = (accumulated[1] << 4) | (accumulated[2] >> 2);
-                outputBytes[outputLength++] = (accumulated[2] << 6) | accumulated[3];
-            }
-            accumulator = (accumulator + 1) % 4;
-        }
-    }
-
-    //handle left-over data
-    if (accumulator > 0) outputBytes[outputLength] = (accumulated[0] << 2) | (accumulated[1] >> 4);
-    if (accumulator > 1) outputBytes[++outputLength] = (accumulated[1] << 4) | (accumulated[2] >> 2);
-    if (accumulator > 2) outputLength++;
-
-    //truncate data to match actual output length
-    outputData.length = (NSUInteger)outputLength;
-    return outputLength? outputData: nil;
-}
-
 + (UIImage *)embeddedImageNamed:(NSString *)name {
     CGFloat screenScale = [UIScreen mainScreen].scale;
     if (screenScale > 1.0) {
@@ -809,7 +808,8 @@ static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage =
     NSString *base64String = [(id)self performSelector:selector];
 #pragma clang diagnostic pop
 
-    UIImage *rawImage = [UIImage imageWithData:[self dataWithBase64EncodedString:base64String]];
+    NSData *imageData = [[NSData alloc] initWithBase64EncodedString:base64String options:0];
+    UIImage *rawImage = [UIImage imageWithData:imageData];
     return [UIImage imageWithCGImage:rawImage.CGImage scale:screenScale orientation:UIImageOrientationUp];
 }
 
@@ -844,15 +844,15 @@ static UIImage *blackArrowImage = nil, *whiteArrowImage = nil, *grayArrowImage =
 - (void)setFrameHeight:(CGFloat)height { self.frame = (CGRect){ .origin=self.frame.origin, .size.width=self.frame.size.width, .size.height=height }; }
 
 - (CGFloat)frameLeft { return self.frame.origin.x; }
-- (void)setFrameLeft:(CGFloat)left { self.frame = (CGRect){ .origin.x=left, .origin.y=self.frame.origin.y, .size.width=fmaxf(self.frame.origin.x+self.frame.size.width-left,0), .size.height=self.frame.size.height }; }
+- (void)setFrameLeft:(CGFloat)left { self.frame = (CGRect){ .origin.x=left, .origin.y=self.frame.origin.y, .size.width=fmax(self.frame.origin.x+self.frame.size.width-left,0), .size.height=self.frame.size.height }; }
 
 - (CGFloat)frameTop { return self.frame.origin.y; }
-- (void)setFrameTop:(CGFloat)top { self.frame = (CGRect){ .origin.x=self.frame.origin.x, .origin.y=top, .size.width=self.frame.size.width, .size.height=fmaxf(self.frame.origin.y+self.frame.size.height-top,0) }; }
+- (void)setFrameTop:(CGFloat)top { self.frame = (CGRect){ .origin.x=self.frame.origin.x, .origin.y=top, .size.width=self.frame.size.width, .size.height=fmax(self.frame.origin.y+self.frame.size.height-top,0) }; }
 
 - (CGFloat)frameRight { return self.frame.origin.x + self.frame.size.width; }
-- (void)setFrameRight:(CGFloat)right { self.frame = (CGRect){ .origin=self.frame.origin, .size.width=fmaxf(right-self.frame.origin.x,0), .size.height=self.frame.size.height }; }
+- (void)setFrameRight:(CGFloat)right { self.frame = (CGRect){ .origin=self.frame.origin, .size.width=fmax(right-self.frame.origin.x,0), .size.height=self.frame.size.height }; }
 
 - (CGFloat)frameBottom { return self.frame.origin.y + self.frame.size.height; }
-- (void)setFrameBottom:(CGFloat)bottom { self.frame = (CGRect){ .origin=self.frame.origin, .size.width=self.frame.size.width, .size.height=fmaxf(bottom-self.frame.origin.y,0) }; }
+- (void)setFrameBottom:(CGFloat)bottom { self.frame = (CGRect){ .origin=self.frame.origin, .size.width=self.frame.size.width, .size.height=fmax(bottom-self.frame.origin.y,0) }; }
 
 @end
