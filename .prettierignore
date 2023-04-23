@@ -5,3 +5,4 @@ example/ios
 example/android
 android/build
 example/vendor/bundle/
+ios/DerivedData
