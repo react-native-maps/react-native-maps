@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/react-native-maps/react-native-maps/compare/v1.7.0...v1.7.1) (2023-04-23)
+
+
+### Bug Fixes
+
+* **android:** crash when removing feature belonging to collection ([#4707](https://github.com/react-native-maps/react-native-maps/issues/4707)) ([ae6fe90](https://github.com/react-native-maps/react-native-maps/commit/ae6fe90d3f0c727441dd2cdc84c1800e18f18d04)), closes [#4706](https://github.com/react-native-maps/react-native-maps/issues/4706)
+
 # [1.7.0](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0...v1.7.0) (2023-04-23)
 
 
