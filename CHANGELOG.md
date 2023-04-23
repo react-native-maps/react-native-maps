@@ -1,5 +1,17 @@
 # Changelog
 
+# [2.0.0-beta.3](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2023-04-23)
+
+
+### Features
+
+* **android:** use semantic version range for gradle dependencies ([#4705](https://github.com/react-native-maps/react-native-maps/issues/4705)) ([85b2838](https://github.com/react-native-maps/react-native-maps/commit/85b2838ba7480daceb869a1ef8820333f82725ea))
+
+
+### BREAKING CHANGES
+
+* **android:** drop support for overriding play-services-{base,maps} version
+
 # [2.0.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2023-04-23)
 
 
