@@ -770,10 +770,21 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     MapFeature feature = features.remove(index);
     if (feature instanceof MapMarker) {
       markerMap.remove(feature.getFeature());
+      feature.removeFromMap(markerCollection);
     } else if (feature instanceof MapHeatmap) {
       heatmapMap.remove(feature.getFeature());
+      feature.removeFromMap(map);
+    } else if(feature instanceof MapCircle) {
+      feature.removeFromMap(circleCollection);
+    } else if(feature instanceof MapOverlay) {
+      feature.removeFromMap(groundOverlayCollection);
+    } else if(feature instanceof MapPolygon) {
+      feature.removeFromMap(polygonCollection);
+    } else if(feature instanceof  MapPolyline) {
+      feature.removeFromMap(polylineCollection);
+    } else {
+      feature.removeFromMap(map);
     }
-    feature.removeFromMap(map);
   }
 
   public WritableMap makeClickEventData(LatLng point) {
