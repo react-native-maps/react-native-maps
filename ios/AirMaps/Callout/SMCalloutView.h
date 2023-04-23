@@ -6,7 +6,7 @@
 SMCalloutView
 -------------
 Created by Nick Farina (nfarina@gmail.com)
-Version 2.1.2
+Version 2.1.5
 
 */
 
@@ -20,11 +20,11 @@ typedef NS_OPTIONS(NSUInteger, SMCalloutArrowDirection) {
 /// options for the callout present/dismiss animation
 typedef NS_ENUM(NSInteger, SMCalloutAnimation) {
     /// the "bounce" animation we all know and love from @c UIAlertView
-            SMCalloutAnimationBounce,
+    SMCalloutAnimationBounce,
     /// a simple fade in or out
-            SMCalloutAnimationFade,
+    SMCalloutAnimationFade,
     /// grow or shrink linearly, like in the iPad Calendar app
-            SMCalloutAnimationStretch
+    SMCalloutAnimationStretch
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -40,6 +40,7 @@ extern NSTimeInterval const kSMCalloutViewRepositionDelayForUIScrollView;
 // Callout view.
 //
 
+// iOS 10+ expects CAAnimationDelegate to be set explicitly.
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 100000
 @interface SMCalloutView : UIView
 #else

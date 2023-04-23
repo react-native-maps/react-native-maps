@@ -535,7 +535,7 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                       callback(@[error]);
                       return;
                   }
-                  MKAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
+                  MKAnnotationView *pin = [[MKMarkerAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
 
                   UIImage *image = snapshot.image;
                   UIGraphicsBeginImageContextWithOptions(image.size, YES, image.scale);
@@ -840,7 +840,7 @@ static int kDragCenterContext;
     if (![view.annotation isKindOfClass:[AIRMapMarker class]]) return;
     AIRMapMarker *marker = (AIRMapMarker *)view.annotation;
 
-    BOOL isPinView = [view isKindOfClass:[MKPinAnnotationView class]];
+    BOOL isPinView = [view isKindOfClass:[MKMarkerAnnotationView class]];
 
     id event = @{
                  @"id": marker.identifier ?: @"unknown",

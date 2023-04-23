@@ -23,7 +23,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 @implementation AIRMapMarker {
     BOOL _hasSetCalloutOffset;
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
-    MKPinAnnotationView *_pinView;
+    MKMarkerAnnotationView *_pinView;
     BOOL _calloutIsOpen;
     NSInteger _zIndexBeforeOpen;
 }
@@ -82,20 +82,19 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     if ([self shouldUsePinView]) {
         // In this case, we want to render a platform "default" marker.
         if (_pinView == nil) {
-            _pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
+            _pinView = [[MKMarkerAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
             [self addGestureRecognizerToView:_pinView];
             _pinView.annotation = self;
         }
 
         _pinView.draggable = self.draggable;
         _pinView.layer.zPosition = self.zIndex;
+        _pinView.markerTintColor = self.pinColor;
 
-        // TODO(lmr): Looks like this API was introduces in iOS 8. We may want to handle differently for earlier
-        // versions. Right now it's just leaving it with the default color. People needing the colors are free to
-        // use their own custom markers.
-        if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
-            _pinView.pinTintColor = self.pinColor;
-        }
+        // Hiding title and subtitle to match behaviour of MKPinAnnotationView
+        // MKMarkerAnnotationView shows the title and subtitle underneath the marker
+        _pinView.titleVisibility = MKFeatureVisibilityHidden;
+        _pinView.subtitleVisibility = MKFeatureVisibilityHidden;
 
         return _pinView;
     } else {
@@ -114,7 +113,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
     // Apply the MKAnnotationView's desired calloutOffset (from the top-middle of the view)
     if ([self shouldUsePinView] && !_hasSetCalloutOffset) {
-        calloutView.calloutOffset = CGPointMake(-8,0);
+        calloutView.calloutOffset = CGPointMake(0,-45);
     } else {
         calloutView.calloutOffset = self.calloutOffset;
     }
@@ -336,9 +335,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     _pinColor = pinColor;
 
-    if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
-        _pinView.pinTintColor = _pinColor;
-    }
+    _pinView.markerTintColor = _pinColor;
 }
 
 - (void)setZIndex:(NSInteger)zIndex
