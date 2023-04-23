@@ -1,5 +1,17 @@
 # Changelog
 
+# [2.0.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2023-04-23)
+
+
+### Features
+
+* require react-native >= 0.69.0 ([#4704](https://github.com/react-native-maps/react-native-maps/issues/4704)) ([6fb60d3](https://github.com/react-native-maps/react-native-maps/commit/6fb60d3a97c8cf99f81ee43355bf6f587b027b57))
+
+
+### BREAKING CHANGES
+
+* Drop support for react-native < 0.69.0
+
 # [2.0.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.7.0...v2.0.0-beta.1) (2023-04-23)
 
 
