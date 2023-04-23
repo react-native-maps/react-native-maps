@@ -45,8 +45,8 @@
     "mapkit"
   ],
   "peerDependencies": {
-    "react": ">= 17.0.1",
-    "react-native": ">= 0.64.3",
+    "react": ">= 18.0.0",
+    "react-native": ">= 0.69.0",
     "react-native-web": ">= 0.11"
   },
   "peerDependenciesMeta": {
