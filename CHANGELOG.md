@@ -1,5 +1,18 @@
 # Changelog
 
+# [2.0.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.7.0...v2.0.0-beta.1) (2023-04-23)
+
+
+### Features
+
+* **ios:** bump SMCalloutView ([6407fd8](https://github.com/react-native-maps/react-native-maps/commit/6407fd8c020ccefa27c37e329ab504cf585910fa))
+* **ios:** migrate to MKMarkerAnnotationView ([080083b](https://github.com/react-native-maps/react-native-maps/commit/080083bfc82950dfb68dfcf8a6e34c2aa218de8d))
+
+
+### BREAKING CHANGES
+
+* **ios:** visual appearance of Apple Maps default marker
+
 # [1.7.0](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0...v1.7.0) (2023-04-23)
 
 
