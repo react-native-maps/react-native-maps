@@ -14,7 +14,7 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 ## Compatibility
 
-`react-native-maps` requires `react-native >= 0.64.3`.
+`react-native-maps` requires `react-native >= 0.69.0`.
 
 ## Component API
 
