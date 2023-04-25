@@ -397,7 +397,10 @@ Poi are clickable, you can catch the event to get its information (usually to ge
 The MapView can accept an `AnimatedRegion` value as its `region` prop. This allows you to utilize the Animated API to control the map's center and zoom.
 
 ```jsx
-import MapView, { AnimatedRegion, Animated } from 'react-native-maps';
+import {Animated} from 'react-native'
+import MapView, { AnimatedRegion } from 'react-native-maps';
+
+const AnimatedMapView = Animated.createAnimatedComponent(MapView);
 
 getInitialState() {
   return {
@@ -416,7 +419,7 @@ onRegionChange(region) {
 
 render() {
   return (
-    <Animated
+    <AnimatedMapView
       region={this.state.region}
       onRegionChange={this.onRegionChange}
     />
@@ -429,7 +432,10 @@ render() {
 Markers can also accept an `AnimatedRegion` value as a coordinate.
 
 ```jsx
-import Mapview, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
+import {Animated} from 'react-native';
+import Mapview, { AnimatedRegion, Marker } from 'react-native-maps';
+
+const AnimatedMarker = Animated.createAnimatedComponent(Marker);
 
 getInitialState() {
   return {
@@ -464,7 +470,7 @@ componentWillReceiveProps(nextProps) {
 render() {
   return (
     <MapView initialRegion={...}>
-      <MarkerAnimated
+      <AnimatedMarker
         ref={marker => { this.marker = marker }}
         coordinate={this.state.coordinate}
       />

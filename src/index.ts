@@ -1,5 +1,4 @@
 import MapView, {
-  AnimatedMapView as Animated,
   MAP_TYPES,
   enableLatestRenderer,
   MapViewProps,
@@ -40,14 +39,11 @@ export type {GeojsonProps} from './Geojson';
 
 export {Marker, Overlay};
 export type {MapViewProps};
-export {Animated, MAP_TYPES, enableLatestRenderer};
+export {MAP_TYPES, enableLatestRenderer};
 
 export * from './ProviderConstants';
 export * from './MapView.types';
 export * from './MapPolygon.types';
 export * from './sharedTypes';
-
-export const MarkerAnimated = Marker.Animated;
-export const OverlayAnimated = Overlay.Animated;
 
 export default MapView;

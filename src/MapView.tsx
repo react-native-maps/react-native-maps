@@ -1,7 +1,5 @@
 import * as React from 'react';
 import {
-  Animated as RNAnimated,
-  Animated,
   findNodeHandle,
   HostComponent,
   NativeModules,
@@ -710,7 +708,6 @@ type State = {
 };
 
 class MapView extends React.Component<MapViewProps, State> {
-  static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
 
   constructor(props: MapViewProps) {
@@ -1114,15 +1111,11 @@ const AIRMapLite = UIManager.getViewManagerConfig('AIRMapLite')
   ? requireNativeComponent<NativeProps>('AIRMapLite')
   : () => null;
 
-export const AnimatedMapView = RNAnimated.createAnimatedComponent(MapView);
-
 export const enableLatestRenderer = () => {
   if (Platform.OS !== 'android') {
     return;
   }
   return NativeModules.AirMapModule.enableLatestRenderer();
 };
-
-MapView.Animated = AnimatedMapView;
 
 export default MapView;

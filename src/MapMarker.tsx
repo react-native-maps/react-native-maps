@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   StyleSheet,
-  Animated,
   Image,
   ViewProps,
   ImageURISource,
@@ -333,8 +332,6 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
 
-  static Animated: Animated.AnimatedComponent<typeof MapMarker>;
-
   private marker: NativeProps['ref'];
 
   constructor(props: MapMarkerProps) {
@@ -433,8 +430,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-
-MapMarker.Animated = Animated.createAnimatedComponent(MapMarker);
 
 export default decorateMapComponent(MapMarker, 'Marker', {
   google: {
