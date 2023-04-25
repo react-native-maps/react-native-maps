@@ -164,7 +164,7 @@ export type GeojsonProps = {
    * This is the default value for all point markers in your geojson data. It can be overriden
    * on a per point basis by adding a `trackViewChanges` property to the `properties` object on the point.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */

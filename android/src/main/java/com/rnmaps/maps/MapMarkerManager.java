@@ -261,7 +261,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     view.setOpacity(opacity);
   }
 
-  @ReactProp(name = "tracksViewChanges", defaultBoolean = true)
+  @ReactProp(name = "tracksViewChanges", defaultBoolean = false)
   public void setTracksViewChanges(MapMarker view, boolean tracksViewChanges) {
     view.setTracksViewChanges(tracksViewChanges);
   }
