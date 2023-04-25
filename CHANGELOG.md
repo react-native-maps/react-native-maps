@@ -1,5 +1,23 @@
 # Changelog
 
+# [2.0.0-beta.5](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2023-04-25)
+
+
+### Features
+
+* make `animateCamera` take duration as second parameter ([2b1fab6](https://github.com/react-native-maps/react-native-maps/commit/2b1fab6173c19707686bcd0b860bf733c7e50adc))
+* remove animated components ([b38f782](https://github.com/react-native-maps/react-native-maps/commit/b38f7828459772b1e3f2669cf23fc31279bfcf5b))
+* set default value of `tracksViewChanges` to false ([de7e48b](https://github.com/react-native-maps/react-native-maps/commit/de7e48b2c253e4c2d72662ed204a1fdbef62c5e9))
+* stop exporting non-decorated components ([6c806ca](https://github.com/react-native-maps/react-native-maps/commit/6c806caec8fff19af2e4d2ac436d60710ac5f63f))
+
+
+### BREAKING CHANGES
+
+* undecorated classes no longer exported. See readme for how to get the type instead
+* animated components are no longer exported. See updated readme to migrate.
+* `animateCamera` takes `duration` as second parameter instead of an options object
+* tracksViewChanges defaults to false. If relying on updating markers, set to true.
+
 # [2.0.0-beta.4](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2023-04-23)
 
 
