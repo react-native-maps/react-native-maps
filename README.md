@@ -52,9 +52,30 @@ This MapView component is built so that features on the map (such as Markers, Po
 specified as children of the MapView itself. This provides an intuitive and react-like API for
 declaratively controlling features on the map.
 
+### Getting a component reference when using typescript
+
+Most components besides the `MapView` is dynamically exported from `react-native-maps`. This means that typescript isn't able to automatically infer the instance type for the compoenent, which is needed when adding a reference. To fix this, use the `InstanceType` utility type, e.g.:
+
+```tsx
+import React from 'react';
+import MapView, {Marker} from 'react-native-maps';
+
+export default function App() {
+  const markerRef = React.useRef<InstanceType<typeof Marker>>(null);
+  return (
+    <MapView style={{flex: 1}}>
+      <Marker
+        ref={markerRef}
+        coordinate={{latitude: 37.78825, longitude: -122.4324}}
+      />
+    </MapView>
+  );
+}
+```
+
 ### Rendering a Map with an initial region
 
-## MapView
+### MapView
 
 ```jsx
 <MapView
