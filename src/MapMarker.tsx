@@ -300,7 +300,7 @@ export type MapMarkerProps = ViewProps & {
    * Sets whether this marker should track view changes.
    * It's recommended to turn it off whenever it's possible to improve custom marker performance.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */

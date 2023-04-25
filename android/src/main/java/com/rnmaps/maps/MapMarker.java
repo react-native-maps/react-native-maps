@@ -74,7 +74,7 @@ public class MapMarker extends MapFeature {
   private float calloutAnchorY;
   private boolean calloutAnchorIsSet;
 
-  private boolean tracksViewChanges = true;
+  private boolean tracksViewChanges = false;
   private boolean tracksViewChangesActive = false;
 
   private boolean hasCustomMarkerView = false;
