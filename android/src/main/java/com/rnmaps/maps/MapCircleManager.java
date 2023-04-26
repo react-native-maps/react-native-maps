@@ -25,7 +25,7 @@ public class MapCircleManager extends ViewGroupManager<MapCircle> {
 
   @Override
   public String getName() {
-    return "AIRMapCircle";
+    return "RNMMapCircle";
   }
 
   @Override

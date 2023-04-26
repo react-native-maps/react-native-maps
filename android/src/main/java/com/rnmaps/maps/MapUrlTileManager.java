@@ -21,7 +21,7 @@ public class MapUrlTileManager extends ViewGroupManager<MapUrlTile> {
 
   @Override
   public String getName() {
-    return "AIRMapUrlTile";
+    return "RNMMapUrlTile";
   }
 
   @Override

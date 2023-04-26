@@ -15,7 +15,7 @@ public class MapHeatmapManager extends ViewGroupManager<MapHeatmap> {
 
     @Override
     public String getName() {
-        return "AIRMapHeatmap";
+        return "RNMMapHeatmap";
     }
 
     @Override

@@ -759,7 +759,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   getCamera(): Promise<Camera> {
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.getCamera(this._getHandle());
+      return NativeModules.RNMMapModule.getCamera(this._getHandle());
     } else if (Platform.OS === 'ios') {
       return this._runCommand('getCamera', []);
     }
@@ -834,7 +834,7 @@ class MapView extends React.Component<MapViewProps, State> {
    */
   async getMapBoundaries(): Promise<BoundingBox> {
     if (Platform.OS === 'android') {
-      return await NativeModules.AirMapModule.getMapBoundaries(
+      return await NativeModules.RNMMapModule.getMapBoundaries(
         this._getHandle(),
       );
     } else if (Platform.OS === 'ios') {
@@ -888,7 +888,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
     // Call native function
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
+      return NativeModules.RNMMapModule.takeSnapshot(this._getHandle(), config);
     } else if (Platform.OS === 'ios') {
       return new Promise((resolve, reject) => {
         this._runCommand('takeSnapshot', [
@@ -922,7 +922,7 @@ class MapView extends React.Component<MapViewProps, State> {
    */
   addressForCoordinate(coordinate: LatLng): Promise<Address> {
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.getAddressFromCoordinates(
+      return NativeModules.RNMMapModule.getAddressFromCoordinates(
         this._getHandle(),
         coordinate,
       );
@@ -943,7 +943,7 @@ class MapView extends React.Component<MapViewProps, State> {
    */
   pointForCoordinate(coordinate: LatLng): Promise<Point> {
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.pointForCoordinate(
+      return NativeModules.RNMMapModule.pointForCoordinate(
         this._getHandle(),
         coordinate,
       );
@@ -964,7 +964,7 @@ class MapView extends React.Component<MapViewProps, State> {
    */
   coordinateForPoint(point: Point): Promise<LatLng> {
     if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.coordinateForPoint(
+      return NativeModules.RNMMapModule.coordinateForPoint(
         this._getHandle(),
         point,
       );
@@ -1073,49 +1073,49 @@ class MapView extends React.Component<MapViewProps, State> {
     if (Platform.OS === 'android' && this.props.liteMode) {
       return (
         <ProviderContext.Provider value={this.props.provider}>
-          <AIRMapLite {...props} />
+          <RNMMapLite {...props} />
         </ProviderContext.Provider>
       );
     }
 
-    const AIRMap = getNativeMapComponent(this.props.provider);
+    const RNMMap = getNativeMapComponent(this.props.provider);
 
     return (
       <ProviderContext.Provider value={this.props.provider}>
-        <AIRMap {...props} />
+        <RNMMap {...props} />
       </ProviderContext.Provider>
     );
   }
 }
 
-const airMaps: {
+const rnmMaps: {
   default: HostComponent<NativeProps>;
   google: NativeComponent<NativeProps>;
 } = {
-  default: requireNativeComponent<NativeProps>('AIRMap'),
+  default: requireNativeComponent<NativeProps>('RNMMap'),
   google: () => null,
 };
 if (Platform.OS === 'android') {
-  airMaps.google = airMaps.default;
+  rnmMaps.google = rnmMaps.default;
 } else {
-  airMaps.google = googleMapIsInstalled
-    ? requireNativeComponent<NativeProps>('AIRGoogleMap')
+  rnmMaps.google = googleMapIsInstalled
+    ? requireNativeComponent<NativeProps>('RNMGoogleMap')
     : createNotSupportedComponent(
-        'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
+        'react-native-maps: RNMGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
       );
 }
 const getNativeMapComponent = (provider: Provider) =>
-  airMaps[provider || 'default'];
+  rnmMaps[provider || 'default'];
 
-const AIRMapLite = UIManager.getViewManagerConfig('AIRMapLite')
-  ? requireNativeComponent<NativeProps>('AIRMapLite')
+const RNMMapLite = UIManager.getViewManagerConfig('RNMMapLite')
+  ? requireNativeComponent<NativeProps>('RNMMapLite')
   : () => null;
 
 export const enableLatestRenderer = () => {
   if (Platform.OS !== 'android') {
     return;
   }
-  return NativeModules.AirMapModule.enableLatestRenderer();
+  return NativeModules.RNMMapModule.enableLatestRenderer();
 };
 
 export default MapView;

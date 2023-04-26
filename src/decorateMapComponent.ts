@@ -29,12 +29,12 @@ export const ProviderContext = createContext<Provider>(undefined);
 
 export function getNativeMapName(provider: Provider) {
   if (Platform.OS === 'android') {
-    return 'AIRMap';
+    return 'RNMMap';
   }
   if (provider === PROVIDER_GOOGLE) {
-    return 'AIRGoogleMap';
+    return 'RNMGoogleMap';
   }
-  return 'AIRMap';
+  return 'RNMMap';
 }
 
 function getNativeComponentName(provider: Provider, component: ComponentName) {

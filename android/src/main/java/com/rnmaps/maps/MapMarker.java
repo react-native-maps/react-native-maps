@@ -332,7 +332,7 @@ public class MapMarker extends MapFeature {
       }
       if (uri != null) {
         // listening for marker bitmap descriptor update, as well as check whether to load the image.
-        MapMarkerManager.AirMapMarkerSharedIcon sharedIcon = this.markerManager.getSharedIcon(uri);
+        MapMarkerManager.MapMarkerSharedIcon sharedIcon = this.markerManager.getSharedIcon(uri);
         sharedIcon.addMarker(this);
         shouldLoadImage = sharedIcon.shouldLoadImage();
       }
