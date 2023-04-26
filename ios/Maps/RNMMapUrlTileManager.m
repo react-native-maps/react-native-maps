@@ -24,7 +24,7 @@
 @implementation RNMMapUrlTileManager
 
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapUrlTile)
 
 - (UIView *)view
 {

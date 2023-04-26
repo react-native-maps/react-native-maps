@@ -11,7 +11,7 @@
 #import <React/RCTView.h>
 
 @implementation RNMMapCalloutSubviewManager
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapCalloutSubview)
 
 - (UIView *)view
 {

@@ -43,7 +43,7 @@ static NSString *const RCTMapViewKey = @"MapView";
    BOOL _hasObserver;
 }
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMap)
 
 - (UIView *)view
 {

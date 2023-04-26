@@ -24,7 +24,7 @@
 @implementation RNMMapLocalTileManager
 
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapLocalTile)
 
 - (UIView *)view
 {

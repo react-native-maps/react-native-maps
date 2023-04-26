@@ -22,7 +22,7 @@
 
 @implementation RNMGoogleMapPolygonManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMGoogleMapPolygon)
 
 - (UIView *)view
 {

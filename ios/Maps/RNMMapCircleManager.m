@@ -24,7 +24,7 @@
 
 @implementation RNMMapCircleManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapCircle)
 
 - (UIView *)view
 {

@@ -24,7 +24,7 @@
 
 @implementation RNMMapCalloutManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapCallout)
 
 - (UIView *)view
 {

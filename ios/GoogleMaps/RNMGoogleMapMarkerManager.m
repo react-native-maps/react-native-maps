@@ -15,7 +15,7 @@
 
 @implementation RNMGoogleMapMarkerManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMGoogleMapMarker)
 
 - (UIView *)view
 {

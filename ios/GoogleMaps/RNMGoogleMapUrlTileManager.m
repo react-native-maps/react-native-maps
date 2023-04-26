@@ -14,7 +14,7 @@
 
 @implementation RNMGoogleMapUrlTileManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMGoogleMapUrlTile)
 
 - (UIView *)view
 {

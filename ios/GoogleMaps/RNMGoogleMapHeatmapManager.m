@@ -16,7 +16,7 @@
 
 @implementation RNMGoogleMapHeatmapManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMGoogleMapHeatmap)
 
 - (UIView *)view
 {

@@ -25,7 +25,7 @@
 
 @implementation RNMMapPolygonManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapPolygon)
 
 - (UIView *)view
 {

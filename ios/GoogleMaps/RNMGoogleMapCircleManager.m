@@ -17,7 +17,7 @@
 
 @implementation RNMGoogleMapCircleManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMGoogleMapCircle)
 
 - (UIView *)view
 {

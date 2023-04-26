@@ -25,7 +25,7 @@
 
 @implementation RNMMapPolylineManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapPolyline)
 
 - (UIView *)view
 {

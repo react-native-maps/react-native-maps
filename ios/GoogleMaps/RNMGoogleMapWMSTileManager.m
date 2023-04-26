@@ -17,7 +17,7 @@
 
 @implementation RNMGoogleMapWMSTileManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMGoogleMapWMSTile)
 
 - (UIView *)view
 {

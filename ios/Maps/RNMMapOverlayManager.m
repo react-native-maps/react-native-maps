@@ -11,7 +11,7 @@
 
 @implementation RNMMapOverlayManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNMMapOverlay)
 
 - (UIView *)view
 {
