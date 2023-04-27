@@ -155,8 +155,8 @@ export class MapUrlTile extends React.Component<MapUrlTileProps> {
   getUIManagerCommand!: (name: string) => UIManagerCommand;
 
   render() {
-    const AIRMapUrlTile = this.getNativeComponent();
-    return <AIRMapUrlTile {...this.props} />;
+    const RNMMapUrlTile = this.getNativeComponent();
+    return <RNMMapUrlTile {...this.props} />;
   }
 }
 

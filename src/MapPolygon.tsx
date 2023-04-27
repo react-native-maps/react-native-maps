@@ -167,9 +167,9 @@ export class MapPolygon extends React.Component<MapPolygonProps> {
 
   render() {
     const {strokeColor = '#000', strokeWidth = 1} = this.props;
-    const AIRMapPolygon = this.getNativeComponent();
+    const RNMMapPolygon = this.getNativeComponent();
     return (
-      <AIRMapPolygon
+      <RNMMapPolygon
         {...this.props}
         strokeColor={strokeColor}
         strokeWidth={strokeWidth}

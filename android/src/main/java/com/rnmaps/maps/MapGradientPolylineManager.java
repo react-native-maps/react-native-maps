@@ -28,7 +28,7 @@ public class MapGradientPolylineManager extends ViewGroupManager<MapGradientPoly
 
   @Override
   public String getName() {
-    return "AIRMapGradientPolyline";
+    return "RNMMapGradientPolyline";
   }
 
   @Override

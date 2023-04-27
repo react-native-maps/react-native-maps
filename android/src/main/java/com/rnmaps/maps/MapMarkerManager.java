@@ -25,20 +25,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
-  public static class AirMapMarkerSharedIcon {
+  public static class MapMarkerSharedIcon {
     private BitmapDescriptor iconBitmapDescriptor;
     private Bitmap bitmap;
     private final Map<MapMarker, Boolean> markers;
     private boolean loadImageStarted;
 
-    public AirMapMarkerSharedIcon(){
+    public MapMarkerSharedIcon(){
       this.markers = new WeakHashMap<>();
       this.loadImageStarted = false;
     }
 
     /**
      * check whether the load image process started.
-     * caller AirMapMarker will only need to load it when this returns true.
+     * caller MapMarker will only need to load it when this returns true.
      *
      * @return true if it is not started, false otherwise.
      */
@@ -109,7 +109,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     }
   }
 
-  private final Map<String, AirMapMarkerSharedIcon> sharedIcons = new ConcurrentHashMap<>();
+  private final Map<String, MapMarkerSharedIcon> sharedIcons = new ConcurrentHashMap<>();
 
   /**
    * get the shared icon object, if not existed, create a new one and store it.
@@ -117,12 +117,12 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
    * @param uri
    * @return the icon object for the given uri.
    */
-  public AirMapMarkerSharedIcon getSharedIcon(String uri) {
-    AirMapMarkerSharedIcon icon = this.sharedIcons.get(uri);
+  public MapMarkerSharedIcon getSharedIcon(String uri) {
+    MapMarkerSharedIcon icon = this.sharedIcons.get(uri);
     if (icon == null) {
       synchronized (this) {
         if((icon = this.sharedIcons.get(uri)) == null) {
-          icon = new AirMapMarkerSharedIcon();
+          icon = new MapMarkerSharedIcon();
           this.sharedIcons.put(uri, icon);
         }
       }
@@ -136,7 +136,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
    * @param uri
    */
   public void removeSharedIconIfEmpty(String uri) {
-    AirMapMarkerSharedIcon icon = this.sharedIcons.get(uri);
+    MapMarkerSharedIcon icon = this.sharedIcons.get(uri);
     if (icon == null) {return;}
     if (!icon.hasMarker()) {
       synchronized (this) {
@@ -152,7 +152,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
   @Override
   public String getName() {
-    return "AIRMapMarker";
+    return "RNMMapMarker";
   }
 
   @Override
@@ -180,20 +180,6 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     view.setSnippet(description);
   }
 
-  // NOTE(lmr):
-  // android uses normalized coordinate systems for this, and is provided through the
-  // `anchor` property  and `calloutAnchor` instead.  Perhaps some work could be done
-  // to normalize iOS and android to use just one of the systems.
-//    @ReactProp(name = "centerOffset")
-//    public void setCenterOffset(AirMapMarker view, ReadableMap map) {
-//
-//    }
-//
-//    @ReactProp(name = "calloutOffset")
-//    public void setCalloutOffset(AirMapMarker view, ReadableMap map) {
-//
-//    }
-
   @ReactProp(name = "anchor")
   public void setAnchor(MapMarker view, ReadableMap map) {
     // should default to (0.5, 1) (bottom middle)
@@ -214,9 +200,6 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
   public void setImage(MapMarker view, @Nullable String source) {
     view.setImage(source);
   }
-//    public void setImage(AirMapMarker view, ReadableMap image) {
-//        view.setImage(image);
-//    }
 
   @ReactProp(name = "icon")
   public void setIcon(MapMarker view, @Nullable String source) {

@@ -95,10 +95,10 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
       image = sourceAsset.uri;
     }
 
-    const AIRMapOverlay = this.getNativeComponent();
+    const RNMMapOverlay = this.getNativeComponent();
 
     return (
-      <AIRMapOverlay
+      <RNMMapOverlay
         {...this.props}
         opacity={opacity}
         image={image}

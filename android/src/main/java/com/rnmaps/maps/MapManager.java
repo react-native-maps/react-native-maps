@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class MapManager extends ViewGroupManager<MapView> {
 
-  private static final String REACT_CLASS = "AIRMap";
+  private static final String REACT_CLASS = "RNMMap";
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
       "standard", GoogleMap.MAP_TYPE_NORMAL,

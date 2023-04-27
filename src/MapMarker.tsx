@@ -402,10 +402,10 @@ export class MapMarker extends React.Component<MapMarkerProps> {
       icon = icon.uri;
     }
 
-    const AIRMapMarker = this.getNativeComponent();
+    const RNMMapMarker = this.getNativeComponent();
 
     return (
-      <AIRMapMarker
+      <RNMMapMarker
         {...this.props}
         ref={this.marker}
         image={image}
