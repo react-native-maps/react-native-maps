@@ -1,5 +1,14 @@
 # Changelog
 
+# [2.0.0-beta.6](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2023-04-27)
+
+
+### Features
+
+* **ios:** align native component names with android ([99e87dd](https://github.com/react-native-maps/react-native-maps/commit/99e87dd41f79f93841bde045dcdb682581d2b173))
+* move ios modules into seperate files and align name on android ([690c285](https://github.com/react-native-maps/react-native-maps/commit/690c285092c525eedfbdc50425d7dfa4ea982750))
+* restructure ios and rename class prefix ([392e352](https://github.com/react-native-maps/react-native-maps/commit/392e35209cbe851a3829cf96ae13d5b8b00030f9))
+
 # [2.0.0-beta.5](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2023-04-25)
 
 
