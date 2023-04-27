@@ -40,16 +40,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-@ReactModule(name = MapModule.NAME)
-public class MapModule extends ReactContextBaseJavaModule {
+@ReactModule(name = MapViewModule.NAME)
+public class MapViewModule extends ReactContextBaseJavaModule {
 
-  public static final String NAME = "RNMMapModule";
+  public static final String NAME = "RNMMapViewModule";
   private static final String SNAPSHOT_RESULT_FILE = "file";
   private static final String SNAPSHOT_RESULT_BASE64 = "base64";
   private static final String SNAPSHOT_FORMAT_PNG = "png";
   private static final String SNAPSHOT_FORMAT_JPG = "jpg";
 
-  public MapModule(ReactApplicationContext reactContext) {
+  public MapViewModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 

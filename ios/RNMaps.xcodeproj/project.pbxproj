@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F407959B29F9AB0F004813EB /* RNMMapViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F407959A29F9AB0F004813EB /* RNMMapViewModule.m */; };
+		F43A0B8529FAE73F001F67CB /* RNMGoogleMapViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F43A0B8429FAE73F001F67CB /* RNMGoogleMapViewModule.m */; };
 		F4CDF48329F9855D00C81005 /* SMCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CDF48229F9855D00C81005 /* SMCalloutView.m */; };
 		F4CDF48629F9867800C81005 /* RNMMap.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CDF48529F9867800C81005 /* RNMMap.m */; };
 		F4CDF48929F9868F00C81005 /* RNMMapCallout.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CDF48829F9868F00C81005 /* RNMMapCallout.m */; };
@@ -78,6 +80,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F407959929F9AB0F004813EB /* RNMMapViewModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNMMapViewModule.h; sourceTree = "<group>"; };
+		F407959A29F9AB0F004813EB /* RNMMapViewModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNMMapViewModule.m; sourceTree = "<group>"; };
+		F43A0B8329FAE73F001F67CB /* RNMGoogleMapViewModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNMGoogleMapViewModule.h; sourceTree = "<group>"; };
+		F43A0B8429FAE73F001F67CB /* RNMGoogleMapViewModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNMGoogleMapViewModule.m; sourceTree = "<group>"; };
 		F4CDF48129F9855D00C81005 /* SMCalloutView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMCalloutView.h; sourceTree = "<group>"; };
 		F4CDF48229F9855D00C81005 /* SMCalloutView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SMCalloutView.m; sourceTree = "<group>"; };
 		F4CDF48429F9867800C81005 /* RNMMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNMMap.h; sourceTree = "<group>"; };
@@ -271,6 +277,8 @@
 				F4CDF52629F9935B00C81005 /* RNMGoogleMapWMSTileManager.m */,
 				F4CDF52829F9937700C81005 /* RCTConvert+GMSMapViewType.h */,
 				F4CDF52929F9937700C81005 /* RCTConvert+GMSMapViewType.m */,
+				F43A0B8329FAE73F001F67CB /* RNMGoogleMapViewModule.h */,
+				F43A0B8429FAE73F001F67CB /* RNMGoogleMapViewModule.m */,
 			);
 			path = GoogleMaps;
 			sourceTree = "<group>";
@@ -353,6 +361,8 @@
 				F4CDF4D429F988AF00C81005 /* RNMMapWMSTileManager.m */,
 				F4CDF4D629F98E9900C81005 /* RCTConvert+RNMMap.h */,
 				F4CDF4D729F98E9900C81005 /* RCTConvert+RNMMap.m */,
+				F407959929F9AB0F004813EB /* RNMMapViewModule.h */,
+				F407959A29F9AB0F004813EB /* RNMMapViewModule.m */,
 			);
 			path = Maps;
 			sourceTree = "<group>";
@@ -434,6 +444,7 @@
 				F4CDF51229F992AB00C81005 /* RNMGoogleMapPolygon.m in Sources */,
 				F4CDF4A129F9871500C81005 /* RNMMapLocalTileManager.m in Sources */,
 				F4CDF52429F9934C00C81005 /* RNMGoogleMapWMSTile.m in Sources */,
+				F407959B29F9AB0F004813EB /* RNMMapViewModule.m in Sources */,
 				F4CDF49B29F986F700C81005 /* RNMMapCoordinate.m in Sources */,
 				F4CDF50F29F9929E00C81005 /* RNMGoogleMapOverlayManager.m in Sources */,
 				F4CDF48F29F986B000C81005 /* RNMMapCalloutSubview.m in Sources */,
@@ -445,6 +456,7 @@
 				F4CDF48629F9867800C81005 /* RNMMap.m in Sources */,
 				F4CDF52A29F9937700C81005 /* RCTConvert+GMSMapViewType.m in Sources */,
 				F4CDF4EE29F991FC00C81005 /* RNMGoogleMapCalloutManager.m in Sources */,
+				F43A0B8529FAE73F001F67CB /* RNMGoogleMapViewModule.m in Sources */,
 				F4CDF4AD29F9875700C81005 /* RNMMapMarkerManager.m in Sources */,
 				F4CDF4B629F9878400C81005 /* RNMMapOverlayRenderer.m in Sources */,
 				F4CDF4C529F987D400C81005 /* RNMMapPolylineRenderer.m in Sources */,

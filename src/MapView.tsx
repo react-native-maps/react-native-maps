@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   findNodeHandle,
   HostComponent,
-  NativeModules,
   NativeSyntheticEvent,
   Platform,
   requireNativeComponent,
@@ -11,7 +10,6 @@ import {
 } from 'react-native';
 import {
   createNotSupportedComponent,
-  getNativeMapName,
   googleMapIsInstalled,
   NativeComponent,
   ProviderContext,
@@ -47,7 +45,6 @@ import {
   MapStyleElement,
   MapType,
   MapTypes,
-  NativeCommandName,
   PanDragEvent,
   PoiClickEvent,
   SnapshotOptions,
@@ -55,6 +52,10 @@ import {
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
 import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
+import MapViewModule, {Spec as MapViewModuleSpec} from './NativeMapViewModule';
+import GoogleMapViewModule, {
+  Spec as GoogleMapViewModuleSpec,
+} from './NativeGoogleMapViewModule';
 
 export const MAP_TYPES: MapTypes = {
   STANDARD: 'standard',
@@ -758,12 +759,10 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   getCamera(): Promise<Camera> {
-    if (Platform.OS === 'android') {
-      return NativeModules.RNMMapModule.getCamera(this._getHandle());
-    } else if (Platform.OS === 'ios') {
-      return this._runCommand('getCamera', []);
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('getCamera')(this._getHandle());
     }
-    return Promise.reject('getCamera not supported on this platform');
+    return mapViewModuleMethod('getCamera')(this._getHandle());
   }
 
   setCamera(camera: Partial<Camera>) {
@@ -833,14 +832,10 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the bounding box ({ northEast: <LatLng>, southWest: <LatLng> })
    */
   async getMapBoundaries(): Promise<BoundingBox> {
-    if (Platform.OS === 'android') {
-      return await NativeModules.RNMMapModule.getMapBoundaries(
-        this._getHandle(),
-      );
-    } else if (Platform.OS === 'ios') {
-      return await this._runCommand('getMapBoundaries', []);
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('getMapBoundaries')(this._getHandle());
     }
-    return Promise.reject('getMapBoundaries not supported on this platform');
+    return mapViewModuleMethod('getMapBoundaries')(this._getHandle());
   }
 
   setMapBoundaries(northEast: LatLng, southWest: LatLng) {
@@ -874,7 +869,7 @@ class MapView extends React.Component<MapViewProps, State> {
     const config = {
       width: args.width || 0,
       height: args.height || 0,
-      region: args.region || {},
+      region: args.region,
       format: args.format || 'png',
       quality: args.quality || 1.0,
       result: args.result || 'file',
@@ -886,29 +881,13 @@ class MapView extends React.Component<MapViewProps, State> {
       throw new Error('Invalid result specified');
     }
 
-    // Call native function
-    if (Platform.OS === 'android') {
-      return NativeModules.RNMMapModule.takeSnapshot(this._getHandle(), config);
-    } else if (Platform.OS === 'ios') {
-      return new Promise((resolve, reject) => {
-        this._runCommand('takeSnapshot', [
-          config.width,
-          config.height,
-          config.region,
-          config.format,
-          config.quality,
-          config.result,
-          (err: unknown, snapshot: string) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(snapshot);
-            }
-          },
-        ]);
-      });
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('takeSnapshot')(
+        this._getHandle(),
+        config,
+      );
     }
-    return Promise.reject('takeSnapshot not supported on this platform');
+    return mapViewModuleMethod('takeSnapshot')(this._getHandle(), config);
   }
 
   /**
@@ -921,15 +900,13 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise with return type Address
    */
   addressForCoordinate(coordinate: LatLng): Promise<Address> {
-    if (Platform.OS === 'android') {
-      return NativeModules.RNMMapModule.getAddressFromCoordinates(
-        this._getHandle(),
-        coordinate,
-      );
-    } else if (Platform.OS === 'ios') {
-      return this._runCommand('getAddressFromCoordinates', [coordinate]);
+    if (this._gogleMapsOniOS()) {
+      throw new Error('addressForCoordinate not supported on Google Maps iOS');
     }
-    return Promise.reject('getAddress not supported on this platform');
+    return mapViewModuleMethod('getAddressFromCoordinates')(
+      this._getHandle(),
+      coordinate,
+    );
   }
 
   /**
@@ -942,15 +919,16 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the point ({ x: Number, y: Number })
    */
   pointForCoordinate(coordinate: LatLng): Promise<Point> {
-    if (Platform.OS === 'android') {
-      return NativeModules.RNMMapModule.pointForCoordinate(
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('pointForCoordinate')(
         this._getHandle(),
         coordinate,
       );
-    } else if (Platform.OS === 'ios') {
-      return this._runCommand('pointForCoordinate', [coordinate]);
     }
-    return Promise.reject('pointForCoordinate not supported on this platform');
+    return mapViewModuleMethod('pointForCoordinate')(
+      this._getHandle(),
+      coordinate,
+    );
   }
 
   /**
@@ -963,15 +941,13 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the coordinate ({ latitude: Number, longitude: Number })
    */
   coordinateForPoint(point: Point): Promise<LatLng> {
-    if (Platform.OS === 'android') {
-      return NativeModules.RNMMapModule.coordinateForPoint(
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('coordinateForPoint')(
         this._getHandle(),
         point,
       );
-    } else if (Platform.OS === 'ios') {
-      return this._runCommand('coordinateForPoint', [point]);
     }
-    return Promise.reject('coordinateForPoint not supported on this platform');
+    return mapViewModuleMethod('coordinateForPoint')(this._getHandle(), point);
   }
 
   /**
@@ -984,10 +960,19 @@ class MapView extends React.Component<MapViewProps, State> {
   getMarkersFrames(onlyVisible: boolean = false): Promise<{
     [key: string]: {point: Point; frame: Frame};
   }> {
-    if (Platform.OS === 'ios') {
-      return this._runCommand('getMarkersFrames', [onlyVisible]);
+    if (Platform.OS !== 'ios') {
+      throw new Error('getMarkersFrames only supported on iOS');
     }
-    return Promise.reject('getMarkersFrames not supported on this platform');
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('getMarkersFrames')(
+        this._getHandle(),
+        onlyVisible,
+      );
+    }
+    return mapViewModuleMethod('getMarkersFrames')(
+      this._getHandle(),
+      onlyVisible,
+    );
   }
 
   /**
@@ -1010,22 +995,16 @@ class MapView extends React.Component<MapViewProps, State> {
     };
   }
 
-  private _mapManagerCommand(name: NativeCommandName) {
-    return NativeModules[`${getNativeMapName(this.props.provider)}Manager`][
-      name
-    ];
-  }
-
   private _getHandle() {
-    return findNodeHandle(this.map.current);
+    const handle = findNodeHandle(this.map.current);
+    if (!handle) {
+      throw new Error('Cannot find node handle');
+    }
+    return handle;
   }
 
-  private _runCommand(name: NativeCommandName, args: any[]) {
-    if (Platform.OS === 'ios') {
-      return this._mapManagerCommand(name)(this._getHandle(), ...args);
-    } else {
-      return Promise.reject(`Invalid platform was passed: ${Platform.OS}`);
-    }
+  private _gogleMapsOniOS() {
+    return Platform.OS === 'ios' && this.props.provider === 'google';
   }
 
   render() {
@@ -1112,10 +1091,35 @@ const RNMMapLite = UIManager.getViewManagerConfig('RNMMapLite')
   : () => null;
 
 export const enableLatestRenderer = () => {
-  if (Platform.OS !== 'android') {
-    return;
+  if (Platform.OS === 'android') {
+    return mapViewModuleMethod('enableLatestRenderer')();
   }
-  return NativeModules.RNMMapModule.enableLatestRenderer();
 };
+
+function mapViewModuleMethod<T extends keyof MapViewModuleSpec>(
+  name: T,
+): MapViewModuleSpec[T] {
+  if (!MapViewModule) {
+    throw new Error('MapViewModule is null');
+  }
+  const method = MapViewModule[name];
+  if (!method) {
+    throw new Error(`Method ${name} is not defined`);
+  }
+  return MapViewModule[name];
+}
+
+function googleMapViewModuleMethod<T extends keyof GoogleMapViewModuleSpec>(
+  name: T,
+): GoogleMapViewModuleSpec[T] {
+  if (!GoogleMapViewModule) {
+    throw new Error('GoogleMapViewModule is null');
+  }
+  const method = GoogleMapViewModule[name];
+  if (!method) {
+    throw new Error(`Method ${name} is not defined`);
+  }
+  return GoogleMapViewModule[name];
+}
 
 export default MapView;
