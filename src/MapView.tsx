@@ -771,59 +771,94 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
-  animateCamera(camera: Partial<Camera>, duration: number = 500) {
-    if (this.map.current) {
-      Commands.animateCamera(this.map.current, camera, duration);
+  animateCamera(
+    camera: Partial<Camera>,
+    duration: number = 500,
+  ): Promise<void> {
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('animateCamera')(
+        this._getHandle(),
+        camera,
+        duration,
+      );
     }
+    return mapViewModuleMethod('animateCamera')(
+      this._getHandle(),
+      camera,
+      duration,
+    );
   }
 
-  animateToRegion(region: Region, duration: number = 500) {
-    if (this.map.current) {
-      Commands.animateToRegion(this.map.current, region, duration);
+  animateToRegion(region: Region, duration: number = 500): Promise<void> {
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('animateToRegion')(
+        this._getHandle(),
+        region,
+        duration,
+      );
     }
+    return mapViewModuleMethod('animateToRegion')(
+      this._getHandle(),
+      region,
+      duration,
+    );
   }
 
-  fitToElements(options: FitToOptions = {}) {
-    if (this.map.current) {
-      const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-        animated = true,
-      } = options;
-
-      Commands.fitToElements(this.map.current, edgePadding, animated);
+  fitToElements(options: FitToOptions = {}): Promise<void> {
+    const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}, duration = 0} =
+      options;
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('fitToElements')(
+        this._getHandle(),
+        edgePadding,
+        duration,
+      );
     }
+    return mapViewModuleMethod('fitToElements')(
+      this._getHandle(),
+      edgePadding,
+      duration,
+    );
   }
 
   fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
-    if (this.map.current) {
-      const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-        animated = true,
-      } = options;
+    const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}, duration = 0} =
+      options;
 
-      Commands.fitToSuppliedMarkers(
-        this.map.current,
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('fitToSuppliedMarkers')(
+        this._getHandle(),
         markers,
         edgePadding,
-        animated,
+        duration,
       );
     }
+    return mapViewModuleMethod('fitToSuppliedMarkers')(
+      this._getHandle(),
+      markers,
+      edgePadding,
+      duration,
+    );
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
-    if (this.map.current) {
-      const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-        animated = true,
-      } = options;
+    const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}, duration = 0} =
+      options;
 
-      Commands.fitToCoordinates(
-        this.map.current,
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('fitToCoordinates')(
+        this._getHandle(),
         coordinates,
         edgePadding,
-        animated,
+        duration,
       );
     }
+    return mapViewModuleMethod('fitToCoordinates')(
+      this._getHandle(),
+      coordinates,
+      edgePadding,
+      duration,
+    );
   }
 
   /**

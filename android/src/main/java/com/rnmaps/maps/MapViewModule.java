@@ -1,6 +1,5 @@
 package com.rnmaps.maps;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Address;
@@ -10,52 +9,52 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
-@ReactModule(name = MapViewModule.NAME)
 public class MapViewModule extends ReactContextBaseJavaModule {
 
-  public static final String NAME = "RNMMapViewModule";
-  private static final String SNAPSHOT_RESULT_FILE = "file";
-  private static final String SNAPSHOT_RESULT_BASE64 = "base64";
-  private static final String SNAPSHOT_FORMAT_PNG = "png";
-  private static final String SNAPSHOT_FORMAT_JPG = "jpg";
+  private final ReactApplicationContext context;
 
   public MapViewModule(ReactApplicationContext reactContext) {
     super(reactContext);
+    context = reactContext;
   }
 
   @Override
   public String getName() {
-    return NAME;
+    return "RNMMapViewModule";
   }
 
   @Override
@@ -63,10 +62,6 @@ public class MapViewModule extends ReactContextBaseJavaModule {
     final Map<String, Object> constants = new HashMap<>();
     constants.put("legalNotice", "This license information is displayed in Settings > Google > Open Source on any device running Google Play services.");
     return constants;
-  }
-
-  public Activity getActivity() {
-    return getCurrentActivity();
   }
 
   public static void closeQuietly(Closeable closeable) {
@@ -79,24 +74,21 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void takeSnapshot(final int tag, final ReadableMap options, final Promise promise) {
-
     // Parse and verity options
-    final ReactApplicationContext context = getReactApplicationContext();
     final String format = options.hasKey("format") ? options.getString("format") : "png";
     final Bitmap.CompressFormat compressFormat =
-        format.equals(SNAPSHOT_FORMAT_PNG) ? Bitmap.CompressFormat.PNG :
-            format.equals(SNAPSHOT_FORMAT_JPG) ? Bitmap.CompressFormat.JPEG : null;
+            format.equals("png") ? Bitmap.CompressFormat.PNG :
+                    format.equals("jpg") ? Bitmap.CompressFormat.JPEG : null;
     final double quality = options.hasKey("quality") ? options.getDouble("quality") : 1.0;
     final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
     final Integer width =
-        options.hasKey("width") ? (int) (displayMetrics.density * options.getDouble("width")) : 0;
+            options.hasKey("width") ? (int) (displayMetrics.density * options.getDouble("width")) : 0;
     final Integer height =
-        options.hasKey("height") ? (int) (displayMetrics.density * options.getDouble("height")) : 0;
+            options.hasKey("height") ? (int) (displayMetrics.density * options.getDouble("height")) : 0;
     final String result = options.hasKey("result") ? options.getString("result") : "file";
 
     // Add UI-block so we can get a valid reference to the map-view
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock() {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
@@ -116,17 +108,17 @@ public class MapViewModule extends ReactContextBaseJavaModule {
               return;
             }
             if ((width != 0) && (height != 0) &&
-                (width != snapshot.getWidth() || height != snapshot.getHeight())) {
+                    (width != snapshot.getWidth() || height != snapshot.getHeight())) {
               snapshot = Bitmap.createScaledBitmap(snapshot, width, height, true);
             }
 
             // Save the snapshot to disk
-            if (result.equals(SNAPSHOT_RESULT_FILE)) {
+            if (result.equals("file")) {
               File tempFile;
               FileOutputStream outputStream;
               try {
                 tempFile =
-                    File.createTempFile("RNMMapSnapshot", "." + format, context.getCacheDir());
+                        File.createTempFile("RNMMapSnapshot", "." + format, context.getCacheDir());
                 outputStream = new FileOutputStream(tempFile);
               } catch (Exception e) {
                 promise.reject(e);
@@ -136,7 +128,7 @@ public class MapViewModule extends ReactContextBaseJavaModule {
               closeQuietly(outputStream);
               String uri = Uri.fromFile(tempFile).toString();
               promise.resolve(uri);
-            } else if (result.equals(SNAPSHOT_RESULT_BASE64)) {
+            } else if (result.equals("base64")) {
               ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
               snapshot.compress(compressFormat, (int) (100.0 * quality), outputStream);
               closeQuietly(outputStream);
@@ -152,14 +144,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getCamera(final int tag, final Promise promise) {
-    final ReactApplicationContext context = getReactApplicationContext();
-
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -178,9 +165,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
         WritableMap cameraJson = new WritableNativeMap();
         cameraJson.putMap("center", centerJson);
-        cameraJson.putDouble("heading", (double)position.bearing);
-        cameraJson.putDouble("zoom", (double)position.zoom);
-        cameraJson.putDouble("pitch", (double)position.tilt);
+        cameraJson.putDouble("heading", (double) position.bearing);
+        cameraJson.putDouble("zoom", (double) position.zoom);
+        cameraJson.putDouble("pitch", (double) position.tilt);
 
         promise.resolve(cameraJson);
       }
@@ -189,14 +176,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getAddressFromCoordinates(final int tag, final ReadableMap coordinate, final Promise promise) {
-    final ReactApplicationContext context = getReactApplicationContext();
-
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -215,7 +197,7 @@ public class MapViewModule extends ReactContextBaseJavaModule {
         Geocoder geocoder = new Geocoder(context);
         try {
           List<Address> list =
-                  geocoder.getFromLocation(coordinate.getDouble("latitude"),coordinate.getDouble("longitude"),1);
+                  geocoder.getFromLocation(coordinate.getDouble("latitude"), coordinate.getDouble("longitude"), 1);
           if (list.isEmpty()) {
             promise.reject("Can not get address location");
             return;
@@ -244,20 +226,16 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void pointForCoordinate(final int tag, ReadableMap coordinate, final Promise promise) {
-    final ReactApplicationContext context = getReactApplicationContext();
-    final double density = (double) context.getResources().getDisplayMetrics().density;
+    final double density = context.getResources().getDisplayMetrics().density;
 
     final LatLng coord = new LatLng(
             coordinate.hasKey("latitude") ? coordinate.getDouble("latitude") : 0.0,
             coordinate.hasKey("longitude") ? coordinate.getDouble("longitude") : 0.0
     );
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -271,8 +249,8 @@ public class MapViewModule extends ReactContextBaseJavaModule {
         Point pt = view.map.getProjection().toScreenLocation(coord);
 
         WritableMap ptJson = new WritableNativeMap();
-        ptJson.putDouble("x", (double)pt.x / density);
-        ptJson.putDouble("y", (double)pt.y / density);
+        ptJson.putDouble("x", (double) pt.x / density);
+        ptJson.putDouble("y", (double) pt.y / density);
 
         promise.resolve(ptJson);
       }
@@ -281,28 +259,22 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void coordinateForPoint(final int tag, ReadableMap point, final Promise promise) {
-    final ReactApplicationContext context = getReactApplicationContext();
-    final double density = (double) context.getResources().getDisplayMetrics().density;
+    final double density = context.getResources().getDisplayMetrics().density;
 
     final Point pt = new Point(
-            point.hasKey("x") ? (int)(point.getDouble("x") * density) : 0,
-            point.hasKey("y") ? (int)(point.getDouble("y") * density) : 0
+            point.hasKey("x") ? (int) (point.getDouble("x") * density) : 0,
+            point.hasKey("y") ? (int) (point.getDouble("y") * density) : 0
     );
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null)
-        {
+        if (view == null) {
           promise.reject("RNMMapView not found");
           return;
         }
-        if (view.map == null)
-        {
+        if (view.map == null) {
           promise.reject("RNMMapView.map is not valid");
           return;
         }
@@ -320,14 +292,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getMapBoundaries(final int tag, final Promise promise) {
-    final ReactApplicationContext context = getReactApplicationContext();
-
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -359,14 +326,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void enableLatestRenderer(final Promise promise) {
-    final ReactApplicationContext context = getReactApplicationContext();
-
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapsInitializer.initialize(context, MapsInitializer.Renderer.LATEST, new OnMapsSdkInitializedCallback() {
           @Override
           public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
@@ -374,6 +336,262 @@ public class MapViewModule extends ReactContextBaseJavaModule {
             promise.resolve(renderer.toString());
           }
         });
+      }
+    });
+  }
+
+  @ReactMethod
+  public void animateToRegion(final int tag, ReadableMap region, int duration, final Promise promise) {
+    double lng = region.getDouble("longitude");
+    double lat = region.getDouble("latitude");
+    double lngDelta = region.getDouble("longitudeDelta");
+    double latDelta = region.getDouble("latitudeDelta");
+    LatLngBounds bounds = new LatLngBounds(
+            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+    );
+
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+        if (duration <= 0) {
+          view.map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+          promise.resolve(null);
+        } else {
+          view.map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+              promise.resolve(null);
+            }
+
+            @Override
+            public void onFinish() {
+              promise.resolve(null);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  @ReactMethod
+  public void animateCamera(final int tag, ReadableMap camera, int duration, final Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+
+        CameraUpdate update = view.buildCameraUpdate(camera);
+
+        if (duration <= 0) {
+          view.map.moveCamera(update);
+          promise.resolve(null);
+        } else {
+          view.map.animateCamera(update, duration, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+              promise.resolve(null);
+            }
+
+            @Override
+            public void onFinish() {
+              promise.resolve(null);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  @ReactMethod
+  public void fitToElements(final int tag, ReadableMap edgePadding, int duration, final Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        boolean addedPosition = false;
+
+        for (MapFeature feature : view.features) {
+          if (feature instanceof MapMarker) {
+            Marker marker = (Marker) feature.getFeature();
+            builder.include(marker.getPosition());
+            addedPosition = true;
+          }
+          // TODO(lmr): may want to include shapes / etc.
+        }
+        if (addedPosition) {
+          LatLngBounds bounds = builder.build();
+          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
+
+          if (edgePadding != null) {
+            view.map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+          }
+
+          if (duration > 0) {
+            view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
+              @Override
+              public void onCancel() {
+                promise.resolve(null);
+              }
+
+              @Override
+              public void onFinish() {
+                promise.resolve(null);
+              }
+            });
+          } else {
+            view.map.moveCamera(cu);
+            promise.resolve(null);
+          }
+        }
+      }
+    });
+
+  }
+
+  @ReactMethod
+  public void fitToSuppliedMarkers(final int tag, ReadableArray markersIds, ReadableMap edgePadding, int duration, final Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        String[] markerIDs = new String[markersIds.size()];
+        for (int i = 0; i < markersIds.size(); i++) {
+          markerIDs[i] = markersIds.getString(i);
+        }
+
+        boolean addedPosition = false;
+
+        List<String> markerIDList = Arrays.asList(markerIDs);
+
+        for (MapFeature feature : view.features) {
+          if (feature instanceof MapMarker) {
+            String identifier = ((MapMarker) feature).getIdentifier();
+            Marker marker = (Marker) feature.getFeature();
+            if (markerIDList.contains(identifier)) {
+              builder.include(marker.getPosition());
+              addedPosition = true;
+            }
+          }
+        }
+
+        if (addedPosition) {
+          LatLngBounds bounds = builder.build();
+          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
+
+          if (edgePadding != null) {
+            view.map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+          }
+
+          if (duration > 0) {
+            view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
+              @Override
+              public void onCancel() {
+                promise.resolve(null);
+              }
+
+              @Override
+              public void onFinish() {
+                promise.resolve(null);
+              }
+            });
+          } else {
+            view.map.moveCamera(cu);
+            promise.resolve(null);
+          }
+        }
+      }
+    });
+  }
+
+  @ReactMethod
+  public void fitToCoordinates(final int tag, ReadableArray coordinates, ReadableMap edgePadding, int duration, Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (int i = 0; i < coordinates.size(); i++) {
+          ReadableMap latLng = coordinates.getMap(i);
+          double lat = latLng.getDouble("latitude");
+          double lng = latLng.getDouble("longitude");
+          builder.include(new LatLng(lat, lng));
+        }
+
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
+
+        if (edgePadding != null) {
+          view.appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        if (duration > 0) {
+          view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+              promise.resolve(null);
+            }
+
+            @Override
+            public void onFinish() {
+              promise.resolve(null);
+            }
+          });
+        } else {
+          view.map.moveCamera(cu);
+          promise.resolve(null);
+        }
+        // Move the google logo to the default base padding value.
+        view.map.setPadding(view.baseLeftMapPadding, view.baseTopMapPadding, view.baseRightMapPadding, view.baseBottomMapPadding);
       }
     });
   }
