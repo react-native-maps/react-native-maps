@@ -299,11 +299,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 >
 ```
 
-Then add the AirGoogleMaps directory:
-
-https://github.com/react-native-maps/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
-
-An unofficial step-by-step guide is also available at https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
+Then update your Podfile and add the Google API key as described in the [installation docs](docs/installation.md#ios).
 
 ### MapView Events
 
