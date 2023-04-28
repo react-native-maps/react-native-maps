@@ -134,8 +134,8 @@ export class MapWMSTile extends React.Component<MapWMSTileProps> {
   getUIManagerCommand!: (name: string) => UIManagerCommand;
 
   render() {
-    const AIRMapWMSTile = this.getNativeComponent();
-    return <AIRMapWMSTile {...this.props} />;
+    const RNMMapWMSTile = this.getNativeComponent();
+    return <RNMMapWMSTile {...this.props} />;
   }
 }
 

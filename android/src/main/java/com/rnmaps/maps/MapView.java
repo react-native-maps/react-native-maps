@@ -93,7 +93,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private Boolean isMapLoaded = false;
   private Integer loadingBackgroundColor = null;
   private Integer loadingIndicatorColor = null;
-  private final int baseMapPadding = 50;
+  public final int baseMapPadding = 50;
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
@@ -114,7 +114,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private static final String[] PERMISSIONS = new String[]{
       "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
-  private final List<MapFeature> features = new ArrayList<>();
+  public final List<MapFeature> features = new ArrayList<>();
   private final Map<Marker, MapMarker> markerMap = new HashMap<>();
   private final Map<Polyline, MapPolyline> polylineMap = new HashMap<>();
   private final Map<Polygon, MapPolygon> polygonMap = new HashMap<>();
@@ -275,17 +275,17 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     markerCollection.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
       public boolean onMarkerClick(@NonNull Marker marker) {
-        MapMarker airMapMarker = getMarkerMap(marker);
+        MapMarker rnmMapMarker = getMarkerMap(marker);
 
         WritableMap event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
+        event.putString("id", rnmMapMarker.getIdentifier());
         manager.pushEvent(context, view, "onMarkerPress", event);
 
         event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
-        manager.pushEvent(context, airMapMarker, "onPress", event);
+        event.putString("id", rnmMapMarker.getIdentifier());
+        manager.pushEvent(context, rnmMapMarker, "onPress", event);
 
         // Return false to open the callout info window and center on the marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
@@ -831,8 +831,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  public void animateToCamera(ReadableMap camera, int duration) {
-    if (map == null) return;
+  public CameraUpdate buildCameraUpdate(ReadableMap camera) {
     CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
     if (camera.hasKey("zoom")) {
       builder.zoom((float)camera.getDouble("zoom"));
@@ -848,7 +847,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
     }
 
-    CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
+    return CameraUpdateFactory.newCameraPosition(builder.build());
+  }
+
+  public void animateToCamera(ReadableMap camera, int duration) {
+    if (map == null) return;
+
+    CameraUpdate update = buildCameraUpdate(camera);
 
     if (duration <= 0) {
       map.moveCamera(update);
@@ -858,93 +863,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  public void animateToRegion(LatLngBounds bounds, int duration) {
-    if (map == null) return;
-    if(duration <= 0) {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-    } else {
-      map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
-    }
-  }
-
-  public void fitToElements(ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    boolean addedPosition = false;
-
-    for (MapFeature feature : features) {
-      if (feature instanceof MapMarker) {
-        Marker marker = (Marker) feature.getFeature();
-        builder.include(marker.getPosition());
-        addedPosition = true;
-      }
-      // TODO(lmr): may want to include shapes / etc.
-    }
-    if (addedPosition) {
-      LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-      if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-      }
-
-      if (animated) {
-        map.animateCamera(cu);
-      } else {
-        map.moveCamera(cu);
-      }
-    }
-  }
-
-  public void fitToSuppliedMarkers(ReadableArray markerIDsArray, ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    String[] markerIDs = new String[markerIDsArray.size()];
-    for (int i = 0; i < markerIDsArray.size(); i++) {
-      markerIDs[i] = markerIDsArray.getString(i);
-    }
-
-    boolean addedPosition = false;
-
-    List<String> markerIDList = Arrays.asList(markerIDs);
-
-    for (MapFeature feature : features) {
-      if (feature instanceof MapMarker) {
-        String identifier = ((MapMarker) feature).getIdentifier();
-        Marker marker = (Marker) feature.getFeature();
-        if (markerIDList.contains(identifier)) {
-          builder.include(marker.getPosition());
-          addedPosition = true;
-        }
-      }
-    }
-
-    if (addedPosition) {
-      LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-      if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-      }
-
-      if (animated) {
-        map.animateCamera(cu);
-      } else {
-        map.moveCamera(cu);
-      }
-    }
-  }
-
-  int baseLeftMapPadding;
-  int baseRightMapPadding;
-  int baseTopMapPadding;
-  int baseBottomMapPadding;
+  public int baseLeftMapPadding;
+  public int baseRightMapPadding;
+  public int baseTopMapPadding;
+  public int baseBottomMapPadding;
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
     this.map.setPadding(left, top, right, bottom);
@@ -954,36 +876,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     baseBottomMapPadding = bottom;
   }
 
-  public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
-      boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    for (int i = 0; i < coordinatesArray.size(); i++) {
-      ReadableMap latLng = coordinatesArray.getMap(i);
-      double lat = latLng.getDouble("latitude");
-      double lng = latLng.getDouble("longitude");
-      builder.include(new LatLng(lat, lng));
-    }
-
-    LatLngBounds bounds = builder.build();
-    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-    if (edgePadding != null) {
-      appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-    }
-
-    if (animated) {
-      map.animateCamera(cu);
-    } else {
-      map.moveCamera(cu);
-    }
-    // Move the google logo to the default base padding value.
-    map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
-  }
-
-  private void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
+  public void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
     int left;
     int top;
     int right;
@@ -1375,21 +1268,21 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   }
 
   private MapMarker getMarkerMap(Marker marker) {
-    MapMarker airMarker = markerMap.get(marker);
+    MapMarker rnmMarker = markerMap.get(marker);
 
-    if (airMarker != null) {
-      return airMarker;
+    if (rnmMarker != null) {
+      return rnmMarker;
     }
 
     for (Map.Entry<Marker, MapMarker> entryMarker : markerMap.entrySet()) {
       if (entryMarker.getKey().getPosition().equals(marker.getPosition())
           && entryMarker.getKey().getTitle().equals(marker.getTitle())) {
-        airMarker = entryMarker.getValue();
+        rnmMarker = entryMarker.getValue();
         break;
       }
     }
 
-    return airMarker;
+    return rnmMarker;
   }
 
   @Override
