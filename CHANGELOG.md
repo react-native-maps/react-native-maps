@@ -1,5 +1,12 @@
 # Changelog
 
+# [2.0.0-beta.8](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2023-04-28)
+
+
+### Bug Fixes
+
+* **android:** prevent random, missing tiles if caching locally ([#4598](https://github.com/react-native-maps/react-native-maps/issues/4598)) ([668e837](https://github.com/react-native-maps/react-native-maps/commit/668e837c18c1c0c454be9febbd92cd972c8574d5)), closes [#4477](https://github.com/react-native-maps/react-native-maps/issues/4477)
+
 # [2.0.0-beta.7](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2023-04-28)
 
 
