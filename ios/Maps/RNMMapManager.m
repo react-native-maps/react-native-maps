@@ -223,22 +223,6 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
-        withRegion:(MKCoordinateRegion)region
-        withDuration:(CGFloat)duration)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNMMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
-        } else {
-            [RNMMap animateWithDuration:duration/1000 animations:^{
-                [(RNMMap *)view setRegion:region animated:YES];
-            }];
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         edgePadding:(nonnull NSDictionary *)edgePadding
         animated:(BOOL)animated)

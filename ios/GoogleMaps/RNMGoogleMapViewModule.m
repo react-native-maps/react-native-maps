@@ -180,4 +180,31 @@ RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
+                withRegion:(NSDictionary *)region
+                withDuration:(CGFloat)duration
+                resolver: (RCTPromiseResolveBlock)resolve
+                rejecter:(RCTPromiseRejectBlock)reject)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[RNMGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
+    } else {
+      RNMGoogleMap *mapView = (RNMGoogleMap *)view;
+      MKCoordinateRegion mkRegion = [RCTConvert MKCoordinateRegion:region];
+      GMSCameraPosition *camera = [RNMGoogleMap makeGMSCameraPositionFromMap:mapView andMKCoordinateRegion:mkRegion];
+      // Core Animation must be used to control the animation's duration
+      // See http://stackoverflow.com/a/15663039/171744
+      [CATransaction begin];
+      [CATransaction setCompletionBlock:^{
+        resolve(nil);
+      }];
+      [CATransaction setAnimationDuration:duration/1000];
+      [mapView animateToCameraPosition:camera];
+      [CATransaction commit];
+    }
+  }];
+}
+
 @end

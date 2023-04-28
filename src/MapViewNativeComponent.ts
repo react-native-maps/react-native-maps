@@ -2,19 +2,11 @@ import type {HostComponent} from 'react-native';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import {NativeProps} from './MapView';
 import {Camera, EdgePadding} from './MapView.types';
-import {LatLng, Region} from './sharedTypes';
+import {LatLng} from './sharedTypes';
 
 export type MapViewNativeComponentType = HostComponent<NativeProps>;
 
 interface NativeCommands {
-  animateToRegion: (
-    viewRef: NonNullable<
-      React.RefObject<MapViewNativeComponentType>['current']
-    >,
-    region: Region,
-    duration: number,
-  ) => void;
-
   setCamera: (
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
@@ -74,7 +66,6 @@ interface NativeCommands {
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   supportedCommands: [
-    'animateToRegion',
     'setCamera',
     'animateCamera',
     'fitToElements',

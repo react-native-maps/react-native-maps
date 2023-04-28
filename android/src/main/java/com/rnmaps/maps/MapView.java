@@ -858,15 +858,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  public void animateToRegion(LatLngBounds bounds, int duration) {
-    if (map == null) return;
-    if(duration <= 0) {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-    } else {
-      map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
-    }
-  }
-
   public void fitToElements(ReadableMap edgePadding, boolean animated) {
     if (map == null) return;
 

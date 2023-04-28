@@ -4,6 +4,11 @@ import {Address, BoundingBox, Camera, MarkersFrames} from './MapView.types';
 import {LatLng, Point, Region} from './sharedTypes';
 
 export interface Spec extends TurboModule {
+  animateToRegion: (
+    viewTag: number,
+    region: Region,
+    duration: number,
+  ) => Promise<void>;
   coordinateForPoint: (viewTag: number, point: Point) => Promise<LatLng>;
   /** android only */
   enableLatestRenderer: () => Promise<string>;

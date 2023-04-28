@@ -20,8 +20,6 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.Map;
 
@@ -279,11 +277,6 @@ public class MapManager extends ViewGroupManager<MapView> {
   @Override
   public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
     int duration;
-    double lat;
-    double lng;
-    double lngDelta;
-    double latDelta;
-    ReadableMap region;
     ReadableMap camera;
 
     switch (commandId) {
@@ -302,23 +295,6 @@ public class MapManager extends ViewGroupManager<MapView> {
         camera = args.getMap(0);
         duration = args.getInt(1);
         view.animateToCamera(camera, duration);
-        break;
-
-      case "animateToRegion":
-        if(args == null) {
-          break;
-        }
-        region = args.getMap(0);
-        duration = args.getInt(1);
-        lng = region.getDouble("longitude");
-        lat = region.getDouble("latitude");
-        lngDelta = region.getDouble("longitudeDelta");
-        latDelta = region.getDouble("latitudeDelta");
-        LatLngBounds bounds = new LatLngBounds(
-            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
-        );
-        view.animateToRegion(bounds, duration);
         break;
 
       case "fitToElements":

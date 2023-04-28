@@ -777,10 +777,19 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
-  animateToRegion(region: Region, duration: number = 500) {
-    if (this.map.current) {
-      Commands.animateToRegion(this.map.current, region, duration);
+  animateToRegion(region: Region, duration: number = 500): Promise<void> {
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('animateToRegion')(
+        this._getHandle(),
+        region,
+        duration,
+      );
     }
+    return mapViewModuleMethod('animateToRegion')(
+      this._getHandle(),
+      region,
+      duration,
+    );
   }
 
   fitToElements(options: FitToOptions = {}) {

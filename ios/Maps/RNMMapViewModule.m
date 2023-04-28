@@ -217,6 +217,27 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
+        withRegion:(NSDictionary *)region
+        withDuration:(CGFloat)duration
+        resolver: (RCTPromiseResolveBlock)resolve
+        rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[RNMMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
+        } else {
+            MKCoordinateRegion mkRegion = [RCTConvert MKCoordinateRegion:region];
+            [RNMMap animateWithDuration:duration/1000 animations:^{
+                [(RNMMap *)view setRegion:mkRegion animated:YES];
+            } completion:^(BOOL finished){
+                resolve(nil);
+            }];
+        }
+    }];
+}
+
 - (void)takeMapSnapshot:(RNMMap *)mapView
             snapshotter:(MKMapSnapshotter *) snapshotter
                  format:(NSString *)format
