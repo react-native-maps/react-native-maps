@@ -1,5 +1,25 @@
 # Changelog
 
+# [2.0.0-beta.7](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2023-04-28)
+
+
+### Features
+
+* **MapView:** make animateCamera async ([b1c76d8](https://github.com/react-native-maps/react-native-maps/commit/b1c76d832edd81a7cdc058ee22a901e735171e00))
+* **MapView:** make animateToRegion async ([b056709](https://github.com/react-native-maps/react-native-maps/commit/b056709ce5e355a94b41c7d6ffad366c0064e4b7))
+* **MapView:** make fitToCoordinates async and accept duration ([e1b6024](https://github.com/react-native-maps/react-native-maps/commit/e1b60243d81910701b68725907e37e1918806190))
+* **MapView:** make fitToElements async and accept duration ([d397367](https://github.com/react-native-maps/react-native-maps/commit/d397367cbee00e55c425e745851022f9fd3fbd7d))
+* **MapView:** make fitToSuppliedMarkers async and accept duration ([8fb89d8](https://github.com/react-native-maps/react-native-maps/commit/8fb89d80e691dd7c0de7b261ce4e0debeba787f9))
+
+
+### BREAKING CHANGES
+
+* **MapView:** made fitToCoordinates async and accept duration instead of animated boolean
+* **MapView:** made fitToSuppliedMarkers async and accept duration instead of animate boolean
+* **MapView:** made fitToElements async. Takes duration instead of animated boolean
+* **MapView:** made MapView.animateCamera async
+* **MapView:** made MapView.animateToRegion async
+
 # [2.0.0-beta.6](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2023-04-27)
 
 
