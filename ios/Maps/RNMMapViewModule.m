@@ -1,5 +1,6 @@
 #import "RNMMapViewModule.h"
 #import "RNMMap.h"
+#import "RNMMapMarker.h"
 #import "RNMMapSnapshot.h"
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
@@ -286,7 +287,6 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
                     [RNMMap animateWithDuration:duration/1000 animations:^{
                         [mapView showAnnotations:mapView.annotations animated:YES];
                     } completion:^(BOOL finished){
-                        NSLog(@"fitToElements completed");
                         resolve(nil);
                     }];
                 } else {
@@ -299,6 +299,42 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
+                  markers:(nonnull NSArray *)markers
+                  edgePadding:(nonnull NSDictionary *)edgePadding
+                  withDuration:(CGFloat)duration
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[RNMMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
+        } else {
+            RNMMap *mapView = (RNMMap *)view;
+            // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
+            // id annotations = mapView.annotations;
+
+            NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                RNMMapMarker *marker = (RNMMapMarker *)evaluatedObject;
+                return [marker isKindOfClass:[RNMMapMarker class]] && [markers containsObject:marker.identifier];
+            }];
+
+            NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
+
+            if(duration > 0.0f) {
+                [RNMMap animateWithDuration:duration/1000 animations:^{
+                [mapView showAnnotations:filteredMarkers animated:YES];
+                } completion:^(BOOL finished){
+                    resolve(nil);
+                }];
+                } else {
+                [mapView showAnnotations:filteredMarkers animated:NO];
+                    resolve(nil);
+                }
+        }
+    }];
+}
 
 - (void)takeMapSnapshot:(RNMMap *)mapView
             snapshotter:(MKMapSnapshotter *) snapshotter

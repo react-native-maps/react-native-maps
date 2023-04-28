@@ -20,6 +20,12 @@ export interface Spec extends TurboModule {
     edgePadding: EdgePadding,
     duration: number,
   ) => Promise<void>;
+  fitToSuppliedMarkers: (
+    viewTag: number,
+    markers: string[],
+    edgePadding: EdgePadding,
+    duration: number,
+  ) => Promise<void>;
   getCamera: (viewTag: number) => Promise<Camera>;
   getMapBoundaries: (viewTag: number) => Promise<BoundingBox>;
   getMarkersFrames: (

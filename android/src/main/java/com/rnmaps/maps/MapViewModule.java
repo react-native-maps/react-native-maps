@@ -16,6 +16,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -37,6 +38,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -453,10 +455,7 @@ public class MapViewModule extends ReactContextBaseJavaModule {
                     edgePadding.getInt("right"), edgePadding.getInt("bottom"));
           }
 
-          if (duration <= 0) {
-            view.map.moveCamera(cu);
-            promise.resolve(null);
-          } else {
+          if (duration > 0) {
             view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
               @Override
               public void onCancel() {
@@ -468,10 +467,79 @@ public class MapViewModule extends ReactContextBaseJavaModule {
                 promise.resolve(null);
               }
             });
+          } else {
+            view.map.moveCamera(cu);
+            promise.resolve(null);
           }
         }
       }
     });
 
+  }
+
+  @ReactMethod
+  public void fitToSuppliedMarkers(final int tag, ReadableArray markersIds, ReadableMap edgePadding, int duration, final Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        String[] markerIDs = new String[markersIds.size()];
+        for (int i = 0; i < markersIds.size(); i++) {
+          markerIDs[i] = markersIds.getString(i);
+        }
+
+        boolean addedPosition = false;
+
+        List<String> markerIDList = Arrays.asList(markerIDs);
+
+        for (MapFeature feature : view.features) {
+          if (feature instanceof MapMarker) {
+            String identifier = ((MapMarker) feature).getIdentifier();
+            Marker marker = (Marker) feature.getFeature();
+            if (markerIDList.contains(identifier)) {
+              builder.include(marker.getPosition());
+              addedPosition = true;
+            }
+          }
+        }
+
+        if (addedPosition) {
+          LatLngBounds bounds = builder.build();
+          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
+
+          if (edgePadding != null) {
+            view.map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+          }
+
+          if (duration > 0) {
+            view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
+              @Override
+              public void onCancel() {
+                promise.resolve(null);
+              }
+
+              @Override
+              public void onFinish() {
+                promise.resolve(null);
+              }
+            });
+          } else {
+            view.map.moveCamera(cu);
+            promise.resolve(null);
+          }
+        }
+      }
+    });
   }
 }

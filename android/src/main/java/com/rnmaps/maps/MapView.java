@@ -863,48 +863,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  public void fitToSuppliedMarkers(ReadableArray markerIDsArray, ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    String[] markerIDs = new String[markerIDsArray.size()];
-    for (int i = 0; i < markerIDsArray.size(); i++) {
-      markerIDs[i] = markerIDsArray.getString(i);
-    }
-
-    boolean addedPosition = false;
-
-    List<String> markerIDList = Arrays.asList(markerIDs);
-
-    for (MapFeature feature : features) {
-      if (feature instanceof MapMarker) {
-        String identifier = ((MapMarker) feature).getIdentifier();
-        Marker marker = (Marker) feature.getFeature();
-        if (markerIDList.contains(identifier)) {
-          builder.include(marker.getPosition());
-          addedPosition = true;
-        }
-      }
-    }
-
-    if (addedPosition) {
-      LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-      if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-      }
-
-      if (animated) {
-        map.animateCamera(cu);
-      } else {
-        map.moveCamera(cu);
-      }
-    }
-  }
-
   int baseLeftMapPadding;
   int baseRightMapPadding;
   int baseTopMapPadding;

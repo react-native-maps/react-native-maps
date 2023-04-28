@@ -197,33 +197,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
-                  markers:(nonnull NSArray *)markers
-                  edgePadding:(nonnull NSDictionary *)edgePadding
-                  animated:(BOOL)animated)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNMMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
-        } else {
-            RNMMap *mapView = (RNMMap *)view;
-            // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
-            // id annotations = mapView.annotations;
-
-            NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-                RNMMapMarker *marker = (RNMMapMarker *)evaluatedObject;
-                return [marker isKindOfClass:[RNMMapMarker class]] && [markers containsObject:marker.identifier];
-            }];
-
-            NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
-
-            [mapView showAnnotations:filteredMarkers animated:animated];
-
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
                   coordinates:(nonnull NSArray<RNMMapCoordinate *> *)coordinates
                   edgePadding:(nonnull NSDictionary *)edgePadding

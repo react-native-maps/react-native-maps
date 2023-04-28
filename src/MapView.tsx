@@ -823,20 +823,27 @@ class MapView extends React.Component<MapViewProps, State> {
     );
   }
 
-  fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
-    if (this.map.current) {
-      const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-        animated = true,
-      } = options;
+  fitToSuppliedMarkers(
+    markers: string[],
+    options: {edgePadding?: EdgePadding; duration?: number} = {},
+  ) {
+    const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}, duration = 0} =
+      options;
 
-      Commands.fitToSuppliedMarkers(
-        this.map.current,
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('fitToSuppliedMarkers')(
+        this._getHandle(),
         markers,
         edgePadding,
-        animated,
+        duration,
       );
     }
+    return mapViewModuleMethod('fitToSuppliedMarkers')(
+      this._getHandle(),
+      markers,
+      edgePadding,
+      duration,
+    );
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {

@@ -29,6 +29,12 @@ export interface Spec extends TurboModule {
     edgePadding: EdgePadding,
     duration: number,
   ) => Promise<void>;
+  fitToSuppliedMarkers: (
+    viewTag: number,
+    markers: string[],
+    edgePadding: EdgePadding,
+    duration: number,
+  ) => Promise<void>;
   getAddressFromCoordinates: (
     viewTag: number,
     coordinate: LatLng,

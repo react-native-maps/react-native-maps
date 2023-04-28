@@ -282,4 +282,54 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
   }];
 }
 
+RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
+                  markers:(nonnull NSArray *)markers
+                  edgePadding:(nonnull NSDictionary *)edgePadding
+                  withDuration:(CGFloat)duration
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[RNMGoogleMap class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
+    } else {
+      RNMGoogleMap *mapView = (RNMGoogleMap *)view;
+
+      NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        RNMGoogleMapMarker *marker = (RNMGoogleMapMarker *)evaluatedObject;
+        return [marker isKindOfClass:[RNMGoogleMapMarker class]] && [markers containsObject:marker.identifier];
+      }];
+
+      NSArray *filteredMarkers = [mapView.markers filteredArrayUsingPredicate:filterMarkers];
+
+      CLLocationCoordinate2D myLocation = ((RNMGoogleMapMarker *)(filteredMarkers.firstObject)).realMarker.position;
+      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
+
+      for (RNMGoogleMapMarker *marker in filteredMarkers)
+        bounds = [bounds includingCoordinate:marker.realMarker.position];
+
+      // Set Map viewport
+      CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+      CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+      CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+      CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+
+      GMSCameraUpdate* cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
+      if (duration > 0.0f) {
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^{
+            resolve(nil);
+        }];
+        [CATransaction setAnimationDuration:duration/1000];
+        [mapView animateWithCameraUpdate:cameraUpdate];
+        [CATransaction commit];
+      } else {
+        [mapView moveCamera:cameraUpdate];
+        resolve(nil);
+      }
+    }
+  }];
+}
+
 @end
