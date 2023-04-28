@@ -30,6 +30,7 @@ import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -415,5 +416,62 @@ public class MapViewModule extends ReactContextBaseJavaModule {
         }
       }
     });
+  }
+
+  @ReactMethod
+  public void fitToElements(final int tag, ReadableMap edgePadding, int duration, final Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        boolean addedPosition = false;
+
+        for (MapFeature feature : view.features) {
+          if (feature instanceof MapMarker) {
+            Marker marker = (Marker) feature.getFeature();
+            builder.include(marker.getPosition());
+            addedPosition = true;
+          }
+          // TODO(lmr): may want to include shapes / etc.
+        }
+        if (addedPosition) {
+          LatLngBounds bounds = builder.build();
+          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
+
+          if (edgePadding != null) {
+            view.map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+          }
+
+          if (duration <= 0) {
+            view.map.moveCamera(cu);
+            promise.resolve(null);
+          } else {
+            view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
+              @Override
+              public void onCancel() {
+                promise.resolve(null);
+              }
+
+              @Override
+              public void onFinish() {
+                promise.resolve(null);
+              }
+            });
+          }
+        }
+      }
+    });
+
   }
 }

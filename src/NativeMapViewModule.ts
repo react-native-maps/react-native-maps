@@ -1,6 +1,12 @@
 import type {TurboModule} from 'react-native';
 import {TurboModuleRegistry} from 'react-native';
-import {Address, BoundingBox, Camera, MarkersFrames} from './MapView.types';
+import {
+  Address,
+  BoundingBox,
+  Camera,
+  EdgePadding,
+  MarkersFrames,
+} from './MapView.types';
 import {LatLng, Point, Region} from './sharedTypes';
 
 export interface Spec extends TurboModule {
@@ -17,6 +23,12 @@ export interface Spec extends TurboModule {
   coordinateForPoint: (viewTag: number, point: Point) => Promise<LatLng>;
   /** android only */
   enableLatestRenderer: () => Promise<string>;
+  fitToElements: (
+    viewTag: number,
+    //** google maps only */
+    edgePadding: EdgePadding,
+    duration: number,
+  ) => Promise<void>;
   getAddressFromCoordinates: (
     viewTag: number,
     coordinate: LatLng,

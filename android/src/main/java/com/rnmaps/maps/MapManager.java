@@ -287,13 +287,6 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.animateToCamera(camera, 0);
         break;
 
-      case "fitToElements":
-        if(args == null) {
-          break;
-        }
-        view.fitToElements(args.getMap(0), args.getBoolean(1));
-        break;
-
       case "fitToSuppliedMarkers":
         if(args == null) {
           break;

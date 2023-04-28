@@ -14,14 +14,6 @@ interface NativeCommands {
     camera: Partial<Camera>,
   ) => void;
 
-  fitToElements: (
-    viewRef: NonNullable<
-      React.RefObject<MapViewNativeComponentType>['current']
-    >,
-    edgePadding: EdgePadding,
-    animated: boolean,
-  ) => void;
-
   fitToSuppliedMarkers: (
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
@@ -59,7 +51,6 @@ interface NativeCommands {
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   supportedCommands: [
     'setCamera',
-    'fitToElements',
     'fitToSuppliedMarkers',
     'fitToCoordinates',
     'setMapBoundaries',

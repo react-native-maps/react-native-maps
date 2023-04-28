@@ -93,7 +93,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private Boolean isMapLoaded = false;
   private Integer loadingBackgroundColor = null;
   private Integer loadingIndicatorColor = null;
-  private final int baseMapPadding = 50;
+  public final int baseMapPadding = 50;
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
@@ -114,7 +114,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private static final String[] PERMISSIONS = new String[]{
       "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
-  private final List<MapFeature> features = new ArrayList<>();
+  public final List<MapFeature> features = new ArrayList<>();
   private final Map<Marker, MapMarker> markerMap = new HashMap<>();
   private final Map<Polyline, MapPolyline> polylineMap = new HashMap<>();
   private final Map<Polygon, MapPolygon> polygonMap = new HashMap<>();
@@ -860,38 +860,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
     else {
       map.animateCamera(update, duration, null);
-    }
-  }
-
-  public void fitToElements(ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    boolean addedPosition = false;
-
-    for (MapFeature feature : features) {
-      if (feature instanceof MapMarker) {
-        Marker marker = (Marker) feature.getFeature();
-        builder.include(marker.getPosition());
-        addedPosition = true;
-      }
-      // TODO(lmr): may want to include shapes / etc.
-    }
-    if (addedPosition) {
-      LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-      if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-      }
-
-      if (animated) {
-        map.animateCamera(cu);
-      } else {
-        map.moveCamera(cu);
-      }
     }
   }
 

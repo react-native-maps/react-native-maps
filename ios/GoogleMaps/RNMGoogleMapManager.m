@@ -122,45 +122,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
-                  edgePadding:(nonnull NSDictionary *)edgePadding
-                  animated:(BOOL)animated)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[RNMGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
-    } else {
-      RNMGoogleMap *mapView = (RNMGoogleMap *)view;
-
-      CLLocationCoordinate2D myLocation = ((RNMGoogleMapMarker *)(mapView.markers.firstObject)).realMarker.position;
-      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
-
-      for (RNMGoogleMapMarker *marker in mapView.markers)
-        bounds = [bounds includingCoordinate:marker.realMarker.position];
-        
-        GMSCameraUpdate* cameraUpdate;
-        
-        if ([edgePadding count] != 0) {
-            // Set Map viewport
-            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-            
-            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
-        } else {
-            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
-        }
-      if (animated) {
-        [mapView animateWithCameraUpdate: cameraUpdate];
-      } else {
-        [mapView moveCamera: cameraUpdate];
-      }
-    }
-  }];
-}
-
 RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
                   markers:(nonnull NSArray *)markers
                   edgePadding:(nonnull NSDictionary *)edgePadding
