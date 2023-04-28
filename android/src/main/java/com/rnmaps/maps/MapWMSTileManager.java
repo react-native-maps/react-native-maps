@@ -21,7 +21,7 @@ public class MapWMSTileManager extends ViewGroupManager<MapWMSTile> {
 
   @Override
   public String getName() {
-    return "AIRMapWMSTile";
+    return "RNMMapWMSTile";
   }
 
   @Override

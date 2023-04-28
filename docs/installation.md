@@ -90,9 +90,7 @@ Add your API key to your manifest file (`android/app/src/main/AndroidManifest.xm
 
 The installation documentation previously specified adding `supportLibVersion`, `playServicesVersion` and `androidMapsUtilsVersion` to `build.gradle`.
 
-None of these keys are required anymore and can be removed, if not used by other modules in your project.
-
-> **ATTENTION**: If you leave `playServicesVersion` in `build.gradle`, the version must be at least `18.0.0`
+None of these keys are used anymore and can be removed, if not in use by other modules in your project.
 
 ### Ensure that you have Google Play Services installed
 

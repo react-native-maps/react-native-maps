@@ -29,9 +29,9 @@ export class MapCalloutSubview extends React.Component<MapCalloutSubviewProps> {
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
   render() {
-    const AIRMapCalloutSubview = this.getNativeComponent();
+    const RNMMapCalloutSubview = this.getNativeComponent();
     return (
-      <AIRMapCalloutSubview
+      <RNMMapCalloutSubview
         {...this.props}
         style={[styles.calloutSubview, this.props.style]}
       />

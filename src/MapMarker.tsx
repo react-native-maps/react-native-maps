@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   StyleSheet,
-  Animated,
   Image,
   ViewProps,
   ImageURISource,
@@ -300,7 +299,7 @@ export type MapMarkerProps = ViewProps & {
    * Sets whether this marker should track view changes.
    * It's recommended to turn it off whenever it's possible to improve custom marker performance.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
@@ -332,8 +331,6 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
-
-  static Animated: Animated.AnimatedComponent<typeof MapMarker>;
 
   private marker: NativeProps['ref'];
 
@@ -405,10 +402,10 @@ export class MapMarker extends React.Component<MapMarkerProps> {
       icon = icon.uri;
     }
 
-    const AIRMapMarker = this.getNativeComponent();
+    const RNMMapMarker = this.getNativeComponent();
 
     return (
-      <AIRMapMarker
+      <RNMMapMarker
         {...this.props}
         ref={this.marker}
         image={image}
@@ -433,8 +430,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-
-MapMarker.Animated = Animated.createAnimatedComponent(MapMarker);
 
 export default decorateMapComponent(MapMarker, 'Marker', {
   google: {

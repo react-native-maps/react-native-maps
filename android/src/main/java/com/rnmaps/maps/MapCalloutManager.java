@@ -14,7 +14,7 @@ public class MapCalloutManager extends ViewGroupManager<MapCallout> {
 
   @Override
   public String getName() {
-    return "AIRMapCallout";
+    return "RNMMapCallout";
   }
 
   @Override

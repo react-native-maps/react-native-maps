@@ -5,7 +5,7 @@ import com.google.android.gms.maps.GoogleMapOptions;
 
 public class MapLiteManager extends MapManager {
 
-  private static final String REACT_CLASS = "AIRMapLite";
+  private static final String REACT_CLASS = "RNMMapLite";
 
   @Override
   public String getName() {

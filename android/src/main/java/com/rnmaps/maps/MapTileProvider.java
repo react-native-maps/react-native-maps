@@ -43,10 +43,10 @@ import java.net.URLConnection;
 
 public class MapTileProvider implements TileProvider {
 
-	class AIRMapUrlTileProvider extends UrlTileProvider {
+	class MapUrlTileProvider extends UrlTileProvider {
     private String urlTemplate;
 
-    public AIRMapUrlTileProvider(int width, int height, String urlTemplate) {
+    public MapUrlTileProvider(int width, int height, String urlTemplate) {
       super(width, height);
       this.urlTemplate = urlTemplate;
     }
@@ -104,7 +104,7 @@ public class MapTileProvider implements TileProvider {
 	public MapTileProvider(int tileSizet, boolean doubleTileSize, String urlTemplate,
                            int maximumZ, int maximumNativeZ, int minimumZ, boolean flipY, String tileCachePath,
                            int tileCacheMaxAge, boolean offlineMode, Context context, boolean customMode) {
-		this.tileProvider = new AIRMapUrlTileProvider(tileSizet, tileSizet, urlTemplate);
+		this.tileProvider = new MapUrlTileProvider(tileSizet, tileSizet, urlTemplate);
 
 		this.tileSize = tileSizet;
     this.doubleTileSize = doubleTileSize;
@@ -448,7 +448,7 @@ public class MapTileProvider implements TileProvider {
 
 	public void setTileSize(int tileSize) {
 		if (this.tileSize != tileSize) {
-			this.tileProvider = new AIRMapUrlTileProvider(tileSize, tileSize, urlTemplate);
+			this.tileProvider = new MapUrlTileProvider(tileSize, tileSize, urlTemplate);
 		}
 		this.tileSize = tileSize;
 	}

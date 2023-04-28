@@ -46,8 +46,8 @@ export class MapLocalTile extends React.Component<MapLocalTileProps> {
   getUIManagerCommand!: (name: string) => UIManagerCommand;
 
   render() {
-    const AIRMapLocalTile = this.getNativeComponent();
-    return <AIRMapLocalTile {...this.props} />;
+    const RNMMapLocalTile = this.getNativeComponent();
+    return <RNMMapLocalTile {...this.props} />;
   }
 }
 
