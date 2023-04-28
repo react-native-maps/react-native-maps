@@ -122,41 +122,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
-                  coordinates:(nonnull NSArray<RNMMapCoordinate *> *)coordinates
-                  edgePadding:(nonnull NSDictionary *)edgePadding
-                  animated:(BOOL)animated)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[RNMGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
-    } else {
-      RNMGoogleMap *mapView = (RNMGoogleMap *)view;
-
-      CLLocationCoordinate2D myLocation = coordinates.firstObject.coordinate;
-      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
-
-      for (RNMMapCoordinate *coordinate in coordinates)
-        bounds = [bounds includingCoordinate:coordinate.coordinate];
-
-      // Set Map viewport
-      CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-      CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-      CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-      CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-
-      GMSCameraUpdate *cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
-
-      if (animated) {
-        [mapView animateWithCameraUpdate: cameraUpdate];
-      } else {
-        [mapView moveCamera: cameraUpdate];
-      }
-    }
-  }];
-}
-
 RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
                   northEast:(CLLocationCoordinate2D)northEast
                   southWest:(CLLocationCoordinate2D)southWest)

@@ -542,4 +542,57 @@ public class MapViewModule extends ReactContextBaseJavaModule {
       }
     });
   }
+
+  @ReactMethod
+  public void fitToCoordinates(final int tag, ReadableArray coordinates, ReadableMap edgePadding, int duration, Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (int i = 0; i < coordinates.size(); i++) {
+          ReadableMap latLng = coordinates.getMap(i);
+          double lat = latLng.getDouble("latitude");
+          double lng = latLng.getDouble("longitude");
+          builder.include(new LatLng(lat, lng));
+        }
+
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
+
+        if (edgePadding != null) {
+          view.appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        if (duration > 0) {
+          view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+              promise.resolve(null);
+            }
+
+            @Override
+            public void onFinish() {
+              promise.resolve(null);
+            }
+          });
+        } else {
+          view.map.moveCamera(cu);
+          promise.resolve(null);
+        }
+        // Move the google logo to the default base padding value.
+        view.map.setPadding(view.baseLeftMapPadding, view.baseTopMapPadding, view.baseRightMapPadding, view.baseBottomMapPadding);
+      }
+    });
+  }
 }

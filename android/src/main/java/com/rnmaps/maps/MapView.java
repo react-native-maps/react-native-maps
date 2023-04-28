@@ -863,10 +863,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  int baseLeftMapPadding;
-  int baseRightMapPadding;
-  int baseTopMapPadding;
-  int baseBottomMapPadding;
+  public int baseLeftMapPadding;
+  public int baseRightMapPadding;
+  public int baseTopMapPadding;
+  public int baseBottomMapPadding;
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
     this.map.setPadding(left, top, right, bottom);
@@ -876,36 +876,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     baseBottomMapPadding = bottom;
   }
 
-  public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
-      boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    for (int i = 0; i < coordinatesArray.size(); i++) {
-      ReadableMap latLng = coordinatesArray.getMap(i);
-      double lat = latLng.getDouble("latitude");
-      double lng = latLng.getDouble("longitude");
-      builder.include(new LatLng(lat, lng));
-    }
-
-    LatLngBounds bounds = builder.build();
-    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-    if (edgePadding != null) {
-      appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-    }
-
-    if (animated) {
-      map.animateCamera(cu);
-    } else {
-      map.moveCamera(cu);
-    }
-    // Move the google logo to the default base padding value.
-    map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
-  }
-
-  private void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
+  public void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
     int left;
     int top;
     int right;

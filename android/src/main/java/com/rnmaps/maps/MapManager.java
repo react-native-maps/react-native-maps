@@ -287,13 +287,6 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.animateToCamera(camera, 0);
         break;
 
-      case "fitToCoordinates":
-        if(args == null) {
-          break;
-        }
-        view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
-        break;
-
       case "setMapBoundaries":
         if(args == null) {
           break;

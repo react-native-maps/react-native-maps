@@ -2,6 +2,7 @@
 #import "RNMMap.h"
 #import "RNMMapMarker.h"
 #import "RNMMapSnapshot.h"
+#import "RNMMapCoordinate.h"
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 
@@ -332,6 +333,48 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
                 [mapView showAnnotations:filteredMarkers animated:NO];
                     resolve(nil);
                 }
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
+                  coordinates:(nonnull NSArray<RNMMapCoordinate *> *)coordinates
+                  edgePadding:(nonnull NSDictionary *)edgePadding
+                  withDuration:(CGFloat)duration
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[RNMMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
+        } else {
+            RNMMap *mapView = (RNMMap *)view;
+
+            // Create Polyline with coordinates
+            CLLocationCoordinate2D coords[coordinates.count];
+            for(int i = 0; i < coordinates.count; i++)
+            {
+                coords[i] = coordinates[i].coordinate;
+            }
+            MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordinates.count];
+
+            // Set Map viewport
+            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+
+            if(duration > 0.0f) {
+                [RNMMap animateWithDuration:duration/1000 animations:^{
+                    [mapView setVisibleMapRect:[polyline boundingMapRect] edgePadding:UIEdgeInsetsMake(top, left, bottom, right) animated:YES];
+                } completion:^(BOOL finished){
+                    resolve(nil);
+                }];
+            } else {
+                [mapView setVisibleMapRect:[polyline boundingMapRect] edgePadding:UIEdgeInsetsMake(top, left, bottom, right) animated:NO];
+                resolve(nil);
+            }
         }
     }];
 }

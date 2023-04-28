@@ -23,6 +23,12 @@ export interface Spec extends TurboModule {
   coordinateForPoint: (viewTag: number, point: Point) => Promise<LatLng>;
   /** android only */
   enableLatestRenderer: () => Promise<string>;
+  fitToCoordinates: (
+    viewTag: number,
+    coordinates: LatLng[],
+    edgePadding: EdgePadding,
+    duration: number,
+  ) => Promise<void>;
   fitToElements: (
     viewTag: number,
     //** google maps only */

@@ -15,6 +15,12 @@ export interface Spec extends TurboModule {
     duration: number,
   ) => Promise<void>;
   coordinateForPoint: (viewTag: number, point: Point) => Promise<LatLng>;
+  fitToCoordinates: (
+    viewTag: number,
+    coordinates: LatLng[],
+    edgePadding: EdgePadding,
+    duration: number,
+  ) => Promise<void>;
   fitToElements: (
     viewTag: number,
     edgePadding: EdgePadding,

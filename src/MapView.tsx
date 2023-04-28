@@ -804,9 +804,7 @@ class MapView extends React.Component<MapViewProps, State> {
     );
   }
 
-  fitToElements(
-    options: {edgePadding?: EdgePadding; duration?: number} = {},
-  ): Promise<void> {
+  fitToElements(options: FitToOptions = {}): Promise<void> {
     const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}, duration = 0} =
       options;
     if (this._gogleMapsOniOS()) {
@@ -823,10 +821,7 @@ class MapView extends React.Component<MapViewProps, State> {
     );
   }
 
-  fitToSuppliedMarkers(
-    markers: string[],
-    options: {edgePadding?: EdgePadding; duration?: number} = {},
-  ) {
+  fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
     const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}, duration = 0} =
       options;
 
@@ -847,19 +842,23 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
-    if (this.map.current) {
-      const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-        animated = true,
-      } = options;
+    const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}, duration = 0} =
+      options;
 
-      Commands.fitToCoordinates(
-        this.map.current,
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('fitToCoordinates')(
+        this._getHandle(),
         coordinates,
         edgePadding,
-        animated,
+        duration,
       );
     }
+    return mapViewModuleMethod('fitToCoordinates')(
+      this._getHandle(),
+      coordinates,
+      edgePadding,
+      duration,
+    );
   }
 
   /**
