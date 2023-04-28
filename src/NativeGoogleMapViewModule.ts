@@ -4,6 +4,11 @@ import {BoundingBox, Camera, MarkersFrames} from './MapView.types';
 import {LatLng, Point, Region} from './sharedTypes';
 
 export interface Spec extends TurboModule {
+  animateCamera: (
+    viewTag: number,
+    camera: Partial<Camera>,
+    duration: number,
+  ) => Promise<void>;
   animateToRegion: (
     viewTag: number,
     region: Region,

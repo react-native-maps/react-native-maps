@@ -122,26 +122,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-
-RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
-                  withCamera:(id)json
-                  withDuration:(CGFloat)duration)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNMGoogleMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
-        } else {
-            [CATransaction begin];
-            [CATransaction setAnimationDuration:duration/1000];
-            RNMGoogleMap *mapView = (RNMGoogleMap *)view;
-            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
-            [mapView animateToCameraPosition:camera];
-            [CATransaction commit];
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
                   edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)

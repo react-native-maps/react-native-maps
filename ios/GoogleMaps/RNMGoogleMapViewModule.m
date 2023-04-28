@@ -1,5 +1,6 @@
 #import "RNMGoogleMapViewModule.h"
 #import "RNMGoogleMap.h"
+#import "RCTConvert+GMSMapViewType.h"
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 
@@ -205,6 +206,31 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
       [CATransaction commit];
     }
   }];
+}
+
+RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
+                  withCamera:(id)json
+                  withDuration:(CGFloat)duration
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[RNMGoogleMap class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
+        } else {
+            RNMGoogleMap *mapView = (RNMGoogleMap *)view;
+            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
+
+            [CATransaction begin];
+            [CATransaction setCompletionBlock:^{
+                resolve(nil);
+            }];
+            [CATransaction setAnimationDuration:duration/1000];
+            [mapView animateToCameraPosition:camera];
+            [CATransaction commit];
+        }
+    }];
 }
 
 @end

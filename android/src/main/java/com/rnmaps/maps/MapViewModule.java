@@ -9,8 +9,8 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -22,6 +22,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -35,10 +36,9 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class MapViewModule extends ReactContextBaseJavaModule {
 
@@ -74,14 +74,14 @@ public class MapViewModule extends ReactContextBaseJavaModule {
     // Parse and verity options
     final String format = options.hasKey("format") ? options.getString("format") : "png";
     final Bitmap.CompressFormat compressFormat =
-        format.equals("png") ? Bitmap.CompressFormat.PNG :
-            format.equals("jpg") ? Bitmap.CompressFormat.JPEG : null;
+            format.equals("png") ? Bitmap.CompressFormat.PNG :
+                    format.equals("jpg") ? Bitmap.CompressFormat.JPEG : null;
     final double quality = options.hasKey("quality") ? options.getDouble("quality") : 1.0;
     final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
     final Integer width =
-        options.hasKey("width") ? (int) (displayMetrics.density * options.getDouble("width")) : 0;
+            options.hasKey("width") ? (int) (displayMetrics.density * options.getDouble("width")) : 0;
     final Integer height =
-        options.hasKey("height") ? (int) (displayMetrics.density * options.getDouble("height")) : 0;
+            options.hasKey("height") ? (int) (displayMetrics.density * options.getDouble("height")) : 0;
     final String result = options.hasKey("result") ? options.getString("result") : "file";
 
     // Add UI-block so we can get a valid reference to the map-view
@@ -105,7 +105,7 @@ public class MapViewModule extends ReactContextBaseJavaModule {
               return;
             }
             if ((width != 0) && (height != 0) &&
-                (width != snapshot.getWidth() || height != snapshot.getHeight())) {
+                    (width != snapshot.getWidth() || height != snapshot.getHeight())) {
               snapshot = Bitmap.createScaledBitmap(snapshot, width, height, true);
             }
 
@@ -115,7 +115,7 @@ public class MapViewModule extends ReactContextBaseJavaModule {
               FileOutputStream outputStream;
               try {
                 tempFile =
-                    File.createTempFile("RNMMapSnapshot", "." + format, context.getCacheDir());
+                        File.createTempFile("RNMMapSnapshot", "." + format, context.getCacheDir());
                 outputStream = new FileOutputStream(tempFile);
               } catch (Exception e) {
                 promise.reject(e);
@@ -141,11 +141,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getCamera(final int tag, final Promise promise) {
-    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -164,9 +162,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
         WritableMap cameraJson = new WritableNativeMap();
         cameraJson.putMap("center", centerJson);
-        cameraJson.putDouble("heading", (double)position.bearing);
-        cameraJson.putDouble("zoom", (double)position.zoom);
-        cameraJson.putDouble("pitch", (double)position.tilt);
+        cameraJson.putDouble("heading", (double) position.bearing);
+        cameraJson.putDouble("zoom", (double) position.zoom);
+        cameraJson.putDouble("pitch", (double) position.tilt);
 
         promise.resolve(cameraJson);
       }
@@ -175,11 +173,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getAddressFromCoordinates(final int tag, final ReadableMap coordinate, final Promise promise) {
-    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -198,7 +194,7 @@ public class MapViewModule extends ReactContextBaseJavaModule {
         Geocoder geocoder = new Geocoder(context);
         try {
           List<Address> list =
-                  geocoder.getFromLocation(coordinate.getDouble("latitude"),coordinate.getDouble("longitude"),1);
+                  geocoder.getFromLocation(coordinate.getDouble("latitude"), coordinate.getDouble("longitude"), 1);
           if (list.isEmpty()) {
             promise.reject("Can not get address location");
             return;
@@ -234,11 +230,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
             coordinate.hasKey("longitude") ? coordinate.getDouble("longitude") : 0.0
     );
 
-    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -252,8 +246,8 @@ public class MapViewModule extends ReactContextBaseJavaModule {
         Point pt = view.map.getProjection().toScreenLocation(coord);
 
         WritableMap ptJson = new WritableNativeMap();
-        ptJson.putDouble("x", (double)pt.x / density);
-        ptJson.putDouble("y", (double)pt.y / density);
+        ptJson.putDouble("x", (double) pt.x / density);
+        ptJson.putDouble("y", (double) pt.y / density);
 
         promise.resolve(ptJson);
       }
@@ -265,23 +259,19 @@ public class MapViewModule extends ReactContextBaseJavaModule {
     final double density = context.getResources().getDisplayMetrics().density;
 
     final Point pt = new Point(
-            point.hasKey("x") ? (int)(point.getDouble("x") * density) : 0,
-            point.hasKey("y") ? (int)(point.getDouble("y") * density) : 0
+            point.hasKey("x") ? (int) (point.getDouble("x") * density) : 0,
+            point.hasKey("y") ? (int) (point.getDouble("y") * density) : 0
     );
 
-    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null)
-        {
+        if (view == null) {
           promise.reject("RNMMapView not found");
           return;
         }
-        if (view.map == null)
-        {
+        if (view.map == null) {
           promise.reject("RNMMapView.map is not valid");
           return;
         }
@@ -299,11 +289,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getMapBoundaries(final int tag, final Promise promise) {
-    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
           promise.reject("RNMMapView not found");
@@ -335,11 +323,9 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void enableLatestRenderer(final Promise promise) {
-    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock()
-    {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
       @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
+      public void execute(NativeViewHierarchyManager nvhm) {
         MapsInitializer.initialize(context, MapsInitializer.Renderer.LATEST, new OnMapsSdkInitializedCallback() {
           @Override
           public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
@@ -374,11 +360,48 @@ public class MapViewModule extends ReactContextBaseJavaModule {
           promise.reject("RNMMapView.map is not valid");
           return;
         }
-        if(duration <= 0) {
+        if (duration <= 0) {
           view.map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
           promise.resolve(null);
         } else {
           view.map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+              promise.resolve(null);
+            }
+
+            @Override
+            public void onFinish() {
+              promise.resolve(null);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  @ReactMethod
+  public void animateCamera(final int tag, ReadableMap camera, int duration, final Promise promise) {
+    context.getNativeModule(UIManagerModule.class).addUIBlock(new UIBlock() {
+      @Override
+      public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+        MapView view = (MapView) nativeViewHierarchyManager.resolveView(tag);
+        if (view == null) {
+          promise.reject("RNMMapView not found");
+          return;
+        }
+        if (view.map == null) {
+          promise.reject("RNMMapView.map is not valid");
+          return;
+        }
+
+        CameraUpdate update = view.buildCameraUpdate(camera);
+
+        if (duration <= 0) {
+          view.map.moveCamera(update);
+          promise.resolve(null);
+        } else {
+          view.map.animateCamera(update, duration, new GoogleMap.CancelableCallback() {
             @Override
             public void onCancel() {
               promise.resolve(null);

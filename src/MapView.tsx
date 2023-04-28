@@ -771,10 +771,22 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
-  animateCamera(camera: Partial<Camera>, duration: number = 500) {
-    if (this.map.current) {
-      Commands.animateCamera(this.map.current, camera, duration);
+  animateCamera(
+    camera: Partial<Camera>,
+    duration: number = 500,
+  ): Promise<void> {
+    if (this._gogleMapsOniOS()) {
+      return googleMapViewModuleMethod('animateCamera')(
+        this._getHandle(),
+        camera,
+        duration,
+      );
     }
+    return mapViewModuleMethod('animateCamera')(
+      this._getHandle(),
+      camera,
+      duration,
+    );
   }
 
   animateToRegion(region: Region, duration: number = 500): Promise<void> {

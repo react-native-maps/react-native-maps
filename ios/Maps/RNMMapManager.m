@@ -197,32 +197,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
-                  withCamera:(id)json
-                  withDuration:(CGFloat)duration)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNMMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
-        } else {
-            RNMMap *mapView = (RNMMap *)view;
-
-            // Merge the changes given with the current camera
-            MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:json existingCamera:[mapView camera]];
-
-            // don't emit region change events when we are setting the camera
-            BOOL originalIgnore = mapView.ignoreRegionChanges;
-            mapView.ignoreRegionChanges = YES;
-            [RNMMap animateWithDuration:duration/1000 animations:^{
-                [mapView setCamera:camera animated:YES];
-            } completion:^(BOOL finished){
-                mapView.ignoreRegionChanges = originalIgnore;
-            }];
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         edgePadding:(nonnull NSDictionary *)edgePadding
         animated:(BOOL)animated)

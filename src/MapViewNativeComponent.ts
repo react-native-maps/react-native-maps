@@ -14,14 +14,6 @@ interface NativeCommands {
     camera: Partial<Camera>,
   ) => void;
 
-  animateCamera: (
-    viewRef: NonNullable<
-      React.RefObject<MapViewNativeComponentType>['current']
-    >,
-    camera: Partial<Camera>,
-    duration: number,
-  ) => void;
-
   fitToElements: (
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
@@ -67,7 +59,6 @@ interface NativeCommands {
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   supportedCommands: [
     'setCamera',
-    'animateCamera',
     'fitToElements',
     'fitToSuppliedMarkers',
     'fitToCoordinates',

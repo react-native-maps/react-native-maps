@@ -276,7 +276,6 @@ public class MapManager extends ViewGroupManager<MapView> {
 
   @Override
   public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
-    int duration;
     ReadableMap camera;
 
     switch (commandId) {
@@ -286,15 +285,6 @@ public class MapManager extends ViewGroupManager<MapView> {
         }
         camera = args.getMap(0);
         view.animateToCamera(camera, 0);
-        break;
-
-      case "animateCamera":
-        if(args == null) {
-          break;
-        }
-        camera = args.getMap(0);
-        duration = args.getInt(1);
-        view.animateToCamera(camera, duration);
         break;
 
       case "fitToElements":

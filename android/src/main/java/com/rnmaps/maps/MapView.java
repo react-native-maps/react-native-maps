@@ -831,8 +831,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  public void animateToCamera(ReadableMap camera, int duration) {
-    if (map == null) return;
+  public CameraUpdate buildCameraUpdate(ReadableMap camera) {
     CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
     if (camera.hasKey("zoom")) {
       builder.zoom((float)camera.getDouble("zoom"));
@@ -848,7 +847,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
     }
 
-    CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
+    return CameraUpdateFactory.newCameraPosition(builder.build());
+  }
+
+  public void animateToCamera(ReadableMap camera, int duration) {
+    if (map == null) return;
+
+    CameraUpdate update = buildCameraUpdate(camera);
 
     if (duration <= 0) {
       map.moveCamera(update);
