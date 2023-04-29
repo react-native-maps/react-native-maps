@@ -71,7 +71,7 @@ const GOOGLE_MAPS_ONLY_TYPES: MapType[] = [MAP_TYPES.TERRAIN, MAP_TYPES.NONE];
 export type MapViewProps = ViewProps & {
   /**
    * A boundary of an area within which the map’s center needs to remain.
-   * @platform iOS: Google Maps only
+   * @platform iOS: Supported
    * @platform Android: Supported
    */
   boundary?: BoundingBox;
