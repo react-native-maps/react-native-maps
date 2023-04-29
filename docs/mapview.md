@@ -4,6 +4,7 @@
 
 | Prop                              | Type                                 | Default      | Note                                                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------- | ------------------------------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `boundary`                        | `BoundingBox`                        |              | A boundary of an area within which the map’s center needs to remain.                                                                                                                                                                                                                                                                                               |
 | `cacheEnabled`                    | `Boolean`                            | `false`      | If `true` map will be cached and displayed as an image instead of being interactable, for performance usage. **Note:** Apple Maps only                                                                                                                                                                                                                             |
 | `camera`                          | `Camera`                             |              | The camera view the map should display. If you use this, the `region` property is ignored.                                                                                                                                                                                                                                                                         |
 | `compassOffset`                   | `Point`                              |              | If set, changes the position of the compass. **Note:** iOS Maps only.                                                                                                                                                                                                                                                                                              |
@@ -94,7 +95,6 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `pointForCoordinate`        | `coordinate: LatLng`                                                                     | Converts a map coordinate to a view coordinate (`Point`). Returns a `Promise<Point>`.                                                                                                                                  |
 | `setCamera`                 | `camera: Camera`                                                                         | Like `animateCamera`, but sets the new view instantly, without an animation.                                                                                                                                           |
 | `setIndoorActiveLevelIndex` | `levelIndex: Number`                                                                     |
-| `setMapBoundaries`          | `northEast: LatLng`, `southWest: LatLng`                                                 | The boundary is defined by the map's center coordinates, not the device's viewport itself. **Note:** Google Maps only.                                                                                                 |
 
 ## Types
 
@@ -121,6 +121,19 @@ type Camera = {
 
    // Only when using Google Maps.
    zoom: number
+}
+```
+
+```ts
+interface BoundingBox {
+  northEast: {
+    latitude: number;
+    longitude: number;
+  };
+  southWest: {
+    latitude: number;
+    longitude: number;
+  };
 }
 ```
 

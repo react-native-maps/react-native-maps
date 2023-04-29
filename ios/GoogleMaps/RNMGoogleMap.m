@@ -305,6 +305,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     }
 }
 
+- (void)setBoundary:(GMSCoordinateBounds*)boundary {
+    self.cameraTargetBounds = boundary;
+}
+
 - (void)didPrepareMap {
   UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
   [self overrideGestureRecognizersForView:mapView];

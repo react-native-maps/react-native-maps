@@ -110,6 +110,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
+  private LatLngBounds boundary;
 
   private static final String[] PERMISSIONS = new String[]{
       "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
@@ -500,7 +501,42 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
+  public void setBoundary(ReadableMap boundary) {
+    if(boundary == null) {
+      this.boundary = null;
+      if(map != null) {
+        // consumers can pass null to clear boundary
+        map.setLatLngBoundsForCameraTarget(null);
+      }
+    } else {
+      LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+      ReadableMap northEast = boundary.getMap("northEast");
+      ReadableMap southWest = boundary.getMap("southWest");
+
+      double neLat = northEast.getDouble("latitude");
+      double neLng = northEast.getDouble("longitude");
+      builder.include(new LatLng(neLat, neLng));
+
+      double swLat = southWest.getDouble("latitude");
+      double swLng = southWest.getDouble("longitude");
+      builder.include(new LatLng(swLat, swLng));
+
+      LatLngBounds bounds = builder.build();
+
+      this.boundary = bounds;
+
+      if(map != null) {
+        map.setLatLngBoundsForCameraTarget(bounds);
+      }
+    }
+  }
+
+  // called as soon as the map is ready. Assuming nothing was set on the map at this point.
   private void applyBridgedProps() {
+    if(boundary != null) {
+      map.setLatLngBoundsForCameraTarget(boundary);
+    }
     if(initialRegion != null) {
       moveToRegion(initialRegion);
       initialRegionSet = true;
@@ -903,24 +939,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       {northEast.longitude, northEast.latitude},
       {southWest.longitude, southWest.latitude}
     };
-  }
-
-  public void setMapBoundaries(ReadableMap northEast, ReadableMap southWest) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    double latNE = northEast.getDouble("latitude");
-    double lngNE = northEast.getDouble("longitude");
-    builder.include(new LatLng(latNE, lngNE));
-
-    double latSW = southWest.getDouble("latitude");
-    double lngSW = southWest.getDouble("longitude");
-    builder.include(new LatLng(latSW, lngSW));
-
-    LatLngBounds bounds = builder.build();
-
-    map.setLatLngBoundsForCameraTarget(bounds);
   }
 
   // InfoWindowAdapter interface

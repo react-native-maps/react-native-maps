@@ -2,7 +2,6 @@ import type {HostComponent} from 'react-native';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import {NativeProps} from './MapView';
 import {Camera} from './MapView.types';
-import {LatLng} from './sharedTypes';
 
 export type MapViewNativeComponentType = HostComponent<NativeProps>;
 
@@ -14,14 +13,6 @@ interface NativeCommands {
     camera: Partial<Camera>,
   ) => void;
 
-  setMapBoundaries: (
-    viewRef: NonNullable<
-      React.RefObject<MapViewNativeComponentType>['current']
-    >,
-    northEast: LatLng,
-    southWest: LatLng,
-  ) => void;
-
   setIndoorActiveLevelIndex: (
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
@@ -31,9 +22,5 @@ interface NativeCommands {
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
-  supportedCommands: [
-    'setCamera',
-    'setMapBoundaries',
-    'setIndoorActiveLevelIndex',
-  ],
+  supportedCommands: ['setCamera', 'setIndoorActiveLevelIndex'],
 });

@@ -274,6 +274,11 @@ public class MapManager extends ViewGroupManager<MapView> {
     }
   }
 
+  @ReactProp(name = "boundary")
+  public void setBoundary(MapView view, ReadableMap boundary) {
+    view.setBoundary(boundary);
+  }
+
   @Override
   public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
     ReadableMap camera;
@@ -285,13 +290,6 @@ public class MapManager extends ViewGroupManager<MapView> {
         }
         camera = args.getMap(0);
         view.animateToCamera(camera, 0);
-        break;
-
-      case "setMapBoundaries":
-        if(args == null) {
-          break;
-        }
-        view.setMapBoundaries(args.getMap(0), args.getMap(1));
         break;
 
       case "setIndoorActiveLevelIndex":

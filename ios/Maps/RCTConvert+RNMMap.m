@@ -56,6 +56,23 @@
     return camera;
 }
 
++ (MKMapCameraBoundary *)MKMapCameraBoundary:(id)json
+{
+    json = [self NSDictionary:json];
+    CLLocationCoordinate2D northEast = [self CLLocationCoordinate2D:json[@"northEast"]];
+    CLLocationCoordinate2D southWest = [self CLLocationCoordinate2D:json[@"southWest"]];
+    MKCoordinateSpan span = {
+        northEast.latitude - southWest.latitude,
+        northEast.longitude - southWest.longitude
+    };
+    CLLocationCoordinate2D center = {
+        (northEast.latitude + southWest.latitude) / 2,
+        (northEast.longitude + southWest.longitude) / 2
+    };
+
+    MKCoordinateRegion region = {center, span}; 
+    return [[MKMapCameraBoundary alloc] initWithCoordinateRegion:region];
+}
 
 RCT_ENUM_CONVERTER(MKMapType, (@{
   @"standard": @(MKMapTypeStandard),

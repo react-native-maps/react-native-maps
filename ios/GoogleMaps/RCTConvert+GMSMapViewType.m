@@ -30,6 +30,14 @@
     return [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:nil];
 }
 
++ (GMSCoordinateBounds*)GMSCoordinateBounds:(id)json
+{
+    json = [self NSDictionary:json];
+    CLLocationCoordinate2D northEast = [self CLLocationCoordinate2D:json[@"northEast"]];
+    CLLocationCoordinate2D southWest = [self CLLocationCoordinate2D:json[@"southWest"]];
+    return [[GMSCoordinateBounds alloc] initWithCoordinate:northEast coordinate:southWest];
+}
+
 + (GMSCameraPosition*)GMSCameraPositionWithDefaults:(id)json existingCamera:(GMSCameraPosition*)existingCamera
 {
     CLLocationDegrees latitude = 0;
