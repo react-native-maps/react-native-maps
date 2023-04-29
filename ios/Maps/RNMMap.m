@@ -340,6 +340,10 @@ const NSInteger RNMMapMaxZoomLevel = 20;
     ];
 }
 
+- (void)setBoundary:(MKMapCameraBoundary*)boundary {
+    [self setCameraBoundary:boundary animated:NO];
+}
+
 - (void)setShowsUserLocation:(BOOL)showsUserLocation
 {
     if (self.showsUserLocation != showsUserLocation) {

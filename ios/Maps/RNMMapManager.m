@@ -81,57 +81,60 @@ RCT_EXPORT_MODULE(RNMMap)
     return map;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
-RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
-RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
-RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
-RCT_EXPORT_VIEW_PROPERTY(userInterfaceStyle, NSString)
-RCT_EXPORT_VIEW_PROPERTY(followsUserLocation, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(userLocationCalloutEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsPointsOfInterest, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsCompass, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsScale, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsTraffic, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(kmlSrc, NSString)
-RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(boundary, MKMapCameraBoundary*)
 RCT_EXPORT_VIEW_PROPERTY(cacheEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(loadingEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(loadingBackgroundColor, UIColor)
-RCT_EXPORT_VIEW_PROPERTY(loadingIndicatorColor, UIColor)
-RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(minDelta, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(compassOffset, CGPoint)
+RCT_EXPORT_VIEW_PROPERTY(followsUserLocation, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(kmlSrc, NSString)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
+RCT_EXPORT_VIEW_PROPERTY(loadingBackgroundColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(loadingEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(loadingIndicatorColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
-RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(minDelta, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onDoublePress, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDeselect, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onMarkerDragStart, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDragEnd, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMarkerDragStart, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
-RCT_CUSTOM_VIEW_PROPERTY(initialRegion, MKCoordinateRegion, RNMMap)
+RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsCompass, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsPointsOfInterest, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsScale, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsTraffic, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(userInterfaceStyle, NSString)
+RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
+RCT_EXPORT_VIEW_PROPERTY(userLocationCalloutEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
+RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(camera, MKMapCamera*, RNMMap)
 {
     if (json == nil) return;
-
-    // don't emit region change events when we are setting the initialRegion
+    
+    // don't emit region change events when we are setting the camera
     BOOL originalIgnore = view.ignoreRegionChanges;
     view.ignoreRegionChanges = YES;
-    [view setInitialRegion:[RCTConvert MKCoordinateRegion:json]];
+    [view setCamera:[RCTConvert MKMapCamera:json] animated:NO];
     view.ignoreRegionChanges = originalIgnore;
 }
 RCT_CUSTOM_VIEW_PROPERTY(initialCamera, MKMapCamera, RNMMap)
@@ -145,10 +148,16 @@ RCT_CUSTOM_VIEW_PROPERTY(initialCamera, MKMapCamera, RNMMap)
     view.ignoreRegionChanges = originalIgnore;
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(initialRegion, MKCoordinateRegion, RNMMap)
+{
+    if (json == nil) return;
 
-RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
-
+    // don't emit region change events when we are setting the initialRegion
+    BOOL originalIgnore = view.ignoreRegionChanges;
+    view.ignoreRegionChanges = YES;
+    [view setInitialRegion:[RCTConvert MKCoordinateRegion:json]];
+    view.ignoreRegionChanges = originalIgnore;
+}
 
 RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, RNMMap)
 {
@@ -160,18 +169,6 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, RNMMap)
     [view setRegion:[RCTConvert MKCoordinateRegion:json] animated:NO];
     view.ignoreRegionChanges = originalIgnore;
 }
-
-RCT_CUSTOM_VIEW_PROPERTY(camera, MKMapCamera*, RNMMap)
-{
-    if (json == nil) return;
-    
-    // don't emit region change events when we are setting the camera
-    BOOL originalIgnore = view.ignoreRegionChanges;
-    view.ignoreRegionChanges = YES;
-    [view setCamera:[RCTConvert MKMapCamera:json] animated:NO];
-    view.ignoreRegionChanges = originalIgnore;
-}
-
 
 #pragma mark exported MapView methods
 
