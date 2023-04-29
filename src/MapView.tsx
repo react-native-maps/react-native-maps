@@ -70,6 +70,12 @@ const GOOGLE_MAPS_ONLY_TYPES: MapType[] = [MAP_TYPES.TERRAIN, MAP_TYPES.NONE];
 
 export type MapViewProps = ViewProps & {
   /**
+   * A boundary of an area within which the map’s center needs to remain.
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  boundary?: BoundingBox;
+  /**
    * If `true` map will be cached and displayed as an image instead of being interactable, for performance usage.
    *
    * @default false
@@ -873,12 +879,6 @@ class MapView extends React.Component<MapViewProps, State> {
     return mapViewModuleMethod('getMapBoundaries')(this._getHandle());
   }
 
-  setMapBoundaries(northEast: LatLng, southWest: LatLng) {
-    if (this.map.current) {
-      Commands.setMapBoundaries(this.map.current, northEast, southWest);
-    }
-  }
-
   setIndoorActiveLevelIndex(activeLevelIndex: number) {
     if (this.map.current) {
       Commands.setIndoorActiveLevelIndex(this.map.current, activeLevelIndex);
@@ -1081,6 +1081,7 @@ class MapView extends React.Component<MapViewProps, State> {
         customMapStyleString: this.props.customMapStyle
           ? JSON.stringify(this.props.customMapStyle)
           : undefined,
+        boundary: this.props.boundary,
       };
     }
 

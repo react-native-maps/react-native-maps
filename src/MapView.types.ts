@@ -186,20 +186,3 @@ export type Address = {
 export interface MarkersFrames {
   [key: string]: {point: Point; frame: Frame};
 }
-
-export type NativeCommandName =
-  | 'animateCamera'
-  | 'animateToRegion'
-  | 'coordinateForPoint'
-  | 'fitToCoordinates'
-  | 'fitToElements'
-  | 'fitToSuppliedMarkers'
-  | 'getAddressFromCoordinates'
-  | 'getCamera'
-  | 'getMapBoundaries'
-  | 'getMarkersFrames'
-  | 'pointForCoordinate'
-  | 'setCamera'
-  | 'setIndoorActiveLevelIndex'
-  | 'setMapBoundaries'
-  | 'takeSnapshot';

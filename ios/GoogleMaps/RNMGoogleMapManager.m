@@ -65,47 +65,47 @@ RCT_EXPORT_MODULE(RNMGoogleMap)
   return map;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
-RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
-RCT_EXPORT_VIEW_PROPERTY(initialCamera, GMSCameraPosition)
-RCT_REMAP_VIEW_PROPERTY(camera, cameraProp, GMSCameraPosition)
-RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
-RCT_EXPORT_VIEW_PROPERTY(region, MKCoordinateRegion)
-RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsCompass, BOOL)
-//RCT_EXPORT_VIEW_PROPERTY(showsScale, BOOL)  // Not supported by GoogleMaps
-RCT_EXPORT_VIEW_PROPERTY(showsTraffic, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(scrollDuringRotateOrZoomEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(zoomTapEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsMyLocationButton, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsIndoors, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsIndoorLevelPicker, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(boundary, GMSCoordinateBounds*)
 RCT_EXPORT_VIEW_PROPERTY(customMapStyleString, NSString)
+RCT_EXPORT_VIEW_PROPERTY(initialCamera, GMSCameraPosition)
+RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
+RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(kmlSrc, NSString)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
-RCT_REMAP_VIEW_PROPERTY(paddingAdjustmentBehavior, paddingAdjustmentBehaviorString, NSString)
-RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onMapLoaded, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onKmlReady, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
+RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onIndoorBuildingFocused, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onIndoorLevelActivated, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onKmlReady, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMapLoaded, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPoiClick, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPoiClick, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onIndoorLevelActivated, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onIndoorBuildingFocused, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
-RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(kmlSrc, NSString)
+RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(region, MKCoordinateRegion)
+RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(scrollDuringRotateOrZoomEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsCompass, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsIndoorLevelPicker, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsIndoors, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsMyLocationButton, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsTraffic, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(zoomTapEnabled, BOOL)
+RCT_REMAP_VIEW_PROPERTY(camera, cameraProp, GMSCameraPosition)
+RCT_REMAP_VIEW_PROPERTY(paddingAdjustmentBehavior, paddingAdjustmentBehaviorString, NSString)
+RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
 
 RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
                   camera:(id)json)
@@ -120,24 +120,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
             [mapView setCamera:camera];
         }
     }];
-}
-
-RCT_EXPORT_METHOD(setMapBoundaries:(nonnull NSNumber *)reactTag
-                  northEast:(CLLocationCoordinate2D)northEast
-                  southWest:(CLLocationCoordinate2D)southWest)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[RNMGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
-    } else {
-      RNMGoogleMap *mapView = (RNMGoogleMap *)view;
-
-      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:northEast coordinate:southWest];
-
-      mapView.cameraTargetBounds = bounds;
-    }
-  }];
 }
 
 RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
