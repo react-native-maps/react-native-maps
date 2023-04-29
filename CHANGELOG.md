@@ -1,5 +1,19 @@
 # Changelog
 
+# [2.0.0-beta.9](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2023-04-29)
+
+
+### Features
+
+* **MapView:** implement `boundary` for Apple Maps ([079e7ab](https://github.com/react-native-maps/react-native-maps/commit/079e7ab568243391fcd7b94ce820f70721b6caad))
+* **MapView:** migrate `setMapBoundaries` to `boundary` prop ([2505c3f](https://github.com/react-native-maps/react-native-maps/commit/2505c3f7ac139a51daf857f3c39d192ee7afd3b9))
+
+
+### BREAKING CHANGES
+
+* **MapView:** drop support for iOS < 13.0.
+* **MapView:** migrated `setMapBoundaries` method to `boundary` prop.
+
 # [2.0.0-beta.8](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2023-04-28)
 
 
