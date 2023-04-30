@@ -64,8 +64,8 @@ dependencies {
   }
   implementation('com.google.android.gms:play-services-location') {
     version {
-      strictly '[20.0.0, 21.0.0['
-      prefer '20.0.0'
+      strictly '[21.0.1, 22.0.0['
+      prefer '21.0.1'
     }
   }
   implementation('com.google.maps.android:android-maps-utils') {
