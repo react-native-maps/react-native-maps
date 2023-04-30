@@ -1,5 +1,14 @@
 # Changelog
 
+# [2.0.0-beta.10](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2023-04-30)
+
+
+### Features
+
+* **android:** bump play-services-base 18.2.0 ([02cf884](https://github.com/react-native-maps/react-native-maps/commit/02cf884a10be09bcca53765aca9e8a1ac2bcc86e))
+* **android:** bump play-services-location to 21.0.1 ([87b9916](https://github.com/react-native-maps/react-native-maps/commit/87b99161347dfbf0e3c1ffc9deef3b624c08c248))
+* **android:** bump play-services-maps to 18.1.0 ([a8f8f13](https://github.com/react-native-maps/react-native-maps/commit/a8f8f13dbacdf90f04c3360ad1c7ffb0b5a3289a))
+
 # [2.0.0-beta.9](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2023-04-29)
 
 
