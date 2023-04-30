@@ -53,19 +53,19 @@ dependencies {
   implementation('com.google.android.gms:play-services-base') {
     version {
       strictly '[18.0.1, 19.0.0['
-      prefer '18.1.0'
+      prefer '18.2.0'
     }
   }
   implementation('com.google.android.gms:play-services-maps') {
     version {
       strictly '[18.0.0, 19.0.0['
-      prefer '18.0.2'
+      prefer '18.1.0'
     }
   }
   implementation('com.google.android.gms:play-services-location') {
     version {
-      strictly '[20.0.0, 21.0.0['
-      prefer '20.0.0'
+      strictly '[21.0.1, 22.0.0['
+      prefer '21.0.1'
     }
   }
   implementation('com.google.maps.android:android-maps-utils') {
