@@ -53,7 +53,7 @@ dependencies {
   implementation('com.google.android.gms:play-services-base') {
     version {
       strictly '[18.0.1, 19.0.0['
-      prefer '18.1.0'
+      prefer '18.2.0'
     }
   }
   implementation('com.google.android.gms:play-services-maps') {
