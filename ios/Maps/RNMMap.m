@@ -116,13 +116,21 @@ const NSInteger RNMMapMaxZoomLevel = 20;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[RNMMapUrlTile class]]) {
         ((RNMMapUrlTile *)subview).map = self;
-        [self addOverlay:(id<MKOverlay>)subview];
+        if (((RNMMapUrlTile *)subview).showLabels) {
+            [self addOverlay:(id<MKOverlay>)subview];
+        } else {
+            [self addOverlay:(id<MKOverlay>)subview level:MKOverlayLevelAboveLabels];
+        }
     }else if ([subview isKindOfClass:[RNMMapWMSTile class]]) {
         ((RNMMapWMSTile *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[RNMMapLocalTile class]]) {
         ((RNMMapLocalTile *)subview).map = self;
-        [self addOverlay:(id<MKOverlay>)subview];
+        if (((RNMMapLocalTile *)subview).showLabels) {
+            [self addOverlay:(id<MKOverlay>)subview level:MKOverlayLevelAboveLabels];
+        } else {
+            [self addOverlay:(id<MKOverlay>)subview];
+        }
     } else if ([subview isKindOfClass:[RNMMapOverlay class]]) {
         ((RNMMapOverlay *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
@@ -257,13 +265,13 @@ const NSInteger RNMMapMaxZoomLevel = 20;
 
     CGPoint touchPoint = [self.calloutView convertPoint:point fromView:self];
     UIView *touchedView = [self.calloutView hitTest:touchPoint withEvent:event];
-    
+
     if (touchedView) {
         UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
         RNMMapCalloutSubview* calloutSubview = nil;
         RNMMapCallout* callout = nil;
         RNMMapMarker* marker = nil;
-        
+
         UIView* tmp = touchedView;
         while (tmp && tmp != win && tmp != self.calloutView) {
             if ([tmp respondsToSelector:@selector(onPress)]) {
@@ -275,7 +283,7 @@ const NSInteger RNMMapMaxZoomLevel = 20;
             }
             tmp = tmp.superview;
         }
-        
+
         if (callout) {
             marker = [self markerForCallout:callout];
             if (marker) {
@@ -285,7 +293,7 @@ const NSInteger RNMMapMaxZoomLevel = 20;
                 }
             }
         }
-        
+
         return calloutSubview ? calloutSubview : touchedView;
     }
 
@@ -324,7 +332,7 @@ const NSInteger RNMMapMaxZoomLevel = 20;
 - (NSArray *)getMapBoundaries
 {
     MKMapRect mapRect = self.visibleMapRect;
-    
+
     CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
     CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
 

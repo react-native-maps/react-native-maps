@@ -38,6 +38,7 @@
 @property NSInteger minimumZ;
 @property BOOL flipY;
 @property BOOL shouldReplaceMapContent;
+@property BOOL showLabels;
 @property NSInteger tileSize;
 @property (nonatomic, copy) NSString *tileCachePath;
 @property NSInteger tileCacheMaxAge;
