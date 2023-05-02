@@ -127,9 +127,9 @@ const NSInteger RNMMapMaxZoomLevel = 20;
     } else if ([subview isKindOfClass:[RNMMapLocalTile class]]) {
         ((RNMMapLocalTile *)subview).map = self;
         if (((RNMMapLocalTile *)subview).showLabels) {
-            [self addOverlay:(id<MKOverlay>)subview level:MKOverlayLevelAboveLabels];
-        } else {
             [self addOverlay:(id<MKOverlay>)subview];
+        } else {
+            [self addOverlay:(id<MKOverlay>)subview level:MKOverlayLevelAboveLabels];
         }
     } else if ([subview isKindOfClass:[RNMMapOverlay class]]) {
         ((RNMMapOverlay *)subview).map = self;
