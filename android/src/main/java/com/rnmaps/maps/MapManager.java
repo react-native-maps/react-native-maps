@@ -281,17 +281,7 @@ public class MapManager extends ViewGroupManager<MapView> {
 
   @Override
   public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
-    ReadableMap camera;
-
     switch (commandId) {
-      case "setCamera":
-        if(args == null) {
-          break;
-        }
-        camera = args.getMap(0);
-        view.animateToCamera(camera, 0);
-        break;
-
       case "setIndoorActiveLevelIndex":
         if(args == null) {
           break;

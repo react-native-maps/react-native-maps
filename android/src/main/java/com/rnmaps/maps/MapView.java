@@ -886,19 +886,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     return CameraUpdateFactory.newCameraPosition(builder.build());
   }
 
-  public void animateToCamera(ReadableMap camera, int duration) {
-    if (map == null) return;
-
-    CameraUpdate update = buildCameraUpdate(camera);
-
-    if (duration <= 0) {
-      map.moveCamera(update);
-    }
-    else {
-      map.animateCamera(update, duration, null);
-    }
-  }
-
   public int baseLeftMapPadding;
   public int baseRightMapPadding;
   public int baseTopMapPadding;

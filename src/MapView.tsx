@@ -771,12 +771,6 @@ class MapView extends React.Component<MapViewProps, State> {
     return mapViewModuleMethod('getCamera')(this._getHandle());
   }
 
-  setCamera(camera: Partial<Camera>) {
-    if (this.map.current) {
-      Commands.setCamera(this.map.current, camera);
-    }
-  }
-
   animateCamera(
     camera: Partial<Camera>,
     duration: number = 500,

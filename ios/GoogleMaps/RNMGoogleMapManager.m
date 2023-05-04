@@ -107,21 +107,6 @@ RCT_REMAP_VIEW_PROPERTY(camera, cameraProp, GMSCameraPosition)
 RCT_REMAP_VIEW_PROPERTY(paddingAdjustmentBehavior, paddingAdjustmentBehaviorString, NSString)
 RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
 
-RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
-                  camera:(id)json)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNMGoogleMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
-        } else {
-            RNMGoogleMap *mapView = (RNMGoogleMap *)view;
-            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
-            [mapView setCamera:camera];
-        }
-    }];
-}
-
 RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
                   levelIndex:(NSInteger) levelIndex)
 {

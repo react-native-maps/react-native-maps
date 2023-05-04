@@ -93,7 +93,6 @@ To access event data, you will need to use `e.nativeEvent`. For example, `onPres
 | `getMapBoundaries`          |                                                                                          | `Promise<{northEast: LatLng, southWest: LatLng}>`                                                                                                                                                                      |
 | `getMarkersFrames`          | `onlyVisible: Boolean`                                                                   | Get markers' centers and frames in view coordinates. Returns a `Promise<{ "markerID" : { point: Point, frame: Frame } }>`. **Note**: iOS only.                                                                         |
 | `pointForCoordinate`        | `coordinate: LatLng`                                                                     | Converts a map coordinate to a view coordinate (`Point`). Returns a `Promise<Point>`.                                                                                                                                  |
-| `setCamera`                 | `camera: Camera`                                                                         | Like `animateCamera`, but sets the new view instantly, without an animation.                                                                                                                                           |
 | `setIndoorActiveLevelIndex` | `levelIndex: Number`                                                                     |
 
 ## Types
