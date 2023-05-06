@@ -1,5 +1,19 @@
 # Changelog
 
+# [2.0.0-beta.11](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2023-05-06)
+
+
+### Features
+
+* **MapView:** migrate `setIndoorActiveLevelIndex` to prop ([5957e44](https://github.com/react-native-maps/react-native-maps/commit/5957e445d9d530d9b2e8478b19e10ce202759b85))
+* **MapView:** remove `setCamera` ([aef8148](https://github.com/react-native-maps/react-native-maps/commit/aef81481db6234f4e925d7748dd62b445c04f92e))
+
+
+### BREAKING CHANGES
+
+* **MapView:** `setIndoorActiveLevelIndex` migrated to `indoorActiveLevelIndex` prop
+* **MapView:** `setCamera` removed. Use `animateCamera` with `duration: 0` instead.
+
 # [2.0.0-beta.10](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2023-04-30)
 
 
