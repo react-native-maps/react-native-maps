@@ -259,12 +259,18 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
             // don't emit region change events when we are setting the camera
             BOOL originalIgnore = mapView.ignoreRegionChanges;
             mapView.ignoreRegionChanges = YES;
-            [RNMMap animateWithDuration:duration/1000 animations:^{
-                [mapView setCamera:camera animated:YES];
-            } completion:^(BOOL finished){
+            if(duration > 0.0f) {
+                [RNMMap animateWithDuration:duration/1000 animations:^{
+                    [mapView setCamera:camera animated:YES];
+                } completion:^(BOOL finished){
+                    mapView.ignoreRegionChanges = originalIgnore;
+                    resolve(nil);
+                }];
+            } else {
+                [mapView setCamera:camera animated:NO];
                 mapView.ignoreRegionChanges = originalIgnore;
                 resolve(nil);
-            }];
+            }
         }
     }];
 }

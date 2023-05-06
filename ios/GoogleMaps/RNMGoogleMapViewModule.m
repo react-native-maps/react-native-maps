@@ -224,13 +224,18 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
             RNMGoogleMap *mapView = (RNMGoogleMap *)view;
             GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
 
-            [CATransaction begin];
-            [CATransaction setCompletionBlock:^{
-                resolve(nil);
-            }];
-            [CATransaction setAnimationDuration:duration/1000];
-            [mapView animateToCameraPosition:camera];
-            [CATransaction commit];
+            if(duration > 0.0f) {
+              [CATransaction begin];
+              [CATransaction setCompletionBlock:^{
+                  resolve(nil);
+              }];
+              [CATransaction setAnimationDuration:duration/1000];
+              [mapView animateToCameraPosition:camera];
+              [CATransaction commit];
+            } else {
+              [mapView moveCamera:camera];
+              resolve(nil);
+            }
         }
     }];
 }
