@@ -51,7 +51,7 @@ import {
   UserLocationChangeEvent,
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
-import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
+import {MapViewNativeComponentType} from './MapViewNativeComponent';
 import MapViewModule, {Spec as MapViewModuleSpec} from './NativeMapViewModule';
 import GoogleMapViewModule, {
   Spec as GoogleMapViewModuleSpec,
@@ -120,6 +120,14 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Not supported
    */
   followsUserLocation?: boolean;
+
+  /**
+   * Set to control what indoor building level to display.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  indoorActiveLevelIndex?: number;
 
   /**
    * The initial camera view the map should use.  Use this prop instead of `camera`
@@ -871,12 +879,6 @@ class MapView extends React.Component<MapViewProps, State> {
       return googleMapViewModuleMethod('getMapBoundaries')(this._getHandle());
     }
     return mapViewModuleMethod('getMapBoundaries')(this._getHandle());
-  }
-
-  setIndoorActiveLevelIndex(activeLevelIndex: number) {
-    if (this.map.current) {
-      Commands.setIndoorActiveLevelIndex(this.map.current, activeLevelIndex);
-    }
   }
 
   /**

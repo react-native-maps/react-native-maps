@@ -279,16 +279,9 @@ public class MapManager extends ViewGroupManager<MapView> {
     view.setBoundary(boundary);
   }
 
-  @Override
-  public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
-    switch (commandId) {
-      case "setIndoorActiveLevelIndex":
-        if(args == null) {
-          break;
-        }
-        view.setIndoorActiveLevelIndex(args.getInt(0));
-        break;
-    }
+  @ReactProp(name = "indoorActiveLevelIndex")
+  public void setIndoorActiveLevelIndex(MapView view, int index) {
+    view.setIndoorActiveLevelIndex(index);
   }
 
   @Override
