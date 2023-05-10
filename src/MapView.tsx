@@ -318,14 +318,6 @@ export type MapViewProps = ViewProps & {
   onLongPress?: (event: LongPressEvent) => void;
 
   /**
-   * Callback that is called when the map has finished rendering all tiles.
-   *
-   * @platform iOS: Google Maps only
-   * @platform Android: Supported
-   */
-  onMapLoaded?: (event: NativeSyntheticEvent<{}>) => void;
-
-  /**
    * Callback that is called once the map is ready.
    *
    * Event is optional, as the first onMapReady callback is intercepted
@@ -431,6 +423,14 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Supported
    */
   onRegionChangeComplete?: (region: Region, details: Details) => void;
+
+  /**
+   * Callback that is called when the map has finished rendering all tiles.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  onTilesRendered?: (event: NativeSyntheticEvent<{}>) => void;
 
   /**
    * Callback that is called when the underlying map figures our users current location

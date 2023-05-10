@@ -311,7 +311,7 @@ public class MapManager extends ViewGroupManager<MapView> {
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
         "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
         "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
-        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded")
+        "onTilesRendered", MapBuilder.of("registrationName", "onTilesRendered")
     ));
 
     return map;
