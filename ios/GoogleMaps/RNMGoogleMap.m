@@ -330,7 +330,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)mapViewDidFinishTileRendering {
-  if (self.onMapLoaded) self.onMapLoaded(@{});
+  if (self.onTilesRendered) self.onTilesRendered(@{});
 }
 
 - (BOOL)didTapMarker:(GMSMarker *)marker {
