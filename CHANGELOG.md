@@ -1,5 +1,24 @@
 # Changelog
 
+# [2.0.0-beta.12](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2023-05-10)
+
+
+### Bug Fixes
+
+* **android:** ui movement when using fitTo{SuppliedMarkers,Coordinates} ([657e05f](https://github.com/react-native-maps/react-native-maps/commit/657e05faecc6f82451cc2799481e53cf11a1669d)), closes [#4590](https://github.com/react-native-maps/react-native-maps/issues/4590)
+* **ios-google:** remove redundant if/else ([db5aadc](https://github.com/react-native-maps/react-native-maps/commit/db5aadc3e30a69a8bda5cba3a89dbefbd6d9c802))
+* **MapView:** `fitToElements` edgePadding moves logo and UI on android ([e0946c9](https://github.com/react-native-maps/react-native-maps/commit/e0946c95fc5bc792cd542feef696ebdb85928fe9))
+
+
+### Features
+
+* **ios:** support edgePadding for fitToElements & fitToSuppliedMarkers ([cf58b84](https://github.com/react-native-maps/react-native-maps/commit/cf58b8426aa4143a3b74f182bb55ccfa3fa720d3))
+
+
+### BREAKING CHANGES
+
+* **ios:** fitTo{Elements,SuppliedMarkers} no longer auto apply padding. Use edgePadding.
+
 # [2.0.0-beta.11](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2023-05-06)
 
 
