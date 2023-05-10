@@ -1,5 +1,18 @@
 # Changelog
 
+# [2.0.0-beta.13](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2023-05-10)
+
+
+### Features
+
+* **ios:** implement `onTilesRendered` for MapKit ([1f43340](https://github.com/react-native-maps/react-native-maps/commit/1f433403520c8d35837783a31928578dbf09c780))
+* **MapView:** rename `onMapLoaded` to `onTilesRendered` ([9ce06d5](https://github.com/react-native-maps/react-native-maps/commit/9ce06d5c5f1e0d8d64547782baf0c7fd677fc0d5))
+
+
+### BREAKING CHANGES
+
+* **MapView:** `onMapLoaded` renamed to `onTilesRendered`
+
 # [2.0.0-beta.12](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2023-05-10)
 
 
