@@ -111,6 +111,7 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onTilesRendered, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
@@ -551,9 +552,12 @@ static int kDragCenterContext;
     [mapView beginLoading];
 }
 
-- (void)mapViewDidFinishRenderingMap:(RNMMap *)mapView fullyRendered:(BOOL)fullyRendered
+- (void)mapViewDidFinishRenderingMap:(RNMMap *)mapView fullyRendered:(__unused BOOL)fullyRendered
 {
     [mapView finishLoading];
+    if (mapView.onTilesRendered) {
+        mapView.onTilesRendered(@{});
+    }
 }
 
 #pragma mark Private

@@ -66,6 +66,7 @@ extern const NSInteger RNMMapMaxZoomLevel;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+@property (nonatomic, copy) RCTBubblingEventBlock onTilesRendered;
 @property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
 
 - (void)cacheViewIfNeeded;
