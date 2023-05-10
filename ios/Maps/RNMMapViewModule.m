@@ -287,21 +287,62 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
             RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
         } else {
             RNMMap *mapView = (RNMMap *)view;
+            
+            if(mapView.annotations.count < 1) {
+                resolve(nil);
+            } else {
+                CLLocationDegrees minLatitude = DBL_MAX;
+                CLLocationDegrees maxLatitude = -DBL_MAX;
+                CLLocationDegrees minLongitude = DBL_MAX;
+                CLLocationDegrees maxLongitude = -DBL_MAX;
+                
+                for(id<MKAnnotation> annotation in mapView.annotations) {
+                    double annotationLat = annotation.coordinate.latitude;
+                    double annotationLong = annotation.coordinate.longitude;
+                    minLatitude = fmin(annotationLat, minLatitude);
+                    maxLatitude = fmax(annotationLat, maxLatitude);
+                    minLongitude = fmin(annotationLong, minLongitude);
+                    maxLongitude = fmax(annotationLong, maxLongitude);
+                }
+                
+                double latitudeDelta = maxLatitude - minLatitude;
+                double longitudeDelta = maxLongitude - minLongitude;
+                
+                double mapViewHeight = mapView.bounds.size.height;
+                double mapViewWidth = mapView.bounds.size.width;
+                
+                double latPerHeight = latitudeDelta / mapViewHeight;
+                double lngPerWidth = longitudeDelta / mapViewWidth;
+                
+                CGFloat topPadding = [RCTConvert CGFloat:edgePadding[@"top"]];
+                CGFloat rightPadding = [RCTConvert CGFloat:edgePadding[@"right"]];
+                CGFloat bottomPadding = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+                CGFloat leftPadding = [RCTConvert CGFloat:edgePadding[@"left"]];
+                
+                maxLatitude = maxLatitude + topPadding * latPerHeight;
+                minLatitude = minLatitude - bottomPadding * latPerHeight;
+                maxLongitude = maxLongitude + rightPadding * lngPerWidth;
+                minLongitude = minLongitude - leftPadding * lngPerWidth;
+                
+                MKCoordinateRegion region;
+                region.center.latitude = (minLatitude + maxLatitude) / 2;
+                region.center.longitude = (minLongitude + maxLongitude) / 2;
+                // if fitting a single marker or if all markers are aligned, the delta will be zero (infinite zoom)
+                // this will cause mapkit not to zoom at all. Picking an arbitrary small number to circumvent
+                region.span.latitudeDelta = fmax(maxLatitude - minLatitude, 0.000001);
+                region.span.longitudeDelta = fmax(maxLongitude - minLongitude, 0.000001);
 
-            // TODO(lmr): we potentially want to include overlays here... and could concat the two arrays together.
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                 if(duration > 0.0f) {
                     [RNMMap animateWithDuration:duration/1000 animations:^{
-                        [mapView showAnnotations:mapView.annotations animated:YES];
+                        [mapView setRegion:region animated:YES];
                     } completion:^(BOOL finished){
                         resolve(nil);
                     }];
                 } else {
-                    [mapView showAnnotations:mapView.annotations animated:NO];
+                    [mapView setRegion:region animated:NO];
                     resolve(nil);
                 }
-                
-            });
+            }
         }
     }];
 }
@@ -328,17 +369,62 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
             }];
 
             NSArray *filteredMarkers = [mapView.annotations filteredArrayUsingPredicate:filterMarkers];
+            
+            if(filteredMarkers.count < 1) {
+                resolve(nil);
+            } else {
+                CLLocationDegrees minLatitude = DBL_MAX;
+                CLLocationDegrees maxLatitude = -DBL_MAX;
+                CLLocationDegrees minLongitude = DBL_MAX;
+                CLLocationDegrees maxLongitude = -DBL_MAX;
+                
+                for(id<MKAnnotation> annotation in filteredMarkers) {
+                    double annotationLat = annotation.coordinate.latitude;
+                    double annotationLong = annotation.coordinate.longitude;
+                    minLatitude = fmin(annotationLat, minLatitude);
+                    maxLatitude = fmax(annotationLat, maxLatitude);
+                    minLongitude = fmin(annotationLong, minLongitude);
+                    maxLongitude = fmax(annotationLong, maxLongitude);
+                }
+                
+                double latitudeDelta = maxLatitude - minLatitude;
+                double longitudeDelta = maxLongitude - minLongitude;
+                
+                double mapViewHeight = mapView.bounds.size.height;
+                double mapViewWidth = mapView.bounds.size.width;
+                
+                double latPerHeight = latitudeDelta / mapViewHeight;
+                double lngPerWidth = longitudeDelta / mapViewWidth;
+                
+                CGFloat topPadding = [RCTConvert CGFloat:edgePadding[@"top"]];
+                CGFloat rightPadding = [RCTConvert CGFloat:edgePadding[@"right"]];
+                CGFloat bottomPadding = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+                CGFloat leftPadding = [RCTConvert CGFloat:edgePadding[@"left"]];
+                
+                maxLatitude = maxLatitude + topPadding * latPerHeight;
+                minLatitude = minLatitude - bottomPadding * latPerHeight;
+                maxLongitude = maxLongitude + rightPadding * lngPerWidth;
+                minLongitude = minLongitude - leftPadding * lngPerWidth;
+                
+                MKCoordinateRegion region;
+                region.center.latitude = (minLatitude + maxLatitude) / 2;
+                region.center.longitude = (minLongitude + maxLongitude) / 2;
+                // if fitting a single marker or if all markers are aligned, the delta will be zero (infinite zoom)
+                // this will cause mapkit not to zoom at all. Picking an arbitrary small number to circumvent
+                region.span.latitudeDelta = fmax(maxLatitude - minLatitude, 0.000001);
+                region.span.longitudeDelta = fmax(maxLongitude - minLongitude, 0.000001);
 
-            if(duration > 0.0f) {
-                [RNMMap animateWithDuration:duration/1000 animations:^{
-                [mapView showAnnotations:filteredMarkers animated:YES];
-                } completion:^(BOOL finished){
-                    resolve(nil);
-                }];
+                if(duration > 0.0f) {
+                    [RNMMap animateWithDuration:duration/1000 animations:^{
+                        [mapView setRegion:region animated:YES];
+                    } completion:^(BOOL finished){
+                        resolve(nil);
+                    }];
                 } else {
-                [mapView showAnnotations:filteredMarkers animated:NO];
+                    [mapView setRegion:region animated:NO];
                     resolve(nil);
                 }
+            }
         }
     }];
 }
