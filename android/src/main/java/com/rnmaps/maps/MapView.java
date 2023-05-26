@@ -1,9 +1,7 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Point;
 
 import androidx.annotation.NonNull;
@@ -16,13 +14,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.location.Location;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
@@ -67,7 +62,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,13 +81,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private CircleManager.Collection circleCollection;
   private GroundOverlayManager groundOverlayManager;
   private GroundOverlayManager.Collection groundOverlayCollection;
-  private ProgressBar mapLoadingProgressBar;
-  private RelativeLayout mapLoadingLayout;
   private ImageView cacheImageView;
   private Boolean isMapLoaded = false;
-  private Integer loadingBackgroundColor = null;
-  private Integer loadingIndicatorColor = null;
-  public final int baseMapPadding = 50;
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
@@ -665,44 +654,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     this.cacheView();
   }
 
-  public void enableMapLoading(boolean loadingEnabled) {
-    if (loadingEnabled && !this.isMapLoaded) {
-      this.getMapLoadingLayoutView().setVisibility(View.VISIBLE);
-    }
-  }
-
   public void setMoveOnMarkerPress(boolean moveOnPress) {
     this.moveOnMarkerPress = moveOnPress;
-  }
-
-  public void setLoadingBackgroundColor(Integer loadingBackgroundColor) {
-    this.loadingBackgroundColor = loadingBackgroundColor;
-
-    if (this.mapLoadingLayout != null) {
-      if (loadingBackgroundColor == null) {
-        this.mapLoadingLayout.setBackgroundColor(Color.WHITE);
-      } else {
-        this.mapLoadingLayout.setBackgroundColor(this.loadingBackgroundColor);
-      }
-    }
-  }
-
-  public void setLoadingIndicatorColor(Integer loadingIndicatorColor) {
-    this.loadingIndicatorColor = loadingIndicatorColor;
-    if (this.mapLoadingProgressBar != null) {
-      Integer color = loadingIndicatorColor;
-      if (color == null) {
-        color = Color.parseColor("#606060");
-      }
-
-      ColorStateList progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-      ColorStateList secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-      ColorStateList indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
-
-      this.mapLoadingProgressBar.setProgressTintList(progressTintList);
-      this.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
-      this.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
-    }
   }
 
   public void setHandlePanDrag(boolean handlePanDrag) {
@@ -1008,36 +961,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     manager.pushEvent(context, this, "onPoiClick", event);
   }
 
-  private ProgressBar getMapLoadingProgressBar() {
-    if (this.mapLoadingProgressBar == null) {
-      this.mapLoadingProgressBar = new ProgressBar(getContext());
-      this.mapLoadingProgressBar.setIndeterminate(true);
-    }
-    if (this.loadingIndicatorColor != null) {
-      this.setLoadingIndicatorColor(this.loadingIndicatorColor);
-    }
-    return this.mapLoadingProgressBar;
-  }
-
-  private RelativeLayout getMapLoadingLayoutView() {
-    if (this.mapLoadingLayout == null) {
-      this.mapLoadingLayout = new RelativeLayout(getContext());
-      this.mapLoadingLayout.setBackgroundColor(Color.LTGRAY);
-      this.addView(this.mapLoadingLayout,
-          new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-              ViewGroup.LayoutParams.MATCH_PARENT));
-
-      RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-          RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-      params.addRule(RelativeLayout.CENTER_IN_PARENT);
-      this.mapLoadingLayout.addView(this.getMapLoadingProgressBar(), params);
-
-      this.mapLoadingLayout.setVisibility(View.INVISIBLE);
-    }
-    this.setLoadingBackgroundColor(this.loadingBackgroundColor);
-    return this.mapLoadingLayout;
-  }
-
   private ImageView getCacheImageView() {
     if (this.cacheImageView == null) {
       this.cacheImageView = new ImageView(getContext());
@@ -1056,41 +979,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  private void removeMapLoadingProgressBar() {
-    if (this.mapLoadingProgressBar != null) {
-      ((ViewGroup) this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
-      this.mapLoadingProgressBar = null;
-    }
-  }
-
-  private void removeMapLoadingLayoutView() {
-    this.removeMapLoadingProgressBar();
-    if (this.mapLoadingLayout != null) {
-      ((ViewGroup) this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
-      this.mapLoadingLayout = null;
-    }
-  }
-
   private void cacheView() {
     if (this.cacheEnabled) {
       final ImageView cacheImageView = this.getCacheImageView();
-      final RelativeLayout mapLoadingLayout = this.getMapLoadingLayoutView();
       cacheImageView.setVisibility(View.INVISIBLE);
-      mapLoadingLayout.setVisibility(View.VISIBLE);
       if (this.isMapLoaded) {
         this.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
           @Override public void onSnapshotReady(Bitmap bitmap) {
             cacheImageView.setImageBitmap(bitmap);
             cacheImageView.setVisibility(View.VISIBLE);
-            mapLoadingLayout.setVisibility(View.INVISIBLE);
           }
         });
       }
     } else {
       this.removeCacheImageView();
-      if (this.isMapLoaded) {
-        this.removeMapLoadingLayoutView();
-      }
     }
   }
 
