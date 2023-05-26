@@ -183,33 +183,6 @@ export type MapViewProps = ViewProps & {
   liteMode?: boolean;
 
   /**
-   * Sets loading background color.
-   *
-   * @default `#FFFFFF`
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingBackgroundColor?: string;
-
-  /**
-   * If `true` a loading indicator will show while the map is loading.
-   *
-   * @default false
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingEnabled?: boolean;
-
-  /**
-   * Sets loading indicator color.
-   *
-   * @default `#606060`
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingIndicatorColor?: string;
-
-  /**
    * Adds custom padding to each side of the map. Useful when map elements/markers are obscured.
    *
    * @platform iOS: Supported

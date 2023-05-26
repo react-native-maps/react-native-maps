@@ -24,7 +24,6 @@ import Overlays from './examples/Overlays';
 import DefaultMarkers from './examples/DefaultMarkers';
 import CustomMarkers from './examples/CustomMarkers';
 import CachedMap from './examples/CachedMap';
-import LoadingMap from './examples/LoadingMap';
 import MapBoundaries from './examples/MapBoundaries';
 import TakeSnapshot from './examples/TakeSnapshot';
 import FitToSuppliedMarkers from './examples/FitToSuppliedMarkers';
@@ -157,7 +156,6 @@ export default class App extends React.Component<any, any> {
         [CustomMarkers, 'Custom Markers', true],
         [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
         [CachedMap, 'Cached Map'],
-        [LoadingMap, 'Map with loading'],
         [MapBoundaries, 'Get visible map boundaries', true],
         [FitToSuppliedMarkers, 'Focus Map On Markers', true],
         [FitToCoordinates, 'Fit Map To Coordinates', true],

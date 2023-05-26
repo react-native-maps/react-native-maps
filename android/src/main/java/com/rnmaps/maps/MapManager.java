@@ -2,12 +2,10 @@ package com.rnmaps.maps;
 
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -232,24 +230,9 @@ public class MapManager extends ViewGroupManager<MapView> {
     view.setCacheEnabled(cacheEnabled);
   }
 
-  @ReactProp(name = "loadingEnabled", defaultBoolean = false)
-  public void setLoadingEnabled(MapView view, boolean loadingEnabled) {
-    view.enableMapLoading(loadingEnabled);
-  }
-
   @ReactProp(name = "moveOnMarkerPress", defaultBoolean = true)
   public void setMoveOnMarkerPress(MapView view, boolean moveOnPress) {
     view.setMoveOnMarkerPress(moveOnPress);
-  }
-
-  @ReactProp(name = "loadingBackgroundColor", customType = "Color")
-  public void setLoadingBackgroundColor(MapView view, @Nullable Integer loadingBackgroundColor) {
-    view.setLoadingBackgroundColor(loadingBackgroundColor);
-  }
-
-  @ReactProp(name = "loadingIndicatorColor", customType = "Color")
-  public void setLoadingIndicatorColor(MapView view, @Nullable Integer loadingIndicatorColor) {
-    view.setLoadingIndicatorColor(loadingIndicatorColor);
   }
 
   @ReactProp(name = "pitchEnabled", defaultBoolean = false)

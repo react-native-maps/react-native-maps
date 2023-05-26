@@ -89,9 +89,6 @@ RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(kmlSrc, NSString)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
-RCT_EXPORT_VIEW_PROPERTY(loadingBackgroundColor, UIColor)
-RCT_EXPORT_VIEW_PROPERTY(loadingEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(loadingIndicatorColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
 RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
@@ -549,7 +546,6 @@ static int kDragCenterContext;
       mapView.onMapReady(@{});
       mapView.hasStartedRendering = YES;
     }
-    [mapView beginLoading];
 }
 
 - (void)mapViewDidFinishRenderingMap:(RNMMap *)mapView fullyRendered:(__unused BOOL)fullyRendered

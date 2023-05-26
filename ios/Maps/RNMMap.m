@@ -431,43 +431,6 @@ const NSInteger RNMMapMaxZoomLevel = 20;
 
 - (void)setCacheEnabled:(BOOL)cacheEnabled {
     _cacheEnabled = cacheEnabled;
-    if (self.cacheEnabled && self.cacheImageView.image == nil) {
-        self.loadingView.hidden = NO;
-        [self.activityIndicatorView startAnimating];
-    }
-    else {
-        if (_loadingView != nil) {
-            self.loadingView.hidden = YES;
-        }
-    }
-}
-
-- (void)setLoadingEnabled:(BOOL)loadingEnabled {
-    _loadingEnabled = loadingEnabled;
-    if (!self.hasShownInitialLoading) {
-        self.loadingView.hidden = !self.loadingEnabled;
-    }
-    else {
-        if (_loadingView != nil) {
-            self.loadingView.hidden = YES;
-        }
-    }
-}
-
-- (UIColor *)loadingBackgroundColor {
-    return self.loadingView.backgroundColor;
-}
-
-- (void)setLoadingBackgroundColor:(UIColor *)loadingBackgroundColor {
-    self.loadingView.backgroundColor = loadingBackgroundColor;
-}
-
-- (UIColor *)loadingIndicatorColor {
-    return self.activityIndicatorView.color;
-}
-
-- (void)setLoadingIndicatorColor:(UIColor *)loadingIndicatorColor {
-    self.activityIndicatorView.color = loadingIndicatorColor;
 }
 
 // Include properties of MKMapView which are only available on iOS 9+
@@ -549,7 +512,7 @@ const NSInteger RNMMapMaxZoomLevel = 20;
     if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
         return;
     }
-    if (self.hasShownInitialLoading) {
+    if (self.mapLoaded) {
         if (!self.cacheEnabled) {
             if (_cacheImageView != nil) {
                 self.cacheImageView.hidden = YES;
@@ -612,46 +575,9 @@ const NSInteger RNMMapMaxZoomLevel = 20;
   return self.layoutMargins;
 }
 
-- (void)beginLoading {
-    if ((!self.hasShownInitialLoading && self.loadingEnabled) || (self.cacheEnabled && self.cacheImageView.image == nil)) {
-        self.loadingView.hidden = NO;
-        [self.activityIndicatorView startAnimating];
-    }
-    else {
-        if (_loadingView != nil) {
-            self.loadingView.hidden = YES;
-        }
-    }
-}
-
 - (void)finishLoading {
-    self.hasShownInitialLoading = YES;
-    if (_loadingView != nil) {
-        self.loadingView.hidden = YES;
-    }
+    self.mapLoaded = YES;
     [self cacheViewIfNeeded];
-}
-
-- (UIActivityIndicatorView *)activityIndicatorView {
-    if (_activityIndicatorView == nil) {
-        _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        _activityIndicatorView.center = self.loadingView.center;
-        _activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        _activityIndicatorView.color = [UIColor colorWithRed:96.f/255.f green:96.f/255.f blue:96.f/255.f alpha:1.f]; // defaults to #606060
-    }
-    [self.loadingView addSubview:_activityIndicatorView];
-    return _activityIndicatorView;
-}
-
-- (UIView *)loadingView {
-    if (_loadingView == nil) {
-        _loadingView = [[UIView alloc] initWithFrame:self.bounds];
-        _loadingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        _loadingView.backgroundColor = [UIColor whiteColor]; // defaults to #FFFFFF
-        [self addSubview:_loadingView];
-        _loadingView.hidden = NO;
-    }
-    return _loadingView;
 }
 
 - (UIImageView *)cacheImageView {
