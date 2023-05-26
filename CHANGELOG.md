@@ -1,5 +1,17 @@
 # Changelog
 
+# [2.0.0-beta.14](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2023-05-26)
+
+
+### Features
+
+* **MapView:** remove loading indicator ([#4749](https://github.com/react-native-maps/react-native-maps/issues/4749)) ([4a4a3b1](https://github.com/react-native-maps/react-native-maps/commit/4a4a3b125f77e54890fd58f820b92d949bd9cb1c))
+
+
+### BREAKING CHANGES
+
+* **MapView:** removed loading indicator. Use ActivityIndicator or similar where one is needed.
+
 # [2.0.0-beta.13](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2023-05-10)
 
 
