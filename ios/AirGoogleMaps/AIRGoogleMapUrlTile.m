@@ -15,11 +15,18 @@
   _tileLayer.zIndex = zIndex;
 }
 
+- (void)setOpacity:(CGFloat)opacity
+{
+    _opacity = opacity;
+    _tileLayer.opacity = opacity;
+}
+
 - (void)setUrlTemplate:(NSString *)urlTemplate
 {
   _urlTemplate = urlTemplate;
   _tileLayer = [GMSURLTileLayer tileLayerWithURLConstructor:[self _getTileURLConstructor]];
   _tileLayer.tileSize = [[UIScreen mainScreen] scale] * 256;
+  _tileLayer.opacity = _opacity;
 }
 
 - (GMSTileURLConstructor)_getTileURLConstructor

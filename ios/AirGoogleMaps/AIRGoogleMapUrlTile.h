@@ -13,6 +13,7 @@
 @property (nonatomic, strong) GMSURLTileLayer *tileLayer;
 @property (nonatomic, assign) NSString *urlTemplate;
 @property (nonatomic, assign) int zIndex;
+@property CGFloat opacity;
 @property NSInteger *maximumZ;
 @property NSInteger *minimumZ;
 @property BOOL flipY;
