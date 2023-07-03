@@ -430,6 +430,7 @@ public class MapMarker extends MapFeature {
   public void addToMap(Object collection) {
     MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
     marker = markerCollection.addMarker(getMarkerOptions());
+    marker.setTag(this);
     updateTracksViewChanges();
   }
 
