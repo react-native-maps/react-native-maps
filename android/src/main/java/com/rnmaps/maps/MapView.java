@@ -1375,7 +1375,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   }
 
   private MapMarker getMarkerMap(Marker marker) {
-    MapMarker airMarker = markerMap.get(marker);
+    MapMarker airMarker = (MapMarker) marker.getTag();
+
+    if (airMarker != null) {
+      return airMarker;
+    }
+
+    airMarker = markerMap.get(marker);
 
     if (airMarker != null) {
       return airMarker;
