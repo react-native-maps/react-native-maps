@@ -598,6 +598,8 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 #define MAX_DISTANCE_PX 10.0f
 - (void)handleMapTap:(UITapGestureRecognizer *)recognizer {
+    self.handleTouchEnd(recognizer);
+
     AIRMap *map = (AIRMap *)recognizer.view;
 
     CGPoint tapPoint = [recognizer locationInView:map];
@@ -736,6 +738,7 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 
 - (void)handleMapLongPress:(UITapGestureRecognizer *)recognizer {
+    self.handleTouchEnd(recognizer);
 
     // NOTE: android only does the equivalent of "began", so we only send in this case
     if (recognizer.state != UIGestureRecognizerStateBegan) return;
@@ -756,6 +759,28 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                     @"y": @(touchPoint.y),
             },
     });
+}
+
+- (void)handleTouchEnd:(UITapGestureRecognizer *)recognizer {
+    AIRGoogleMap *map = (AIRGoogleMap *)recognizer.view;
+
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        CGPoint touchPoint = [recognizer locationInView:map];
+        CLLocationCoordinate2D coord = [map.projection coordinateForPoint:touchPoint];
+
+        if (!map.onTouchReleased) return;
+
+        map.onTouchReleased(@{
+                      @"coordinate": @{
+                          @"latitude": @(coord.latitude),
+                          @"longitude": @(coord.longitude),
+                          },
+                      @"position": @{
+                          @"x": @(touchPoint.x),
+                          @"y": @(touchPoint.y),
+                          },
+                      });
+    }
 }
 
 #pragma mark MKMapViewDelegate
