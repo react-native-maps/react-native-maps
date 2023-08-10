@@ -762,11 +762,11 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 }
 
 - (void)handleTouchEnd:(UITapGestureRecognizer *)recognizer {
-    AIRGoogleMap *map = (AIRGoogleMap *)recognizer.view;
+    AIRMap *map = (AIRMap *)recognizer.view;
 
     if (recognizer.state == UIGestureRecognizerStateEnded) {
         CGPoint touchPoint = [recognizer locationInView:map];
-        CLLocationCoordinate2D coord = [map.projection coordinateForPoint:touchPoint];
+        CLLocationCoordinate2D coord = [map convertPoint:touchPoint toCoordinateFromView:map];
 
         if (!map.onTouchReleased) return;
 
