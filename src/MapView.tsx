@@ -388,7 +388,7 @@ export type MapViewProps = ViewProps & {
    *
    * @platform iOS: Supported
    */
-  onTouchRelease?: (event: PanDragEvent) => void;
+  onTouchReleased?: (event: PanDragEvent) => void;
 
   /**
    * Callback that is called when user click on a POI.
