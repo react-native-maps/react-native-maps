@@ -384,6 +384,13 @@ export type MapViewProps = ViewProps & {
   onPanDrag?: (event: PanDragEvent) => void;
 
   /**
+   * Callback that is called when user releases touch after starting it.
+   *
+   * @platform iOS: Supported
+   */
+  onTouchRelease?: (event: PanDragEvent) => void;
+
+  /**
    * Callback that is called when user click on a POI.
    *
    * @platform iOS: Google Maps only

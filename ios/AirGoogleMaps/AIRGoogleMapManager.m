@@ -62,6 +62,11 @@ RCT_EXPORT_MODULE()
   UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
   [map addGestureRecognizer:pinch];
 
+  UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTouchEnd:)];
+  [map addGestureRecognizer:tapGesture];
+  UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleTouchEnd:)];
+  [map addGestureRecognizer:longPressGesture];
+
   return map;
 }
 
@@ -590,6 +595,30 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
                       },
                   });
 
+}
+
+- (void)handleTouchEnd:(UITapGestureRecognizer *)recognizer {
+    AIRGoogleMap *map = (AIRGoogleMap *)recognizer.view;
+    NSLog(@"handleTouchEnd: %@", map);
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"handleTouchEnd:UIGestureRecognizerStateEnded: %@", map.onTouchReleased);
+
+        CGPoint touchPoint = [recognizer locationInView:map];
+        CLLocationCoordinate2D coord = [map.projection coordinateForPoint:touchPoint];
+
+        if (!map.onTouchReleased) return;
+
+        map.onTouchReleased(@{
+                      @"coordinate": @{
+                          @"latitude": @(coord.latitude),
+                          @"longitude": @(coord.longitude),
+                          },
+                      @"position": @{
+                          @"x": @(touchPoint.x),
+                          @"y": @(touchPoint.y),
+                          },
+                      });
+    }
 }
 
 @end

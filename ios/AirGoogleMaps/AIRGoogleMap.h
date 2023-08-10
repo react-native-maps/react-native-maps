@@ -32,6 +32,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onPanDrag;
+@property (nonatomic, copy) RCTBubblingEventBlock onTouchReleased;
 @property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
