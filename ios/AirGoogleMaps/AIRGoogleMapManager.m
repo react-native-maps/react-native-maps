@@ -599,10 +599,8 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
 
 - (void)handleTouchEnd:(UITapGestureRecognizer *)recognizer {
     AIRGoogleMap *map = (AIRGoogleMap *)recognizer.view;
-    NSLog(@"handleTouchEnd: %@", map);
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        NSLog(@"handleTouchEnd:UIGestureRecognizerStateEnded: %@", map.onTouchReleased);
 
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
         CGPoint touchPoint = [recognizer locationInView:map];
         CLLocationCoordinate2D coord = [map.projection coordinateForPoint:touchPoint];
 
