@@ -52,13 +52,13 @@ RCT_EXPORT_MODULE()
 
     map.isAccessibilityElement = NO;
     map.accessibilityElementsHidden = NO;
-    
+
     // MKMapView doesn't report tap events, so we attach gesture recognizers to it
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDoubleTap:)];
     [doubleTap setNumberOfTapsRequired:2];
     [tap requireGestureRecognizerToFail:doubleTap];
-    
+
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapLongPress:)];
     UIPanGestureRecognizer *drag = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapDrag:)];
     [drag setMinimumNumberOfTouches:1];
@@ -66,13 +66,13 @@ RCT_EXPORT_MODULE()
     tap.cancelsTouchesInView = NO;
     doubleTap.cancelsTouchesInView = NO;
     longPress.cancelsTouchesInView = NO;
-    
+
     doubleTap.delegate = self;
-    
+
     // disable drag by default
     drag.enabled = NO;
     drag.delegate = self;
-  
+
     [map addGestureRecognizer:tap];
     [map addGestureRecognizer:doubleTap];
     [map addGestureRecognizer:longPress];
@@ -138,7 +138,7 @@ RCT_CUSTOM_VIEW_PROPERTY(initialRegion, MKCoordinateRegion, AIRMap)
 RCT_CUSTOM_VIEW_PROPERTY(initialCamera, MKMapCamera, AIRMap)
 {
     if (json == nil) return;
-    
+
     // don't emit region change events when we are setting the initialCamera
     BOOL originalIgnore = view.ignoreRegionChanges;
     view.ignoreRegionChanges = YES;
@@ -165,7 +165,7 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, AIRMap)
 RCT_CUSTOM_VIEW_PROPERTY(camera, MKMapCamera*, AIRMap)
 {
     if (json == nil) return;
-    
+
     // don't emit region change events when we are setting the camera
     BOOL originalIgnore = view.ignoreRegionChanges;
     view.ignoreRegionChanges = YES;
@@ -550,16 +550,16 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                                   [overlay drawToSnapshot:snapshot context:UIGraphicsGetCurrentContext()];
                           }
                       }
-                      
+
                       for (id <MKAnnotation> annotation in mapView.annotations) {
                           CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
-                          
+
                           MKAnnotationView* anView = [mapView viewForAnnotation: annotation];
-                          
+
                           if (anView){
                               pin = anView;
                           }
-                          
+
                           if (CGRectContainsPoint(rect, point)) {
                               point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
                               point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
@@ -598,7 +598,7 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 #define MAX_DISTANCE_PX 10.0f
 - (void)handleMapTap:(UITapGestureRecognizer *)recognizer {
-    self.handleTouchEnd(recognizer);
+    [self handleTouchEnd:recognizer];
 
     AIRMap *map = (AIRMap *)recognizer.view;
 
@@ -720,7 +720,7 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 - (void)handleMapDoubleTap:(UIPanGestureRecognizer*)recognizer {
     AIRMap *map = (AIRMap *)recognizer.view;
     if (!map.onDoublePress) return;
-    
+
     CGPoint touchPoint = [recognizer locationInView:map];
     CLLocationCoordinate2D coord = [map convertPoint:touchPoint toCoordinateFromView:map];
     map.onDoublePress(@{
@@ -733,12 +733,12 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                             @"y": @(touchPoint.y),
                             },
                     });
-    
+
 }
 
 
 - (void)handleMapLongPress:(UITapGestureRecognizer *)recognizer {
-    self.handleTouchEnd(recognizer);
+    [self handleTouchEnd:recognizer];
 
     // NOTE: android only does the equivalent of "began", so we only send in this case
     if (recognizer.state != UIGestureRecognizerStateBegan) return;
@@ -948,15 +948,15 @@ static int kDragCenterContext;
                          @"heading": @(location.location.course),
                          }
                  };
-    
+
     if (mapView.onUserLocationChange) {
         mapView.onUserLocationChange(event);
     }
-    
+
     if (mapView.followUserLocation) {
         [mapView setCenterCoordinate:location.coordinate animated:YES];
     }
-    
+
 }
 
 - (void)mapViewDidChangeVisibleRegion:(AIRMap *)mapView
