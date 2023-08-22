@@ -2,7 +2,7 @@
   "name": "react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
   "source": "src/index",
-  "main": "src/index.ts",
+  "main": "lib/index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
   "version": "0.0.0",
@@ -14,6 +14,7 @@
     "build": "tsc --project tsconfig.build.json",
     "test": "jest",
     "prepare": "husky install",
+    "release": "semantic-release",
     "bundle-install": "cd example && bundle install",
     "pod-install": "cd example/ios && bundle exec pod install",
     "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
