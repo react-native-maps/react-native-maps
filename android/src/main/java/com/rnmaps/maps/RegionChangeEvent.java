@@ -1,9 +1,9 @@
 package com.rnmaps.maps;
 
+import androidx.annotation.Nullable;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.events.Event;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -12,8 +12,8 @@ public class RegionChangeEvent extends Event<RegionChangeEvent> {
   private final boolean continuous;
   private final boolean isGesture;
 
-  public RegionChangeEvent(int id, LatLngBounds bounds, boolean continuous, boolean isGesture) {
-    super(id);
+  public RegionChangeEvent(int surfaceId, int id, LatLngBounds bounds, boolean continuous, boolean isGesture) {
+    super(surfaceId, id);
     this.bounds = bounds;
     this.continuous = continuous;
     this.isGesture = isGesture;
@@ -29,20 +29,21 @@ public class RegionChangeEvent extends Event<RegionChangeEvent> {
     return false;
   }
 
+  @Nullable
   @Override
-  public void dispatch(RCTEventEmitter rctEventEmitter) {
-    WritableMap event = new WritableNativeMap();
-    event.putBoolean("continuous", continuous);
+  protected WritableMap getEventData() {
+    WritableMap eventData = Arguments.createMap(); //new WritableNativeMap();
+    eventData.putBoolean("continuous", continuous);
 
-    WritableMap region = new WritableNativeMap();
+    WritableMap region = Arguments.createMap();
     LatLng center = bounds.getCenter();
     region.putDouble("latitude", center.latitude);
     region.putDouble("longitude", center.longitude);
     region.putDouble("latitudeDelta", bounds.northeast.latitude - bounds.southwest.latitude);
     region.putDouble("longitudeDelta", bounds.northeast.longitude - bounds.southwest.longitude);
-    event.putMap("region", region);
-    event.putBoolean("isGesture", isGesture);
+    eventData.putMap("region", region);
+    eventData.putBoolean("isGesture", isGesture);
 
-    rctEventEmitter.receiveEvent(getViewTag(), getEventName(), event);
+    return eventData;
   }
 }

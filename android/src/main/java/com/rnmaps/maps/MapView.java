@@ -30,6 +30,7 @@ import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
@@ -377,10 +378,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         cameraLastIdleBounds = null;
         boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+        int surfaceId = UIManagerHelper.getSurfaceId(context);
+        int tagId = getId();
 
-        RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, true, isGesture);
-        eventDispatcher.dispatchEvent(event);
-      }
+        UIManagerHelper.getEventDispatcherForReactTag(context, tagId)
+                .dispatchEvent(
+                        new RegionChangeEvent(surfaceId, tagId, bounds, false, isGesture));      }
     });
 
     map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
@@ -393,10 +396,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
           cameraLastIdleBounds = bounds;
           boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+          int surfaceId = UIManagerHelper.getSurfaceId(context);
+          int tagId = getId();
 
-          RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, false, isGesture);
-          eventDispatcher.dispatchEvent(event);
-        }
+          UIManagerHelper.getEventDispatcherForReactTag(context, tagId)
+                  .dispatchEvent(
+                          new RegionChangeEvent(surfaceId, tagId, bounds, false, isGesture));        }
       }
     });
 
