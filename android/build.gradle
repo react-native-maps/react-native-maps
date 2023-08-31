@@ -20,11 +20,11 @@ buildscript {
 apply plugin: 'com.android.library'
 
 android {
-  compileSdkVersion safeExtGet('compileSdkVersion', 30)
+  compileSdkVersion safeExtGet('compileSdkVersion', 31)
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 21)
-    targetSdkVersion safeExtGet('targetSdkVersion', 30)
+    targetSdkVersion safeExtGet('targetSdkVersion', 31)
   }
 }
 
@@ -43,11 +43,10 @@ repositories {
 }
 
 dependencies {
-  def work_version = safeExtGet('targetSdkVersion', 27) < 31 ? "2.5.0" : "2.7.1"
   implementation 'com.facebook.react:react-native:+'
   implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '18.1.0')}"
   implementation "com.google.android.gms:play-services-maps:${safeExtGet('playServicesVersion', '18.0.2')}"
   implementation "com.google.android.gms:play-services-location:20.0.0"
-  implementation 'com.google.maps.android:android-maps-utils:0.5'
-  implementation "androidx.work:work-runtime:$work_version"
+  implementation 'com.google.maps.android:android-maps-utils:3.4.0'
+  implementation "androidx.work:work-runtime:2.7.1"
 }

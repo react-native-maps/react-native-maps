@@ -1,0 +1,37 @@
+name: iOS build
+
+on:
+  pull_request:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          cache: yarn
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.2'
+          bundler-cache: true
+          working-directory: example
+
+      - name: Install dependencies
+        run: yarn --cwd example --frozen-lockfile
+
+      - name: Install pods
+        run: yarn pod-install
+
+      - name: Write Config.xcconfig
+        run: echo MAPS_API_KEY=your_api_key_here >> example/ios/Config.xcconfig
+
+      - name: Build iOS
+        run: xcodebuild -workspace example/ios/rnmshowcase.xcworkspace -scheme rnmshowcase -configuration Debug -sdk iphonesimulator

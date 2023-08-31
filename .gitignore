@@ -45,5 +45,8 @@ yarn-error.log
 .vscode
 
 # ts outDir
-# lib/
-example/
+lib/
+
+example/vendor/bundle/
+
+example/ios/Config.xcconfig

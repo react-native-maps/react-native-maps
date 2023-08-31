@@ -2,8 +2,8 @@
 
 React Native Map components for iOS + Android
 
-
 ## Contributing
+
 This project is being maintained by a small group of people, and any help with issues and pull requests are always appreciated. If you are able and willing to contribute, please read the [guidelines](./CONTRIBUTING.md).
 
 ## Installation
@@ -41,6 +41,7 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 ```js
 import MapView from 'react-native-maps';
 ```
+
 or
 
 ```js
@@ -54,15 +55,16 @@ declaratively controlling features on the map.
 ### Rendering a Map with an initial region
 
 ## MapView
+
 ```jsx
-  <MapView
-    initialRegion={{
-      latitude: 37.78825,
-      longitude: -122.4324,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    }}
-  />
+<MapView
+  initialRegion={{
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  }}
+/>
 ```
 
 ### Using a MapView while controlling the region as state
@@ -96,12 +98,9 @@ render() {
 ### Rendering a list of markers on a map
 
 ```jsx
-import { Marker } from 'react-native-maps';
+import {Marker} from 'react-native-maps';
 
-<MapView
-  region={this.state.region}
-  onRegionChange={this.onRegionChange}
->
+<MapView region={this.state.region} onRegionChange={this.onRegionChange}>
   {this.state.markers.map((marker, index) => (
     <Marker
       key={index}
@@ -110,16 +109,18 @@ import { Marker } from 'react-native-maps';
       description={marker.description}
     />
   ))}
-</MapView>
+</MapView>;
 ```
 
 ### Rendering a Marker with a custom image
+
 1. You need to generate an `png` image with various resolution (lets call them `custom_pin`) - for more information go to [Android](https://developer.android.com/studio/write/resource-manager#import), [iOS](https://developer.apple.com/documentation/xcode/adding-images-to-your-xcode-project)
-2. put all images in Android drawables and iOS assets dir 
+2. put all images in Android drawables and iOS assets dir
 3. Now you can use the following code:
+
 ```jsx
 <Marker
-  coordinate={{ latitude : latitude , longitude : longitude }}
+  coordinate={{latitude: latitude, longitude: longitude}}
   image={{uri: 'custom_pin'}}
 />
 ```
@@ -127,10 +128,11 @@ import { Marker } from 'react-native-maps';
 Note: You can also pass the image binary data like `image={require('custom_pin.png')}`, but this will not scale good with the different screen sizes.
 
 ### Rendering a Marker with a custom view
+
 Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the head ache)
 
 ```jsx
-<Marker coordinate={{ latitude : latitude , longitude : longitude }}>
+<Marker coordinate={{latitude: latitude, longitude: longitude}}>
   <MyCustomMarkerView {...marker} />
 </Marker>
 ```
@@ -138,14 +140,14 @@ Note: This has performance implications, if you wish for a simpler solution go w
 ### Rendering a custom Marker with a custom Callout
 
 ```jsx
-import { Callout } from 'react-native-maps';
+import {Callout} from 'react-native-maps';
 
 <Marker coordinate={marker.latlng}>
   <MyCustomMarkerView {...marker} />
   <Callout>
     <MyCustomCalloutView {...marker} />
   </Callout>
-</Marker>
+</Marker>;
 ```
 
 ### Draggable Markers
@@ -164,12 +166,9 @@ import { Callout } from 'react-native-maps';
 #### Tile Overlay using tile server
 
 ```jsx
-import { UrlTile } from 'react-native-maps';
+import {UrlTile} from 'react-native-maps';
 
-<MapView
-  region={this.state.region}
-  onRegionChange={this.onRegionChange}
->
+<MapView region={this.state.region} onRegionChange={this.onRegionChange}>
   <UrlTile
     /**
      * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
@@ -187,13 +186,15 @@ import { UrlTile } from 'react-native-maps';
      */
     flipY={false}
   />
-</MapView>
+</MapView>;
 ```
 
 For Android: add the following line in your AndroidManifest.xml
+
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
+
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
 
 #### Tile Overlay using local tiles
@@ -201,27 +202,25 @@ For IOS: configure [App Transport Security](https://developer.apple.com/library/
 Tiles can be stored locally within device using xyz tiling scheme and displayed as tile overlay as well. This is usefull especially for offline map usage when tiles are available for selected map region within device storage.
 
 ```jsx
-import { LocalTile } from 'react-native-maps';
+import {LocalTile} from 'react-native-maps';
 
-<MapView
-  region={this.state.region}
-  onRegionChange={this.onRegionChange}
->
+<MapView region={this.state.region} onRegionChange={this.onRegionChange}>
   <LocalTile
-   /**
-    * The path template of the locally stored tiles. The patterns {x} {y} {z} will be replaced at runtime
-    * For example, /storage/emulated/0/mytiles/{z}/{x}/{y}.png
-    */
-   pathTemplate={this.state.pathTemplate}
-   /**
-    * The size of provided local tiles (usually 256 or 512).
-    */
-   tileSize={256}
+    /**
+     * The path template of the locally stored tiles. The patterns {x} {y} {z} will be replaced at runtime
+     * For example, /storage/emulated/0/mytiles/{z}/{x}/{y}.png
+     */
+    pathTemplate={this.state.pathTemplate}
+    /**
+     * The size of provided local tiles (usually 256 or 512).
+     */
+    tileSize={256}
   />
-</MapView>
+</MapView>;
 ```
 
 For Android: LocalTile is still just overlay over original map tiles. It means that if device is online, underlying tiles will be still downloaded. If original tiles download/display is not desirable set mapType to 'none'. For example:
+
 ```
 <MapView
   mapType={Platform.OS == "android" ? "none" : "standard"}
@@ -265,6 +264,7 @@ render() {
   );
 }
 ```
+
 For iOS, in addition to providing the `mapStyle` you will need to do the following
 
 ```jsx
@@ -291,35 +291,25 @@ This example displays some of them in a log as a demonstration.
 
 ![](http://i.giphy.com/3o6UBpncYQASu2WTW8.gif) ![](http://i.giphy.com/xT77YdviLqtjaecRYA.gif)
 
-
-
 ### Tracking Region / Location
 
 ![](http://i.giphy.com/3o6UBoPSLlIKQ2dv7q.gif) ![](http://i.giphy.com/xT77XWjqECvdgjx9oA.gif)
 
-
-
-
 ### Programmatically Changing Region
 
 One can change the mapview's position using refs and component methods, or by passing in an updated
-`region` prop.  The component methods will allow one to animate to a given position like the native
+`region` prop. The component methods will allow one to animate to a given position like the native
 API could.
 
 ![](http://i.giphy.com/3o6UB7poyB6YJ0KPWU.gif) ![](http://i.giphy.com/xT77Yc4wK3pzZusEbm.gif)
-
 
 ### Changing the style of the map
 
 ![](http://i.imgur.com/a9WqCL6.png)
 
-
-
 ### Arbitrary React Views as Markers
 
 ![](http://i.giphy.com/3o6UBcsCLoLQtksJxe.gif) ![](http://i.giphy.com/3o6UB1qGEM9jYni3KM.gif)
-
-
 
 ### Using the MapView with the Animated API
 
@@ -338,13 +328,9 @@ Markers' coordinates can also be animated, as shown in this example:
 
 ![](http://i.giphy.com/xTcnTelp1OwGPu1Wh2.gif) ![](http://i.giphy.com/xTcnT6WVpwlCiQnFW8.gif)
 
-
-
 ### Polygon Creator
 
 ![](http://i.giphy.com/3o6UAZWqQBkOzs8HE4.gif) ![](http://i.giphy.com/xT77XVBRErNZl3zyWQ.gif)
-
-
 
 ### Other Overlays
 
@@ -353,15 +339,11 @@ So far, `<Circle />`, `<Polygon />`, and `<Polyline />` are available to pass in
 
 ![](http://i.giphy.com/xT77XZCH8JpEhzVcNG.gif) ![](http://i.giphy.com/xT77XZyA0aYeOX5jsA.gif)
 
-
-
 ### Gradient Polylines (iOS MapKit only)
 
 Gradient polylines can be created using the `strokeColors` prop of the `<Polyline>` component.
 
 ![](https://i.imgur.com/P7UeqAm.png?1)
-
-
 
 ### Default Markers
 
@@ -370,11 +352,9 @@ color of the default marker by using the `pinColor` prop.
 
 ![](http://i.giphy.com/xT77Y0pWKmUUnguHK0.gif) ![](http://i.giphy.com/3o6UBfk3I58VIwZjVe.gif)
 
-
-
 ### Custom Callouts
 
-Callouts to markers can be completely arbitrary react views, similar to markers.  As a result, they
+Callouts to markers can be completely arbitrary react views, similar to markers. As a result, they
 can be interacted with like any other view.
 
 Additionally, you can fall back to the standard behavior of just having a title/description through
@@ -388,15 +368,11 @@ See `Callouts.js` example.
 
 ![](http://i.giphy.com/xT77XNePGnMIIDpbnq.gif) ![](http://i.giphy.com/xT77YdU0HXryvoRqaQ.gif)
 
-
-
 ### Image-based Markers
 
 Markers can be customized by just using images, and specified using the `image` prop.
 
 ![](http://i.imgur.com/mzrOjTR.png)
-
-
 
 ### Draggable Markers
 
@@ -558,10 +534,10 @@ Pass an array of coordinates to focus a map region on said coordinates.
 
 #### My map is blank
 
-* Make sure that you have [properly installed](docs/installation.md) react-native-maps.
-* Check in the logs if there is more informations about the issue.
-* Try setting the style of the MapView to an absolute position with top, left, right and bottom  values set.
-*   Make sure you have enabled Google Maps API in [Google developer console](https://console.developers.google.com/apis/library)
+- Make sure that you have [properly installed](docs/installation.md) react-native-maps.
+- Check in the logs if there is more informations about the issue.
+- Try setting the style of the MapView to an absolute position with top, left, right and bottom values set.
+- Make sure you have enabled Google Maps API in [Google developer console](https://console.developers.google.com/apis/library)
 
 ```javascript
 const styles = StyleSheet.create({
@@ -580,14 +556,14 @@ const styles = StyleSheet.create({
 
 #### Inputs don't focus
 
-* When inputs don't focus or elements don't respond to tap, look at the order of the view hierarchy, sometimes the issue could be due to ordering of rendered components, prefer putting MapView as the first component.
+- When inputs don't focus or elements don't respond to tap, look at the order of the view hierarchy, sometimes the issue could be due to ordering of rendered components, prefer putting MapView as the first component.
 
 Bad:
 
 ```jsx
 <View>
-  <TextInput/>
-  <MapView/>
+  <TextInput />
+  <MapView />
 </View>
 ```
 
@@ -595,31 +571,32 @@ Good:
 
 ```jsx
 <View>
-  <MapView/>
-  <TextInput/>
+  <MapView />
+  <TextInput />
 </View>
 ```
 
 #### Children Components Not Re-Rendering
+
 Components that aren't declared by this library (Ex: Markers, Polyline) must not be children of the MapView component due to MapView's unique rendering methodology. Have your custom components / views outside the MapView component and position absolute to ensure they only re-render as needed.
 Example:
 Bad:
 
 ```jsx
-  <View style={StyleSheet.absoluteFillObject}>
-    <MapView style={StyleSheet.absoluteFillObject}>
-      <View style={{ position: 'absolute', top: 100, left: 50 }}/>
-    </MapView>
-  </View>
+<View style={StyleSheet.absoluteFillObject}>
+  <MapView style={StyleSheet.absoluteFillObject}>
+    <View style={{position: 'absolute', top: 100, left: 50}} />
+  </MapView>
+</View>
 ```
 
 Good:
 
 ```jsx
-  <View style={StyleSheet.absoluteFillObject}>
-    <MapView style={StyleSheet.absoluteFillObject} />
-    <View style={{ position: 'absolute', top: 100, left: 50 }}/>
-  </View>
+<View style={StyleSheet.absoluteFillObject}>
+  <MapView style={StyleSheet.absoluteFillObject} />
+  <View style={{position: 'absolute', top: 100, left: 50}} />
+</View>
 ```
 
 Source: https://github.com/react-native-maps/react-native-maps/issues/1901
@@ -630,8 +607,26 @@ Source: https://github.com/react-native-maps/react-native-maps/issues/1901
 
 Source: https://github.com/react-native-maps/react-native-maps/issues/3957#issuecomment-924161121
 
-License
---------
+#### onRegionChangeComplete() callback is called infinitely
+
+If changing the state in `onRegionChangeComplete` is called infinitely, add a condition to limit these calls to occur only when the region change was done as a result of a user's action.
+
+```javascript
+onRegionChangeComplete={ (region, gesture) => {
+	// This fix only works on Google Maps because isGesture is NOT available on Apple Maps
+	if (!gesture.isGesture) {
+    return;
+  }
+
+  // You can use
+  dispatch({ type: "map_region", payload: { mapRegion: region }}); // if using useReducer
+	// setMapRegionState(region); // if using useState
+}}
+```
+
+Source: https://github.com/react-native-maps/react-native-maps/issues/846#issuecomment-1210079461
+
+## License
 
      Copyright (c) 2017 Airbnb
 
