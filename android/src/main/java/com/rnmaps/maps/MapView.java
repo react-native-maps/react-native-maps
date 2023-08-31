@@ -116,6 +116,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   private final List<MapFeature> features = new ArrayList<>();
   private final Map<Marker, MapMarker> markerMap = new HashMap<>();
+  private final Map<Marker, MapMarker> markerPointMap = new HashMap<>();
   private final Map<Polyline, MapPolyline> polylineMap = new HashMap<>();
   private final Map<Polygon, MapPolygon> polygonMap = new HashMap<>();
   private final Map<GroundOverlay, MapOverlay> overlayMap = new HashMap<>();
@@ -275,27 +276,28 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     markerCollection.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
       public boolean onMarkerClick(@NonNull Marker marker) {
-        MapMarker airMapMarker = getMarkerMap(marker);
+        // MapMarker airMapMarker = getMarkerMap(marker);
 
         WritableMap event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
+        event.putString("id", markerPointMap.get(marker));
         manager.pushEvent(context, view, "onMarkerPress", event);
 
-        event = makeClickEventData(marker.getPosition());
-        event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
-        manager.pushEvent(context, airMapMarker, "onPress", event);
+        // event = makeClickEventData(marker.getPosition());
+        // event.putString("action", "marker-press");
+        // event.putString("id", airMapMarker.getIdentifier());
+        // manager.pushEvent(context, airMapMarker, "onPress", event);
 
         // Return false to open the callout info window and center on the marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
         // .OnMarkerClickListener
-        if (view.moveOnMarkerPress) {
-          return false;
-        } else {
-          marker.showInfoWindow();
-          return true;
-        }
+        // if (view.moveOnMarkerPress) {
+        //   return false;
+        // } else {
+        //   marker.showInfoWindow();
+        //   return true;
+        // }
+        return true;
       }
     });
 
@@ -1011,6 +1013,34 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       {southWest.longitude, southWest.latitude}
     };
   }
+
+  public void setMarkerPoints(ReadableArray markers, String image, boolean skipClear){
+    Context context = this.context.getApplicationContext();
+    // Toast.makeText( this.context.getApplicationContext(), "set markers", Toast.LENGTH_SHORT).show();
+    image = image == null ? "marker" : image;
+
+    // remove all markers
+    if(!skipClear){
+      map.clear();
+    }
+    if (markers != null && map != null) {
+      for (int i = 0; i < markers.size(); i++) {
+        ReadableMap markerPoint = markers.getMap(i);
+        LatLng latLng = new LatLng(markerPoint.getDouble("latitude"), markerPoint.getDouble("longitude"));
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(markerPoint.getString("title"));
+        markerOptions.snippet(markerPoint.getString("description"));
+        // add marker.png
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(getResources().getIdentifier(image,"drawable",this.context.getPackageName())));
+        Marker marker=map.addMarker(markerOptions);
+
+        String id=markerPoint.getString("id");
+        id=id==null?i+"":id;
+
+        markerPointMap.put(marker,id);
+      }
+    
 
   public void setMapBoundaries(ReadableMap northEast, ReadableMap southWest) {
     if (map == null) return;
