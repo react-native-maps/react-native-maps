@@ -47,6 +47,6 @@ dependencies {
   implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '18.1.0')}"
   implementation "com.google.android.gms:play-services-maps:${safeExtGet('playServicesVersion', '18.0.2')}"
   implementation "com.google.android.gms:play-services-location:20.0.0"
-  implementation 'com.google.maps.android:android-maps-utils:0.5'
+  implementation 'com.google.maps.android:android-maps-utils:3.4.0'
   implementation "androidx.work:work-runtime:2.7.1"
 }

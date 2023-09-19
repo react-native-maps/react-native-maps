@@ -101,13 +101,12 @@ public class MapHeatmap extends MapFeature {
     }
 
     @Override
-    public void addToMap(GoogleMap map) {
-        Log.d("AirMapHeatmap", "ADD TO MAP");
-        heatmap = map.addTileOverlay(getHeatmapOptions());
+    public void addToMap(Object map) {
+        heatmap = ((GoogleMap) map).addTileOverlay(getHeatmapOptions());
     }
 
     @Override
-    public void removeFromMap(GoogleMap map) {
+    public void removeFromMap(Object map) {
         heatmap.remove();
     }
 
