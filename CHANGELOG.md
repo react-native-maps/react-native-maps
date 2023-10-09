@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.8.0](https://github.com/react-native-maps/react-native-maps/compare/v1.7.1...v1.8.0) (2023-10-09)
+
+
+### Features
+
+* **android:** Add android namespace to support react-native 0.73 ([#4859](https://github.com/react-native-maps/react-native-maps/issues/4859)) ([1c6c13d](https://github.com/react-native-maps/react-native-maps/commit/1c6c13d05705ed73c5ffdaf9f26648b44b7cb523))
+
 ## [1.7.1](https://github.com/react-native-maps/react-native-maps/compare/v1.7.0...v1.7.1) (2023-04-23)
 
 
