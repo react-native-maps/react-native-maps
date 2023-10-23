@@ -23,6 +23,8 @@
 @property (nonatomic, strong) MKTileOverlay *tileOverlay;
 @property (nonatomic, strong) MKTileOverlayRenderer *renderer;
 
+@property BOOL showLabels;
+
 @property (nonatomic, copy) NSString *pathTemplate;
 @property (nonatomic, assign) CGFloat tileSize;
 

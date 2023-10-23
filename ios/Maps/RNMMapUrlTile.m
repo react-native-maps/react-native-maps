@@ -21,6 +21,12 @@
     [self update];
 }
 
+- (void)setShowLabels:(BOOL)showLabels
+{
+    _showLabels = showLabels;
+    [self update];
+}
+
 - (void)setMaximumZ:(NSInteger)maximumZ
 {
     _maximumZ = maximumZ;
@@ -178,7 +184,7 @@
 - (void)update
 {
     if (!_renderer) return;
-    
+
     if (_map == nil) return;
     [_map removeOverlay:self];
     [_map addOverlay:self level:MKOverlayLevelAboveLabels];

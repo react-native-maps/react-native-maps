@@ -85,6 +85,15 @@ export type MapUrlTileProps = ViewProps & {
   shouldReplaceMapContent?: boolean;
 
   /**
+   * If true then native iOS labels are shown on top of custom tiles. Only applicable if shouldReplaceMapContent is true.
+   *
+   * @default false
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  showLabels?: boolean;
+
+  /**
    * Defines maximum age in seconds for a cached tile before it's refreshed.
    *
    * NB! Refresh logic is "serve-stale-while-refresh"
