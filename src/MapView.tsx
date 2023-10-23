@@ -51,7 +51,7 @@ import {
   UserLocationChangeEvent,
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
-import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
+import {MapViewNativeComponentType} from './MapViewNativeComponent';
 import MapViewModule, {Spec as MapViewModuleSpec} from './NativeMapViewModule';
 import GoogleMapViewModule, {
   Spec as GoogleMapViewModuleSpec,
@@ -122,6 +122,14 @@ export type MapViewProps = ViewProps & {
   followsUserLocation?: boolean;
 
   /**
+   * Set to control what indoor building level to display.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  indoorActiveLevelIndex?: number;
+
+  /**
    * The initial camera view the map should use.  Use this prop instead of `camera`
    * only if you don't want to control the camera of the map besides the initial view.
    *
@@ -173,33 +181,6 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Supported
    */
   liteMode?: boolean;
-
-  /**
-   * Sets loading background color.
-   *
-   * @default `#FFFFFF`
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingBackgroundColor?: string;
-
-  /**
-   * If `true` a loading indicator will show while the map is loading.
-   *
-   * @default false
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingEnabled?: boolean;
-
-  /**
-   * Sets loading indicator color.
-   *
-   * @default `#606060`
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingIndicatorColor?: string;
 
   /**
    * Adds custom padding to each side of the map. Useful when map elements/markers are obscured.
@@ -310,14 +291,6 @@ export type MapViewProps = ViewProps & {
   onLongPress?: (event: LongPressEvent) => void;
 
   /**
-   * Callback that is called when the map has finished rendering all tiles.
-   *
-   * @platform iOS: Google Maps only
-   * @platform Android: Supported
-   */
-  onMapLoaded?: (event: NativeSyntheticEvent<{}>) => void;
-
-  /**
    * Callback that is called once the map is ready.
    *
    * Event is optional, as the first onMapReady callback is intercepted
@@ -423,6 +396,14 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Supported
    */
   onRegionChangeComplete?: (region: Region, details: Details) => void;
+
+  /**
+   * Callback that is called when the map has finished rendering all tiles.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  onTilesRendered?: (event: NativeSyntheticEvent<{}>) => void;
 
   /**
    * Callback that is called when the underlying map figures our users current location
@@ -771,12 +752,6 @@ class MapView extends React.Component<MapViewProps, State> {
     return mapViewModuleMethod('getCamera')(this._getHandle());
   }
 
-  setCamera(camera: Partial<Camera>) {
-    if (this.map.current) {
-      Commands.setCamera(this.map.current, camera);
-    }
-  }
-
   animateCamera(
     camera: Partial<Camera>,
     duration: number = 500,
@@ -877,12 +852,6 @@ class MapView extends React.Component<MapViewProps, State> {
       return googleMapViewModuleMethod('getMapBoundaries')(this._getHandle());
     }
     return mapViewModuleMethod('getMapBoundaries')(this._getHandle());
-  }
-
-  setIndoorActiveLevelIndex(activeLevelIndex: number) {
-    if (this.map.current) {
-      Commands.setIndoorActiveLevelIndex(this.map.current, activeLevelIndex);
-    }
   }
 
   /**

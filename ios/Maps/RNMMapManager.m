@@ -89,9 +89,6 @@ RCT_EXPORT_VIEW_PROPERTY(handlePanDrag, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(kmlSrc, NSString)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
-RCT_EXPORT_VIEW_PROPERTY(loadingBackgroundColor, UIColor)
-RCT_EXPORT_VIEW_PROPERTY(loadingEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(loadingIndicatorColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
 RCT_EXPORT_VIEW_PROPERTY(maxDelta, CGFloat)
@@ -111,6 +108,7 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onTilesRendered, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
@@ -168,30 +166,6 @@ RCT_CUSTOM_VIEW_PROPERTY(region, MKCoordinateRegion, RNMMap)
     view.ignoreRegionChanges = YES;
     [view setRegion:[RCTConvert MKCoordinateRegion:json] animated:NO];
     view.ignoreRegionChanges = originalIgnore;
-}
-
-#pragma mark exported MapView methods
-
-RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
-                  camera:(id)json)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNMMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNMMap, got: %@", view);
-        } else {
-            RNMMap *mapView = (RNMMap *)view;
-
-            // Merge the changes given with the current camera
-            MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:json existingCamera:[mapView camera]];
-
-            // don't emit region change events when we are setting the camera
-            BOOL originalIgnore = mapView.ignoreRegionChanges;
-            mapView.ignoreRegionChanges = YES;
-            [mapView setCamera:camera animated:NO];
-            mapView.ignoreRegionChanges = originalIgnore;
-        }
-    }];
 }
 
 #pragma mark Gesture Recognizer Handlers
@@ -572,12 +546,14 @@ static int kDragCenterContext;
       mapView.onMapReady(@{});
       mapView.hasStartedRendering = YES;
     }
-    [mapView beginLoading];
 }
 
-- (void)mapViewDidFinishRenderingMap:(RNMMap *)mapView fullyRendered:(BOOL)fullyRendered
+- (void)mapViewDidFinishRenderingMap:(RNMMap *)mapView fullyRendered:(__unused BOOL)fullyRendered
 {
     [mapView finishLoading];
+    if (mapView.onTilesRendered) {
+        mapView.onTilesRendered(@{});
+    }
 }
 
 #pragma mark Private

@@ -2,12 +2,10 @@ package com.rnmaps.maps;
 
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -232,24 +230,9 @@ public class MapManager extends ViewGroupManager<MapView> {
     view.setCacheEnabled(cacheEnabled);
   }
 
-  @ReactProp(name = "loadingEnabled", defaultBoolean = false)
-  public void setLoadingEnabled(MapView view, boolean loadingEnabled) {
-    view.enableMapLoading(loadingEnabled);
-  }
-
   @ReactProp(name = "moveOnMarkerPress", defaultBoolean = true)
   public void setMoveOnMarkerPress(MapView view, boolean moveOnPress) {
     view.setMoveOnMarkerPress(moveOnPress);
-  }
-
-  @ReactProp(name = "loadingBackgroundColor", customType = "Color")
-  public void setLoadingBackgroundColor(MapView view, @Nullable Integer loadingBackgroundColor) {
-    view.setLoadingBackgroundColor(loadingBackgroundColor);
-  }
-
-  @ReactProp(name = "loadingIndicatorColor", customType = "Color")
-  public void setLoadingIndicatorColor(MapView view, @Nullable Integer loadingIndicatorColor) {
-    view.setLoadingIndicatorColor(loadingIndicatorColor);
   }
 
   @ReactProp(name = "pitchEnabled", defaultBoolean = false)
@@ -279,26 +262,9 @@ public class MapManager extends ViewGroupManager<MapView> {
     view.setBoundary(boundary);
   }
 
-  @Override
-  public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
-    ReadableMap camera;
-
-    switch (commandId) {
-      case "setCamera":
-        if(args == null) {
-          break;
-        }
-        camera = args.getMap(0);
-        view.animateToCamera(camera, 0);
-        break;
-
-      case "setIndoorActiveLevelIndex":
-        if(args == null) {
-          break;
-        }
-        view.setIndoorActiveLevelIndex(args.getInt(0));
-        break;
-    }
+  @ReactProp(name = "indoorActiveLevelIndex")
+  public void setIndoorActiveLevelIndex(MapView view, int index) {
+    view.setIndoorActiveLevelIndex(index);
   }
 
   @Override
@@ -328,7 +294,7 @@ public class MapManager extends ViewGroupManager<MapView> {
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
         "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
         "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
-        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded")
+        "onTilesRendered", MapBuilder.of("registrationName", "onTilesRendered")
     ));
 
     return map;

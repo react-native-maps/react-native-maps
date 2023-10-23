@@ -1,5 +1,63 @@
 # Changelog
 
+# [2.0.0-beta.14](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2023-05-26)
+
+
+### Features
+
+* **MapView:** remove loading indicator ([#4749](https://github.com/react-native-maps/react-native-maps/issues/4749)) ([4a4a3b1](https://github.com/react-native-maps/react-native-maps/commit/4a4a3b125f77e54890fd58f820b92d949bd9cb1c))
+
+
+### BREAKING CHANGES
+
+* **MapView:** removed loading indicator. Use ActivityIndicator or similar where one is needed.
+
+# [2.0.0-beta.13](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2023-05-10)
+
+
+### Features
+
+* **ios:** implement `onTilesRendered` for MapKit ([1f43340](https://github.com/react-native-maps/react-native-maps/commit/1f433403520c8d35837783a31928578dbf09c780))
+* **MapView:** rename `onMapLoaded` to `onTilesRendered` ([9ce06d5](https://github.com/react-native-maps/react-native-maps/commit/9ce06d5c5f1e0d8d64547782baf0c7fd677fc0d5))
+
+
+### BREAKING CHANGES
+
+* **MapView:** `onMapLoaded` renamed to `onTilesRendered`
+
+# [2.0.0-beta.12](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2023-05-10)
+
+
+### Bug Fixes
+
+* **android:** ui movement when using fitTo{SuppliedMarkers,Coordinates} ([657e05f](https://github.com/react-native-maps/react-native-maps/commit/657e05faecc6f82451cc2799481e53cf11a1669d)), closes [#4590](https://github.com/react-native-maps/react-native-maps/issues/4590)
+* **ios-google:** remove redundant if/else ([db5aadc](https://github.com/react-native-maps/react-native-maps/commit/db5aadc3e30a69a8bda5cba3a89dbefbd6d9c802))
+* **MapView:** `fitToElements` edgePadding moves logo and UI on android ([e0946c9](https://github.com/react-native-maps/react-native-maps/commit/e0946c95fc5bc792cd542feef696ebdb85928fe9))
+
+
+### Features
+
+* **ios:** support edgePadding for fitToElements & fitToSuppliedMarkers ([cf58b84](https://github.com/react-native-maps/react-native-maps/commit/cf58b8426aa4143a3b74f182bb55ccfa3fa720d3))
+
+
+### BREAKING CHANGES
+
+* **ios:** fitTo{Elements,SuppliedMarkers} no longer auto apply padding. Use edgePadding.
+
+# [2.0.0-beta.11](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2023-05-06)
+
+
+### Features
+
+* **MapView:** migrate `setIndoorActiveLevelIndex` to prop ([5957e44](https://github.com/react-native-maps/react-native-maps/commit/5957e445d9d530d9b2e8478b19e10ce202759b85))
+* **MapView:** remove `setCamera` ([aef8148](https://github.com/react-native-maps/react-native-maps/commit/aef81481db6234f4e925d7748dd62b445c04f92e))
+
+
+### BREAKING CHANGES
+
+* **MapView:** `setIndoorActiveLevelIndex` migrated to `indoorActiveLevelIndex` prop
+* **MapView:** `setCamera` removed. Use `animateCamera` with `duration: 0` instead.
+
 # [2.0.0-beta.10](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2023-04-30)
 
 

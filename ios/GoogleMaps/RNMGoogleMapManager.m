@@ -67,6 +67,7 @@ RCT_EXPORT_MODULE(RNMGoogleMap)
 
 RCT_EXPORT_VIEW_PROPERTY(boundary, GMSCoordinateBounds*)
 RCT_EXPORT_VIEW_PROPERTY(customMapStyleString, NSString)
+RCT_EXPORT_VIEW_PROPERTY(indoorActiveLevelIndex, NSInteger)
 RCT_EXPORT_VIEW_PROPERTY(initialCamera, GMSCameraPosition)
 RCT_EXPORT_VIEW_PROPERTY(initialRegion, MKCoordinateRegion)
 RCT_EXPORT_VIEW_PROPERTY(isAccessibilityElement, BOOL)
@@ -80,7 +81,6 @@ RCT_EXPORT_VIEW_PROPERTY(onIndoorBuildingFocused, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onIndoorLevelActivated, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onKmlReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onMapLoaded, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
@@ -88,6 +88,7 @@ RCT_EXPORT_VIEW_PROPERTY(onPoiClick, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onTilesRendered, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(region, MKCoordinateRegion)
@@ -106,40 +107,6 @@ RCT_EXPORT_VIEW_PROPERTY(zoomTapEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(camera, cameraProp, GMSCameraPosition)
 RCT_REMAP_VIEW_PROPERTY(paddingAdjustmentBehavior, paddingAdjustmentBehaviorString, NSString)
 RCT_REMAP_VIEW_PROPERTY(testID, accessibilityIdentifier, NSString)
-
-RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
-                  camera:(id)json)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNMGoogleMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
-        } else {
-            RNMGoogleMap *mapView = (RNMGoogleMap *)view;
-            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
-            [mapView setCamera:camera];
-        }
-    }];
-}
-
-RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
-                  levelIndex:(NSInteger) levelIndex)
-{
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    id view = viewRegistry[reactTag];
-    if (![view isKindOfClass:[RNMGoogleMap class]]) {
-      RCTLogError(@"Invalid view returned from registry, expecting RNMGoogleMap, got: %@", view);
-    } else {
-      RNMGoogleMap *mapView = (RNMGoogleMap *)view;
-      if (!mapView.indoorDisplay) {
-        return;
-      }
-      if ( levelIndex < [mapView.indoorDisplay.activeBuilding.levels count]) {
-        mapView.indoorDisplay.activeLevel = mapView.indoorDisplay.activeBuilding.levels[levelIndex];
-      }
-    }
-  }];
- }
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

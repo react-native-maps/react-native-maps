@@ -434,26 +434,34 @@ public class MapViewModule extends ReactContextBaseJavaModule {
           promise.reject("RNMMapView.map is not valid");
           return;
         }
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
         boolean addedPosition = false;
+
+        double maxLatitude = -Double.MAX_VALUE;
+        double minLatitude = Double.MAX_VALUE;
+        double maxLongitude = -Double.MAX_VALUE;
+        double minLongitude = Double.MAX_VALUE;
 
         for (MapFeature feature : view.features) {
           if (feature instanceof MapMarker) {
-            Marker marker = (Marker) feature.getFeature();
-            builder.include(marker.getPosition());
+            LatLng position = ((Marker) feature.getFeature()).getPosition();
+            maxLatitude = Math.max(maxLatitude, position.latitude);
+            minLatitude = Math.min(minLatitude, position.latitude);
+            maxLongitude = Math.max(maxLongitude, position.longitude);
+            minLongitude = Math.min(minLongitude, position.longitude);
             addedPosition = true;
           }
           // TODO(lmr): may want to include shapes / etc.
         }
-        if (addedPosition) {
-          LatLngBounds bounds = builder.build();
-          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
-
-          if (edgePadding != null) {
-            view.map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-          }
+        if(!addedPosition) {
+          // nothing to do
+          promise.resolve(null);
+        } else {
+          Map<String, Double> paddedBoundary = padBoundary(view, maxLatitude, minLatitude, maxLongitude, minLongitude, edgePadding);
+          LatLngBounds bounds = new LatLngBounds(
+                  new LatLng(paddedBoundary.get("minLatitude"), paddedBoundary.get("minLongitude")), // southwest
+                  new LatLng(paddedBoundary.get("maxLatitude"), paddedBoundary.get("maxLongitude"))  // northeast
+          );
+          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
           if (duration > 0) {
             view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
@@ -491,7 +499,6 @@ public class MapViewModule extends ReactContextBaseJavaModule {
           promise.reject("RNMMapView.map is not valid");
           return;
         }
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         String[] markerIDs = new String[markersIds.size()];
         for (int i = 0; i < markersIds.size(); i++) {
@@ -502,25 +509,35 @@ public class MapViewModule extends ReactContextBaseJavaModule {
 
         List<String> markerIDList = Arrays.asList(markerIDs);
 
+        double maxLatitude = -Double.MAX_VALUE;
+        double minLatitude = Double.MAX_VALUE;
+        double maxLongitude = -Double.MAX_VALUE;
+        double minLongitude = Double.MAX_VALUE;
+
         for (MapFeature feature : view.features) {
           if (feature instanceof MapMarker) {
             String identifier = ((MapMarker) feature).getIdentifier();
-            Marker marker = (Marker) feature.getFeature();
             if (markerIDList.contains(identifier)) {
-              builder.include(marker.getPosition());
+              LatLng position = ((Marker) feature.getFeature()).getPosition();
+              maxLatitude = Math.max(maxLatitude, position.latitude);
+              minLatitude = Math.min(minLatitude, position.latitude);
+              maxLongitude = Math.max(maxLongitude, position.longitude);
+              minLongitude = Math.min(minLongitude, position.longitude);
               addedPosition = true;
             }
           }
         }
 
-        if (addedPosition) {
-          LatLngBounds bounds = builder.build();
-          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
-
-          if (edgePadding != null) {
-            view.map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-          }
+        if(!addedPosition) {
+          // nothing to do
+          promise.resolve(null);
+        } else {
+          Map<String, Double> paddedBoundary = padBoundary(view, maxLatitude, minLatitude, maxLongitude, minLongitude, edgePadding);
+          LatLngBounds bounds = new LatLngBounds(
+                  new LatLng(paddedBoundary.get("minLatitude"), paddedBoundary.get("minLongitude")), // southwest
+                  new LatLng(paddedBoundary.get("maxLatitude"), paddedBoundary.get("maxLongitude"))  // northeast
+          );
+          CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
           if (duration > 0) {
             view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
@@ -558,21 +575,28 @@ public class MapViewModule extends ReactContextBaseJavaModule {
           return;
         }
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        double maxLatitude = -Double.MAX_VALUE;
+        double minLatitude = Double.MAX_VALUE;
+        double maxLongitude = -Double.MAX_VALUE;
+        double minLongitude = Double.MAX_VALUE;
 
         for (int i = 0; i < coordinates.size(); i++) {
           ReadableMap latLng = coordinates.getMap(i);
           double lat = latLng.getDouble("latitude");
           double lng = latLng.getDouble("longitude");
-          builder.include(new LatLng(lat, lng));
+          maxLatitude = Math.max(maxLatitude, lat);
+          minLatitude = Math.min(minLatitude, lat);
+          maxLongitude = Math.max(maxLongitude, lng);
+          minLongitude = Math.min(minLongitude, lng);
         }
 
-        LatLngBounds bounds = builder.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, view.baseMapPadding);
+        Map<String, Double> paddedBoundary = padBoundary(view, maxLatitude, minLatitude, maxLongitude, minLongitude, edgePadding);
+        LatLngBounds bounds = new LatLngBounds(
+                new LatLng(paddedBoundary.get("minLatitude"), paddedBoundary.get("minLongitude")), // southwest
+                new LatLng(paddedBoundary.get("maxLatitude"), paddedBoundary.get("maxLongitude"))  // northeast
+        );
 
-        if (edgePadding != null) {
-          view.appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-        }
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
         if (duration > 0) {
           view.map.animateCamera(cu, duration, new GoogleMap.CancelableCallback() {
@@ -590,9 +614,29 @@ public class MapViewModule extends ReactContextBaseJavaModule {
           view.map.moveCamera(cu);
           promise.resolve(null);
         }
-        // Move the google logo to the default base padding value.
-        view.map.setPadding(view.baseLeftMapPadding, view.baseTopMapPadding, view.baseRightMapPadding, view.baseBottomMapPadding);
       }
     });
+  }
+
+  private Map<String, Double> padBoundary(MapView mapView, double maxLat, double minLat, double maxLng, double minLng, ReadableMap edgePadding) {
+    double latitudeDelta = maxLat - minLat;
+    double longitudeDelta = maxLng - minLng;
+    float displayDensity = context.getResources().getDisplayMetrics().density;
+    double mapViewHeight = mapView.getHeight() / displayDensity;
+    double mapViewWidth = mapView.getWidth() / displayDensity;
+    double latPerHeight = latitudeDelta / mapViewHeight;
+    double lngPerWidth = longitudeDelta / mapViewWidth;
+    double paddedMaxLatitude = maxLat + latPerHeight * edgePadding.getInt("top");
+    double paddedMinLatitude = minLat - latPerHeight * edgePadding.getInt("bottom");
+    double paddedMaxLongitude = maxLng + lngPerWidth * edgePadding.getInt("right");
+    double paddedMinLongitude = minLng - lngPerWidth * edgePadding.getInt("left");
+
+    Map<String,Double> paddedBoundary = new HashMap<String,Double>();
+    paddedBoundary.put("maxLatitude", paddedMaxLatitude);
+    paddedBoundary.put("minLatitude", paddedMinLatitude);
+    paddedBoundary.put("maxLongitude", paddedMaxLongitude);
+    paddedBoundary.put("minLongitude", paddedMinLongitude);
+
+    return paddedBoundary;
   }
 }

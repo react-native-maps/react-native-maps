@@ -309,6 +309,15 @@ id regionAsJSON(MKCoordinateRegion region) {
     self.cameraTargetBounds = boundary;
 }
 
+- (void)setIndoorActiveLevelIndex:(NSInteger)index {
+  if (!self.indoorDisplay) {
+    return;
+  }
+  if ( index < [self.indoorDisplay.activeBuilding.levels count]) {
+    self.indoorDisplay.activeLevel = self.indoorDisplay.activeBuilding.levels[index];
+  }
+}
+
 - (void)didPrepareMap {
   UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
   [self overrideGestureRecognizersForView:mapView];
@@ -321,7 +330,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)mapViewDidFinishTileRendering {
-  if (self.onMapLoaded) self.onMapLoaded(@{});
+  if (self.onTilesRendered) self.onTilesRendered(@{});
 }
 
 - (BOOL)didTapMarker:(GMSMarker *)marker {

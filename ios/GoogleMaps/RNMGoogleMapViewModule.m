@@ -224,13 +224,18 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
             RNMGoogleMap *mapView = (RNMGoogleMap *)view;
             GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
 
-            [CATransaction begin];
-            [CATransaction setCompletionBlock:^{
-                resolve(nil);
-            }];
-            [CATransaction setAnimationDuration:duration/1000];
-            [mapView animateToCameraPosition:camera];
-            [CATransaction commit];
+            if(duration > 0.0f) {
+              [CATransaction begin];
+              [CATransaction setCompletionBlock:^{
+                  resolve(nil);
+              }];
+              [CATransaction setAnimationDuration:duration/1000];
+              [mapView animateToCameraPosition:camera];
+              [CATransaction commit];
+            } else {
+              [mapView moveCamera:camera];
+              resolve(nil);
+            }
         }
     }];
 }
@@ -256,17 +261,13 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         
         GMSCameraUpdate* cameraUpdate;
         
-        if ([edgePadding count] != 0) {
-            // Set Map viewport
-            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+        // Set Map viewport
+        CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+        CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+        CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+        CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
             
-            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
-        } else {
-            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
-        }
+        cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
       if (duration > 0.0f) {
         [CATransaction begin];
         [CATransaction setCompletionBlock:^{
