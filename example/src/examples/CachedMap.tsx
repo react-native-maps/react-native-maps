@@ -66,9 +66,7 @@ class CachedMap extends React.Component<any, any> {
                 }}
                 initialRegion={region}
                 cacheEnabled={this.state.cache}
-                zoomEnabled
-                loadingIndicatorColor="#666666"
-                loadingBackgroundColor="#eeeeee">
+                zoomEnabled>
                 <Marker
                   coordinate={region}
                   centerOffset={{x: -18, y: -60}}

@@ -1,9 +1,7 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Point;
 
 import androidx.annotation.NonNull;
@@ -16,13 +14,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.location.Location;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
@@ -67,7 +62,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,13 +81,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private CircleManager.Collection circleCollection;
   private GroundOverlayManager groundOverlayManager;
   private GroundOverlayManager.Collection groundOverlayCollection;
-  private ProgressBar mapLoadingProgressBar;
-  private RelativeLayout mapLoadingLayout;
   private ImageView cacheImageView;
   private Boolean isMapLoaded = false;
-  private Integer loadingBackgroundColor = null;
-  private Integer loadingIndicatorColor = null;
-  private final int baseMapPadding = 50;
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
@@ -110,11 +99,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
+  private LatLngBounds boundary;
 
   private static final String[] PERMISSIONS = new String[]{
       "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
-  private final List<MapFeature> features = new ArrayList<>();
+  public final List<MapFeature> features = new ArrayList<>();
   private final Map<Marker, MapMarker> markerMap = new HashMap<>();
   private final Map<Polyline, MapPolyline> polylineMap = new HashMap<>();
   private final Map<Polygon, MapPolygon> polygonMap = new HashMap<>();
@@ -275,17 +265,17 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     markerCollection.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
       @Override
       public boolean onMarkerClick(@NonNull Marker marker) {
-        MapMarker airMapMarker = getMarkerMap(marker);
+        MapMarker rnmMapMarker = getMarkerMap(marker);
 
         WritableMap event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
+        event.putString("id", rnmMapMarker.getIdentifier());
         manager.pushEvent(context, view, "onMarkerPress", event);
 
         event = makeClickEventData(marker.getPosition());
         event.putString("action", "marker-press");
-        event.putString("id", airMapMarker.getIdentifier());
-        manager.pushEvent(context, airMapMarker, "onPress", event);
+        event.putString("id", rnmMapMarker.getIdentifier());
+        manager.pushEvent(context, rnmMapMarker, "onPress", event);
 
         // Return false to open the callout info window and center on the marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
@@ -403,7 +393,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
       @Override public void onMapLoaded() {
         isMapLoaded = true;
-        manager.pushEvent(context, view, "onMapLoaded", new WritableNativeMap());
+        manager.pushEvent(context, view, "onTilesRendered", new WritableNativeMap());
         MapView.this.cacheView();
       }
     });
@@ -500,7 +490,42 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
+  public void setBoundary(ReadableMap boundary) {
+    if(boundary == null) {
+      this.boundary = null;
+      if(map != null) {
+        // consumers can pass null to clear boundary
+        map.setLatLngBoundsForCameraTarget(null);
+      }
+    } else {
+      LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+      ReadableMap northEast = boundary.getMap("northEast");
+      ReadableMap southWest = boundary.getMap("southWest");
+
+      double neLat = northEast.getDouble("latitude");
+      double neLng = northEast.getDouble("longitude");
+      builder.include(new LatLng(neLat, neLng));
+
+      double swLat = southWest.getDouble("latitude");
+      double swLng = southWest.getDouble("longitude");
+      builder.include(new LatLng(swLat, swLng));
+
+      LatLngBounds bounds = builder.build();
+
+      this.boundary = bounds;
+
+      if(map != null) {
+        map.setLatLngBoundsForCameraTarget(bounds);
+      }
+    }
+  }
+
+  // called as soon as the map is ready. Assuming nothing was set on the map at this point.
   private void applyBridgedProps() {
+    if(boundary != null) {
+      map.setLatLngBoundsForCameraTarget(boundary);
+    }
     if(initialRegion != null) {
       moveToRegion(initialRegion);
       initialRegionSet = true;
@@ -629,44 +654,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     this.cacheView();
   }
 
-  public void enableMapLoading(boolean loadingEnabled) {
-    if (loadingEnabled && !this.isMapLoaded) {
-      this.getMapLoadingLayoutView().setVisibility(View.VISIBLE);
-    }
-  }
-
   public void setMoveOnMarkerPress(boolean moveOnPress) {
     this.moveOnMarkerPress = moveOnPress;
-  }
-
-  public void setLoadingBackgroundColor(Integer loadingBackgroundColor) {
-    this.loadingBackgroundColor = loadingBackgroundColor;
-
-    if (this.mapLoadingLayout != null) {
-      if (loadingBackgroundColor == null) {
-        this.mapLoadingLayout.setBackgroundColor(Color.WHITE);
-      } else {
-        this.mapLoadingLayout.setBackgroundColor(this.loadingBackgroundColor);
-      }
-    }
-  }
-
-  public void setLoadingIndicatorColor(Integer loadingIndicatorColor) {
-    this.loadingIndicatorColor = loadingIndicatorColor;
-    if (this.mapLoadingProgressBar != null) {
-      Integer color = loadingIndicatorColor;
-      if (color == null) {
-        color = Color.parseColor("#606060");
-      }
-
-      ColorStateList progressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-      ColorStateList secondaryProgressTintList = ColorStateList.valueOf(loadingIndicatorColor);
-      ColorStateList indeterminateTintList = ColorStateList.valueOf(loadingIndicatorColor);
-
-      this.mapLoadingProgressBar.setProgressTintList(progressTintList);
-      this.mapLoadingProgressBar.setSecondaryProgressTintList(secondaryProgressTintList);
-      this.mapLoadingProgressBar.setIndeterminateTintList(indeterminateTintList);
-    }
   }
 
   public void setHandlePanDrag(boolean handlePanDrag) {
@@ -831,8 +820,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  public void animateToCamera(ReadableMap camera, int duration) {
-    if (map == null) return;
+  public CameraUpdate buildCameraUpdate(ReadableMap camera) {
     CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
     if (camera.hasKey("zoom")) {
       builder.zoom((float)camera.getDouble("zoom"));
@@ -848,103 +836,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
     }
 
-    CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
-
-    if (duration <= 0) {
-      map.moveCamera(update);
-    }
-    else {
-      map.animateCamera(update, duration, null);
-    }
+    return CameraUpdateFactory.newCameraPosition(builder.build());
   }
 
-  public void animateToRegion(LatLngBounds bounds, int duration) {
-    if (map == null) return;
-    if(duration <= 0) {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-    } else {
-      map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
-    }
-  }
-
-  public void fitToElements(ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    boolean addedPosition = false;
-
-    for (MapFeature feature : features) {
-      if (feature instanceof MapMarker) {
-        Marker marker = (Marker) feature.getFeature();
-        builder.include(marker.getPosition());
-        addedPosition = true;
-      }
-      // TODO(lmr): may want to include shapes / etc.
-    }
-    if (addedPosition) {
-      LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-      if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-      }
-
-      if (animated) {
-        map.animateCamera(cu);
-      } else {
-        map.moveCamera(cu);
-      }
-    }
-  }
-
-  public void fitToSuppliedMarkers(ReadableArray markerIDsArray, ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    String[] markerIDs = new String[markerIDsArray.size()];
-    for (int i = 0; i < markerIDsArray.size(); i++) {
-      markerIDs[i] = markerIDsArray.getString(i);
-    }
-
-    boolean addedPosition = false;
-
-    List<String> markerIDList = Arrays.asList(markerIDs);
-
-    for (MapFeature feature : features) {
-      if (feature instanceof MapMarker) {
-        String identifier = ((MapMarker) feature).getIdentifier();
-        Marker marker = (Marker) feature.getFeature();
-        if (markerIDList.contains(identifier)) {
-          builder.include(marker.getPosition());
-          addedPosition = true;
-        }
-      }
-    }
-
-    if (addedPosition) {
-      LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-      if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-      }
-
-      if (animated) {
-        map.animateCamera(cu);
-      } else {
-        map.moveCamera(cu);
-      }
-    }
-  }
-
-  int baseLeftMapPadding;
-  int baseRightMapPadding;
-  int baseTopMapPadding;
-  int baseBottomMapPadding;
+  public int baseLeftMapPadding;
+  public int baseRightMapPadding;
+  public int baseTopMapPadding;
+  public int baseBottomMapPadding;
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
     this.map.setPadding(left, top, right, bottom);
@@ -954,36 +852,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     baseBottomMapPadding = bottom;
   }
 
-  public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
-      boolean animated) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    for (int i = 0; i < coordinatesArray.size(); i++) {
-      ReadableMap latLng = coordinatesArray.getMap(i);
-      double lat = latLng.getDouble("latitude");
-      double lng = latLng.getDouble("longitude");
-      builder.include(new LatLng(lat, lng));
-    }
-
-    LatLngBounds bounds = builder.build();
-    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
-
-    if (edgePadding != null) {
-      appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-    }
-
-    if (animated) {
-      map.animateCamera(cu);
-    } else {
-      map.moveCamera(cu);
-    }
-    // Move the google logo to the default base padding value.
-    map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
-  }
-
-  private void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
+  public void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
     int left;
     int top;
     int right;
@@ -1010,24 +879,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       {northEast.longitude, northEast.latitude},
       {southWest.longitude, southWest.latitude}
     };
-  }
-
-  public void setMapBoundaries(ReadableMap northEast, ReadableMap southWest) {
-    if (map == null) return;
-
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-    double latNE = northEast.getDouble("latitude");
-    double lngNE = northEast.getDouble("longitude");
-    builder.include(new LatLng(latNE, lngNE));
-
-    double latSW = southWest.getDouble("latitude");
-    double lngSW = southWest.getDouble("longitude");
-    builder.include(new LatLng(latSW, lngSW));
-
-    LatLngBounds bounds = builder.build();
-
-    map.setLatLngBoundsForCameraTarget(bounds);
   }
 
   // InfoWindowAdapter interface
@@ -1110,36 +961,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     manager.pushEvent(context, this, "onPoiClick", event);
   }
 
-  private ProgressBar getMapLoadingProgressBar() {
-    if (this.mapLoadingProgressBar == null) {
-      this.mapLoadingProgressBar = new ProgressBar(getContext());
-      this.mapLoadingProgressBar.setIndeterminate(true);
-    }
-    if (this.loadingIndicatorColor != null) {
-      this.setLoadingIndicatorColor(this.loadingIndicatorColor);
-    }
-    return this.mapLoadingProgressBar;
-  }
-
-  private RelativeLayout getMapLoadingLayoutView() {
-    if (this.mapLoadingLayout == null) {
-      this.mapLoadingLayout = new RelativeLayout(getContext());
-      this.mapLoadingLayout.setBackgroundColor(Color.LTGRAY);
-      this.addView(this.mapLoadingLayout,
-          new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-              ViewGroup.LayoutParams.MATCH_PARENT));
-
-      RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-          RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-      params.addRule(RelativeLayout.CENTER_IN_PARENT);
-      this.mapLoadingLayout.addView(this.getMapLoadingProgressBar(), params);
-
-      this.mapLoadingLayout.setVisibility(View.INVISIBLE);
-    }
-    this.setLoadingBackgroundColor(this.loadingBackgroundColor);
-    return this.mapLoadingLayout;
-  }
-
   private ImageView getCacheImageView() {
     if (this.cacheImageView == null) {
       this.cacheImageView = new ImageView(getContext());
@@ -1158,41 +979,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
-  private void removeMapLoadingProgressBar() {
-    if (this.mapLoadingProgressBar != null) {
-      ((ViewGroup) this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
-      this.mapLoadingProgressBar = null;
-    }
-  }
-
-  private void removeMapLoadingLayoutView() {
-    this.removeMapLoadingProgressBar();
-    if (this.mapLoadingLayout != null) {
-      ((ViewGroup) this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
-      this.mapLoadingLayout = null;
-    }
-  }
-
   private void cacheView() {
     if (this.cacheEnabled) {
       final ImageView cacheImageView = this.getCacheImageView();
-      final RelativeLayout mapLoadingLayout = this.getMapLoadingLayoutView();
       cacheImageView.setVisibility(View.INVISIBLE);
-      mapLoadingLayout.setVisibility(View.VISIBLE);
       if (this.isMapLoaded) {
         this.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
           @Override public void onSnapshotReady(Bitmap bitmap) {
             cacheImageView.setImageBitmap(bitmap);
             cacheImageView.setVisibility(View.VISIBLE);
-            mapLoadingLayout.setVisibility(View.INVISIBLE);
           }
         });
       }
     } else {
       this.removeCacheImageView();
-      if (this.isMapLoaded) {
-        this.removeMapLoadingLayoutView();
-      }
     }
   }
 
@@ -1375,21 +1175,21 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   }
 
   private MapMarker getMarkerMap(Marker marker) {
-    MapMarker airMarker = markerMap.get(marker);
+    MapMarker rnmMarker = markerMap.get(marker);
 
-    if (airMarker != null) {
-      return airMarker;
+    if (rnmMarker != null) {
+      return rnmMarker;
     }
 
     for (Map.Entry<Marker, MapMarker> entryMarker : markerMap.entrySet()) {
       if (entryMarker.getKey().getPosition().equals(marker.getPosition())
           && entryMarker.getKey().getTitle().equals(marker.getTitle())) {
-        airMarker = entryMarker.getValue();
+        rnmMarker = entryMarker.getValue();
         break;
       }
     }
 
-    return airMarker;
+    return rnmMarker;
   }
 
   @Override

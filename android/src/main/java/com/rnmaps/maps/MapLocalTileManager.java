@@ -24,7 +24,7 @@ public class MapLocalTileManager extends ViewGroupManager<MapLocalTile> {
 
     @Override
     public String getName() {
-        return "AIRMapLocalTile";
+        return "RNMMapLocalTile";
     }
 
     @Override

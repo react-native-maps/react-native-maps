@@ -29,7 +29,7 @@ public class MapPolygonManager extends ViewGroupManager<MapPolygon> {
 
   @Override
   public String getName() {
-    return "AIRMapPolygon";
+    return "RNMMapPolygon";
   }
 
   @Override

@@ -6,9 +6,12 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
+  Animated,
 } from 'react-native';
 
 import MapView, {Marker, AnimatedRegion} from 'react-native-maps';
+
+const AnimatedMarker = Animated.createAnimatedComponent(Marker);
 
 const screen = Dimensions.get('window');
 
@@ -60,7 +63,7 @@ class AnimatedMarkers extends React.Component<any, any> {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}>
-          <Marker.Animated
+          <AnimatedMarker
             ref={(marker: any) => {
               this.marker = marker;
             }}

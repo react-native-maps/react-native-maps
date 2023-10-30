@@ -27,7 +27,7 @@ public class MapOverlayManager extends ViewGroupManager<MapOverlay> {
 
   @Override
   public String getName() {
-    return "AIRMapOverlay";
+    return "RNMMapOverlay";
   }
 
   @Override

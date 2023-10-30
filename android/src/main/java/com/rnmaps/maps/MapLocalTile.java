@@ -15,14 +15,14 @@ import java.io.InputStream;
 
 public class MapLocalTile extends MapFeature {
 
-    class AIRMapLocalTileProvider implements TileProvider {
+    class MapLocalTileProvider implements TileProvider {
         private static final int BUFFER_SIZE = 16 * 1024;
         private int tileSize;
         private String pathTemplate;
         private final boolean useAssets;
 
 
-        public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, boolean useAssets) {
+        public MapLocalTileProvider(int tileSizet, String pathTemplate, boolean useAssets) {
             this.tileSize = tileSizet;
             this.pathTemplate = pathTemplate;
             this.useAssets = useAssets;
@@ -80,7 +80,7 @@ public class MapLocalTile extends MapFeature {
 
     private TileOverlayOptions tileOverlayOptions;
     private TileOverlay tileOverlay;
-    private MapLocalTile.AIRMapLocalTileProvider tileProvider;
+    private MapLocalTile.MapLocalTileProvider tileProvider;
 
     private String pathTemplate;
     private float tileSize;
@@ -129,7 +129,7 @@ public class MapLocalTile extends MapFeature {
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
-        this.tileProvider = new MapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate, this.useAssets);
+        this.tileProvider = new MapLocalTile.MapLocalTileProvider((int)this.tileSize, this.pathTemplate, this.useAssets);
         options.tileProvider(this.tileProvider);
         return options;
     }

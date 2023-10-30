@@ -1,11 +1,146 @@
 # Changelog
 
-# [1.8.0](https://github.com/react-native-maps/react-native-maps/compare/v1.7.1...v1.8.0) (2023-10-09)
+# [2.0.0-beta.14](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2023-05-26)
 
 
 ### Features
 
-* **android:** Add android namespace to support react-native 0.73 ([#4859](https://github.com/react-native-maps/react-native-maps/issues/4859)) ([1c6c13d](https://github.com/react-native-maps/react-native-maps/commit/1c6c13d05705ed73c5ffdaf9f26648b44b7cb523))
+* **MapView:** remove loading indicator ([#4749](https://github.com/react-native-maps/react-native-maps/issues/4749)) ([4a4a3b1](https://github.com/react-native-maps/react-native-maps/commit/4a4a3b125f77e54890fd58f820b92d949bd9cb1c))
+
+
+### BREAKING CHANGES
+
+* **MapView:** removed loading indicator. Use ActivityIndicator or similar where one is needed.
+
+# [2.0.0-beta.13](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2023-05-10)
+
+
+### Features
+
+* **ios:** implement `onTilesRendered` for MapKit ([1f43340](https://github.com/react-native-maps/react-native-maps/commit/1f433403520c8d35837783a31928578dbf09c780))
+* **MapView:** rename `onMapLoaded` to `onTilesRendered` ([9ce06d5](https://github.com/react-native-maps/react-native-maps/commit/9ce06d5c5f1e0d8d64547782baf0c7fd677fc0d5))
+
+
+### BREAKING CHANGES
+
+* **MapView:** `onMapLoaded` renamed to `onTilesRendered`
+
+# [2.0.0-beta.12](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2023-05-10)
+
+
+### Bug Fixes
+
+* **android:** ui movement when using fitTo{SuppliedMarkers,Coordinates} ([657e05f](https://github.com/react-native-maps/react-native-maps/commit/657e05faecc6f82451cc2799481e53cf11a1669d)), closes [#4590](https://github.com/react-native-maps/react-native-maps/issues/4590)
+* **ios-google:** remove redundant if/else ([db5aadc](https://github.com/react-native-maps/react-native-maps/commit/db5aadc3e30a69a8bda5cba3a89dbefbd6d9c802))
+* **MapView:** `fitToElements` edgePadding moves logo and UI on android ([e0946c9](https://github.com/react-native-maps/react-native-maps/commit/e0946c95fc5bc792cd542feef696ebdb85928fe9))
+
+
+### Features
+
+* **ios:** support edgePadding for fitToElements & fitToSuppliedMarkers ([cf58b84](https://github.com/react-native-maps/react-native-maps/commit/cf58b8426aa4143a3b74f182bb55ccfa3fa720d3))
+
+
+### BREAKING CHANGES
+
+* **ios:** fitTo{Elements,SuppliedMarkers} no longer auto apply padding. Use edgePadding.
+
+# [2.0.0-beta.11](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2023-05-06)
+
+
+### Features
+
+* **MapView:** migrate `setIndoorActiveLevelIndex` to prop ([5957e44](https://github.com/react-native-maps/react-native-maps/commit/5957e445d9d530d9b2e8478b19e10ce202759b85))
+* **MapView:** remove `setCamera` ([aef8148](https://github.com/react-native-maps/react-native-maps/commit/aef81481db6234f4e925d7748dd62b445c04f92e))
+
+
+### BREAKING CHANGES
+
+* **MapView:** `setIndoorActiveLevelIndex` migrated to `indoorActiveLevelIndex` prop
+* **MapView:** `setCamera` removed. Use `animateCamera` with `duration: 0` instead.
+
+# [2.0.0-beta.10](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2023-04-30)
+
+
+### Features
+
+* **android:** bump play-services-base 18.2.0 ([02cf884](https://github.com/react-native-maps/react-native-maps/commit/02cf884a10be09bcca53765aca9e8a1ac2bcc86e))
+* **android:** bump play-services-location to 21.0.1 ([87b9916](https://github.com/react-native-maps/react-native-maps/commit/87b99161347dfbf0e3c1ffc9deef3b624c08c248))
+* **android:** bump play-services-maps to 18.1.0 ([a8f8f13](https://github.com/react-native-maps/react-native-maps/commit/a8f8f13dbacdf90f04c3360ad1c7ffb0b5a3289a))
+
+# [2.0.0-beta.9](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2023-04-29)
+
+
+### Features
+
+* **MapView:** implement `boundary` for Apple Maps ([079e7ab](https://github.com/react-native-maps/react-native-maps/commit/079e7ab568243391fcd7b94ce820f70721b6caad))
+* **MapView:** migrate `setMapBoundaries` to `boundary` prop ([2505c3f](https://github.com/react-native-maps/react-native-maps/commit/2505c3f7ac139a51daf857f3c39d192ee7afd3b9))
+
+
+### BREAKING CHANGES
+
+* **MapView:** drop support for iOS < 13.0.
+* **MapView:** migrated `setMapBoundaries` method to `boundary` prop.
+
+# [2.0.0-beta.8](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2023-04-28)
+
+
+### Bug Fixes
+
+* **android:** prevent random, missing tiles if caching locally ([#4598](https://github.com/react-native-maps/react-native-maps/issues/4598)) ([668e837](https://github.com/react-native-maps/react-native-maps/commit/668e837c18c1c0c454be9febbd92cd972c8574d5)), closes [#4477](https://github.com/react-native-maps/react-native-maps/issues/4477)
+
+# [2.0.0-beta.7](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2023-04-28)
+
+
+### Features
+
+* **MapView:** make animateCamera async ([b1c76d8](https://github.com/react-native-maps/react-native-maps/commit/b1c76d832edd81a7cdc058ee22a901e735171e00))
+* **MapView:** make animateToRegion async ([b056709](https://github.com/react-native-maps/react-native-maps/commit/b056709ce5e355a94b41c7d6ffad366c0064e4b7))
+* **MapView:** make fitToCoordinates async and accept duration ([e1b6024](https://github.com/react-native-maps/react-native-maps/commit/e1b60243d81910701b68725907e37e1918806190))
+* **MapView:** make fitToElements async and accept duration ([d397367](https://github.com/react-native-maps/react-native-maps/commit/d397367cbee00e55c425e745851022f9fd3fbd7d))
+* **MapView:** make fitToSuppliedMarkers async and accept duration ([8fb89d8](https://github.com/react-native-maps/react-native-maps/commit/8fb89d80e691dd7c0de7b261ce4e0debeba787f9))
+
+
+### BREAKING CHANGES
+
+* **MapView:** made fitToCoordinates async and accept duration instead of animated boolean
+* **MapView:** made fitToSuppliedMarkers async and accept duration instead of animate boolean
+* **MapView:** made fitToElements async. Takes duration instead of animated boolean
+* **MapView:** made MapView.animateCamera async
+* **MapView:** made MapView.animateToRegion async
+
+# [2.0.0-beta.6](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2023-04-27)
+
+
+### Features
+
+* **ios:** align native component names with android ([99e87dd](https://github.com/react-native-maps/react-native-maps/commit/99e87dd41f79f93841bde045dcdb682581d2b173))
+* move ios modules into seperate files and align name on android ([690c285](https://github.com/react-native-maps/react-native-maps/commit/690c285092c525eedfbdc50425d7dfa4ea982750))
+* restructure ios and rename class prefix ([392e352](https://github.com/react-native-maps/react-native-maps/commit/392e35209cbe851a3829cf96ae13d5b8b00030f9))
+
+# [2.0.0-beta.5](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2023-04-25)
+
+
+### Features
+
+* make `animateCamera` take duration as second parameter ([2b1fab6](https://github.com/react-native-maps/react-native-maps/commit/2b1fab6173c19707686bcd0b860bf733c7e50adc))
+* remove animated components ([b38f782](https://github.com/react-native-maps/react-native-maps/commit/b38f7828459772b1e3f2669cf23fc31279bfcf5b))
+* set default value of `tracksViewChanges` to false ([de7e48b](https://github.com/react-native-maps/react-native-maps/commit/de7e48b2c253e4c2d72662ed204a1fdbef62c5e9))
+* stop exporting non-decorated components ([6c806ca](https://github.com/react-native-maps/react-native-maps/commit/6c806caec8fff19af2e4d2ac436d60710ac5f63f))
+
+
+### BREAKING CHANGES
+
+* undecorated classes no longer exported. See readme for how to get the type instead
+* animated components are no longer exported. See updated readme to migrate.
+* `animateCamera` takes `duration` as second parameter instead of an options object
+* tracksViewChanges defaults to false. If relying on updating markers, set to true.
+
+# [2.0.0-beta.4](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2023-04-23)
+
+
+### Bug Fixes
+
+* **android:** crash when removing feature belonging to collection ([#4707](https://github.com/react-native-maps/react-native-maps/issues/4707)) ([ae6fe90](https://github.com/react-native-maps/react-native-maps/commit/ae6fe90d3f0c727441dd2cdc84c1800e18f18d04)), closes [#4706](https://github.com/react-native-maps/react-native-maps/issues/4706)
 
 ## [1.7.1](https://github.com/react-native-maps/react-native-maps/compare/v1.7.0...v1.7.1) (2023-04-23)
 
@@ -13,6 +148,43 @@
 ### Bug Fixes
 
 * **android:** crash when removing feature belonging to collection ([#4707](https://github.com/react-native-maps/react-native-maps/issues/4707)) ([ae6fe90](https://github.com/react-native-maps/react-native-maps/commit/ae6fe90d3f0c727441dd2cdc84c1800e18f18d04)), closes [#4706](https://github.com/react-native-maps/react-native-maps/issues/4706)
+
+# [2.0.0-beta.3](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2023-04-23)
+
+
+### Features
+
+* **android:** use semantic version range for gradle dependencies ([#4705](https://github.com/react-native-maps/react-native-maps/issues/4705)) ([85b2838](https://github.com/react-native-maps/react-native-maps/commit/85b2838ba7480daceb869a1ef8820333f82725ea))
+
+
+### BREAKING CHANGES
+
+* **android:** drop support for overriding play-services-{base,maps} version
+
+# [2.0.0-beta.2](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2023-04-23)
+
+
+### Features
+
+* require react-native >= 0.69.0 ([#4704](https://github.com/react-native-maps/react-native-maps/issues/4704)) ([6fb60d3](https://github.com/react-native-maps/react-native-maps/commit/6fb60d3a97c8cf99f81ee43355bf6f587b027b57))
+
+
+### BREAKING CHANGES
+
+* Drop support for react-native < 0.69.0
+
+# [2.0.0-beta.1](https://github.com/react-native-maps/react-native-maps/compare/v1.7.0...v2.0.0-beta.1) (2023-04-23)
+
+
+### Features
+
+* **ios:** bump SMCalloutView ([6407fd8](https://github.com/react-native-maps/react-native-maps/commit/6407fd8c020ccefa27c37e329ab504cf585910fa))
+* **ios:** migrate to MKMarkerAnnotationView ([080083b](https://github.com/react-native-maps/react-native-maps/commit/080083bfc82950dfb68dfcf8a6e34c2aa218de8d))
+
+
+### BREAKING CHANGES
+
+* **ios:** visual appearance of Apple Maps default marker
 
 # [1.7.0](https://github.com/react-native-maps/react-native-maps/compare/v1.6.0...v1.7.0) (2023-04-23)
 

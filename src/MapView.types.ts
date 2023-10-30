@@ -1,4 +1,4 @@
-import {ClickEvent, LatLng, Point, Region} from './sharedTypes';
+import {ClickEvent, Frame, LatLng, Point, Region} from './sharedTypes';
 import {NativeSyntheticEvent} from 'react-native';
 
 // All types in this file are directly exported with the package for external
@@ -151,7 +151,7 @@ export type ChangeEvent = NativeSyntheticEvent<{
 
 export type FitToOptions = {
   edgePadding?: EdgePadding;
-  animated?: boolean;
+  duration?: number;
 };
 
 export type BoundingBox = {northEast: LatLng; southWest: LatLng};
@@ -183,19 +183,6 @@ export type Address = {
   thoroughfare: string;
 };
 
-export type NativeCommandName =
-  | 'animateCamera'
-  | 'animateToRegion'
-  | 'coordinateForPoint'
-  | 'fitToCoordinates'
-  | 'fitToElements'
-  | 'fitToSuppliedMarkers'
-  | 'getAddressFromCoordinates'
-  | 'getCamera'
-  | 'getMapBoundaries'
-  | 'getMarkersFrames'
-  | 'pointForCoordinate'
-  | 'setCamera'
-  | 'setIndoorActiveLevelIndex'
-  | 'setMapBoundaries'
-  | 'takeSnapshot';
+export interface MarkersFrames {
+  [key: string]: {point: Point; frame: Frame};
+}

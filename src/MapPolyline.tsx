@@ -173,9 +173,9 @@ export class MapPolyline extends React.Component<MapPolylineProps> {
       lineJoin = 'round',
       lineCap = 'round',
     } = this.props;
-    const AIRMapPolyline = this.getNativeComponent();
+    const RNMMapPolyline = this.getNativeComponent();
     return (
-      <AIRMapPolyline
+      <RNMMapPolyline
         {...this.props}
         strokeColor={strokeColor}
         strokeWidth={strokeWidth}

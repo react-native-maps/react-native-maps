@@ -99,7 +99,7 @@ export class MapHeatmap extends React.Component<MapHeatmapProps> {
   }
 
   render() {
-    const AIRMapHeatmap = this.getNativeComponent();
+    const RNMMapHeatmap = this.getNativeComponent();
     const propGradient = this.props.gradient;
     let gradient: NativeProps['gradient'];
     if (propGradient) {
@@ -107,7 +107,7 @@ export class MapHeatmap extends React.Component<MapHeatmapProps> {
       gradient = {...propGradient, colors};
     }
     return (
-      <AIRMapHeatmap {...this.props} gradient={gradient} ref={this.heatmap} />
+      <RNMMapHeatmap {...this.props} gradient={gradient} ref={this.heatmap} />
     );
   }
 }

@@ -12,13 +12,13 @@ public class MapWMSTile extends MapUrlTile {
   private static final double[] mapBound = {-20037508.34789244, 20037508.34789244};
   private static final double FULL = 20037508.34789244 * 2;
 
-  class AIRMapGSUrlTileProvider extends MapTileProvider {
+  class MapGSUrlTileProvider extends MapTileProvider {
 
-    class AIRMapWMSTileProvider extends UrlTileProvider {
+    class MapWMSTileProvider extends UrlTileProvider {
     private String urlTemplate;
     private final int tileSize;
 
-    public AIRMapWMSTileProvider(int width, int height, String urlTemplate) {
+    public MapWMSTileProvider(int width, int height, String urlTemplate) {
       super(width, height);
       this.urlTemplate = urlTemplate;
       this.tileSize = width;
@@ -67,12 +67,12 @@ public class MapWMSTile extends MapUrlTile {
     }
   }
 
-  public AIRMapGSUrlTileProvider(int tileSizet, String urlTemplate, 
+  public MapGSUrlTileProvider(int tileSizet, String urlTemplate, 
     int maximumZ, int maximumNativeZ, int minimumZ, String tileCachePath, 
     int tileCacheMaxAge, boolean offlineMode, Context context, boolean customMode) {
       super(tileSizet, false, urlTemplate, maximumZ, maximumNativeZ, minimumZ, false,
         tileCachePath, tileCacheMaxAge, offlineMode, context, customMode);
-      this.tileProvider = new AIRMapWMSTileProvider(tileSizet, tileSizet, urlTemplate);
+      this.tileProvider = new MapWMSTileProvider(tileSizet, tileSizet, urlTemplate);
     }
   }
 
@@ -85,7 +85,7 @@ public class MapWMSTile extends MapUrlTile {
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
     options.transparency(1 - this.opacity);
-    AIRMapGSUrlTileProvider tileProvider = new AIRMapGSUrlTileProvider((int) this.tileSize, this.urlTemplate,
+    MapGSUrlTileProvider tileProvider = new MapGSUrlTileProvider((int) this.tileSize, this.urlTemplate,
             (int) this.maximumZ, (int) this.maximumNativeZ, (int) this.minimumZ, this.tileCachePath,
             (int) this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded);
     options.tileProvider(tileProvider);

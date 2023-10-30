@@ -2,12 +2,10 @@ package com.rnmaps.maps;
 
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -20,14 +18,12 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.Map;
 
 public class MapManager extends ViewGroupManager<MapView> {
 
-  private static final String REACT_CLASS = "AIRMap";
+  private static final String REACT_CLASS = "RNMMap";
 
   private final Map<String, Integer> MAP_TYPES = MapBuilder.of(
       "standard", GoogleMap.MAP_TYPE_NORMAL,
@@ -234,24 +230,9 @@ public class MapManager extends ViewGroupManager<MapView> {
     view.setCacheEnabled(cacheEnabled);
   }
 
-  @ReactProp(name = "loadingEnabled", defaultBoolean = false)
-  public void setLoadingEnabled(MapView view, boolean loadingEnabled) {
-    view.enableMapLoading(loadingEnabled);
-  }
-
   @ReactProp(name = "moveOnMarkerPress", defaultBoolean = true)
   public void setMoveOnMarkerPress(MapView view, boolean moveOnPress) {
     view.setMoveOnMarkerPress(moveOnPress);
-  }
-
-  @ReactProp(name = "loadingBackgroundColor", customType = "Color")
-  public void setLoadingBackgroundColor(MapView view, @Nullable Integer loadingBackgroundColor) {
-    view.setLoadingBackgroundColor(loadingBackgroundColor);
-  }
-
-  @ReactProp(name = "loadingIndicatorColor", customType = "Color")
-  public void setLoadingIndicatorColor(MapView view, @Nullable Integer loadingIndicatorColor) {
-    view.setLoadingIndicatorColor(loadingIndicatorColor);
   }
 
   @ReactProp(name = "pitchEnabled", defaultBoolean = false)
@@ -276,86 +257,14 @@ public class MapManager extends ViewGroupManager<MapView> {
     }
   }
 
-  @Override
-  public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
-    int duration;
-    double lat;
-    double lng;
-    double lngDelta;
-    double latDelta;
-    ReadableMap region;
-    ReadableMap camera;
+  @ReactProp(name = "boundary")
+  public void setBoundary(MapView view, ReadableMap boundary) {
+    view.setBoundary(boundary);
+  }
 
-    switch (commandId) {
-      case "setCamera":
-        if(args == null) {
-          break;
-        }
-        camera = args.getMap(0);
-        view.animateToCamera(camera, 0);
-        break;
-
-      case "animateCamera":
-        if(args == null) {
-          break;
-        }
-        camera = args.getMap(0);
-        duration = args.getInt(1);
-        view.animateToCamera(camera, duration);
-        break;
-
-      case "animateToRegion":
-        if(args == null) {
-          break;
-        }
-        region = args.getMap(0);
-        duration = args.getInt(1);
-        lng = region.getDouble("longitude");
-        lat = region.getDouble("latitude");
-        lngDelta = region.getDouble("longitudeDelta");
-        latDelta = region.getDouble("latitudeDelta");
-        LatLngBounds bounds = new LatLngBounds(
-            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
-        );
-        view.animateToRegion(bounds, duration);
-        break;
-
-      case "fitToElements":
-        if(args == null) {
-          break;
-        }
-        view.fitToElements(args.getMap(0), args.getBoolean(1));
-        break;
-
-      case "fitToSuppliedMarkers":
-        if(args == null) {
-          break;
-        }
-        view.fitToSuppliedMarkers(args.getArray(0), args.getMap(1), args.getBoolean(2));
-        break;
-
-      case "fitToCoordinates":
-        if(args == null) {
-          break;
-        }
-        view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
-        break;
-
-      case "setMapBoundaries":
-        if(args == null) {
-          break;
-        }
-        view.setMapBoundaries(args.getMap(0), args.getMap(1));
-        break;
-
-      case "setIndoorActiveLevelIndex":
-        if(args == null) {
-          break;
-        }
-        view.setIndoorActiveLevelIndex(args.getInt(0));
-        break;
-    }
+  @ReactProp(name = "indoorActiveLevelIndex")
+  public void setIndoorActiveLevelIndex(MapView view, int index) {
+    view.setIndoorActiveLevelIndex(index);
   }
 
   @Override
@@ -385,7 +294,7 @@ public class MapManager extends ViewGroupManager<MapView> {
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
         "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
         "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
-        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded")
+        "onTilesRendered", MapBuilder.of("registrationName", "onTilesRendered")
     ));
 
     return map;

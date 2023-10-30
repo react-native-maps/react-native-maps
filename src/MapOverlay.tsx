@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   StyleSheet,
   Image,
-  Animated,
   ViewProps,
   ImageURISource,
   ImageRequireSource,
@@ -83,8 +82,6 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
 
-  static Animated: Animated.AnimatedComponent<typeof MapOverlay>;
-
   render() {
     const {opacity = 1.0} = this.props;
     let image: string | undefined;
@@ -98,10 +95,10 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
       image = sourceAsset.uri;
     }
 
-    const AIRMapOverlay = this.getNativeComponent();
+    const RNMMapOverlay = this.getNativeComponent();
 
     return (
-      <AIRMapOverlay
+      <RNMMapOverlay
         {...this.props}
         opacity={opacity}
         image={image}
@@ -143,8 +140,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-
-MapOverlay.Animated = Animated.createAnimatedComponent(MapOverlay);
 
 export default decorateMapComponent(MapOverlay, 'Overlay', {
   google: {
