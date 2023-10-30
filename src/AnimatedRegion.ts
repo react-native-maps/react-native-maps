@@ -74,7 +74,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
 
   setValue(value: Region) {
     this.latitude.setValue(value.latitude);
-    this.longitude.setValue(value.latitude);
+    this.longitude.setValue(value.longitude);
     this.latitudeDelta.setValue(value.latitudeDelta);
     this.longitudeDelta.setValue(value.longitudeDelta);
   }
