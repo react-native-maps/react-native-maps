@@ -543,7 +543,10 @@ static int kDragCenterContext;
 - (void)mapViewWillStartRenderingMap:(RNMMap *)mapView
 {
     if (!mapView.hasStartedRendering) {
-      mapView.onMapReady(@{});
+      if(mapView.onMapReady) {
+        mapView.onMapReady(@{});
+      }
+
       mapView.hasStartedRendering = YES;
     }
 }
