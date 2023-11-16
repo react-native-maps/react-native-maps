@@ -1020,7 +1020,8 @@ class MapView extends React.Component<MapViewProps, State> {
       return undefined;
     }
 
-    const requiredInitialCameraProps = ['center', 'heading', 'pitch'];
+    // INFO: Without these properties Android app will crash on native side
+    const requiredInitialCameraProps = ['center', 'heading', 'pitch', 'zoom'];
     const initialCameraKeys = Object.keys(this.props.initialCamera);
 
     if (
