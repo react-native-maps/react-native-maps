@@ -1011,6 +1011,29 @@ class MapView extends React.Component<MapViewProps, State> {
     return Platform.OS === 'ios' && this.props.provider === 'google';
   }
 
+  private _getInitialCamera() {
+    if (Platform.OS === 'ios') {
+      return this.props.initialCamera;
+    }
+
+    if (!this.props.initialCamera) {
+      return undefined;
+    }
+
+    const requiredInitialCameraProps = ['center', 'heading', 'pitch'];
+    const initialCameraKeys = Object.keys(this.props.initialCamera);
+
+    if (
+      !requiredInitialCameraProps.every(prop =>
+        initialCameraKeys.includes(prop),
+      )
+    ) {
+      throw new Error('Initial camera object is missing required properties');
+    }
+
+    return this.props.initialCamera;
+  }
+
   render() {
     let props: NativeProps;
 
@@ -1042,7 +1065,7 @@ class MapView extends React.Component<MapViewProps, State> {
         style: this.props.style,
         region: null,
         initialRegion: this.props.initialRegion || null,
-        initialCamera: this.props.initialCamera,
+        initialCamera: this._getInitialCamera(),
         ref: this.map,
         onChange: this._onChange,
         onMapReady: this._onMapReady,

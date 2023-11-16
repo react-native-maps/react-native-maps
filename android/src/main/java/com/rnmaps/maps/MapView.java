@@ -523,25 +523,30 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   // called as soon as the map is ready. Assuming nothing was set on the map at this point.
   private void applyBridgedProps() {
-    if(boundary != null) {
-      map.setLatLngBoundsForCameraTarget(boundary);
+    try {
+      if(boundary != null) {
+        map.setLatLngBoundsForCameraTarget(boundary);
+      }
+      if(initialRegion != null) {
+        moveToRegion(initialRegion);
+        initialRegionSet = true;
+      } else if(initialCamera != null) {
+        moveToCamera(initialCamera);
+        initialCameraSet = true;
+      } else if(region != null) {
+        moveToRegion(region);
+      } else {
+        moveToCamera(camera);
+      }
+      if(customMapStyleString != null) {
+        map.setMapStyle(new MapStyleOptions(customMapStyleString));
+      }
+    } catch (Exception e) {
+        System.err.println("Fail during applying MapView props");
+        e.printStackTrace();
     }
-    if(initialRegion != null) {
-      moveToRegion(initialRegion);
-      initialRegionSet = true;
-    } else if(initialCamera != null) {
-      moveToCamera(initialCamera);
-      initialCameraSet = true;
-    } else if(region != null) {
-      moveToRegion(region);
-    } else {
-      moveToCamera(camera);
-    }
-    if(customMapStyleString != null) {
-      map.setMapStyle(new MapStyleOptions(customMapStyleString));
-    }
-  }
-
+  } 
+  
   private void moveToRegion(ReadableMap region) {
     if (region == null) return;
 
