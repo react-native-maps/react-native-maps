@@ -64,6 +64,8 @@ export const MAP_TYPES: MapTypes = {
   TERRAIN: 'terrain',
   NONE: 'none',
   MUTEDSTANDARD: 'mutedStandard',
+  SATELLITE_FLYOVER: 'satelliteFlyover',
+  HYBRID_FLYOVER: 'hybridFlyover',
 };
 
 const GOOGLE_MAPS_ONLY_TYPES: MapType[] = [MAP_TYPES.TERRAIN, MAP_TYPES.NONE];
@@ -194,7 +196,7 @@ export type MapViewProps = ViewProps & {
    * The map type to be displayed
    *
    * @default `standard`
-   * @platform iOS: hybrid | mutedStandard | sattelite | standard | terrain
+   * @platform iOS: hybrid | mutedStandard | sattelite | standard | terrain | hybridFlyover | satelliteFlyover
    * @platform Android: hybrid | none | sattelite | standard | terrain
    */
   mapType?: MapType;
