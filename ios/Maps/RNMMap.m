@@ -609,6 +609,7 @@ const NSInteger RNMMapMaxZoomLevel = 20;
     }
 }
 
+// based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
 - (double)getZoomLevel {
     // function returns current zoom of the map
     double angleCamera = self.rotation;
@@ -648,15 +649,11 @@ const NSInteger RNMMapMaxZoomLevel = 20;
 -(void)trackRotationChanges {
     CGFloat rotation = [self getRotation];
 
-    // function detects map changes and processes it
     if (rotation >= 0 && rotation != self.rotation) {
         self.rotation = rotation;
-        // [self.listener mapView:self rotationDidChange:rotation];
     }
 }
 
-- (void)startTrackingRotationChanges {
-    // function starts tracking map changes
     if (self.changesTimer == nil) {
        NSTimer * test = [NSTimer timerWithTimeInterval:0.1
                                                    target:self
@@ -671,16 +668,15 @@ const NSInteger RNMMapMaxZoomLevel = 20;
 }
     
 - (void)stopTrackingRotationChanges {
-    // function stops tracking map changes
     if (self.changesTimer != nil) {
         [self.changesTimer invalidate];
         self.changesTimer = nil;
     }
 }
 
+// scans subviews recursively and returns 
+// a reference to the found one of a type
 -(UIView *)findViewOfType:(NSString *)viewType inView:(UIView *)view {
-    // Function scans subviews recursively and returns 
-    // a reference to the found one of a type
     if (view.subviews) {
         for (int i = 0; i < view.subviews.count; i++) {
             UIView* subview = view.subviews[i];
