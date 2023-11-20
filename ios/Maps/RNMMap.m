@@ -653,7 +653,7 @@ const NSInteger RNMMapMaxZoomLevel = 20;
         self.rotation = rotation;
     }
 }
-
+- (void)startTrackingRotationChanges {
     if (self.changesTimer == nil) {
        NSTimer * test = [NSTimer timerWithTimeInterval:0.1
                                                    target:self

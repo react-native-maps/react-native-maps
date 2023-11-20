@@ -515,7 +515,7 @@ static int kDragCenterContext;
 
 - (void)mapView:(RNMMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
-    CGFloat zoomLevel = [self zoomLevel:mapView];
+    CGFloat zoomLevel = [mapView getZoomLevel];
 
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
