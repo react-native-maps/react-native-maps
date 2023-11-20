@@ -523,12 +523,7 @@ static int kDragCenterContext;
         [self _regionChanged:mapView];
     }
 
-    if (zoomLevel < mapView.minZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
-    }
-    else if (zoomLevel > mapView.maxZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
-    }
+    [self applyZoomConstrains:mapView];
 
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
@@ -741,6 +736,29 @@ static int kDragCenterContext;
     [mapView setRegion:region animated:animated];
 }
 
+-(void)applyZoomConstrains:(RNMMap *)mapView {
+    // flyover maps don't use mercator projection so we can't
+    // calculate their zoom level. We have to hack around to limit the zoom
+    if (mapView.mapType == MKMapTypeHybridFlyover || mapView.mapType == MKMapTypeSatelliteFlyover) {
+        CLLocationDistance minDistance = pow(2, mapView.minZoomLevel + 6);
+        CLLocationDistance maxDistance = pow(2, mapView.maxZoomLevel + 6);
+
+        MKMapCameraZoomRange *zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:minDistance
+                                                                                maxCenterCoordinateDistance:maxDistance];                                                            maxCenterCoordinateDistance:maxDistance;
+        [mapView setCameraZoomRange:zoomRange animated:YES];
+        return;
+    }
+
+    CGFloat zoomLevel = [mapView getZoomLevel];
+
+    if (zoomLevel < mapView.minZoomLevel) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
+    }
+    else if (zoomLevel > mapView.maxZoomLevel) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
+    }
+}
+
 //KMapView cannot display tiles that cross the pole (as these would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do).
 -(MKCoordinateRegion)coordinateRegionWithMapView:(RNMMap *)mapView
                                 centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
@@ -797,21 +815,6 @@ static int kDragCenterContext;
     }
 
     return region;
-}
-
-- (double) zoomLevel:(RNMMap *)mapView {
-    MKCoordinateRegion region = mapView.region;
-
-    double centerPixelX = [RNMMapManager longitudeToPixelSpaceX: region.center.longitude];
-    double topLeftPixelX = [RNMMapManager longitudeToPixelSpaceX: region.center.longitude - region.span.longitudeDelta / 2];
-
-    double scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
-    CGSize mapSizeInPixels = mapView.bounds.size;
-    double zoomScale = scaledMapWidth / mapSizeInPixels.width;
-    double zoomExponent = log(zoomScale) / log(2);
-    double zoomLevel = RNMMapMaxZoomLevel - zoomExponent;
-
-    return zoomLevel;
 }
 
 #pragma mark MKMapViewDelegate - Tracking the User Location

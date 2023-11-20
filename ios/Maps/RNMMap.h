@@ -60,9 +60,13 @@ extern const NSInteger RNMMapMaxZoomLevel;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerPress;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerSelect;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+@property (nonatomic, assign) CGFloat rotation;
+@property (nonatomic, assign) UIView *mapContainerView;
+@property (nonatomic, assign) NSTimer *changesTimer;
 
 - (void)cacheViewIfNeeded;
 - (void)finishLoading;
+- (double)getZoomLevel;
 - (NSArray *)getMapBoundaries;
 
 - (RNMMapMarker*) markerAtPoint:(CGPoint)point;
