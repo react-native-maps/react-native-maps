@@ -626,8 +626,9 @@ const NSInteger RNMMapMaxZoomLevel = 20;
     
     // calculating Longitude span corresponding to normal (non-rotated) width
     double spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad));
+    int normalizingFactor = 512;
 
-    return log2(360 * ((width / 128) / spanStraight));
+    return log2(360 * ((width / normalizingFactor) / spanStraight));
 }
 
 - (CGFloat)getRotation {
