@@ -33,7 +33,7 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
 
   @Override
   public String getName() {
-    return "AIRMapPolyline";
+    return "RNMMapPolyline";
   }
 
   @Override

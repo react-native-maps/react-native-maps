@@ -14,7 +14,7 @@ public class MapsPackage implements ReactPackage {
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
     List<NativeModule> modules = new ArrayList<>();
 
-    modules.add(new MapModule(reactContext));
+    modules.add(new MapViewModule(reactContext));
 
     return modules;
   }

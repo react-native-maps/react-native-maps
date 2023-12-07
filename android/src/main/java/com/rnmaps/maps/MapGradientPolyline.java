@@ -86,7 +86,7 @@ public class MapGradientPolyline extends MapFeature {
   private TileOverlayOptions createTileOverlayOptions() {
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
-    AirMapGradientPolylineProvider tileProvider = new AirMapGradientPolylineProvider(context, points, colors, width);
+    MapGradientPolylineProvider tileProvider = new MapGradientPolylineProvider(context, points, colors, width);
     options.tileProvider(tileProvider);
     return options;
   }
@@ -110,7 +110,7 @@ public class MapGradientPolyline extends MapFeature {
     return Color.rgb(rTotal, gTotal, bTotal);
   }
 
-  public class AirMapGradientPolylineProvider implements TileProvider {
+  public class MapGradientPolylineProvider implements TileProvider {
 
     public static final int BASE_TILE_SIZE = 256;
 
@@ -126,7 +126,7 @@ public class MapGradientPolyline extends MapFeature {
     protected Point[] projectedPts;
     protected Point[] projectedPtMids;
 
-    public AirMapGradientPolylineProvider(Context context, List<LatLng> points, int[] colors,
+    public MapGradientPolylineProvider(Context context, List<LatLng> points, int[] colors,
         float width) {
       super();
 
@@ -239,7 +239,7 @@ public class MapGradientPolyline extends MapFeature {
         float interp2 = ((float)i - 1) / points.size();
         float interp1to2 = (interp1 + interp2) / 2;
 
-        Log.d("AirMapGradientPolyline", String.valueOf(interp1to2));
+        Log.d("MapGradientPolyline", String.valueOf(interp1to2));
 
         // Circle for the corner (removes the weird empty corners that occur otherwise)
         colorPaint.setStyle(Paint.Style.FILL);

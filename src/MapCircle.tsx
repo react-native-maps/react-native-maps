@@ -141,9 +141,9 @@ export class MapCircle extends React.Component<MapCircleProps> {
 
   render() {
     const {strokeColor = '#000', strokeWidth = 1} = this.props;
-    const AIRMapCircle = this.getNativeComponent();
+    const RNMMapCircle = this.getNativeComponent();
     return (
-      <AIRMapCircle
+      <RNMMapCircle
         {...this.props}
         strokeColor={strokeColor}
         strokeWidth={strokeWidth}

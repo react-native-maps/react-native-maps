@@ -1,13 +1,11 @@
 import React from 'react';
 import {StyleSheet, View, Dimensions, Animated} from 'react-native';
 
-import {
-  Animated as AnimatedMap,
-  AnimatedRegion,
-  Marker,
-} from 'react-native-maps';
+import MapView, {AnimatedRegion, Marker} from 'react-native-maps';
 import PanController from './PanController';
 import PriceMarker from './AnimatedPriceMarker';
+
+const AnimatedMap = Animated.createAnimatedComponent(MapView);
 
 const screen = Dimensions.get('window');
 

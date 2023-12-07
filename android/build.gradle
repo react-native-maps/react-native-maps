@@ -12,7 +12,7 @@ buildscript {
       mavenCentral()
     }
     dependencies {
-      classpath("com.android.tools.build:gradle:4.2.2")
+      classpath("com.android.tools.build:gradle:7.1.1")
     }
   }
 }
@@ -29,24 +29,55 @@ android {
 }
 
 repositories {
-  mavenLocal()
-  mavenCentral()
   maven {
     // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-    url "$rootDir/../node_modules/react-native/android"
+    url("$rootDir/../node_modules/react-native/android")
   }
   maven {
     // Android JSC is installed from npm
-    url "$rootDir/../node_modules/jsc-android/dist"
+    url("$rootDir/../node_modules/jsc-android/dist")
+  }
+  mavenCentral {
+    // We don't want to fetch react-native from Maven Central as there are
+    // older versions over there.
+    content {
+      excludeGroup "com.facebook.react"
+    }
   }
   google()
+  maven { url 'https://www.jitpack.io' }
 }
 
 dependencies {
   implementation 'com.facebook.react:react-native:+'
-  implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '18.1.0')}"
-  implementation "com.google.android.gms:play-services-maps:${safeExtGet('playServicesVersion', '18.0.2')}"
-  implementation "com.google.android.gms:play-services-location:20.0.0"
-  implementation 'com.google.maps.android:android-maps-utils:3.4.0'
-  implementation "androidx.work:work-runtime:2.7.1"
+  implementation('com.google.android.gms:play-services-base') {
+    version {
+      strictly '[18.0.1, 19.0.0['
+      prefer '18.2.0'
+    }
+  }
+  implementation('com.google.android.gms:play-services-maps') {
+    version {
+      strictly '[18.0.0, 19.0.0['
+      prefer '18.1.0'
+    }
+  }
+  implementation('com.google.android.gms:play-services-location') {
+    version {
+      strictly '[21.0.1, 22.0.0['
+      prefer '21.0.1'
+    }
+  }
+  implementation('com.google.maps.android:android-maps-utils') {
+    version {
+      strictly '[3.0.0, 4.0.0['
+      prefer '3.4.0'
+    }
+  }
+  implementation('androidx.work:work-runtime') {
+    version {
+      strictly '[2.7.1, 3.0.0['
+      prefer '2.7.1'
+    }
+  }
 }
