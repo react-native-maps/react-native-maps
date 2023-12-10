@@ -1159,12 +1159,12 @@ static int kDragCenterContext;
     [mapView setRegion:region animated:animated];
 }
 
--(void)applyZoomConstrains:(RNMMap *)mapView {
+-(void)applyZoomConstrains:(AIRMap *)mapView {
     // flyover maps don't use mercator projection so we can't
     // calculate their zoom level. We have to hack around to limit the zoom
     if (mapView.mapType == MKMapTypeHybridFlyover || mapView.mapType == MKMapTypeSatelliteFlyover) {
-        CLLocationDistance minDistance = pow(2, mapView.minZoomLevel + 6);
-        CLLocationDistance maxDistance = pow(2, mapView.maxZoomLevel + 6);
+        CLLocationDistance minDistance = pow(2, 26 - mapView.maxZoomLevel);
+        CLLocationDistance maxDistance = pow(2, 26 - mapView.minZoomLevel);
 
         MKMapCameraZoomRange *zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:minDistance
                                                                                 maxCenterCoordinateDistance:maxDistance];                                                            maxCenterCoordinateDistance:maxDistance;
