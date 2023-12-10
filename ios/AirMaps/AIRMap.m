@@ -86,6 +86,10 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
+
+        self.mapContainerView = [self findViewOfType:@"MKScrollContainerView" inView:self];
+        self.changesTimer = nil;
+        [self startTrackingRotationChanges];
     }
     return self;
 }
@@ -673,6 +677,92 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         compassButton = [self.subviews objectAtIndex:index];
         compassButton.frame = CGRectMake(compassButton.frame.origin.x + _compassOffset.x, compassButton.frame.origin.y + _compassOffset.y, compassButton.frame.size.width, compassButton.frame.size.height);
     }
+}
+
+// based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
+- (double)getZoomLevel {
+    // function returns current zoom of the map
+    double angleCamera = self.rotation;
+    if (angleCamera > 270) {
+        angleCamera = 360 - angleCamera;
+    } else if (angleCamera > 90) {
+        angleCamera = fabs(angleCamera - 180);
+    }
+
+    double angleRad = M_PI * angleCamera / 180; // map rotation in radians
+    double width = self.frame.size.width;
+    double height = self.frame.size.height;
+    double heightOffset = 20; // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
+
+    // calculating Longitude span corresponding to normal (non-rotated) width
+    double spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad));
+    int normalizingFactor = 512;
+
+    return log2(360 * ((width / normalizingFactor) / spanStraight));
+}
+
+- (CGFloat)getRotation {
+    if(!self.mapContainerView) {
+        return -1;
+    }
+
+    double rotation = fabs(180 * asin(self.mapContainerView.transform.b) / M_PI);
+
+    if (self.mapContainerView.transform.b <= 0 && self.mapContainerView.transform.a >= 0) {
+        rotation = 180 - rotation;
+    } else if (self.mapContainerView.transform.b > 0) {
+        rotation = self.mapContainerView.transform.a <= 0 ? (rotation + 180) : (360 - rotation);
+    }
+
+    return rotation;
+}
+
+-(void)trackRotationChanges {
+    CGFloat rotation = [self getRotation];
+
+    if (rotation >= 0 && rotation != self.rotation) {
+        self.rotation = rotation;
+    }
+}
+- (void)startTrackingRotationChanges {
+    if (self.changesTimer == nil) {
+       NSTimer * test = [NSTimer timerWithTimeInterval:0.1
+                                                   target:self
+                                                 selector:@selector(trackRotationChanges)
+                                                 userInfo:nil
+                                                  repeats:YES];
+
+
+       self.changesTimer = test;
+       [[NSRunLoop currentRunLoop] addTimer:self.changesTimer forMode:NSRunLoopCommonModes];
+    }
+}
+
+- (void)stopTrackingRotationChanges {
+    if (self.changesTimer != nil) {
+        [self.changesTimer invalidate];
+        self.changesTimer = nil;
+    }
+}
+
+// scans subviews recursively and returns 
+// a reference to the found one of a type
+-(UIView *)findViewOfType:(NSString *)viewType inView:(UIView *)view {
+    if (view.subviews) {
+        for (int i = 0; i < view.subviews.count; i++) {
+            UIView* subview = view.subviews[i];
+            if ([subview isKindOfClass:NSClassFromString(viewType)]) {
+                return subview;
+            }
+
+            UIView* inSubviews = [self findViewOfType:viewType inView:subview];
+            if (inSubviews != NULL) {
+                return inSubviews;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 @end

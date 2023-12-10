@@ -52,6 +52,10 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
 
+@property (nonatomic, assign) CGFloat rotation;
+@property (nonatomic, assign) UIView *mapContainerView;
+@property (nonatomic, assign) NSTimer *changesTimer;
+
 @property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
@@ -64,6 +68,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragStart;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDrag;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
+
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
@@ -71,6 +76,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 - (void)cacheViewIfNeeded;
 - (void)beginLoading;
 - (void)finishLoading;
+- (double)getZoomLevel;
 - (NSArray *)getMapBoundaries;
 
 - (AIRMapMarker*) markerAtPoint:(CGPoint)point;
