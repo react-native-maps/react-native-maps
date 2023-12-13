@@ -58,8 +58,6 @@ Add the following to your Podfile above the `use_native_modules!` function and r
 
 ```ruby
 # React Native Maps dependencies
-# The following line is only needed if building on an Apple silicon Mac without rosetta.
-pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
 
 rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-google-maps', :path => rn_maps_path
