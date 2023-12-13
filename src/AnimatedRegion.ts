@@ -31,6 +31,13 @@ type TValueIn = number | Animated.Value | undefined;
 
 type Props = Partial<Region> | undefined;
 
+type RegionListener = {
+  latitude: string;
+  longitude: string;
+  latitudeDelta: string;
+  longitudeDelta: string;
+};
+
 const getAnimatedValue = (valueIn: TValueIn, fallback: number) => {
   if (valueIn instanceof Animated.Value) {
     return valueIn;
@@ -41,6 +48,12 @@ const getAnimatedValue = (valueIn: TValueIn, fallback: number) => {
 };
 
 export default class AnimatedMapRegion extends AnimatedWithChildren {
+  latitude: Animated.Value;
+  longitude: Animated.Value;
+  latitudeDelta: Animated.Value;
+  longitudeDelta: Animated.Value;
+  _regionListeners: Record<string, RegionListener>;
+
   constructor(valueIn: Props = {}) {
     super();
     this.latitude = getAnimatedValue(valueIn.latitude, defaultValues.latitude);
@@ -60,10 +73,10 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
   }
 
   setValue(value: Region) {
-    this.latitude._value = value.latitude;
-    this.longitude._value = value.longitude;
-    this.latitudeDelta._value = value.latitudeDelta;
-    this.longitudeDelta._value = value.longitudeDelta;
+    this.latitude.setValue(value.latitude);
+    this.longitude.setValue(value.longitude);
+    this.latitudeDelta.setValue(value.latitudeDelta);
+    this.longitudeDelta.setValue(value.longitudeDelta);
   }
 
   setOffset(offset: Region) {
@@ -82,25 +95,11 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
 
   private __getValue() {
     return {
-      latitude: this.latitude.__getValue(),
-      longitude: this.longitude.__getValue(),
-      latitudeDelta: this.latitudeDelta.__getValue(),
-      longitudeDelta: this.longitudeDelta.__getValue(),
+      latitude: (this.latitude as any)._value,
+      longitude: (this.longitude as any)._value,
+      latitudeDelta: (this.latitudeDelta as any)._value,
+      longitudeDelta: (this.longitudeDelta as any)._value,
     };
-  }
-
-  private __attach() {
-    this.latitude.__addChild(this);
-    this.longitude.__addChild(this);
-    this.latitudeDelta.__addChild(this);
-    this.longitudeDelta.__addChild(this);
-  }
-
-  private __detach() {
-    this.latitude.__removeChild(this);
-    this.longitude.__removeChild(this);
-    this.latitudeDelta.__removeChild(this);
-    this.longitudeDelta.__removeChild(this);
   }
 
   stopAnimation(callback: (region: Region) => void) {
