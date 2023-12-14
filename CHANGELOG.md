@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.8.3](https://github.com/react-native-maps/react-native-maps/compare/v1.8.2...v1.8.3) (2023-12-07)
+
+
+### Bug Fixes
+
+* add missing subThoroughfare to Address type ([435798b](https://github.com/react-native-maps/react-native-maps/commit/435798b58cb7907cb43caf75fec6286fe0840d28))
+
+## [1.8.2](https://github.com/react-native-maps/react-native-maps/compare/v1.8.1...v1.8.2) (2023-12-07)
+
+
+### Bug Fixes
+
+* **ios:** update google-maps-ios-utils version to 4.2.2 ([28f59c9](https://github.com/react-native-maps/react-native-maps/commit/28f59c9891ddd9f4f4774e1b4104f44d26f466f3))
+
+## [1.8.1](https://github.com/react-native-maps/react-native-maps/compare/v1.8.0...v1.8.1) (2023-12-06)
+
+
+### Bug Fixes
+
+* **example:** fix typo in AndroidManifest.xml for ACCESS_COARSE_LOCATION permission ([a4a0f0d](https://github.com/react-native-maps/react-native-maps/commit/a4a0f0d91b9098b18081aab493a70008b0ca1436))
+
 # [1.8.0](https://github.com/react-native-maps/react-native-maps/compare/v1.7.1...v1.8.0) (2023-10-09)
 
 
