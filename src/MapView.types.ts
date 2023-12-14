@@ -181,6 +181,7 @@ export type Address = {
   subAdministrativeArea: string;
   subLocality: string;
   thoroughfare: string;
+  subThoroughfare?: string;
 };
 
 export type NativeCommandName =
