@@ -727,6 +727,7 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setNativeProps(props: Partial<NativeProps>) {
+    // @ts-ignore
     this.map.current?.setNativeProps(props);
   }
 

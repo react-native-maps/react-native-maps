@@ -348,6 +348,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   }
 
   setNativeProps(props: Partial<NativeProps>) {
+    // @ts-ignore
     this.marker.current?.setNativeProps(props);
   }
 
