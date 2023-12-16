@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '13.0'
+platform :ios, '13.4'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'rnmshowcase' do
@@ -26,7 +26,7 @@ target 'rnmshowcase' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  
+
   rn_maps_path = '../../'
   pod 'react-native-google-maps', :path => rn_maps_path
 
