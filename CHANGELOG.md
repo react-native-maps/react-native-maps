@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.4](https://github.com/react-native-maps/react-native-maps/compare/v1.8.3...v1.8.4) (2023-12-15)
+
+
+### Bug Fixes
+
+* **AIRMap:** fix location change timestamp ([7e5fb71](https://github.com/react-native-maps/react-native-maps/commit/7e5fb712f6f38973b666b406d904f51934f0fb55))
+
 ## [1.8.3](https://github.com/react-native-maps/react-native-maps/compare/v1.8.2...v1.8.3) (2023-12-07)
 
 
