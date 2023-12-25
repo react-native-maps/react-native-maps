@@ -8,7 +8,6 @@ import {
   NativeSyntheticEvent,
   Platform,
   requireNativeComponent,
-  UIManager,
   ViewProps,
 } from 'react-native';
 import {
