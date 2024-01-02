@@ -29,8 +29,7 @@ jobs:
 
       - name: Install pods
         run: USE_FRAMEWORKS=static RCT_NEW_ARCH_ENABLED=1 bundle exec pod install
-        with:
-          working-directory: example/ios
+        working-directory: example/ios
 
       - name: Write Config.xcconfig
         run: echo MAPS_API_KEY=your_api_key_here >> example/ios/Config.xcconfig
