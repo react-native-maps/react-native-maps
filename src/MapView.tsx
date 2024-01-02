@@ -8,7 +8,6 @@ import {
   NativeSyntheticEvent,
   Platform,
   requireNativeComponent,
-  UIManager,
   ViewProps,
 } from 'react-native';
 import {
@@ -168,6 +167,12 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Supported
    */
   liteMode?: boolean;
+
+  /**
+   * https://developers.google.com/maps/documentation/get-map-id
+   * google cloud mapId to enable cloud styling and more
+   */
+  googleMapId?: string;
 
   /**
    * Sets loading background color.
@@ -1044,6 +1049,8 @@ class MapView extends React.Component<MapViewProps, State> {
         initialRegion: null,
         onChange: this._onChange,
         onMapReady: this._onMapReady,
+        liteMode: this.props.liteMode,
+        googleMapId: this.props.googleMapId,
         ref: this.map,
         customMapStyleString: this.props.customMapStyle
           ? JSON.stringify(this.props.customMapStyle)
@@ -1065,6 +1072,8 @@ class MapView extends React.Component<MapViewProps, State> {
       props = {
         style: this.props.style,
         region: null,
+        liteMode: this.props.liteMode,
+        googleMapId: this.props.googleMapId,
         initialRegion: this.props.initialRegion || null,
         initialCamera: this.props.initialCamera,
         ref: this.map,
@@ -1075,14 +1084,6 @@ class MapView extends React.Component<MapViewProps, State> {
           ? JSON.stringify(this.props.customMapStyle)
           : undefined,
       };
-    }
-
-    if (Platform.OS === 'android' && this.props.liteMode) {
-      return (
-        <ProviderContext.Provider value={this.props.provider}>
-          <AIRMapLite {...props} />
-        </ProviderContext.Provider>
-      );
     }
 
     const AIRMap = getNativeMapComponent(this.props.provider);
@@ -1113,10 +1114,6 @@ if (Platform.OS === 'android') {
 }
 const getNativeMapComponent = (provider: Provider) =>
   airMaps[provider || 'default'];
-
-const AIRMapLite = UIManager.getViewManagerConfig('AIRMapLite')
-  ? requireNativeComponent<NativeProps>('AIRMapLite')
-  : () => null;
 
 export const AnimatedMapView = RNAnimated.createAnimatedComponent(MapView);
 
