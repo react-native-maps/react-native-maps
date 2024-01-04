@@ -6,36 +6,35 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
 
-steps:
-  - uses: actions/checkout@v4
-  - name: Setup JDK 17
-    uses: actions/setup-java@v3
-    with:
-      java-version: 17
-      distribution: temurin
+      - name: Setup Android SDK
+        uses: amyu/setup-android@v4
+        with:
+          cache-disabled: true
+          sdk-version: 34
+          build-tools-version: 33.0.2
 
-  - name: Setup Android SDK
-    uses: amyu/setup-android@v4
-    with:
-      cache-disabled: true
-      sdk-version: 34
-      build-tools-version: 33.0.2
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-  - name: Check out repository code
-    uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          cache: yarn
 
-  - name: Setup node
-    uses: actions/setup-node@v3
-    with:
-      node-version: 'lts/*'
-      cache: yarn
+      - name: Install dependencies
+        run: yarn --cwd example --frozen-lockfile
 
-  - name: Install dependencies
-    run: yarn --cwd example --frozen-lockfile
+      - name: Write local.properties
+        run: echo MAPS_API_KEY=your_api_key_here >> example/android/local.properties
 
-  - name: Write local.properties
-    run: echo MAPS_API_KEY=your_api_key_here >> example/android/local.properties
-
-  - name: Build Android
-    run: cd example/android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug
+      - name: Build Android
+        run: cd example/android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug
