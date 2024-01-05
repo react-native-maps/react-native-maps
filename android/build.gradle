@@ -12,7 +12,7 @@ buildscript {
       mavenCentral()
     }
     dependencies {
-      classpath("com.android.tools.build:gradle:4.2.2")
+      classpath("com.android.tools.build:gradle:7.6.3")
     }
   }
 }
@@ -25,11 +25,11 @@ android {
     namespace "com.rnmaps.maps"
   }
 
-  compileSdkVersion safeExtGet('compileSdkVersion', 31)
+  compileSdk safeExtGet('compileSdkVersion', 34)
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 21)
-    targetSdkVersion safeExtGet('targetSdkVersion', 31)
+    targetSdkVersion safeExtGet('targetSdkVersion', 34)
   }
 }
 
