@@ -10,14 +10,19 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "react": "18.1.0",
-    "react-native": "0.70.9"
+    "react": "18.2.0",
+    "react-native": "0.73.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/preset-typescript": "^7.18.6",
-    "@babel/runtime": "^7.12.5",
+    "@babel/core": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
     "babel-plugin-module-resolver": "5.0.0",
-    "metro-react-native-babel-preset": "0.72.3"
+    "@react-native/babel-preset": "^0.73.18",
+    "@react-native/eslint-config": "^0.73.1",
+    "@react-native/metro-config": "^0.73.2",
+    "@react-native/typescript-config": "^0.73.1",
+    "@types/react": "^18.2.6",
+    "@types/react-test-renderer": "^18.0.0"
   }
 }

@@ -731,14 +731,7 @@ class MapView extends React.Component<MapViewProps, State> {
     this._onChange = this._onChange.bind(this);
   }
 
-  /**
-   * @deprecated Will be removed in v2.0.0, as setNativeProps is not a thing in fabric.
-   * See https://reactnative.dev/docs/new-architecture-library-intro#migrating-off-setnativeprops
-   */
   setNativeProps(props: Partial<NativeProps>) {
-    console.warn(
-      'setNativeProps is deprecated and will be removed in next major release',
-    );
     // @ts-ignore
     this.map.current?.setNativeProps(props);
   }
