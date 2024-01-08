@@ -347,12 +347,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     this.animateMarkerToCoordinate = this.animateMarkerToCoordinate.bind(this);
   }
 
-  /**
-   * @deprecated Will be removed in v2.0.0, as setNativeProps is not a thing in fabric.
-   * See https://reactnative.dev/docs/new-architecture-library-intro#migrating-off-setnativeprops
-   */
   setNativeProps(props: Partial<NativeProps>) {
-    // setNativeProps is deprecated and will be removed in next major release
     // @ts-ignore
     this.marker.current?.setNativeProps(props);
   }

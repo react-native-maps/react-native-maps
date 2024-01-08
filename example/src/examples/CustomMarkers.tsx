@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import MapView, {Marker} from 'react-native-maps';
-// @ts-ignore
 import flagPinkImg from './assets/flag-pink.png';
 
 const {width, height} = Dimensions.get('window');
