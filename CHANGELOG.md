@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.9.1](https://github.com/react-native-maps/react-native-maps/compare/v1.9.0...v1.9.1) (2024-01-05)
+
+
+### Bug Fixes
+
+* crash due to casting subview in iOS AIRGoogleMapMarker.m ([#4930](https://github.com/react-native-maps/react-native-maps/issues/4930)) ([4f38bd5](https://github.com/react-native-maps/react-native-maps/commit/4f38bd54e61bd93e26708c4d317ced3fa632cea9))
+
+# [1.9.0](https://github.com/react-native-maps/react-native-maps/compare/v1.8.4...v1.9.0) (2024-01-02)
+
+
+### Features
+
+* **googleMaps:** add support for the new Google's cloud based maps / styling via googleMapId prop ([77610e9](https://github.com/react-native-maps/react-native-maps/commit/77610e96360a7cba3df72e8082d0eb4cae310d38))
+
 ## [1.8.4](https://github.com/react-native-maps/react-native-maps/compare/v1.8.3...v1.8.4) (2023-12-15)
 
 

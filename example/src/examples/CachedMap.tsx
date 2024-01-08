@@ -4,12 +4,11 @@ import {
   View,
   Dimensions,
   StyleSheet,
-  ListView,
+  FlatList,
   TouchableOpacity,
 } from 'react-native';
 
 import MapView, {Marker} from 'react-native-maps';
-// @ts-ignore
 import flagImg from './assets/flag-blue.png';
 
 const HORIZONTAL_PADDING = 12;
@@ -18,12 +17,8 @@ const VERTICAL_PADDING = 6;
 class CachedMap extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-    });
     this.state = {
-      dataSource: ds.cloneWithRows(COUNTRIES),
+      data: {...COUNTRIES},
       cache: true,
     };
   }
@@ -31,11 +26,11 @@ class CachedMap extends React.Component<any, any> {
   toggleCache() {
     // a hack to force listview to reload with the same data
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows([]),
+      data: this.state.data,
     });
     this.setState({
       cache: !this.state.cache,
-      dataSource: this.state.dataSource.cloneWithRows(COUNTRIES),
+      data: {...COUNTRIES},
     });
   }
 
@@ -53,9 +48,9 @@ class CachedMap extends React.Component<any, any> {
             </Text>
           </TouchableOpacity>
         </View>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={region => (
+        <FlatList
+          data={this.state.data}
+          renderItem={({item: region}) => (
             <View style={styles.item}>
               <Text>{region.name}</Text>
               <MapView
@@ -78,6 +73,7 @@ class CachedMap extends React.Component<any, any> {
               </MapView>
             </View>
           )}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );

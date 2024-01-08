@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
 
 import MapView, {Overlay} from 'react-native-maps';
-// @ts-ignore
 import flagPinkImg from './assets/flag-pink.png';
 
 const {width, height} = Dimensions.get('window');
