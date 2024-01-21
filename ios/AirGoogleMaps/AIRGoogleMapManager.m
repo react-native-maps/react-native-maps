@@ -592,6 +592,7 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
                       @"x": @(touchPoint.x),
                       @"y": @(touchPoint.y),
                       },
+                   @"numberOfTouches": @(recognizer.numberOfTouches),
                   });
 
 }

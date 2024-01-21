@@ -710,6 +710,7 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
                           @"x": @(touchPoint.x),
                           @"y": @(touchPoint.y),
                           },
+                  @"numberOfTouches": @(recognizer.numberOfTouches)
                   });
 
 }
