@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.10.0](https://github.com/react-native-maps/react-native-maps/compare/v1.9.1...v1.10.0) (2024-01-21)
+
+
+### Features
+
+* **map:** add numberOfTouches to onPanDrag event on iOS ([#4934](https://github.com/react-native-maps/react-native-maps/issues/4934)) ([13f3903](https://github.com/react-native-maps/react-native-maps/commit/13f39030e35472ec639733ba3c469ae51283d806))
+
 ## [1.9.1](https://github.com/react-native-maps/react-native-maps/compare/v1.9.0...v1.9.1) (2024-01-05)
 
 
