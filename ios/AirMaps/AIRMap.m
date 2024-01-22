@@ -469,8 +469,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 - (void)setMinZoomLevel:(CGFloat)minZoomLevel {
     if (_minZoomLevel != minZoomLevel) {
         _minZoomLevel = minZoomLevel;
-
-        if (self.mapType == MKMapTypeSatellite || self.mapType == MKMapTypeHybrid) {
+        if (self.mapType == MKMapTypeSatelliteFlyover || self.mapType == MKMapTypeHybridFlyover) {
             [self setZoomRange:minZoomLevel maxZoomLevel:self.maxZoomLevel];
         }
     }
@@ -480,7 +479,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
    if (_maxZoomLevel != maxZoomLevel) {
         _maxZoomLevel = maxZoomLevel;
 
-        if (self.mapType == MKMapTypeSatellite || self.mapType == MKMapTypeHybrid) {
+        if (self.mapType == MKMapTypeSatelliteFlyover || self.mapType == MKMapTypeHybridFlyover) {
             [self setZoomRange:self.minZoomLevel maxZoomLevel:maxZoomLevel];
         }
     }
