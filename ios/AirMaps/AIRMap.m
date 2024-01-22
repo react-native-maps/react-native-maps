@@ -83,7 +83,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
 
-        self.minZoomLevel = 1;
+        self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
     }
@@ -467,7 +467,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 }
 
 - (void)setMinZoomLevel:(CGFloat)minZoomLevel {
-    NSLog(@"minZoomLevl %f", minZoomLevel);
     if (_minZoomLevel != minZoomLevel) {
         _minZoomLevel = minZoomLevel;
 
@@ -488,16 +487,14 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 }
 
 - (void)setZoomRange:(CGFloat)minZoomLevel maxZoomLevel:(CGFloat)maxZoomLevel {
-   CLLocationDistance minDistance = pow(2, (26 - maxZoomLevel));
-   CLLocationDistance maxDistance = pow(2, (26 - minZoomLevel));
+    CLLocationDistance minDistance = pow(2, (26 - maxZoomLevel));
+    CLLocationDistance maxDistance = pow(2, (26 - minZoomLevel));
 
-    NSLog(@"minDistance %f", minDistance);
-    NSLog(@"maxDistance %f", maxDistance);
-
-        MKMapCameraZoomRange *zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:minDistance
-                                                                                maxCenterCoordinateDistance:maxDistance];                                                            maxCenterCoordinateDistance:maxDistance;
-        [self setCameraZoomRange:zoomRange animated:YES];
+    MKMapCameraZoomRange *zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:minDistance
+                                                                                maxCenterCoordinateDistance:maxDistance];
+    [self setCameraZoomRange:zoomRange animated:YES];
 }
+
 // Include properties of MKMapView which are only available on iOS 9+
 // and check if their selector is available before calling super method.
 
@@ -708,21 +705,22 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 }
 
 // based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
-- (double)getZoomLevel {
-    double angleCamera = self.camera.heading;
-    if (angleCamera > 270) {
-        angleCamera = 360 - angleCamera;
-    } else if (angleCamera > 90) {
-        angleCamera = fabs(angleCamera - 180);
+- (CGFloat)getZoomLevel {
+    CGFloat cameraAngle = self.camera.heading;
+
+    if (cameraAngle > 270) {
+        cameraAngle = 360 - cameraAngle;
+    } else if (cameraAngle > 90) {
+        cameraAngle = fabs(cameraAngle - 180);
     }
 
-    double angleRad = M_PI * angleCamera / 180; // map rotation in radians
-    double width = self.frame.size.width;
-    double height = self.frame.size.height;
-    double heightOffset = 20; // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
+    CGFloat angleRad = M_PI * cameraAngle / 180; // map rotation in radians
+    CGFloat width = self.frame.size.width;
+    CGFloat height = self.frame.size.height;
+    CGFloat heightOffset = 20; // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
 
     // calculating Longitude span corresponding to normal (non-rotated) width
-    double spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad));
+    CGFloat spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad));
     int normalizingFactor = 512;
 
     return log2(360 * ((width / normalizingFactor) / spanStraight));
