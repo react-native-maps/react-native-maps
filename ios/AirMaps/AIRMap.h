@@ -52,10 +52,6 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
 
-@property (nonatomic, assign) CGFloat rotation;
-@property (nonatomic, assign) UIView *mapContainerView;
-@property (nonatomic, assign) NSTimer *changesTimer;
-
 @property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;

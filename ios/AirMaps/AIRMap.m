@@ -38,6 +38,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, assign) NSNumber *shouldZoomEnabled;
 @property (nonatomic, assign) NSNumber *shouldScrollEnabled;
+@property (nonatomic, assign) CGFloat rotation;
+@property (nonatomic, assign) UIView *mapContainerView;
+@property (nonatomic, assign) NSTimer *changesTimer;
 
 - (void)updateScrollEnabled;
 - (void)updateZoomEnabled;
@@ -83,7 +86,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
 
-        self.minZoomLevel = 0;
+        self.minZoomLevel = 1;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
 
@@ -470,6 +473,38 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     self.activityIndicatorView.color = loadingIndicatorColor;
 }
 
+- (void)setMinZoomLevel:(CGFloat)minZoomLevel {
+    NSLog(@"minZoomLevl %f", minZoomLevel);
+    if (_minZoomLevel != minZoomLevel) {
+        _minZoomLevel = minZoomLevel;
+
+        if (self.mapType == MKMapTypeSatellite || self.mapType == MKMapTypeHybrid) {
+            [self setZoomRange:minZoomLevel maxZoomLevel:self.maxZoomLevel];
+        }
+    }
+}
+
+- (void)setMaxZoomLevel:(CGFloat)maxZoomLevel {
+   if (_maxZoomLevel != maxZoomLevel) {
+        _maxZoomLevel = maxZoomLevel;
+
+        if (self.mapType == MKMapTypeSatellite || self.mapType == MKMapTypeHybrid) {
+            [self setZoomRange:self.minZoomLevel maxZoomLevel:maxZoomLevel];
+        }
+    }
+}
+
+- (void)setZoomRange:(CGFloat)minZoomLevel maxZoomLevel:(CGFloat)maxZoomLevel {
+   CLLocationDistance minDistance = pow(2, (26 - maxZoomLevel));
+   CLLocationDistance maxDistance = pow(2, (26 - minZoomLevel));
+
+    NSLog(@"minDistance %f", minDistance);
+    NSLog(@"maxDistance %f", maxDistance);
+
+        MKMapCameraZoomRange *zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:minDistance
+                                                                                maxCenterCoordinateDistance:maxDistance];                                                            maxCenterCoordinateDistance:maxDistance;
+        [self setCameraZoomRange:zoomRange animated:YES];
+}
 // Include properties of MKMapView which are only available on iOS 9+
 // and check if their selector is available before calling super method.
 
