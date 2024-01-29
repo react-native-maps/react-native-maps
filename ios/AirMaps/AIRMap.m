@@ -498,9 +498,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         zoomRange = [[MKMapCameraZoomRange alloc] initWithMaxCenterCoordinateDistance:[maxValue doubleValue]];
     }
 
-    // make sure app crashes with a descriptive message if unexpected error occurs (e.g. hardware failure, unnoticed bug, etc.)
-    NSAssert(zoomRange != nil, @"Error creating zoom range");
-
     BOOL animated = [cameraZoomRange[@"animated"] boolValue];
 
     self.reactiveZoomConstraintsEnabled = NO;
