@@ -188,6 +188,12 @@ export type Address = {
   subThoroughfare?: string;
 };
 
+export type CameraZoomRange = {
+  minCenterCoordinateDistance?: number;
+  maxCenterCoordinateDistance?: number;
+  animated?: boolean;
+};
+
 export type NativeCommandName =
   | 'animateCamera'
   | 'animateToRegion'

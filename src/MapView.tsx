@@ -36,6 +36,7 @@ import {
   Address,
   BoundingBox,
   Camera,
+  CameraZoomRange,
   ChangeEvent,
   Details,
   EdgePadding,
@@ -230,6 +231,7 @@ export type MapViewProps = ViewProps & {
 
   /**
    * Maximum zoom value for the map, must be between 0 and 20
+   * Disabled for iOS 3D (flyover) maps. Use `cameraZoomRange` instead.
    *
    * @default 20
    * @platform iOS: Supported
@@ -247,6 +249,7 @@ export type MapViewProps = ViewProps & {
 
   /**
    * Minimum zoom value for the map, must be between 0 and 20
+   * Disabled for iOS 3D (flyover) maps. Use `cameraZoomRange` instead.
    *
    * @default 0
    * @platform iOS: Supported
@@ -692,6 +695,17 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Not supported
    */
   zoomTapEnabled?: boolean;
+
+  /**
+   * Map camera distance limits. `minCenterCoordinateDistance` for minimum distance, `maxCenterCoordinateDistance` for maximum.
+   * Alternative to `minZoomLevel`, `maxZoomLevel`. Works on 3D (flyover) maps as well.
+   * Takes precedence if conflicting with `minZoomLevel`, `maxZoomLevel`.
+   * `animated` for animated zoom changes.
+   *
+   * @platform iOS: 13.0+
+   * @platform Android: Not supported
+   */
+  cameraZoomRange?: CameraZoomRange;
 };
 
 type ModifiedProps = Modify<
