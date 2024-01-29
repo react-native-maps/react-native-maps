@@ -86,6 +86,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
+        self.reactiveZoomConstraintsEnabled = YES;
     }
     return self;
 }
@@ -466,32 +467,44 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     self.activityIndicatorView.color = loadingIndicatorColor;
 }
 
-- (void)setMinZoomLevel:(CGFloat)minZoomLevel {
-    if (_minZoomLevel != minZoomLevel) {
-        _minZoomLevel = minZoomLevel;
-        if (self.mapType == MKMapTypeSatelliteFlyover || self.mapType == MKMapTypeHybridFlyover) {
-            [self setZoomRange:minZoomLevel maxZoomLevel:self.maxZoomLevel];
-        }
+- (void)setCameraZoomRange:(NSDictionary *)cameraZoomRange {
+    if (!@available(iOS 13.0, *)) {
+        return;
     }
-}
 
-- (void)setMaxZoomLevel:(CGFloat)maxZoomLevel {
-   if (_maxZoomLevel != maxZoomLevel) {
-        _maxZoomLevel = maxZoomLevel;
-
-        if (self.mapType == MKMapTypeSatelliteFlyover || self.mapType == MKMapTypeHybridFlyover) {
-            [self setZoomRange:self.minZoomLevel maxZoomLevel:maxZoomLevel];
-        }
+    if (cameraZoomRange == nil) {
+        cameraZoomRange = @{};
     }
-}
 
-- (void)setZoomRange:(CGFloat)minZoomLevel maxZoomLevel:(CGFloat)maxZoomLevel {
-    CLLocationDistance minDistance = pow(2, (26 - maxZoomLevel));
-    CLLocationDistance maxDistance = pow(2, (26 - minZoomLevel));
+    NSNumber *minValue = cameraZoomRange[@"minCenterCoordinateDistance"];
+    NSNumber *maxValue = cameraZoomRange[@"maxCenterCoordinateDistance"];
 
-    MKMapCameraZoomRange *zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:minDistance
-                                                                                maxCenterCoordinateDistance:maxDistance];
-    [self setCameraZoomRange:zoomRange animated:YES];
+    if (minValue == nil && maxValue == nil) {
+        self.reactiveZoomConstraintsEnabled = YES;
+
+        MKMapCameraZoomRange *defaultZoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:MKMapCameraZoomDefault maxCenterCoordinateDistance:MKMapCameraZoomDefault];
+        [super setCameraZoomRange:defaultZoomRange animated:NO];
+
+        return;
+    }
+
+    MKMapCameraZoomRange *zoomRange = nil;
+
+    if (minValue != nil && maxValue != nil) {
+        zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue] maxCenterCoordinateDistance:[maxValue doubleValue]];
+    } else if (minValue != nil) {
+        zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue]];
+    } else if (maxValue != nil) {
+        zoomRange = [[MKMapCameraZoomRange alloc] initWithMaxCenterCoordinateDistance:[maxValue doubleValue]];
+    }
+
+    // make sure app crashes with a descriptive message if unexpected error occurs (e.g. hardware failure, unnoticed bug, etc.)
+    NSAssert(zoomRange != nil, @"Error creating zoom range");
+
+    BOOL animated = [cameraZoomRange[@"animated"] boolValue];
+
+    self.reactiveZoomConstraintsEnabled = NO;
+    [super setCameraZoomRange:zoomRange animated:animated];
 }
 
 // Include properties of MKMapView which are only available on iOS 9+

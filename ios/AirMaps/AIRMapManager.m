@@ -110,6 +110,7 @@ RCT_EXPORT_VIEW_PROPERTY(compassOffset, CGPoint)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
+RCT_EXPORT_VIEW_PROPERTY(cameraZoomRange, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
@@ -1162,8 +1163,11 @@ static int kDragCenterContext;
 
 -(void)applyZoomConstrains:(AIRMap *)mapView {
     // flyover maps don't use mercator projection so we can't calculate their zoom level.
-    // We assign them a cameraZoomRange when min/maxZoomLevel are set
     if (mapView.mapType == MKMapTypeHybridFlyover || mapView.mapType == MKMapTypeSatelliteFlyover) {
+        return;
+    } 
+
+    if (mapView.reactiveZoomConstraintsEnabled == NO) {
         return;
     }
 
