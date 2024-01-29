@@ -948,7 +948,9 @@ static int kDragCenterContext;
         [self _regionChanged:mapView];
     }
 
-   [self applyZoomConstrains:mapView];
+    if (mapview.reactiveZoomConstraintsEnabled == YES) {
+        [self applyZoomConstrains:mapView];
+    }
 
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
@@ -1164,10 +1166,6 @@ static int kDragCenterContext;
     if (mapView.mapType == MKMapTypeHybridFlyover || mapView.mapType == MKMapTypeSatelliteFlyover) {
         return;
     } 
-
-    if (mapView.reactiveZoomConstraintsEnabled == NO) {
-        return;
-    }
 
     CGFloat zoomLevel = [mapView getZoomLevel];
 
