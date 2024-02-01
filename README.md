@@ -246,7 +246,7 @@ render() {
 }
 ```
 
-### Customizing the map style
+### Customizing the map style (Google Maps provider only)
 
 Create the json object, or download a generated one from the [google style generator](https://mapstyle.withgoogle.com/).
 
