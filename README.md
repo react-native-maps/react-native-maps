@@ -265,7 +265,7 @@ render() {
 }
 ```
 
-For iOS, in addition to providing the `mapStyle` you will need to do the following
+This option only works with the Google provier. So for iOS, in addition to providing the `mapStyle` you will need to do specify the provier with the following:
 
 ```jsx
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
