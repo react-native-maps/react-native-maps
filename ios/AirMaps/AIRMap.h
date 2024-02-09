@@ -33,7 +33,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) BOOL hasStartedRendering;
 @property (nonatomic, assign) BOOL cacheEnabled;
 @property (nonatomic, assign) BOOL loadingEnabled;
-@property (nonatomic, assign) BOOL reactiveZoomConstraintsEnabled;
+@property (nonatomic, assign) BOOL legacyZoomConstraintsEnabled;
 @property (nonatomic, strong) UIColor *loadingBackgroundColor;
 @property (nonatomic, strong) UIColor *loadingIndicatorColor;
 @property (nonatomic, assign) BOOL hasShownInitialLoading;

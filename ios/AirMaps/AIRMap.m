@@ -86,7 +86,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
-        self.reactiveZoomConstraintsEnabled = YES;
+        self.legacyZoomConstraintsEnabled = YES;
     }
     return self;
 }
@@ -480,7 +480,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     NSNumber *maxValue = cameraZoomRange[@"maxCenterCoordinateDistance"];
 
     if (minValue == nil && maxValue == nil) {
-        self.reactiveZoomConstraintsEnabled = YES;
+        self.legacyZoomConstraintsEnabled = YES;
 
         MKMapCameraZoomRange *defaultZoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:MKMapCameraZoomDefault maxCenterCoordinateDistance:MKMapCameraZoomDefault];
         [super setCameraZoomRange:defaultZoomRange animated:NO];
@@ -500,7 +500,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
     BOOL animated = [cameraZoomRange[@"animated"] boolValue];
 
-    self.reactiveZoomConstraintsEnabled = NO;
+    self.legacyZoomConstraintsEnabled = NO;
     [super setCameraZoomRange:zoomRange animated:animated];
 }
 

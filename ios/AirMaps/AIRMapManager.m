@@ -948,7 +948,7 @@ static int kDragCenterContext;
         [self _regionChanged:mapView];
     }
 
-    if (mapView.reactiveZoomConstraintsEnabled == YES) {
+    if (mapView.legacyZoomConstraintsEnabled == YES) {
         [self applyZoomConstrains:mapView];
     }
 
