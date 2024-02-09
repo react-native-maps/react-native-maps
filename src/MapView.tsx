@@ -216,8 +216,8 @@ export type MapViewProps = ViewProps & {
    * The map type to be displayed
    *
    * @default `standard`
-   * @platform iOS: hybrid | mutedStandard | sattelite | standard | terrain | hybridFlyover | satelliteFlyover
-   * @platform Android: hybrid | none | sattelite | standard | terrain
+   * @platform iOS: hybrid | mutedStandard | satellite | standard | terrain | hybridFlyover | satelliteFlyover
+   * @platform Android: hybrid | none | satellite | standard | terrain
    */
   mapType?: MapType;
 
