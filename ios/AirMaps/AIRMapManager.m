@@ -949,7 +949,7 @@ static int kDragCenterContext;
     }
 
     if (mapView.legacyZoomConstraintsEnabled == YES) {
-        [self applyZoomConstrains:mapView];
+        [self applyLegacyZoomConstrains:mapView];
     }
 
     // Don't send region did change events until map has
@@ -1161,7 +1161,7 @@ static int kDragCenterContext;
     [mapView setRegion:region animated:animated];
 }
 
--(void)applyZoomConstrains:(AIRMap *)mapView {
+-(void)applyLegacyZoomConstrains:(AIRMap *)mapView {
     // flyover maps don't use mercator projection so we can't calculate their zoom level.
     if (mapView.mapType == MKMapTypeHybridFlyover || mapView.mapType == MKMapTypeSatelliteFlyover) {
         return;

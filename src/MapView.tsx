@@ -231,11 +231,11 @@ export type MapViewProps = ViewProps & {
 
   /**
    * Maximum zoom value for the map, must be between 0 and 20
-   * Disabled for iOS 3D (flyover) maps. Use `cameraZoomRange` instead.
    *
    * @default 20
    * @platform iOS: Supported
    * @platform Android: Supported
+   * @deprecated on Apple Maps, use `cameraZoomRange` instead
    */
   maxZoomLevel?: number;
 
@@ -249,11 +249,11 @@ export type MapViewProps = ViewProps & {
 
   /**
    * Minimum zoom value for the map, must be between 0 and 20
-   * Disabled for iOS 3D (flyover) maps. Use `cameraZoomRange` instead.
    *
    * @default 0
    * @platform iOS: Supported
    * @platform Android: Supported
+   * @deprecated on Apple Maps, use `cameraZoomRange` instead
    */
   minZoomLevel?: number;
 
@@ -698,9 +698,8 @@ export type MapViewProps = ViewProps & {
 
   /**
    * Map camera distance limits. `minCenterCoordinateDistance` for minimum distance, `maxCenterCoordinateDistance` for maximum.
-   * Alternative to `minZoomLevel`, `maxZoomLevel`. Works on 3D (flyover) maps as well.
-   * Takes precedence if conflicting with `minZoomLevel`, `maxZoomLevel`.
    * `animated` for animated zoom changes.
+   * Takes precedence if conflicting with `minZoomLevel`, `maxZoomLevel`.
    *
    * @platform iOS: 13.0+
    * @platform Android: Not supported
