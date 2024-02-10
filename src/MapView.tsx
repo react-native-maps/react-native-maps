@@ -36,6 +36,7 @@ import {
   Address,
   BoundingBox,
   Camera,
+  CameraZoomRange,
   ChangeEvent,
   Details,
   EdgePadding,
@@ -64,6 +65,8 @@ export const MAP_TYPES: MapTypes = {
   TERRAIN: 'terrain',
   NONE: 'none',
   MUTEDSTANDARD: 'mutedStandard',
+  SATELLITE_FLYOVER: 'satelliteFlyover',
+  HYBRID_FLYOVER: 'hybridFlyover',
 };
 
 const GOOGLE_MAPS_ONLY_TYPES: MapType[] = [MAP_TYPES.TERRAIN, MAP_TYPES.NONE];
@@ -213,7 +216,7 @@ export type MapViewProps = ViewProps & {
    * The map type to be displayed
    *
    * @default `standard`
-   * @platform iOS: hybrid | mutedStandard | satellite | standard | terrain
+   * @platform iOS: hybrid | mutedStandard | satellite | standard | terrain | hybridFlyover | satelliteFlyover
    * @platform Android: hybrid | none | satellite | standard | terrain
    */
   mapType?: MapType;
@@ -232,6 +235,7 @@ export type MapViewProps = ViewProps & {
    * @default 20
    * @platform iOS: Supported
    * @platform Android: Supported
+   * @deprecated on Apple Maps, use `cameraZoomRange` instead
    */
   maxZoomLevel?: number;
 
@@ -249,6 +253,7 @@ export type MapViewProps = ViewProps & {
    * @default 0
    * @platform iOS: Supported
    * @platform Android: Supported
+   * @deprecated on Apple Maps, use `cameraZoomRange` instead
    */
   minZoomLevel?: number;
 
@@ -690,6 +695,16 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Not supported
    */
   zoomTapEnabled?: boolean;
+
+  /**
+   * Map camera distance limits. `minCenterCoordinateDistance` for minimum distance, `maxCenterCoordinateDistance` for maximum.
+   * `animated` for animated zoom changes.
+   * Takes precedence if conflicting with `minZoomLevel`, `maxZoomLevel`.
+   *
+   * @platform iOS: 13.0+
+   * @platform Android: Not supported
+   */
+  cameraZoomRange?: CameraZoomRange;
 };
 
 type ModifiedProps = Modify<
