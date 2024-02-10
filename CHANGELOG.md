@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/react-native-maps/react-native-maps/compare/v1.10.1...v1.10.2) (2024-02-10)
+
+
+### Bug Fixes
+
+* **AIRMap:** support iOS MapKit zoomConstraints for better zoom handling especially for 3d maps ([#4905](https://github.com/react-native-maps/react-native-maps/issues/4905)) ([d83e1a9](https://github.com/react-native-maps/react-native-maps/commit/d83e1a9f4e5e93e0826ec810a35688eb6b4b4026))
+
 ## [1.10.1](https://github.com/react-native-maps/react-native-maps/compare/v1.10.0...v1.10.1) (2024-02-04)
 
 
