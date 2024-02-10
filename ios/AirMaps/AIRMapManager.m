@@ -110,6 +110,7 @@ RCT_EXPORT_VIEW_PROPERTY(compassOffset, CGPoint)
 RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
+RCT_EXPORT_VIEW_PROPERTY(cameraZoomRange, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
@@ -941,19 +942,14 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
-    CGFloat zoomLevel = [self zoomLevel:mapView];
-
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
     if(mapView.hasStartedRendering){
         [self _regionChanged:mapView];
     }
 
-    if (zoomLevel < mapView.minZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
-    }
-    else if (zoomLevel > mapView.maxZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
+    if (mapView.legacyZoomConstraintsEnabled == YES) {
+        [self applyLegacyZoomConstrains:mapView];
     }
 
     // Don't send region did change events until map has
@@ -1165,6 +1161,22 @@ static int kDragCenterContext;
     [mapView setRegion:region animated:animated];
 }
 
+-(void)applyLegacyZoomConstrains:(AIRMap *)mapView {
+    // flyover maps don't use mercator projection so we can't calculate their zoom level.
+    if (mapView.mapType == MKMapTypeHybridFlyover || mapView.mapType == MKMapTypeSatelliteFlyover) {
+        return;
+    } 
+
+    CGFloat zoomLevel = [mapView getZoomLevel];
+
+    if (zoomLevel < mapView.minZoomLevel) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
+    }
+    else if (zoomLevel > mapView.maxZoomLevel) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
+    }
+}
+
 //KMapView cannot display tiles that cross the pole (as these would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do).
 -(MKCoordinateRegion)coordinateRegionWithMapView:(AIRMap *)mapView
                                 centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
@@ -1221,21 +1233,6 @@ static int kDragCenterContext;
 	}
 
 	return region;
-}
-
-- (double) zoomLevel:(AIRMap *)mapView {
-    MKCoordinateRegion region = mapView.region;
-
-    double centerPixelX = [AIRMapManager longitudeToPixelSpaceX: region.center.longitude];
-    double topLeftPixelX = [AIRMapManager longitudeToPixelSpaceX: region.center.longitude - region.span.longitudeDelta / 2];
-
-    double scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
-    CGSize mapSizeInPixels = mapView.bounds.size;
-    double zoomScale = scaledMapWidth / mapSizeInPixels.width;
-    double zoomExponent = log(zoomScale) / log(2);
-    double zoomLevel = AIRMapMaxZoomLevel - zoomExponent;
-
-    return zoomLevel;
 }
 
 #pragma mark MKMapViewDelegate - Tracking the User Location

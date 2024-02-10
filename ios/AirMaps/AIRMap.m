@@ -86,6 +86,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
+        self.legacyZoomConstraintsEnabled = YES;
     }
     return self;
 }
@@ -466,6 +467,43 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     self.activityIndicatorView.color = loadingIndicatorColor;
 }
 
+- (void)setCameraZoomRange:(NSDictionary *)cameraZoomRange {
+    if (!@available(iOS 13.0, *)) {
+        return;
+    }
+
+    if (cameraZoomRange == nil) {
+        cameraZoomRange = @{};
+    }
+
+    NSNumber *minValue = cameraZoomRange[@"minCenterCoordinateDistance"];
+    NSNumber *maxValue = cameraZoomRange[@"maxCenterCoordinateDistance"];
+
+    if (minValue == nil && maxValue == nil) {
+        self.legacyZoomConstraintsEnabled = YES;
+
+        MKMapCameraZoomRange *defaultZoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:MKMapCameraZoomDefault maxCenterCoordinateDistance:MKMapCameraZoomDefault];
+        [super setCameraZoomRange:defaultZoomRange animated:NO];
+
+        return;
+    }
+
+    MKMapCameraZoomRange *zoomRange = nil;
+
+    if (minValue != nil && maxValue != nil) {
+        zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue] maxCenterCoordinateDistance:[maxValue doubleValue]];
+    } else if (minValue != nil) {
+        zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue]];
+    } else if (maxValue != nil) {
+        zoomRange = [[MKMapCameraZoomRange alloc] initWithMaxCenterCoordinateDistance:[maxValue doubleValue]];
+    }
+
+    BOOL animated = [cameraZoomRange[@"animated"] boolValue];
+
+    self.legacyZoomConstraintsEnabled = NO;
+    [super setCameraZoomRange:zoomRange animated:animated];
+}
+
 // Include properties of MKMapView which are only available on iOS 9+
 // and check if their selector is available before calling super method.
 
@@ -673,6 +711,28 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         compassButton = [self.subviews objectAtIndex:index];
         compassButton.frame = CGRectMake(compassButton.frame.origin.x + _compassOffset.x, compassButton.frame.origin.y + _compassOffset.y, compassButton.frame.size.width, compassButton.frame.size.height);
     }
+}
+
+// based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
+- (CGFloat)getZoomLevel {
+    CGFloat cameraAngle = self.camera.heading;
+
+    if (cameraAngle > 270) {
+        cameraAngle = 360 - cameraAngle;
+    } else if (cameraAngle > 90) {
+        cameraAngle = fabs(cameraAngle - 180);
+    }
+
+    CGFloat angleRad = M_PI * cameraAngle / 180; // map rotation in radians
+    CGFloat width = self.frame.size.width;
+    CGFloat height = self.frame.size.height;
+    CGFloat heightOffset = 20; // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
+
+    // calculating Longitude span corresponding to normal (non-rotated) width
+    CGFloat spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad));
+    int normalizingFactor = 512;
+
+    return log2(360 * ((width / normalizingFactor) / spanStraight));
 }
 
 @end

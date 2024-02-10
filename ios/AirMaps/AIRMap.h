@@ -33,6 +33,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) BOOL hasStartedRendering;
 @property (nonatomic, assign) BOOL cacheEnabled;
 @property (nonatomic, assign) BOOL loadingEnabled;
+@property (nonatomic, assign) BOOL legacyZoomConstraintsEnabled;
 @property (nonatomic, strong) UIColor *loadingBackgroundColor;
 @property (nonatomic, strong) UIColor *loadingIndicatorColor;
 @property (nonatomic, assign) BOOL hasShownInitialLoading;
@@ -64,6 +65,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragStart;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDrag;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
+
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
@@ -71,6 +73,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 - (void)cacheViewIfNeeded;
 - (void)beginLoading;
 - (void)finishLoading;
+- (double)getZoomLevel;
 - (NSArray *)getMapBoundaries;
 
 - (AIRMapMarker*) markerAtPoint:(CGPoint)point;
