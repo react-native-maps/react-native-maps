@@ -367,7 +367,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
 
   setCoordinates(coordinate: LatLng) {
     if (this.marker.current) {
-      this.marker.current.setCoordinates(coordinate);
+      Commands.setCoordinates(this.marker.current, coordinate);
     }
   }
 

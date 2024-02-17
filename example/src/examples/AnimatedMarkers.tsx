@@ -6,7 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {MapMarker, Marker} from 'react-native-maps';
 import {
   runOnJS,
   useDerivedValue,
@@ -22,7 +22,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const AnimatedMarkers = () => {
-  const markerRef = useRef(null);
+  const markerRef = useRef<MapMarker>(null);
   // Shared values for latitude and longitude
   const latitude = useSharedValue(LATITUDE);
   const longitude = useSharedValue(LONGITUDE);
