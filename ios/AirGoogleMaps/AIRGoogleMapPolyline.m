@@ -26,17 +26,31 @@
 
 -(void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates
 {
-  _coordinates = coordinates;
+    _coordinates = coordinates;
 
-  GMSMutablePath *path = [GMSMutablePath path];
-  for(int i = 0; i < coordinates.count; i++)
-  {
-    [path addCoordinate:coordinates[i].coordinate];
-  }
+    GMSMutablePath *path = [GMSMutablePath path];
 
-  _polyline.path = path;
+    if (!coordinates || coordinates.count == 0) 
+    {
+        _polyline.map = nil; // Remove polyline from the map
+        return;
+    }
 
-  [self configureStyleSpansIfNeeded];
+    for (int i = 0; i < coordinates.count; i++) {
+        [path addCoordinate:coordinates[i].coordinate];
+    }
+
+    if (!_originalMap) {
+        _originalMap = _polyline.map; // Store the original map
+    }
+
+    if(!_polyline.map) {
+        _polyline.map = _originalMap;
+    }
+
+    _polyline.path = path;
+
+    [self configureStyleSpansIfNeeded];
 }
 
 -(void)setStrokeColor:(UIColor *)strokeColor
