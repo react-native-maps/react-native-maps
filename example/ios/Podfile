@@ -39,8 +39,9 @@ target 'rnmshowcase' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  rn_maps_path = '../../'
+  rn_maps_path = '../..'
   pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'react-native-maps', :path => rn_maps_path
 
   target 'rnmshowcaseTests' do
     inherit! :complete
