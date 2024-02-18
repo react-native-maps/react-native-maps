@@ -343,6 +343,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     this.marker = React.createRef<MapMarkerNativeComponentType>();
     this.showCallout = this.showCallout.bind(this);
     this.hideCallout = this.hideCallout.bind(this);
+    this.setCoordinates = this.setCoordinates.bind(this);
     this.redrawCallout = this.redrawCallout.bind(this);
     this.animateMarkerToCoordinate = this.animateMarkerToCoordinate.bind(this);
   }
@@ -361,6 +362,12 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   hideCallout() {
     if (this.marker.current) {
       Commands.hideCallout(this.marker.current);
+    }
+  }
+
+  setCoordinates(coordinate: LatLng) {
+    if (this.marker.current) {
+      Commands.setCoordinates(this.marker.current, coordinate);
     }
   }
 

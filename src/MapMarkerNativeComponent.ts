@@ -16,6 +16,12 @@ interface NativeCommands {
       React.RefObject<MapMarkerNativeComponentType>['current']
     >,
   ) => void;
+  setCoordinates: (
+    viewRef: NonNullable<
+      React.RefObject<MapMarkerNativeComponentType>['current']
+    >,
+    coordinate: LatLng,
+  ) => void;
   redrawCallout: (
     viewRef: NonNullable<
       React.RefObject<MapMarkerNativeComponentType>['current']
@@ -42,5 +48,6 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'redrawCallout',
     'animateMarkerToCoordinate',
     'redraw',
+    'setCoordinates',
   ],
 });
