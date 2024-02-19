@@ -18,9 +18,6 @@ class PanController extends React.Component<any, any> {
     ) {
       this.deceleration = this.props.momentumDecayConfig.deceleration;
     }
-  }
-
-  componentWillMount() {
     this._responder = PanResponder.create({
       onStartShouldSetPanResponder: this.props.onStartShouldSetPanResponder,
       onMoveShouldSetPanResponder: this.props.onMoveShouldSetPanResponder,
@@ -327,7 +324,7 @@ class PanController extends React.Component<any, any> {
         Animated.spring(anim, {
           toValue: endX,
           velocity: endV,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }).start();
       }
     });
@@ -387,18 +384,6 @@ class PanController extends React.Component<any, any> {
     }
     return vf;
   }
-
-  // componentDidMount() {
-  //    //TODO: we may need to measure the children width/height here?
-  // },
-  //
-  // componentWillUnmount() {
-  //
-  // },
-  //
-  // componentDidUnmount() {
-  //
-  // },
 
   render() {
     return <View {...this.props} {...this._responder.panHandlers} />;

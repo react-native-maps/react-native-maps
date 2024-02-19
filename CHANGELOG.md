@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.3](https://github.com/react-native-maps/react-native-maps/compare/v1.10.2...v1.10.3) (2024-02-18)
+
+
+### Bug Fixes
+
+* **animation:** Marker Animation using reanimated ([#4974](https://github.com/react-native-maps/react-native-maps/issues/4974)) ([7455ed0](https://github.com/react-native-maps/react-native-maps/commit/7455ed022117cbb45d232bc0f2a8ac5982bb8fd6))
+
 ## [1.10.2](https://github.com/react-native-maps/react-native-maps/compare/v1.10.1...v1.10.2) (2024-02-10)
 
 
