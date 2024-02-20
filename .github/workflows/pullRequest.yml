@@ -20,6 +20,10 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Install example dependencies
+        run: yarn --frozen-lockfile
+        working-directory: example
+
       - name: Lint
         run: yarn lint
 
