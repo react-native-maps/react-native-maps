@@ -30,7 +30,9 @@ import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.facebook.react.uimanager.common.UIManagerType;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -208,7 +210,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       }
     });
 
-    eventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+    int uiManagerType = UIManagerType.DEFAULT;
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      uiManagerType = UIManagerType.FABRIC;
+    }
+
+    eventDispatcher = UIManagerHelper
+      .getUIManager(reactContext, uiManagerType)
+      .getEventDispatcher();
 
     // Set up a parent view for triggering visibility in subviews that depend on it.
     // Mainly ReactImageView depends on Fresco which depends on onVisibilityChanged() event
