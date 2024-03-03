@@ -11,6 +11,23 @@
 
 @implementation AIRGMSMarker
 
+- (id)makeEventData {
+    CLLocationCoordinate2D coordinate = self.position;
+    CGPoint position = [self.map.projection pointForCoordinate:coordinate];
+
+    return @{
+            @"id": self.identifier ?: @"unknown",
+            @"position": @{
+                @"x": @(position.x),
+                @"y": @(position.y),
+                },
+            @"coordinate": @{
+                @"latitude": @(coordinate.latitude),
+                @"longitude": @(coordinate.longitude),
+                }
+            };
+}
+
 @end
 
 #endif

@@ -351,9 +351,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 
   if (airMarker.onPress) airMarker.onPress(event);
   if (self.onMarkerPress) self.onMarkerPress(event);
-
   // TODO: not sure why this is necessary
   [self setSelectedMarker:marker];
+
   return NO;
 }
 
@@ -582,6 +582,28 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.indoorPicker;
 }
 
+-(void)setSelectedMarker:(AIRGMSMarker *)selectedMarker {
+  if (selectedMarker == self.selectedMarker) {
+    return;
+  }
+    AIRGMSMarker *airMarker = (AIRGMSMarker *) self.selectedMarker;
+    
+    if (airMarker) {
+      if (airMarker.onDeselect) {
+          airMarker.onDeselect([airMarker makeEventData]);
+      }
+    }
+    
+    if (selectedMarker) {
+        if (selectedMarker.onSelect) {
+            selectedMarker.onSelect([selectedMarker makeEventData]);
+        }
+    }
+    
+
+  [super setSelectedMarker:selectedMarker];
+}
+
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
   // solution from here: http://stackoverflow.com/a/16587735/1102215
   GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
@@ -740,16 +762,19 @@ id regionAsJSON(MKCoordinateRegion region) {
     BOOL isTap = [gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || [gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]];
     if (isTap) {
         BOOL isTapInsideBubble = NO;
-    CGPoint tapPoint = CGPointZero;
-    CGPoint tapPointInBubble = CGPointZero;
+        CGPoint tapPoint = CGPointZero;
+        CGPoint tapPointInBubble = CGPointZero;
 
-    NSArray* touches = [gestureRecognizer valueForKey:@"touches"];
-    UITouch* oneTouch = [touches firstObject];
-    NSArray* delayedTouches = [gestureRecognizer valueForKey:@"delayedTouches"];
-    NSObject* delayedTouch = [delayedTouches firstObject]; //UIGestureDeleayedTouch
-    UITouch* tapTouch = [delayedTouch valueForKey:@"stateWhenDelayed"];
-    if (!tapTouch)
-        tapTouch = oneTouch;
+        NSArray* touches = [gestureRecognizer valueForKey:@"touches"];
+        UITouch* oneTouch = [touches firstObject];
+        NSArray* delayedTouches = [gestureRecognizer valueForKey:@"delayedTouches"];
+        NSObject* delayedTouch = [delayedTouches firstObject]; //UIGestureDeleayedTouch
+        UITouch* tapTouch = [delayedTouch valueForKey:@"stateWhenDelayed"];
+
+        if (!tapTouch) {
+            tapTouch = oneTouch;
+        };
+
         tapPoint = [tapTouch locationInView:self];
         isTapInsideBubble = tapTouch != nil && CGRectContainsPoint(bubbleFrame, tapPoint);
         if (isTapInsideBubble) {
