@@ -391,6 +391,7 @@ const getRgbaFromHex = (hex: string, alpha: number = 1) => {
     }
     return subColor;
   });
+  let rgba = `rgba(${r},${g},${b},${alpha})`;
   return `rgba(${r},${g},${b},${alpha})`;
 };
 

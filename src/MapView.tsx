@@ -9,6 +9,7 @@ import {
   Platform,
   requireNativeComponent,
   ViewProps,
+  TurboModuleRegistry,
 } from 'react-native';
 import {
   createNotSupportedComponent,
@@ -732,6 +733,7 @@ type State = {
 class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
+  private MapViewNativeComponent_harmony = TurboModuleRegistry.get('AIRMapManager');
 
   constructor(props: MapViewProps) {
     super(props);
@@ -739,7 +741,8 @@ class MapView extends React.Component<MapViewProps, State> {
     this.map = React.createRef<MapViewNativeComponentType>();
 
     this.state = {
-      isReady: Platform.OS === 'ios',
+      // @ts-ignore
+      isReady: Platform.OS === 'ios' || Platform.OS === 'harmony',
     };
 
     this._onMapReady = this._onMapReady.bind(this);
@@ -778,29 +781,55 @@ class MapView extends React.Component<MapViewProps, State> {
       return NativeModules.AirMapModule.getCamera(this._getHandle());
     } else if (Platform.OS === 'ios') {
       return this._runCommand('getCamera', []);
+      
+    }
+    // @ts-ignore
+    else if(Platform.OS === 'harmony'){
+      // @ts-ignore
+      return this.MapViewNativeComponent_harmony.getCamera();
     }
     return Promise.reject('getCamera not supported on this platform');
   }
 
   setCamera(camera: Partial<Camera>) {
     if (this.map.current) {
-      Commands.setCamera(this.map.current, camera);
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.setCamera(camera);
+      }else{
+        Commands.setCamera(this.map.current, camera);
+      }
     }
   }
 
   animateCamera(camera: Partial<Camera>, opts?: {duration?: number}) {
     if (this.map.current) {
-      Commands.animateCamera(
-        this.map.current,
-        camera,
-        opts?.duration ? opts.duration : 500,
-      );
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.animateCamera(camera, opts?.duration ? opts.duration : 500);
+      }
+      else{
+        Commands.animateCamera(
+          this.map.current,
+          camera,
+          opts?.duration ? opts.duration : 500,
+        );
+      }
     }
   }
 
   animateToRegion(region: Region, duration: number = 500) {
     if (this.map.current) {
-      Commands.animateToRegion(this.map.current, region, duration);
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.animateToRegion(region, duration);
+      }
+      else{
+        Commands.animateToRegion(this.map.current, region, duration);
+      }
     }
   }
 
@@ -810,8 +839,14 @@ class MapView extends React.Component<MapViewProps, State> {
         edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
         animated = true,
       } = options;
-
-      Commands.fitToElements(this.map.current, edgePadding, animated);
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.fitToElements(edgePadding, animated);
+      }
+      else{
+        Commands.fitToElements(this.map.current, edgePadding, animated);
+      }
     }
   }
 
@@ -821,13 +856,19 @@ class MapView extends React.Component<MapViewProps, State> {
         edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
         animated = true,
       } = options;
-
-      Commands.fitToSuppliedMarkers(
-        this.map.current,
-        markers,
-        edgePadding,
-        animated,
-      );
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.fitToSuppliedMarkers(markers, edgePadding, animated);
+      }
+      else{
+        Commands.fitToSuppliedMarkers(
+          this.map.current,
+          markers,
+          edgePadding,
+          animated,
+        );
+      }
     }
   }
 
@@ -837,13 +878,19 @@ class MapView extends React.Component<MapViewProps, State> {
         edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
         animated = true,
       } = options;
-
-      Commands.fitToCoordinates(
-        this.map.current,
-        coordinates,
-        edgePadding,
-        animated,
-      );
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.fitToCoordinates(coordinates, edgePadding, animated);
+      }
+      else{
+        Commands.fitToCoordinates(
+          this.map.current,
+          coordinates,
+          edgePadding,
+          animated,
+        );
+      }
     }
   }
 
@@ -859,19 +906,38 @@ class MapView extends React.Component<MapViewProps, State> {
       );
     } else if (Platform.OS === 'ios') {
       return await this._runCommand('getMapBoundaries', []);
+    } 
+    // @ts-ignore
+    else if (Platform.OS === 'harmony') {
+      // @ts-ignore
+      return await this.MapViewNativeComponent_harmony.getMapBoundaries();
     }
     return Promise.reject('getMapBoundaries not supported on this platform');
   }
 
   setMapBoundaries(northEast: LatLng, southWest: LatLng) {
     if (this.map.current) {
-      Commands.setMapBoundaries(this.map.current, northEast, southWest);
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.setMapBoundaries(northEast, southWest);
+      }
+      else{
+        Commands.setMapBoundaries(this.map.current, northEast, southWest);
+      }
     }
   }
 
   setIndoorActiveLevelIndex(activeLevelIndex: number) {
     if (this.map.current) {
-      Commands.setIndoorActiveLevelIndex(this.map.current, activeLevelIndex);
+      // @ts-ignore
+      if (Platform.OS === 'harmony') {
+        // @ts-ignore
+        this.MapViewNativeComponent_harmony.setIndoorActiveLevelIndex(activeLevelIndex);
+      }
+      else{
+        Commands.setIndoorActiveLevelIndex(this.map.current, activeLevelIndex);
+      }
     }
   }
 
@@ -928,6 +994,19 @@ class MapView extends React.Component<MapViewProps, State> {
         ]);
       });
     }
+    // @ts-ignore
+    else if(Platform.OS === 'harmony'){
+      return new Promise((resolve, reject) => {
+          // @ts-ignore
+          this.MapViewNativeComponent_harmony.takeSnapshot(config, (err, snapshot) => {
+              if(err){
+                  reject(err);
+              }else{
+                  resolve(snapshot);
+              }
+          })
+      });
+  }
     return Promise.reject('takeSnapshot not supported on this platform');
   }
 
@@ -948,6 +1027,11 @@ class MapView extends React.Component<MapViewProps, State> {
       );
     } else if (Platform.OS === 'ios') {
       return this._runCommand('getAddressFromCoordinates', [coordinate]);
+    }
+    // @ts-ignore
+    else if(Platform.OS === 'harmony'){
+      // @ts-ignore
+      return this.MapViewNativeComponent_harmony.getAddressFromCoordinates(coordinate);
     }
     return Promise.reject('getAddress not supported on this platform');
   }
@@ -970,6 +1054,11 @@ class MapView extends React.Component<MapViewProps, State> {
     } else if (Platform.OS === 'ios') {
       return this._runCommand('pointForCoordinate', [coordinate]);
     }
+    // @ts-ignore
+    else if(Platform.OS === 'harmony'){
+      // @ts-ignore
+      return this.MapViewNativeComponent_harmony.pointForCoordinate(coordinate);
+    }
     return Promise.reject('pointForCoordinate not supported on this platform');
   }
 
@@ -991,6 +1080,11 @@ class MapView extends React.Component<MapViewProps, State> {
     } else if (Platform.OS === 'ios') {
       return this._runCommand('coordinateForPoint', [point]);
     }
+    // @ts-ignore
+    else if(Platform.OS === 'harmony'){
+      // @ts-ignore
+      return this.MapViewNativeComponent_harmony.coordinateForPoint(point);
+    }
     return Promise.reject('coordinateForPoint not supported on this platform');
   }
 
@@ -1006,6 +1100,11 @@ class MapView extends React.Component<MapViewProps, State> {
   }> {
     if (Platform.OS === 'ios') {
       return this._runCommand('getMarkersFrames', [onlyVisible]);
+    }
+    // @ts-ignore
+    else if(Platform.OS === 'harmony'){
+      // @ts-ignore
+      return this.MapViewNativeComponent_harmony.getMarkersFrames(onlyVisible);
     }
     return Promise.reject('getMarkersFrames not supported on this platform');
   }
@@ -1066,7 +1165,8 @@ class MapView extends React.Component<MapViewProps, State> {
         ...this.props,
       };
       if (
-        Platform.OS === 'ios' &&
+        // @ts-ignore
+        Platform.OS === 'ios' || Platform.OS === 'harmony' &&
         props.provider === ProviderConstants.PROVIDER_DEFAULT &&
         props.mapType &&
         GOOGLE_MAPS_ONLY_TYPES.includes(props.mapType)

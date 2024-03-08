@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
-  "version": "0.0.0",
+  "version": "1.10.3",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -23,6 +23,7 @@
     "lib",
     "android",
     "ios",
+	"harmony",
     "react-native-google-maps.podspec",
     "react-native-maps.podspec",
     "!android/build",
