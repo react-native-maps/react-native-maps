@@ -1,0 +1,9 @@
+labels: [not yet]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Add a description
+      description:  Add a description here...
+    validations:
+      required: false
