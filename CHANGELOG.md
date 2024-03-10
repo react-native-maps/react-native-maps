@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.4](https://github.com/react-native-maps/react-native-maps/compare/v1.10.3...v1.10.4) (2024-03-10)
+
+
+### Bug Fixes
+
+* **android:** remove dangling map marker views causing memory leak ([#4992](https://github.com/react-native-maps/react-native-maps/issues/4992)) ([02ed7c0](https://github.com/react-native-maps/react-native-maps/commit/02ed7c04ec51789462a234cbddf0483d2c8116cd))
+
 ## [1.10.3](https://github.com/react-native-maps/react-native-maps/compare/v1.10.2...v1.10.3) (2024-02-18)
 
 
