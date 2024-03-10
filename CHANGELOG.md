@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.11.0](https://github.com/react-native-maps/react-native-maps/compare/v1.10.4...v1.11.0) (2024-03-10)
+
+
+### Features
+
+* **android:** add bridgeless support ([#4985](https://github.com/react-native-maps/react-native-maps/issues/4985)) ([3ad0265](https://github.com/react-native-maps/react-native-maps/commit/3ad0265cd2e1fc357713ae2b8de71249c8425b50))
+
 ## [1.10.4](https://github.com/react-native-maps/react-native-maps/compare/v1.10.3...v1.10.4) (2024-03-10)
 
 
