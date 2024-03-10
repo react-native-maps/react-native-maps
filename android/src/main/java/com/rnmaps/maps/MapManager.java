@@ -450,8 +450,10 @@ public class MapManager extends ViewGroupManager<MapView> {
   }
 
   void pushEvent(ThemedReactContext context, View view, String name, WritableMap data) {
-    context.getJSModule(RCTEventEmitter.class)
-        .receiveEvent(view.getId(), name, data);
+    context
+      .getReactApplicationContext()
+      .getJSModule(RCTEventEmitter.class)
+      .receiveEvent(view.getId(), name, data);
   }
 
   @Override
