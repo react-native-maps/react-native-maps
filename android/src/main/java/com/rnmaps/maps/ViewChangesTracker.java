@@ -18,12 +18,13 @@ public class ViewChangesTracker {
     handler = new Handler(Looper.myLooper());
     updateRunnable = new Runnable() {
       @Override
-      public void run() {
-        hasScheduledFrame = false;
+      public void run() {        
         update();
 
         if (markers.size() > 0) {
           handler.postDelayed(updateRunnable, fps);
+        } else {
+          hasScheduledFrame = false;
         }
       }
     };
