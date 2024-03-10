@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/react-native-maps/react-native-maps/compare/v1.11.0...v1.11.1) (2024-03-10)
+
+
+### Bug Fixes
+
+* **android:** custom maker performance improvements when view tracking ([#4969](https://github.com/react-native-maps/react-native-maps/issues/4969)) ([f30c9d7](https://github.com/react-native-maps/react-native-maps/commit/f30c9d7624aa2f50afb7da97b6749fc45eb3125c))
+
 # [1.11.0](https://github.com/react-native-maps/react-native-maps/compare/v1.10.4...v1.11.0) (2024-03-10)
 
 
