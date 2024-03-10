@@ -771,6 +771,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     if (feature instanceof MapMarker) {
       markerMap.remove(feature.getFeature());
       feature.removeFromMap(markerCollection);
+      attacherGroup.removeView(feature);
     } else if (feature instanceof MapHeatmap) {
       heatmapMap.remove(feature.getFeature());
       feature.removeFromMap(map);
