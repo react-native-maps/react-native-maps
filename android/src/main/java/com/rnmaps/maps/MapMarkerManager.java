@@ -326,7 +326,9 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"),
         "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
         "onDrag", MapBuilder.of("registrationName", "onDrag"),
-        "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
+        "onDragEnd", MapBuilder.of("registrationName", "onDragEnd"),
+        "onSelect", MapBuilder.of("registrationName", "onSelect"),
+        "onDeselect", MapBuilder.of("registrationName", "onDeselect")
     );
 
     map.putAll(MapBuilder.of(

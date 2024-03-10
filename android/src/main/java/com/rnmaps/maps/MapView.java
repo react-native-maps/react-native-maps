@@ -110,6 +110,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
+  private MapMarker selectedMarker;
 
   private static final String[] PERMISSIONS = new String[]{
       "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
@@ -287,6 +288,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         event.putString("id", airMapMarker.getIdentifier());
         manager.pushEvent(context, airMapMarker, "onPress", event);
 
+        handleMarkerSelection(airMapMarker);
+
         // Return false to open the callout info window and center on the marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
         // .OnMarkerClickListener
@@ -342,6 +345,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         WritableMap event = makeClickEventData(point);
         event.putString("action", "press");
         manager.pushEvent(context, view, "onPress", event);
+
+        handleMarkerSelection(null);
       }
     });
 
@@ -452,6 +457,26 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     };
 
     context.addLifecycleEventListener(lifecycleListener);
+  }
+
+  private synchronized void handleMarkerSelection(MapMarker target) {
+    WritableMap event;
+  
+    if (selectedMarker != null) {
+      event = makeClickEventData(selectedMarker.getPosition());
+      event.putString("action", "marker-deselect");
+      event.putString("id", selectedMarker.getIdentifier());
+      manager.pushEvent(context, selectedMarker, "onDeselect", event);
+    }
+
+    if (target != null && target != selectedMarker) {
+      event = makeClickEventData(target.getPosition());
+      event.putString("action", "marker-select");
+      event.putString("id", target.getIdentifier());
+      manager.pushEvent(context, target, "onSelect", event);
+    }
+
+     selectedMarker = (selectedMarker == target) ? null : target;
   }
 
   private boolean hasPermissions() {
