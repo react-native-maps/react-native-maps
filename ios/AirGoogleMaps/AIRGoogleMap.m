@@ -351,6 +351,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 
   if (airMarker.onPress) airMarker.onPress(event);
   if (self.onMarkerPress) self.onMarkerPress(event);
+
   // TODO: not sure why this is necessary
   [self setSelectedMarker:marker];
 
@@ -588,16 +589,12 @@ id regionAsJSON(MKCoordinateRegion region) {
   }
     AIRGMSMarker *airMarker = (AIRGMSMarker *) self.selectedMarker;
     
-    if (airMarker) {
-      if (airMarker.onDeselect) {
-          airMarker.onDeselect([airMarker makeEventData]);
-      }
+    if (airMarker && airMarker.onDeselect) {
+        airMarker.onDeselect([airMarker makeEventData]);
     }
     
-    if (selectedMarker) {
-        if (selectedMarker.onSelect) {
-            selectedMarker.onSelect([selectedMarker makeEventData]);
-        }
+    if (selectedMarker && selectedMarker.onSelect) {
+        selectedMarker.onSelect([selectedMarker makeEventData]);
     }
     
 
