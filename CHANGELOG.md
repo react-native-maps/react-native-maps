@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.11.3](https://github.com/react-native-maps/react-native-maps/compare/v1.11.2...v1.11.3) (2024-03-11)
+
+
+### Bug Fixes
+
+* AnimatedRegion types ([#4909](https://github.com/react-native-maps/react-native-maps/issues/4909)) ([5fd9ca6](https://github.com/react-native-maps/react-native-maps/commit/5fd9ca6dfb655145cfbf41f7f977855d8265b1f1))
+
+## [1.11.2](https://github.com/react-native-maps/react-native-maps/compare/v1.11.1...v1.11.2) (2024-03-11)
+
+
+### Bug Fixes
+
+* **iOS:** removing polylines on iOS with googleProvider ([#4973](https://github.com/react-native-maps/react-native-maps/issues/4973)) ([6603060](https://github.com/react-native-maps/react-native-maps/commit/66030603a1808ef2c055f0abe2ab02f5e47cdf4c))
+
+## [1.11.1](https://github.com/react-native-maps/react-native-maps/compare/v1.11.0...v1.11.1) (2024-03-10)
+
+
+### Bug Fixes
+
+* **android:** custom maker performance improvements when view tracking ([#4969](https://github.com/react-native-maps/react-native-maps/issues/4969)) ([f30c9d7](https://github.com/react-native-maps/react-native-maps/commit/f30c9d7624aa2f50afb7da97b6749fc45eb3125c))
+
+# [1.11.0](https://github.com/react-native-maps/react-native-maps/compare/v1.10.4...v1.11.0) (2024-03-10)
+
+
+### Features
+
+* **android:** add bridgeless support ([#4985](https://github.com/react-native-maps/react-native-maps/issues/4985)) ([3ad0265](https://github.com/react-native-maps/react-native-maps/commit/3ad0265cd2e1fc357713ae2b8de71249c8425b50))
+
+## [1.10.4](https://github.com/react-native-maps/react-native-maps/compare/v1.10.3...v1.10.4) (2024-03-10)
+
+
+### Bug Fixes
+
+* **android:** remove dangling map marker views causing memory leak ([#4992](https://github.com/react-native-maps/react-native-maps/issues/4992)) ([02ed7c0](https://github.com/react-native-maps/react-native-maps/commit/02ed7c04ec51789462a234cbddf0483d2c8116cd))
+
 ## [1.10.3](https://github.com/react-native-maps/react-native-maps/compare/v1.10.2...v1.10.3) (2024-02-18)
 
 
