@@ -20,6 +20,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onDeselect;
 
 -(id)makeEventData;
+-(id)makeEventData:(NSString *)action;
 @end
 
 

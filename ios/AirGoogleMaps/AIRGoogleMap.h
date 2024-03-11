@@ -34,6 +34,8 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPanDrag;
 @property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;
+@property (nonatomic, copy) RCTBubblingEventBlock onMarkerSelect;
+@property (nonatomic, copy) RCTBubblingEventBlock onMarkerDeselect;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onPoiClick;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;

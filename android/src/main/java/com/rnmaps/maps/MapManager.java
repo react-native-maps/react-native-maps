@@ -392,8 +392,6 @@ public class MapManager extends ViewGroupManager<MapView> {
         "onPress", MapBuilder.of("registrationName", "onPress"),
         "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
         "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
-        "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
-        "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect"),
         "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
     );
 
@@ -411,7 +409,9 @@ public class MapManager extends ViewGroupManager<MapView> {
         "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
         "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
         "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
-        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded")
+        "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"),
+        "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
+        "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect")
     ));
 
     return map;

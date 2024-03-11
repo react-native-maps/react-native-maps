@@ -467,6 +467,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       event.putString("action", "marker-deselect");
       event.putString("id", selectedMarker.getIdentifier());
       manager.pushEvent(context, selectedMarker, "onDeselect", event);
+
+      event = makeClickEventData(selectedMarker.getPosition());
+      event.putString("action", "marker-deselect");
+      event.putString("id", selectedMarker.getIdentifier());
+      manager.pushEvent(context, this, "onMarkerDeselect", event);
     }
 
     if (target != null && target != selectedMarker) {
@@ -474,9 +479,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       event.putString("action", "marker-select");
       event.putString("id", target.getIdentifier());
       manager.pushEvent(context, target, "onSelect", event);
+
+      event = makeClickEventData(target.getPosition());
+      event.putString("action", "marker-select");
+      event.putString("id", target.getIdentifier());
+      manager.pushEvent(context, this, "onMarkerSelect", event);
     }
 
-     selectedMarker = (selectedMarker == target) ? null : target;
+     selectedMarker = target;
   }
 
   private boolean hasPermissions() {

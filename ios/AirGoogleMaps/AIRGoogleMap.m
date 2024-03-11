@@ -590,13 +590,20 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGMSMarker *airMarker = (AIRGMSMarker *) self.selectedMarker;
     
     if (airMarker && airMarker.onDeselect) {
-        airMarker.onDeselect([airMarker makeEventData]);
+        airMarker.onDeselect([airMarker makeEventData:@"marker-deselect"]);
+    }
+
+    if (airMarker && self.onMarkerDeselect) {
+        self.onMarkerDeselect([airMarker makeEventData:@"marker-deselect"]);
     }
     
     if (selectedMarker && selectedMarker.onSelect) {
-        selectedMarker.onSelect([selectedMarker makeEventData]);
+        selectedMarker.onSelect([selectedMarker makeEventData:@"marker-select"]);
     }
-    
+
+    if (selectedMarker && self.onMarkerSelect) {
+        self.onMarkerSelect([selectedMarker makeEventData:@"marker-select"]);
+    }
 
   [super setSelectedMarker:selectedMarker];
 }
