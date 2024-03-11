@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.3](https://github.com/react-native-maps/react-native-maps/compare/v1.11.2...v1.11.3) (2024-03-11)
+
+
+### Bug Fixes
+
+* AnimatedRegion types ([#4909](https://github.com/react-native-maps/react-native-maps/issues/4909)) ([5fd9ca6](https://github.com/react-native-maps/react-native-maps/commit/5fd9ca6dfb655145cfbf41f7f977855d8265b1f1))
+
 ## [1.11.2](https://github.com/react-native-maps/react-native-maps/compare/v1.11.1...v1.11.2) (2024-03-11)
 
 
