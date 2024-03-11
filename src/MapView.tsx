@@ -57,6 +57,7 @@ import {
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
 import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
+import AnimatedRegion from './AnimatedRegion';
 
 export const MAP_TYPES: MapTypes = {
   STANDARD: 'standard',
@@ -472,7 +473,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  region?: Region;
+  region?: Region | AnimatedRegion;
 
   /**
    * If `false` the user won't be able to adjust the camera’s pitch angle.
