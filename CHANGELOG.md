@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.2](https://github.com/react-native-maps/react-native-maps/compare/v1.11.1...v1.11.2) (2024-03-11)
+
+
+### Bug Fixes
+
+* **iOS:** removing polylines on iOS with googleProvider ([#4973](https://github.com/react-native-maps/react-native-maps/issues/4973)) ([6603060](https://github.com/react-native-maps/react-native-maps/commit/66030603a1808ef2c055f0abe2ab02f5e47cdf4c))
+
 ## [1.11.1](https://github.com/react-native-maps/react-native-maps/compare/v1.11.0...v1.11.1) (2024-03-10)
 
 
