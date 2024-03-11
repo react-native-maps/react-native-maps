@@ -19,6 +19,7 @@
 @property (nonatomic, strong) AIRGMSPolyline *polyline;
 @property (nonatomic, strong) NSArray<AIRMapCoordinate *> *coordinates;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
+@property (nonatomic, strong) GMSMapView *originalMap;
 
 @property (nonatomic, strong) UIColor *strokeColor;
 @property (nonatomic, strong) NSArray<UIColor *> *strokeColors;
