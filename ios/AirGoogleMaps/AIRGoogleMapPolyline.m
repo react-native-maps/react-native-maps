@@ -29,9 +29,23 @@
   _coordinates = coordinates;
 
   GMSMutablePath *path = [GMSMutablePath path];
-  for(int i = 0; i < coordinates.count; i++)
+
+  if (!coordinates || coordinates.count == 0) 
   {
+    _polyline.map = nil; // Remove polyline from the map
+    return;
+  }
+
+  for (int i = 0; i < coordinates.count; i++) {
     [path addCoordinate:coordinates[i].coordinate];
+  }
+
+  if (!_originalMap) {
+    _originalMap = _polyline.map; // Store the original map
+  }
+
+  if (!_polyline.map) {
+    _polyline.map = _originalMap;
   }
 
   _polyline.path = path;
