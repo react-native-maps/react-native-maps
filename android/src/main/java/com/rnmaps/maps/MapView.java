@@ -460,8 +460,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   }
 
   private synchronized void handleMarkerSelection(MapMarker target) {
+    if (selectedMarker == target) {
+      return;
+    }
+    
     WritableMap event;
-  
+
     if (selectedMarker != null) {
       event = makeClickEventData(selectedMarker.getPosition());
       event.putString("action", "marker-deselect");
@@ -474,7 +478,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       manager.pushEvent(context, this, "onMarkerDeselect", event);
     }
 
-    if (target != null && target != selectedMarker) {
+    if (target != null) {
       event = makeClickEventData(target.getPosition());
       event.putString("action", "marker-select");
       event.putString("id", target.getIdentifier());
