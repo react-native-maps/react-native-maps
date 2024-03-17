@@ -31,7 +31,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     private final Map<MapMarker, Boolean> markers;
     private boolean loadImageStarted;
 
-    public AirMapMarkerSharedIcon(){
+    public AirMapMarkerSharedIcon() {
       this.markers = new WeakHashMap<>();
       this.loadImageStarted = false;
     }
@@ -42,7 +42,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
      *
      * @return true if it is not started, false otherwise.
      */
-    public synchronized boolean shouldLoadImage(){
+    public synchronized boolean shouldLoadImage() {
       if (!this.loadImageStarted) {
         this.loadImageStarted = true;
         return true;
@@ -67,7 +67,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     /**
      * Remove marker from this shared icon.
      *
-     * Marker will only need to call it when the marker receives a different marker image uri.
+     * Marker will only need to call it when the marker receives a different marker
+     * image uri.
      *
      * @param marker
      */
@@ -81,7 +82,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
      *
      * @return true if there is, false otherwise
      */
-    public synchronized boolean hasMarker(){
+    public synchronized boolean hasMarker() {
       return this.markers.isEmpty();
     }
 
@@ -101,7 +102,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         return;
       }
 
-      for (Map.Entry<MapMarker, Boolean> markerEntry: markers.entrySet()) {
+      for (Map.Entry<MapMarker, Boolean> markerEntry : markers.entrySet()) {
         if (markerEntry.getKey() != null) {
           markerEntry.getKey().setIconBitmapDescriptor(bitmapDescriptor, bitmap);
         }
@@ -121,7 +122,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     AirMapMarkerSharedIcon icon = this.sharedIcons.get(uri);
     if (icon == null) {
       synchronized (this) {
-        if((icon = this.sharedIcons.get(uri)) == null) {
+        if ((icon = this.sharedIcons.get(uri)) == null) {
           icon = new AirMapMarkerSharedIcon();
           this.sharedIcons.put(uri, icon);
         }
@@ -131,16 +132,19 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
   }
 
   /**
-   * Remove the share icon object from our sharedIcons map when no markers are listening for it.
+   * Remove the share icon object from our sharedIcons map when no markers are
+   * listening for it.
    *
    * @param uri
    */
   public void removeSharedIconIfEmpty(String uri) {
     AirMapMarkerSharedIcon icon = this.sharedIcons.get(uri);
-    if (icon == null) {return;}
+    if (icon == null) {
+      return;
+    }
     if (!icon.hasMarker()) {
       synchronized (this) {
-        if((icon = this.sharedIcons.get(uri)) != null && !icon.hasMarker()) {
+        if ((icon = this.sharedIcons.get(uri)) != null && !icon.hasMarker()) {
           this.sharedIcons.remove(uri);
         }
       }
@@ -181,18 +185,20 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
   }
 
   // NOTE(lmr):
-  // android uses normalized coordinate systems for this, and is provided through the
-  // `anchor` property  and `calloutAnchor` instead.  Perhaps some work could be done
+  // android uses normalized coordinate systems for this, and is provided through
+  // the
+  // `anchor` property and `calloutAnchor` instead. Perhaps some work could be
+  // done
   // to normalize iOS and android to use just one of the systems.
-//    @ReactProp(name = "centerOffset")
-//    public void setCenterOffset(AirMapMarker view, ReadableMap map) {
-//
-//    }
-//
-//    @ReactProp(name = "calloutOffset")
-//    public void setCalloutOffset(AirMapMarker view, ReadableMap map) {
-//
-//    }
+  // @ReactProp(name = "centerOffset")
+  // public void setCenterOffset(AirMapMarker view, ReadableMap map) {
+  //
+  // }
+  //
+  // @ReactProp(name = "calloutOffset")
+  // public void setCalloutOffset(AirMapMarker view, ReadableMap map) {
+  //
+  // }
 
   @ReactProp(name = "anchor")
   public void setAnchor(MapMarker view, ReadableMap map) {
@@ -214,16 +220,16 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
   public void setImage(MapMarker view, @Nullable String source) {
     view.setImage(source);
   }
-//    public void setImage(AirMapMarker view, ReadableMap image) {
-//        view.setImage(image);
-//    }
+  // public void setImage(AirMapMarker view, ReadableMap image) {
+  // view.setImage(image);
+  // }
 
   @ReactProp(name = "icon")
   public void setIcon(MapMarker view, @Nullable String source) {
     view.setImage(source);
   }
 
-  @ReactProp(name = "pinColor", defaultInt = Color.RED, customType = "Color")
+  @ReactProp(name = "markerColor", defaultInt = Color.RED, customType = "Color")
   public void setPinColor(MapMarker view, int pinColor) {
     float[] hsv = new float[3];
     Color.colorToHSV(pinColor, hsv);
@@ -268,7 +274,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
   @Override
   public void addView(MapMarker parent, View child, int index) {
-    // if an <Callout /> component is a child, then it is a callout view, NOT part of the
+    // if an <Callout /> component is a child, then it is a callout view, NOT part
+    // of the
     // marker.
     if (child instanceof MapCallout) {
       parent.setCalloutView((MapCallout) child);
@@ -301,7 +308,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         break;
 
       case "animateMarkerToCoordinate":
-        if(args == null) {
+        if (args == null) {
           break;
         }
         region = args.getMap(0);
@@ -326,14 +333,12 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"),
         "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
         "onDrag", MapBuilder.of("registrationName", "onDrag"),
-        "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
-    );
+        "onDragEnd", MapBuilder.of("registrationName", "onDragEnd"));
 
     map.putAll(MapBuilder.of(
         "onDragStart", MapBuilder.of("registrationName", "onDragStart"),
         "onDrag", MapBuilder.of("registrationName", "onDrag"),
-        "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")
-    ));
+        "onDragEnd", MapBuilder.of("registrationName", "onDragEnd")));
 
     return map;
   }
@@ -348,7 +353,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
   @Override
   public void updateExtraData(MapMarker view, Object extraData) {
-    // This method is called from the shadow node with the width/height of the rendered
+    // This method is called from the shadow node with the width/height of the
+    // rendered
     // marker view.
     HashMap<String, Float> data = (HashMap<String, Float>) extraData;
     float width = data.get("width");

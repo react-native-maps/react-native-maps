@@ -23,7 +23,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 @implementation AIRMapMarker {
     BOOL _hasSetCalloutOffset;
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
-    MKPinAnnotationView *_pinView;
+    MKMarkerAnnotationView *_markerView;
     BOOL _calloutIsOpen;
     NSInteger _zIndexBeforeOpen;
 }
@@ -81,23 +81,23 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     if ([self shouldUsePinView]) {
         // In this case, we want to render a platform "default" marker.
-        if (_pinView == nil) {
-            _pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
-            [self addGestureRecognizerToView:_pinView];
-            _pinView.annotation = self;
+        if (_markerView == nil) {
+            _markerView = [[MKMarkerAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
+            [self addGestureRecognizerToView:_markerView];
+            _markerView.annotation = self;
         }
 
-        _pinView.draggable = self.draggable;
-        _pinView.layer.zPosition = self.zIndex;
+        _markerView.draggable = self.draggable;
+        _markerView.layer.zPosition = self.zIndex;
 
         // TODO(lmr): Looks like this API was introduces in iOS 8. We may want to handle differently for earlier
         // versions. Right now it's just leaving it with the default color. People needing the colors are free to
         // use their own custom markers.
-        if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
-            _pinView.pinTintColor = self.pinColor;
+        if ([_markerView respondsToSelector:@selector(setMarkerTintColor:)]) {
+            _markerView.markerTintColor = self.pinColor;
         }
 
-        return _pinView;
+        return _markerView;
     } else {
         // If it has subviews, it means we are wanting to render a custom marker with arbitrary react views.
         // if it has a non-null image, it means we want to render a custom marker with the image.
@@ -336,8 +336,8 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     _pinColor = pinColor;
 
-    if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
-        _pinView.pinTintColor = _pinColor;
+    if ([_markerView respondsToSelector:@selector(setPinTintColor:)]) {
+        _markerView.markerTintColor = _pinColor;
     }
 }
 
