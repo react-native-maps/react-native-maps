@@ -93,7 +93,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         // TODO(lmr): Looks like this API was introduces in iOS 8. We may want to handle differently for earlier
         // versions. Right now it's just leaving it with the default color. People needing the colors are free to
         // use their own custom markers.
-        if ([_markerView respondsToSelector:@selector(setMarkerTintColor:)]) {
+        if ([_markerView respondsToSelector:@selector(setPinTintColor:)]) {
             _markerView.markerTintColor = self.pinColor;
         }
 
@@ -113,11 +113,9 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     // Set everything necessary on the calloutView before it becomes visible.
 
     // Apply the MKAnnotationView's desired calloutOffset (from the top-middle of the view)
-    if ([self shouldUsePinView] && !_hasSetCalloutOffset) {
-        calloutView.calloutOffset = CGPointMake(-8,0);
-    } else {
-        calloutView.calloutOffset = self.calloutOffset;
-    }
+    if ([self shouldUsePinView] && _hasSetCalloutOffset) {
+        calloutView.calloutOffset = self.calloutOffset;  
+    } 
 
     if (self.calloutView) {
         calloutView.title = nil;
