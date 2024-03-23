@@ -26,8 +26,6 @@
 @property (nonatomic, copy) RCTDirectEventBlock onDragStart;
 @property (nonatomic, copy) RCTDirectEventBlock onDrag;
 @property (nonatomic, copy) RCTDirectEventBlock onDragEnd;
-@property (nonatomic, copy) RCTDirectEventBlock onSelect;
-@property (nonatomic, copy) RCTDirectEventBlock onDeselect;
 @property (nonatomic, copy) NSString *imageSrc;
 @property (nonatomic, copy) NSString *iconSrc;
 @property (nonatomic, copy) NSString *title;
@@ -53,6 +51,8 @@
 - (void)didBeginDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didEndDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didDragMarker:(AIRGMSMarker *)marker;
+- (id)makeEventData;
+- (id)makeEventData:(NSString *)action;
 @end
 
 #endif

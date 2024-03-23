@@ -82,7 +82,6 @@
 
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
 - (instancetype) initWithMapId:(NSString *) mapId;
-
 @end
 
 #endif

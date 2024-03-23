@@ -18,9 +18,6 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTDirectEventBlock onSelect;
 @property (nonatomic, copy) RCTDirectEventBlock onDeselect;
-
--(id)makeEventData;
--(id)makeEventData:(NSString *)action;
 @end
 
 

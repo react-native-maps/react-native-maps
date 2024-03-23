@@ -588,21 +588,23 @@ id regionAsJSON(MKCoordinateRegion region) {
     return;
   }
     AIRGMSMarker *airMarker = (AIRGMSMarker *) self.selectedMarker;
+    AIRGoogleMapMarker *fakeAirMarker = (AIRGoogleMapMarker *) airMarker.fakeMarker;
+    AIRGoogleMapMarker *fakeSelectedMarker = (AIRGoogleMapMarker *) selectedMarker.fakeMarker;
     
     if (airMarker && airMarker.onDeselect) {
-        airMarker.onDeselect([airMarker makeEventData:@"marker-deselect"]);
+        airMarker.onDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
     }
 
     if (airMarker && self.onMarkerDeselect) {
-        self.onMarkerDeselect([airMarker makeEventData:@"marker-deselect"]);
+        self.onMarkerDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
     }
     
     if (selectedMarker && selectedMarker.onSelect) {
-        selectedMarker.onSelect([selectedMarker makeEventData:@"marker-select"]);
+        selectedMarker.onSelect([fakeSelectedMarker makeEventData:@"marker-select"]);
     }
 
     if (selectedMarker && self.onMarkerSelect) {
-        self.onMarkerSelect([selectedMarker makeEventData:@"marker-select"]);
+        self.onMarkerSelect([fakeSelectedMarker makeEventData:@"marker-select"]);
     }
 
   [super setSelectedMarker:selectedMarker];

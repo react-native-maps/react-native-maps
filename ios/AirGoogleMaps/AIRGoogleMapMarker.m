@@ -182,17 +182,17 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (void)didBeginDraggingMarker:(AIRGMSMarker *)marker {
   if (!self.onDragStart) return;
-  self.onDragStart([self.realMarker makeEventData]);
+  self.onDragStart([self makeEventData]);
 }
 
 - (void)didEndDraggingMarker:(AIRGMSMarker *)marker {
   if (!self.onDragEnd) return;
-  self.onDragEnd([self.realMarker makeEventData]);
+  self.onDragEnd([self makeEventData]);
 }
 
 - (void)didDragMarker:(AIRGMSMarker *)marker {
   if (!self.onDrag) return;
-  self.onDrag([self.realMarker makeEventData]);
+  self.onDrag([self makeEventData]);
 }
 
 - (void)setCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -426,6 +426,29 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (BOOL)tracksInfoWindowChanges {
   return _realMarker.tracksInfoWindowChanges;
+}
+
+
+- (id)makeEventData:(NSString *)action {
+    CLLocationCoordinate2D coordinate = self.realMarker.position;
+    CGPoint position = [self.realMarker.map.projection pointForCoordinate:coordinate];
+
+    return @{
+            @"id": self.identifier ?: @"unknown",
+            @"position": @{
+                @"x": @(position.x),
+                @"y": @(position.y),
+                },
+            @"coordinate": @{
+                @"latitude": @(coordinate.latitude),
+                @"longitude": @(coordinate.longitude),
+                },
+            @"action": action,
+            };
+}
+
+- (id)makeEventData {
+    return [self makeEventData:@"unknown"];
 }
 
 @end
