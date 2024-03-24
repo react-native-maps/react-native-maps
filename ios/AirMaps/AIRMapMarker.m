@@ -89,13 +89,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
         _markerView.draggable = self.draggable;
         _markerView.layer.zPosition = self.zIndex;
-
-        // TODO(lmr): Looks like this API was introduces in iOS 8. We may want to handle differently for earlier
-        // versions. Right now it's just leaving it with the default color. People needing the colors are free to
-        // use their own custom markers.
-        if ([_markerView respondsToSelector:@selector(setPinTintColor:)]) {
-            _markerView.markerTintColor = self.pinColor;
-        }
+        _markerView.markerTintColor = self.pinColor;
 
         return _markerView;
     } else {
@@ -333,10 +327,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 - (void)setPinColor:(UIColor *)pinColor
 {
     _pinColor = pinColor;
-
-    if ([_markerView respondsToSelector:@selector(setPinTintColor:)]) {
-        _markerView.markerTintColor = _pinColor;
-    }
+    _markerView.markerTintColor = _pinColor;
 }
 
 - (void)setZIndex:(NSInteger)zIndex
