@@ -90,6 +90,8 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         _markerView.draggable = self.draggable;
         _markerView.layer.zPosition = self.zIndex;
         _markerView.markerTintColor = self.pinColor;
+        _markerView.titleVisibility = self.titleVisibility;
+        _markerView.subtitleVisibility = self.subtitleVisibility;
 
         return _markerView;
     } else {

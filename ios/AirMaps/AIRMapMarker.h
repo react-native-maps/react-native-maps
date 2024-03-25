@@ -35,6 +35,8 @@
 @property (nonatomic, assign) NSInteger zIndex;
 @property (nonatomic, assign) double opacity;
 @property (nonatomic, assign) BOOL isPreselected;
+@property (nonatomic, assign) MKFeatureVisibility titleVisibility;
+@property (nonatomic, assign) MKFeatureVisibility subtitleVisibility;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTDirectEventBlock onSelect;
