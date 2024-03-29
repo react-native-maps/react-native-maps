@@ -214,8 +214,8 @@ export type MapMarkerProps = ViewProps & {
    * Callback that is called when the marker becomes selected.
    * This will be called when the callout for that marker is about to be shown.
    *
-   * @platform iOS: Apple Maps only.
-   * @platform Android: Not supported
+   * @platform iOS: Supported.
+   * @platform Android: Supported
    */
   onSelect?: (event: MarkerSelectEvent) => void;
 

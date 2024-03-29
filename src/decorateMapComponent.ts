@@ -19,6 +19,7 @@ import {MapPolygon} from './MapPolygon';
 import {MapPolyline} from './MapPolyline';
 import {MapUrlTile} from './MapUrlTile';
 import {MapWMSTile} from './MapWMSTile';
+import {Commands} from './MapViewNativeComponent';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -146,8 +147,7 @@ type Providers = {
 
 export type UIManagerCommand = number;
 
-//todo: narrow down type
-export type MapManagerCommand = any;
+export type MapManagerCommand = keyof typeof Commands;
 
 export type NativeComponent<H = unknown> =
   | HostComponent<H>
