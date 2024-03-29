@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.12.0](https://github.com/react-native-maps/react-native-maps/compare/v1.11.3...v1.12.0) (2024-03-29)
+
+
+### Features
+
+* **google-maps:** add onSelect/onDeselect support fo google maps ([#4990](https://github.com/react-native-maps/react-native-maps/issues/4990)) ([b9fbe31](https://github.com/react-native-maps/react-native-maps/commit/b9fbe31bb1feca4281a3131cc2a78dd64cca96d3))
+
 ## [1.11.3](https://github.com/react-native-maps/react-native-maps/compare/v1.11.2...v1.11.3) (2024-03-11)
 
 
