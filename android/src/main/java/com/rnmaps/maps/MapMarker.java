@@ -276,6 +276,10 @@ public class MapMarker extends MapFeature {
     }
   }
 
+  public LatLng getPosition() {
+    return position;
+  }
+
   public boolean updateCustomForTracking() {
     if (!tracksViewChangesActive)
       return false;

@@ -51,6 +51,8 @@
 - (void)didBeginDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didEndDraggingMarker:(AIRGMSMarker *)marker;
 - (void)didDragMarker:(AIRGMSMarker *)marker;
+- (id)makeEventData;
+- (id)makeEventData:(NSString *)action;
 @end
 
 #endif
