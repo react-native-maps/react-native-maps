@@ -87,11 +87,14 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             _markerView.annotation = self;
         }
 
+        #define DEFAULT_TITLE_VISIBILITY MKFeatureVisibilityHidden;
+        #define DEFAULT_SUBTITLE_VISIBILITY MKFeatureVisibilityHidden;
+
         _markerView.draggable = self.draggable;
         _markerView.layer.zPosition = self.zIndex;
         _markerView.markerTintColor = self.pinColor;
-        _markerView.titleVisibility = self.titleVisibility;
-        _markerView.subtitleVisibility = self.subtitleVisibility;
+        _markerView.titleVisibility = (self.titleVisibility != nil) ? self.titleVisibility : DEFAULT_TITLE_VISIBILITY;
+        _markerView.subtitleVisibility = (self.subtitleVisibility != nil) ? self.subtitleVisibility : DEFAULT_SUBTITLE_VISIBILITY;
 
         return _markerView;
     } else {
