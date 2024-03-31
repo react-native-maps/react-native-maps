@@ -22,6 +22,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -80,6 +81,12 @@ public class MapManager extends ViewGroupManager<MapView> {
       }
       if (initialProps.hasKey("liteMode")) {
         googleMapOptions.liteMode(initialProps.getBoolean("liteMode", false));
+      }
+      if (initialProps.hasKey("initialCamera")){
+        CameraPosition position = MapView.cameraPositionFromMap(initialProps.getMap("initialCamera"));
+        if (position != null) {
+          googleMapOptions.camera(position);
+        }
       }
     }
     return super.createViewInstance(reactTag, reactContext, initialProps, stateWrapper);

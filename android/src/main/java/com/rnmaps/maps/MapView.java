@@ -602,24 +602,28 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       moveToCamera(camera);
     }
   }
+public static CameraPosition cameraPositionFromMap(ReadableMap camera){
+  if (camera == null) return null;
 
-  public void moveToCamera(ReadableMap camera) {
+  CameraPosition.Builder builder = new CameraPosition.Builder();
+
+  ReadableMap center = camera.getMap("center");
+  if (center != null) {
+    double lng = center.getDouble("longitude");
+    double lat = center.getDouble("latitude");
+    builder.target(new LatLng(lat, lng));
+  }
+
+  builder.tilt((float)camera.getDouble("pitch"));
+  builder.bearing((float)camera.getDouble("heading"));
+  builder.zoom((float)camera.getDouble("zoom"));
+
+  return builder.build();
+}
+  public void moveToCamera(ReadableMap cameraMap) {
+    CameraPosition camera = cameraPositionFromMap(cameraMap);
     if (camera == null) return;
-
-    CameraPosition.Builder builder = new CameraPosition.Builder();
-
-    ReadableMap center = camera.getMap("center");
-    if (center != null) {
-      double lng = center.getDouble("longitude");
-      double lat = center.getDouble("latitude");
-      builder.target(new LatLng(lat, lng));
-    }
-
-    builder.tilt((float)camera.getDouble("pitch"));
-    builder.bearing((float)camera.getDouble("heading"));
-    builder.zoom((float)camera.getDouble("zoom"));
-
-    CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
+    CameraUpdate update = CameraUpdateFactory.newCameraPosition(camera);
 
     if (super.getHeight() <= 0 || super.getWidth() <= 0) {
       // in this case, our map has not been laid out yet, so we save the camera update in a
