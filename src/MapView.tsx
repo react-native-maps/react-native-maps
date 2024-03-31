@@ -338,8 +338,8 @@ export type MapViewProps = ViewProps & {
    * Callback that is called when a marker on the map becomes deselected.
    * This will be called when the callout for that marker is about to be hidden.
    *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
+   * @platform iOS: Supported
+   * @platform Android: Supported
    */
   onMarkerDeselect?: (event: MarkerDeselectEvent) => void;
 
@@ -380,8 +380,8 @@ export type MapViewProps = ViewProps & {
    * Callback that is called when a marker on the map becomes selected.
    * This will be called when the callout for that marker is about to be shown.
    *
-   * @platform iOS: Apple Maps only.
-   * @platform Android: Not supported
+   * @platform iOS: Supported.
+   * @platform Android: Supported
    */
   onMarkerSelect?: (event: MarkerSelectEvent) => void;
 
