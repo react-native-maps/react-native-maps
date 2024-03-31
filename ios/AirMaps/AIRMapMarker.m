@@ -24,8 +24,10 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     BOOL _hasSetCalloutOffset;
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     MKMarkerAnnotationView *_markerView;
+    MKPinAnnotationView *_pinView;
     BOOL _calloutIsOpen;
     NSInteger _zIndexBeforeOpen;
+    BOOL _useLegacyPinView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -80,23 +82,39 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 - (MKAnnotationView *)getAnnotationView
 {
     if ([self shouldUsePinView]) {
-        // In this case, we want to render a platform "default" marker.
-        if (_markerView == nil) {
+        // In this case, we want to render a platform "default" legacy marker.
+
+        
+        if (_pinView == nil && _useLegacyPinView) {
+            _pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
+            [self addGestureRecognizerToView:_pinView];
+            _pinView.annotation = self;
+
+            if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
+                _pinView.pinTintColor = self.pinColor;
+            }
+
+            _pinView.draggable = self.draggable;
+            _pinView.layer.zPosition = self.zIndex;
+
+            return _pinView;
+        }
+    
+        
+
+        if (_markerView == nil && !_useLegacyPinView) {
             _markerView = [[MKMarkerAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
             [self addGestureRecognizerToView:_markerView];
             _markerView.annotation = self;
-        }
-
-        #define DEFAULT_TITLE_VISIBILITY MKFeatureVisibilityHidden;
-        #define DEFAULT_SUBTITLE_VISIBILITY MKFeatureVisibilityHidden;
 
         _markerView.draggable = self.draggable;
         _markerView.layer.zPosition = self.zIndex;
         _markerView.markerTintColor = self.pinColor;
-        _markerView.titleVisibility = (self.titleVisibility != nil) ? self.titleVisibility : DEFAULT_TITLE_VISIBILITY;
-        _markerView.subtitleVisibility = (self.subtitleVisibility != nil) ? self.subtitleVisibility : DEFAULT_SUBTITLE_VISIBILITY;
+        _markerView.titleVisibility = self.titleVisibility ?: MKFeatureVisibilityHidden;
+        _markerView.subtitleVisibility = self.subtitleVisibility ?: MKFeatureVisibilityHidden;
 
-        return _markerView;
+        }
+        return _markerView ?: _pinView;
     } else {
         // If it has subviews, it means we are wanting to render a custom marker with arbitrary react views.
         // if it has a non-null image, it means we want to render a custom marker with the image.
@@ -112,9 +130,11 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     // Set everything necessary on the calloutView before it becomes visible.
 
     // Apply the MKAnnotationView's desired calloutOffset (from the top-middle of the view)
-    if ([self shouldUsePinView] && _hasSetCalloutOffset) {
-        calloutView.calloutOffset = self.calloutOffset;  
-    } 
+     if ([self shouldUsePinView] && !_hasSetCalloutOffset && _useLegacyPinView) {
+        calloutView.calloutOffset = CGPointMake(-8,0);
+    } else {
+        calloutView.calloutOffset = self.calloutOffset;
+    }
 
     if (self.calloutView) {
         calloutView.title = nil;
@@ -332,7 +352,12 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 - (void)setPinColor:(UIColor *)pinColor
 {
     _pinColor = pinColor;
-    _markerView.markerTintColor = _pinColor;
+
+    if(_useLegacyPinView && [_pinView respondsToSelector:@selector(setPinTintColor:)]) {
+        _pinView.pinTintColor = _pinColor;
+    } else {
+        _markerView.markerTintColor = _pinColor;
+    }
 }
 
 - (void)setZIndex:(NSInteger)zIndex
@@ -354,6 +379,10 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     if ([keyPath isEqualToString:@"zPosition"]) {
         self.layer.zPosition = _zIndex;
     }
+}
+
+- (void)setUseLegacyPinView:(BOOL)value {
+    _useLegacyPinView = value;
 }
 
 @end

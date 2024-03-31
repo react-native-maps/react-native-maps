@@ -48,6 +48,7 @@ RCT_EXPORT_VIEW_PROPERTY(opacity, double)
 RCT_EXPORT_VIEW_PROPERTY(isPreselected, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(titleVisibility, NSString)
 RCT_EXPORT_VIEW_PROPERTY(subtitleVisibility, NSString)
+RCT_EXPORT_VIEW_PROPERTY(useLegacyPinView, BOOL)
 
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onSelect, RCTDirectEventBlock)
