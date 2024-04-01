@@ -100,13 +100,6 @@ None of these keys are required anymore and can be removed, if not used by other
   from there you will see a button to update it (do not search within the
   Play Store).
 
-### Google Maps Renderer
-
- use the mapView prop googleRenderer with both possible values: LEGACY, LATEST
-
-LATEST is enabled By default
-
-
 ## Troubleshooting
 
 ### The map background is blank (Google Maps)
