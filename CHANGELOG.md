@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.13.0](https://github.com/react-native-maps/react-native-maps/compare/v1.12.0...v1.13.0) (2024-04-01)
+
+
+### Features
+
+* **google-init:** Improve Google Maps Initialisation on Android ([a1be51b](https://github.com/react-native-maps/react-native-maps/commit/a1be51bd882933da93dc50fcc7ae2219a1df58b4))
+
 # [1.12.0](https://github.com/react-native-maps/react-native-maps/compare/v1.11.3...v1.12.0) (2024-03-29)
 
 
