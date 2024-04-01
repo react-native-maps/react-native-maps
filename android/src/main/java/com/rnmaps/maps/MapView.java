@@ -253,7 +253,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     this.map.setOnPoiClickListener(this);
     this.map.setOnIndoorStateChangeListener(this);
 
-    MapsInitializer.initialize(context, MapsInitializer.Renderer.LATEST, renderer -> Log.d("AirMapRenderer", renderer.toString()));
+    MapsInitializer.initialize(context, this.manager.renderer, renderer -> Log.d("AirMapRenderer", renderer.toString()));
 
     applyBridgedProps();
 
