@@ -1,7 +1,6 @@
 import MapView, {
   AnimatedMapView as Animated,
   MAP_TYPES,
-  enableLatestRenderer,
   MapViewProps,
 } from './MapView';
 
@@ -40,7 +39,7 @@ export type {GeojsonProps} from './Geojson';
 
 export {Marker, Overlay};
 export type {MapViewProps};
-export {Animated, MAP_TYPES, enableLatestRenderer};
+export {Animated, MAP_TYPES};
 
 export * from './ProviderConstants';
 export * from './MapView.types';
