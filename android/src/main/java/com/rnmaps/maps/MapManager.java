@@ -131,7 +131,7 @@ public class MapManager extends ViewGroupManager<MapView> {
 
   @ReactProp(name = "initialCamera")
   public void setInitialCamera(MapView view, ReadableMap initialCamera) {
-    view.setInitialCamera(initialCamera);
+   // do nothing, passed as part of the GoogleMapOptions.camera
   }
 
   @ReactProp(name = "mapType")
