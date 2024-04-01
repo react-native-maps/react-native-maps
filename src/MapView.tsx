@@ -1137,13 +1137,6 @@ const getNativeMapComponent = (provider: Provider) =>
 
 export const AnimatedMapView = RNAnimated.createAnimatedComponent(MapView);
 
-export const enableLatestRenderer = () => {
-  if (Platform.OS !== 'android') {
-    return;
-  }
-  return NativeModules.AirMapModule.enableLatestRenderer();
-};
-
 MapView.Animated = AnimatedMapView;
 
 export default MapView;

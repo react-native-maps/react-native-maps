@@ -172,7 +172,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     this.manager = manager;
     this.context = reactContext;
-
+    MapsInitializer.initialize(context, this.manager.renderer, renderer -> Log.d("AirMapRenderer", renderer.toString()));
     super.onCreate(null);
     super.onResume();
     super.getMapAsync(this);
@@ -252,8 +252,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     markerCollection.setOnMarkerDragListener(this);
     this.map.setOnPoiClickListener(this);
     this.map.setOnIndoorStateChangeListener(this);
-
-    MapsInitializer.initialize(context, this.manager.renderer, renderer -> Log.d("AirMapRenderer", renderer.toString()));
 
     applyBridgedProps();
 

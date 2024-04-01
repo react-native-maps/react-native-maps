@@ -8,10 +8,8 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -25,8 +23,6 @@ import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -35,10 +31,9 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 @ReactModule(name = MapModule.NAME)
 public class MapModule extends ReactContextBaseJavaModule {
@@ -353,27 +348,6 @@ public class MapModule extends ReactContextBaseJavaModule {
         coordinates.putMap("southWest", southWestHash);
 
         promise.resolve(coordinates);
-      }
-    });
-  }
-
-  @ReactMethod
-  public void enableLatestRenderer(final Promise promise) {
-    final ReactApplicationContext context = getReactApplicationContext();
-
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
-      @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
-        MapsInitializer.initialize(context, MapsInitializer.Renderer.LATEST, new OnMapsSdkInitializedCallback() {
-          @Override
-          public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
-            Log.d("AirMapRenderer", renderer.toString());
-            promise.resolve(renderer.toString());
-          }
-        });
       }
     });
   }
