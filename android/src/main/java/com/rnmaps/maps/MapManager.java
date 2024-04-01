@@ -87,6 +87,11 @@ public class MapManager extends ViewGroupManager<MapView> {
         if (position != null) {
           googleMapOptions.camera(position);
         }
+      } else if (initialProps.hasKey("camera")){
+        CameraPosition position = MapView.cameraPositionFromMap(initialProps.getMap("camera"));
+        if (position != null) {
+          googleMapOptions.camera(position);
+        }
       }
     }
     return super.createViewInstance(reactTag, reactContext, initialProps, stateWrapper);
