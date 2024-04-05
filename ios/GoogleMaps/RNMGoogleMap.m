@@ -323,6 +323,9 @@ id regionAsJSON(MKCoordinateRegion region) {
   [self overrideGestureRecognizersForView:mapView];
 
   if (!_didCallOnMapReady && self.onMapReady) {
+    if(self.zoomTapEnabled == NO){
+        [self toggleGesture:@"handleZoomTapGesture:" toggle:self.zoomTapEnabled];
+    }
     self.onMapReady(@{});
     _didCallOnMapReady = true;
   }
@@ -478,6 +481,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setZoomTapEnabled:(BOOL)zoomTapEnabled {
+    if(_zoomTapEnabled != zoomTapEnabled){
+        [self toggleGesture:@"handleZoomTapGesture:" toggle:zoomTapEnabled];
+    }
     _zoomTapEnabled = zoomTapEnabled;
 }
 
@@ -693,19 +699,13 @@ id regionAsJSON(MKCoordinateRegion region) {
         //get original handlers
         NSArray* origTargets = [gestureRecognizer valueForKey:@"targets"];
         NSMutableArray* origTargetsActions = [[NSMutableArray alloc] init];
-        BOOL isZoomTapGesture = NO;
         for (NSObject* trg in origTargets) {
             NSObject* target = [trg valueForKey:@"target"];
             SEL action = [self getActionForTarget:trg];
-            isZoomTapGesture = [NSStringFromSelector(action) isEqualToString:@"handleZoomTapGesture:"];
             [origTargetsActions addObject:@{
                                             @"target": [NSValue valueWithNonretainedObject:target],
                                             @"action": NSStringFromSelector(action)
                                             }];
-        }
-        if (isZoomTapGesture && self.zoomTapEnabled == NO) {
-            [view removeGestureRecognizer:gestureRecognizer];
-            continue;
         }
 
         //replace with extendedMapGestureHandler
@@ -977,6 +977,24 @@ id regionAsJSON(MKCoordinateRegion region) {
     });
 }
 
+-(void)toggleGesture:(NSString*)gesture toggle:(BOOL)toggle {
+    UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
+
+    NSArray* grs = mapView.gestureRecognizers;
+    for (UIGestureRecognizer* gestureRecognizer in grs) {
+        NSNumber* grHash = [NSNumber numberWithUnsignedInteger:gestureRecognizer.hash];
+        NSDictionary* origMeta = [self.origGestureRecognizersMeta objectForKey:grHash];
+        NSDictionary* origTargets = [origMeta objectForKey:@"targets"];
+        for (NSDictionary* origTarget in origTargets) {
+            NSString* actionString = [origTarget objectForKey:@"action"];
+
+            if([actionString isEqualToString:gesture]){
+                [gestureRecognizer setEnabled:toggle];
+                continue;
+            }
+        }
+    }
+}
 
 @end
 
