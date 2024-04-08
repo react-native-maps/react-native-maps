@@ -86,6 +86,8 @@ public class MapManager extends ViewGroupManager<MapView> {
             }
             if (initialProps.hasKey("liteMode")) {
                 googleMapOptions.liteMode(initialProps.getBoolean("liteMode", false));
+            } else {
+                googleMapOptions.liteMode(false);
             }
             if (initialProps.hasKey("initialCamera")) {
                 CameraPosition position = MapView.cameraPositionFromMap(initialProps.getMap("initialCamera"));
