@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.2](https://github.com/react-native-maps/react-native-maps/compare/v1.13.1...v1.13.2) (2024-04-13)
+
+
+### Bug Fixes
+
+* **android:** googleMapOptions / initialising multiple maps on android is buggy ([#5034](https://github.com/react-native-maps/react-native-maps/issues/5034)) ([be28937](https://github.com/react-native-maps/react-native-maps/commit/be2893701f4d92e6e7d1b3917626c74352f75303))
+
 ## [1.13.1](https://github.com/react-native-maps/react-native-maps/compare/v1.13.0...v1.13.1) (2024-04-13)
 
 
