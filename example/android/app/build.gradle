@@ -107,8 +107,8 @@ android {
             exclude 'META-INF/proguard/androidx-annotations.pro'
 
             // Exclude React Native's JSC and Fabric JNI
-            exclude '**/libjscexecutor.so'
-            exclude '**/libfabricjni.so'
+            pickFirst '**/libjscexecutor.so'
+            pickFirst '**/libfabricjni.so'
 
             // Avoid React Native's JNI duplicated classes
             pickFirst '**/libc++_shared.so'
