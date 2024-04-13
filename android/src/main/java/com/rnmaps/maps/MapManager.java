@@ -57,7 +57,6 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     public MapManager(ReactApplicationContext context) {
         this.appContext = context;
-        this.googleMapOptions = new GoogleMapOptions();
     }
 
     public MapMarkerManager getMarkerManager() {
@@ -80,6 +79,7 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @Override
     protected MapView createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext, @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
+        this.googleMapOptions = new GoogleMapOptions();
         if (initialProps != null) {
             if (initialProps.getString("googleMapId") != null) {
                 googleMapOptions.mapId(initialProps.getString("googleMapId"));
