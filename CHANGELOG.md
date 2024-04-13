@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/react-native-maps/react-native-maps/compare/v1.13.0...v1.13.1) (2024-04-13)
+
+
+### Bug Fixes
+
+* **android:** onSelect was crashing android ([#5032](https://github.com/react-native-maps/react-native-maps/issues/5032)) ([b3ce3fc](https://github.com/react-native-maps/react-native-maps/commit/b3ce3fc4731b86107ea205d9ddb4743443c9523b))
+
 # [1.13.0](https://github.com/react-native-maps/react-native-maps/compare/v1.12.0...v1.13.0) (2024-04-01)
 
 
