@@ -47,7 +47,7 @@ export const createNotSupportedComponent = (message: string) => () => {
   return null;
 };
 
-export const googleMapIsInstalled = !!UIManager.getViewManagerConfig(
+export const googleMapIsInstalled = !!UIManager.hasViewManagerConfig(
   getNativeMapName(PROVIDER_GOOGLE),
 );
 
