@@ -102,6 +102,21 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+     packagingOptions {
+            // MPAndroidChart uses androidX - remove this line when we migrate everything to androidX
+            exclude 'META-INF/proguard/androidx-annotations.pro'
+
+            // Exclude React Native's JSC and Fabric JNI
+            exclude '**/libjscexecutor.so'
+            exclude '**/libfabricjni.so'
+
+            // Avoid React Native's JNI duplicated classes
+            pickFirst '**/libc++_shared.so'
+            pickFirst '**/libfbjni.so'
+
+            pickFirst 'META-INF/-no-jdk.kotlin_module'
+
+       }
 }
 
 dependencies {
