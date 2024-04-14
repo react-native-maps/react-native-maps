@@ -42,9 +42,6 @@ android {
             "META-INF",
             "META-INF/**",
             ]
-    jniLibs {
-      pickFirsts += ['**/*.so']
-    }
   }
 }
 

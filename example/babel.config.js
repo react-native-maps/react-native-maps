@@ -7,7 +7,6 @@ module.exports = {
     ['@babel/preset-typescript', {allowDeclareFields: true}], // to allow use of declare context
   ],
   plugins: [
-    'react-native-reanimated/plugin',
     [
       'module-resolver',
       {
