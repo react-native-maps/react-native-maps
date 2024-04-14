@@ -37,6 +37,15 @@ android {
 
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
   }
+  packagingOptions {
+    excludes = [
+            "META-INF",
+            "META-INF/**",
+            ]
+    jniLibs {
+      pickFirsts += ['**/*.so']
+    }
+  }
 }
 
 repositories {
