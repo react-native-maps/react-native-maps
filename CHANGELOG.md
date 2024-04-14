@@ -1,5 +1,26 @@
 # Changelog
 
+# [1.14.0](https://github.com/react-native-maps/react-native-maps/compare/v1.13.2...v1.14.0) (2024-04-14)
+
+
+### Bug Fixes
+
+* **android:** map initialization as expected ([b57d22f](https://github.com/react-native-maps/react-native-maps/commit/b57d22f887f352d7be636b3cc9b60be8254ab850))
+* **android:** map initialization as expected ([8ba7608](https://github.com/react-native-maps/react-native-maps/commit/8ba7608e90d188ee8bad50392968c60c5a2f15be))
+* **android:** map initialization as expected ([7e1dd58](https://github.com/react-native-maps/react-native-maps/commit/7e1dd58e3bf3ea174e0a526926b14ef38340a195))
+* **android:** map initialization as expected ([73640a6](https://github.com/react-native-maps/react-native-maps/commit/73640a6232f7e523c8962f6ab315bc9772ae154c))
+* **android:** map initialization as expected ([6554793](https://github.com/react-native-maps/react-native-maps/commit/6554793a0287060dd946edae0a92de3482c2b14d))
+
+
+### Features
+
+* add support for new React Native architecture ([630b72e](https://github.com/react-native-maps/react-native-maps/commit/630b72ef90c2bcb8611ce907c4f359eefe40c555))
+* add support for new React Native architecture ([48665da](https://github.com/react-native-maps/react-native-maps/commit/48665da2a581d300557d40fe740b8a28bb1cdc43))
+* add support for new React Native architecture ([794c64f](https://github.com/react-native-maps/react-native-maps/commit/794c64f9288310a8da0bb5450011a8ef6236b952))
+* add support for new React Native architecture ([1310985](https://github.com/react-native-maps/react-native-maps/commit/1310985e6e2c0d5b915d7364cf52a99cca43ec8f))
+* add support for new React Native architecture ([39fd4e6](https://github.com/react-native-maps/react-native-maps/commit/39fd4e6e57cad141e640e4baf4ed3f60eccd6db4))
+* Enable new arch for the example project ([1a21f86](https://github.com/react-native-maps/react-native-maps/commit/1a21f862b3b781707ae88e44db501f7453e95ac1))
+
 ## [1.13.2](https://github.com/react-native-maps/react-native-maps/compare/v1.13.1...v1.13.2) (2024-04-13)
 
 
