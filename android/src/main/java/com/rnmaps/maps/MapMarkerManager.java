@@ -67,7 +67,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         /**
          * Remove marker from this shared icon.
          * <p>
-         * Marker will only need to call it when the marker receives a different marker image uri.
+         * Marker will only need to call it when the marker receives a different marker
+         * image uri.
          *
          * @param marker
          */
@@ -131,7 +132,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     }
 
     /**
-     * Remove the share icon object from our sharedIcons map when no markers are listening for it.
+     * Remove the share icon object from our sharedIcons map when no markers are
+     * listening for it.
      *
      * @param uri
      */
@@ -183,18 +185,20 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     }
 
     // NOTE(lmr):
-    // android uses normalized coordinate systems for this, and is provided through the
-    // `anchor` property  and `calloutAnchor` instead.  Perhaps some work could be done
+    // android uses normalized coordinate systems for this, and is provided through
+    // the
+    // `anchor` property and `calloutAnchor` instead. Perhaps some work could be
+    // done
     // to normalize iOS and android to use just one of the systems.
-//    @ReactProp(name = "centerOffset")
-//    public void setCenterOffset(AirMapMarker view, ReadableMap map) {
-//
-//    }
-//
-//    @ReactProp(name = "calloutOffset")
-//    public void setCalloutOffset(AirMapMarker view, ReadableMap map) {
-//
-//    }
+    // @ReactProp(name = "centerOffset")
+    // public void setCenterOffset(AirMapMarker view, ReadableMap map) {
+    //
+    // }
+    //
+    // @ReactProp(name = "calloutOffset")
+    // public void setCalloutOffset(AirMapMarker view, ReadableMap map) {
+    //
+    // }
 
     @ReactProp(name = "anchor")
     public void setAnchor(MapMarker view, ReadableMap map) {
@@ -216,9 +220,9 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     public void setImage(MapMarker view, @Nullable String source) {
         view.setImage(source);
     }
-//    public void setImage(AirMapMarker view, ReadableMap image) {
-//        view.setImage(image);
-//    }
+    // public void setImage(AirMapMarker view, ReadableMap image) {
+    // view.setImage(image);
+    // }
 
     @ReactProp(name = "icon")
     public void setIcon(MapMarker view, @Nullable String source) {
@@ -256,6 +260,15 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         view.setZIndex(integerZIndex);
     }
 
+    @ReactProp(name = "collisionBehavior")
+    public void setCollisionBehavior(MapMarker view, @Nullable String collisionBehavior) {
+        if (collisionBehavior == null) {
+            // Set default value if prop is not provided
+            collisionBehavior = "required";
+        }
+        view.setCollisionBehavior(collisionBehavior);
+    }
+
     @Override
     @ReactProp(name = "opacity", defaultFloat = 1.0f)
     public void setOpacity(MapMarker view, float opacity) {
@@ -270,7 +283,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
     @Override
     public void addView(MapMarker parent, View child, int index) {
-        // if an <Callout /> component is a child, then it is a callout view, NOT part of the
+        // if an <Callout /> component is a child, then it is a callout view, NOT part
+        // of the
         // marker.
         if (child instanceof MapCallout) {
             parent.setCalloutView((MapCallout) child);
@@ -341,7 +355,6 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
                 .build();
     }
 
-
     @Override
     public LayoutShadowNode createShadowNodeInstance() {
         // we use a custom shadow node that emits the width/height of the view
@@ -352,7 +365,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
     @Override
     public void updateExtraData(MapMarker view, Object extraData) {
-        // This method is called from the shadow node with the width/height of the rendered
+        // This method is called from the shadow node with the width/height of the
+        // rendered
         // marker view.
         HashMap<String, Float> data = (HashMap<String, Float>) extraData;
         float width = data.get("width");

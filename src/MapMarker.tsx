@@ -315,6 +315,20 @@ export type MapMarkerProps = ViewProps & {
    * @platform Android: Supported
    */
   zIndex?: number;
+
+  /**
+   * The behavior of the marker when it collides with other markers.
+   * Full description is available in the [Google Maps documentation](https://developers.google.com/maps/documentation/android-sdk/advanced-markers/collision-behavior#set_collision_behavior_for_a_marker).
+   *
+   * It won't work without googleMapId property passed to MapView
+   * @default 'required'
+   * @platform iOS: Not supported
+   * @platform Android: Supported
+   */
+  collisionBehavior?:
+    | 'required'
+    | 'optionalAndHidesLowerPriority'
+    | 'requiredAndHidesOptional';
 };
 
 type OmittedProps = Omit<MapMarkerProps, 'stopPropagation'>;

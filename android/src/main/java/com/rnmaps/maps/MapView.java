@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
@@ -1282,7 +1283,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       int index = 0;
       for (KmlPlacemark placemark : container.getPlacemarks()) {
-        MarkerOptions options = new MarkerOptions();
+        MarkerOptions options = new AdvancedMarkerOptions();
 
         if (placemark.getInlineStyle() != null) {
           options = placemark.getMarkerOptions();
