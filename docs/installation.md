@@ -100,26 +100,6 @@ None of these keys are required anymore and can be removed, if not used by other
   from there you will see a button to update it (do not search within the
   Play Store).
 
-### Using the new Google Maps Renderer
-
-A new renderer for Google Maps on Android will become the default through a progressive rollout starting in June 2022 at the earliest. (Read more about it [here](https://developers.google.com/maps/documentation/android-sdk/renderer))
-
-react-native-maps added support for the new renderer in v0.31.0.
-
-To opt in to the new renderer add the following code in your entry file (e.g. App.js):
-
-```javascript
-import {enableLatestRenderer} from 'react-native-maps';
-
-enableLatestRenderer();
-```
-
-`enableLatestRenderer` returns a promise (on android) specifying the map renderer being used, either `'LATEST' | 'LEGACY'`. It can be called at any point to get the renderer being used, but it won't change after the first map has been rendered.
-
-Make sure to test your app thoroughly after enabling the new renderer, as it seems to cause some behavioural changes, e.g. [this](https://github.com/react-native-maps/react-native-maps/pull/4055#issuecomment-1063358886).
-
----
-
 ## Troubleshooting
 
 ### The map background is blank (Google Maps)

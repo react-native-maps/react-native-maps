@@ -46,6 +46,7 @@ class GradientPolylines extends React.Component<any, any> {
   render() {
     return (
       <MapView
+        googleRenderer={'LEGACY'}
         provider={this.props.provider}
         style={styles.container}
         initialRegion={this.state.region}>
