@@ -58,6 +58,7 @@ import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.MapCapabilities;
 import com.google.maps.android.collections.CircleManager;
 import com.google.maps.android.collections.GroundOverlayManager;
 import com.google.maps.android.collections.MarkerManager;
@@ -237,6 +238,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       return;
     }
     this.map = map;
+
+    MapCapabilities capabilities = map.getMapCapabilities();
+    MapMarkerManager.areAdvancedMarkersAvailable = capabilities.isAdvancedMarkersAvailable();
 
     markerManager = new MarkerManager(map);
     markerCollection = markerManager.newCollection();

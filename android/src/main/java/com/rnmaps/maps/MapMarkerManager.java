@@ -151,6 +151,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         }
     }
 
+    public static boolean areAdvancedMarkersAvailable = false;
+
     public MapMarkerManager() {
     }
 

@@ -423,8 +423,14 @@ public class MapMarker extends MapFeature {
           break;
       }
 
-      markerOptions = new AdvancedMarkerOptions()
-          .collisionBehavior(markerCollisionBehavior);
+      boolean areAdvancedMarkersAvailable = MapMarkerManager.areAdvancedMarkersAvailable;
+
+      if (areAdvancedMarkersAvailable) {
+        markerOptions = new AdvancedMarkerOptions().collisionBehavior(markerCollisionBehavior);
+      } else {
+        markerOptions = new MarkerOptions();
+      }
+
     }
 
     fillMarkerOptions(markerOptions);
