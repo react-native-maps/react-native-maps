@@ -1,11 +1,7 @@
 #import "AppDelegate.h"
 
-#import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
-#import <React/RCTRootView.h>
-
 #import <GoogleMaps/GoogleMaps.h>
-
 
 @implementation AppDelegate
 
@@ -34,20 +30,5 @@
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
-
-- (BOOL)turboModuleEnabled {
-  return true;
-}
-
-
-- (BOOL)fabricEnabled{
-  return true;
-}
-
-- (BOOL)bridgelessEnabled
-{
-    return YES;
-}
-
 
 @end
