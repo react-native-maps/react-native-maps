@@ -1,5 +1,12 @@
 # Changelog
 
+# [2.0.0-beta.15](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2024-05-04)
+
+
+### Features
+
+* **ios:** add isGesture support to onRegionChange and onRegionChangeComplete for iOS ([#5022](https://github.com/react-native-maps/react-native-maps/issues/5022)) ([12a0cbc](https://github.com/react-native-maps/react-native-maps/commit/12a0cbc80d9e0e042428fbe61de8ac6d7923583b))
+
 # [2.0.0-beta.14](https://github.com/react-native-maps/react-native-maps/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2023-05-26)
 
 
