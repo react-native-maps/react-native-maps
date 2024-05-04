@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.15.0](https://github.com/react-native-maps/react-native-maps/compare/v1.14.0...v1.15.0) (2024-05-04)
+
+
+### Features
+
+* **ios:** Add possibility to use both MKMarkerAnnotationView and MKPinAnnotationView ([#5005](https://github.com/react-native-maps/react-native-maps/issues/5005)) ([6e4f49e](https://github.com/react-native-maps/react-native-maps/commit/6e4f49ead61557ca0eed6fd764317a848981e353))
+
 # [1.14.0](https://github.com/react-native-maps/react-native-maps/compare/v1.13.2...v1.14.0) (2024-04-14)
 
 
