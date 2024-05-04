@@ -513,6 +513,24 @@ static int kDragCenterContext;
     [self _regionChanged:mapView];
 }
 
+- (BOOL)mapViewRegionDidChangeFromUserInteraction:(RNMMap *)mapView
+{
+    UIView *view = mapView.subviews.firstObject;
+    // Look through gesture recognizers to determine whether this region change is from user interaction
+    for(UIGestureRecognizer *recognizer in view.gestureRecognizers) {
+        if(recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged || recognizer.state == UIGestureRecognizerStateEnded) {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+- (void)mapView:(RNMMap *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    mapView.mapChangedFromUserInteraction = [self mapViewRegionDidChangeFromUserInteraction: mapView];
+}
+
 - (void)mapView:(RNMMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
     CGFloat zoomLevel = [self zoomLevel:mapView];
@@ -598,6 +616,7 @@ static int kDragCenterContext;
 #define FLUSH_NAN(value) (isnan(value) ? 0 : value)
         mapView.onChange(@{
                 @"continuous": @(continuous),
+                @"isGesture": @(mapView.mapChangedFromUserInteraction),
                 @"region": @{
                         @"latitude": @(FLUSH_NAN(region.center.latitude)),
                         @"longitude": @(FLUSH_NAN(region.center.longitude)),

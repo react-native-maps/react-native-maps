@@ -29,6 +29,7 @@ extern const NSInteger RNMMapMaxZoomLevel;
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
 @property (nonatomic, assign) BOOL mapLoaded;
 @property (nonatomic, assign) BOOL userLocationCalloutEnabled;
+@property (nonatomic, assign) BOOL mapChangedFromUserInteraction;
 @property (nonatomic, assign) CGFloat maxDelta;
 @property (nonatomic, assign) CGFloat maxZoomLevel;
 @property (nonatomic, assign) CGFloat minDelta;

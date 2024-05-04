@@ -86,6 +86,7 @@ const NSInteger RNMMapMaxZoomLevel = 20;
         self.minZoomLevel = 0;
         self.maxZoomLevel = RNMMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
+        self.mapChangedFromUserInteraction = NO;
     }
     return self;
 }
@@ -405,6 +406,11 @@ const NSInteger RNMMapMaxZoomLevel = 20;
         region.span.longitudeDelta = self.region.span.longitudeDelta;
     }
 
+    // If the region was changed with an animation, there is no way it was a user interaction
+    if (animated) {
+        self.mapChangedFromUserInteraction = NO;
+    }
+    
     // Animate/move to new position
     [super setRegion:region animated:animated];
 }
@@ -418,6 +424,11 @@ const NSInteger RNMMapMaxZoomLevel = 20;
 
 - (void)setCamera:(MKMapCamera*)camera animated:(BOOL)animated
 {
+    // If the camera was changed with an animation, there is no way it was a user interaction
+    if (animated) {
+        self.mapChangedFromUserInteraction = NO;
+    }
+    
     [super setCamera:camera animated:animated];
 }
 
