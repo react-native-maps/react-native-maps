@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.1](https://github.com/react-native-maps/react-native-maps/compare/v1.15.0...v1.15.1) (2024-05-05)
+
+
+### Bug Fixes
+
+* **android:** fix non working tile update ([#5041](https://github.com/react-native-maps/react-native-maps/issues/5041)) ([29107d5](https://github.com/react-native-maps/react-native-maps/commit/29107d516ac6f6cb0ecbd604a5ebe43dfae339a2))
+
 # [1.15.0](https://github.com/react-native-maps/react-native-maps/compare/v1.14.0...v1.15.0) (2024-05-04)
 
 
