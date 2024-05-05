@@ -11,11 +11,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      - name: Select required xCode version
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '14.3.1'
-
       - name: Setup node
         uses: actions/setup-node@v3
         with:
