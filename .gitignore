@@ -23,7 +23,7 @@ DerivedData
 project.xcworkspace
 Pods/
 AirMapsExplorer.xcworkspace/
-ios/.xcode.env.local
+**/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -69,7 +69,7 @@ example/vendor/bundle/
 example/ios/Config.xcconfig
 
 # Ruby / CocoaPods
-/ios/Pods/
+**/Pods/
 /vendor/bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
@@ -77,3 +77,11 @@ example/ios/Config.xcconfig
 
 # testing
 /coverage
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
