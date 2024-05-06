@@ -43,7 +43,7 @@ import com.google.maps.android.collections.MarkerManager;
 
 public class MapMarker extends MapFeature {
 
-  private MarkerOptions markerOptions;
+  protected MarkerOptions markerOptions;
   private Marker marker;
   private int width;
   private int height;
@@ -52,7 +52,6 @@ public class MapMarker extends MapFeature {
   private LatLng position;
   private String title;
   private String snippet;
-  private String collisionBehavior = "required";
 
   private boolean anchorIsSet;
   private float anchorX;
@@ -177,15 +176,6 @@ public class MapMarker extends MapFeature {
     if (marker != null) {
       marker.setTitle(title);
     }
-    update(false);
-  }
-
-  public String getCollisionBehavior() {
-    return collisionBehavior;
-  }
-
-  public void setCollisionBehavior(String collisionBehavior) {
-    this.collisionBehavior = collisionBehavior;
     update(false);
   }
 
@@ -409,28 +399,7 @@ public class MapMarker extends MapFeature {
 
   public MarkerOptions getMarkerOptions() {
     if (markerOptions == null) {
-      int markerCollisionBehavior = AdvancedMarkerOptions.CollisionBehavior.REQUIRED;
-
-      switch (collisionBehavior) {
-        case "required":
-          markerCollisionBehavior = AdvancedMarkerOptions.CollisionBehavior.REQUIRED;
-          break;
-        case "optionalAndHidesLowerPriority":
-          markerCollisionBehavior = AdvancedMarkerOptions.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY;
-          break;
-        case "requiredAndHidesOptional":
-          markerCollisionBehavior = AdvancedMarkerOptions.CollisionBehavior.REQUIRED_AND_HIDES_OPTIONAL;
-          break;
-      }
-
-      boolean areAdvancedMarkersAvailable = MapMarkerManager.areAdvancedMarkersAvailable;
-
-      if (areAdvancedMarkersAvailable) {
-        markerOptions = new AdvancedMarkerOptions().collisionBehavior(markerCollisionBehavior);
-      } else {
-        markerOptions = new MarkerOptions();
-      }
-
+      markerOptions = new MarkerOptions();
     }
 
     fillMarkerOptions(markerOptions);
@@ -510,7 +479,7 @@ public class MapMarker extends MapFeature {
     }
   }
 
-  private MarkerOptions fillMarkerOptions(MarkerOptions options) {
+  protected MarkerOptions fillMarkerOptions(MarkerOptions options) {
     options.position(position);
     if (anchorIsSet)
       options.anchor(anchorX, anchorY);

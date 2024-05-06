@@ -151,7 +151,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         }
     }
 
-    public static boolean areAdvancedMarkersAvailable = false;
+    public static boolean useAdvancedMarkersAvailable = false;
 
     public MapMarkerManager() {
     }
@@ -163,6 +163,10 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
     @Override
     public MapMarker createViewInstance(ThemedReactContext context) {
+
+        if (useAdvancedMarkersAvailable) {
+            return new AdvancedMapMarker(context, this);
+        }
         return new MapMarker(context, this);
     }
 
@@ -263,11 +267,12 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     }
 
     @ReactProp(name = "collisionBehavior")
-    public void setCollisionBehavior(MapMarker view, @Nullable String collisionBehavior) {
+    public void setCollisionBehavior(AdvancedMapMarker view, @Nullable String collisionBehavior) {
         if (collisionBehavior == null) {
             // Set default value if prop is not provided
             collisionBehavior = "required";
         }
+
         view.setCollisionBehavior(collisionBehavior);
     }
 

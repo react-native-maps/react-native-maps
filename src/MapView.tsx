@@ -715,6 +715,14 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Not supported
    */
   cameraZoomRange?: CameraZoomRange;
+
+  /**
+   * If 'true' map will use old MapMarkers instead of AdvancedMapMarkers
+   * @default false
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  classicalGoogleMarkers?: boolean;
 };
 
 type ModifiedProps = Modify<
@@ -1061,6 +1069,7 @@ class MapView extends React.Component<MapViewProps, State> {
   render() {
     let props: NativeProps;
 
+    console.log('props', this.props);
     if (this.state.isReady) {
       props = {
         region: null,
@@ -1074,6 +1083,7 @@ class MapView extends React.Component<MapViewProps, State> {
         customMapStyleString: this.props.customMapStyle
           ? JSON.stringify(this.props.customMapStyle)
           : undefined,
+        classicalGoogleMarkers: this.props.classicalGoogleMarkers,
         ...this.props,
       };
       if (
@@ -1103,6 +1113,7 @@ class MapView extends React.Component<MapViewProps, State> {
         customMapStyleString: this.props.customMapStyle
           ? JSON.stringify(this.props.customMapStyle)
           : undefined,
+        classicalGoogleMarkers: this.props.classicalGoogleMarkers,
       };
     }
 
