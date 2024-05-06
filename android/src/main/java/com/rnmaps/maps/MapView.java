@@ -246,8 +246,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     this.map = map;
 
     MapCapabilities capabilities = map.getMapCapabilities();
-    MapMarkerManager.useAdvancedMarkersAvailable = capabilities.isAdvancedMarkersAvailable()
+    boolean advancedMarkersEnabled = capabilities.isAdvancedMarkersAvailable()
         && !classicalGoogleMarkers;
+
+    MapMarkerManager.advancedMarkersEnabled = advancedMarkersEnabled;
 
     markerManager = new MarkerManager(map);
     markerCollection = markerManager.newCollection();
@@ -267,7 +269,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     applyBridgedProps();
 
-    manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
+    WritableMap mapInfo = new WritableNativeMap();
+    WritableMap event = new WritableNativeMap();
+
+    mapInfo.putBoolean("advancedMarkersEnabled", advancedMarkersEnabled);
+
+    event.putMap("advancedMarkersEnabled", mapInfo);
+
+    manager.pushEvent(context, this, "onMapReady", event);
 
     final MapView view = this;
 
@@ -429,7 +438,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       @Override
       public void onMapLoaded() {
         isMapLoaded = true;
-        manager.pushEvent(context, view, "onMapLoaded", new WritableNativeMap());
+
+        WritableMap mapInfo = new WritableNativeMap();
+
+        mapInfo.putBoolean("advancedMarkersEnabled", advancedMarkersEnabled);
+
+        manager.pushEvent(context, view, "onMapLoaded", mapInfo);
         MapView.this.cacheView();
       }
     });

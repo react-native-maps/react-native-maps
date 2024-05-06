@@ -76,6 +76,7 @@ class MarkersCollisionBehavior extends React.Component<any, any> {
               image={flagPinkImg}
               key={marker.key}
               coordinate={marker.coordinate}
+              collisionBehavior="optionalAndHidesLowerPriority"
             />
           ))}
         </MapView>

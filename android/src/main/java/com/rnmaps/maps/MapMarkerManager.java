@@ -151,7 +151,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         }
     }
 
-    public static boolean useAdvancedMarkersAvailable = false;
+    public static boolean advancedMarkersEnabled = false;
 
     public MapMarkerManager() {
     }
@@ -164,7 +164,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     @Override
     public MapMarker createViewInstance(ThemedReactContext context) {
 
-        if (useAdvancedMarkersAvailable) {
+        if (advancedMarkersEnabled) {
             return new AdvancedMapMarker(context, this);
         }
         return new MapMarker(context, this);
