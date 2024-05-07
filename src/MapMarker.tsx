@@ -339,7 +339,9 @@ export type MapMarkerProps = ViewProps & {
    * @platform Android: Not supported
    */
   useLegacyPinView?: boolean;
+};
 
+export type AdvancedMapMarkerProps = {
   /**
    * The behavior of the marker when it collides with other markers.
    * Full description is available in the [Google Maps documentation](https://developers.google.com/maps/documentation/android-sdk/advanced-markers/collision-behavior#set_collision_behavior_for_a_marker).
@@ -364,7 +366,9 @@ export type NativeProps = Modify<
   ref: React.RefObject<MapMarkerNativeComponentType>;
 };
 
-export class MapMarker extends React.Component<MapMarkerProps> {
+export class MapMarker extends React.Component<
+  MapMarkerProps & AdvancedMapMarkerProps
+> {
   // declaration only, as they are set through decorateMap
   declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;

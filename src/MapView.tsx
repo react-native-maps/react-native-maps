@@ -719,7 +719,7 @@ export type MapViewProps = ViewProps & {
   /**
    * If 'true' map will use old MapMarkers instead of AdvancedMapMarkers
    * @default false
-   * @platform iOS: Supported
+   * @platform iOS: Not supported yet
    * @platform Android: Supported
    */
   classicalGoogleMarkers?: boolean;
