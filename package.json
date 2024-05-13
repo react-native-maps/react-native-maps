@@ -17,7 +17,8 @@
     "release": "semantic-release",
     "bundle-install": "cd example && bundle install",
     "pod-install": "cd example/ios && bundle exec pod install",
-    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install",
+    "windows": "react-native run-windows"
   },
   "files": [
     "lib",
@@ -70,8 +71,10 @@
     "prettier": "2.8.8",
     "react": "18.2.0",
     "react-native": "0.73.0",
+    "react-native-windows": "0.73.12",
     "semantic-release": "21.1.2",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "metro-config": "^0.80.1"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.13"
