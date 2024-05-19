@@ -197,7 +197,6 @@ For Android: add the following line in your AndroidManifest.xml
 
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
 
-
 ## React Native Configuration for Fabric / New Architecture
 
 If you are using React Native 0.74 or higher, or if Fabric / the new architecture is enabled in your project, you need to add specific configurations to your `react-native-config` file to ensure compatibility with certain components. This setup is essential for maintaining the stability and functionality of the map components provided by `react-native-maps`.
@@ -210,42 +209,43 @@ If you are using React Native 0.74 or higher, or if Fabric / the new architectur
 
 ```javascript
 module.exports = {
-    project: {
-        android: {
-            unstable_reactLegacyComponentNames: [
-                'AIRMap',
-                'AIRMapCallout',
-                'AIRMapCalloutSubview',
-                'AIRMapCircle',
-                'AIRMapHeatmap',
-                'AIRMapLocalTile',
-                'AIRMapMarker',
-                'AIRMapOverlay',
-                'AIRMapPolygon',
-                'AIRMapPolyline',
-                'AIRMapUrlTile',
-                'AIRMapWMSTile',
-            ],
-        },
-        ios: {
-            unstable_reactLegacyComponentNames: [
-                'AIRMap',
-                'AIRMapCallout',
-                'AIRMapCalloutSubview',
-                'AIRMapCircle',
-                'AIRMapHeatmap',
-                'AIRMapLocalTile',
-                'AIRMapMarker',
-                'AIRMapOverlay',
-                'AIRMapPolygon',
-                'AIRMapPolyline',
-                'AIRMapUrlTile',
-                'AIRMapWMSTile',
-            ],
-        },
+  project: {
+    android: {
+      unstable_reactLegacyComponentNames: [
+        'AIRMap',
+        'AIRMapCallout',
+        'AIRMapCalloutSubview',
+        'AIRMapCircle',
+        'AIRMapHeatmap',
+        'AIRMapLocalTile',
+        'AIRMapMarker',
+        'AIRMapOverlay',
+        'AIRMapPolygon',
+        'AIRMapPolyline',
+        'AIRMapUrlTile',
+        'AIRMapWMSTile',
+      ],
     },
+    ios: {
+      unstable_reactLegacyComponentNames: [
+        'AIRMap',
+        'AIRMapCallout',
+        'AIRMapCalloutSubview',
+        'AIRMapCircle',
+        'AIRMapHeatmap',
+        'AIRMapLocalTile',
+        'AIRMapMarker',
+        'AIRMapOverlay',
+        'AIRMapPolygon',
+        'AIRMapPolyline',
+        'AIRMapUrlTile',
+        'AIRMapWMSTile',
+      ],
+    },
+  },
 };
 ```
+
 checkout the example project to see it in action.
 
 #### Tile Overlay using local tiles
