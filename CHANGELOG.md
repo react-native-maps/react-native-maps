@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.2](https://github.com/react-native-maps/react-native-maps/compare/v1.15.1...v1.15.2) (2024-05-20)
+
+
+### Bug Fixes
+
+* use initialProps to set zoomTapEnabled in google-maps-ios ([#5059](https://github.com/react-native-maps/react-native-maps/issues/5059)) ([524194f](https://github.com/react-native-maps/react-native-maps/commit/524194ff62859cd82d78cbcca53c6f8e2da29bb7))
+
 ## [1.15.1](https://github.com/react-native-maps/react-native-maps/compare/v1.15.0...v1.15.1) (2024-05-05)
 
 
