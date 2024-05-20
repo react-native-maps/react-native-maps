@@ -71,7 +71,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   NSString* _googleMapId;
 }
 
-- (instancetype)initWithMapId:(NSString *)mapId
+- (instancetype)initWithMapId:(NSString *)mapId andZoomTapEnabled:(BOOL)zoomTapEnabled
 {
     if (mapId){
         GMSMapID *mapID = [GMSMapID mapIDWithIdentifier:mapId];
@@ -100,7 +100,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _didLayoutSubviews = false;
     _didPrepareMap = false;
     _didCallOnMapReady = false;
-    _zoomTapEnabled = YES;
+    _zoomTapEnabled = zoomTapEnabled;
 
     // Listen to the myLocation property of GMSMapView.
     [self addObserver:self
@@ -116,7 +116,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (instancetype) init {
-  return [self initWithMapId:nil];
+  return [self initWithMapId:nil andZoomTapEnabled:YES];
 }
 
 - (void)dealloc {
