@@ -16,11 +16,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.UIManager;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.fabric.FabricUIManager;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
+import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -89,9 +92,7 @@ public class MapModule extends ReactContextBaseJavaModule {
         options.hasKey("height") ? (int) (displayMetrics.density * options.getDouble("height")) : 0;
     final String result = options.hasKey("result") ? options.getString("result") : "file";
 
-    // Add UI-block so we can get a valid reference to the map-view
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock() {
+    UIBlock uiBlock = new UIBlock() {
       public void execute(NativeViewHierarchyManager nvhm) {
         MapView view = (MapView) nvhm.resolveView(tag);
         if (view == null) {
@@ -142,15 +143,24 @@ public class MapModule extends ReactContextBaseJavaModule {
           }
         });
       }
-    });
+    };
+
+    // Add UI-block so we can get a valid reference to the map-view
+
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      UIManager uiManager = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC);
+      ((FabricUIManager)uiManager).addUIBlock(uiBlock);
+    } else {
+      UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+      uiManager.addUIBlock(uiBlock);
+    }
   }
 
   @ReactMethod
   public void getCamera(final int tag, final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
+    UIBlock uiBlock =  new UIBlock()
     {
       @Override
       public void execute(NativeViewHierarchyManager nvhm)
@@ -179,15 +189,22 @@ public class MapModule extends ReactContextBaseJavaModule {
 
         promise.resolve(cameraJson);
       }
-    });
+    };
+
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      UIManager uiManager = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC);
+      ((FabricUIManager)uiManager).addUIBlock(uiBlock);
+    } else {
+      UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+      uiManager.addUIBlock(uiBlock);
+    }
   }
 
   @ReactMethod
   public void getAddressFromCoordinates(final int tag, final ReadableMap coordinate, final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
+    UIBlock uiBlock = new UIBlock()
     {
       @Override
       public void execute(NativeViewHierarchyManager nvhm)
@@ -234,7 +251,15 @@ public class MapModule extends ReactContextBaseJavaModule {
           promise.reject("Can not get address location");
         }
       }
-    });
+    };
+
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      UIManager uiManager = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC);
+      ((FabricUIManager)uiManager).addUIBlock(uiBlock);
+    } else {
+      UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+      uiManager.addUIBlock(uiBlock);
+    }
   }
 
   @ReactMethod
@@ -247,8 +272,7 @@ public class MapModule extends ReactContextBaseJavaModule {
             coordinate.hasKey("longitude") ? coordinate.getDouble("longitude") : 0.0
     );
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
+    UIBlock uiBlock = new UIBlock()
     {
       @Override
       public void execute(NativeViewHierarchyManager nvhm)
@@ -271,7 +295,15 @@ public class MapModule extends ReactContextBaseJavaModule {
 
         promise.resolve(ptJson);
       }
-    });
+    };
+
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      UIManager uiManager = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC);
+      ((FabricUIManager)uiManager).addUIBlock(uiBlock);
+    } else {
+      UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+      uiManager.addUIBlock(uiBlock);
+    }
   }
 
   @ReactMethod
@@ -284,8 +316,7 @@ public class MapModule extends ReactContextBaseJavaModule {
             point.hasKey("y") ? (int)(point.getDouble("y") * density) : 0
     );
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
+    UIBlock uiBlock = new UIBlock()
     {
       @Override
       public void execute(NativeViewHierarchyManager nvhm)
@@ -310,15 +341,22 @@ public class MapModule extends ReactContextBaseJavaModule {
 
         promise.resolve(coordJson);
       }
-    });
+    };
+
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      UIManager uiManager = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC);
+      ((FabricUIManager)uiManager).addUIBlock(uiBlock);
+    } else {
+      UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+      uiManager.addUIBlock(uiBlock);
+    }
   }
 
   @ReactMethod
   public void getMapBoundaries(final int tag, final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
+    UIBlock uiBlock = new UIBlock()
     {
       @Override
       public void execute(NativeViewHierarchyManager nvhm)
@@ -349,6 +387,14 @@ public class MapModule extends ReactContextBaseJavaModule {
 
         promise.resolve(coordinates);
       }
-    });
+    };
+
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      UIManager uiManager = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC);
+      ((FabricUIManager)uiManager).addUIBlock(uiBlock);
+    } else {
+      UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
+      uiManager.addUIBlock(uiBlock);
+    }
   }
 }
