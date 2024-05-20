@@ -114,6 +114,7 @@
 		4C99C9DF2226D8C400A8693E /* AIRWeakMapReference.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIRWeakMapReference.h; sourceTree = "<group>"; };
 		4C99C9E02226D8C400A8693E /* AIRWeakMapReference.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRWeakMapReference.m; sourceTree = "<group>"; };
 		4E0A36142BFB4CF3009FCCE4 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = AirGoogleMaps/Resources; sourceTree = "<group>"; };
+		4E0A36152BFB4E76009FCCE4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4E0CFBDC2B388F2B0017E126 /* RCTComponentData+Maps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCTComponentData+Maps.h"; sourceTree = "<group>"; };
 		4E0CFBDD2B388F2B0017E126 /* RCTComponentData+Maps.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCTComponentData+Maps.m"; sourceTree = "<group>"; };
 		53D31635202E723B00B55447 /* AIRMapOverlayManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRMapOverlayManager.m; sourceTree = "<group>"; };
@@ -202,6 +203,7 @@
 		11FA5C481C4A1296003AC2EE = {
 			isa = PBXGroup;
 			children = (
+				4E0A36152BFB4E76009FCCE4 /* PrivacyInfo.xcprivacy */,
 				9B9498A32017EF9D00158761 /* AirGoogleMaps */,
 				62AEC4D31FD5A0AA003225E0 /* AIRMapLocalTileOverlay.m */,
 				11FA5C531C4A1296003AC2EE /* AirMaps */,
