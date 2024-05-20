@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -113,6 +113,8 @@
 		4C99C9DD2226CF2800A8693E /* AIRWeakTimerReference.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRWeakTimerReference.m; sourceTree = "<group>"; };
 		4C99C9DF2226D8C400A8693E /* AIRWeakMapReference.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIRWeakMapReference.h; sourceTree = "<group>"; };
 		4C99C9E02226D8C400A8693E /* AIRWeakMapReference.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRWeakMapReference.m; sourceTree = "<group>"; };
+		4E0A36142BFB4CF3009FCCE4 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = AirGoogleMaps/Resources; sourceTree = "<group>"; };
+		4E0A36152BFB4E76009FCCE4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4E0CFBDC2B388F2B0017E126 /* RCTComponentData+Maps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCTComponentData+Maps.h"; sourceTree = "<group>"; };
 		4E0CFBDD2B388F2B0017E126 /* RCTComponentData+Maps.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCTComponentData+Maps.m"; sourceTree = "<group>"; };
 		53D31635202E723B00B55447 /* AIRMapOverlayManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AIRMapOverlayManager.m; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 		11FA5C481C4A1296003AC2EE = {
 			isa = PBXGroup;
 			children = (
+				4E0A36152BFB4E76009FCCE4 /* PrivacyInfo.xcprivacy */,
 				9B9498A32017EF9D00158761 /* AirGoogleMaps */,
 				62AEC4D31FD5A0AA003225E0 /* AIRMapLocalTileOverlay.m */,
 				11FA5C531C4A1296003AC2EE /* AirMaps */,
@@ -244,7 +247,6 @@
 				1125B2C91C4AD3DA007D0023 /* AIRMapManager.h */,
 				1125B2CA1C4AD3DA007D0023 /* AIRMapManager.m */,
 				1125B2CB1C4AD3DA007D0023 /* AIRMapMarker.h */,
-				1125B2CC1C4AD3DA007D0023 /* AIRMapMarker.m */,
 				1125B2CD1C4AD3DA007D0023 /* AIRMapMarkerManager.h */,
 				1125B2CE1C4AD3DA007D0023 /* AIRMapMarkerManager.m */,
 				1125B2CF1C4AD3DA007D0023 /* AIRMapPolygon.h */,
@@ -290,6 +292,7 @@
 		9B9498A32017EF9D00158761 /* AirGoogleMaps */ = {
 			isa = PBXGroup;
 			children = (
+				4E0A36142BFB4CF3009FCCE4 /* Resources */,
 				B5EA3BA82098E22B000E7AFD /* AIRDummyView.h */,
 				B5EA3BA72098E22B000E7AFD /* AIRDummyView.m */,
 				9B9498C12017EFB700158761 /* AIRGMSMarker.h */,
@@ -365,7 +368,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0940;
-				ORGANIZATIONNAME = Christopher;
+				ORGANIZATIONNAME = "react-native-maps";
 				TargetAttributes = {
 					11FA5C501C4A1296003AC2EE = {
 						CreatedOnToolsVersion = 7.2;
@@ -373,10 +376,11 @@
 				};
 			};
 			buildConfigurationList = 11FA5C4C1C4A1296003AC2EE /* Build configuration list for PBXProject "AirMaps" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 11FA5C481C4A1296003AC2EE;

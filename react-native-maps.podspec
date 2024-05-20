@@ -13,6 +13,8 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
   s.source_files  = "ios/AirMaps/**/*.{h,m}"
-
+  s.resource_bundles = {
+      'ReactNativeMapsPrivacy' => ['ios/PrivacyInfo.xcprivacy']
+  }
   s.dependency 'React-Core'
 end
