@@ -19,9 +19,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
-import com.facebook.react.uimanager.NativeViewHierarchyManager;
-import com.facebook.react.uimanager.UIBlock;
-import com.facebook.react.uimanager.UIManagerModule;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -89,19 +86,7 @@ public class MapModule extends ReactContextBaseJavaModule {
         options.hasKey("height") ? (int) (displayMetrics.density * options.getDouble("height")) : 0;
     final String result = options.hasKey("result") ? options.getString("result") : "file";
 
-    // Add UI-block so we can get a valid reference to the map-view
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock() {
-      public void execute(NativeViewHierarchyManager nvhm) {
-        MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null) {
-          promise.reject("AirMapView not found");
-          return;
-        }
-        if (view.map == null) {
-          promise.reject("AirMapView.map is not valid");
-          return;
-        }
+    MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
         view.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
           public void onSnapshotReady(@Nullable Bitmap snapshot) {
 
@@ -141,30 +126,20 @@ public class MapModule extends ReactContextBaseJavaModule {
             }
           }
         });
-      }
-    });
+
+        return null;
+      });
+
+    // Add UI-block so we can get a valid reference to the map-view
+
+    uiBlock.addToUIManager();
   }
 
   @ReactMethod
   public void getCamera(final int tag, final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
-      @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
-        MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null) {
-          promise.reject("AirMapView not found");
-          return;
-        }
-        if (view.map == null) {
-          promise.reject("AirMapView.map is not valid");
-          return;
-        }
-
+    MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
         CameraPosition position = view.map.getCameraPosition();
 
         WritableMap centerJson = new WritableNativeMap();
@@ -178,34 +153,23 @@ public class MapModule extends ReactContextBaseJavaModule {
         cameraJson.putDouble("pitch", (double)position.tilt);
 
         promise.resolve(cameraJson);
-      }
+
+        return null;
     });
+
+    uiBlock.addToUIManager();
   }
 
   @ReactMethod
   public void getAddressFromCoordinates(final int tag, final ReadableMap coordinate, final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
-      @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
-        MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null) {
-          promise.reject("AirMapView not found");
-          return;
-        }
-        if (view.map == null) {
-          promise.reject("AirMapView.map is not valid");
-          return;
-        }
+    MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, mapView -> {
         if (coordinate == null ||
                 !coordinate.hasKey("latitude") ||
                 !coordinate.hasKey("longitude")) {
           promise.reject("Invalid coordinate format");
-          return;
+          return null;
         }
         Geocoder geocoder = new Geocoder(context);
         try {
@@ -213,7 +177,7 @@ public class MapModule extends ReactContextBaseJavaModule {
                   geocoder.getFromLocation(coordinate.getDouble("latitude"),coordinate.getDouble("longitude"),1);
           if (list.isEmpty()) {
             promise.reject("Can not get address location");
-            return;
+            return null;
           }
           Address address = list.get(0);
 
@@ -233,8 +197,11 @@ public class MapModule extends ReactContextBaseJavaModule {
         } catch (IOException e) {
           promise.reject("Can not get address location");
         }
-      }
+
+        return null;
     });
+
+    uiBlock.addToUIManager();
   }
 
   @ReactMethod
@@ -247,22 +214,7 @@ public class MapModule extends ReactContextBaseJavaModule {
             coordinate.hasKey("longitude") ? coordinate.getDouble("longitude") : 0.0
     );
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
-      @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
-        MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null) {
-          promise.reject("AirMapView not found");
-          return;
-        }
-        if (view.map == null) {
-          promise.reject("AirMapView.map is not valid");
-          return;
-        }
-
+    MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
         Point pt = view.map.getProjection().toScreenLocation(coord);
 
         WritableMap ptJson = new WritableNativeMap();
@@ -270,8 +222,11 @@ public class MapModule extends ReactContextBaseJavaModule {
         ptJson.putDouble("y", (double)pt.y / density);
 
         promise.resolve(ptJson);
-      }
+
+        return null;
     });
+
+    uiBlock.addToUIManager();
   }
 
   @ReactMethod
@@ -284,24 +239,7 @@ public class MapModule extends ReactContextBaseJavaModule {
             point.hasKey("y") ? (int)(point.getDouble("y") * density) : 0
     );
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
-      @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
-        MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null)
-        {
-          promise.reject("AirMapView not found");
-          return;
-        }
-        if (view.map == null)
-        {
-          promise.reject("AirMapView.map is not valid");
-          return;
-        }
-
+    MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
         LatLng coord = view.map.getProjection().fromScreenLocation(pt);
 
         WritableMap coordJson = new WritableNativeMap();
@@ -309,30 +247,18 @@ public class MapModule extends ReactContextBaseJavaModule {
         coordJson.putDouble("longitude", coord.longitude);
 
         promise.resolve(coordJson);
-      }
+
+        return null;
     });
+
+    uiBlock.addToUIManager();
   }
 
   @ReactMethod
   public void getMapBoundaries(final int tag, final Promise promise) {
     final ReactApplicationContext context = getReactApplicationContext();
 
-    UIManagerModule uiManager = context.getNativeModule(UIManagerModule.class);
-    uiManager.addUIBlock(new UIBlock()
-    {
-      @Override
-      public void execute(NativeViewHierarchyManager nvhm)
-      {
-        MapView view = (MapView) nvhm.resolveView(tag);
-        if (view == null) {
-          promise.reject("AirMapView not found");
-          return;
-        }
-        if (view.map == null) {
-          promise.reject("AirMapView.map is not valid");
-          return;
-        }
-
+    MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
         double[][] boundaries = view.getMapBoundaries();
 
         WritableMap coordinates = new WritableNativeMap();
@@ -348,7 +274,10 @@ public class MapModule extends ReactContextBaseJavaModule {
         coordinates.putMap("southWest", southWestHash);
 
         promise.resolve(coordinates);
-      }
+
+        return null;
     });
+
+    uiBlock.addToUIManager();
   }
 }
