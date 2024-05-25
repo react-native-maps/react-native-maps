@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.4](https://github.com/react-native-maps/react-native-maps/compare/v1.15.3...v1.15.4) (2024-05-25)
+
+
+### Bug Fixes
+
+* **ios:** resolve issue with Pods installation ([#5065](https://github.com/react-native-maps/react-native-maps/issues/5065)) ([9992c36](https://github.com/react-native-maps/react-native-maps/commit/9992c36054b0a8a056f0ce97d4687fcdf18c2ca5))
+
 ## [1.15.3](https://github.com/react-native-maps/react-native-maps/compare/v1.15.2...v1.15.3) (2024-05-24)
 
 
