@@ -199,7 +199,9 @@ For IOS: configure [App Transport Security](https://developer.apple.com/library/
 
 ## React Native Configuration for Fabric / New Architecture
 
-If you are using React Native 0.74 or higher, or if Fabric / the new architecture is enabled in your project, you need to add specific configurations to your `react-native-config` file to ensure compatibility with certain components. This setup is essential for maintaining the stability and functionality of the map components provided by `react-native-maps`.
+This library works with Fabric using the [New Renderer Interop Layer](https://github.com/reactwg/react-native-new-architecture/discussions/135)
+
+There is a warning message that those steps are not necessary; but we couldn't get the example working without them so far.
 
 ### Configuration Steps
 

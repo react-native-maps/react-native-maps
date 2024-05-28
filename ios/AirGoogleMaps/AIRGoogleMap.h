@@ -81,7 +81,7 @@
 + (GMSCameraPosition*)makeGMSCameraPositionFromMap:(GMSMapView *)map andMKCoordinateRegion:(MKCoordinateRegion)region;
 
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
-- (instancetype) initWithMapId:(NSString *) mapId;
+- (instancetype) initWithMapId:(NSString *) mapId andZoomTapEnabled:(BOOL) zoomTapEnabled;
 @end
 
 #endif

@@ -47,10 +47,16 @@ RCT_EXPORT_MODULE()
 {
   [GMSServices setMetalRendererEnabled:YES];
   NSString* googleMapId  = nil;
-  if (self.initialProps && self.initialProps[@"googleMapId"]){
-    googleMapId  = self.initialProps[@"googleMapId"];
+  BOOL zoomTapEnabled = YES;
+  if (self.initialProps){
+      if (self.initialProps[@"googleMapId"]){
+          googleMapId  = self.initialProps[@"googleMapId"];
+      }
+      if (self.initialProps[@"zoomTapEnabled"]){
+          zoomTapEnabled = self.initialProps[@"zoomTapEnabled"];
+      }
   }
-  AIRGoogleMap *map = [[AIRGoogleMap alloc] initWithMapId:googleMapId];
+  AIRGoogleMap *map = [[AIRGoogleMap alloc] initWithMapId:googleMapId andZoomTapEnabled:zoomTapEnabled];
   map.bridge = self.bridge;
   map.delegate = self;
   map.isAccessibilityElement = NO;
