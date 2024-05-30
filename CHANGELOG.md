@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.6](https://github.com/react-native-maps/react-native-maps/compare/v1.15.5...v1.15.6) (2024-05-30)
+
+
+### Bug Fixes
+
+* **iOS:** iOS PrivacyInfo fix ([#5078](https://github.com/react-native-maps/react-native-maps/issues/5078)) ([9f458d9](https://github.com/react-native-maps/react-native-maps/commit/9f458d956ba2c16ee3f2a9e8849d9330dcefdda2))
+
 ## [1.15.5](https://github.com/react-native-maps/react-native-maps/compare/v1.15.4...v1.15.5) (2024-05-30)
 
 
