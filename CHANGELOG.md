@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.5](https://github.com/react-native-maps/react-native-maps/compare/v1.15.4...v1.15.5) (2024-05-30)
+
+
+### Bug Fixes
+
+* **android:** UIManagerModule fix for Bridgeless 0.74 ([#5061](https://github.com/react-native-maps/react-native-maps/issues/5061)) ([f194f99](https://github.com/react-native-maps/react-native-maps/commit/f194f9977ea7c6ab547b53e15b4d9a3480c8baa7))
+
 ## [1.15.4](https://github.com/react-native-maps/react-native-maps/compare/v1.15.3...v1.15.4) (2024-05-25)
 
 
