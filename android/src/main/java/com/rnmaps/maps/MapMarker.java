@@ -38,11 +38,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.maps.android.collections.MarkerManager;
 
 public class MapMarker extends MapFeature {
 
-  private MarkerOptions markerOptions;
+  protected MarkerOptions markerOptions;
   private Marker marker;
   private int width;
   private int height;
@@ -83,41 +84,40 @@ public class MapMarker extends MapFeature {
 
   private final DraweeHolder<?> logoHolder;
   private DataSource<CloseableReference<CloseableImage>> dataSource;
-  private final ControllerListener<ImageInfo> mLogoControllerListener =
-      new BaseControllerListener<ImageInfo>() {
-        @Override
-        public void onFinalImageSet(
-            String id,
-            @Nullable final ImageInfo imageInfo,
-            @Nullable Animatable animatable) {
-          CloseableReference<CloseableImage> imageReference = null;
-          try {
-            imageReference = dataSource.getResult();
-            if (imageReference != null) {
-              CloseableImage image = imageReference.get();
-              if (image instanceof CloseableStaticBitmap) {
-                CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
-                Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
-                if (bitmap != null) {
-                  bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                  iconBitmap = bitmap;
-                  iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-                }
-              }
-            }
-          } finally {
-            dataSource.close();
-            if (imageReference != null) {
-              CloseableReference.closeSafely(imageReference);
+  private final ControllerListener<ImageInfo> mLogoControllerListener = new BaseControllerListener<ImageInfo>() {
+    @Override
+    public void onFinalImageSet(
+        String id,
+        @Nullable final ImageInfo imageInfo,
+        @Nullable Animatable animatable) {
+      CloseableReference<CloseableImage> imageReference = null;
+      try {
+        imageReference = dataSource.getResult();
+        if (imageReference != null) {
+          CloseableImage image = imageReference.get();
+          if (image instanceof CloseableStaticBitmap) {
+            CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
+            Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
+            if (bitmap != null) {
+              bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+              iconBitmap = bitmap;
+              iconBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
             }
           }
-          if (MapMarker.this.markerManager != null && MapMarker.this.imageUri != null) {
-            MapMarker.this.markerManager.getSharedIcon(MapMarker.this.imageUri)
-                .updateIcon(iconBitmapDescriptor, iconBitmap);
-          }
-          update(true);
         }
-      };
+      } finally {
+        dataSource.close();
+        if (imageReference != null) {
+          CloseableReference.closeSafely(imageReference);
+        }
+      }
+      if (MapMarker.this.markerManager != null && MapMarker.this.imageUri != null) {
+        MapMarker.this.markerManager.getSharedIcon(MapMarker.this.imageUri)
+            .updateIcon(iconBitmapDescriptor, iconBitmap);
+      }
+      update(true);
+    }
+  };
 
   public MapMarker(Context context, MapMarkerManager markerManager) {
     super(context);
@@ -259,7 +259,8 @@ public class MapMarker extends MapFeature {
 
   private void updateTracksViewChanges() {
     boolean shouldTrack = tracksViewChanges && hasCustomMarkerView && marker != null;
-    if (shouldTrack == tracksViewChangesActive) return;
+    if (shouldTrack == tracksViewChangesActive)
+      return;
     tracksViewChangesActive = shouldTrack;
 
     if (shouldTrack) {
@@ -269,9 +270,9 @@ public class MapMarker extends MapFeature {
 
       // Let it render one more time to avoid race conditions.
       // i.e. Image onLoad ->
-      //      ViewChangesTracker may not get a chance to render ->
-      //      setState({ tracksViewChanges: false }) ->
-      //      image loaded but not rendered.
+      // ViewChangesTracker may not get a chance to render ->
+      // setState({ tracksViewChanges: false }) ->
+      // image loaded but not rendered.
       updateMarkerIcon();
     }
   }
@@ -290,7 +291,8 @@ public class MapMarker extends MapFeature {
   }
 
   public void updateMarkerIcon() {
-    if (marker == null) return;
+    if (marker == null)
+      return;
 
     marker.setIcon(getIcon());
   }
@@ -310,10 +312,10 @@ public class MapMarker extends MapFeature {
     };
     Property<Marker, LatLng> property = Property.of(Marker.class, LatLng.class, "position");
     ObjectAnimator animator = ObjectAnimator.ofObject(
-      marker,
-      property,
-      typeEvaluator,
-      finalPosition);
+        marker,
+        property,
+        typeEvaluator,
+        finalPosition);
     animator.setDuration(duration);
     animator.start();
   }
@@ -323,7 +325,8 @@ public class MapMarker extends MapFeature {
     boolean shouldLoadImage = true;
 
     if (this.markerManager != null) {
-      // remove marker from previous shared icon if needed, to avoid future updates from it.
+      // remove marker from previous shared icon if needed, to avoid future updates
+      // from it.
       // remove the shared icon completely if no markers on it as well.
       // this is to avoid memory leak due to orphan bitmaps.
       //
@@ -335,7 +338,8 @@ public class MapMarker extends MapFeature {
         this.markerManager.removeSharedIconIfEmpty(this.imageUri);
       }
       if (uri != null) {
-        // listening for marker bitmap descriptor update, as well as check whether to load the image.
+        // listening for marker bitmap descriptor update, as well as check whether to
+        // load the image.
         MapMarkerManager.AirMapMarkerSharedIcon sharedIcon = this.markerManager.getSharedIcon(uri);
         sharedIcon.addMarker(this);
         shouldLoadImage = sharedIcon.shouldLoadImage();
@@ -343,7 +347,9 @@ public class MapMarker extends MapFeature {
     }
 
     this.imageUri = uri;
-    if (!shouldLoadImage) {return;}
+    if (!shouldLoadImage) {
+      return;
+    }
 
     if (uri == null) {
       iconBitmapDescriptor = null;
@@ -367,11 +373,12 @@ public class MapMarker extends MapFeature {
       int drawableId = getDrawableResourceByName(uri);
       iconBitmap = BitmapFactory.decodeResource(getResources(), drawableId);
       if (iconBitmap == null) { // VectorDrawable or similar
-          Drawable drawable = getResources().getDrawable(drawableId);
-          iconBitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-          drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-          Canvas canvas = new Canvas(iconBitmap);
-          drawable.draw(canvas);
+        Drawable drawable = getResources().getDrawable(drawableId);
+        iconBitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+            Bitmap.Config.ARGB_8888);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        Canvas canvas = new Canvas(iconBitmap);
+        drawable.draw(canvas);
       }
       if (this.markerManager != null) {
         this.markerManager.getSharedIcon(uri).updateIcon(iconBitmapDescriptor, iconBitmap);
@@ -472,10 +479,12 @@ public class MapMarker extends MapFeature {
     }
   }
 
-  private MarkerOptions fillMarkerOptions(MarkerOptions options) {
+  protected MarkerOptions fillMarkerOptions(MarkerOptions options) {
     options.position(position);
-    if (anchorIsSet) options.anchor(anchorX, anchorY);
-    if (calloutAnchorIsSet) options.infoWindowAnchor(calloutAnchorX, calloutAnchorY);
+    if (anchorIsSet)
+      options.anchor(anchorX, anchorY);
+    if (calloutAnchorIsSet)
+      options.infoWindowAnchor(calloutAnchorX, calloutAnchorY);
     options.title(title);
     options.snippet(snippet);
     options.rotation(rotation);
@@ -530,9 +539,9 @@ public class MapMarker extends MapFeature {
     Bitmap bitmap = mLastBitmapCreated;
 
     if (bitmap == null ||
-            bitmap.isRecycled() ||
-            bitmap.getWidth() != width ||
-            bitmap.getHeight() != height) {
+        bitmap.isRecycled() ||
+        bitmap.getWidth() != width ||
+        bitmap.getHeight() != height) {
       bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
       mLastBitmapCreated = bitmap;
     } else {
@@ -554,7 +563,8 @@ public class MapMarker extends MapFeature {
   }
 
   public View getCallout() {
-    if (this.calloutView == null) return null;
+    if (this.calloutView == null)
+      return null;
 
     if (this.wrappedCalloutView == null) {
       this.wrapCalloutView();
@@ -568,7 +578,8 @@ public class MapMarker extends MapFeature {
   }
 
   public View getInfoContents() {
-    if (this.calloutView == null) return null;
+    if (this.calloutView == null)
+      return null;
 
     if (this.wrappedCalloutView == null) {
       this.wrapCalloutView();
@@ -582,7 +593,8 @@ public class MapMarker extends MapFeature {
   }
 
   private void wrapCalloutView() {
-    // some hackery is needed to get the arbitrary infowindow view to render centered, and
+    // some hackery is needed to get the arbitrary infowindow view to render
+    // centered, and
     // with only the width/height that it needs.
     if (this.calloutView == null || this.calloutView.getChildCount() == 0) {
       return;
@@ -593,17 +605,14 @@ public class MapMarker extends MapFeature {
     LL.setLayoutParams(new LinearLayout.LayoutParams(
         this.calloutView.width,
         this.calloutView.height,
-        0f
-    ));
-
+        0f));
 
     LinearLayout LL2 = new LinearLayout(context);
     LL2.setOrientation(LinearLayout.HORIZONTAL);
     LL2.setLayoutParams(new LinearLayout.LayoutParams(
         this.calloutView.width,
         this.calloutView.height,
-        0f
-    ));
+        0f));
 
     LL.addView(LL2);
     LL2.addView(this.calloutView);

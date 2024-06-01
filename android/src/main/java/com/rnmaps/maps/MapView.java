@@ -53,10 +53,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.MapCapabilities;
 import com.google.maps.android.collections.CircleManager;
 import com.google.maps.android.collections.GroundOverlayManager;
 import com.google.maps.android.collections.MarkerManager;
@@ -79,7 +81,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
-    GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
+    GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener,
+    GoogleMap.OnIndoorStateChangeListener {
   public GoogleMap map;
   private MarkerManager markerManager;
   private MarkerManager.Collection markerCollection;
@@ -112,9 +115,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
   private MapMarker selectedMarker;
+  private boolean classicalGoogleMarkers = false;
 
-  private static final String[] PERMISSIONS = new String[]{
-      "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
+  private static final String[] PERMISSIONS = new String[] {
+      "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION" };
 
   private final List<MapFeature> features = new ArrayList<>();
   private final Map<Marker, MapMarker> markerMap = new HashMap<>();
@@ -166,13 +170,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   }
 
   public MapView(ThemedReactContext reactContext, ReactApplicationContext appContext,
-                 MapManager manager,
-                 GoogleMapOptions googleMapOptions) {
+      MapManager manager,
+      GoogleMapOptions googleMapOptions,
+      boolean classicalGoogleMarkers) {
     super(getNonBuggyContext(reactContext, appContext), googleMapOptions);
 
     this.manager = manager;
     this.context = reactContext;
-    MapsInitializer.initialize(context, this.manager.renderer, renderer -> Log.d("AirMapRenderer", renderer.toString()));
+    this.classicalGoogleMarkers = classicalGoogleMarkers;
+    MapsInitializer.initialize(context, this.manager.renderer,
+        renderer -> Log.d("AirMapRenderer", renderer.toString()));
     super.onCreate(null);
     super.onResume();
     super.getMapAsync(this);
@@ -181,27 +188,27 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     fusedLocationSource = new FusedLocationSource(context);
 
-    gestureDetector =
-        new GestureDetectorCompat(reactContext, new GestureDetector.SimpleOnGestureListener() {
+    gestureDetector = new GestureDetectorCompat(reactContext, new GestureDetector.SimpleOnGestureListener() {
 
-          @Override
-          public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-              float distanceY) {
-            if (handlePanDrag) {
-              onPanDrag(e2);
-            }
-            return false;
-          }
+      @Override
+      public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+          float distanceY) {
+        if (handlePanDrag) {
+          onPanDrag(e2);
+        }
+        return false;
+      }
 
-          @Override
-          public boolean onDoubleTap(MotionEvent ev) {
-            onDoublePress(ev);
-            return false;
-          }
-        });
+      @Override
+      public boolean onDoubleTap(MotionEvent ev) {
+        onDoublePress(ev);
+        return false;
+      }
+    });
 
     this.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-      @Override public void onLayoutChange(View v, int left, int top, int right, int bottom,
+      @Override
+      public void onLayoutChange(View v, int left, int top, int right, int bottom,
           int oldLeft, int oldTop, int oldRight, int oldBottom) {
         if (!paused) {
           MapView.this.cacheView();
@@ -215,11 +222,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     eventDispatcher = UIManagerHelper
-      .getUIManager(reactContext, uiManagerType)
-      .getEventDispatcher();
+        .getUIManager(reactContext, uiManagerType)
+        .getEventDispatcher();
 
     // Set up a parent view for triggering visibility in subviews that depend on it.
-    // Mainly ReactImageView depends on Fresco which depends on onVisibilityChanged() event
+    // Mainly ReactImageView depends on Fresco which depends on
+    // onVisibilityChanged() event
     attacherGroup = new ViewAttacherGroup(context);
     LayoutParams attacherLayoutParams = new LayoutParams(0, 0);
     attacherLayoutParams.width = 0;
@@ -236,6 +244,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       return;
     }
     this.map = map;
+
+    MapCapabilities capabilities = map.getMapCapabilities();
+    boolean advancedMarkersEnabled = capabilities.isAdvancedMarkersAvailable()
+        && !classicalGoogleMarkers;
+
+    MapMarkerManager.advancedMarkersEnabled = advancedMarkersEnabled;
 
     markerManager = new MarkerManager(map);
     markerCollection = markerManager.newCollection();
@@ -255,13 +269,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     applyBridgedProps();
 
-    manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
+    WritableMap mapInfo = new WritableNativeMap();
+    WritableMap event = new WritableNativeMap();
+
+    mapInfo.putBoolean("advancedMarkersEnabled", advancedMarkersEnabled);
+
+    event.putMap("advancedMarkersEnabled", mapInfo);
+
+    manager.pushEvent(context, this, "onMapReady", event);
 
     final MapView view = this;
 
     map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
       @Override
-      public void onMyLocationChange(Location location){
+      public void onMyLocationChange(Location location) {
         WritableMap event = new WritableNativeMap();
 
         WritableMap coordinate = new WritableNativeMap();
@@ -342,7 +363,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         event = makeClickEventData(marker.getPosition());
         event.putString("action", "callout-press");
         MapCallout infoWindow = markerView.getCalloutView();
-        if (infoWindow != null) manager.pushEvent(context, infoWindow, "onPress", event);
+        if (infoWindow != null)
+          manager.pushEvent(context, infoWindow, "onPress", event);
       }
     });
 
@@ -400,8 +422,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       public void onCameraIdle() {
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
         if ((cameraMoveReason != 0) &&
-          ((cameraLastIdleBounds == null) ||
-            LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
+            ((cameraLastIdleBounds == null) ||
+                LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
 
           cameraLastIdleBounds = bounds;
           boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
@@ -413,25 +435,34 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     });
 
     map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-      @Override public void onMapLoaded() {
+      @Override
+      public void onMapLoaded() {
         isMapLoaded = true;
-        manager.pushEvent(context, view, "onMapLoaded", new WritableNativeMap());
+
+        WritableMap mapInfo = new WritableNativeMap();
+
+        mapInfo.putBoolean("advancedMarkersEnabled", advancedMarkersEnabled);
+
+        manager.pushEvent(context, view, "onMapLoaded", mapInfo);
         MapView.this.cacheView();
       }
     });
 
-    // We need to be sure to disable location-tracking when app enters background, in-case some
+    // We need to be sure to disable location-tracking when app enters background,
+    // in-case some
     // other module
-    // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager
+    // has acquired a wake-lock and is controlling location-updates, otherwise,
+    // location-manager
     // will be left
-    // updating location constantly, killing the battery, even though some other location-mgmt
+    // updating location constantly, killing the battery, even though some other
+    // location-mgmt
     // module may
     // desire to shut-down location-services.
     lifecycleListener = new LifecycleEventListener() {
       @Override
       public void onHostResume() {
         if (hasPermissions() && map != null) {
-          //noinspection MissingPermission
+          // noinspection MissingPermission
           map.setMyLocationEnabled(showUserLocation);
           map.setLocationSource(fusedLocationSource);
         }
@@ -446,7 +477,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       @Override
       public void onHostPause() {
         if (hasPermissions() && map != null) {
-          //noinspection MissingPermission
+          // noinspection MissingPermission
           map.setMyLocationEnabled(false);
         }
         synchronized (MapView.this) {
@@ -470,7 +501,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     if (selectedMarker == target) {
       return;
     }
-    
+
     WritableMap event;
 
     if (selectedMarker != null) {
@@ -497,7 +528,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       manager.pushEvent(context, this, "onMarkerSelect", event);
     }
 
-     selectedMarker = target;
+    selectedMarker = target;
   }
 
   private boolean hasPermissions() {
@@ -505,9 +536,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         checkSelfPermission(getContext(), PERMISSIONS[1]) == PermissionChecker.PERMISSION_GRANTED;
   }
 
-
   /*
-  onDestroy is final method so I can't override it.
+   * onDestroy is final method so I can't override it.
    */
   public synchronized void doDestroy() {
     if (destroyed) {
@@ -537,34 +567,38 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   }
 
   private void applyBridgedProps() {
-    if(initialRegion != null) {
+    if (initialRegion != null) {
       moveToRegion(initialRegion);
       initialRegionSet = true;
-    } else if(region != null) {
+    } else if (region != null) {
       moveToRegion(region);
     } else {
       moveToCamera(camera);
     }
-    if(customMapStyleString != null) {
+    if (customMapStyleString != null) {
       map.setMapStyle(new MapStyleOptions(customMapStyleString));
     }
   }
 
   private void moveToRegion(ReadableMap region) {
-    if (region == null) return;
+    if (region == null)
+      return;
 
     double lng = region.getDouble("longitude");
     double lat = region.getDouble("latitude");
     double lngDelta = region.getDouble("longitudeDelta");
     double latDelta = region.getDouble("latitudeDelta");
     LatLngBounds bounds = new LatLngBounds(
-            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+        new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+        new LatLng(lat + latDelta / 2, lng + lngDelta / 2) // northeast
     );
     if (super.getHeight() <= 0 || super.getWidth() <= 0) {
-      // in this case, our map has not been laid out yet, so we save the bounds in a local
-      // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
-      // occurs, we will move the camera to the saved bounds. Note that if we tried to move
+      // in this case, our map has not been laid out yet, so we save the bounds in a
+      // local
+      // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as
+      // layout
+      // occurs, we will move the camera to the saved bounds. Note that if we tried to
+      // move
       // to the bounds now, it would trigger an exception.
       map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
       boundsToMove = bounds;
@@ -576,44 +610,51 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   public void setRegion(ReadableMap region) {
     this.region = region;
-    if(region != null && map != null) {
+    if (region != null && map != null) {
       moveToRegion(region);
     }
   }
 
   public void setCamera(ReadableMap camera) {
     this.camera = camera;
-    if(camera != null && map != null) {
+    if (camera != null && map != null) {
       moveToCamera(camera);
     }
   }
-public static CameraPosition cameraPositionFromMap(ReadableMap camera){
-  if (camera == null) return null;
 
-  CameraPosition.Builder builder = new CameraPosition.Builder();
+  public static CameraPosition cameraPositionFromMap(ReadableMap camera) {
+    if (camera == null)
+      return null;
 
-  ReadableMap center = camera.getMap("center");
-  if (center != null) {
-    double lng = center.getDouble("longitude");
-    double lat = center.getDouble("latitude");
-    builder.target(new LatLng(lat, lng));
+    CameraPosition.Builder builder = new CameraPosition.Builder();
+
+    ReadableMap center = camera.getMap("center");
+    if (center != null) {
+      double lng = center.getDouble("longitude");
+      double lat = center.getDouble("latitude");
+      builder.target(new LatLng(lat, lng));
+    }
+
+    builder.tilt((float) camera.getDouble("pitch"));
+    builder.bearing((float) camera.getDouble("heading"));
+    builder.zoom((float) camera.getDouble("zoom"));
+
+    return builder.build();
   }
 
-  builder.tilt((float)camera.getDouble("pitch"));
-  builder.bearing((float)camera.getDouble("heading"));
-  builder.zoom((float)camera.getDouble("zoom"));
-
-  return builder.build();
-}
   public void moveToCamera(ReadableMap cameraMap) {
     CameraPosition camera = cameraPositionFromMap(cameraMap);
-    if (camera == null) return;
+    if (camera == null)
+      return;
     CameraUpdate update = CameraUpdateFactory.newCameraPosition(camera);
 
     if (super.getHeight() <= 0 || super.getWidth() <= 0) {
-      // in this case, our map has not been laid out yet, so we save the camera update in a
-      // local variable. As soon as layout occurs, we will move the camera to the saved update.
-      // Note that if we tried to move to the camera now, it would trigger an exception.
+      // in this case, our map has not been laid out yet, so we save the camera update
+      // in a
+      // local variable. As soon as layout occurs, we will move the camera to the
+      // saved update.
+      // Note that if we tried to move to the camera now, it would trigger an
+      // exception.
       cameraToSet = update;
     } else {
       map.moveCamera(update);
@@ -623,7 +664,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
   public void setMapStyle(@Nullable String customMapStyleString) {
     this.customMapStyleString = customMapStyleString;
-    if(map != null && customMapStyleString != null) {
+    if (map != null && customMapStyleString != null) {
       map.setMapStyle(new MapStyleOptions(customMapStyleString));
     }
   }
@@ -632,20 +673,20 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
     if (hasPermissions()) {
       map.setLocationSource(fusedLocationSource);
-      //noinspection MissingPermission
+      // noinspection MissingPermission
       map.setMyLocationEnabled(showUserLocation);
     }
   }
 
-  public void setUserLocationPriority(int priority){
+  public void setUserLocationPriority(int priority) {
     fusedLocationSource.setPriority(priority);
   }
 
-  public void setUserLocationUpdateInterval(int interval){
+  public void setUserLocationUpdateInterval(int interval) {
     fusedLocationSource.setInterval(interval);
   }
 
-  public void setUserLocationFastestInterval(int interval){
+  public void setUserLocationFastestInterval(int interval) {
     fusedLocationSource.setFastestInterval(interval);
   }
 
@@ -711,8 +752,10 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void addFeature(View child, int index) {
-    // Our desired API is to pass up annotations/overlays as children to the mapview component.
-    // This is where we intercept them and do the appropriate underlying mapview action.
+    // Our desired API is to pass up annotations/overlays as children to the mapview
+    // component.
+    // This is where we intercept them and do the appropriate underlying mapview
+    // action.
     if (child instanceof MapMarker) {
       MapMarker annotation = (MapMarker) child;
       annotation.addToMap(markerCollection);
@@ -724,7 +767,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       // Remove from a view group if already present, prevent "specified child
       // already had a parent" error.
-      ViewGroup annotationParent = (ViewGroup)annotation.getParent();
+      ViewGroup annotationParent = (ViewGroup) annotation.getParent();
       if (annotationParent != null) {
         annotationParent.removeView(annotation);
       }
@@ -734,7 +777,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       // Trigger visibility event if necessary.
       // With some testing, seems like it is not always
-      //   triggered just by being added to a parent view.
+      // triggered just by being added to a parent view.
       annotation.setVisibility(visibility);
 
       Marker marker = (Marker) annotation.getFeature();
@@ -783,7 +826,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       MapHeatmap heatmapView = (MapHeatmap) child;
       heatmapView.addToMap(map);
       features.add(index, heatmapView);
-      TileOverlay heatmap = (TileOverlay)heatmapView.getFeature();
+      TileOverlay heatmap = (TileOverlay) heatmapView.getFeature();
       heatmapMap.put(heatmap, heatmapView);
     } else if (child instanceof ViewGroup) {
       ViewGroup children = (ViewGroup) child;
@@ -812,13 +855,13 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     } else if (feature instanceof MapHeatmap) {
       heatmapMap.remove(feature.getFeature());
       feature.removeFromMap(map);
-    } else if(feature instanceof MapCircle) {
+    } else if (feature instanceof MapCircle) {
       feature.removeFromMap(circleCollection);
-    } else if(feature instanceof MapOverlay) {
+    } else if (feature instanceof MapOverlay) {
       feature.removeFromMap(groundOverlayCollection);
-    } else if(feature instanceof MapPolygon) {
+    } else if (feature instanceof MapPolygon) {
       feature.removeFromMap(polygonCollection);
-    } else if(feature instanceof  MapPolyline) {
+    } else if (feature instanceof MapPolyline) {
       feature.removeFromMap(polylineCollection);
     } else {
       feature.removeFromMap(map);
@@ -845,15 +888,16 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void updateExtraData(Object extraData) {
-    // if boundsToMove is not null, we now have the MapView's width/height, so we can apply
+    // if boundsToMove is not null, we now have the MapView's width/height, so we
+    // can apply
     // a proper camera move
     if (boundsToMove != null) {
       HashMap<String, Float> data = (HashMap<String, Float>) extraData;
       int width = data.get("width") == null ? 0 : data.get("width").intValue();
       int height = data.get("height") == null ? 0 : data.get("height").intValue();
 
-      //fix for https://github.com/react-native-maps/react-native-maps/issues/245,
-      //it's not guaranteed the passed-in height and width would be greater than 0.
+      // fix for https://github.com/react-native-maps/react-native-maps/issues/245,
+      // it's not guaranteed the passed-in height and width would be greater than 0.
       if (width <= 0 || height <= 0) {
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
       } else {
@@ -862,24 +906,24 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       boundsToMove = null;
       cameraToSet = null;
-    }
-    else if (cameraToSet != null) {
+    } else if (cameraToSet != null) {
       map.moveCamera(cameraToSet);
       cameraToSet = null;
     }
   }
 
   public void animateToCamera(ReadableMap camera, int duration) {
-    if (map == null) return;
+    if (map == null)
+      return;
     CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
     if (camera.hasKey("zoom")) {
-      builder.zoom((float)camera.getDouble("zoom"));
+      builder.zoom((float) camera.getDouble("zoom"));
     }
     if (camera.hasKey("heading")) {
-      builder.bearing((float)camera.getDouble("heading"));
+      builder.bearing((float) camera.getDouble("heading"));
     }
     if (camera.hasKey("pitch")) {
-      builder.tilt((float)camera.getDouble("pitch"));
+      builder.tilt((float) camera.getDouble("pitch"));
     }
     if (camera.hasKey("center")) {
       ReadableMap center = camera.getMap("center");
@@ -890,15 +934,15 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
     if (duration <= 0) {
       map.moveCamera(update);
-    }
-    else {
+    } else {
       map.animateCamera(update, duration, null);
     }
   }
 
   public void animateToRegion(LatLngBounds bounds, int duration) {
-    if (map == null) return;
-    if(duration <= 0) {
+    if (map == null)
+      return;
+    if (duration <= 0) {
       map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
     } else {
       map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
@@ -906,7 +950,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void fitToElements(ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
+    if (map == null)
+      return;
 
     LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
@@ -926,7 +971,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       if (edgePadding != null) {
         map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+            edgePadding.getInt("right"), edgePadding.getInt("bottom"));
       }
 
       if (animated) {
@@ -938,7 +983,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void fitToSuppliedMarkers(ReadableArray markerIDsArray, ReadableMap edgePadding, boolean animated) {
-    if (map == null) return;
+    if (map == null)
+      return;
 
     LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
@@ -968,7 +1014,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       if (edgePadding != null) {
         map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+            edgePadding.getInt("right"), edgePadding.getInt("bottom"));
       }
 
       if (animated) {
@@ -984,7 +1030,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   int baseTopMapPadding;
   int baseBottomMapPadding;
 
-  public void applyBaseMapPadding(int left, int top, int right, int bottom){
+  public void applyBaseMapPadding(int left, int top, int right, int bottom) {
     this.map.setPadding(left, top, right, bottom);
     baseLeftMapPadding = left;
     baseRightMapPadding = right;
@@ -994,7 +1040,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
   public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
       boolean animated) {
-    if (map == null) return;
+    if (map == null)
+      return;
 
     LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
@@ -1009,7 +1056,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
 
     if (edgePadding != null) {
-      appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+      appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"),
+          edgePadding.getInt("bottom"));
     }
 
     if (animated) {
@@ -1021,7 +1069,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
   }
 
-  private void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
+  private void appendMapPadding(int iLeft, int iTop, int iRight, int iBottom) {
     int left;
     int top;
     int right;
@@ -1034,9 +1082,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     bottom = (int) (iBottom * density);
 
     map.setPadding(left + baseLeftMapPadding,
-            top + baseTopMapPadding,
-            right + baseRightMapPadding,
-            bottom + baseBottomMapPadding);
+        top + baseTopMapPadding,
+        right + baseRightMapPadding,
+        bottom + baseBottomMapPadding);
   }
 
   public double[][] getMapBoundaries() {
@@ -1045,13 +1093,14 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     LatLng southWest = bounds.southwest;
 
     return new double[][] {
-      {northEast.longitude, northEast.latitude},
-      {southWest.longitude, southWest.latitude}
+        { northEast.longitude, northEast.latitude },
+        { southWest.longitude, southWest.latitude }
     };
   }
 
   public void setMapBoundaries(ReadableMap northEast, ReadableMap southWest) {
-    if (map == null) return;
+    if (map == null)
+      return;
 
     LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
@@ -1086,10 +1135,10 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   public boolean dispatchTouchEvent(MotionEvent ev) {
     gestureDetector.onTouchEvent(ev);
 
-    int X = (int)ev.getX();          
-    int Y = (int)ev.getY();
-    if(map != null) {
-      tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
+    int X = (int) ev.getX();
+    int Y = (int) ev.getY();
+    if (map != null) {
+      tapLocation = map.getProjection().fromScreenLocation(new Point(X, Y));
     }
 
     int action = MotionEventCompat.getActionMasked(ev);
@@ -1219,7 +1268,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       mapLoadingLayout.setVisibility(View.VISIBLE);
       if (this.isMapLoaded) {
         this.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
-          @Override public void onSnapshotReady(Bitmap bitmap) {
+          @Override
+          public void onSnapshotReady(Bitmap bitmap) {
             cacheImageView.setImageBitmap(bitmap);
             cacheImageView.setVisibility(View.VISIBLE);
             mapLoadingLayout.setVisibility(View.INVISIBLE);
@@ -1242,7 +1292,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void onDoublePress(MotionEvent ev) {
-    if (this.map == null) return;
+    if (this.map == null)
+      return;
     Point point = new Point((int) ev.getX(), (int) ev.getY());
     LatLng coords = this.map.getProjection().fromScreenLocation(point);
     WritableMap event = makeClickEventData(coords);
@@ -1251,13 +1302,14 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
   public void setKmlSrc(String kmlSrc) {
     try {
-      InputStream kmlStream =  new FileUtil(context).execute(kmlSrc).get();
+      InputStream kmlStream = new FileUtil(context).execute(kmlSrc).get();
 
       if (kmlStream == null) {
         return;
       }
 
-      KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context, markerManager, polygonManager, polylineManager, groundOverlayManager, null);
+      KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context, markerManager, polygonManager, polylineManager,
+          groundOverlayManager, null);
       kmlLayer.addLayerToMap();
 
       WritableMap pointers = new WritableNativeMap();
@@ -1268,13 +1320,12 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
         return;
       }
 
-      //Retrieve a nested container within the first container
+      // Retrieve a nested container within the first container
       KmlContainer container = kmlLayer.getContainers().iterator().next();
       if (container == null || container.getContainers() == null) {
         manager.pushEvent(context, this, "onKmlReady", pointers);
         return;
       }
-
 
       if (container.getContainers().iterator().hasNext()) {
         container = container.getContainers().iterator().next();
@@ -1282,7 +1333,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       int index = 0;
       for (KmlPlacemark placemark : container.getPlacemarks()) {
-        MarkerOptions options = new MarkerOptions();
+        MarkerOptions options = new AdvancedMarkerOptions();
 
         if (placemark.getInlineStyle() != null) {
           options = placemark.getMarkerOptions();
@@ -1440,7 +1491,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     @Override
     public void run() {
       measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
-              MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+          MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
       layout(getLeft(), getTop(), getRight(), getBottom());
     }
   };
