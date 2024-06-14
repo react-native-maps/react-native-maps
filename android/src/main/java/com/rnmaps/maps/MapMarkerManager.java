@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.facebook.react.R;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
@@ -266,6 +267,11 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     @ReactProp(name = "tracksViewChanges", defaultBoolean = true)
     public void setTracksViewChanges(MapMarker view, boolean tracksViewChanges) {
         view.setTracksViewChanges(tracksViewChanges);
+    }
+
+    @ReactProp(name = "accessibilityLabel")
+    public void setAccessibilityLabel(MapMarker view, @Nullable String accessibilityLabel) {
+        view.setTag(R.id.accessibility_label, accessibilityLabel);
     }
 
     @Override
