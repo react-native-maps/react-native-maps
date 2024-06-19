@@ -38,6 +38,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, assign) NSNumber *shouldZoomEnabled;
 @property (nonatomic, assign) NSNumber *shouldScrollEnabled;
+@property (nonatomic, strong) MKCompassButton *defaultCompassButton;
+@property (nonatomic, strong) MKCompassButton *overlayCompassButton;
 
 - (void)updateScrollEnabled;
 - (void)updateZoomEnabled;
@@ -508,6 +510,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 // and check if their selector is available before calling super method.
 
 - (void)setShowsCompass:(BOOL)showsCompass {
+    if (self.overlayCompassButton != nil) {
+        self.overlayCompassButton.compassVisibility = showsCompass ? MKFeatureVisibilityAdaptive : MKFeatureVisibilityHidden;
+    }
     if ([MKMapView instancesRespondToSelector:@selector(setShowsCompass:)]) {
         [super setShowsCompass:showsCompass];
     }
@@ -711,6 +716,29 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         compassButton = [self.subviews objectAtIndex:index];
         compassButton.frame = CGRectMake(compassButton.frame.origin.x + _compassOffset.x, compassButton.frame.origin.y + _compassOffset.y, compassButton.frame.size.width, compassButton.frame.size.height);
     }
+
+    if (self.overlayCompassButton == nil) {
+        for (UIView *subview in self.subviews) {
+            if (![NSStringFromClass(subview.class) isEqualToString:@"MKPassThroughStackView"]) continue;
+            self.overlayCompassButton = [MKCompassButton compassButtonWithMapView:self];
+            [subview addSubview:self.overlayCompassButton];
+            self.overlayCompassButton.frame = CGRectMake(self.overlayCompassButton.frame.origin.x + _compassOffset.x, self.overlayCompassButton.frame.origin.y + _compassOffset.y, self.overlayCompassButton.frame.size.width, self.overlayCompassButton.frame.size.height);
+            break;
+        }
+    }
+    
+    if (self.defaultCompassButton == nil) {
+        for (UIView *subview in self.subviews) {
+            if (![NSStringFromClass(subview.class) isEqualToString:@"MKPassThroughStackView"]) continue;
+            for (UIView *subview2 in subview.subviews) {
+                if (![NSStringFromClass(subview2.class) isEqualToString:@"MKCompassView"]) continue;
+                self.defaultCompassButton = subview2;
+                self.defaultCompassButton.hidden = YES;
+            }
+            break;
+        }
+    }
+    
 }
 
 // based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
