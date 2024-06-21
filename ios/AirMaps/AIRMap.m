@@ -707,15 +707,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self cacheViewIfNeeded];
-    NSUInteger index = [[self subviews] indexOfObjectPassingTest:^BOOL(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *str = NSStringFromClass([obj class]);
-        return [str containsString:@"MKCompassView"];
-    }];
-    if (index != NSNotFound) {
-        UIView* compassButton;
-        compassButton = [self.subviews objectAtIndex:index];
-        compassButton.frame = CGRectMake(compassButton.frame.origin.x + _compassOffset.x, compassButton.frame.origin.y + _compassOffset.y, compassButton.frame.size.width, compassButton.frame.size.height);
-    }
 
     if (self.overlayCompassButton == nil) {
         for (UIView *subview in self.subviews) {
