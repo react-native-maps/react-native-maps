@@ -622,4 +622,11 @@ public class MapMarker extends MapFeature {
     return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
   }
 
+  @Override
+  protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    this.height = b-t;
+    this.width = r-l;
+    System.out.println("Onlayout_Changed " + changed + " " + l + " " + r + " " + r + " " + b);
+  }
+
 }
