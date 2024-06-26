@@ -97,6 +97,11 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
       view.setLineDashPattern(patternValues);
   }
 
+  @ReactProp(name = "strokeColors")
+  public void setStrokeColors(MapPolyline view, ReadableArray colors){
+    view.setStrokeColors(colors);
+  }
+
   @Override
   @Nullable
   public Map getExportedCustomDirectEventTypeConstants() {
