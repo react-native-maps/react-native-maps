@@ -624,9 +624,8 @@ public class MapMarker extends MapFeature {
 
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    super.onLayout(changed, l, t, r, b);
     this.height = b-t;
     this.width = r-l;
-    System.out.println("Onlayout_Changed " + changed + " " + l + " " + r + " " + r + " " + b);
   }
-
 }
