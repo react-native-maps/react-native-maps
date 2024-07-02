@@ -1,6 +1,7 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -13,6 +14,8 @@ import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.google.android.gms.maps.model.StrokeStyle;
+import com.google.android.gms.maps.model.StyleSpan;
 import com.google.maps.android.collections.PolylineManager;
 
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ public class MapPolyline extends MapFeature {
   private Cap lineCap = new RoundCap();
   private ReadableArray patternValues;
   private List<PatternItem> pattern;
+  private StyleSpan styleSpan = null;
 
   public MapPolyline(Context context) {
     super(context);
@@ -124,6 +128,14 @@ public class MapPolyline extends MapFeature {
     }
   }
 
+  public void setStrokeColors(ReadableArray colors){
+    if(colors.size() < 1) return;
+    int n = colors.size();
+    int start = Color.parseColor(colors.getString(0));
+    int end =  Color.parseColor(colors.getString(n-1));
+    this.styleSpan = new StyleSpan(StrokeStyle.gradientBuilder(start, end).build());
+  }
+
   public PolylineOptions getPolylineOptions() {
     if (polylineOptions == null) {
       polylineOptions = createPolylineOptions();
@@ -141,6 +153,7 @@ public class MapPolyline extends MapFeature {
     options.startCap(lineCap);
     options.endCap(lineCap);
     options.pattern(this.pattern);
+    if(this.styleSpan != null) options.addSpan(styleSpan);
     return options;
   }
 
