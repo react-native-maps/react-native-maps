@@ -4,7 +4,10 @@ import android.content.Context;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.collections.PolygonManager;
@@ -25,6 +28,8 @@ public class MapPolygon extends MapFeature {
   private boolean geodesic;
   private boolean tappable;
   private float zIndex;
+  private ReadableArray patternValues;
+  private List<PatternItem> pattern;
 
   public MapPolygon(Context context) {
     super(context);
@@ -117,6 +122,32 @@ public class MapPolygon extends MapFeature {
     }
   }
 
+  public void setLineDashPattern(ReadableArray patternValues) {
+    this.patternValues = patternValues;
+    this.applyPattern();
+  }
+
+  private void applyPattern() {
+    if(patternValues == null) {
+      return;
+    }
+    this.pattern = new ArrayList<>(patternValues.size());
+    for (int i = 0; i < patternValues.size(); i++) {
+      float patternValue = (float) patternValues.getDouble(i);
+      boolean isGap = i % 2 != 0;
+      if(isGap) {
+        this.pattern.add(new Gap(patternValue));
+      }else {
+        PatternItem patternItem;
+        patternItem = new Dash(patternValue);
+        this.pattern.add(patternItem);
+      }
+    }
+    if(polygon != null) {
+      polygon.setStrokePattern(this.pattern);
+    }
+  }
+
   public PolygonOptions getPolygonOptions() {
     if (polygonOptions == null) {
       polygonOptions = createPolygonOptions();
@@ -132,6 +163,7 @@ public class MapPolygon extends MapFeature {
     options.strokeWidth(strokeWidth);
     options.geodesic(geodesic);
     options.zIndex(zIndex);
+    options.strokePattern(this.pattern);
 
     if (this.holes != null) {
       for (int i = 0; i < holes.size(); i++) {

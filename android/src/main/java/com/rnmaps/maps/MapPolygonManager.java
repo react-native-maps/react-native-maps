@@ -78,6 +78,11 @@ public class MapPolygonManager extends ViewGroupManager<MapPolygon> {
     view.setZIndex(zIndex);
   }
 
+  @ReactProp(name = "lineDashPattern")
+  public void setLineDashPattern(MapPolygon view, ReadableArray patternValues) {
+      view.setLineDashPattern(patternValues);
+  }
+
   @Override
   @Nullable
   public Map getExportedCustomDirectEventTypeConstants() {
