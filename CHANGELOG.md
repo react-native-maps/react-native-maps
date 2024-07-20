@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.16.0](https://github.com/react-native-maps/react-native-maps/compare/v1.15.7...v1.16.0) (2024-07-20)
+
+
+### Features
+
+* **ios:** allow use of light compass theme with satellite/hybrid map… ([#5099](https://github.com/react-native-maps/react-native-maps/issues/5099)) ([befb86e](https://github.com/react-native-maps/react-native-maps/commit/befb86e0aa4e8f517301d01bc084246e21c08c0b))
+
 ## [1.15.7](https://github.com/react-native-maps/react-native-maps/compare/v1.15.6...v1.15.7) (2024-07-20)
 
 
