@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/react-native-maps/react-native-maps/compare/v1.17.0...v1.17.1) (2024-07-21)
+
+
+### Bug Fixes
+
+* **iOS:** ensure onPress(Marker) returns nativeEvent.position [#4996](https://github.com/react-native-maps/react-native-maps/issues/4996) ([#5092](https://github.com/react-native-maps/react-native-maps/issues/5092)) ([b2d2fd8](https://github.com/react-native-maps/react-native-maps/commit/b2d2fd8cddb8808a41ae881f87a7295ac78f5b06))
+
 # [1.17.0](https://github.com/react-native-maps/react-native-maps/compare/v1.16.0...v1.17.0) (2024-07-21)
 
 
