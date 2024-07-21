@@ -129,7 +129,7 @@ Note: You can also pass the image binary data like `image={require('custom_pin.p
 
 ### Rendering a Marker with a custom view
 
-Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the head ache)
+Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the headache)
 
 ```jsx
 <Marker coordinate={{latitude: latitude, longitude: longitude}}>
