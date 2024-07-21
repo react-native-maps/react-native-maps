@@ -73,7 +73,9 @@ export type GeojsonProps = {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  lineDashPattern?: PolylineProps['lineDashPattern'];
+  lineDashPattern?:
+    | PolygonProps['lineDashPattern']
+    | PolylineProps['lineDashPattern'];
 
   /**
    * The offset (in points) at which to start drawing the dash pattern.
