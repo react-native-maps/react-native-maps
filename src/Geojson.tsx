@@ -73,7 +73,9 @@ export type GeojsonProps = {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  lineDashPattern?: PolylineProps['lineDashPattern'];
+  lineDashPattern?:
+    | PolygonProps['lineDashPattern']
+    | PolylineProps['lineDashPattern'];
 
   /**
    * The offset (in points) at which to start drawing the dash pattern.
@@ -261,6 +263,11 @@ const Geojson = (props: GeojsonProps) => {
             strokeColor={lineStrokeColor}
             fillColor={polygonFillColor}
             strokeWidth={lineStrokeWidth}
+            lineDashPhase={lineDashPhase}
+            lineDashPattern={lineDashPattern}
+            lineCap={lineCap}
+            lineJoin={lineJoin}
+            miterLimit={miterLimit}
             tappable={tappable}
             onPress={() => onPress && onPress(overlay)}
             zIndex={zIndex}

@@ -14,7 +14,10 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 ## Compatibility
 
-`react-native-maps` requires `react-native >= 0.64.3`.
+## React-Native Requirements
+
+- **Version 1.14.0 and above**: Requires `react-native >= 0.74`.
+- **Versions below 1.14.0**: Require `react-native >= 0.64.3`.
 
 ## Component API
 
@@ -129,7 +132,7 @@ Note: You can also pass the image binary data like `image={require('custom_pin.p
 
 ### Rendering a Marker with a custom view
 
-Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the head ache)
+Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the headache)
 
 ```jsx
 <Marker coordinate={{latitude: latitude, longitude: longitude}}>
