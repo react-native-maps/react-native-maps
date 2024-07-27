@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.3](https://github.com/react-native-maps/react-native-maps/compare/v1.17.2...v1.17.3) (2024-07-27)
+
+
+### Bug Fixes
+
+* **Android:** Added A11y for Map and Marker ([#5091](https://github.com/react-native-maps/react-native-maps/issues/5091)) ([f3f5a4e](https://github.com/react-native-maps/react-native-maps/commit/f3f5a4e45cb4a27624c87999d366710c17d4daee))
+
 ## [1.17.2](https://github.com/react-native-maps/react-native-maps/compare/v1.17.1...v1.17.2) (2024-07-27)
 
 
