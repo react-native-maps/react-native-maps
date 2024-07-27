@@ -194,7 +194,7 @@ export default decorateMapComponent(MapPolyline, 'Polyline', {
   },
 });
 
-type PolylinePressEvent = NativeSyntheticEvent<{
+export type PolylinePressEvent = NativeSyntheticEvent<{
   action: 'polyline-press';
 
   /**
