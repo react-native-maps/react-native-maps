@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.2](https://github.com/react-native-maps/react-native-maps/compare/v1.17.1...v1.17.2) (2024-07-27)
+
+
+### Bug Fixes
+
+* export PolylinePressEvent ([#5125](https://github.com/react-native-maps/react-native-maps/issues/5125)) ([27fec3a](https://github.com/react-native-maps/react-native-maps/commit/27fec3a993af8fc5a21b9a303b34d73bc34f1914))
+
 ## [1.17.1](https://github.com/react-native-maps/react-native-maps/compare/v1.17.0...v1.17.1) (2024-07-21)
 
 
