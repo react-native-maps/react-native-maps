@@ -40,7 +40,7 @@ class AnimatedMarkers extends React.Component<any, any> {
 
     if (Platform.OS === 'android') {
       if (this.marker) {
-        this.marker._component.animateMarkerToCoordinate(newCoordinate, 500);
+        this.marker.animateMarkerToCoordinate(newCoordinate, 500);
       }
     } else {
       // `useNativeDriver` defaults to false if not passed explicitly

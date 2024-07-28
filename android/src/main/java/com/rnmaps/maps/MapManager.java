@@ -39,15 +39,13 @@ public class MapManager extends ViewGroupManager<MapView> {
             "satellite", GoogleMap.MAP_TYPE_SATELLITE,
             "hybrid", GoogleMap.MAP_TYPE_HYBRID,
             "terrain", GoogleMap.MAP_TYPE_TERRAIN,
-            "none", GoogleMap.MAP_TYPE_NONE
-    );
+            "none", GoogleMap.MAP_TYPE_NONE);
 
     private final Map<String, Integer> MY_LOCATION_PRIORITY = MapBuilder.of(
             "balanced", Priority.PRIORITY_BALANCED_POWER_ACCURACY,
             "high", Priority.PRIORITY_HIGH_ACCURACY,
             "low", Priority.PRIORITY_LOW_POWER,
-            "passive", Priority.PRIORITY_PASSIVE
-    );
+            "passive", Priority.PRIORITY_PASSIVE);
 
     private final ReactApplicationContext appContext;
     private MapMarkerManager markerManager;
@@ -55,6 +53,7 @@ public class MapManager extends ViewGroupManager<MapView> {
     protected GoogleMapOptions googleMapOptions;
 
     protected MapsInitializer.Renderer renderer;
+    protected boolean classicalGoogleMarkers = false;
 
     public MapManager(ReactApplicationContext context) {
         this.appContext = context;
@@ -75,11 +74,12 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @Override
     protected MapView createViewInstance(@NonNull ThemedReactContext context) {
-        return new MapView(context, this.appContext, this, googleMapOptions);
+        return new MapView(context, this.appContext, this, googleMapOptions, classicalGoogleMarkers);
     }
 
     @Override
-    protected MapView createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext, @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
+    protected MapView createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext,
+            @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
         this.googleMapOptions = new GoogleMapOptions();
         if (initialProps != null) {
             if (initialProps.getString("googleMapId") != null) {
@@ -104,6 +104,9 @@ public class MapManager extends ViewGroupManager<MapView> {
             } else {
                 renderer = MapsInitializer.Renderer.LATEST;
             }
+            if (initialProps.hasKey("classicalGoogleMarkers")) {
+                classicalGoogleMarkers = initialProps.getBoolean("classicalGoogleMarkers", false);
+            }
         }
         return super.createViewInstance(reactTag, reactContext, initialProps, stateWrapper);
     }
@@ -121,6 +124,11 @@ public class MapManager extends ViewGroupManager<MapView> {
     @ReactProp(name = "region")
     public void setRegion(MapView view, ReadableMap region) {
         view.setRegion(region);
+    }
+
+    @ReactProp(name = "classicalGoogleMarkers")
+    public void setClassicalGoogleMarkers(MapView view, boolean classicalGoogleMarkers) {
+        // do nothing, passed as part of the InitialProps
     }
 
     @ReactProp(name = "googleRenderer")
@@ -226,7 +234,8 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.setToolbarEnabled(toolbarEnabled);
     }
 
-    // This is a private prop to improve performance of panDrag by disabling it when the callback
+    // This is a private prop to improve performance of panDrag by disabling it when
+    // the callback
     // is not set
     @ReactProp(name = "handlePanDrag", defaultBoolean = false)
     public void setHandlePanDrag(MapView view, boolean handlePanDrag) {
@@ -375,7 +384,7 @@ public class MapManager extends ViewGroupManager<MapView> {
                 latDelta = region.getDouble("latitudeDelta");
                 LatLngBounds bounds = new LatLngBounds(
                         new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-                        new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+                        new LatLng(lat + latDelta / 2, lng + lngDelta / 2) // northeast
                 );
                 view.animateToRegion(bounds, duration);
                 break;
@@ -425,8 +434,7 @@ public class MapManager extends ViewGroupManager<MapView> {
                 "onPress", MapBuilder.of("registrationName", "onPress"),
                 "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
                 "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
-                "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
-        );
+                "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"));
 
         map.putAll(MapBuilder.of(
                 "onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),
@@ -435,8 +443,7 @@ public class MapManager extends ViewGroupManager<MapView> {
                 "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
                 "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
                 "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-                "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
-        ));
+                "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")));
 
         map.putAll(MapBuilder.of(
                 "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
@@ -444,15 +451,15 @@ public class MapManager extends ViewGroupManager<MapView> {
                 "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
                 "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"),
                 "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
-                "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect")
-        ));
+                "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect")));
 
         return map;
     }
 
     @Override
     public LayoutShadowNode createShadowNodeInstance() {
-        // A custom shadow node is needed in order to pass back the width/height of the map to the
+        // A custom shadow node is needed in order to pass back the width/height of the
+        // map to the
         // view manager so that it can start applying camera moves with bounds.
         return new SizeReportingShadowNode();
     }
