@@ -279,7 +279,9 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "scrollDuringRotateOrZoomEnabled", defaultBoolean = true)
     public void setScrollDuringRotateOrZoomEnabled(MapView view, boolean scrollDuringRotateOrZoomEnabled) {
-        view.map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollDuringRotateOrZoomEnabled);
+        if(view.map != null) {
+            view.map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollDuringRotateOrZoomEnabled);
+        }
     }
 
     @ReactProp(name = "cacheEnabled", defaultBoolean = false)
@@ -414,34 +416,26 @@ public class MapManager extends ViewGroupManager<MapView> {
     @Override
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
-        Map<String, Map<String, String>> map = MapBuilder.of(
-                "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
-                "onPress", MapBuilder.of("registrationName", "onPress"),
-                "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
-                "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
-                "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
-        );
-
-        map.putAll(MapBuilder.of(
-                "onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),
-                "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
-                "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
-                "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
-                "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
-                "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-                "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
-        ));
-
-        map.putAll(MapBuilder.of(
-                "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
-                "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
-                "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
-                "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"),
-                "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
-                "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect")
-        ));
-
-        return map;
+        return MapBuilder.<String, Map<String, String>>builder()
+        .put("onMapReady", MapBuilder.of("registrationName", "onMapReady"))
+        .put("onPress", MapBuilder.of("registrationName", "onPress"))
+        .put("onLongPress", MapBuilder.of("registrationName", "onLongPress"))
+        .put("onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"))
+        .put("onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"))
+        .put("onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"))
+        .put("onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"))
+        .put("onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"))
+        .put("onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"))
+        .put("onPanDrag", MapBuilder.of("registrationName", "onPanDrag"))
+        .put("onKmlReady", MapBuilder.of("registrationName", "onKmlReady"))
+        .put("onPoiClick", MapBuilder.of("registrationName", "onPoiClick"))
+        .put("onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"))
+        .put("onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"))
+        .put("onDoublePress", MapBuilder.of("registrationName", "onDoublePress"))
+        .put("onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"))
+        .put("onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"))
+        .put("onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect"))
+        .build();
     }
 
     @Override

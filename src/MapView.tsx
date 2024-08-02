@@ -1061,7 +1061,7 @@ class MapView extends React.Component<MapViewProps, State> {
   render() {
     let props: NativeProps;
 
-    if (this.state.isReady) {
+    // if (this.state.isReady) {
       props = {
         region: null,
         initialRegion: null,
@@ -1087,24 +1087,24 @@ class MapView extends React.Component<MapViewProps, State> {
       if (props.onPanDrag) {
         props.handlePanDrag = !!props.onPanDrag;
       }
-    } else {
-      props = {
-        style: this.props.style,
-        region: null,
-        liteMode: this.props.liteMode,
-        googleMapId: this.props.googleMapId,
-        googleRenderer: this.props.googleRenderer,
-        initialRegion: this.props.initialRegion || null,
-        initialCamera: this.props.initialCamera,
-        ref: this.map,
-        onChange: this._onChange,
-        onMapReady: this._onMapReady,
-        onLayout: this.props.onLayout,
-        customMapStyleString: this.props.customMapStyle
-          ? JSON.stringify(this.props.customMapStyle)
-          : undefined,
-      };
-    }
+    // } else {
+    //   props = {
+    //     style: this.props.style,
+    //     region: null,
+    //     liteMode: this.props.liteMode,
+    //     googleMapId: this.props.googleMapId,
+    //     googleRenderer: this.props.googleRenderer,
+    //     initialRegion: this.props.initialRegion || null,
+    //     initialCamera: this.props.initialCamera,
+    //     ref: this.map,
+    //     onChange: this._onChange,
+    //     onMapReady: this._onMapReady,
+    //     onLayout: this.props.onLayout,
+    //     customMapStyleString: this.props.customMapStyle
+    //       ? JSON.stringify(this.props.customMapStyle)
+    //       : undefined,
+    //   };
+    // }
 
     const AIRMap = getNativeMapComponent(this.props.provider);
 
