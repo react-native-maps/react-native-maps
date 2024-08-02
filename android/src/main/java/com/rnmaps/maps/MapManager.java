@@ -157,7 +157,8 @@ public class MapManager extends ViewGroupManager<MapView> {
     @ReactProp(name = "mapType")
     public void setMapType(MapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
-        view.map.setMapType(typeId);
+        if (view.map != null)
+            view.map.setMapType(typeId);
     }
 
     @ReactProp(name = "customMapStyleString")
@@ -192,7 +193,8 @@ public class MapManager extends ViewGroupManager<MapView> {
         }
 
         view.applyBaseMapPadding(left, top, right, bottom);
-        view.map.setPadding(left, top, right, bottom);
+        if (view.map != null)
+            view.map.setPadding(left, top, right, bottom);
     }
 
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)
@@ -234,22 +236,26 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "showsTraffic", defaultBoolean = false)
     public void setShowTraffic(MapView view, boolean showTraffic) {
-        view.map.setTrafficEnabled(showTraffic);
+        if (view.map != null)
+            view.map.setTrafficEnabled(showTraffic);
     }
 
     @ReactProp(name = "showsBuildings", defaultBoolean = false)
     public void setShowBuildings(MapView view, boolean showBuildings) {
-        view.map.setBuildingsEnabled(showBuildings);
+        if (view.map != null)
+            view.map.setBuildingsEnabled(showBuildings);
     }
 
     @ReactProp(name = "showsIndoors", defaultBoolean = false)
     public void setShowIndoors(MapView view, boolean showIndoors) {
-        view.map.setIndoorEnabled(showIndoors);
+        if (view.map != null)
+            view.map.setIndoorEnabled(showIndoors);
     }
 
     @ReactProp(name = "showsIndoorLevelPicker", defaultBoolean = false)
     public void setShowsIndoorLevelPicker(MapView view, boolean showsIndoorLevelPicker) {
-        view.map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
+        if (view.map != null)
+            view.map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
     }
 
     @ReactProp(name = "showsCompass", defaultBoolean = false)
@@ -259,22 +265,26 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "scrollEnabled", defaultBoolean = false)
     public void setScrollEnabled(MapView view, boolean scrollEnabled) {
-        view.map.getUiSettings().setScrollGesturesEnabled(scrollEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setScrollGesturesEnabled(scrollEnabled);
     }
 
     @ReactProp(name = "zoomEnabled", defaultBoolean = false)
     public void setZoomEnabled(MapView view, boolean zoomEnabled) {
-        view.map.getUiSettings().setZoomGesturesEnabled(zoomEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setZoomGesturesEnabled(zoomEnabled);
     }
 
     @ReactProp(name = "zoomControlEnabled", defaultBoolean = true)
     public void setZoomControlEnabled(MapView view, boolean zoomControlEnabled) {
-        view.map.getUiSettings().setZoomControlsEnabled(zoomControlEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setZoomControlsEnabled(zoomControlEnabled);
     }
 
     @ReactProp(name = "rotateEnabled", defaultBoolean = false)
     public void setRotateEnabled(MapView view, boolean rotateEnabled) {
-        view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
 
     @ReactProp(name = "scrollDuringRotateOrZoomEnabled", defaultBoolean = true)
@@ -311,17 +321,20 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "pitchEnabled", defaultBoolean = false)
     public void setPitchEnabled(MapView view, boolean pitchEnabled) {
-        view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
     }
 
     @ReactProp(name = "minZoomLevel")
     public void setMinZoomLevel(MapView view, float minZoomLevel) {
-        view.map.setMinZoomPreference(minZoomLevel);
+        if (view.map != null)
+            view.map.setMinZoomPreference(minZoomLevel);
     }
 
     @ReactProp(name = "maxZoomLevel")
     public void setMaxZoomLevel(MapView view, float maxZoomLevel) {
-        view.map.setMaxZoomPreference(maxZoomLevel);
+        if (view.map != null)
+            view.map.setMaxZoomPreference(maxZoomLevel);
     }
 
     @ReactProp(name = "kmlSrc")
