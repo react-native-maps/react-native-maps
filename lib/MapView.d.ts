@@ -597,6 +597,8 @@ type State = {
 declare class MapView extends React.Component<MapViewProps, State> {
     static Animated: Animated.AnimatedComponent<typeof MapView>;
     private map;
+    private callMapReady;
+    private mapReadytimerId;
     constructor(props: MapViewProps);
     setNativeProps(props: Partial<NativeProps>): void;
     private _onMapReady;
