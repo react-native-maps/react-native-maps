@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.18.0](https://github.com/react-native-maps/react-native-maps/compare/v1.17.3...v1.18.0) (2024-08-18)
+
+
+### Features
+
+* add anchor and centerOffset prop to GeoJson component to be passed to Marker ([#5140](https://github.com/react-native-maps/react-native-maps/issues/5140)) ([266be79](https://github.com/react-native-maps/react-native-maps/commit/266be79e924298633e60aed5c0b86d077fa479cc)), closes [#5139](https://github.com/react-native-maps/react-native-maps/issues/5139)
+
 ## [1.17.3](https://github.com/react-native-maps/react-native-maps/compare/v1.17.2...v1.17.3) (2024-07-27)
 
 
