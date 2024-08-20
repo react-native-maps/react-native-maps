@@ -444,7 +444,8 @@ public class MapManager extends ViewGroupManager<MapView> {
                 "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
                 "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"),
                 "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
-                "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect")
+                "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect"),
+                "onRegionChangeStart", MapBuilder.of("registrationName", "onRegionChangeStart")
         ));
 
         return map;
