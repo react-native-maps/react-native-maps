@@ -388,6 +388,11 @@ id regionAsJSON(MKCoordinateRegion region) {
   self.onLongPress([self eventFromCoordinate:coordinate]);
 }
 
+- (void)willMove:(BOOL)gesture {
+  id event = @{@"isGesture": [NSNumber numberWithBool:gesture]};
+  if (self.onRegionChangeStart) self.onRegionChangeStart(event);
+}
+
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture{
   id event = @{@"continuous": @YES,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),

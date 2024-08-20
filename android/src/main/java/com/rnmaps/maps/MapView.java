@@ -379,6 +379,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       @Override
       public void onCameraMoveStarted(int reason) {
         cameraMoveReason = reason;
+        boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
+        WritableMap event = new WritableNativeMap();
+        event.putBoolean("isGesture", isGesture);
+        manager.pushEvent(context, view, "onRegionChangeStart", event);
       }
     });
 
