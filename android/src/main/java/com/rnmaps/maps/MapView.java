@@ -566,10 +566,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
       // occurs, we will move the camera to the saved bounds. Note that if we tried to move
       // to the bounds now, it would trigger an exception.
-      map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
+      moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
       boundsToMove = bounds;
     } else {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+      moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
       boundsToMove = null;
     }
   }
@@ -616,7 +616,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       // Note that if we tried to move to the camera now, it would trigger an exception.
       cameraToSet = update;
     } else {
-      map.moveCamera(update);
+      moveCamera(update);
       cameraToSet = null;
     }
   }
@@ -855,16 +855,16 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       //fix for https://github.com/react-native-maps/react-native-maps/issues/245,
       //it's not guaranteed the passed-in height and width would be greater than 0.
       if (width <= 0 || height <= 0) {
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
+        moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
       } else {
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
+        moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
       }
 
       boundsToMove = null;
       cameraToSet = null;
     }
     else if (cameraToSet != null) {
-      map.moveCamera(cameraToSet);
+      moveCamera(cameraToSet);
       cameraToSet = null;
     }
   }
@@ -889,19 +889,19 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
 
     if (duration <= 0) {
-      map.moveCamera(update);
+      moveCamera(update);
     }
     else {
-      map.animateCamera(update, duration, null);
+      animateCamera(update, duration);
     }
   }
 
   public void animateToRegion(LatLngBounds bounds, int duration) {
     if (map == null) return;
     if(duration <= 0) {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+      moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
     } else {
-      map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+      animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration);
     }
   }
 
@@ -930,9 +930,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       }
 
       if (animated) {
-        map.animateCamera(cu);
+        animateCamera(cu);
       } else {
-        map.moveCamera(cu);
+        moveCamera(cu);
       }
     }
   }
@@ -972,9 +972,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       }
 
       if (animated) {
-        map.animateCamera(cu);
+        animateCamera(cu);
       } else {
-        map.moveCamera(cu);
+        moveCamera(cu);
       }
     }
   }
@@ -986,6 +986,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
     this.map.setPadding(left, top, right, bottom);
+    reapplyCamera();
+
     baseLeftMapPadding = left;
     baseRightMapPadding = right;
     baseTopMapPadding = top;
@@ -1013,9 +1015,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     }
 
     if (animated) {
-      map.animateCamera(cu);
+      animateCamera(cu);
     } else {
-      map.moveCamera(cu);
+      moveCamera(cu);
     }
     // Move the google logo to the default base padding value.
     map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
@@ -1066,6 +1068,29 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     LatLngBounds bounds = builder.build();
 
     map.setLatLngBoundsForCameraTarget(bounds);
+  }
+
+  private CameraUpdate lastCamera;
+
+  private void moveCamera(CameraUpdate cu) {
+    map.moveCamera(cu);
+    lastCamera = cu;
+  }
+
+  private void animateCamera(CameraUpdate cu) {
+    map.animateCamera(cu);
+    lastCamera = cu;
+  }
+
+  private void animateCamera(CameraUpdate cu, int durationMs) {
+    map.animateCamera(cu, durationMs, null);
+    lastCamera = cu;
+  }
+
+  private void reapplyCamera() {
+    if (lastCamera != null) {
+      map.moveCamera(lastCamera);
+    }
   }
 
   // InfoWindowAdapter interface
