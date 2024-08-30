@@ -100,6 +100,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
+  private boolean setPaddingDeferred = false;
   private boolean showUserLocation = false;
   private boolean handlePanDrag = false;
   private boolean moveOnMarkerPress = true;
@@ -867,6 +868,11 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       moveCamera(cameraToSet);
       cameraToSet = null;
     }
+    if (setPaddingDeferred && super.getHeight() > 0 && super.getWidth() > 0) {
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+      reapplyCamera();
+      setPaddingDeferred = false;
+    }
   }
 
   public void animateToCamera(ReadableMap camera, int duration) {
@@ -985,13 +991,19 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   int baseBottomMapPadding;
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
-    this.map.setPadding(left, top, right, bottom);
-    reapplyCamera();
-
     baseLeftMapPadding = left;
     baseRightMapPadding = right;
     baseTopMapPadding = top;
     baseBottomMapPadding = bottom;
+
+    if (super.getHeight() <= 0 || super.getWidth() <= 0) {
+      // the map is not laid out yet and calling setPadding() now has no effect
+      setPaddingDeferred = true;
+      return;
+    }
+
+    this.map.setPadding(left, top, right, bottom);
+    reapplyCamera();
   }
 
   public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
