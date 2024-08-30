@@ -96,7 +96,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private Boolean isMapLoaded = false;
   private Integer loadingBackgroundColor = null;
   private Integer loadingIndicatorColor = null;
-  private final int baseMapPadding = 50;
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
@@ -947,7 +946,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     }
     if (addedPosition) {
       LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
       if (edgePadding != null) {
         appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
@@ -991,7 +990,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
     if (addedPosition) {
       LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
       if (edgePadding != null) {
         appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
@@ -1054,7 +1053,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     }
 
     LatLngBounds bounds = builder.build();
-    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
     if (edgePadding != null) {
       appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
