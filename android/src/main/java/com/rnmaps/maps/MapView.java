@@ -882,8 +882,14 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       cameraToSet = null;
     }
     if (setPaddingDeferred && super.getHeight() > 0 && super.getWidth() > 0) {
-      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+      map.setPadding(edgeLeftPadding + baseLeftMapPadding,
+          edgeTopPadding + baseTopMapPadding,
+          edgeRightPadding + baseRightMapPadding,
+          edgeBottomPadding + baseBottomMapPadding);
       reapplyCamera();
+      // Move the google logo to the default base padding value.
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+
       setPaddingDeferred = false;
     }
   }
@@ -944,7 +950,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
 
       if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+        appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
           edgePadding.getInt("right"), edgePadding.getInt("bottom"));
       }
 
@@ -953,6 +959,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       } else {
         moveCamera(cu);
       }
+      // Move the google logo to the default base padding value.
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
     }
   }
 
@@ -986,7 +994,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
 
       if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+        appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
           edgePadding.getInt("right"), edgePadding.getInt("bottom"));
       }
 
@@ -995,13 +1003,21 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       } else {
         moveCamera(cu);
       }
+      // Move the google logo to the default base padding value.
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
     }
   }
 
+  // padding configured by 'mapPadding' property
   int baseLeftMapPadding;
   int baseRightMapPadding;
   int baseTopMapPadding;
   int baseBottomMapPadding;
+  // extra padding specified by 'edgePadding' option of fitToElements/fitToSuppliedMarkers/fitToCoordinates
+  int edgeLeftPadding;
+  int edgeRightPadding;
+  int edgeTopPadding;
+  int edgeBottomPadding;
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
     baseLeftMapPadding = left;
@@ -1015,8 +1031,13 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       return;
     }
 
-    this.map.setPadding(left, top, right, bottom);
+    map.setPadding(edgeLeftPadding + left,
+        edgeTopPadding + top,
+        edgeRightPadding + right,
+        edgeBottomPadding + bottom);
     reapplyCamera();
+    // Move the google logo to the default base padding value.
+    map.setPadding(left, top, right, bottom);
   }
 
   public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
@@ -1049,21 +1070,17 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   private void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
-    int left;
-    int top;
-    int right;
-    int bottom;
     double density = getResources().getDisplayMetrics().density;
 
-    left = (int) (iLeft * density);
-    top = (int) (iTop * density);
-    right = (int) (iRight * density);
-    bottom = (int) (iBottom * density);
+    edgeLeftPadding = (int) (iLeft * density);
+    edgeTopPadding = (int) (iTop * density);
+    edgeRightPadding = (int) (iRight * density);
+    edgeBottomPadding = (int) (iBottom * density);
 
-    map.setPadding(left + baseLeftMapPadding,
-            top + baseTopMapPadding,
-            right + baseRightMapPadding,
-            bottom + baseBottomMapPadding);
+    map.setPadding(edgeLeftPadding + baseLeftMapPadding,
+            edgeTopPadding + baseTopMapPadding,
+            edgeRightPadding + baseRightMapPadding,
+            edgeBottomPadding + baseBottomMapPadding);
   }
 
   public double[][] getMapBoundaries() {
