@@ -107,9 +107,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private boolean cacheEnabled = false;
   private ReadableMap initialRegion;
   private ReadableMap region;
+  private ReadableMap initialCamera;
   private ReadableMap camera;
   private String customMapStyleString;
   private boolean initialRegionSet = false;
+  private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
   private MapMarker selectedMarker;
@@ -537,13 +539,24 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
+  public void setInitialCamera(ReadableMap initialCamera) {
+    this.initialCamera = initialCamera;
+    if (!initialCameraSet && map != null) {
+      moveToCamera(initialCamera);
+      initialCameraSet = true;
+    }
+  }
+
   private void applyBridgedProps() {
     if(initialRegion != null) {
       moveToRegion(initialRegion);
       initialRegionSet = true;
     } else if(region != null) {
       moveToRegion(region);
-    } else {
+    } else if (initialCamera != null) {
+      moveToCamera(initialCamera);
+      initialCameraSet = true;
+    } else if (camera != null) {
       moveToCamera(camera);
     }
     if(customMapStyleString != null) {
