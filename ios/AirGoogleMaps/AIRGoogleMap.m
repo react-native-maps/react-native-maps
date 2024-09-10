@@ -312,7 +312,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setCameraProp:(GMSCameraPosition*)camera {
     _initialCamera = camera;
-    self.camera = camera;
+    if(_didLayoutSubviews) {
+      self.camera = camera;
+    }
 }
 
 - (void)setOnMapReady:(RCTBubblingEventBlock)onMapReady {

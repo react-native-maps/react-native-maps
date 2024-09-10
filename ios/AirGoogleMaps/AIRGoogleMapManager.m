@@ -152,7 +152,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
         } else {
             AIRGoogleMap *mapView = (AIRGoogleMap *)view;
             GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
-            [mapView setCamera:camera];
+            [mapView setCameraProp:camera];
         }
     }];
 }
