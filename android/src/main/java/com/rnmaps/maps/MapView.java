@@ -615,26 +615,32 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     return cameraPositionFromMap(camera, null);
   }
 
-private static CameraPosition cameraPositionFromMap(ReadableMap camera, CameraPosition current){
-  if (camera == null) return null;
+  private static CameraPosition cameraPositionFromMap(ReadableMap camera, CameraPosition current){
+    if (camera == null) return null;
 
-  CameraPosition.Builder builder = current != null
-      ? new CameraPosition.Builder(current)
-      : new CameraPosition.Builder();
+    CameraPosition.Builder builder = current != null
+        ? new CameraPosition.Builder(current)
+        : new CameraPosition.Builder();
 
-  ReadableMap center = camera.getMap("center");
-  if (center != null) {
-    double lng = center.getDouble("longitude");
-    double lat = center.getDouble("latitude");
-    builder.target(new LatLng(lat, lng));
+    ReadableMap center = camera.getMap("center");
+    if (center != null) {
+      double lng = center.getDouble("longitude");
+      double lat = center.getDouble("latitude");
+      builder.target(new LatLng(lat, lng));
+    }
+
+    if (camera.hasKey("pitch")) {
+      builder.tilt((float)camera.getDouble("pitch"));
+    }
+    if (camera.hasKey("heading")) {
+      builder.bearing((float)camera.getDouble("heading"));
+    }
+    if (camera.hasKey("zoom")) {
+      builder.zoom((float)camera.getDouble("zoom"));
+    }
+
+    return builder.build();
   }
-
-  builder.tilt((float)camera.getDouble("pitch"));
-  builder.bearing((float)camera.getDouble("heading"));
-  builder.zoom((float)camera.getDouble("zoom"));
-
-  return builder.build();
-}
 
   public void moveToCamera(ReadableMap cameraMap) {
     moveToCamera(cameraMap, null, 0);
