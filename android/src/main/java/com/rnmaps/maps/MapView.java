@@ -557,11 +557,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       initialRegionSet = true;
     } else if(region != null) {
       moveToRegion(region);
+    } else if (camera != null) {
+      moveToCamera(camera);
+      if (initialCamera != null) {
+        initialCameraSet = true;
+      }
     } else if (initialCamera != null) {
       moveToCamera(initialCamera);
       initialCameraSet = true;
-    } else if (camera != null) {
-      moveToCamera(camera);
     }
     if(customMapStyleString != null) {
       map.setMapStyle(new MapStyleOptions(customMapStyleString));
@@ -909,29 +912,36 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void animateToCamera(ReadableMap camera, int duration) {
-    if (map == null) return;
-    CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
-    if (camera.hasKey("zoom")) {
-      builder.zoom((float)camera.getDouble("zoom"));
-    }
-    if (camera.hasKey("heading")) {
-      builder.bearing((float)camera.getDouble("heading"));
-    }
-    if (camera.hasKey("pitch")) {
-      builder.tilt((float)camera.getDouble("pitch"));
-    }
-    if (camera.hasKey("center")) {
-      ReadableMap center = camera.getMap("center");
-      builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
-    }
+    if (map != null) {
+      CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
+      if (camera.hasKey("zoom")) {
+        builder.zoom((float)camera.getDouble("zoom"));
+      }
+      if (camera.hasKey("heading")) {
+        builder.bearing((float)camera.getDouble("heading"));
+      }
+      if (camera.hasKey("pitch")) {
+        builder.tilt((float)camera.getDouble("pitch"));
+      }
+      if (camera.hasKey("center")) {
+        ReadableMap center = camera.getMap("center");
+        builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
+      }
 
-    CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
+      CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
 
-    if (duration <= 0) {
-      map.moveCamera(update);
-    }
-    else {
-      map.animateCamera(update, duration, null);
+      if (duration <= 0) {
+        map.moveCamera(update);
+      }
+      else {
+        map.animateCamera(update, duration, null);
+      }
+    } else {
+      // The map is not ready yet. Update `camera` (or `initialCamera`) property so that
+      // it will be applied once the map becomes ready.
+      ReadableMap current = this.camera != null ? this.camera : initialCamera;
+      ReadableMap updated = mergeCameraMaps(current, camera);
+      this.camera = updated;
     }
   }
 
@@ -1137,6 +1147,19 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     LatLngBounds bounds = builder.build();
 
     map.setLatLngBoundsForCameraTarget(bounds);
+  }
+
+  private ReadableMap mergeCameraMaps(ReadableMap base, ReadableMap updates) {
+    if (base == null) {
+      return updates;
+    } else if (updates == null) {
+      return base;
+    }
+
+    WritableMap m = new WritableNativeMap();
+    m.merge(base);
+    m.merge(updates);
+    return m;
   }
 
   // InfoWindowAdapter interface
