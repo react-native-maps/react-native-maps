@@ -99,6 +99,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
+  private int cameraToSetDuration = 0;
   private boolean setPaddingDeferred = false;
   private boolean showUserLocation = false;
   private boolean handlePanDrag = false;
@@ -609,10 +610,17 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       moveToCamera(camera);
     }
   }
-public static CameraPosition cameraPositionFromMap(ReadableMap camera){
+
+  public static CameraPosition cameraPositionFromMap(ReadableMap camera) {
+    return cameraPositionFromMap(camera, null);
+  }
+
+private static CameraPosition cameraPositionFromMap(ReadableMap camera, CameraPosition current){
   if (camera == null) return null;
 
-  CameraPosition.Builder builder = new CameraPosition.Builder();
+  CameraPosition.Builder builder = current != null
+      ? new CameraPosition.Builder(current)
+      : new CameraPosition.Builder();
 
   ReadableMap center = camera.getMap("center");
   if (center != null) {
@@ -627,8 +635,13 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
   return builder.build();
 }
+
   public void moveToCamera(ReadableMap cameraMap) {
-    CameraPosition camera = cameraPositionFromMap(cameraMap);
+    moveToCamera(cameraMap, null, 0);
+  }
+
+  private void moveToCamera(ReadableMap cameraMap, CameraPosition current, int duration) {
+    CameraPosition camera = cameraPositionFromMap(cameraMap, current);
     if (camera == null) return;
     CameraUpdate update = CameraUpdateFactory.newCameraPosition(camera);
 
@@ -637,9 +650,15 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       // local variable. As soon as layout occurs, we will move the camera to the saved update.
       // Note that if we tried to move to the camera now, it would trigger an exception.
       cameraToSet = update;
+      cameraToSetDuration = duration;
     } else {
-      map.moveCamera(update);
+      if (duration > 0) {
+        map.animateCamera(update, duration, null);
+      } else {
+        map.moveCamera(update);
+      }
       cameraToSet = null;
+      cameraToSetDuration = 0;
     }
   }
 
@@ -906,36 +925,19 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       cameraToSet = null;
     }
     else if (cameraToSet != null) {
-      map.moveCamera(cameraToSet);
+      if (cameraToSetDuration > 0) {
+        map.animateCamera(cameraToSet, cameraToSetDuration, null);
+      } else {
+        map.moveCamera(cameraToSet);
+      }
       cameraToSet = null;
+      cameraToSetDuration = 0;
     }
   }
 
   public void animateToCamera(ReadableMap camera, int duration) {
     if (map != null) {
-      CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
-      if (camera.hasKey("zoom")) {
-        builder.zoom((float)camera.getDouble("zoom"));
-      }
-      if (camera.hasKey("heading")) {
-        builder.bearing((float)camera.getDouble("heading"));
-      }
-      if (camera.hasKey("pitch")) {
-        builder.tilt((float)camera.getDouble("pitch"));
-      }
-      if (camera.hasKey("center")) {
-        ReadableMap center = camera.getMap("center");
-        builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
-      }
-
-      CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
-
-      if (duration <= 0) {
-        map.moveCamera(update);
-      }
-      else {
-        map.animateCamera(update, duration, null);
-      }
+      moveToCamera(camera, map.getCameraPosition(), duration);
     } else {
       // The map is not ready yet. Update `camera` (or `initialCamera`) property so that
       // it will be applied once the map becomes ready.
