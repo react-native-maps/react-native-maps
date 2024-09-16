@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Dimensions} from 'react-native';
 
-import MapView, {Polyline} from 'react-native-maps';
+import MapView, {Polyline, LatLng, Provider} from 'react-native-maps';
 
 const {width, height} = Dimensions.get('window');
 
@@ -29,42 +29,37 @@ const COLORS = [
   '#7F0000',
 ];
 
-class GradientPolylines extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
+export type GradientPolylinesFunctionalProps = {
+  provider: Provider;
+};
 
-    this.state = {
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      coordinates: [],
-    };
-  }
+const GradientPolylines = (props: GradientPolylinesFunctionalProps) => {
+  const [region] = useState({
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
+  });
 
-  componentDidMount(): void {
-    this.setState({coordinates: COORDINATES});
-  }
+  const [polylineSteps, setPolylineSteps] = useState<LatLng[]>([]);
 
-  render() {
-    return (
-      <MapView
-        googleRenderer={'LEGACY'}
-        provider={this.props.provider}
-        style={styles.container}
-        initialRegion={this.state.region}>
-        <Polyline
-          coordinates={this.state.coordinates}
-          strokeColor="#000"
-          strokeColors={COLORS}
-          strokeWidth={6}
-        />
-      </MapView>
-    );
-  }
-}
+  useEffect(() => setPolylineSteps(COORDINATES), []);
+
+  return (
+    <MapView
+      provider={props.provider}
+      style={styles.container}
+      initialRegion={region}
+      showsUserLocation>
+      <Polyline
+        coordinates={polylineSteps}
+        strokeColor="#000"
+        strokeColors={COLORS}
+        strokeWidth={6}
+      />
+    </MapView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
