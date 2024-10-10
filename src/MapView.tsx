@@ -829,6 +829,12 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
+  scrollMap(xPixel: number, yPixel: number, animated: boolean) {
+    if (this.map.current) {
+      Commands.scrollMap(this.map.current, xPixel, yPixel, animated);
+    }
+  }
+
   fitToElements(options: FitToOptions = {}) {
     if (this.map.current) {
       const {

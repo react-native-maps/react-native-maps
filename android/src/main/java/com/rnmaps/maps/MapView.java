@@ -914,6 +914,15 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     }
   }
 
+  public void scrollMap(float xPixel, float yPixel, boolean animated) {
+    if (map == null) return;
+    if (animated) {
+      map.animateCamera(CameraUpdateFactory.scrollBy(xPixel, yPixel), 400, null );
+    } else {
+      map.moveCamera(CameraUpdateFactory.scrollBy(xPixel, yPixel));
+    }
+  }
+
   public void fitToElements(ReadableMap edgePadding, boolean animated) {
     if (map == null) return;
 

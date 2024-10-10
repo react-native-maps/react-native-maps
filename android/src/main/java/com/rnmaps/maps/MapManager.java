@@ -389,6 +389,12 @@ public class MapManager extends ViewGroupManager<MapView> {
                 view.animateToRegion(bounds, duration);
                 break;
 
+            case "scrollMap":
+                if (args == null) {
+                    break;
+                }
+                view.scrollMap((float) args.getDouble(0), (float) args.getDouble(1), args.getBoolean(2));
+
             case "fitToElements":
                 if (args == null) {
                     break;

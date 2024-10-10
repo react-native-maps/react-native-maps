@@ -158,4 +158,4 @@ export type CameraZoomRange = {
     maxCenterCoordinateDistance?: number;
     animated?: boolean;
 };
-export type NativeCommandName = 'animateCamera' | 'animateToRegion' | 'coordinateForPoint' | 'fitToCoordinates' | 'fitToElements' | 'fitToSuppliedMarkers' | 'getAddressFromCoordinates' | 'getCamera' | 'getMapBoundaries' | 'getMarkersFrames' | 'pointForCoordinate' | 'setCamera' | 'setIndoorActiveLevelIndex' | 'setMapBoundaries' | 'takeSnapshot';
+export type NativeCommandName = 'animateCamera' | 'animateToRegion' | 'coordinateForPoint' | 'fitToCoordinates' | 'fitToElements' | 'fitToSuppliedMarkers' | 'getAddressFromCoordinates' | 'getCamera' | 'getMapBoundaries' | 'getMarkersFrames' | 'pointForCoordinate' | 'setCamera' | 'setIndoorActiveLevelIndex' | 'setMapBoundaries' | 'takeSnapshot' | 'scrollMap';

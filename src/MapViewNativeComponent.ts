@@ -70,6 +70,15 @@ interface NativeCommands {
     >,
     activeLevelIndex: number,
   ) => void;
+
+  scrollMap: (
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
+    xPixel: number,
+    YPixel: number,
+    animated: boolean,
+  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -82,5 +91,6 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'fitToCoordinates',
     'setMapBoundaries',
     'setIndoorActiveLevelIndex',
+    'scrollMap'
   ],
 });

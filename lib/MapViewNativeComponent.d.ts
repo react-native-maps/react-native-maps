@@ -13,6 +13,7 @@ interface NativeCommands {
     fitToCoordinates: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, coordinates: LatLng[], edgePadding: EdgePadding, animated: boolean) => void;
     setMapBoundaries: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, northEast: LatLng, southWest: LatLng) => void;
     setIndoorActiveLevelIndex: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, activeLevelIndex: number) => void;
+    scrollMap: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, xPixel: number, YPixel: number, animated: boolean) => void;
 }
 export declare const Commands: NativeCommands;
 export {};

@@ -293,6 +293,13 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(scrollMap:(nonnull NSNumber *)reactTag
+                  xPixel:(CGFloat)xPixel
+                  yPixel:(CGFloat)yPixel
+                  animated:(BOOL)animated)
+{
+}
+
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         edgePadding:(nonnull NSDictionary *)edgePadding
         animated:(BOOL)animated)

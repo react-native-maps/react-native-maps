@@ -609,6 +609,7 @@ declare class MapView extends React.Component<MapViewProps, State> {
         duration?: number;
     }): void;
     animateToRegion(region: Region, duration?: number): void;
+    scrollMap(xPixel: number, yPixel: number, animated: boolean): void;
     fitToElements(options?: FitToOptions): void;
     fitToSuppliedMarkers(markers: string[], options?: FitToOptions): void;
     fitToCoordinates(coordinates?: LatLng[], options?: FitToOptions): void;
