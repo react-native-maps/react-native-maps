@@ -742,6 +742,8 @@ type State = {
 class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
+  private callMapReady: boolean;
+  private mapReadytimerId: ReturnType<typeof setTimeout>;
 
   constructor(props: MapViewProps) {
     super(props);
@@ -754,6 +756,16 @@ class MapView extends React.Component<MapViewProps, State> {
 
     this._onMapReady = this._onMapReady.bind(this);
     this._onChange = this._onChange.bind(this);
+    this.callMapReady = true;
+    this.mapReadytimerId = setTimeout(() => {
+      this.callMapReady = false;
+      const {onMapReady} = this.props;
+      this.setState({isReady: true}, () => {
+        if (onMapReady) {
+          onMapReady();
+        }
+      });
+    }, 100)
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -762,12 +774,15 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   private _onMapReady() {
-    const {onMapReady} = this.props;
-    this.setState({isReady: true}, () => {
-      if (onMapReady) {
-        onMapReady();
-      }
-    });
+    if(this.callMapReady) {
+      clearTimeout(this.mapReadytimerId);
+      const {onMapReady} = this.props;
+      this.setState({isReady: true}, () => {
+        if (onMapReady) {
+          onMapReady();
+        }
+      });
+    }
   }
 
   private _onChange({nativeEvent}: ChangeEvent) {
@@ -811,6 +826,12 @@ class MapView extends React.Component<MapViewProps, State> {
   animateToRegion(region: Region, duration: number = 500) {
     if (this.map.current) {
       Commands.animateToRegion(this.map.current, region, duration);
+    }
+  }
+
+  scrollMap(xPixel: number, yPixel: number, animated: boolean) {
+    if (this.map.current) {
+      Commands.scrollMap(this.map.current, xPixel, yPixel, animated);
     }
   }
 

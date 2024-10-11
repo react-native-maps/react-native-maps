@@ -158,7 +158,8 @@ public class MapManager extends ViewGroupManager<MapView> {
     @ReactProp(name = "mapType")
     public void setMapType(MapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
-        view.map.setMapType(typeId);
+        if (view.map != null)
+            view.map.setMapType(typeId);
     }
 
     @ReactProp(name = "customMapStyleString")
@@ -193,7 +194,8 @@ public class MapManager extends ViewGroupManager<MapView> {
         }
 
         view.applyBaseMapPadding(left, top, right, bottom);
-        view.map.setPadding(left, top, right, bottom);
+        if (view.map != null)
+            view.map.setPadding(left, top, right, bottom);
     }
 
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)
@@ -235,22 +237,26 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "showsTraffic", defaultBoolean = false)
     public void setShowTraffic(MapView view, boolean showTraffic) {
-        view.map.setTrafficEnabled(showTraffic);
+        if (view.map != null)
+            view.map.setTrafficEnabled(showTraffic);
     }
 
     @ReactProp(name = "showsBuildings", defaultBoolean = false)
     public void setShowBuildings(MapView view, boolean showBuildings) {
-        view.map.setBuildingsEnabled(showBuildings);
+        if (view.map != null)
+            view.map.setBuildingsEnabled(showBuildings);
     }
 
     @ReactProp(name = "showsIndoors", defaultBoolean = false)
     public void setShowIndoors(MapView view, boolean showIndoors) {
-        view.map.setIndoorEnabled(showIndoors);
+        if (view.map != null)
+            view.map.setIndoorEnabled(showIndoors);
     }
 
     @ReactProp(name = "showsIndoorLevelPicker", defaultBoolean = false)
     public void setShowsIndoorLevelPicker(MapView view, boolean showsIndoorLevelPicker) {
-        view.map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
+        if (view.map != null)
+            view.map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
     }
 
     @ReactProp(name = "showsCompass", defaultBoolean = false)
@@ -260,27 +266,33 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "scrollEnabled", defaultBoolean = false)
     public void setScrollEnabled(MapView view, boolean scrollEnabled) {
-        view.map.getUiSettings().setScrollGesturesEnabled(scrollEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setScrollGesturesEnabled(scrollEnabled);
     }
 
     @ReactProp(name = "zoomEnabled", defaultBoolean = false)
     public void setZoomEnabled(MapView view, boolean zoomEnabled) {
-        view.map.getUiSettings().setZoomGesturesEnabled(zoomEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setZoomGesturesEnabled(zoomEnabled);
     }
 
     @ReactProp(name = "zoomControlEnabled", defaultBoolean = true)
     public void setZoomControlEnabled(MapView view, boolean zoomControlEnabled) {
-        view.map.getUiSettings().setZoomControlsEnabled(zoomControlEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setZoomControlsEnabled(zoomControlEnabled);
     }
 
     @ReactProp(name = "rotateEnabled", defaultBoolean = false)
     public void setRotateEnabled(MapView view, boolean rotateEnabled) {
-        view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
     }
 
     @ReactProp(name = "scrollDuringRotateOrZoomEnabled", defaultBoolean = true)
     public void setScrollDuringRotateOrZoomEnabled(MapView view, boolean scrollDuringRotateOrZoomEnabled) {
-        view.map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollDuringRotateOrZoomEnabled);
+        if(view.map != null) {
+            view.map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollDuringRotateOrZoomEnabled);
+        }
     }
 
     @ReactProp(name = "cacheEnabled", defaultBoolean = false)
@@ -310,17 +322,20 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "pitchEnabled", defaultBoolean = false)
     public void setPitchEnabled(MapView view, boolean pitchEnabled) {
-        view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
+        if (view.map != null)
+            view.map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
     }
 
     @ReactProp(name = "minZoomLevel")
     public void setMinZoomLevel(MapView view, float minZoomLevel) {
-        view.map.setMinZoomPreference(minZoomLevel);
+        if (view.map != null)
+            view.map.setMinZoomPreference(minZoomLevel);
     }
 
     @ReactProp(name = "maxZoomLevel")
     public void setMaxZoomLevel(MapView view, float maxZoomLevel) {
-        view.map.setMaxZoomPreference(maxZoomLevel);
+        if (view.map != null)
+            view.map.setMaxZoomPreference(maxZoomLevel);
     }
 
     @ReactProp(name = "kmlSrc")
@@ -380,6 +395,12 @@ public class MapManager extends ViewGroupManager<MapView> {
                 view.animateToRegion(bounds, duration);
                 break;
 
+            case "scrollMap":
+                if (args == null) {
+                    break;
+                }
+                view.scrollMap((float) args.getDouble(0), (float) args.getDouble(1), args.getBoolean(2));
+
             case "fitToElements":
                 if (args == null) {
                     break;
@@ -420,34 +441,26 @@ public class MapManager extends ViewGroupManager<MapView> {
     @Override
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
-        Map<String, Map<String, String>> map = MapBuilder.of(
-                "onMapReady", MapBuilder.of("registrationName", "onMapReady"),
-                "onPress", MapBuilder.of("registrationName", "onPress"),
-                "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
-                "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
-                "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
-        );
-
-        map.putAll(MapBuilder.of(
-                "onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),
-                "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
-                "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
-                "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
-                "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
-                "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-                "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
-        ));
-
-        map.putAll(MapBuilder.of(
-                "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
-                "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
-                "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
-                "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"),
-                "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),
-                "onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect")
-        ));
-
-        return map;
+        return MapBuilder.<String, Map<String, String>>builder()
+        .put("onMapReady", MapBuilder.of("registrationName", "onMapReady"))
+        .put("onPress", MapBuilder.of("registrationName", "onPress"))
+        .put("onLongPress", MapBuilder.of("registrationName", "onLongPress"))
+        .put("onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"))
+        .put("onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"))
+        .put("onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"))
+        .put("onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"))
+        .put("onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"))
+        .put("onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"))
+        .put("onPanDrag", MapBuilder.of("registrationName", "onPanDrag"))
+        .put("onKmlReady", MapBuilder.of("registrationName", "onKmlReady"))
+        .put("onPoiClick", MapBuilder.of("registrationName", "onPoiClick"))
+        .put("onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"))
+        .put("onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"))
+        .put("onDoublePress", MapBuilder.of("registrationName", "onDoublePress"))
+        .put("onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"))
+        .put("onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"))
+        .put("onMarkerDeselect", MapBuilder.of("registrationName", "onMarkerDeselect"))
+        .build();
     }
 
     @Override

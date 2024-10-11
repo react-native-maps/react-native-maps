@@ -198,6 +198,27 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
   }];
 }
 
+RCT_EXPORT_METHOD(scrollMap:(nonnull NSNumber *)reactTag
+                  xPixel:(CGFloat)xPixel
+                  yPixel:(CGFloat)yPixel
+                  animated:(BOOL)animated)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+      id view = viewRegistry[reactTag];
+      if (![view isKindOfClass:[AIRGoogleMap class]]) {
+        RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
+      } else {
+        AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+        GMSCameraUpdate *cameraUpdate = [GMSCameraUpdate scrollByX:xPixel Y:yPixel];
+        if (animated) {
+          [mapView animateWithCameraUpdate:cameraUpdate];
+        } else {
+          [mapView moveCamera:cameraUpdate];
+        }
+      }
+  }];
+}
+
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
                   edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)

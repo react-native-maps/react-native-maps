@@ -77,6 +77,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
     GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
@@ -134,6 +136,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   private final ViewAttacherGroup attacherGroup;
   private LatLng tapLocation;
+
 
   private static boolean contextHasBug(Context context) {
     return context == null ||
@@ -197,6 +200,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
           public boolean onDoubleTap(MotionEvent ev) {
             onDoublePress(ev);
             return false;
+          }
+
+          @Override
+          public boolean onDoubleTapEvent(MotionEvent e){
+            map.animateCamera(CameraUpdateFactory.zoomIn(), 400, null);
+            return true;
           }
         });
 
@@ -650,13 +659,13 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void setShowsMyLocationButton(boolean showMyLocationButton) {
-    if (hasPermissions() || !showMyLocationButton) {
+    if ((hasPermissions() || !showMyLocationButton) && map != null) {
       map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
     }
   }
 
   public void setToolbarEnabled(boolean toolbarEnabled) {
-    if (hasPermissions() || !toolbarEnabled) {
+    if ((hasPermissions() || !toolbarEnabled) && map != null) {
       map.getUiSettings().setMapToolbarEnabled(toolbarEnabled);
     }
   }
@@ -902,6 +911,15 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
     } else {
       map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+    }
+  }
+
+  public void scrollMap(float xPixel, float yPixel, boolean animated) {
+    if (map == null) return;
+    if (animated) {
+      map.animateCamera(CameraUpdateFactory.scrollBy(xPixel, yPixel), 400, null );
+    } else {
+      map.moveCamera(CameraUpdateFactory.scrollBy(xPixel, yPixel));
     }
   }
 
