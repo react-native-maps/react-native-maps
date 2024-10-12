@@ -485,7 +485,7 @@ render() {
 Markers can also accept an `AnimatedRegion` value as a coordinate.
 
 ```jsx
-import Mapview, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
+import MapView, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
 
 getInitialState() {
   return {
