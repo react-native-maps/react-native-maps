@@ -159,7 +159,7 @@ export default class App extends React.Component<any, any> {
         [CustomMarkers, 'Custom Markers', true],
         [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
         [CachedMap, 'Cached Map'],
-        [LoadingMap, 'Map with loading'],
+        [LoadingMap, 'Map with loading', true],
         [MapBoundaries, 'Get visible map boundaries', true],
         [FitToSuppliedMarkers, 'Focus Map On Markers', true],
         [FitToCoordinates, 'Fit Map To Coordinates', true],
