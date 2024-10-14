@@ -324,8 +324,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didPrepareMap {
-  UIView* mapView = [self valueForKey:@"mapView"]; //GMSVectorMapView
-  [self overrideGestureRecognizersForView:mapView];
+    if (!_didPrepareMap){
+        [self overrideGestureRecognizersForView];
+    }
 
   if (!_didCallOnMapReady && self.onMapReady) {
     self.onMapReady(@{});
@@ -716,8 +717,8 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 #pragma mark - Overrides for Callout behavior
 
--(void)overrideGestureRecognizersForView:(UIView*)view {
-    NSArray* grs = view.gestureRecognizers;
+-(void)overrideGestureRecognizersForView {
+    NSArray* grs = self.gestureRecognizers;
     for (UIGestureRecognizer* gestureRecognizer in grs) {
         NSNumber* grHash = [NSNumber numberWithUnsignedInteger:gestureRecognizer.hash];
         if([self.origGestureRecognizersMeta objectForKey:grHash] != nil)
@@ -737,7 +738,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                                             }];
         }
         if (isZoomTapGesture && self.zoomTapEnabled == NO) {
-            [view removeGestureRecognizer:gestureRecognizer];
+            [self removeGestureRecognizer:gestureRecognizer];
             continue;
         }
 
