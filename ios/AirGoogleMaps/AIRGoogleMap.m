@@ -71,17 +71,22 @@ id regionAsJSON(MKCoordinateRegion region) {
   NSString* _googleMapId;
 }
 
-- (instancetype)initWithMapId:(NSString *)mapId andZoomTapEnabled:(BOOL)zoomTapEnabled
+- (instancetype)initWithMapId:(NSString *)mapId initialCamera:(GMSCameraPosition*) camera backgroundColor:(UIColor *) backgroundColor andZoomTapEnabled:(BOOL)zoomTapEnabled
 {
+    GMSMapViewOptions* options = [[GMSMapViewOptions alloc] init];
+
     if (mapId){
         GMSMapID *mapID = [GMSMapID mapIDWithIdentifier:mapId];
-        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:47.0169
-                                                                longitude:-122.336471
-                                                                     zoom:12];
-        self = [super initWithFrame:CGRectZero mapID:mapID camera:camera];
-    } else {
-        self = [super init];
+        [options setMapID:mapID];
     }
+    if (backgroundColor){
+        [options setBackgroundColor:backgroundColor];
+    }
+    if (camera){
+        [options setCamera:camera];
+    }
+    self = [super initWithOptions:options];
+ 
     if (self) {
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
@@ -116,7 +121,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (instancetype) init {
-  return [self initWithMapId:nil andZoomTapEnabled:YES];
+  return [self initWithMapId:nil initialCamera:nil backgroundColor:nil andZoomTapEnabled:YES];
 }
 
 - (void)dealloc {
@@ -1012,6 +1017,10 @@ id regionAsJSON(MKCoordinateRegion region) {
                 @"shortName": level.shortName
         }
     });
+}
+// do nothing, passed as options on initialization
+- (void)setLoadingBackgroundColor:(UIColor *)loadingBackgroundColor {
+    
 }
 
 
