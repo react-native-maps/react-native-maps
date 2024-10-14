@@ -214,16 +214,16 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
       for (AIRGoogleMapMarker *marker in mapView.markers)
         bounds = [bounds includingCoordinate:marker.realMarker.position];
-        
+
         GMSCameraUpdate* cameraUpdate;
-        
+
         if ([edgePadding count] != 0) {
             // Set Map viewport
             CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
             CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
             CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
             CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-            
+
             cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
         } else {
             cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
