@@ -51,7 +51,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     UIView *_legalLabel;
     BOOL _initialRegionSet;
     BOOL _initialCameraSet;
-
+    
     // Array to manually track RN subviews
     //
     // AIRMap implicitly creates subviews that aren't regular RN children
@@ -69,7 +69,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     if ((self = [super init])) {
         _hasStartedRendering = NO;
         _reactSubviews = [NSMutableArray new];
-
+        
         // Find Apple link label
         for (UIView *subview in self.subviews) {
             if ([NSStringFromClass(subview.class) isEqualToString:@"MKAttributionLabel"]) {
@@ -79,12 +79,12 @@ const NSInteger AIRMapMaxZoomLevel = 20;
                 break;
             }
         }
-
+        
         // 3rd-party callout view for MapKit that has more options than the built-in. It's painstakingly built to
         // be identical to the built-in callout view (which has a private API)
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
-
+        
         self.minZoomLevel = 0;
         self.maxZoomLevel = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
@@ -132,7 +132,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
         for (int i = 0; i < childSubviews.count; i++) {
-          [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
+            [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
         }
     }
     [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
@@ -163,7 +163,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
         for (int i = 0; i < childSubviews.count; i++) {
-          [self removeReactSubview:(UIView *)childSubviews[i]];
+            [self removeReactSubview:(UIView *)childSubviews[i]];
         }
     }
     [_reactSubviews removeObject:(UIView *)subview];
@@ -173,7 +173,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
 - (NSArray<id<RCTComponent>> *)reactSubviews {
-  return _reactSubviews;
+    return _reactSubviews;
 }
 #pragma clang diagnostic pop
 
@@ -212,15 +212,15 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         CGRect frame = [self frameForMarker:mrkAnn];
         CGPoint point = [self convertCoordinate:mrkAnn.coordinate toPointToView:self];
         NSDictionary* frameDict = @{
-                                    @"x": @(frame.origin.x),
-                                    @"y": @(frame.origin.y),
-                                    @"width": @(frame.size.width),
-                                    @"height": @(frame.size.height)
-                                    };
+            @"x": @(frame.origin.x),
+            @"y": @(frame.origin.y),
+            @"width": @(frame.size.width),
+            @"height": @(frame.size.height)
+        };
         NSDictionary* pointDict = @{
-                                   @"x": @(point.x),
-                                   @"y": @(point.y)
-                                  };
+            @"x": @(point.x),
+            @"y": @(point.y)
+        };
         NSString* k = mrkAnn.identifier;
         BOOL isVisible = CGRectIntersectsRect(self.bounds, frame);
         if (k != nil && (!onlyVisible || isVisible)) {
@@ -257,7 +257,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 // Allow touches to be sent to our calloutview.
 // See this for some discussion of why we need to override this: https://github.com/nfarina/calloutview/pull/9
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-
+    
     CGPoint touchPoint = [self.calloutView convertPoint:point fromView:self];
     UIView *touchedView = [self.calloutView hitTest:touchPoint withEvent:event];
     
@@ -291,33 +291,33 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         
         return calloutSubview ? calloutSubview : touchedView;
     }
-
+    
     return [super hitTest:point withEvent:event];
 }
 
 #pragma mark SMCalloutViewDelegate
 
 - (NSTimeInterval)calloutView:(SMCalloutView *)calloutView delayForRepositionWithSize:(CGSize)offset {
-
+    
     // When the callout is being asked to present in a way where it or its target will be partially offscreen, it asks us
     // if we'd like to reposition our surface first so the callout is completely visible. Here we scroll the map into view,
     // but it takes some math because we have to deal in lon/lat instead of the given offset in pixels.
-
+    
     CLLocationCoordinate2D coordinate = self.region.center;
-
+    
     // where's the center coordinate in terms of our view?
     CGPoint center = [self convertCoordinate:coordinate toPointToView:self];
-
+    
     // move it by the requested offset
     center.x -= offset.width;
     center.y -= offset.height;
-
+    
     // and translate it back into map coordinates
     coordinate = [self convertPoint:center toCoordinateFromView:self];
-
+    
     // move the map!
     [self setCenterCoordinate:coordinate animated:YES];
-
+    
     // tell the callout to wait for a while while we scroll (we assume the scroll delay for MKMapView matches UIScrollView)
     return kSMCalloutViewRepositionDelayForUIScrollView;
 }
@@ -330,7 +330,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     
     CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
     CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
-
+    
     return @[
         @[
             [NSNumber numberWithDouble:northEast.longitude],
@@ -395,7 +395,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     if (!CLLocationCoordinate2DIsValid(region.center)) {
         return;
     }
-
+    
     // If new span values are nil, use old values instead
     if (!region.span.latitudeDelta) {
         region.span.latitudeDelta = self.region.span.latitudeDelta;
@@ -403,7 +403,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     if (!region.span.longitudeDelta) {
         region.span.longitudeDelta = self.region.span.longitudeDelta;
     }
-
+    
     // Animate/move to new position
     [super setRegion:region animated:animated];
 }
@@ -470,40 +470,39 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 }
 
 - (void)setCameraZoomRange:(NSDictionary *)cameraZoomRange {
-    if (!@available(iOS 13.0, *)) {
-        return;
+    if (@available(iOS 13.0, *)) {
+        
+        if (cameraZoomRange == nil) {
+            cameraZoomRange = @{};
+        }
+        
+        NSNumber *minValue = cameraZoomRange[@"minCenterCoordinateDistance"];
+        NSNumber *maxValue = cameraZoomRange[@"maxCenterCoordinateDistance"];
+        
+        if (minValue == nil && maxValue == nil) {
+            self.legacyZoomConstraintsEnabled = YES;
+            
+            MKMapCameraZoomRange *defaultZoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:MKMapCameraZoomDefault maxCenterCoordinateDistance:MKMapCameraZoomDefault];
+            [super setCameraZoomRange:defaultZoomRange animated:NO];
+            
+            return;
+        }
+        
+        MKMapCameraZoomRange *zoomRange = nil;
+        
+        if (minValue != nil && maxValue != nil) {
+            zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue] maxCenterCoordinateDistance:[maxValue doubleValue]];
+        } else if (minValue != nil) {
+            zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue]];
+        } else if (maxValue != nil) {
+            zoomRange = [[MKMapCameraZoomRange alloc] initWithMaxCenterCoordinateDistance:[maxValue doubleValue]];
+        }
+        
+        BOOL animated = [cameraZoomRange[@"animated"] boolValue];
+        
+        self.legacyZoomConstraintsEnabled = NO;
+        [super setCameraZoomRange:zoomRange animated:animated];
     }
-
-    if (cameraZoomRange == nil) {
-        cameraZoomRange = @{};
-    }
-
-    NSNumber *minValue = cameraZoomRange[@"minCenterCoordinateDistance"];
-    NSNumber *maxValue = cameraZoomRange[@"maxCenterCoordinateDistance"];
-
-    if (minValue == nil && maxValue == nil) {
-        self.legacyZoomConstraintsEnabled = YES;
-
-        MKMapCameraZoomRange *defaultZoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:MKMapCameraZoomDefault maxCenterCoordinateDistance:MKMapCameraZoomDefault];
-        [super setCameraZoomRange:defaultZoomRange animated:NO];
-
-        return;
-    }
-
-    MKMapCameraZoomRange *zoomRange = nil;
-
-    if (minValue != nil && maxValue != nil) {
-        zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue] maxCenterCoordinateDistance:[maxValue doubleValue]];
-    } else if (minValue != nil) {
-        zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue]];
-    } else if (maxValue != nil) {
-        zoomRange = [[MKMapCameraZoomRange alloc] initWithMaxCenterCoordinateDistance:[maxValue doubleValue]];
-    }
-
-    BOOL animated = [cameraZoomRange[@"animated"] boolValue];
-
-    self.legacyZoomConstraintsEnabled = NO;
-    [super setCameraZoomRange:zoomRange animated:animated];
 }
 
 // Include properties of MKMapView which are only available on iOS 9+
@@ -598,7 +597,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         else {
             self.cacheImageView.image = nil;
             self.cacheImageView.hidden = YES;
-
+            
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 self.cacheImageView.image = nil;
                 self.cacheImageView.hidden = YES;
@@ -606,12 +605,12 @@ const NSInteger AIRMapMaxZoomLevel = 20;
                 [self.layer renderInContext:UIGraphicsGetCurrentContext()];
                 UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
-
+                
                 self.cacheImageView.image = image;
                 self.cacheImageView.hidden = NO;
             });
         }
-
+        
         [self updateScrollEnabled];
         [self updateZoomEnabled];
         [self updateLegalLabelInsets];
@@ -639,16 +638,16 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 
 - (void)setLegalLabelInsets:(UIEdgeInsets)legalLabelInsets {
-  _legalLabelInsets = legalLabelInsets;
-  [self updateLegalLabelInsets];
+    _legalLabelInsets = legalLabelInsets;
+    [self updateLegalLabelInsets];
 }
 
 - (void)setMapPadding:(UIEdgeInsets)mapPadding {
-  self.layoutMargins = mapPadding;
+    self.layoutMargins = mapPadding;
 }
 
 - (UIEdgeInsets)mapPadding {
-  return self.layoutMargins;
+    return self.layoutMargins;
 }
 
 - (void)beginLoading {
@@ -707,7 +706,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self cacheViewIfNeeded];
-
+    
     if (self.overlayCompassButton == nil) {
         for (UIView *subview in self.subviews) {
             if (![NSStringFromClass(subview.class) isEqualToString:@"MKPassThroughStackView"]) continue;
@@ -735,22 +734,22 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 // based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
 - (CGFloat)getZoomLevel {
     CGFloat cameraAngle = self.camera.heading;
-
+    
     if (cameraAngle > 270) {
         cameraAngle = 360 - cameraAngle;
     } else if (cameraAngle > 90) {
         cameraAngle = fabs(cameraAngle - 180);
     }
-
+    
     CGFloat angleRad = M_PI * cameraAngle / 180; // map rotation in radians
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;
     CGFloat heightOffset = 20; // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
-
+    
     // calculating Longitude span corresponding to normal (non-rotated) width
     CGFloat spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad));
     int normalizingFactor = 512;
-
+    
     return log2(360 * ((width / normalizingFactor) / spanStraight));
 }
 
