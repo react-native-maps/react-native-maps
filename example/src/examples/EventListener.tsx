@@ -73,6 +73,7 @@ class EventListener extends React.Component<any, any> {
           initialRegion={this.state.region}
           showsUserLocation
           showsMyLocationButton
+          onRegionChangeStart={this.recordEvent('Map::onRegionChangeStart')}
           onRegionChange={this.recordEvent('Map::onRegionChange')}
           onRegionChangeComplete={this.recordEvent(
             'Map::onRegionChangeComplete',

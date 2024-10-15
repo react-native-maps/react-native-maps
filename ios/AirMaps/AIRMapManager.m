@@ -113,6 +113,7 @@ RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
 RCT_EXPORT_VIEW_PROPERTY(cameraZoomRange, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRegionChangeStart, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
@@ -933,6 +934,11 @@ static int kDragCenterContext;
         [mapView setCenterCoordinate:location.coordinate animated:YES];
     }
     
+}
+
+- (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    if (mapView.onRegionChangeStart) mapView.onRegionChangeStart(@{});
 }
 
 - (void)mapViewDidChangeVisibleRegion:(AIRMap *)mapView
