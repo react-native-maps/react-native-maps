@@ -160,8 +160,8 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
             RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
         } else {
             AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
-            [mapView setCamera:camera];
+            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView cameraProp]];
+            [mapView setCameraProp:camera];
         }
     }];
 }
@@ -179,7 +179,7 @@ RCT_EXPORT_METHOD(animateCamera:(nonnull NSNumber *)reactTag
             [CATransaction begin];
             [CATransaction setAnimationDuration:duration/1000];
             AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView camera]];
+            GMSCameraPosition *camera = [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:[mapView cameraProp]];
             [mapView animateToCameraPosition:camera];
             [CATransaction commit];
         }
