@@ -96,19 +96,22 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private Boolean isMapLoaded = false;
   private Integer loadingBackgroundColor = null;
   private Integer loadingIndicatorColor = null;
-  private final int baseMapPadding = 50;
 
   private LatLngBounds boundsToMove;
   private CameraUpdate cameraToSet;
+  private int cameraToSetDuration = 0;
+  private boolean setPaddingDeferred = false;
   private boolean showUserLocation = false;
   private boolean handlePanDrag = false;
   private boolean moveOnMarkerPress = true;
   private boolean cacheEnabled = false;
   private ReadableMap initialRegion;
   private ReadableMap region;
+  private ReadableMap initialCamera;
   private ReadableMap camera;
   private String customMapStyleString;
   private boolean initialRegionSet = false;
+  private boolean initialCameraSet = false;
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
   private MapMarker selectedMarker;
@@ -536,14 +539,28 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
   }
 
+  public void setInitialCamera(ReadableMap initialCamera) {
+    this.initialCamera = initialCamera;
+    if (!initialCameraSet && map != null) {
+      moveToCamera(initialCamera);
+      initialCameraSet = true;
+    }
+  }
+
   private void applyBridgedProps() {
     if(initialRegion != null) {
       moveToRegion(initialRegion);
       initialRegionSet = true;
     } else if(region != null) {
       moveToRegion(region);
-    } else {
+    } else if (camera != null) {
       moveToCamera(camera);
+      if (initialCamera != null) {
+        initialCameraSet = true;
+      }
+    } else if (initialCamera != null) {
+      moveToCamera(initialCamera);
+      initialCameraSet = true;
     }
     if(customMapStyleString != null) {
       map.setMapStyle(new MapStyleOptions(customMapStyleString));
@@ -566,10 +583,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
       // occurs, we will move the camera to the saved bounds. Note that if we tried to move
       // to the bounds now, it would trigger an exception.
-      map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
+      moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
       boundsToMove = bounds;
     } else {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+      moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
       boundsToMove = null;
     }
   }
@@ -587,26 +604,44 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       moveToCamera(camera);
     }
   }
-public static CameraPosition cameraPositionFromMap(ReadableMap camera){
-  if (camera == null) return null;
 
-  CameraPosition.Builder builder = new CameraPosition.Builder();
-
-  ReadableMap center = camera.getMap("center");
-  if (center != null) {
-    double lng = center.getDouble("longitude");
-    double lat = center.getDouble("latitude");
-    builder.target(new LatLng(lat, lng));
+  public static CameraPosition cameraPositionFromMap(ReadableMap camera) {
+    return cameraPositionFromMap(camera, null);
   }
 
-  builder.tilt((float)camera.getDouble("pitch"));
-  builder.bearing((float)camera.getDouble("heading"));
-  builder.zoom((float)camera.getDouble("zoom"));
+  private static CameraPosition cameraPositionFromMap(ReadableMap camera, CameraPosition current){
+    if (camera == null) return null;
 
-  return builder.build();
-}
+    CameraPosition.Builder builder = current != null
+        ? new CameraPosition.Builder(current)
+        : new CameraPosition.Builder();
+
+    ReadableMap center = camera.getMap("center");
+    if (center != null) {
+      double lng = center.getDouble("longitude");
+      double lat = center.getDouble("latitude");
+      builder.target(new LatLng(lat, lng));
+    }
+
+    if (camera.hasKey("pitch")) {
+      builder.tilt((float)camera.getDouble("pitch"));
+    }
+    if (camera.hasKey("heading")) {
+      builder.bearing((float)camera.getDouble("heading"));
+    }
+    if (camera.hasKey("zoom")) {
+      builder.zoom((float)camera.getDouble("zoom"));
+    }
+
+    return builder.build();
+  }
+
   public void moveToCamera(ReadableMap cameraMap) {
-    CameraPosition camera = cameraPositionFromMap(cameraMap);
+    moveToCamera(cameraMap, null, 0);
+  }
+
+  private void moveToCamera(ReadableMap cameraMap, CameraPosition current, int duration) {
+    CameraPosition camera = cameraPositionFromMap(cameraMap, current);
     if (camera == null) return;
     CameraUpdate update = CameraUpdateFactory.newCameraPosition(camera);
 
@@ -615,9 +650,15 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       // local variable. As soon as layout occurs, we will move the camera to the saved update.
       // Note that if we tried to move to the camera now, it would trigger an exception.
       cameraToSet = update;
+      cameraToSetDuration = duration;
     } else {
-      map.moveCamera(update);
+      if (duration > 0) {
+        animateCamera(update, duration);
+      } else {
+        moveCamera(update);
+      }
       cameraToSet = null;
+      cameraToSetDuration = 0;
     }
   }
 
@@ -855,53 +896,54 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       //fix for https://github.com/react-native-maps/react-native-maps/issues/245,
       //it's not guaranteed the passed-in height and width would be greater than 0.
       if (width <= 0 || height <= 0) {
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
+        moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
       } else {
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
+        moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
       }
 
       boundsToMove = null;
       cameraToSet = null;
     }
     else if (cameraToSet != null) {
-      map.moveCamera(cameraToSet);
+      if (cameraToSetDuration > 0) {
+        animateCamera(cameraToSet, cameraToSetDuration);
+      } else {
+        moveCamera(cameraToSet);
+      }
       cameraToSet = null;
+      cameraToSetDuration = 0;
+    }
+    if (setPaddingDeferred && super.getHeight() > 0 && super.getWidth() > 0) {
+      map.setPadding(edgeLeftPadding + baseLeftMapPadding,
+          edgeTopPadding + baseTopMapPadding,
+          edgeRightPadding + baseRightMapPadding,
+          edgeBottomPadding + baseBottomMapPadding);
+      reapplyCamera();
+      // Move the google logo to the default base padding value.
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+
+      setPaddingDeferred = false;
     }
   }
 
   public void animateToCamera(ReadableMap camera, int duration) {
-    if (map == null) return;
-    CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
-    if (camera.hasKey("zoom")) {
-      builder.zoom((float)camera.getDouble("zoom"));
-    }
-    if (camera.hasKey("heading")) {
-      builder.bearing((float)camera.getDouble("heading"));
-    }
-    if (camera.hasKey("pitch")) {
-      builder.tilt((float)camera.getDouble("pitch"));
-    }
-    if (camera.hasKey("center")) {
-      ReadableMap center = camera.getMap("center");
-      builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
-    }
-
-    CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
-
-    if (duration <= 0) {
-      map.moveCamera(update);
-    }
-    else {
-      map.animateCamera(update, duration, null);
+    if (map != null) {
+      moveToCamera(camera, map.getCameraPosition(), duration);
+    } else {
+      // The map is not ready yet. Update `camera` (or `initialCamera`) property so that
+      // it will be applied once the map becomes ready.
+      ReadableMap current = this.camera != null ? this.camera : initialCamera;
+      ReadableMap updated = mergeCameraMaps(current, camera);
+      this.camera = updated;
     }
   }
 
   public void animateToRegion(LatLngBounds bounds, int duration) {
     if (map == null) return;
     if(duration <= 0) {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+      moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
     } else {
-      map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+      animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration);
     }
   }
 
@@ -922,18 +964,20 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     }
     if (addedPosition) {
       LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
       if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+        appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
           edgePadding.getInt("right"), edgePadding.getInt("bottom"));
       }
 
       if (animated) {
-        map.animateCamera(cu);
+        animateCamera(cu);
       } else {
-        map.moveCamera(cu);
+        moveCamera(cu);
       }
+      // Move the google logo to the default base padding value.
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
     }
   }
 
@@ -964,32 +1008,53 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
     if (addedPosition) {
       LatLngBounds bounds = builder.build();
-      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+      CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
       if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+        appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
           edgePadding.getInt("right"), edgePadding.getInt("bottom"));
       }
 
       if (animated) {
-        map.animateCamera(cu);
+        animateCamera(cu);
       } else {
-        map.moveCamera(cu);
+        moveCamera(cu);
       }
+      // Move the google logo to the default base padding value.
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
     }
   }
 
+  // padding configured by 'mapPadding' property
   int baseLeftMapPadding;
   int baseRightMapPadding;
   int baseTopMapPadding;
   int baseBottomMapPadding;
+  // extra padding specified by 'edgePadding' option of fitToElements/fitToSuppliedMarkers/fitToCoordinates
+  int edgeLeftPadding;
+  int edgeRightPadding;
+  int edgeTopPadding;
+  int edgeBottomPadding;
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
-    this.map.setPadding(left, top, right, bottom);
     baseLeftMapPadding = left;
     baseRightMapPadding = right;
     baseTopMapPadding = top;
     baseBottomMapPadding = bottom;
+
+    if (super.getHeight() <= 0 || super.getWidth() <= 0) {
+      // the map is not laid out yet and calling setPadding() now has no effect
+      setPaddingDeferred = true;
+      return;
+    }
+
+    map.setPadding(edgeLeftPadding + left,
+        edgeTopPadding + top,
+        edgeRightPadding + right,
+        edgeBottomPadding + bottom);
+    reapplyCamera();
+    // Move the google logo to the default base padding value.
+    map.setPadding(left, top, right, bottom);
   }
 
   public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
@@ -1006,37 +1071,33 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     }
 
     LatLngBounds bounds = builder.build();
-    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, baseMapPadding);
+    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
 
     if (edgePadding != null) {
       appendMapPadding(edgePadding.getInt("left"), edgePadding.getInt("top"), edgePadding.getInt("right"), edgePadding.getInt("bottom"));
     }
 
     if (animated) {
-      map.animateCamera(cu);
+      animateCamera(cu);
     } else {
-      map.moveCamera(cu);
+      moveCamera(cu);
     }
     // Move the google logo to the default base padding value.
     map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
   }
 
   private void appendMapPadding(int iLeft,int iTop, int iRight, int iBottom) {
-    int left;
-    int top;
-    int right;
-    int bottom;
     double density = getResources().getDisplayMetrics().density;
 
-    left = (int) (iLeft * density);
-    top = (int) (iTop * density);
-    right = (int) (iRight * density);
-    bottom = (int) (iBottom * density);
+    edgeLeftPadding = (int) (iLeft * density);
+    edgeTopPadding = (int) (iTop * density);
+    edgeRightPadding = (int) (iRight * density);
+    edgeBottomPadding = (int) (iBottom * density);
 
-    map.setPadding(left + baseLeftMapPadding,
-            top + baseTopMapPadding,
-            right + baseRightMapPadding,
-            bottom + baseBottomMapPadding);
+    map.setPadding(edgeLeftPadding + baseLeftMapPadding,
+            edgeTopPadding + baseTopMapPadding,
+            edgeRightPadding + baseRightMapPadding,
+            edgeBottomPadding + baseBottomMapPadding);
   }
 
   public double[][] getMapBoundaries() {
@@ -1066,6 +1127,42 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     LatLngBounds bounds = builder.build();
 
     map.setLatLngBoundsForCameraTarget(bounds);
+  }
+
+  private CameraUpdate lastCamera;
+
+  private void moveCamera(CameraUpdate cu) {
+    map.moveCamera(cu);
+    lastCamera = cu;
+  }
+
+  private void animateCamera(CameraUpdate cu) {
+    map.animateCamera(cu);
+    lastCamera = cu;
+  }
+
+  private void animateCamera(CameraUpdate cu, int durationMs) {
+    map.animateCamera(cu, durationMs, null);
+    lastCamera = cu;
+  }
+
+  private void reapplyCamera() {
+    if (lastCamera != null) {
+      map.moveCamera(lastCamera);
+    }
+  }
+
+  private ReadableMap mergeCameraMaps(ReadableMap base, ReadableMap updates) {
+    if (base == null) {
+      return updates;
+    } else if (updates == null) {
+      return base;
+    }
+
+    WritableMap m = new WritableNativeMap();
+    m.merge(base);
+    m.merge(updates);
+    return m;
   }
 
   // InfoWindowAdapter interface
