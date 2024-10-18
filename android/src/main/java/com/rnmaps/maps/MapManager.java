@@ -419,7 +419,7 @@ public class MapManager extends ViewGroupManager<MapView> {
                 if (args == null) {
                     break;
                 }
-                view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
+                view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2),args.getInt(3));
                 break;
 
             case "setMapBoundaries":

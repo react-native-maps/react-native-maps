@@ -10,7 +10,7 @@ interface NativeCommands {
     animateCamera: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, camera: Partial<Camera>, duration: number) => void;
     fitToElements: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, edgePadding: EdgePadding, animated: boolean) => void;
     fitToSuppliedMarkers: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, markers: string[], edgePadding: EdgePadding, animated: boolean) => void;
-    fitToCoordinates: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, coordinates: LatLng[], edgePadding: EdgePadding, animated: boolean) => void;
+    fitToCoordinates: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, coordinates: LatLng[], edgePadding: EdgePadding, animated: boolean, duration: number) => void;
     setMapBoundaries: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, northEast: LatLng, southWest: LatLng) => void;
     setIndoorActiveLevelIndex: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, activeLevelIndex: number) => void;
     scrollMap: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, xPixel: number, YPixel: number, animated: boolean) => void;

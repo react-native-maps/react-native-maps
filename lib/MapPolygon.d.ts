@@ -51,7 +51,7 @@ export type MapPolygonProps = ViewProps & {
      * followed by the first gap length, followed by the second line segment length, and so on.
      *
      * @platform iOS: Apple Maps only
-     * @platform Android: Not supported
+     * @platform Android: Supported
      */
     lineDashPattern?: number[];
     /**
