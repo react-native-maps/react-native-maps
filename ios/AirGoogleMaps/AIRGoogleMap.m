@@ -157,6 +157,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   } else if ([subview isKindOfClass:[AIRGoogleMapPolyline class]]) {
     AIRGoogleMapPolyline *polyline = (AIRGoogleMapPolyline*)subview;
     polyline.polyline.map = self;
+    polyline.animatedPolyline.map = self;
     [self.polylines addObject:polyline];
   } else if ([subview isKindOfClass:[AIRGoogleMapCircle class]]) {
     AIRGoogleMapCircle *circle = (AIRGoogleMapCircle*)subview;
@@ -205,6 +206,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   } else if ([subview isKindOfClass:[AIRGoogleMapPolyline class]]) {
     AIRGoogleMapPolyline *polyline = (AIRGoogleMapPolyline*)subview;
     polyline.polyline.map = nil;
+    polyline.animatedPolyline.map = nil;
     [self.polylines removeObject:polyline];
   } else if ([subview isKindOfClass:[AIRGoogleMapCircle class]]) {
     AIRGoogleMapCircle *circle = (AIRGoogleMapCircle*)subview;

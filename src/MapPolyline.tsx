@@ -9,6 +9,10 @@ import decorateMapComponent, {
   UIManagerCommand,
 } from './decorateMapComponent';
 import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
+import {
+  Commands,
+  MapPolylineNativeComponentType,
+} from './MapPolylineNativeComponent';
 
 export type MapPolylineProps = ViewProps & {
   /**
@@ -146,7 +150,9 @@ export type MapPolylineProps = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = MapPolylineProps & {ref: React.RefObject<View>};
+export type NativeProps = MapPolylineProps & {
+  ref: React.RefObject<MapPolylineNativeComponentType>;
+};
 
 export class MapPolyline extends React.Component<MapPolylineProps> {
   // declaration only, as they are set through decorateMap
@@ -159,11 +165,35 @@ export class MapPolyline extends React.Component<MapPolylineProps> {
 
   constructor(props: MapPolylineProps) {
     super(props);
-    this.polyline = React.createRef<View>();
+    this.polyline = React.createRef<MapPolylineNativeComponentType>();
+    this.startPolylineAnimation = this.startPolylineAnimation.bind(this);
+    this.stopPolylineAnimation = this.stopPolylineAnimation.bind(this);
   }
 
   setNativeProps(props: Partial<NativeProps>) {
+    // @ts-ignore
     this.polyline.current?.setNativeProps(props);
+  }
+
+  startPolylineAnimation(
+    staticColor: string,
+    animationDuration: number,
+    delay: number,
+  ) {
+    if (this.polyline.current) {
+      Commands.startPolylineAnimation(
+        this.polyline.current,
+        staticColor,
+        animationDuration,
+        delay,
+      );
+    }
+  }
+
+  stopPolylineAnimation() {
+    if (this.polyline.current) {
+      Commands.stopPolylineAnimation(this.polyline.current);
+    }
   }
 
   render() {

@@ -6,6 +6,33 @@ import { MapPolylineProps as PolylineProps } from './MapPolyline';
 import { LatLng } from './sharedTypes';
 export type GeojsonProps = {
     /**
+     * Sets the anchor point for the marker.
+     * The anchor specifies the point in the icon image that is anchored to the marker's position on the Earth's surface.
+     *
+     * The anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],
+     * where (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.
+     *
+     * The anchoring point in a W x H image is the nearest discrete grid point in a (W + 1) x (H + 1) grid, obtained by scaling the then rounding.
+     * For example, in a 4 x 2 image, the anchor point (0.7, 0.6) resolves to the grid point at (3, 1).
+     *
+     * @default {x: 0.5, y: 1.0}
+     * @platform iOS: Google Maps only. For Apple Maps, see the `centerOffset` prop
+     * @platform Android: Supported
+     */
+    anchor?: MarkerProps['anchor'];
+    /**
+     * The offset (in points) at which to display the annotation view.
+     *
+     * By default, the center point of an annotation view is placed at the coordinate point of the associated annotation.
+     *
+     * Positive offset values move the annotation view down and to the right, while negative values move it up and to the left.
+     *
+     * @default {x: 0.0, y: 0.0}
+     * @platform iOS: Apple Maps only. For Google Maps, see the `anchor` prop
+     * @platform Android: Not supported. See see the `anchor` prop
+     */
+    centerOffset?: MarkerProps['centerOffset'];
+    /**
      * The pincolor used on markers
      *
      * @platform iOS: Supported
@@ -55,7 +82,7 @@ export type GeojsonProps = {
      * @platform iOS: Supported
      * @platform Android: Supported
      */
-    lineDashPattern?: PolylineProps['lineDashPattern'];
+    lineDashPattern?: PolygonProps['lineDashPattern'] | PolylineProps['lineDashPattern'];
     /**
      * The offset (in points) at which to start drawing the dash pattern.
      *
