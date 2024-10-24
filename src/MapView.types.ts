@@ -156,6 +156,7 @@ export type ChangeEvent = NativeSyntheticEvent<{
 export type FitToOptions = {
   edgePadding?: EdgePadding;
   animated?: boolean;
+  duration?: number;
 };
 
 export type BoundingBox = {northEast: LatLng; southWest: LatLng};

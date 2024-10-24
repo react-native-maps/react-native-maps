@@ -54,6 +54,7 @@ interface NativeCommands {
     coordinates: LatLng[],
     edgePadding: EdgePadding,
     animated: boolean,
+    duration: number,
   ) => void;
 
   setMapBoundaries: (

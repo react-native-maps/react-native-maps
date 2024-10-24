@@ -303,7 +303,8 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
                   coordinates:(nonnull NSArray<AIRMapCoordinate *> *)coordinates
                   edgePadding:(nonnull NSDictionary *)edgePadding
-                  animated:(BOOL)animated)
+                  animated:(BOOL)animated
+                  duration:(NSInteger)duration)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
     id view = viewRegistry[reactTag];
@@ -327,7 +328,10 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
       GMSCameraUpdate *cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
 
       if (animated) {
-        [mapView animateWithCameraUpdate: cameraUpdate];
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:duration / 1000.0]; // Convert milliseconds to seconds
+        [mapView animateWithCameraUpdate:cameraUpdate];
+        [CATransaction commit];
       } else {
         [mapView moveCamera: cameraUpdate];
       }

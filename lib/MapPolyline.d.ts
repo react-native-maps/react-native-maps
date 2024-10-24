@@ -139,7 +139,7 @@ export declare class MapPolyline extends React.Component<MapPolylineProps> {
 }
 declare const _default: typeof MapPolyline;
 export default _default;
-type PolylinePressEvent = NativeSyntheticEvent<{
+export type PolylinePressEvent = NativeSyntheticEvent<{
     action: 'polyline-press';
     /**
      * @platform iOS: Google Maps

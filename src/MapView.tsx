@@ -765,7 +765,7 @@ class MapView extends React.Component<MapViewProps, State> {
           onMapReady();
         }
       });
-    }, 100)
+    }, 100);
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -774,7 +774,7 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   private _onMapReady() {
-    if(this.callMapReady) {
+    if (this.callMapReady) {
       clearTimeout(this.mapReadytimerId);
       const {onMapReady} = this.props;
       this.setState({isReady: true}, () => {
@@ -867,6 +867,7 @@ class MapView extends React.Component<MapViewProps, State> {
       const {
         edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
         animated = true,
+        duration = 400,
       } = options;
 
       Commands.fitToCoordinates(
@@ -874,6 +875,7 @@ class MapView extends React.Component<MapViewProps, State> {
         coordinates,
         edgePadding,
         animated,
+        duration,
       );
     }
   }
