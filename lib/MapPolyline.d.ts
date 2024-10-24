@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { NativeSyntheticEvent, View, ViewProps } from 'react-native';
+import { NativeSyntheticEvent, ViewProps } from 'react-native';
 import { ProviderContext, NativeComponent, MapManagerCommand, UIManagerCommand } from './decorateMapComponent';
 import { LatLng, LineCapType, LineJoinType, Point } from './sharedTypes';
+import { MapPolylineNativeComponentType } from './MapPolylineNativeComponent';
 export type MapPolylineProps = ViewProps & {
     /**
      * An array of coordinates to describe the polyline
@@ -124,8 +125,8 @@ export type MapPolylineProps = ViewProps & {
      */
     zIndex?: number;
 };
-type NativeProps = MapPolylineProps & {
-    ref: React.RefObject<View>;
+export type NativeProps = MapPolylineProps & {
+    ref: React.RefObject<MapPolylineNativeComponentType>;
 };
 export declare class MapPolyline extends React.Component<MapPolylineProps> {
     context: React.ContextType<typeof ProviderContext>;
@@ -135,6 +136,8 @@ export declare class MapPolyline extends React.Component<MapPolylineProps> {
     private polyline;
     constructor(props: MapPolylineProps);
     setNativeProps(props: Partial<NativeProps>): void;
+    startPolylineAnimation(staticColor: string, animationDuration: number, delay: number): void;
+    stopPolylineAnimation(): void;
     render(): React.JSX.Element;
 }
 declare const _default: typeof MapPolyline;
