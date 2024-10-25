@@ -302,43 +302,10 @@ render() {
 }
 ```
 
-### Customizing the map style
+### Customizing the map style (Google Maps Only)
 
-Create the json object, or download a generated one from the [google style generator](https://mapstyle.withgoogle.com/).
-
-```jsx
-// The generated json object
-mapStyle = [ ... ]
-
-render() {
-  return (
-    <MapView
-      region={this.state.region}
-      onRegionChange={this.onRegionChange}
-      customMapStyle={mapStyle}
-    />
-  );
-}
-```
-
-For iOS, in addition to providing the `mapStyle` you will need to do the following
-
-```jsx
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-
-// ...
-
-<MapView
-  provider={PROVIDER_GOOGLE}
-  customMapStyle={MapStyle}
->
-```
-
-Then add the AirGoogleMaps directory:
-
-https://github.com/react-native-maps/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
-
-An unofficial step-by-step guide is also available at https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
+The `<MapView provider="google" googleMapId="yourStyledMapId" />` Google Maps on iOS and Android supports styling via google cloud platform, the styled maps are published under a googleMapId, by simply setting the property googleMapId to the MapView you can use that styled map
+more info here: [google map id](https://developers.google.com/maps/documentation/get-map-id)
 
 ### MapView Events
 
@@ -485,7 +452,7 @@ render() {
 Markers can also accept an `AnimatedRegion` value as a coordinate.
 
 ```jsx
-import Mapview, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
+import MapView, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
 
 getInitialState() {
   return {

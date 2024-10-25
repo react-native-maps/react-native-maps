@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.18.2](https://github.com/react-native-maps/react-native-maps/compare/v1.18.1...v1.18.2) (2024-10-14)
+
+
+### Bug Fixes
+
+* correctly check for iOS OS version before using cameraZoomRange ([#5185](https://github.com/react-native-maps/react-native-maps/issues/5185)) ([4efd881](https://github.com/react-native-maps/react-native-maps/commit/4efd881ffb4995f77d7f325455053d30c50cd429))
+
+## [1.18.1](https://github.com/react-native-maps/react-native-maps/compare/v1.18.0...v1.18.1) (2024-10-12)
+
+
+### Bug Fixes
+
+* documentation on README.md ([#5174](https://github.com/react-native-maps/react-native-maps/issues/5174)) ([b853f3a](https://github.com/react-native-maps/react-native-maps/commit/b853f3ae28e72aa107eb61db79a90adb00f03492))
+
 # [1.18.0](https://github.com/react-native-maps/react-native-maps/compare/v1.17.3...v1.18.0) (2024-08-18)
 
 

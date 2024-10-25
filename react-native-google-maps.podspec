@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
   s.homepage     = package["homepage"]
   s.license      = package["license"]
-  s.platform     = :ios, "13.4"
+  s.platform     = :ios, "14"
 
   s.source       = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
   s.source_files  = "ios/AirGoogleMaps/**/*.{h,m}"
@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps"' }
 
   s.dependency 'React-Core'
-  s.dependency 'GoogleMaps', '7.4.0'
-  s.dependency 'Google-Maps-iOS-Utils', '4.2.2'
+  s.dependency 'GoogleMaps', '8.4.0'
+  s.dependency 'Google-Maps-iOS-Utils', '5.0.0'
 end
