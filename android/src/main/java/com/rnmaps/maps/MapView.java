@@ -579,10 +579,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
       // occurs, we will move the camera to the saved bounds. Note that if we tried to move
       // to the bounds now, it would trigger an exception.
-      moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
+      map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
       boundsToMove = bounds;
     } else {
-      moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
       boundsToMove = null;
     }
   }
@@ -629,7 +629,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       // Note that if we tried to move to the camera now, it would trigger an exception.
       cameraToSet = update;
     } else {
-      moveCamera(update);
+      map.moveCamera(update);
       cameraToSet = null;
     }
   }
@@ -858,6 +858,21 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void updateExtraData(Object extraData) {
+    if (setPaddingDeferred && super.getHeight() > 0 && super.getWidth() > 0) {
+      CameraUpdate cu = CameraUpdateFactory.newCameraPosition(map.getCameraPosition());
+
+      map.setPadding(edgeLeftPadding + baseLeftMapPadding,
+          edgeTopPadding + baseTopMapPadding,
+          edgeRightPadding + baseRightMapPadding,
+          edgeBottomPadding + baseBottomMapPadding);
+      map.moveCamera(cu);
+
+      // Move the google logo to the default base padding value.
+      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+
+      setPaddingDeferred = false;
+    }
+
     // if boundsToMove is not null, we now have the MapView's width/height, so we can apply
     // a proper camera move
     if (boundsToMove != null) {
@@ -868,28 +883,17 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       //fix for https://github.com/react-native-maps/react-native-maps/issues/245,
       //it's not guaranteed the passed-in height and width would be greater than 0.
       if (width <= 0 || height <= 0) {
-        moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, 0));
       } else {
-        moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsToMove, width, height, 0));
       }
 
       boundsToMove = null;
       cameraToSet = null;
     }
     else if (cameraToSet != null) {
-      moveCamera(cameraToSet);
+      map.moveCamera(cameraToSet);
       cameraToSet = null;
-    }
-    if (setPaddingDeferred && super.getHeight() > 0 && super.getWidth() > 0) {
-      map.setPadding(edgeLeftPadding + baseLeftMapPadding,
-          edgeTopPadding + baseTopMapPadding,
-          edgeRightPadding + baseRightMapPadding,
-          edgeBottomPadding + baseBottomMapPadding);
-      reapplyCamera();
-      // Move the google logo to the default base padding value.
-      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
-
-      setPaddingDeferred = false;
     }
   }
 
@@ -913,19 +917,19 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
 
     if (duration <= 0) {
-      moveCamera(update);
+      map.moveCamera(update);
     }
     else {
-      animateCamera(update, duration);
+      map.animateCamera(update, duration, null);
     }
   }
 
   public void animateToRegion(LatLngBounds bounds, int duration) {
     if (map == null) return;
     if(duration <= 0) {
-      moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
     } else {
-      animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration);
+      map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
     }
   }
 
@@ -954,9 +958,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       }
 
       if (animated) {
-        animateCamera(cu);
+        map.animateCamera(cu);
       } else {
-        moveCamera(cu);
+        map.moveCamera(cu);
       }
       // Move the google logo to the default base padding value.
       map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
@@ -998,9 +1002,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       }
 
       if (animated) {
-        animateCamera(cu);
+        map.animateCamera(cu);
       } else {
-        moveCamera(cu);
+        map.moveCamera(cu);
       }
       // Move the google logo to the default base padding value.
       map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
@@ -1019,22 +1023,35 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   int edgeBottomPadding;
 
   public void applyBaseMapPadding(int left, int top, int right, int bottom){
+    if (super.getHeight() <= 0 || super.getWidth() <= 0) {
+      // the map is not laid out yet and calling setPadding() now has no effect
+      baseLeftMapPadding = left;
+      baseRightMapPadding = right;
+      baseTopMapPadding = top;
+      baseBottomMapPadding = bottom;
+      setPaddingDeferred = true;
+      return;
+    }
+
+    // retrieve current camera with current edge paddings configured
+    map.setPadding(edgeLeftPadding + baseLeftMapPadding,
+        edgeTopPadding + baseTopMapPadding,
+        edgeRightPadding + baseRightMapPadding,
+        edgeBottomPadding + baseBottomMapPadding);
+    CameraUpdate cu = CameraUpdateFactory.newCameraPosition(map.getCameraPosition());
+
     baseLeftMapPadding = left;
     baseRightMapPadding = right;
     baseTopMapPadding = top;
     baseBottomMapPadding = bottom;
 
-    if (super.getHeight() <= 0 || super.getWidth() <= 0) {
-      // the map is not laid out yet and calling setPadding() now has no effect
-      setPaddingDeferred = true;
-      return;
-    }
-
+    // apply base paddings and restore center position of the map
     map.setPadding(edgeLeftPadding + left,
         edgeTopPadding + top,
         edgeRightPadding + right,
         edgeBottomPadding + bottom);
-    reapplyCamera();
+    map.moveCamera(cu);
+
     // Move the google logo to the default base padding value.
     map.setPadding(left, top, right, bottom);
   }
@@ -1060,9 +1077,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     }
 
     if (animated) {
-      animateCamera(cu);
+      map.animateCamera(cu);
     } else {
-      moveCamera(cu);
+      map.moveCamera(cu);
     }
     // Move the google logo to the default base padding value.
     map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
@@ -1109,29 +1126,6 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     LatLngBounds bounds = builder.build();
 
     map.setLatLngBoundsForCameraTarget(bounds);
-  }
-
-  private CameraUpdate lastCamera;
-
-  private void moveCamera(CameraUpdate cu) {
-    map.moveCamera(cu);
-    lastCamera = cu;
-  }
-
-  private void animateCamera(CameraUpdate cu) {
-    map.animateCamera(cu);
-    lastCamera = cu;
-  }
-
-  private void animateCamera(CameraUpdate cu, int durationMs) {
-    map.animateCamera(cu, durationMs, null);
-    lastCamera = cu;
-  }
-
-  private void reapplyCamera() {
-    if (lastCamera != null) {
-      map.moveCamera(lastCamera);
-    }
   }
 
   // InfoWindowAdapter interface
