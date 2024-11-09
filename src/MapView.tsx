@@ -420,6 +420,16 @@ export type MapViewProps = ViewProps & {
   onPress?: (event: MapPressEvent) => void;
 
   /**
+   * Callback that is called once before the region changes, such as when the user starts moving the map.
+   * `isGesture` property indicates if the move was from the user (true) or an animation (false).
+   * **Note**: `isGesture` is supported by Google Maps only.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  onRegionChangeStart?: (event: NativeSyntheticEvent<Details>) => void;
+
+  /**
    * Callback that is called continuously when the region changes, such as when a user is dragging the map.
    * `isGesture` property indicates if the move was from the user (true) or an animation (false).
    * **Note**: `isGesture` is supported by Google Maps only.
