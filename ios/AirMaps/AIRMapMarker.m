@@ -272,7 +272,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
                          @"latitude": @(marker.coordinate.latitude),
                          @"longitude": @(marker.coordinate.longitude)
                          },
-                 @"point": @{
+                 @"position": @{
                          @"x": @(touchPointReal.x),
                          @"y": @(touchPointReal.y),
                          }
