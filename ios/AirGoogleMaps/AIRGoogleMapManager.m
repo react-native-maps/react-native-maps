@@ -45,9 +45,11 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-  [GMSServices setMetalRendererEnabled:YES];
   NSString* googleMapId  = nil;
   BOOL zoomTapEnabled = YES;
+  UIColor* backgroundColor = nil;
+  GMSCameraPosition* camera = nil;
+
   if (self.initialProps){
       if (self.initialProps[@"googleMapId"]){
           googleMapId  = self.initialProps[@"googleMapId"];
@@ -55,8 +57,14 @@ RCT_EXPORT_MODULE()
       if (self.initialProps[@"zoomTapEnabled"]){
           zoomTapEnabled = self.initialProps[@"zoomTapEnabled"];
       }
+      if (self.initialProps[@"loadingBackgroundColor"]){
+          backgroundColor = [RCTConvert UIColor:self.initialProps[@"loadingBackgroundColor"]];
+      }
+      if (self.initialProps[@"initialCamera"]){
+          camera = [RCTConvert GMSCameraPositionWithDefaults:self.initialProps[@"initialCamera"] existingCamera:nil];
+      }
   }
-  AIRGoogleMap *map = [[AIRGoogleMap alloc] initWithMapId:googleMapId andZoomTapEnabled:zoomTapEnabled];
+  AIRGoogleMap *map = [[AIRGoogleMap alloc] initWithMapId:googleMapId initialCamera:camera backgroundColor:backgroundColor andZoomTapEnabled:zoomTapEnabled];
   map.bridge = self.bridge;
   map.delegate = self;
   map.isAccessibilityElement = NO;
@@ -118,6 +126,7 @@ RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
 RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(kmlSrc, NSString)
+RCT_EXPORT_VIEW_PROPERTY(loadingBackgroundColor, UIColor)
 
 RCT_EXPORT_METHOD(getCamera:(nonnull NSNumber *)reactTag
                   resolver: (RCTPromiseResolveBlock)resolve
@@ -214,16 +223,16 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
 
       for (AIRGoogleMapMarker *marker in mapView.markers)
         bounds = [bounds includingCoordinate:marker.realMarker.position];
-        
+
         GMSCameraUpdate* cameraUpdate;
-        
+
         if ([edgePadding count] != 0) {
             // Set Map viewport
             CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
             CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
             CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
             CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-            
+
             cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
         } else {
             cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
