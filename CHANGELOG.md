@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.4](https://github.com/react-native-maps/react-native-maps/compare/v1.18.3...v1.18.4) (2024-11-09)
+
+
+### Bug Fixes
+
+* **Android:** fix multiple padding related issues on Android ([#5150](https://github.com/react-native-maps/react-native-maps/issues/5150), [#5152](https://github.com/react-native-maps/react-native-maps/issues/5152), [#5153](https://github.com/react-native-maps/react-native-maps/issues/5153), [#5154](https://github.com/react-native-maps/react-native-maps/issues/5154)) ([#5151](https://github.com/react-native-maps/react-native-maps/issues/5151)) ([0009170](https://github.com/react-native-maps/react-native-maps/commit/0009170f26735eda47f1d7316a0642de3c9a952c))
+
 ## [1.18.3](https://github.com/react-native-maps/react-native-maps/compare/v1.18.2...v1.18.3) (2024-11-09)
 
 
