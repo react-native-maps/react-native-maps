@@ -42,9 +42,6 @@ class GradientPolylines extends React.Component<any, any> {
       },
       coordinates: [],
     };
-  }
-
-  componentDidMount(): void {
     this.setState({coordinates: COORDINATES});
   }
 

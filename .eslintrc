@@ -1,4 +1,0 @@
-{
-  "extends": "@react-native",
-  "ignorePatterns": "lib" // ts outdir
-}
