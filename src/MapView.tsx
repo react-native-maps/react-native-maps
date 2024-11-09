@@ -191,7 +191,7 @@ export type MapViewProps = ViewProps & {
    * Sets loading background color.
    *
    * @default `#FFFFFF`
-   * @platform iOS: Apple Maps only
+   * @platform iOS: Supported
    * @platform Android: Supported
    */
   loadingBackgroundColor?: string;
