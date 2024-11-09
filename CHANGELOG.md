@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.19.0](https://github.com/react-native-maps/react-native-maps/compare/v1.18.4...v1.19.0) (2024-11-09)
+
+
+### Features
+
+* add onRegionChangeStart event to MapView ([#5144](https://github.com/react-native-maps/react-native-maps/issues/5144)) ([eeb56f9](https://github.com/react-native-maps/react-native-maps/commit/eeb56f9f08c636eea928f383ce63d3ed1521ff8b))
+
 ## [1.18.4](https://github.com/react-native-maps/react-native-maps/compare/v1.18.3...v1.18.4) (2024-11-09)
 
 
