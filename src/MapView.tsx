@@ -120,6 +120,16 @@ export type MapViewProps = ViewProps & {
   followsUserLocation?: boolean;
 
   /**
+   * If `false` the map will not capture PoI clicks
+   * This can improve click handling on the map for android
+   *
+   * @default true
+   * @platform iOS: Not supported
+   * @platform Android: supported
+   */
+  poiClickEnabled?: boolean;
+
+  /**
    * The initial camera view the map should use.  Use this prop instead of `camera`
    * only if you don't want to control the camera of the map besides the initial view.
    *
