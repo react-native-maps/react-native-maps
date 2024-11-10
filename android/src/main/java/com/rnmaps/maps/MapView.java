@@ -104,6 +104,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private boolean handlePanDrag = false;
   private boolean moveOnMarkerPress = true;
   private boolean cacheEnabled = false;
+  private boolean poiClickEnabled = true;
+
   private ReadableMap initialRegion;
   private ReadableMap region;
   private ReadableMap initialCamera;
@@ -252,7 +254,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     markerCollection.setInfoWindowAdapter(this);
     markerCollection.setOnMarkerDragListener(this);
-    this.map.setOnPoiClickListener(this);
     this.map.setOnIndoorStateChangeListener(this);
 
     applyBridgedProps();
@@ -565,6 +566,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     if(customMapStyleString != null) {
       map.setMapStyle(new MapStyleOptions(customMapStyleString));
     }
+    this.setPoiClickEnabled(poiClickEnabled);
   }
 
   private void moveToRegion(ReadableMap region) {
@@ -681,6 +683,11 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   public void setCacheEnabled(boolean cacheEnabled) {
     this.cacheEnabled = cacheEnabled;
     this.cacheView();
+  }
+
+  public void setPoiClickEnabled(boolean poiClickEnabled) {
+    this.poiClickEnabled = poiClickEnabled;
+    map.setOnPoiClickListener(poiClickEnabled ? this : null);
   }
 
   public void enableMapLoading(boolean loadingEnabled) {
@@ -1508,4 +1515,5 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       layout(getLeft(), getTop(), getRight(), getBottom());
     }
   };
+
 }
