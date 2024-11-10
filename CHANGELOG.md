@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.20.0](https://github.com/react-native-maps/react-native-maps/compare/v1.19.1...v1.20.0) (2024-11-10)
+
+
+### Features
+
+* **android:** add support for disabling PoIClick ([#5210](https://github.com/react-native-maps/react-native-maps/issues/5210)) ([d92e283](https://github.com/react-native-maps/react-native-maps/commit/d92e28365ac42fda4b298f0a6b352cc297566660))
+
 ## [1.19.1](https://github.com/react-native-maps/react-native-maps/compare/v1.19.0...v1.19.1) (2024-11-10)
 
 
