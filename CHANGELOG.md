@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.1](https://github.com/react-native-maps/react-native-maps/compare/v1.19.0...v1.19.1) (2024-11-10)
+
+
+### Bug Fixes
+
+* Remove unstable_reactLegacyComponentNames ([#5209](https://github.com/react-native-maps/react-native-maps/issues/5209)) ([33112be](https://github.com/react-native-maps/react-native-maps/commit/33112be8bd4d8c817df5875e08131f3286a10477))
+
 # [1.19.0](https://github.com/react-native-maps/react-native-maps/compare/v1.18.4...v1.19.0) (2024-11-09)
 
 
