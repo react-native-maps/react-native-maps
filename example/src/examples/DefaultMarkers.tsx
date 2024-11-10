@@ -58,6 +58,7 @@ class DefaultMarkers extends React.Component<any, any> {
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
+          poiClickEnabled={false}
           onPress={e => this.onMapPress(e)}>
           {this.state.markers.map((marker: any) => (
             <Marker

@@ -288,6 +288,11 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.setCacheEnabled(cacheEnabled);
     }
 
+      @ReactProp(name = "poiClickEnabled", defaultBoolean = true)
+        public void setPoiClickEnabled(MapView view, boolean poiClickEnabled) {
+            view.setPoiClickEnabled(poiClickEnabled);
+        }
+
     @ReactProp(name = "loadingEnabled", defaultBoolean = false)
     public void setLoadingEnabled(MapView view, boolean loadingEnabled) {
         view.enableMapLoading(loadingEnabled);
