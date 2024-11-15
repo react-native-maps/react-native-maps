@@ -433,8 +433,10 @@ public class MapMarker extends MapFeature {
   @Override
   public void addToMap(Object collection) {
     MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
-    marker = markerCollection.addMarker(getMarkerOptions());
-    updateTracksViewChanges();
+    if (markerCollection != null){
+      marker = markerCollection.addMarker(getMarkerOptions());
+      updateTracksViewChanges();
+    }
   }
 
   @Override
@@ -443,6 +445,7 @@ public class MapMarker extends MapFeature {
       return;
     }
     MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
+    if (markerCollection == null) return;
     markerCollection.remove(marker);
     marker = null;
     updateTracksViewChanges();

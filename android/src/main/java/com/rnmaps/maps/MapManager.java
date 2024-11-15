@@ -261,7 +261,8 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "showsCompass", defaultBoolean = false)
     public void setShowsCompass(MapView view, boolean showsCompass) {
-        view.map.getUiSettings().setCompassEnabled(showsCompass);
+        if (view.map != null)
+            view.map.getUiSettings().setCompassEnabled(showsCompass);
     }
 
     @ReactProp(name = "scrollEnabled", defaultBoolean = false)
