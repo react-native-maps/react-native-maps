@@ -114,6 +114,11 @@ body:
         - 'SDK 46'
         - 'SDK 47'
         - 'SDK 48'
+        - 'SDK 49'
+        - 'SDK 50'
+        - 'SDK 51'
+        - 'SDK 52'
+        - 'SDK 53'
     validations:
       required: true
 
