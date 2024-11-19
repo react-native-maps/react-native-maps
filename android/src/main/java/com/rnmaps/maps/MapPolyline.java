@@ -254,6 +254,7 @@ public class MapPolyline extends MapFeature {
   @Override
   public void addToMap(Object collection) {
     PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+    if (polylineCollection == null) return;
     polyline = polylineCollection.addPolyline(getPolylineOptions());
     animatedPolyline = polylineCollection.addPolyline(new PolylineOptions().color(animateColor).width(width));
     polyline.setClickable(this.tappable);
@@ -262,6 +263,7 @@ public class MapPolyline extends MapFeature {
   @Override
   public void removeFromMap(Object collection) {
     PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+    if (polylineCollection == null) return;
     stopPolylineAnimation();
     polylineCollection.remove(animatedPolyline);
     polylineCollection.remove(polyline);
