@@ -189,7 +189,8 @@ id regionAsJSON(MKCoordinateRegion region) {
     }
   }
   if (subview != nil) {
-    [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
+    NSUInteger safeIndex = MIN(atIndex, _reactSubviews.count);
+    [_reactSubviews insertObject:(UIView *)subview atIndex:safeIndex];
   }
 }
 #pragma clang diagnostic pop
