@@ -20,6 +20,8 @@
   if (self = [super init]) {
     _didMoveToWindow = false;
     _polygon = [[AIRGMSPolygon alloc] init];
+    _polygon.fillColor = _fillColor;
+    _polygon.strokeColor = _strokeColor;
   }
 
   return self;

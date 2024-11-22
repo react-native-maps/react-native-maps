@@ -20,6 +20,8 @@
   if (self = [super init]) {
     _didMoveToWindow = false;
     _circle = [[GMSCircle alloc] init];
+    _circle.fillColor = _fillColor;
+    _circle.strokeColor = _strokeColor;
   }
   return self;
 }
