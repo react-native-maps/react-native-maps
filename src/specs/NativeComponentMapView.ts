@@ -19,13 +19,88 @@ export type ActionType =
     | 'marker-deselect'
     | 'marker-select';
 
+export type Frame = Readonly<{
+    x: Double;
+    y: Double;
+    width: Double;
+    height: Double;
+}>;
+
+export type ClickEvent = DirectEventHandler<
+    Readonly<{
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+        position:{
+            x: Double; // Inlined Point
+            y: Double;
+        };
+    }>
+>;
+
+export type KmlMarker = {
+    id: string; // Non-nullable string
+    title: string; // Non-nullable string
+    description: string; // Non-nullable string
+    coordinate: {
+        latitude: Double; // Inlined LatLng
+        longitude: Double;
+    }; // Non-nullable LatLng
+    position: {
+        x: Double; // Inlined Point
+        y: Double;
+    }; // Non-nullable Point
+};
+
+export type LongPressEventHandler = DirectEventHandler<
+    Readonly<{
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+        position: {
+            x: Double; // Inlined Point
+            y: Double;
+        };
+        action?: string;
+    }>
+>;
+
+export type MarkerDeselectEventHandler = DirectEventHandler<
+    Readonly<{
+        action?: string;
+        id: string;
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+    }>
+>;
+
+export type MarkerSelectEventHandler = DirectEventHandler<
+    Readonly<{
+        action?: string;
+        id: string;
+        coordinate:{
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+    }>
+>;
+
 export type CalloutPressEvent = Readonly<{
-    action?: WithDefault<'callout-press', ActionType>;
+    action?: string;
 
     /**
      * @platform iOS
      */
-    frame?: Frame;
+    frame?: {
+        x: Double;
+        y: Double;
+        width: Double;
+        height: Double;
+    };
 
     /**
      * @platform iOS
@@ -35,25 +110,29 @@ export type CalloutPressEvent = Readonly<{
     /**
      * @platform iOS
      */
-    point?: Point;
+    point?: {
+        x: Double; // Non-nullable Double for x
+        y: Double; // Non-nullable Double for y
+    };
 
     /**
      * @platform Android
      */
-    coordinate?: LatLng;
+    coordinate?: {
+        latitude: Double; // Non-nullable Double for latitude
+        longitude: Double; // Non-nullable Double for longitude
+    };
 
     /**
      * @platform Android
      */
-    position?: Point;
+    position?: {
+        x: Double; // Non-nullable Double for x
+        y: Double; // Non-nullable Double for y
+    };
 }>;
 
-export type Frame = Readonly<{
-    x: Double;
-    y: Double;
-    width: Double;
-    height: Double;
-}>;
+
 
 export type CalloutPressEventHandler = DirectEventHandler<CalloutPressEvent>;
 
@@ -87,13 +166,7 @@ export type Region = Readonly<LatLng & {
     longitudeDelta: Double; // Non-nullable Double for longitudeDelta
 }>;
 
-export type ClickEvent<T = {}> = DirectEventHandler<
-    Readonly<{
-        coordinate: LatLng;
-        position: Point;
-    }> &
-    T
->;
+
 
 export type IndoorLevel = Readonly<{
     index: Int32; // Int32 for integers
@@ -101,15 +174,13 @@ export type IndoorLevel = Readonly<{
     shortName: string; // Non-nullable string
 }>;
 
-export type ActiveIndoorLevel = Readonly<{
-    activeLevelIndex: Int32; // Int32 for integers
-    name: string; // Non-nullable string
-    shortName: string; // Non-nullable string
-}>;
-
 export type IndoorLevelActivatedEventHandler = DirectEventHandler<
     Readonly<{
-        IndoorLevel: ActiveIndoorLevel; // Nested ActiveIndoorLevel type
+        IndoorLevel: {
+            activeLevelIndex: Int32; // Int32 for integers
+            name: string; // Non-nullable string
+            shortName: string; // Non-nullable string
+        }; // Nested ActiveIndoorLevel type
     }>
 >;
 
@@ -121,48 +192,19 @@ export type IndoorBuilding = Readonly<{
 
 export type IndoorBuildingEventHandler = DirectEventHandler<
     Readonly<{
-        IndoorBuilding: IndoorBuilding; // Nested IndoorBuilding type
+        IndoorBuilding: {
+            underground: boolean; // Non-nullable boolean
+            activeLevelIndex: Int32; // Int32 for integers
+        }
     }>
 >;
 
-export type KmlMarker = Readonly<{
-    id: string; // Non-nullable string
-    title: string; // Non-nullable string
-    description: string; // Non-nullable string
-    coordinate: LatLng; // Non-nullable LatLng
-    position: Point; // Non-nullable Point
-}>;
 
 export type KmlMapEventHandler = DirectEventHandler<
     Readonly<{
-        markers: ReadonlyArray<KmlMarker>; // Immutable array of KmlMarker
     }>
 >;
 
-
-export type LongPressEventHandler = DirectEventHandler<
-    Readonly<{
-        coordinate: LatLng;
-        position: Point;
-        action?: WithDefault<'long-press', ActionType>; // Default 'long-press'
-    }>
->;
-
-export type MarkerDeselectEventHandler = DirectEventHandler<
-    Readonly<{
-        action: WithDefault<'marker-deselect', ActionType>; // Default 'marker-deselect'
-        id: string;
-        coordinate: LatLng;
-    }>
->;
-
-export type MarkerSelectEventHandler = DirectEventHandler<
-    Readonly<{
-        action: WithDefault<'marker-select', ActionType>; // Default 'marker-select'
-        id: string;
-        coordinate: LatLng;
-    }>
->;
 
 export type MapLoadedEventHandler = DirectEventHandler<Readonly<{}>>;
 
@@ -176,33 +218,57 @@ export type Details = Readonly<{
 
 export type MarkerDragEventHandler = DirectEventHandler<
     Readonly<{
-        coordinate: LatLng;
-        position: Point;
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+        position: {
+            x: Double; // Inlined Point
+            y: Double;
+        };
         id?: string; // Optional id for iOS
     }>
 >;
 
 export type MarkerDragStartEndEventHandler = DirectEventHandler<
     Readonly<{
-        coordinate: LatLng;
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
         id?: string; // Optional id for iOS
-        position?: Point; // Optional position for Android
+        position?: {
+            x: Double; // Inlined Point
+            y: Double;
+        }; // Optional position for Android
     }>
 >;
 
 export type MarkerPressEventHandler = DirectEventHandler<
     Readonly<{
-        action?: WithDefault<'marker-press', ActionType>; // Default 'long-press'
+        action?: string;
         id: string;
-        coordinate: LatLng;
-        position?: Point; // Optional position for Android
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+        position?: {
+            x: Double; // Inlined Point
+            y: Double;
+        }; // Optional position for Android
     }>
 >;
 
 export type PanDragEventHandler = DirectEventHandler<
     Readonly<{
-        coordinate: LatLng;
-        position: Point;
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+        position: {
+            x: Double; // Inlined Point
+            y: Double;
+        };
     }>
 >;
 
@@ -210,16 +276,28 @@ export type PoiClickEventHandler = DirectEventHandler<
     Readonly<{
         placeId: string;
         name: string;
-        coordinate: LatLng;
-        position?: Point; // Optional position for Android
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+        position?: {
+            x: Double; // Inlined Point
+            y: Double;
+        }; // Optional position for Android
     }>
 >;
 
 export type MapPressEventHandler = DirectEventHandler<
     Readonly<{
-        coordinate: LatLng;
-        position: Point;
-        action?: WithDefault<'press', ActionType>; // Optional action
+        coordinate: {
+            latitude: Double; // Inlined LatLng
+            longitude: Double;
+        };
+        position: {
+            x: Double; // Inlined Point
+            y: Double;
+        };
+        action?: string;
     }>
 >;
 
@@ -227,15 +305,24 @@ export type MapPressEventHandler = DirectEventHandler<
 export type RegionChangeStartEventHandler = DirectEventHandler<Details>;
 
 export type RegionChangeEvent = Readonly<{
-    region: Region; // The region object
-    details: Details; // Additional details like isGesture
+    region:  {
+        latitude: Double; // Non-nullable Double for latitude
+        longitude: Double;
+        latitudeDelta: Double; // Non-nullable Double for latitudeDelta
+        longitudeDelta: Double; // Non-nullable Double for longitudeDelta
+    }; // The region object
+    details: {
+        isGesture?: boolean; // Optional boolean for gesture detail
+    }; // Additional details like isGesture
 }>;
 
 export type RegionChangeEventHandler = DirectEventHandler<RegionChangeEvent>;
 
 
 export type UserLocationChangeEvent = Readonly<{
-    coordinate?: Readonly<LatLng & {
+    coordinate?: {
+        latitude: Double; // Non-nullable Double for latitude
+        longitude: Double;
         altitude: Double; // Use Double for numeric values
         timestamp: Double;
         accuracy: Float;
@@ -251,7 +338,7 @@ export type UserLocationChangeEvent = Readonly<{
          * @platform Android
          */
         isFromMockProvider?: boolean; // Optional boolean for mock provider
-    }>;
+    };
 
     /**
      * @platform iOS
