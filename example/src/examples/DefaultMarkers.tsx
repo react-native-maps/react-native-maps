@@ -69,10 +69,11 @@ class DefaultMarkers extends React.Component<any, any> {
           ))}
         </MapView>
         <View style={styles.buttonContainer}>
+
           <TouchableOpacity
-            onPress={() => this.setState({markers: []})}
-            style={styles.bubble}>
-            <Text>Tap map to create a marker of random color</Text>
+              onPress={() => this.setState({markers: []})}
+              style={styles.bubble}>
+            <Text>toggle compass</Text>
           </TouchableOpacity>
         </View>
       </View>

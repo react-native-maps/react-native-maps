@@ -73,7 +73,49 @@ using namespace facebook::react;
 {
   const auto &oldViewProps = *std::static_pointer_cast<RNMapsMapViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<RNMapsMapViewProps const>(props);
+    
+#define REMAP_MAPVIEW_PROP(name)                    \
+    if (oldViewProps.name != newViewProps.name) {   \
+        _view.name = newViewProps.name;             \
+    }
 
+#define REMAP_MAPVIEW_STRING_PROP(name)                             \
+    if (oldViewProps.name != newViewProps.name) {                   \
+        _view.name = RCTNSStringFromString(newViewProps.name);      \
+    }
+
+    
+    
+
+    REMAP_MAPVIEW_PROP(followsUserLocation)
+    REMAP_MAPVIEW_PROP(loadingEnabled)
+    REMAP_MAPVIEW_PROP(scrollEnabled)
+
+    REMAP_MAPVIEW_PROP(maxDelta)
+    REMAP_MAPVIEW_PROP(maxZoomLevel)
+    REMAP_MAPVIEW_PROP(minDelta)
+    REMAP_MAPVIEW_PROP(minZoomLevel)
+    
+    REMAP_MAPVIEW_PROP(showsCompass)
+    REMAP_MAPVIEW_PROP(showsScale)
+    REMAP_MAPVIEW_PROP(showsTraffic)
+    REMAP_MAPVIEW_PROP(showsUserLocation)
+    REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
+
+
+    REMAP_MAPVIEW_PROP(zoomEnabled)
+    
+    if (newViewProps.compassOffset.x != oldViewProps.compassOffset.x || newViewProps.compassOffset.y != oldViewProps.compassOffset.y){
+        _view.compassOffset =  CGPointMake(newViewProps.compassOffset.x, newViewProps.compassOffset.y);
+    }
+    if (newViewProps.region.latitude != oldViewProps.region.latitude || newViewProps.region.longitude != oldViewProps.region.longitude || newViewProps.region.latitudeDelta != oldViewProps.region.latitudeDelta || newViewProps.region.longitudeDelta != oldViewProps.region.longitudeDelta){
+        MKCoordinateSpan span = MKCoordinateSpanMake(newViewProps.region.latitudeDelta, newViewProps.region.longitudeDelta);
+        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(newViewProps.region.latitude, newViewProps.region.longitude), span);
+        
+        _view.region = region;
+    }
+
+   
 
   [super updateProps:props oldProps:oldProps];
 }

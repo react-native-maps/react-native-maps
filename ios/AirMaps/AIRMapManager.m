@@ -930,7 +930,7 @@ static int kDragCenterContext;
         mapView.onUserLocationChange(event);
     }
     
-    if (mapView.followUserLocation) {
+    if (mapView.followsUserLocation) {
         [mapView setCenterCoordinate:location.coordinate animated:YES];
     }
     

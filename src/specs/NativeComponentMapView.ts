@@ -714,7 +714,7 @@ interface NativeProps extends ViewProps {
      * @platform iOS: Supported
      * @platform Android: Supported
      */
-    onPress?: MapPressEventHandler;
+    onMapPress?: MapPressEventHandler;
 
     /**
      * Callback that is called once before the region changes, such as when the user starts moving the map.

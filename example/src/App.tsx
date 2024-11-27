@@ -56,6 +56,7 @@ class App extends React.Component<any, any> {
         longitudeDelta: LONGITUDE_DELTA,
       },
       markers: [],
+      compassVisible: false,
     };
   }
   onResetPress() {
@@ -68,6 +69,11 @@ class App extends React.Component<any, any> {
 
     this.setState({
       markers: [...this.state.markers, newMarker],
+    });
+  }
+  onToggleCompass() {
+    this.setState({
+      compassVisible: !this.state.compassVisible,
     });
   }
 
@@ -85,13 +91,14 @@ class App extends React.Component<any, any> {
   }
 
   render() {
-    console.log("markes count " + this.state.markers.length);
+    console.log("markes count " + this.state.markers.length, this.state.compassVisible);
     return (
       <View style={styles.container}>
         <NewMapView
           provider={this.props.provider}
           style={styles.map}
-          initialRegion={this.state.region}
+          zoomEnabled={this.state.compassVisible}
+          region={this.state.region}
           poiClickEnabled={false}
           onPress={e => this.onMapPress(e)}>
           {this.state.markers.map((marker: any) => (
@@ -107,6 +114,11 @@ class App extends React.Component<any, any> {
               onPress={() => this.onResetPress()}
             style={styles.bubble}>
             <Text>Tap map to create a marker of random color</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+              onPress={() => this.onToggleCompass()}
+              style={styles.bubble}>
+            <Text>Tap map to toggle compass</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -128,6 +140,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 20,
+    margin: 5,
   },
   latlng: {
     width: 200,
@@ -140,7 +153,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginVertical: 20,
     backgroundColor: 'transparent',
   },
