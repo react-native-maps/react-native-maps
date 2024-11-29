@@ -19,8 +19,8 @@ let id = 0;
 
 function randomColor() {
   return `#${Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6)}`;
+      .toString(16)
+      .padStart(6)}`;
 }
 
 class DefaultMarkers extends React.Component<any, any> {
@@ -53,30 +53,29 @@ class DefaultMarkers extends React.Component<any, any> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <MapView
-          provider={this.props.provider}
-          style={styles.map}
-          initialRegion={this.state.region}
-          poiClickEnabled={false}
-          onPress={e => this.onMapPress(e)}>
-          {this.state.markers.map((marker: any) => (
-            <Marker
-              key={marker.key}
-              coordinate={marker.coordinate}
-              pinColor={marker.color}
-            />
-          ))}
-        </MapView>
-        <View style={styles.buttonContainer}>
-
-          <TouchableOpacity
-              onPress={() => this.setState({markers: []})}
-              style={styles.bubble}>
-            <Text>toggle compass</Text>
-          </TouchableOpacity>
+        <View style={styles.container}>
+          <MapView
+              provider={this.props.provider}
+              style={styles.map}
+              initialRegion={this.state.region}
+              poiClickEnabled={false}
+              onPress={e => this.onMapPress(e)}>
+            {this.state.markers.map((marker: any) => (
+                <Marker
+                    key={marker.key}
+                    coordinate={marker.coordinate}
+                    pinColor={marker.color}
+                />
+            ))}
+          </MapView>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+                onPress={() => this.setState({markers: []})}
+                style={styles.bubble}>
+              <Text>Tap map to create a marker of random color</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
     );
   }
 }

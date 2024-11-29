@@ -358,7 +358,7 @@ export type CameraZoomRange = Readonly<{
 }>;
 
 
-interface NativeProps extends ViewProps {
+export interface MapFabricNativeProps extends ViewProps {
     /**
      * If `true` map will be cached and displayed as an image instead of being interactable, for performance usage.
      *
@@ -1024,6 +1024,6 @@ interface NativeProps extends ViewProps {
     cameraZoomRange?: CameraZoomRange;
 }
 
-export default codegenNativeComponent<NativeProps>('RNMapsMapView', {
+export default codegenNativeComponent<MapFabricNativeProps>('RNMapsMapView', {
     excludedPlatforms: ['android'],
-}) as HostComponent<NativeProps>;
+}) as HostComponent<MapFabricNativeProps>;
