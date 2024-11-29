@@ -68,6 +68,18 @@ using namespace facebook::react;
     }
 }
 
+MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
+    switch (rnMapType) {
+        case RNMapsMapViewMapType::Standard: return MKMapTypeStandard;
+        case RNMapsMapViewMapType::Satellite: return MKMapTypeSatellite;
+        case RNMapsMapViewMapType::Hybrid: return MKMapTypeHybrid;
+        case RNMapsMapViewMapType::MutedStandard: return MKMapTypeMutedStandard;
+        case RNMapsMapViewMapType::SatelliteFlyover: return MKMapTypeSatelliteFlyover;
+        case RNMapsMapViewMapType::HybridFlyover: return MKMapTypeHybridFlyover;
+        default: return MKMapTypeStandard; // Default case
+    }
+}
+
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
@@ -84,9 +96,60 @@ using namespace facebook::react;
         _view.name = RCTNSStringFromString(newViewProps.name);      \
     }
 
+#define REMAP_MAPVIEW_COLOR_PROP(name)                                   \
+    if (oldViewProps.name != newViewProps.name) {                        \
+        _view.name = RCTUIColorFromSharedColor(newViewProps.name);       \
+    }
     
+#define REMAP_MAPVIEW_POINT_PROP(name)                               \
+    if (newViewProps.name.x != oldViewProps.name.x ||                \
+        newViewProps.name.y != oldViewProps.name.y) {                \
+        _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
+    }
     
+#define REMAP_MAPVIEW_REGION_PROP(name)                                      \
+    if (newViewProps.name.latitude != oldViewProps.name.latitude ||          \
+        newViewProps.name.longitude != oldViewProps.name.longitude ||        \
+        newViewProps.name.latitudeDelta != oldViewProps.name.latitudeDelta ||\
+        newViewProps.name.longitudeDelta != oldViewProps.name.longitudeDelta) { \
+        MKCoordinateSpan span = MKCoordinateSpanMake(newViewProps.name.latitudeDelta, \
+                                                     newViewProps.name.longitudeDelta); \
+        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake( \
+            newViewProps.name.latitude, newViewProps.name.longitude), span); \
+        _view.name = region;                                                 \
+    }
 
+#define REMAP_MAPVIEW_CAMERA_PROP(name)                                    \
+    if (newViewProps.name.center.latitude != oldViewProps.name.center.latitude || \
+        newViewProps.name.center.longitude != oldViewProps.name.center.longitude || \
+        newViewProps.name.heading != oldViewProps.name.heading ||         \
+        newViewProps.name.pitch != oldViewProps.name.pitch) {             \
+        CLLocationCoordinate2D center = CLLocationCoordinate2DMake(       \
+            newViewProps.name.center.latitude,                            \
+            newViewProps.name.center.longitude);                          \
+        MKMapCamera* camera = [[MKMapCamera alloc] init];                 \
+        camera.centerCoordinate = center;                                 \
+        camera.heading = newViewProps.name.heading;                       \
+        camera.pitch = newViewProps.name.pitch;                           \
+        _view.name = camera;                                              \
+    }
+    
+#define REMAP_MAPVIEW_EDGEINSETS_PROP(name)                               \
+    if (newViewProps.name.top != oldViewProps.name.top ||                 \
+        newViewProps.name.right != oldViewProps.name.right ||             \
+        newViewProps.name.bottom != oldViewProps.name.bottom ||           \
+        newViewProps.name.left != oldViewProps.name.left) {               \
+        _view.name = UIEdgeInsetsMake(newViewProps.name.top,              \
+                                      newViewProps.name.left,             \
+                                      newViewProps.name.bottom,           \
+                                      newViewProps.name.right);           \
+    }
+    
+#define REMAP_MAPVIEW_MAPTYPE(rnMapType) MKMapType##rnMapType
+
+
+    REMAP_MAPVIEW_PROP(cacheEnabled)
+    
     REMAP_MAPVIEW_PROP(followsUserLocation)
     REMAP_MAPVIEW_PROP(loadingEnabled)
     REMAP_MAPVIEW_PROP(scrollEnabled)
@@ -101,21 +164,38 @@ using namespace facebook::react;
     REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
-
-
     REMAP_MAPVIEW_PROP(zoomEnabled)
     
-    if (newViewProps.compassOffset.x != oldViewProps.compassOffset.x || newViewProps.compassOffset.y != oldViewProps.compassOffset.y){
-        _view.compassOffset =  CGPointMake(newViewProps.compassOffset.x, newViewProps.compassOffset.y);
+    REMAP_MAPVIEW_POINT_PROP(compassOffset)
+    
+    REMAP_MAPVIEW_REGION_PROP(region)
+    REMAP_MAPVIEW_REGION_PROP(initialRegion)
+    
+    REMAP_MAPVIEW_CAMERA_PROP(initialCamera)
+    REMAP_MAPVIEW_CAMERA_PROP(camera)
+    
+    REMAP_MAPVIEW_EDGEINSETS_PROP(legalLabelInsets)
+    REMAP_MAPVIEW_EDGEINSETS_PROP(mapPadding)
+    
+    REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)
+    REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)
+    REMAP_MAPVIEW_COLOR_PROP(tintColor)
+    
+    // userLocationAnnotationTitle
+    REMAP_MAPVIEW_STRING_PROP(userLocationAnnotationTitle)
+    
+    if (oldViewProps.mapType != newViewProps.mapType){
+        _view.mapType = mapRNTypeToMKMapType(newViewProps.mapType);
     }
-    if (newViewProps.region.latitude != oldViewProps.region.latitude || newViewProps.region.longitude != oldViewProps.region.longitude || newViewProps.region.latitudeDelta != oldViewProps.region.latitudeDelta || newViewProps.region.longitudeDelta != oldViewProps.region.longitudeDelta){
-        MKCoordinateSpan span = MKCoordinateSpanMake(newViewProps.region.latitudeDelta, newViewProps.region.longitudeDelta);
-        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(newViewProps.region.latitude, newViewProps.region.longitude), span);
+    
+    if (oldViewProps.cameraZoomRange.minCenterCoordinateDistance != newViewProps.cameraZoomRange.minCenterCoordinateDistance ||
+        oldViewProps.cameraZoomRange.maxCenterCoordinateDistance != newViewProps.cameraZoomRange.maxCenterCoordinateDistance ||
+        oldViewProps.cameraZoomRange.animated != newViewProps.cameraZoomRange.animated) {
         
-        _view.region = region;
+        MKMapCameraZoomRange* zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:newViewProps.cameraZoomRange.minCenterCoordinateDistance maxCenterCoordinateDistance:newViewProps.cameraZoomRange.maxCenterCoordinateDistance];
+        [_view setCameraZoomRange:zoomRange animated:newViewProps.cameraZoomRange.animated];
     }
 
-   
 
   [super updateProps:props oldProps:oldProps];
 }

@@ -1,4 +1,4 @@
-import type {HostComponent, ViewProps} from 'react-native';
+import type {HostComponent, ViewProps, ColorValue} from 'react-native';
 
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {Double, Int32, WithDefault, Float, DirectEventHandler} from 'react-native/Libraries/Types/CodegenTypes';
@@ -481,7 +481,7 @@ interface NativeProps extends ViewProps {
      * @platform iOS: Supported
      * @platform Android: Supported
      */
-    loadingBackgroundColor?: string;
+    loadingBackgroundColor?: ColorValue;
 
     /**
      * If `true` a loading indicator will show while the map is loading.
@@ -499,7 +499,7 @@ interface NativeProps extends ViewProps {
      * @platform iOS: Apple Maps only
      * @platform Android: Supported
      */
-    loadingIndicatorColor?: string;
+    loadingIndicatorColor?: ColorValue;
 
     /**
      * Adds custom padding to each side of the map. Useful when map elements/markers are obscured.
@@ -910,7 +910,7 @@ interface NativeProps extends ViewProps {
      * @platform iOS: Apple Maps only
      * @platform Android: Not supported
      */
-    tintColor?: string;
+    tintColor?: ColorValue;
 
     /**
      * If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
