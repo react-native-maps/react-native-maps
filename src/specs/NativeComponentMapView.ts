@@ -928,7 +928,7 @@ export interface MapFabricNativeProps extends ViewProps {
      * @platform iOS: Apple Maps only (iOS >= 13.0)
      * @platform Android: Not supported
      */
-    userInterfaceStyle?: WithDefault<'light' | 'dark', 'light'>;
+    userInterfaceStyle?: WithDefault< 'system' | 'light' | 'dark', 'system'>;
 
     /**
      * The title of the annotation for current user location.

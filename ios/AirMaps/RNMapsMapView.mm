@@ -73,8 +73,6 @@ using namespace facebook::react;
       };
 
 
-
-
       _view.onMapReady = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -265,6 +263,19 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
 
     if (oldViewProps.mapType != newViewProps.mapType){
         _view.mapType = mapRNTypeToMKMapType(newViewProps.mapType);
+    }
+    if (oldViewProps.userInterfaceStyle != newViewProps.userInterfaceStyle){
+        switch (newViewProps.userInterfaceStyle) {
+            case RNMapsMapViewUserInterfaceStyle::Light:
+                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+                break;
+            case RNMapsMapViewUserInterfaceStyle::Dark:
+                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+                break;
+            case RNMapsMapViewUserInterfaceStyle::System:
+                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
+                break;
+        }
     }
 
     if (oldViewProps.cameraZoomRange.minCenterCoordinateDistance != newViewProps.cameraZoomRange.minCenterCoordinateDistance ||

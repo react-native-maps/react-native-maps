@@ -1116,7 +1116,7 @@ class MapView extends React.Component<MapViewProps, State> {
       // Define props specifically for MapFabricNativeProps
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { onCalloutPress, onIndoorBuildingFocused, onKmlReady, onLongPress, onMarkerDeselect, onMarkerPress, onMarkerSelect, onRegionChangeStart, onRegionChange, onRegionChangeComplete, region, ...restProps } = this.props;
-
+     const userInterfaceStyle = this.props.userInterfaceStyle || 'system';
       const props: MapFabricNativeProps = {
         onMapReady: this._onMapReady,
         liteMode: this.props.liteMode,
@@ -1126,6 +1126,7 @@ class MapView extends React.Component<MapViewProps, State> {
         onMarkerPress: this.handleMarkerPress,
         onMarkerSelect: this.handleMarkerSelect,
         onMarkerDeselect: this.handleMarkerDeselect,
+        userInterfaceStyle: userInterfaceStyle,
         ...restProps,
       };
       if (this.props.region){
