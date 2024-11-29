@@ -8,7 +8,7 @@
 
 #import "RNMapsMapView.h"
 #import "AirMap.h"
-
+#import "AIRMapManager.h"
 #import <react/renderer/components/RNMapsSpecs/ComponentDescriptors.h>
 #import <react/renderer/components/RNMapsSpecs/EventEmitters.h>
 #import <react/renderer/components/RNMapsSpecs/Props.h>
@@ -24,6 +24,7 @@ using namespace facebook::react;
 
 @implementation RNMapsMapView {
     AIRMap *_view;
+    AIRMapManager* _legacyMapManager;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -37,14 +38,69 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNMapsMapViewProps>();
     _props = defaultProps;
-
-      AIRMap *map = [AIRMap new];
-      
-
-
-    _view = map;
+      _legacyMapManager = [[AIRMapManager alloc] init];
+    _view = (AIRMap *)[_legacyMapManager view];
 
     self.contentView = _view;
+    
+      _view.onPress = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+              // Extract values from the NSDictionary
+                NSDictionary* coordinateDict = dictionary[@"coordinate"];
+                NSDictionary* positionDict = dictionary[@"position"];
+                
+                // Populate the OnMapPressCoordinate struct
+                facebook::react::RNMapsMapViewEventEmitter::OnMapPressCoordinate coordinate = {
+                    .latitude = [coordinateDict[@"latitude"] doubleValue],
+                    .longitude = [coordinateDict[@"longitude"] doubleValue],
+                };
+                
+                // Populate the OnMapPressPosition struct
+                facebook::react::RNMapsMapViewEventEmitter::OnMapPressPosition position = {
+                    .x = [positionDict[@"x"] doubleValue],
+                    .y = [positionDict[@"y"] doubleValue],
+                };
+              
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnMapPress data = {
+                  .action = std::string([@"press" UTF8String]),
+                  .position = position,
+                  .coordinate = coordinate
+              };
+              NSLog(@"onMapPress %@", dictionary);
+              mapViewEventEmitter->onMapPress(data);
+          }
+      };
+
+      
+      _view.onMarkerPress = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+              NSDictionary* coordinateDict = dictionary[@"coordinate"];
+
+              facebook::react::RNMapsMapViewEventEmitter::OnMarkerPressCoordinate coordinate = {
+                  .latitude = [coordinateDict[@"latitude"] doubleValue],
+                  .longitude = [coordinateDict[@"longitude"] doubleValue],
+              };
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnMarkerPress data = {
+                  .action = std::string([@"marker-press" UTF8String]),
+                  .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),
+                  .coordinate = coordinate
+              };
+              NSLog(@"onMarkerPress %@", dictionary);
+              mapViewEventEmitter->onMarkerPress(data);
+          }
+      };
+      
+      _view.onMapReady = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnMapReady data = {};
+              NSLog(@"onMapReady %@", dictionary);
+              mapViewEventEmitter->onMapReady(data);
+          }
+      };
   }
 
   return self;

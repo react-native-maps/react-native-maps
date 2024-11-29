@@ -100,7 +100,7 @@ class App extends React.Component<any, any> {
           zoomEnabled={this.state.compassVisible}
           region={this.state.region}
           poiClickEnabled={false}
-          onPress={e => this.onMapPress(e)}>
+          onMapPress={e => this.onMapPress(e)}>
           {this.state.markers.map((marker: any) => (
             <Marker
               key={marker.key}
