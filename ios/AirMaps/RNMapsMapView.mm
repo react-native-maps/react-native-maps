@@ -42,25 +42,25 @@ using namespace facebook::react;
     _view = (AIRMap *)[_legacyMapManager view];
 
     self.contentView = _view;
-    
+
       _view.onPress = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
               // Extract values from the NSDictionary
                 NSDictionary* coordinateDict = dictionary[@"coordinate"];
                 NSDictionary* positionDict = dictionary[@"position"];
-                
+
                 // Populate the OnMapPressCoordinate struct
                 facebook::react::RNMapsMapViewEventEmitter::OnMapPressCoordinate coordinate = {
                     .latitude = [coordinateDict[@"latitude"] doubleValue],
                     .longitude = [coordinateDict[@"longitude"] doubleValue],
                 };
-                
+
                 // Populate the OnMapPressPosition struct
                 facebook::react::RNMapsMapViewEventEmitter::OnMapPressPosition position = {
                     .x = [positionDict[@"x"] doubleValue],
                     .y = [positionDict[@"y"] doubleValue],
                 };
-              
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMapViewEventEmitter::OnMapPress data = {
                   .action = std::string([@"press" UTF8String]),
@@ -72,7 +72,7 @@ using namespace facebook::react;
           }
       };
 
-      
+
       _view.onMarkerPress = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
               NSDictionary* coordinateDict = dictionary[@"coordinate"];
@@ -91,7 +91,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onMarkerPress(data);
           }
       };
-      
+
       _view.onMapReady = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -123,6 +123,14 @@ using namespace facebook::react;
         [_view insertReactSubview:paperView atIndex:index];
     }
 }
+- (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    NSLog(@"childView %@", childComponentView );
+    id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
+    if (paperView){
+        [_view removeReactSubview:paperView];
+    }
+}
 
 MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
     switch (rnMapType) {
@@ -141,7 +149,7 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
 {
   const auto &oldViewProps = *std::static_pointer_cast<RNMapsMapViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<RNMapsMapViewProps const>(props);
-    
+
 #define REMAP_MAPVIEW_PROP(name)                    \
     if (oldViewProps.name != newViewProps.name) {   \
         _view.name = newViewProps.name;             \
@@ -156,13 +164,13 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
     if (oldViewProps.name != newViewProps.name) {                        \
         _view.name = RCTUIColorFromSharedColor(newViewProps.name);       \
     }
-    
+
 #define REMAP_MAPVIEW_POINT_PROP(name)                               \
     if (newViewProps.name.x != oldViewProps.name.x ||                \
         newViewProps.name.y != oldViewProps.name.y) {                \
         _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
     }
-    
+
 #define REMAP_MAPVIEW_REGION_PROP(name)                                      \
     if (newViewProps.name.latitude != oldViewProps.name.latitude ||          \
         newViewProps.name.longitude != oldViewProps.name.longitude ||        \
@@ -189,7 +197,7 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
         camera.pitch = newViewProps.name.pitch;                           \
         _view.name = camera;                                              \
     }
-    
+
 #define REMAP_MAPVIEW_EDGEINSETS_PROP(name)                               \
     if (newViewProps.name.top != oldViewProps.name.top ||                 \
         newViewProps.name.right != oldViewProps.name.right ||             \
@@ -200,12 +208,12 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
                                       newViewProps.name.bottom,           \
                                       newViewProps.name.right);           \
     }
-    
+
 #define REMAP_MAPVIEW_MAPTYPE(rnMapType) MKMapType##rnMapType
 
 
     REMAP_MAPVIEW_PROP(cacheEnabled)
-    
+
     REMAP_MAPVIEW_PROP(followsUserLocation)
     REMAP_MAPVIEW_PROP(loadingEnabled)
     REMAP_MAPVIEW_PROP(scrollEnabled)
@@ -214,40 +222,40 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
     REMAP_MAPVIEW_PROP(maxZoomLevel)
     REMAP_MAPVIEW_PROP(minDelta)
     REMAP_MAPVIEW_PROP(minZoomLevel)
-    
+
     REMAP_MAPVIEW_PROP(showsCompass)
     REMAP_MAPVIEW_PROP(showsScale)
     REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
     REMAP_MAPVIEW_PROP(zoomEnabled)
-    
+
     REMAP_MAPVIEW_POINT_PROP(compassOffset)
-    
+
     REMAP_MAPVIEW_REGION_PROP(region)
     REMAP_MAPVIEW_REGION_PROP(initialRegion)
-    
+
     REMAP_MAPVIEW_CAMERA_PROP(initialCamera)
     REMAP_MAPVIEW_CAMERA_PROP(camera)
-    
+
     REMAP_MAPVIEW_EDGEINSETS_PROP(legalLabelInsets)
     REMAP_MAPVIEW_EDGEINSETS_PROP(mapPadding)
-    
+
     REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)
     REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)
     REMAP_MAPVIEW_COLOR_PROP(tintColor)
-    
+
     // userLocationAnnotationTitle
     REMAP_MAPVIEW_STRING_PROP(userLocationAnnotationTitle)
-    
+
     if (oldViewProps.mapType != newViewProps.mapType){
         _view.mapType = mapRNTypeToMKMapType(newViewProps.mapType);
     }
-    
+
     if (oldViewProps.cameraZoomRange.minCenterCoordinateDistance != newViewProps.cameraZoomRange.minCenterCoordinateDistance ||
         oldViewProps.cameraZoomRange.maxCenterCoordinateDistance != newViewProps.cameraZoomRange.maxCenterCoordinateDistance ||
         oldViewProps.cameraZoomRange.animated != newViewProps.cameraZoomRange.animated) {
-        
+
         MKMapCameraZoomRange* zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:newViewProps.cameraZoomRange.minCenterCoordinateDistance maxCenterCoordinateDistance:newViewProps.cameraZoomRange.maxCenterCoordinateDistance];
         [_view setCameraZoomRange:zoomRange animated:newViewProps.cameraZoomRange.animated];
     }

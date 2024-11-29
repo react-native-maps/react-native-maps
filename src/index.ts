@@ -4,8 +4,6 @@ import MapView, {
   MapViewProps,
 } from './MapView';
 
-import NewMapView from './specs/NativeComponentMapView';
-export { NewMapView }
 
 import Marker from './MapMarker';
 export {MapMarker} from './MapMarker';

@@ -57,6 +57,7 @@ import {
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
 import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
+import FabricMapView from './specs/NativeComponentMapView';
 import AnimatedRegion from './AnimatedRegion';
 
 export const MAP_TYPES: MapTypes = {
@@ -1140,16 +1141,17 @@ const airMaps: {
   default: HostComponent<NativeProps>;
   google: NativeComponent<NativeProps>;
 } = {
-  default: requireNativeComponent<NativeProps>('AIRMap'),
+  default: Platform.OS === 'ios' ? FabricMapView : requireNativeComponent<NativeProps>('AIRMap'),
   google: () => null,
 };
+
 if (Platform.OS === 'android') {
   airMaps.google = airMaps.default;
 } else {
   airMaps.google = googleMapIsInstalled
-    ? requireNativeComponent<NativeProps>('AIRGoogleMap')
-    : createNotSupportedComponent(
-        'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
+      ? requireNativeComponent<NativeProps>('AIRGoogleMap')
+      : createNotSupportedComponent(
+          'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
       );
 }
 const getNativeMapComponent = (provider: Provider) =>
