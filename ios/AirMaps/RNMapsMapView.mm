@@ -73,24 +73,7 @@ using namespace facebook::react;
       };
 
 
-      _view.onMarkerPress = [self](NSDictionary* dictionary) {
-          if (_eventEmitter) {
-              NSDictionary* coordinateDict = dictionary[@"coordinate"];
 
-              facebook::react::RNMapsMapViewEventEmitter::OnMarkerPressCoordinate coordinate = {
-                  .latitude = [coordinateDict[@"latitude"] doubleValue],
-                  .longitude = [coordinateDict[@"longitude"] doubleValue],
-              };
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnMarkerPress data = {
-                  .action = std::string([@"marker-press" UTF8String]),
-                  .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),
-                  .coordinate = coordinate
-              };
-              NSLog(@"onMarkerPress %@", dictionary);
-              mapViewEventEmitter->onMarkerPress(data);
-          }
-      };
 
       _view.onMapReady = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
@@ -101,6 +84,38 @@ using namespace facebook::react;
               mapViewEventEmitter->onMapReady(data);
           }
       };
+#define HANDLE_MARKER_EVENT(eventName, emitterFunction, actionName)                \
+    if (_eventEmitter) {                                                          \
+        NSDictionary* coordinateDict = dictionary[@"coordinate"];                 \
+        facebook::react::RNMapsMapViewEventEmitter::eventName##Coordinate coordinate = { \
+            .latitude = [coordinateDict[@"latitude"] doubleValue],                 \
+            .longitude = [coordinateDict[@"longitude"] doubleValue],               \
+        };                                                                        \
+                                                                                  \
+        auto mapViewEventEmitter =                                                \
+            std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter); \
+        facebook::react::RNMapsMapViewEventEmitter::eventName data = {            \
+            .action = std::string([@actionName UTF8String]),                      \
+            .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),       \
+            .coordinate = coordinate                                              \
+        };                                                                        \
+        NSLog(@"%@ %@", @#eventName, dictionary);                                 \
+        mapViewEventEmitter->emitterFunction(data);                               \
+    }
+      _view.onMarkerSelect = [self](NSDictionary* dictionary) {
+          HANDLE_MARKER_EVENT(OnMarkerSelect, onMarkerSelect, "marker-select");
+      };
+
+      _view.onMarkerDeselect = [self](NSDictionary* dictionary) {
+          HANDLE_MARKER_EVENT(OnMarkerDeselect, onMarkerDeselect, "marker-deselect");
+      };
+
+      _view.onMarkerPress = [self](NSDictionary* dictionary) {
+          HANDLE_MARKER_EVENT(OnMarkerPress, onMarkerPress, "marker-press");
+      };
+
+      
+      
   }
 
   return self;

@@ -1081,7 +1081,29 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
+  private handleMapPress = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onPress) {
+      this.props.onPress(event);
+    }
+  };
 
+  private handleMarkerPress = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onMarkerPress) {
+      this.props.onMarkerPress(event);
+    }
+  };
+
+  private handleMarkerSelect = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onMarkerSelect) {
+      this.props.onMarkerSelect(event);
+    }
+  };
+
+  private handleMarkerDeselect = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onMarkerDeselect) {
+      this.props.onMarkerDeselect(event);
+    }
+  };
 
 
   render() {
@@ -1100,6 +1122,10 @@ class MapView extends React.Component<MapViewProps, State> {
         liteMode: this.props.liteMode,
         googleMapId: this.props.googleMapId,
         googleRenderer: this.props.googleRenderer,
+        onMapPress: this.handleMapPress,
+        onMarkerPress: this.handleMarkerPress,
+        onMarkerSelect: this.handleMarkerSelect,
+        onMarkerDeselect: this.handleMarkerDeselect,
         ...restProps,
       };
       if (this.props.region){
@@ -1111,12 +1137,6 @@ class MapView extends React.Component<MapViewProps, State> {
         };
       }
 
-      props.onMapPress = (event: NativeSyntheticEvent<any>) => {
-        if (this.props.onPress){
-          this.props.onPress(event);
-        }
-      };
-
       if (this.state.isReady) {
         if (
             props.mapType &&
@@ -1124,7 +1144,7 @@ class MapView extends React.Component<MapViewProps, State> {
         ) {
           props.mapType = MAP_TYPES.STANDARD;
 
-          console.log('ready')
+          console.log('ready');
         }
 
       } else {
