@@ -19,13 +19,61 @@
 
 using namespace facebook::react;
 
-@interface RNMapsMapView () <RCTComponentViewProtocol>
+@interface RNMapsMapView () <RCTRNMapsMapViewViewProtocol>
 @end
 
 @implementation RNMapsMapView {
     AIRMap *_view;
     AIRMapManager* _legacyMapManager;
 }
+#pragma mark - JS Commands
+- (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration{
+    NSDictionary* regionDic = [RCTConvert dictonaryFromString:regionJSON];
+    [AIRMap animateWithDuration:duration/1000 animations:^{
+        [self->_view setRegion:[RCTConvert MKCoordinateRegion:regionDic] animated:YES];
+    }];
+}
+- (void)setCamera:(NSString *)cameraJSON{
+    NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
+    [_view setCamera:[RCTConvert MKMapCamera:cameraDic]];
+}
+- (void)getCamera{
+    
+}
+- (void)animateCamera:(NSString *)cameraJSON duration:(NSInteger)duration{
+    NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
+    MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:cameraDic existingCamera:[_view camera]];
+
+    // don't emit region change events when we are setting the camera
+    BOOL originalIgnore = _view.ignoreRegionChanges;
+    _view.ignoreRegionChanges = YES;
+    [AIRMap animateWithDuration:duration/1000 animations:^{
+        [self->_view setCamera:camera animated:YES];
+    } completion:^(BOOL finished){
+        self->_view.ignoreRegionChanges = originalIgnore;
+    }];
+    
+}
+- (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated {
+    
+}
+- (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
+    
+}
+- (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
+    
+}
+- (void)setMapBoundaries:(NSString *)northEast southWest:(NSString *)southWest {
+    
+}
+
+#pragma mark - Native commands
+
+- (void)handleCommand:(const NSString *)commandName args:(const NSArray *)args
+{
+    RCTRNMapsMapViewHandleCommand(self, commandName, args);
+}
+
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
@@ -112,8 +160,8 @@ using namespace facebook::react;
           HANDLE_MARKER_EVENT(OnMarkerPress, onMarkerPress, "marker-press");
       };
 
-      
-      
+
+
   }
 
   return self;

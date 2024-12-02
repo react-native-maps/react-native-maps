@@ -57,10 +57,10 @@ import {
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
 import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
-import FabricMapView from './specs/NativeComponentMapView';
 import type {MapFabricNativeProps} from './specs/NativeComponentMapView';
 
 import AnimatedRegion from './AnimatedRegion';
+import FabricMapView , {FabricMapHandle} from './FabricMapView';
 
 export const MAP_TYPES: MapTypes = {
   STANDARD: 'standard',
@@ -766,11 +766,13 @@ class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
 
+  private fabricMap: React.RefObject<FabricMapHandle>;
+
   constructor(props: MapViewProps) {
     super(props);
 
     this.map = React.createRef<MapViewNativeComponentType>();
-
+    this.fabricMap = React.createRef<FabricMapHandle>();
     this.state = {
       isReady: Platform.OS === 'ios',
     };
@@ -816,13 +818,18 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setCamera(camera: Partial<Camera>) {
-    if (this.map.current) {
-      Commands.setCamera(this.map.current, camera);
+    if (this.fabricMap.current) {
+       this.fabricMap.current.setCamera(camera);
+      } else if (this.map.current) {
+        Commands.setCamera(this.map.current, camera);
     }
   }
 
   animateCamera(camera: Partial<Camera>, opts?: { duration?: number }) {
-    if (this.map.current) {
+    console.log('animateCamera');
+    if (this.fabricMap.current) {
+      this.fabricMap.current.animateCamera(camera, opts?.duration ? opts.duration : 500);
+    } else  if (this.map.current) {
       Commands.animateCamera(
           this.map.current,
           camera,
@@ -832,29 +839,33 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   animateToRegion(region: Region, duration: number = 500) {
-    if (this.map.current) {
+    if (this.fabricMap.current) {
+      this.fabricMap.current.animateToRegion(region, duration);
+    } else if (this.map.current) {
       Commands.animateToRegion(this.map.current, region, duration);
     }
   }
 
   fitToElements(options: FitToOptions = {}) {
-    if (this.map.current) {
-      const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-        animated = true,
-      } = options;
-
+    const {
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+      animated = true,
+    } = options;
+    if (this.fabricMap.current) {
+      this.fabricMap.current.fitToElements(edgePadding, animated);
+    } else if (this.map.current) {
       Commands.fitToElements(this.map.current, edgePadding, animated);
     }
   }
 
   fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
-    if (this.map.current) {
-      const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-        animated = true,
-      } = options;
-
+    const {
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+      animated = true,
+    } = options;
+    if (this.fabricMap.current) {
+      this.fabricMap.current.fitToSuppliedMarkers(markers, edgePadding, animated);
+    } else if (this.map.current) {
       Commands.fitToSuppliedMarkers(
           this.map.current,
           markers,
@@ -865,12 +876,13 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
-    if (this.map.current) {
       const {
         edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
         animated = true,
       } = options;
-
+      if (this.fabricMap.current) {
+        this.fabricMap.current.fitToCoordinates(coordinates, edgePadding, animated);
+      } else if (this.map.current) {
       Commands.fitToCoordinates(
           this.map.current,
           coordinates,
@@ -1157,7 +1169,7 @@ class MapView extends React.Component<MapViewProps, State> {
       // Render AIRMap with MapFabricNativeProps
       return (
           <ProviderContext.Provider value={this.props.provider}>
-            <AIRMap {...props} />
+            <AIRMap {...props} ref={this.fabricMap}/>
           </ProviderContext.Provider>
       );
     } else {

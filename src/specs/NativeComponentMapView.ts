@@ -1,6 +1,7 @@
 import type {HostComponent, ViewProps, ColorValue} from 'react-native';
 
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import {Double, Int32, WithDefault, Float, DirectEventHandler} from 'react-native/Libraries/Types/CodegenTypes';
 
 export type EdgePadding = Readonly<{
@@ -32,7 +33,7 @@ export type ClickEvent = DirectEventHandler<
             latitude: Double; // Inlined LatLng
             longitude: Double;
         };
-        position:{
+        position: {
             x: Double; // Inlined Point
             y: Double;
         };
@@ -82,7 +83,7 @@ export type MarkerSelectEventHandler = DirectEventHandler<
     Readonly<{
         action?: string;
         id: string;
-        coordinate:{
+        coordinate: {
             latitude: Double; // Inlined LatLng
             longitude: Double;
         };
@@ -133,7 +134,6 @@ export type CalloutPressEvent = Readonly<{
 }>;
 
 
-
 export type CalloutPressEventHandler = DirectEventHandler<CalloutPressEvent>;
 
 export type Camera = Readonly<{
@@ -165,8 +165,6 @@ export type Region = Readonly<LatLng & {
     latitudeDelta: Double; // Non-nullable Double for latitudeDelta
     longitudeDelta: Double; // Non-nullable Double for longitudeDelta
 }>;
-
-
 
 export type IndoorLevel = Readonly<{
     index: Int32; // Int32 for integers
@@ -201,8 +199,7 @@ export type IndoorBuildingEventHandler = DirectEventHandler<
 
 
 export type KmlMapEventHandler = DirectEventHandler<
-    Readonly<{
-    }>
+    Readonly<{}>
 >;
 
 
@@ -305,7 +302,7 @@ export type MapPressEventHandler = DirectEventHandler<
 export type RegionChangeStartEventHandler = DirectEventHandler<Details>;
 
 export type RegionChangeEvent = Readonly<{
-    region:  {
+    region: {
         latitude: Double; // Non-nullable Double for latitude
         longitude: Double;
         latitudeDelta: Double; // Non-nullable Double for latitudeDelta
@@ -928,7 +925,7 @@ export interface MapFabricNativeProps extends ViewProps {
      * @platform iOS: Apple Maps only (iOS >= 13.0)
      * @platform Android: Not supported
      */
-    userInterfaceStyle?: WithDefault< 'system' | 'light' | 'dark', 'system'>;
+    userInterfaceStyle?: WithDefault<'system' | 'light' | 'dark', 'system'>;
 
     /**
      * The title of the annotation for current user location.
@@ -1023,6 +1020,70 @@ export interface MapFabricNativeProps extends ViewProps {
      */
     cameraZoomRange?: CameraZoomRange;
 }
+
+
+export interface NativeCommands {
+    animateToRegion: (
+        viewRef: React.ElementRef<React.ComponentType>,
+        regionJSON: string,
+        duration: Int32,
+    ) => void;
+
+    setCamera: (
+        viewRef: React.ElementRef<React.ComponentType>,
+        cameraJSON: string,
+    ) => void;
+
+    getCamera: (
+        viewRef: React.ElementRef<React.ComponentType>,
+    ) => Promise<string>;
+
+    animateCamera: (
+        viewRef: React.ElementRef<React.ComponentType>,
+        cameraJSON: string,
+        duration: Int32,
+    ) => void;
+
+    fitToElements: (
+        viewRef: React.ElementRef<React.ComponentType>,
+        edgePaddingJSON: string,
+        animated: boolean,
+    ) => void;
+
+    fitToSuppliedMarkers: (
+        viewRef: React.ElementRef<React.ComponentType>,
+        markersJSON: string,
+        edgePaddingJSON: string,
+        animated: boolean,
+    ) => void;
+
+    fitToCoordinates: (
+        viewRef: React.ElementRef<React.ComponentType>,
+        coordinatesJSON: string,
+        edgePaddingJSON: string,
+        animated: boolean,
+    ) => void;
+
+    setMapBoundaries: (
+        viewRef: React.ElementRef<React.ComponentType>,
+        northEast: string,
+        southWest: string,
+    ) => void;
+
+}
+
+export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
+    supportedCommands: [
+        'animateToRegion',
+        'setCamera',
+        'getCamera',
+        'animateCamera',
+        'fitToElements',
+        'fitToSuppliedMarkers',
+        'fitToCoordinates',
+        'setMapBoundaries'
+    ],
+});
 
 export default codegenNativeComponent<MapFabricNativeProps>('RNMapsMapView', {
     excludedPlatforms: ['android'],
