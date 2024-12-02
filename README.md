@@ -14,10 +14,19 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 ## Compatibility
 
-## React-Native Requirements
+## React Native Compatibility
 
-- **Version 1.14.0 and above**: Requires `react-native >= 0.74`.
-- **Versions below 1.14.0**: Require `react-native >= 0.64.3`.
+### Important Notes:
+
+- **Fabric is not yet supported**:  
+  This feature is currently under development. Fabric is enabled by default in React Native `0.76` and above, so **please disable it** for now.  
+  Follow updates on this issue here: [react-native-maps/issues/5206](https://github.com/react-native-maps/react-native-maps/issues/5206).  
+  Kindly refrain from opening duplicate tickets regarding this matter.
+
+### Version Requirements:
+
+- **Version `1.14.0` and above**: Requires **React Native `>= 0.74`**.
+- **Versions below `1.14.0`**: Require **React Native `>= 0.64.3`**.
 
 ## Component API
 
