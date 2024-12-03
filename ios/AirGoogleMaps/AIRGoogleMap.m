@@ -188,7 +188,10 @@ id regionAsJSON(MKCoordinateRegion region) {
       [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
     }
   }
-  [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
+  if (subview != nil) {
+    NSUInteger safeIndex = MIN(atIndex, _reactSubviews.count);
+    [_reactSubviews insertObject:(UIView *)subview atIndex:safeIndex];
+  }
 }
 #pragma clang diagnostic pop
 
@@ -957,15 +960,16 @@ id regionAsJSON(MKCoordinateRegion region) {
     marker.layer.position = CGPointZero;
 
     [self insertReactSubview:(UIView *) marker atIndex:index];
-
-    [markers addObject:@{@"id": marker.identifier,
-                         @"title": marker.title,
-                         @"description": marker.subtitle,
-                         @"coordinate": @{
-                             @"latitude": @(location.latitude),
-                             @"longitude": @(location.longitude)
-                             }
-                         }];
+    if (marker.identifier != nil && marker.title != nil && marker.subtitle != nil) {
+      [markers addObject:@{@"id": marker.identifier,
+                          @"title": marker.title,
+                          @"description": marker.subtitle,
+                          @"coordinate": @{
+                              @"latitude": @(location.latitude),
+                              @"longitude": @(location.longitude)
+                              }
+                          }];
+    }
 
     index++;
   }
