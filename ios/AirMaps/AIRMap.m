@@ -135,7 +135,11 @@ const NSInteger AIRMapMaxZoomLevel = 20;
             [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
         }
     }
-    [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
+    
+    if (subview != nil) {
+        NSUInteger safeIndex = MIN(atIndex, _reactSubviews.count);
+        [_reactSubviews insertObject:(UIView *)subview atIndex:safeIndex];
+    }
 }
 #pragma clang diagnostic pop
 
