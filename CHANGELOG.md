@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.1](https://github.com/react-native-maps/react-native-maps/compare/v1.20.0...v1.20.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* **ios:** color update in AIRGoogleMap ([#5227](https://github.com/react-native-maps/react-native-maps/issues/5227)) ([f445546](https://github.com/react-native-maps/react-native-maps/commit/f44554637a93de5f505bbf199d2a5fee84c76695))
+
 # [1.20.0](https://github.com/react-native-maps/react-native-maps/compare/v1.19.1...v1.20.0) (2024-11-10)
 
 
