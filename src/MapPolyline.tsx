@@ -20,15 +20,6 @@ export type MapPolylineProps = ViewProps & {
   coordinates: LatLng[];
 
   /**
-   * The fill color to use for the path.
-   *
-   * @default `#000`, `rgba(r,g,b,0.5)`
-   * @platform iOS: Supported
-   * @platform Android: Not supported
-   */
-  fillColor?: string;
-
-  /**
    * Boolean to indicate whether to draw each segment of the line as a geodesic as opposed to straight lines on the Mercator projection.
    * A geodesic is the shortest path between two points on the Earth's surface.
    * The geodesic curve is constructed assuming the Earth is a sphere.

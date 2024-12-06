@@ -24,7 +24,6 @@
 @property (nonatomic, strong) UIColor *strokeColor;
 @property (nonatomic, strong) NSArray<UIColor *> *strokeColors;
 @property (nonatomic, assign) double strokeWidth;
-@property (nonatomic, assign) UIColor *fillColor;
 @property (nonatomic, strong) NSArray<NSNumber *> *lineDashPattern;
 @property (nonatomic, assign) BOOL geodesic;
 @property (nonatomic, assign) NSString *title;
