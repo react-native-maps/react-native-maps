@@ -74,8 +74,7 @@ class PolylineCreator extends React.Component<any, any> {
             <Polyline
               key={polyline.id}
               coordinates={polyline.coordinates}
-              strokeColor="#000"
-              fillColor="rgba(255,0,0,0.5)"
+              strokeColor="rgba(255,0,0,0.5)"
               strokeWidth={1}
             />
           ))}
@@ -83,8 +82,7 @@ class PolylineCreator extends React.Component<any, any> {
             <Polyline
               key="editingPolyline"
               coordinates={this.state.editing.coordinates}
-              strokeColor="#F00"
-              fillColor="rgba(255,0,0,0.5)"
+              strokeColor="rgba(255,0,0,0.5)"
               strokeWidth={1}
             />
           )}

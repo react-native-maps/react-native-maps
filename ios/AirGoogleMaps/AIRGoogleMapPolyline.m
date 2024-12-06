@@ -20,7 +20,6 @@
 {
   if (self = [super init]) {
     _polyline = [[AIRGMSPolyline alloc] init];
-    _polyline.spans = @[[GMSStyleSpan spanWithColor:_strokeColor]];
     _polyline.strokeColor = _strokeColor;
   }
   return self;
@@ -32,7 +31,7 @@
 
   GMSMutablePath *path = [GMSMutablePath path];
 
-  if (!coordinates || coordinates.count == 0) 
+  if (!coordinates || coordinates.count == 0)
   {
     [path removeAllCoordinates];
     return;
@@ -78,12 +77,6 @@
 {
   _strokeWidth = strokeWidth;
   _polyline.strokeWidth = strokeWidth;
-}
-
--(void)setFillColor:(UIColor *)fillColor
-{
-  _fillColor = fillColor;
-  _polyline.spans = @[[GMSStyleSpan spanWithColor:fillColor]];
 }
 
 - (void)setLineDashPattern:(NSArray<NSNumber *> *)lineDashPattern {
