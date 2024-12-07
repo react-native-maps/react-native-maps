@@ -959,7 +959,7 @@ class MapView extends React.Component<MapViewProps, State> {
       return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
     } else if (Platform.OS === 'ios') {
       if (this.fabricMap.current) {
-        return this.fabricMap.current.takeSnapshot(args);
+        return this.fabricMap.current.takeSnapshot(config);
       }
     }
     return Promise.reject('takeSnapshot not supported on this platform');
