@@ -4,7 +4,6 @@ import MapView, {
   MapViewProps,
 } from './MapView';
 
-
 import Marker from './MapMarker';
 export {MapMarker} from './MapMarker';
 export type {MapMarkerProps} from './MapMarker';

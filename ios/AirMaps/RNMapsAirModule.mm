@@ -117,6 +117,21 @@
                       resolve:(RCTPromiseResolveBlock)resolve
                        reject:(RCTPromiseRejectBlock)reject
 {
+    double latitude = coordinate.latitude();
+    double longitude = coordinate.longitude();
+    
+    [self executeWithMapView:tag success:^(AIRMap *mapView) {
+    
+        CGPoint touchPoint = [mapView convertCoordinate:
+                              CLLocationCoordinate2DMake(latitude,longitude)
+                                          toPointToView:mapView];
+
+        resolve(@{
+                  @"x": @(touchPoint.x),
+                  @"y": @(touchPoint.y),
+                  });
+        
+    } reject:reject];
     
 }
 - (void)getCoordinateForPoint:(double)tag
@@ -124,7 +139,7 @@
                       resolve:(RCTPromiseResolveBlock)resolve
                        reject:(RCTPromiseRejectBlock)reject
 {
-    
+   
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
