@@ -1,14 +1,21 @@
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 
 // Import your native commands for FabricMapView
-import type {MapFabricNativeProps, Camera} from './specs/NativeComponentMapView';
+import type {MapBoundaries, SnapshotOptions} from './specs/NativeAirMapsModule';
+import NativeAirMapsModule from './specs/NativeAirMapsModule';
+
+import type {MapFabricNativeProps, Camera, Point} from './specs/NativeComponentMapView';
 import FabricMapView, {Commands} from './specs/NativeComponentMapView';
+import {LatLng, Region} from './sharedTypes';
+import {Address, EdgePadding} from './MapView.types';
+import {findNodeHandle} from 'react-native';
 
 export interface FabricMapHandle {
     getCamera: () => Promise<Camera>;
     setCamera: (camera: Partial<Camera>) => void;
     animateToRegion: (region: Region, duration: number) => void;
     animateCamera: (camera: Partial<Camera>, duration: number) => void;
+    getMarkersFrames: (onlyVisible: boolean) => Promise<unknown>;
     fitToElements: (
         edgePadding: EdgePadding,
         animated: boolean,
@@ -30,16 +37,69 @@ export interface FabricMapHandle {
         northEast: LatLng,
         southWest: LatLng,
     ) => void;
+    getMapBoundaries: () => Promise<MapBoundaries>;
+    takeSnapshot:(config: SnapshotOptions) => Promise<string>;
+    getAddressFromCoordinates: (
+        coordinate: LatLng) => Promise<Address>;
+    getPointForCoordinate: (
+        coordinate: LatLng) => Promise<Point>;
+    getCoordinateForPoint: (point: Point) => Promise<LatLng>
 }
-
-import {LatLng, Region} from './sharedTypes';
-import {EdgePadding} from './MapView.types';
 
 export const FabricMap = forwardRef<FabricMapHandle, MapFabricNativeProps>(
     (props, ref) => {
         const fabricRef = useRef<React.ElementRef<React.ComponentType>>(null);
         // Use Imperative Handle to expose commands
         useImperativeHandle(ref, () => ({
+            async getMarkersFrames(onlyVisible: boolean){
+                if (fabricRef.current) {
+                    return NativeAirMapsModule.getMarkersFrames(findNodeHandle(fabricRef.current) ?? -1, onlyVisible);
+                } else {
+                    throw new Error('getMarkersFrames is only supported on iOS with Fabric.');
+                }
+            },
+            async getCoordinateForPoint(point: Point){
+                if (fabricRef.current) {
+                    return NativeAirMapsModule.getCoordinateForPoint(findNodeHandle(fabricRef.current) ?? -1, point);
+                } else {
+                    throw new Error('getCoordinateForPoint is only supported on iOS with Fabric.');
+                }
+            },
+            async getPointForCoordinate(coordinate: LatLng){
+                if (fabricRef.current) {
+                    return NativeAirMapsModule.getPointForCoordinate(findNodeHandle(fabricRef.current) ?? -1, coordinate);
+                } else {
+                    throw new Error('getPointForCoordinate is only supported on iOS with Fabric.');
+                }
+            },
+            async getAddressFromCoordinates(coordinate: LatLng){
+                if (fabricRef.current) {
+                    return NativeAirMapsModule.getAddressFromCoordinates(findNodeHandle(fabricRef.current) ?? -1, coordinate);
+                } else {
+                    throw new Error('getAddressFromCoordinates is only supported on iOS with Fabric.');
+                }
+            },
+            async takeSnapshot(config: SnapshotOptions) {
+                if (fabricRef.current) {
+                    return NativeAirMapsModule.takeSnapshot(findNodeHandle(fabricRef.current) ?? -1, config);
+                } else {
+                    throw new Error('takeSnapshot is only supported on iOS with Fabric.');
+                }
+            },
+            async getCamera() {
+                if (fabricRef.current) {
+                        return NativeAirMapsModule.getCamera(findNodeHandle(fabricRef.current) ?? -1);
+                } else {
+                    throw new Error('getCamera is only supported on iOS with Fabric.');
+                }
+            },
+            async getMapBoundaries(){
+                if (fabricRef.current) {
+                    return NativeAirMapsModule.getMapBoundaries(findNodeHandle(fabricRef.current) ?? -1);
+                } else {
+                    throw new Error('getMapBoundaries is only supported on iOS with Fabric.');
+                }
+            },
             animateToRegion(region: Region, duration: number) {
                 if (fabricRef.current) {
                     try {
@@ -101,19 +161,6 @@ export const FabricMap = forwardRef<FabricMapHandle, MapFabricNativeProps>(
                     }
                 } else {
                     throw new Error('fitToCoordinates is only supported on iOS with Fabric.');
-                }
-            },
-            async getCamera() {
-                if (fabricRef.current) {
-                    try {
-                        const jsonString = await Commands.getCamera(fabricRef.current);
-                        console.log('getCamera: ' + jsonString);
-                        return JSON.parse(jsonString);
-                    } catch (error) {
-                        throw new Error('Failed to retrieve camera');
-                    }
-                } else {
-                    throw new Error('getCamera is only supported on iOS with Fabric.');
                 }
             },
             setCamera(camera: Partial<Camera>) {

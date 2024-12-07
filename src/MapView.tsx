@@ -812,7 +812,9 @@ class MapView extends React.Component<MapViewProps, State> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.getCamera(this._getHandle());
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('getCamera', []);
+      if (this.fabricMap.current){
+        return this.fabricMap.current.getCamera();
+      }
     }
     return Promise.reject('getCamera not supported on this platform');
   }
@@ -826,7 +828,6 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   animateCamera(camera: Partial<Camera>, opts?: { duration?: number }) {
-    console.log('animateCamera');
     if (this.fabricMap.current) {
       this.fabricMap.current.animateCamera(camera, opts?.duration ? opts.duration : 500);
     } else  if (this.map.current) {
@@ -903,7 +904,9 @@ class MapView extends React.Component<MapViewProps, State> {
           this._getHandle(),
       );
     } else if (Platform.OS === 'ios') {
-      return await this._runCommand('getMapBoundaries', []);
+      if (this.fabricMap.current) {
+        return this.fabricMap.current.getMapBoundaries();
+      }
     }
     return Promise.reject('getMapBoundaries not supported on this platform');
   }
@@ -955,23 +958,9 @@ class MapView extends React.Component<MapViewProps, State> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
     } else if (Platform.OS === 'ios') {
-      return new Promise((resolve, reject) => {
-        this._runCommand('takeSnapshot', [
-          config.width,
-          config.height,
-          config.region,
-          config.format,
-          config.quality,
-          config.result,
-          (err: unknown, snapshot: string) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(snapshot);
-            }
-          },
-        ]);
-      });
+      if (this.fabricMap.current) {
+        return this.fabricMap.current.takeSnapshot(args);
+      }
     }
     return Promise.reject('takeSnapshot not supported on this platform');
   }
@@ -992,7 +981,9 @@ class MapView extends React.Component<MapViewProps, State> {
           coordinate,
       );
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('getAddressFromCoordinates', [coordinate]);
+      if (this.fabricMap.current) {
+        return this.fabricMap.current.getAddressFromCoordinates(coordinate);
+      }
     }
     return Promise.reject('getAddress not supported on this platform');
   }
@@ -1013,7 +1004,9 @@ class MapView extends React.Component<MapViewProps, State> {
           coordinate,
       );
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('pointForCoordinate', [coordinate]);
+      if (this.fabricMap.current) {
+        return this.fabricMap.current.getPointForCoordinate(coordinate);
+      }
     }
     return Promise.reject('pointForCoordinate not supported on this platform');
   }
@@ -1034,7 +1027,9 @@ class MapView extends React.Component<MapViewProps, State> {
           point,
       );
     } else if (Platform.OS === 'ios') {
-      return this._runCommand('coordinateForPoint', [point]);
+      if (this.fabricMap.current) {
+        return this.fabricMap.current.getCoordinateForPoint(point);
+      }
     }
     return Promise.reject('coordinateForPoint not supported on this platform');
   }
@@ -1050,7 +1045,10 @@ class MapView extends React.Component<MapViewProps, State> {
     [key: string]: { point: Point; frame: Frame };
   }> {
     if (Platform.OS === 'ios') {
-      return this._runCommand('getMarkersFrames', [onlyVisible]);
+      if (this.fabricMap.current) {
+        // @ts-ignore
+        return this.fabricMap.current.getMarkersFrames(onlyVisible);
+      }
     }
     return Promise.reject('getMarkersFrames not supported on this platform');
   }
@@ -1075,23 +1073,11 @@ class MapView extends React.Component<MapViewProps, State> {
     };
   }
 
-  private _mapManagerCommand(name: NativeCommandName) {
-    return NativeModules[`${getNativeMapName(this.props.provider)}Manager`][
-        name
-        ];
-  }
 
   private _getHandle() {
     return findNodeHandle(this.map.current);
   }
 
-  private _runCommand(name: NativeCommandName, args: any[]) {
-    if (Platform.OS === 'ios') {
-      return this._mapManagerCommand(name)(this._getHandle(), ...args);
-    } else {
-      return Promise.reject(`Invalid platform was passed: ${Platform.OS}`);
-    }
-  }
 
   private handleMapPress = (event: NativeSyntheticEvent<any>) => {
     if (this.props.onPress) {

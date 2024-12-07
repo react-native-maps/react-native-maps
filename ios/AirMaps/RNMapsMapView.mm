@@ -26,6 +26,12 @@ using namespace facebook::react;
     AIRMap *_view;
     AIRMapManager* _legacyMapManager;
 }
+
+
+- (AIRMap *) mapView {
+    return _view;
+}
+
 #pragma mark - JS Commands
 - (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration{
     NSDictionary* regionDic = [RCTConvert dictonaryFromString:regionJSON];
@@ -35,11 +41,10 @@ using namespace facebook::react;
 }
 - (void)setCamera:(NSString *)cameraJSON{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
-    [_view setCamera:[RCTConvert MKMapCamera:cameraDic]];
+    MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:cameraDic existingCamera:[_view camera]];
+    [_view setCamera:camera];
 }
-- (void)getCamera{
-    
-}
+
 - (void)animateCamera:(NSString *)cameraJSON duration:(NSInteger)duration{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
     MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:cameraDic existingCamera:[_view camera]];

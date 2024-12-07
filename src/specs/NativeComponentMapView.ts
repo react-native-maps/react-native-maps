@@ -1034,10 +1034,6 @@ export interface NativeCommands {
         cameraJSON: string,
     ) => void;
 
-    getCamera: (
-        viewRef: React.ElementRef<React.ComponentType>,
-    ) => Promise<string>;
-
     animateCamera: (
         viewRef: React.ElementRef<React.ComponentType>,
         cameraJSON: string,
@@ -1076,12 +1072,11 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     supportedCommands: [
         'animateToRegion',
         'setCamera',
-        'getCamera',
         'animateCamera',
         'fitToElements',
         'fitToSuppliedMarkers',
         'fitToCoordinates',
-        'setMapBoundaries'
+        'setMapBoundaries',
     ],
 });
 

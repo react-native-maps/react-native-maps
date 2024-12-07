@@ -92,7 +92,7 @@
   },
   "codegenConfig": {
     "name": "RNMapsSpecs",
-    "type": "components",
+    "type": "all",
     "jsSrcsDir": "./src/specs"
   },
   "engines": {

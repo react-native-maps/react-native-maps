@@ -8,8 +8,14 @@
 
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
+@class AIRMap;
+
 NS_ASSUME_NONNULL_BEGIN
+
 @interface RNMapsMapView : RCTViewComponentView
+
+- (AIRMap *) mapView;
+
 @end
 
 NS_ASSUME_NONNULL_END
