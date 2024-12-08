@@ -8,6 +8,7 @@
 
 #import "RNMapsMapView.h"
 #import "AirMap.h"
+#import "AIRMapMarker.h"
 #import "AIRMapManager.h"
 #import <react/renderer/components/RNMapsSpecs/ComponentDescriptors.h>
 #import <react/renderer/components/RNMapsSpecs/EventEmitters.h>
@@ -57,19 +58,26 @@ using namespace facebook::react;
     } completion:^(BOOL finished){
         self->_view.ignoreRegionChanges = originalIgnore;
     }];
-    
+
 }
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated {
-    
+
 }
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
-    
+    NSArray* markers = [RCTConvert arrayFromString:markersJSON];
+    NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        AIRMapMarker *marker = (AIRMapMarker *)evaluatedObject;
+        return [marker isKindOfClass:[AIRMapMarker class]] && [markers containsObject:marker.identifier];
+    }];
+    NSArray *filteredMarkers = [_view.annotations filteredArrayUsingPredicate:filterMarkers];
+    [_view showAnnotations:filteredMarkers animated:animated];
+
 }
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
-    
+
 }
 - (void)setMapBoundaries:(NSString *)northEast southWest:(NSString *)southWest {
-    
+
 }
 
 #pragma mark - Native commands

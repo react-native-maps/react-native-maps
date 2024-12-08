@@ -41,6 +41,14 @@
                                                 error:&jsonError];
 }
 
++ (NSArray*) arrayFromString:(NSString *) str {
+    NSError *jsonError;
+    NSData *objectData = [str dataUsingEncoding:NSUTF8StringEncoding];
+    return [NSJSONSerialization JSONObjectWithData:objectData
+                                              options:NSJSONReadingMutableContainers
+                                                error:&jsonError];
+}
+
 + (MKMapCamera*)MKMapCameraWithDefaults:(id)json existingCamera:(MKMapCamera*)camera
 {
     json = [self NSDictionary:json];

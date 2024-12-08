@@ -15,4 +15,5 @@
 + (MKMapCamera*)MKMapCameraWithDefaults:(id)json existingCamera:(MKMapCamera*)camera;
 + (MKMapType)MKMapType:(id)json;
 + (NSDictionary*) dictonaryFromString:(NSString *) str;
++ (NSArray*) arrayFromString:(NSString *) str;
 @end
