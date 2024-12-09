@@ -422,6 +422,14 @@ export type MapViewProps = ViewProps & {
   onPoiClick?: (event: PoiClickEvent) => void;
 
   /**
+   * Callback that is called when user clicks on "My Location" button.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  onMyLocationButtonClick?: (event?: NativeSyntheticEvent<{}>) => void;
+
+  /**
    * Callback that is called when user taps on the map.
    *
    * @platform iOS: Supported

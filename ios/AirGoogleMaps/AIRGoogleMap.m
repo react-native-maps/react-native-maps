@@ -431,6 +431,11 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (self.onPoiClick) self.onPoiClick(event);
 }
 
+- (BOOL)didTapMyLocationButtonForMapView:(GMSMapView *)mapView {
+    if (self.onMyLocationButtonClick) self.onMyLocationButtonClick(@{});
+    return NO;
+}
+
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position  isGesture:(BOOL)isGesture{
   id event = @{@"continuous": @NO,
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),

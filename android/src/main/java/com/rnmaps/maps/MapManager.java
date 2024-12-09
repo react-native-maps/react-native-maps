@@ -439,8 +439,12 @@ public class MapManager extends ViewGroupManager<MapView> {
                 "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
                 "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
                 "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
-                "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-                "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
+                "onKmlReady", MapBuilder.of("registrationName", "onKmlReady")
+        ));
+
+        map.putAll(MapBuilder.of(
+                "onPoiClick", MapBuilder.of("registrationName", "onPoiClick"),
+                "onMyLocationButtonClick", MapBuilder.of("registrationName", "onMyLocationButtonClick")
         ));
 
         map.putAll(MapBuilder.of(
