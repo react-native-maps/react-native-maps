@@ -38,6 +38,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onMarkerDeselect;
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onPoiClick;
+@property (nonatomic, copy) RCTBubblingEventBlock onMyLocationButtonClick;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
@@ -77,6 +78,7 @@
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
 - (void)didTapPOIWithPlaceID:(NSString *)placeID name:(NSString *) name location:(CLLocationCoordinate2D) location;
+- (BOOL)didTapMyLocationButtonForMapView:(GMSMapView *)mapView;
 - (NSArray *)getMapBoundaries;
 
 + (MKCoordinateRegion)makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position;

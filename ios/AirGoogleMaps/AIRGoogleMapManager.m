@@ -121,6 +121,7 @@ RCT_EXPORT_VIEW_PROPERTY(onRegionChangeStart, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPoiClick, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMyLocationButtonClick, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onIndoorLevelActivated, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onIndoorBuildingFocused, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(mapType, GMSMapViewType)
@@ -593,6 +594,11 @@ RCT_EXPORT_METHOD(setIndoorActiveLevelIndex:(nonnull NSNumber *)reactTag
                 location:(CLLocationCoordinate2D)location {
     AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
     [googleMapView didTapPOIWithPlaceID:placeID name:name location:location];
+}
+
+- (BOOL)didTapMyLocationButtonForMapView:(GMSMapView *)mapView {
+    AIRGoogleMap *googleMapView = (AIRGoogleMap *)mapView;
+    return [googleMapView didTapMyLocationButtonForMapView:mapView];
 }
 
 #pragma mark Gesture Recognizer Handlers

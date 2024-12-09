@@ -79,7 +79,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
-    GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
+    GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener, GoogleMap.OnMyLocationButtonClickListener {
   public GoogleMap map;
   private MarkerManager markerManager;
   private MarkerManager.Collection markerCollection;
@@ -653,6 +653,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
       map.setLocationSource(fusedLocationSource);
       //noinspection MissingPermission
       map.setMyLocationEnabled(showUserLocation);
+      map.setOnMyLocationButtonClickListener(showUserLocation ? this : null);
     }
   }
 
@@ -1217,6 +1218,14 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     event.putString("name", poi.name);
 
     manager.pushEvent(context, this, "onPoiClick", event);
+  }
+
+  @Override
+  public boolean onMyLocationButtonClick() {
+    WritableMap event = Arguments.createMap();
+
+    manager.pushEvent(context, this, "onMyLocationButtonClick", event);
+    return false;
   }
 
   private ProgressBar getMapLoadingProgressBar() {
