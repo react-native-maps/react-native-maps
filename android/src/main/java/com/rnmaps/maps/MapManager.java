@@ -55,6 +55,7 @@ public class MapManager extends ViewGroupManager<MapView> {
     protected GoogleMapOptions googleMapOptions;
 
     protected MapsInitializer.Renderer renderer;
+    protected boolean classicalGoogleMarkers = false;
 
     public MapManager(ReactApplicationContext context) {
         this.appContext = context;
@@ -75,7 +76,7 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @Override
     protected MapView createViewInstance(@NonNull ThemedReactContext context) {
-        return new MapView(context, this.appContext, this, googleMapOptions);
+        return new MapView(context, this.appContext, this, googleMapOptions, classicalGoogleMarkers);
     }
 
     @Override
@@ -104,6 +105,9 @@ public class MapManager extends ViewGroupManager<MapView> {
             } else {
                 renderer = MapsInitializer.Renderer.LATEST;
             }
+            if (initialProps.hasKey("classicalGoogleMarkers")) {
+                classicalGoogleMarkers = initialProps.getBoolean("classicalGoogleMarkers", false);
+            }
         }
         return super.createViewInstance(reactTag, reactContext, initialProps, stateWrapper);
     }
@@ -121,6 +125,11 @@ public class MapManager extends ViewGroupManager<MapView> {
     @ReactProp(name = "region")
     public void setRegion(MapView view, ReadableMap region) {
         view.setRegion(region);
+    }
+
+    @ReactProp(name = "classicalGoogleMarkers")
+    public void setClassicalGoogleMarkers(MapView view, boolean classicalGoogleMarkers) {
+        // do nothing, passed as part of the InitialProps
     }
 
     @ReactProp(name = "googleRenderer")
