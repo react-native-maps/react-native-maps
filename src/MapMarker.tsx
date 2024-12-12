@@ -10,7 +10,6 @@ import {
 
 import decorateMapComponent, {
   MapManagerCommand,
-  NativeComponent,
   ProviderContext,
   SUPPORTED,
   UIManagerCommand,
