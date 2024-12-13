@@ -34,7 +34,6 @@ export interface FabricMapHandle {
     animated: boolean,
   ) => void;
 
-  setMapBoundaries: (northEast: LatLng, southWest: LatLng) => void;
   getMapBoundaries: () => Promise<MapBoundaries>;
   takeSnapshot: (config: SnapshotOptions) => Promise<string>;
   getAddressFromCoordinates: (coordinate: LatLng) => Promise<Address>;
@@ -229,23 +228,6 @@ export const FabricMap = forwardRef<FabricMapHandle, MapFabricNativeProps>(
           }
         } else {
           console.warn('setCamera is only supported on iOS with Fabric.');
-        }
-      },
-      setMapBoundaries(northEast: LatLng, southWest: LatLng) {
-        if (fabricRef.current) {
-          try {
-            Commands.setMapBoundaries(
-              fabricRef.current,
-              JSON.stringify(northEast),
-              JSON.stringify(southWest),
-            );
-          } catch (error) {
-            console.error('Failed to set camera:', error);
-          }
-        } else {
-          console.warn(
-            'setMapBoundaries is only supported on iOS with Fabric.',
-          );
         }
       },
     }));

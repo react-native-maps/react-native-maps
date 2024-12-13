@@ -1061,12 +1061,6 @@ export interface NativeCommands {
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
-
-  setMapBoundaries: (
-    viewRef: React.ElementRef<React.ComponentType>,
-    northEast: string,
-    southWest: string,
-  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -1077,7 +1071,6 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'fitToElements',
     'fitToSuppliedMarkers',
     'fitToCoordinates',
-    'setMapBoundaries',
   ],
 });
 
