@@ -60,9 +60,11 @@ using namespace facebook::react;
     }];
 
 }
-- (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated {
 
+- (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated {
+    [_view showAnnotations:_view.annotations animated:animated];
 }
+
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
     NSArray* markers = [RCTConvert arrayFromString:markersJSON];
     NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
