@@ -139,6 +139,22 @@
                       resolve:(RCTPromiseResolveBlock)resolve
                        reject:(RCTPromiseRejectBlock)reject
 {
+    double x = point.x();
+    double y = point.y();
+    
+    [self executeWithMapView:tag success:^(AIRMap *mapView) {
+    
+       
+        CLLocationCoordinate2D coordinate = [mapView convertPoint:CGPointMake(x,y)
+            toCoordinateFromView:mapView];
+
+            resolve(@{
+                      @"latitude": @(coordinate.latitude),
+                      @"longitude": @(coordinate.longitude),
+                      });
+        
+    } reject:reject];
+    
    
 }
 
