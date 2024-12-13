@@ -110,8 +110,37 @@
                           resolve:(RCTPromiseResolveBlock)resolve
                            reject:(RCTPromiseRejectBlock)reject
 {
+    double latitude = coordinate.latitude();
+    double longitude = coordinate.longitude();
     
+    [self executeWithMapView:tag success:^(AIRMap *mapView) {
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude
+                                                          longitude:longitude];
+        CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+        [geoCoder reverseGeocodeLocation:location
+                       completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (error == nil && [placemarks count] > 0){
+                CLPlacemark *placemark = placemarks[0];
+                resolve(@{
+                    @"name" : [NSString stringWithFormat:@"%@", placemark.name],
+                    @"thoroughfare" : [NSString stringWithFormat:@"%@", placemark.thoroughfare],
+                    @"subThoroughfare" : [NSString stringWithFormat:@"%@", placemark.subThoroughfare],
+                    @"locality" : [NSString stringWithFormat:@"%@", placemark.locality],
+                    @"subLocality" : [NSString stringWithFormat:@"%@", placemark.subLocality],
+                    @"administrativeArea" : [NSString stringWithFormat:@"%@", placemark.administrativeArea],
+                    @"subAdministrativeArea" : [NSString stringWithFormat:@"%@", placemark.subAdministrativeArea],
+                    @"postalCode" : [NSString stringWithFormat:@"%@", placemark.postalCode],
+                    @"countryCode" : [NSString stringWithFormat:@"%@", placemark.ISOcountryCode],
+                    @"country" : [NSString stringWithFormat:@"%@", placemark.country],
+                });
+            } else {
+                reject(@"Invalid argument", [NSString stringWithFormat:@"Can not get address location"], NULL);
+            }
+        }];
+        
+    } reject:reject];
 }
+
 - (void)getPointForCoordinate:(double)tag
                    coordinate:(JS::NativeAirMapsModule::LatLng &)coordinate
                       resolve:(RCTPromiseResolveBlock)resolve
