@@ -56,7 +56,9 @@
                  resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject
 {
-    
+    [self executeWithMapView:tag success:^(AIRMap *mapView) {
+        resolve([mapView getMarkersFramesWithOnlyVisible:onlyVisible]);
+    } reject:reject];
 }
 - (void)getMapBoundaries:(double)tag
                  resolve:(RCTPromiseResolveBlock)resolve
