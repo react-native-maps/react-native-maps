@@ -78,9 +78,6 @@ using namespace facebook::react;
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
 
 }
-- (void)setMapBoundaries:(NSString *)northEast southWest:(NSString *)southWest {
-
-}
 
 #pragma mark - Native commands
 
@@ -161,6 +158,41 @@ using namespace facebook::react;
               mapViewEventEmitter->onRegionChange(data);
           }
       };
+      
+      _view.onRegionChangeStart = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* regionDict = dictionary[@"region"];
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnRegionChangeStart data = {
+                  .region.latitude = [regionDict[@"latitude"] doubleValue],
+                  .region.longitude = [regionDict[@"longitude"] doubleValue],
+                  .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
+                  .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                  .continuous = [dictionary[@"continuous"] boolValue],
+                 };
+              NSLog(@"onRegionChangeStart %@", dictionary);
+              mapViewEventEmitter->onRegionChangeStart(data);
+          }
+      };
+      
+      
+#define HANDLE_MARKER_DRAG_EVENT(eventName, emitterFunction)                     \
+    if (_eventEmitter) {                                                        \
+        NSDictionary* coordinateDict = dictionary[@"coordinate"];               \
+        auto mapViewEventEmitter =                                              \
+            std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter); \
+        facebook::react::RNMapsMapViewEventEmitter::eventName data = {          \
+            .coordinate.latitude = [coordinateDict[@"latitude"] doubleValue],   \
+            .coordinate.longitude = [coordinateDict[@"longitude"] doubleValue], \
+            .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),     \
+        };                                                                      \
+        NSLog(@"%@ %@", @#eventName, dictionary);                               \
+        mapViewEventEmitter->emitterFunction(data);                             \
+    }
+
+
+      
 #define HANDLE_MARKER_EVENT(eventName, emitterFunction, actionName)                \
     if (_eventEmitter) {                                                          \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];                 \
@@ -179,6 +211,19 @@ using namespace facebook::react;
         NSLog(@"%@ %@", @#eventName, dictionary);                                 \
         mapViewEventEmitter->emitterFunction(data);                               \
     }
+      
+      _view.onMarkerDrag = [self](NSDictionary* dictionary) {
+          HANDLE_MARKER_DRAG_EVENT(OnMarkerDrag, onMarkerDrag);
+      };
+
+      _view.onMarkerDragStart = [self](NSDictionary* dictionary) {
+          HANDLE_MARKER_DRAG_EVENT(OnMarkerDragStart, onMarkerDragStart);
+      };
+
+      _view.onMarkerDragEnd = [self](NSDictionary* dictionary) {
+          HANDLE_MARKER_DRAG_EVENT(OnMarkerDragEnd, onMarkerDragEnd);
+      };
+      
       _view.onMarkerSelect = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_EVENT(OnMarkerSelect, onMarkerSelect, "marker-select");
       };
