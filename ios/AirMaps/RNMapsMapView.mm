@@ -145,6 +145,22 @@ using namespace facebook::react;
               mapViewEventEmitter->onMapReady(data);
           }
       };
+      _view.onChange = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* regionDict = dictionary[@"region"];
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnRegionChange data = {
+                  .region.latitude = [regionDict[@"latitude"] doubleValue],
+                  .region.longitude = [regionDict[@"longitude"] doubleValue],
+                  .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
+                  .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                  .continuous = [dictionary[@"continuous"] boolValue],
+                 };
+              NSLog(@"onRegionChanged %@", dictionary);
+              mapViewEventEmitter->onRegionChange(data);
+          }
+      };
 #define HANDLE_MARKER_EVENT(eventName, emitterFunction, actionName)                \
     if (_eventEmitter) {                                                          \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];                 \

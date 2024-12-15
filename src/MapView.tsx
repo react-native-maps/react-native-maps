@@ -1110,6 +1110,17 @@ class MapView extends React.Component<MapViewProps, State> {
       this.props.onMarkerDeselect(event);
     }
   };
+  private handleRegionChange = (event: NativeSyntheticEvent<any>) => {
+    const isGesture = event.nativeEvent.isGesture;
+    const details = {isGesture};
+    if (event.nativeEvent.continuous) {
+      if (this.props.onRegionChange) {
+        this.props.onRegionChange(event.nativeEvent.region, details);
+      }
+    } else if (this.props.onRegionChangeComplete) {
+      this.props.onRegionChangeComplete(event.nativeEvent.region, details);
+    }
+  };
 
   render() {
     if (
@@ -1145,6 +1156,7 @@ class MapView extends React.Component<MapViewProps, State> {
         onMarkerSelect: this.handleMarkerSelect,
         onMarkerDeselect: this.handleMarkerDeselect,
         userInterfaceStyle: userInterfaceStyle,
+        onRegionChange: this.handleRegionChange,
         ...restProps,
       };
       if (this.props.region) {

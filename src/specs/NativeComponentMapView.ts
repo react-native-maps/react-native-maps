@@ -307,9 +307,7 @@ export type RegionChangeEvent = Readonly<{
     latitudeDelta: Double; // Non-nullable Double for latitudeDelta
     longitudeDelta: Double; // Non-nullable Double for longitudeDelta
   }; // The region object
-  details: {
-    isGesture?: boolean; // Optional boolean for gesture detail
-  }; // Additional details like isGesture
+  continuous?: boolean;
 }>;
 
 export type RegionChangeEventHandler = DirectEventHandler<RegionChangeEvent>;

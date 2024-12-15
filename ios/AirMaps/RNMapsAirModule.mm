@@ -62,7 +62,9 @@
                  resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject
 {
-    
+    [self executeWithMapView:tag success:^(AIRMap *mapView) {
+        resolve([mapView getMapBoundaries]);
+    } reject:reject];
 }
 - (void)takeSnapshot:(double)tag
               config:(NSDictionary *)config
