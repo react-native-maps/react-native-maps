@@ -242,6 +242,60 @@ using namespace facebook::react;
           }
       };
       
+      _view.onCalloutPress = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* coordinateDict = dictionary[@"coordinate"];
+              NSDictionary* positionDict = dictionary[@"position"];
+
+              // Populate the OnCalloutPressPoint struct
+              facebook::react::RNMapsMapViewEventEmitter::OnCalloutPressPoint point = {
+                  .x = [coordinateDict[@"x"] doubleValue],
+                  .y = [coordinateDict[@"y"] doubleValue],
+              };
+
+          
+              facebook::react::RNMapsMapViewEventEmitter::OnCalloutPressFrame frame = {
+                  .x = [positionDict[@"x"] doubleValue],
+                  .y = [positionDict[@"y"] doubleValue],
+                  .width = [positionDict[@"width"] doubleValue],
+                  .height = [positionDict[@"height"] doubleValue],
+              };
+/*
+ std::string action;
+OnCalloutPressFrame frame;
+std::string id;
+OnCalloutPressPoint point;
+OnCalloutPressCoordinate coordinate;
+OnCalloutPressPosition position;
+ id event = @{
+              @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
+              @"id": marker.identifier ?: @"unknown",
+              @"point": @{
+                      @"x": @(touchPointReal.x),
+                      @"y": @(touchPointReal.y),
+                      },
+              @"frame": @{
+                  @"x": @(bubbleFrame.origin.x),
+                  @"y": @(bubbleFrame.origin.y),
+                  @"width": @(bubbleFrame.size.width),
+                  @"height": @(bubbleFrame.size.height),
+                  }
+              };
+ */
+              
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnCalloutPress data = {
+                  .action = std::string([dictionary[@"action"] UTF8String]),
+                  .id = std::string([dictionary[@"id"] UTF8String]),
+                  .point = point,
+                  .frame = frame,
+                 };
+              NSLog(@"onCalloutPress %@", dictionary);
+              mapViewEventEmitter->onCalloutPress(data);
+          }
+      };
+      
       
       _view.onRegionChangeStart = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
