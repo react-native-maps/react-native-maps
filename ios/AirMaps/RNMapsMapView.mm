@@ -127,7 +127,6 @@ using namespace facebook::react;
                   .position = position,
                   .coordinate = coordinate
               };
-              NSLog(@"onMapPress %@", dictionary);
               mapViewEventEmitter->onMapPress(data);
           }
       };
@@ -138,7 +137,6 @@ using namespace facebook::react;
 
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMapViewEventEmitter::OnMapReady data = {};
-              NSLog(@"onMapReady %@", dictionary);
               mapViewEventEmitter->onMapReady(data);
           }
       };
@@ -154,7 +152,6 @@ using namespace facebook::react;
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
                   .continuous = [dictionary[@"continuous"] boolValue],
                  };
-              NSLog(@"onRegionChanged %@", dictionary);
               mapViewEventEmitter->onRegionChange(data);
           }
       };
@@ -182,7 +179,6 @@ using namespace facebook::react;
                   .position = position,
                   .coordinate = coordinate
                  };
-              NSLog(@"onDoublePress %@", dictionary);
               mapViewEventEmitter->onDoublePress(data);
           }
       };
@@ -210,7 +206,6 @@ using namespace facebook::react;
                         .position = position,
                         .coordinate = coordinate,
                  };
-              NSLog(@"onPanDrag %@", dictionary);
               mapViewEventEmitter->onPanDrag(data);
           }
       };
@@ -237,7 +232,6 @@ using namespace facebook::react;
                   .coordinate = coordinate,
                   .error = error,
                  };
-              NSLog(@"onUserLocationChange %@", dictionary);
               mapViewEventEmitter->onUserLocationChange(data);
           }
       };
@@ -291,7 +285,6 @@ OnCalloutPressPosition position;
                   .point = point,
                   .frame = frame,
                  };
-              NSLog(@"onCalloutPress %@", dictionary);
               mapViewEventEmitter->onCalloutPress(data);
           }
       };
@@ -309,7 +302,6 @@ OnCalloutPressPosition position;
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
                   .continuous = [dictionary[@"continuous"] boolValue],
                  };
-              NSLog(@"onRegionChangeStart %@", dictionary);
               mapViewEventEmitter->onRegionChangeStart(data);
           }
       };
@@ -325,7 +317,6 @@ OnCalloutPressPosition position;
             .coordinate.longitude = [coordinateDict[@"longitude"] doubleValue], \
             .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),     \
         };                                                                      \
-        NSLog(@"%@ %@", @#eventName, dictionary);                               \
         mapViewEventEmitter->emitterFunction(data);                             \
     }
 
@@ -346,7 +337,6 @@ OnCalloutPressPosition position;
             .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),       \
             .coordinate = coordinate                                              \
         };                                                                        \
-        NSLog(@"%@ %@", @#eventName, dictionary);                                 \
         mapViewEventEmitter->emitterFunction(data);                               \
     }
       
@@ -392,7 +382,6 @@ OnCalloutPressPosition position;
 }
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
-    NSLog(@"childView %@", childComponentView );
     id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
     if (paperView){
         [_view insertReactSubview:paperView atIndex:index];
@@ -400,7 +389,6 @@ OnCalloutPressPosition position;
 }
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    NSLog(@"childView %@", childComponentView );
     id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
     if (paperView){
         [_view removeReactSubview:paperView];
