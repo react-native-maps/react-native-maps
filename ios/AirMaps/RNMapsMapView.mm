@@ -158,6 +158,90 @@ using namespace facebook::react;
               mapViewEventEmitter->onRegionChange(data);
           }
       };
+      _view.onDoublePress = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* coordinateDict = dictionary[@"coordinate"];
+              NSDictionary* positionDict = dictionary[@"position"];
+
+              // Populate the OnMapPressCoordinate struct
+              facebook::react::RNMapsMapViewEventEmitter::OnDoublePressCoordinate coordinate = {
+                  .latitude = [coordinateDict[@"latitude"] doubleValue],
+                  .longitude = [coordinateDict[@"longitude"] doubleValue],
+              };
+
+              // Populate the OnMapDouplePressPosition struct
+              facebook::react::RNMapsMapViewEventEmitter::OnDoublePressPosition position = {
+                  .x = [positionDict[@"x"] doubleValue],
+                  .y = [positionDict[@"y"] doubleValue],
+              };
+
+              
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnDoublePress data = {
+                  .position = position,
+                  .coordinate = coordinate
+                 };
+              NSLog(@"onDoublePress %@", dictionary);
+              mapViewEventEmitter->onDoublePress(data);
+          }
+      };
+      
+      _view.onPanDrag =  [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* coordinateDict = dictionary[@"coordinate"];
+              NSDictionary* positionDict = dictionary[@"position"];
+
+              // Populate the OnMapPressCoordinate struct
+              facebook::react::RNMapsMapViewEventEmitter::OnPanDragCoordinate coordinate = {
+                  .latitude = [coordinateDict[@"latitude"] doubleValue],
+                  .longitude = [coordinateDict[@"longitude"] doubleValue],
+              };
+
+              // Populate the OnMapDouplePressPosition struct
+              facebook::react::RNMapsMapViewEventEmitter::OnPanDragPosition position = {
+                  .x = [positionDict[@"x"] doubleValue],
+                  .y = [positionDict[@"y"] doubleValue],
+              };
+              
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnPanDrag data = {
+                        .position = position,
+                        .coordinate = coordinate,
+                 };
+              NSLog(@"onPanDrag %@", dictionary);
+              mapViewEventEmitter->onPanDrag(data);
+          }
+      };
+      
+      _view.onUserLocationChange =  [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* coordinateDict = dictionary[@"coordinate"];
+              NSDictionary* errorDict = dictionary[@"error"];
+
+              
+              // Populate the OnMapPressCoordinate struct
+              facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
+                  .latitude = [coordinateDict[@"latitude"] doubleValue],
+                  .longitude = [coordinateDict[@"longitude"] doubleValue],
+              };
+              facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeError error = {
+                  .message = std::string([errorDict[@"message"] UTF8String]),
+              };
+              
+              
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChange data = {
+                  .coordinate = coordinate,
+                  .error = error,
+                 };
+              NSLog(@"onUserLocationChange %@", dictionary);
+              mapViewEventEmitter->onUserLocationChange(data);
+          }
+      };
+      
       
       _view.onRegionChangeStart = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
