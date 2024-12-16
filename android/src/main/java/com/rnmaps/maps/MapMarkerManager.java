@@ -150,6 +150,8 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         }
     }
 
+    public static boolean advancedMarkersEnabled = false;
+
     public MapMarkerManager() {
     }
 
@@ -160,6 +162,10 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
 
     @Override
     public MapMarker createViewInstance(ThemedReactContext context) {
+        if (advancedMarkersEnabled) {
+            return new AdvancedMapMarker(context, this);
+        }
+
         return new MapMarker(context, this);
     }
 
@@ -224,6 +230,16 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     @ReactProp(name = "icon")
     public void setIcon(MapMarker view, @Nullable String source) {
         view.setImage(source);
+    }
+
+    @ReactProp(name = "collisionBehavior")
+    public void setCollisionBehavior(AdvancedMapMarker view, @Nullable String collisionBehavior) {
+        if (collisionBehavior == null) {
+            // Set default value if prop is not provided
+            collisionBehavior = "required";
+        }
+
+        view.setCollisionBehavior(collisionBehavior);
     }
 
     @ReactProp(name = "pinColor", defaultInt = Color.RED, customType = "Color")

@@ -53,10 +53,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.MapCapabilities;
 import com.google.maps.android.collections.CircleManager;
 import com.google.maps.android.collections.GroundOverlayManager;
 import com.google.maps.android.collections.MarkerManager;
@@ -116,6 +118,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
   private MapMarker selectedMarker;
+  private boolean classicalGoogleMarkers = true;
 
   private static final String[] PERMISSIONS = new String[]{
       "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
@@ -171,11 +174,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   public MapView(ThemedReactContext reactContext, ReactApplicationContext appContext,
                  MapManager manager,
-                 GoogleMapOptions googleMapOptions) {
+                 GoogleMapOptions googleMapOptions,
+                 boolean classicalGoogleMarkers) {
     super(getNonBuggyContext(reactContext, appContext), googleMapOptions);
 
     this.manager = manager;
     this.context = reactContext;
+    this.classicalGoogleMarkers = classicalGoogleMarkers;
+
     MapsInitializer.initialize(context, this.manager.renderer, renderer -> Log.d("AirMapRenderer", renderer.toString()));
     super.onCreate(null);
     super.onResume();
@@ -241,6 +247,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
     this.map = map;
 
+    MapCapabilities capabilities = map.getMapCapabilities();
+    boolean advancedMarkersEnabled = capabilities.isAdvancedMarkersAvailable()
+        && !classicalGoogleMarkers;
+
+    MapMarkerManager.advancedMarkersEnabled = advancedMarkersEnabled;
+
+
     markerManager = new MarkerManager(map);
     markerCollection = markerManager.newCollection();
     polylineManager = new PolylineManager(map);
@@ -258,7 +271,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     applyBridgedProps();
 
-    manager.pushEvent(context, this, "onMapReady", new WritableNativeMap());
+    WritableMap mapInfo = new WritableNativeMap();
+    WritableMap event = new WritableNativeMap();
+
+    mapInfo.putBoolean("advancedMarkersEnabled", advancedMarkersEnabled);
+
+    event.putMap("advancedMarkersEnabled", mapInfo);
+
+    manager.pushEvent(context, this, "onMapReady", event);
 
     final MapView view = this;
 
@@ -422,7 +442,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
       @Override public void onMapLoaded() {
         isMapLoaded = true;
-        manager.pushEvent(context, view, "onMapLoaded", new WritableNativeMap());
+
+        WritableMap mapInfo = new WritableNativeMap();
+
+        mapInfo.putBoolean("advancedMarkersEnabled", advancedMarkersEnabled);
+
+        manager.pushEvent(context, view, "onMapLoaded", mapInfo);
         MapView.this.cacheView();
       }
     });
@@ -1353,7 +1378,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
       int index = 0;
       for (KmlPlacemark placemark : container.getPlacemarks()) {
-        MarkerOptions options = new MarkerOptions();
+        MarkerOptions options = new AdvancedMarkerOptions();
 
         if (placemark.getInlineStyle() != null) {
           options = placemark.getMarkerOptions();

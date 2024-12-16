@@ -38,11 +38,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.maps.android.collections.MarkerManager;
 
 public class MapMarker extends MapFeature {
 
-  private MarkerOptions markerOptions;
+  protected MarkerOptions markerOptions;
   private Marker marker;
   private int width;
   private int height;
@@ -472,7 +473,7 @@ public class MapMarker extends MapFeature {
     }
   }
 
-  private MarkerOptions fillMarkerOptions(MarkerOptions options) {
+  protected MarkerOptions fillMarkerOptions(MarkerOptions options) {
     options.position(position);
     if (anchorIsSet) options.anchor(anchorX, anchorY);
     if (calloutAnchorIsSet) options.infoWindowAnchor(calloutAnchorX, calloutAnchorY);
