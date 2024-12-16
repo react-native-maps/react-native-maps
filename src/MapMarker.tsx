@@ -6,6 +6,7 @@ import {
   ViewProps,
   ImageURISource,
   ImageRequireSource,
+  Platform,
 } from 'react-native';
 
 import decorateMapComponent, {
@@ -31,6 +32,7 @@ import {
   Point,
 } from './sharedTypes';
 import {Modify} from './sharedTypesInternal';
+import FabricMarkerView from './FabricMarkerView';
 
 type AppleMarkerVisibility = 'hidden' | 'adaptive' | 'visible';
 
@@ -370,6 +372,13 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     this.setCoordinates = this.setCoordinates.bind(this);
     this.redrawCallout = this.redrawCallout.bind(this);
     this.animateMarkerToCoordinate = this.animateMarkerToCoordinate.bind(this);
+    this.onPress = this.onPress.bind(this);
+    this.onSelect = this.onSelect.bind(this);
+    this.onDeselect = this.onDeselect.bind(this);
+    this.onDrag = this.onDrag.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
+    this.onCalloutPress = this.onCalloutPress.bind(this);
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -417,6 +426,48 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     }
   }
 
+  onPress = (event: any) => {
+    if (this.props.stopPropagation) {
+      event.stopPropagation();
+    }
+    if (this.props.onPress) {
+      this.props.onPress(event);
+    }
+  };
+
+  onSelect = (event: any) => {
+    if (this.props.onSelect) {
+      this.props.onSelect(event);
+    }
+  };
+  onDeselect = (event: any) => {
+    if (this.props.onDeselect) {
+      this.props.onDeselect(event);
+    }
+  };
+
+  onCalloutPress = (event: any) => {
+    if (this.props.onCalloutPress) {
+      this.props.onCalloutPress(event);
+    }
+  };
+
+  onDrag = (event: any) => {
+    if (this.props.onDrag) {
+      this.props.onDrag(event);
+    }
+  };
+  onDragEnd = (event: any) => {
+    if (this.props.onDragEnd) {
+      this.props.onDragEnd(event);
+    }
+  };
+  onDragStart = (event: any) => {
+    if (this.props.onDragStart) {
+      this.props.onDragStart(event);
+    }
+  };
+
   render() {
     const {stopPropagation = false} = this.props;
     let image;
@@ -431,25 +482,56 @@ export class MapMarker extends React.Component<MapMarkerProps> {
       icon = icon.uri;
     }
 
-    const AIRMapMarker = this.getNativeComponent();
-
-    return (
-      <AIRMapMarker
-        {...this.props}
-        ref={this.marker}
-        image={image}
-        icon={icon}
-        style={[styles.marker, this.props.style]}
-        onPress={event => {
-          if (stopPropagation) {
-            event.stopPropagation();
-          }
-          if (this.props.onPress) {
-            this.props.onPress(event);
-          }
-        }}
-      />
-    );
+    if (Platform.OS === 'ios') {
+      const AIRMapMarker = FabricMarkerView;
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      const {
+        onCalloutPress,
+        onDeselect,
+        onDrag,
+        onDragEnd,
+        onDragStart,
+        onSelect,
+        onPress,
+        anchor,
+        calloutAnchor,
+        ...restProps
+      } = this.props;
+      /* eslint-enable @typescript-eslint/no-unused-vars */
+      return (
+        <AIRMapMarker
+          {...restProps}
+          ref={this.marker}
+          style={[styles.marker, this.props.style]}
+          onPress={this.onPress}
+          onSelect={this.onSelect}
+          onCalloutPress={this.onCalloutPress}
+          onDeselect={this.onDeselect}
+          onDragStart={this.onDragStart}
+          onDragEnd={this.onDragEnd}
+          onDrag={this.onDrag}
+        />
+      );
+    } else {
+      const AIRMapMarker = this.getNativeComponent();
+      return (
+        <AIRMapMarker
+          {...this.props}
+          ref={this.marker}
+          image={image}
+          icon={icon}
+          style={[styles.marker, this.props.style]}
+          onPress={event => {
+            if (stopPropagation) {
+              event.stopPropagation();
+            }
+            if (this.props.onPress) {
+              this.props.onPress(event);
+            }
+          }}
+        />
+      );
+    }
   }
 }
 
