@@ -69,7 +69,8 @@ class MarkersCollisionBehavior extends React.Component<any, any> {
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
-          onPress={this.onMapPress}>
+          onPress={this.onMapPress}
+          classicalGoogleMarkers={false}>
           {this.state.markers.map((marker: any) => (
             <Marker
               title={marker.key}

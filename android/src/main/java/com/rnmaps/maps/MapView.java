@@ -118,7 +118,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   private LatLngBounds cameraLastIdleBounds;
   private int cameraMoveReason = 0;
   private MapMarker selectedMarker;
-  private boolean classicalGoogleMarkers = false;
+  private boolean classicalGoogleMarkers = true;
 
   private static final String[] PERMISSIONS = new String[]{
       "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
