@@ -6,7 +6,6 @@ on:
     branches:
       - master
       - beta
-      - alpha
 jobs:
   release:
     runs-on: ubuntu-latest
