@@ -175,7 +175,7 @@ using namespace facebook::react;
                   .y = [positionDict[@"y"] doubleValue],
               };
 
-              
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMapViewEventEmitter::OnDoublePress data = {
                   .position = position,
@@ -184,7 +184,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onDoublePress(data);
           }
       };
-      
+
       _view.onPanDrag =  [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -202,7 +202,7 @@ using namespace facebook::react;
                   .x = [positionDict[@"x"] doubleValue],
                   .y = [positionDict[@"y"] doubleValue],
               };
-              
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMapViewEventEmitter::OnPanDrag data = {
                         .position = position,
@@ -211,14 +211,14 @@ using namespace facebook::react;
               mapViewEventEmitter->onPanDrag(data);
           }
       };
-      
+
       _view.onUserLocationChange =  [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
               NSDictionary* coordinateDict = dictionary[@"coordinate"];
               NSDictionary* errorDict = dictionary[@"error"];
 
-              
+
               // Populate the OnMapPressCoordinate struct
               facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
                   .latitude = [coordinateDict[@"latitude"] doubleValue],
@@ -227,8 +227,8 @@ using namespace facebook::react;
               facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeError error = {
                   .message = std::string([errorDict[@"message"] UTF8String]),
               };
-              
-              
+
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChange data = {
                   .coordinate = coordinate,
@@ -237,7 +237,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onUserLocationChange(data);
           }
       };
-      
+
       _view.onCalloutPress = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -250,7 +250,7 @@ using namespace facebook::react;
                   .y = [coordinateDict[@"y"] doubleValue],
               };
 
-          
+
               facebook::react::RNMapsMapViewEventEmitter::OnCalloutPressFrame frame = {
                   .x = [positionDict[@"x"] doubleValue],
                   .y = [positionDict[@"y"] doubleValue],
@@ -279,7 +279,7 @@ OnCalloutPressPosition position;
                   }
               };
  */
-              
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMapViewEventEmitter::OnCalloutPress data = {
                   .action = std::string([dictionary[@"action"] UTF8String]),
@@ -290,8 +290,8 @@ OnCalloutPressPosition position;
               mapViewEventEmitter->onCalloutPress(data);
           }
       };
-      
-      
+
+
       _view.onRegionChangeStart = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -307,8 +307,8 @@ OnCalloutPressPosition position;
               mapViewEventEmitter->onRegionChangeStart(data);
           }
       };
-      
-      
+
+
 #define HANDLE_MARKER_DRAG_EVENT(eventName, emitterFunction)                     \
     if (_eventEmitter) {                                                        \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];               \
@@ -323,7 +323,7 @@ OnCalloutPressPosition position;
     }
 
 
-      
+
 #define HANDLE_MARKER_EVENT(eventName, emitterFunction, actionName)                \
     if (_eventEmitter) {                                                          \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];                 \
@@ -341,7 +341,7 @@ OnCalloutPressPosition position;
         };                                                                        \
         mapViewEventEmitter->emitterFunction(data);                               \
     }
-      
+
       _view.onMarkerDrag = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_DRAG_EVENT(OnMarkerDrag, onMarkerDrag);
       };
@@ -353,7 +353,7 @@ OnCalloutPressPosition position;
       _view.onMarkerDragEnd = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_DRAG_EVENT(OnMarkerDragEnd, onMarkerDragEnd);
       };
-      
+
       _view.onMarkerSelect = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_EVENT(OnMarkerSelect, onMarkerSelect, "marker-select");
       };
@@ -397,12 +397,12 @@ OnCalloutPressPosition position;
 }
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
-    [_view insertReactSubview:[self getChild:childComponentView] atIndex:index];
+    [_view insertReactSubview:[RNMapsMapView getChild:childComponentView] atIndex:index];
 }
 
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    [_view insertReactSubview:[self getChild:childComponentView] atIndex:index];
+    [_view removeReactSubview:[RNMapsMapView getChild:childComponentView]];
 }
 
 MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {

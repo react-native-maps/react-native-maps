@@ -7,6 +7,7 @@
 //
 
 #import "RNMapsMarkerView.h"
+#import "RNMapsMapView.h"
 #import "AIRMapMarker.h"
 #import "AIRMapMarker.h"
 #import "AIRMapMarkerManager.h"
@@ -49,7 +50,7 @@ using namespace facebook::react;
       _legacyMapManager = [[AIRMapMarkerManager alloc] init];
       _view = (AIRMapMarker *)[_legacyMapManager view];
 
-    self.contentView = _view;
+      self.contentView = _view;
 
       _view.onPress = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
@@ -93,7 +94,7 @@ using namespace facebook::react;
                   .y = [coordinateDict[@"y"] doubleValue],
               };
 
-          
+
               facebook::react::RNMapsMarkerViewEventEmitter::OnCalloutPressFrame frame = {
                   .x = [positionDict[@"x"] doubleValue],
                   .y = [positionDict[@"y"] doubleValue],
@@ -122,7 +123,7 @@ OnCalloutPressPosition position;
                   }
               };
  */
-              
+
               auto markerEventEmitter = std::static_pointer_cast<RNMapsMarkerViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMarkerViewEventEmitter::OnCalloutPress data = {
                   .action = std::string([dictionary[@"action"] UTF8String]),
@@ -133,10 +134,10 @@ OnCalloutPressPosition position;
               markerEventEmitter->onCalloutPress(data);
           }
       };
-      
-     
-      
-      
+
+
+
+
 #define HANDLE_MARKER_DRAG_EVENT(eventName, emitterFunction)                     \
     if (_eventEmitter) {                                                        \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];               \
@@ -151,7 +152,7 @@ OnCalloutPressPosition position;
     }
 
 
-      
+
 #define HANDLE_MARKER_EVENT(eventName, emitterFunction, actionName)                \
     if (_eventEmitter) {                                                          \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];                 \
@@ -181,7 +182,7 @@ OnCalloutPressPosition position;
       _view.onDragEnd = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_DRAG_EVENT(OnMarkerDragEnd, onMarkerDragEnd);
       };
-      
+
       _view.onSelect = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_EVENT(OnMarkerSelect, onMarkerSelect, "marker-select");
       };
@@ -203,14 +204,14 @@ OnCalloutPressPosition position;
 
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
-    [_view insertReactSubview:childComponentView atIndex:index];
+
+    [self.contentView insertReactSubview:childComponentView atIndex:index];
+    [self.contentView insertSubview:childComponentView atIndex:index];
 }
 
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-
-    [_view removeReactSubview:childComponentView];
-    
+    [self.contentView unmountChildComponentView:childComponentView index:index];
 }
 
 
@@ -233,7 +234,7 @@ CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(       \
     newViewProps.name.longitude); \
         _view.name = coordinate;                                                 \
     }
-    
+
 #define REMAP_MARKERVIEW_STRING_PROP(name)                             \
     if (oldViewProps.name != newViewProps.name) {                   \
         _view.name = RCTNSStringFromString(newViewProps.name);      \
@@ -261,10 +262,10 @@ CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(       \
     REMAP_MARKERVIEW_PROP(isPreselected)
     REMAP_MARKERVIEW_PROP(opacity)
     REMAP_MARKERVIEW_PROP(useLegacyPinView)
-    
+
 
     REMAP_MARKERVIEW_COLOR_PROP(pinColor)
-    
+
 
 
     REMAP_MARKERVIEW_STRING_PROP(title)
