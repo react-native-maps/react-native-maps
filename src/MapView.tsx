@@ -1087,7 +1087,7 @@ class MapView extends React.Component<MapViewProps, State> {
     return findNodeHandle(this.map.current);
   }
 
-  private handleMapPress = (event: NativeSyntheticEvent<any>) => {
+  private handleMapPress = (event: any) => {
     if (this.props.onPress) {
       this.props.onPress(event);
     }
@@ -1141,6 +1141,7 @@ class MapView extends React.Component<MapViewProps, State> {
         onRegionChangeStart,
         onRegionChange,
         onRegionChangeComplete,
+        onPress,
         region,
         ...restProps
       } = this.props;
@@ -1151,7 +1152,7 @@ class MapView extends React.Component<MapViewProps, State> {
         liteMode: this.props.liteMode,
         googleMapId: this.props.googleMapId,
         googleRenderer: this.props.googleRenderer,
-        onMapPress: this.handleMapPress,
+        onPress: this.handleMapPress,
         onMarkerPress: this.handleMarkerPress,
         onMarkerSelect: this.handleMarkerSelect,
         onMarkerDeselect: this.handleMarkerDeselect,

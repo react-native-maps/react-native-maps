@@ -8,6 +8,7 @@ import {
   WithDefault,
   Float,
   DirectEventHandler,
+  BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type EdgePadding = Readonly<{
@@ -32,7 +33,7 @@ export type Frame = Readonly<{
   height: Double;
 }>;
 
-export type ClickEvent = DirectEventHandler<
+export type ClickEvent = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -59,7 +60,7 @@ export type KmlMarker = {
   }; // Non-nullable Point
 };
 
-export type LongPressEventHandler = DirectEventHandler<
+export type LongPressEventHandler = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -73,7 +74,7 @@ export type LongPressEventHandler = DirectEventHandler<
   }>
 >;
 
-export type MarkerDeselectEventHandler = DirectEventHandler<
+export type MarkerDeselectEventHandler = BubblingEventHandler<
   Readonly<{
     action?: string;
     id: string;
@@ -84,7 +85,7 @@ export type MarkerDeselectEventHandler = DirectEventHandler<
   }>
 >;
 
-export type MarkerSelectEventHandler = DirectEventHandler<
+export type MarkerSelectEventHandler = BubblingEventHandler<
   Readonly<{
     action?: string;
     id: string;
@@ -95,7 +96,7 @@ export type MarkerSelectEventHandler = DirectEventHandler<
   }>
 >;
 
-export type CalloutPressEvent = Readonly<{
+export type CalloutPressEvent = BubblingEventHandler<{
   action?: string;
 
   /**
@@ -213,7 +214,7 @@ export type Details = Readonly<{
   isGesture?: boolean; // Optional boolean for gesture detail
 }>;
 
-export type MarkerDragEventHandler = DirectEventHandler<
+export type MarkerDragEventHandler = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -227,7 +228,7 @@ export type MarkerDragEventHandler = DirectEventHandler<
   }>
 >;
 
-export type MarkerDragStartEndEventHandler = DirectEventHandler<
+export type MarkerDragStartEndEventHandler = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -241,7 +242,7 @@ export type MarkerDragStartEndEventHandler = DirectEventHandler<
   }>
 >;
 
-export type MarkerPressEventHandler = DirectEventHandler<
+export type MarkerPressEventHandler = BubblingEventHandler<
   Readonly<{
     action?: string;
     id: string;
@@ -256,7 +257,7 @@ export type MarkerPressEventHandler = DirectEventHandler<
   }>
 >;
 
-export type PanDragEventHandler = DirectEventHandler<
+export type PanDragEventHandler = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -269,7 +270,7 @@ export type PanDragEventHandler = DirectEventHandler<
   }>
 >;
 
-export type PoiClickEventHandler = DirectEventHandler<
+export type PoiClickEventHandler = BubblingEventHandler<
   Readonly<{
     placeId: string;
     name: string;
@@ -284,7 +285,7 @@ export type PoiClickEventHandler = DirectEventHandler<
   }>
 >;
 
-export type MapPressEventHandler = DirectEventHandler<
+export type MapPressEventHandler = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -310,7 +311,7 @@ export type RegionChangeEvent = Readonly<{
   continuous?: boolean;
 }>;
 
-export type RegionChangeEventHandler = DirectEventHandler<RegionChangeEvent>;
+export type RegionChangeEventHandler = BubblingEventHandler<RegionChangeEvent>;
 
 export type UserLocationChangeEvent = Readonly<{
   coordinate?: {
@@ -706,7 +707,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onMapPress?: MapPressEventHandler;
+  onPress?: MapPressEventHandler;
 
   /**
    * Callback that is called once before the region changes, such as when the user starts moving the map.

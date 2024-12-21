@@ -70,6 +70,14 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         [super insertReactSubview:(UIView *)subview atIndex:atIndex];
     }
 }
+- (void) setFrame:(CGRect)frame {
+    // hack to ignore call by react transactions when it shouldn't
+    if (!CGPointEqualToPoint(self.frame.origin, CGPointZero) &&
+        CGPointEqualToPoint(frame.origin, CGPointZero)){
+        return;
+    }
+    [super setFrame:frame];
+}
 
 - (void)removeReactSubview:(id<RCTComponent>)subview {
     if ([subview isKindOfClass:[AIRMapCallout class]] && self.calloutView == subview) {
@@ -84,7 +92,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     if ([self shouldUsePinView]) {
         // In this case, we want to render a platform "default" legacy marker.
 
-        
+
         if (_pinView == nil && _useLegacyPinView) {
             _pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
             [self addGestureRecognizerToView:_pinView];
@@ -99,8 +107,8 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
             return _pinView;
         }
-    
-        
+
+
 
         if (_markerView == nil && !_useLegacyPinView) {
             _markerView = [[MKMarkerAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
