@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.1](https://github.com/react-native-maps/react-native-maps/compare/v1.20.1...v1.21.0-alpha.1) (2024-12-21)
+
+
+### Features
+
+* **Fabric:** testing new commit ([#5298](https://github.com/react-native-maps/react-native-maps/issues/5298)) ([5c94060](https://github.com/react-native-maps/react-native-maps/commit/5c94060b30f27b84b5c10e5ea0e2396e95183814))
+
 ## [1.20.1](https://github.com/react-native-maps/react-native-maps/compare/v1.20.0...v1.20.1) (2024-11-22)
 
 
