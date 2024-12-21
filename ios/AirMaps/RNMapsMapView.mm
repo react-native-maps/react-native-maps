@@ -7,8 +7,6 @@
 //
 
 #import "RNMapsMapView.h"
-#import "RNMapsMarkerView.h"
-#import "AIRMapMarker.h"
 #import "AirMap.h"
 #import "AIRMapMarker.h"
 #import "AIRMapManager.h"
@@ -382,27 +380,19 @@ OnCalloutPressPosition position;
     // Return nil if paperView is not accessible
     return nil;
 }
-- (id) getChild:(UIView<RCTComponentViewProtocol> *)childComponentView
-{
-    if ([childComponentView isKindOfClass:[RNMapsMarkerView class]]){
-        RNMapsMarkerView* view = (RNMapsMarkerView *) childComponentView;
-        return [view markerView];
-    } else {
-        id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
-        if (paperView){
-            return paperView;
-        }
-    }
-    return nil;
-}
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
-    [_view insertReactSubview:[self getChild:childComponentView] atIndex:index];
+    id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
+    if (paperView){
+        [_view insertReactSubview:paperView atIndex:index];
+    }
 }
-
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    [_view insertReactSubview:[self getChild:childComponentView] atIndex:index];
+    id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
+    if (paperView){
+        [_view removeReactSubview:paperView];
+    }
 }
 
 MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {

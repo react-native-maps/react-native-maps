@@ -3,7 +3,6 @@ import {type ColorValue, HostComponent, ViewProps} from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
   DirectEventHandler,
-  BubblingEventHandler,
   Double,
   Float,
 } from 'react-native/Libraries/Types/CodegenTypes';
@@ -17,21 +16,6 @@ export type Point = Readonly<{
   x: Double; // Non-nullable Double for x
   y: Double; // Non-nullable Double for y
 }>;
-
-export type MarkerBubblingEventHandler = BubblingEventHandler<
-  Readonly<{
-    coordinate: {
-      latitude: Double; // Inlined LatLng
-      longitude: Double;
-    };
-    position: {
-      x: Double; // Inlined Point
-      y: Double;
-    };
-    action: string;
-    id?: string; // Optional id for iOS
-  }>
->;
 
 export type MarkerEventHandler = DirectEventHandler<
   Readonly<{
@@ -59,10 +43,6 @@ export type CalloutEventHandler = DirectEventHandler<
     coordinate: {
       latitude: Double; // Inlined LatLng
       longitude: Double;
-    };
-    point: {
-      x: Double; // Inlined Point
-      y: Double;
     };
     position: {
       x: Double; // Inlined Point
@@ -279,7 +259,7 @@ export interface MarkerFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onPress?: MarkerBubblingEventHandler;
+  onPress?: MarkerEventHandler;
 
   /**
    * Callback that is called when the marker becomes selected.
