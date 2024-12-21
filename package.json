@@ -23,7 +23,6 @@
     "lib",
     "android",
     "ios",
-    "react-native-google-maps.podspec",
     "react-native-maps.podspec",
     "!android/build",
     "!ios/build",
@@ -90,6 +89,11 @@
       "/node_modules/",
       "e2e"
     ]
+  },
+  "codegenConfig": {
+    "name": "RNMapsSpecs",
+    "type": "all",
+    "jsSrcsDir": "./src/specs"
   },
   "engines": {
     "node": ">=18"
