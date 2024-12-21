@@ -372,7 +372,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (void)setFollowsUserLocation:(BOOL)followsUserLocation
 {
-    _followUserLocation = followsUserLocation;
+    _followsUserLocation = followsUserLocation;
 }
 
 - (void)setUserLocationCalloutEnabled:(BOOL)calloutEnabled

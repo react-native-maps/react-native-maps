@@ -28,7 +28,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, strong) UIView *loadingView;
 
 @property (nonatomic, copy) NSString *userLocationAnnotationTitle;
-@property (nonatomic, assign) BOOL followUserLocation;
+@property (nonatomic, assign) BOOL followsUserLocation;
 @property (nonatomic, assign) BOOL userLocationCalloutEnabled;
 @property (nonatomic, assign) BOOL hasStartedRendering;
 @property (nonatomic, assign) BOOL cacheEnabled;
@@ -79,5 +79,6 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 - (AIRMapMarker*) markerAtPoint:(CGPoint)point;
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
+- (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex;
 
 @end
