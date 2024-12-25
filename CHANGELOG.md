@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.3](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.2...v1.21.0-alpha.3) (2024-12-25)
+
+
+### Bug Fixes
+
+* **android:** android build with Fabric enabled ([#5306](https://github.com/react-native-maps/react-native-maps/issues/5306)) ([f7ed6a0](https://github.com/react-native-maps/react-native-maps/commit/f7ed6a031c2d25e422cbe17279a1c75a5fa07e48))
+
 # [1.21.0-alpha.2](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.1...v1.21.0-alpha.2) (2024-12-25)
 
 
