@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.4](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.3...v1.21.0-alpha.4) (2024-12-25)
+
+
+### Bug Fixes
+
+* **android:** fix build.gradle ([c1a1cf5](https://github.com/react-native-maps/react-native-maps/commit/c1a1cf5fa99399780e42154e5a5f89e513b2daf0))
+
 # [1.21.0-alpha.3](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.2...v1.21.0-alpha.3) (2024-12-25)
 
 
