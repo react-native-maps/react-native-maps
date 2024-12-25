@@ -17,11 +17,15 @@ buildscript {
   }
 }
 
-apply plugin: 'com.android.library'
-
 def isNewArchitectureEnabled() {
   return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
+
+apply plugin: 'com.android.library'
+if (isNewArchitectureEnabled()) {
+  apply plugin: 'com.facebook.react'
+}
+apply plugin: 'kotlin-android'
 
 android {
   namespace "com.rnmaps.maps"
