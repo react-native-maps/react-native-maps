@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.2](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.1...v1.21.0-alpha.2) (2024-12-25)
+
+
+### Bug Fixes
+
+* **ios:** re-enable google-maps for iOS ([#5305](https://github.com/react-native-maps/react-native-maps/issues/5305)) ([7652cdf](https://github.com/react-native-maps/react-native-maps/commit/7652cdfa2b5cadc795b357d00019be19701b6d44))
+
 # [1.21.0-alpha.1](https://github.com/react-native-maps/react-native-maps/compare/v1.20.1...v1.21.0-alpha.1) (2024-12-21)
 
 
