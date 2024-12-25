@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.5](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.4...v1.21.0-alpha.5) (2024-12-25)
+
+
+### Bug Fixes
+
+* **android:** maps load correctly with codegen on android ([feef13e](https://github.com/react-native-maps/react-native-maps/commit/feef13eb6c80d82b42d6777692f3025852ca96a7))
+
 # [1.21.0-alpha.4](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.3...v1.21.0-alpha.4) (2024-12-25)
 
 
