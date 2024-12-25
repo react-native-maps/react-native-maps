@@ -17,6 +17,19 @@ buildscript {
   }
 }
 
+def supportsNamespace() {
+  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+  def major = parsed[0].toInteger()
+  def minor = parsed[1].toInteger()
+
+  // Namespace support was added in 7.3.0
+  if (major == 7 && minor >= 3) {
+    return true
+  }
+
+  return major >= 8
+}
+
 def isNewArchitectureEnabled() {
   return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
@@ -28,9 +41,7 @@ if (isNewArchitectureEnabled()) {
 apply plugin: 'kotlin-android'
 
 android {
-  namespace "com.rnmaps.maps"
-  def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
-  if (agpVersion.tokenize('.')[0].toInteger() >= 7) {
+  if (supportsNamespace()) {
     namespace "com.rnmaps.maps"
   }
 
