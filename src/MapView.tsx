@@ -78,7 +78,7 @@ export type MapViewProps = ViewProps & {
    * If `true` map will be cached and displayed as an image instead of being interactable, for performance usage.
    *
    * @default false
-   * @platform iOS: Apple maps only
+   * @platform iOS: Apple Maps only
    * @platform Android: Supported
    */
   cacheEnabled?: boolean;
@@ -168,7 +168,7 @@ export type MapViewProps = ViewProps & {
   kmlSrc?: string;
 
   /**
-   * If set, changes the position of the "Legal" label link in Apple maps.
+   * If set, changes the position of the "Legal" label link in Apple Maps.
    *
    * @platform iOS: Apple Maps only
    * @platform Android: Not supported
