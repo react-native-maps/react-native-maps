@@ -93,7 +93,7 @@
   "codegenConfig": {
     "name": "RNMapsSpecs",
     "type": "all",
-    "jsSrcsDir": "./src/specs",
+    "jsSrcsDir": "./lib/specs",
     "android": {
       "javaPackageName": "com.rnmaps.fabric"
     }
