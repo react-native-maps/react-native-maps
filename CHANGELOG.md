@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.6](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.5...v1.21.0-alpha.6) (2024-12-26)
+
+
+### Bug Fixes
+
+* correct path for codegen ([1041ad3](https://github.com/react-native-maps/react-native-maps/commit/1041ad3d5e6491d8530b2323011f54fc37bff8fb))
+
 # [1.21.0-alpha.5](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.4...v1.21.0-alpha.5) (2024-12-25)
 
 
