@@ -1250,9 +1250,28 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - react-native-google-maps (0.0.0):
+    - DoubleConversion
+    - glog
     - Google-Maps-iOS-Utils (= 5.0.0)
     - GoogleMaps (= 8.4.0)
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-maps (0.0.0):
     - DoubleConversion
     - glog
@@ -1790,7 +1809,7 @@ SPEC CHECKSUMS:
   React-logger: 7b5b458327a1ff0d7e5a349430d1ed133dcebaa3
   React-Mapbuffer: 0d88ad9afa9e195dd7634424bde1d38e4129e646
   React-microtasksnativemodule: 17234f35d37e6ed388e18a6314210b3b9e051219
-  react-native-google-maps: 8b5273b13c431821382a7ee952c1be2bf7f3a496
+  react-native-google-maps: f2c7c06aeb6836ce24f96ad28ad754b12996ba49
   react-native-maps: 550af152f61535db2ce5c9c4c6fa508ba0e78a19
   React-nativeconfig: 93fe8c85a8c40820c57814e30f3e44b94c995a7b
   React-NativeModulesApple: a4457b73e63e983db66d66612160006bccb00ad5

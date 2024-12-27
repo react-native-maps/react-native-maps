@@ -17,6 +17,7 @@
 #import "AIRGoogleMapUrlTile.h"
 #import "AIRGoogleMapWMSTile.h"
 #import "AIRGoogleMapOverlay.h"
+#import "AIRMapCoordinate.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import <React/UIView+React.h>
@@ -143,6 +144,88 @@ id regionAsJSON(MKCoordinateRegion region) {
                @"y": @(touchPoint.y),
                },
            };
+}
+
+-(void) fitToCoordinates:(NSArray<AIRMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated
+{
+    CLLocationCoordinate2D myLocation = coordinates.firstObject.coordinate;
+         GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
+
+         for (AIRMapCoordinate *coordinate in coordinates)
+           bounds = [bounds includingCoordinate:coordinate.coordinate];
+
+         // Set Map viewport
+         CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+         CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+         CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+         CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+
+         GMSCameraUpdate *cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
+
+         if (animated) {
+           [self animateWithCameraUpdate: cameraUpdate];
+         } else {
+           [self moveCamera: cameraUpdate];
+         }
+}
+
+-(void) fitToElementsWithEdgePadding:(nonnull NSDictionary *)edgePadding
+             animated:(BOOL)animated
+{
+    CLLocationCoordinate2D myLocation = ((AIRGoogleMapMarker *)(self.markers.firstObject)).realMarker.position;
+    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
+
+    for (AIRGoogleMapMarker *marker in self.markers)
+      bounds = [bounds includingCoordinate:marker.realMarker.position];
+
+      GMSCameraUpdate* cameraUpdate;
+
+      if ([edgePadding count] != 0) {
+          // Set Map viewport
+          CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+          CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+          CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+          CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+
+          cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
+      } else {
+          cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
+      }
+    if (animated) {
+      [self animateWithCameraUpdate: cameraUpdate];
+    } else {
+      [self moveCamera: cameraUpdate];
+    }
+}
+
+- (void) fitToSuppliedMarkers:(NSArray*) markers withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated
+{
+    NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+      AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)evaluatedObject;
+      return [marker isKindOfClass:[AIRGoogleMapMarker class]] && [markers containsObject:marker.identifier];
+    }];
+
+    NSArray *filteredMarkers = [self.markers filteredArrayUsingPredicate:filterMarkers];
+
+    CLLocationCoordinate2D myLocation = ((AIRGoogleMapMarker *)(filteredMarkers.firstObject)).realMarker.position;
+    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
+
+    for (AIRGoogleMapMarker *marker in filteredMarkers)
+      bounds = [bounds includingCoordinate:marker.realMarker.position];
+
+    // Set Map viewport
+    CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
+    CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
+    CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
+    CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
+
+    GMSCameraUpdate* cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
+    if (animated) {
+      [self animateWithCameraUpdate:cameraUpdate
+       ];
+    } else {
+      [self moveCamera: cameraUpdate];
+    }
 }
 
 #pragma clang diagnostic push
@@ -579,11 +662,11 @@ id regionAsJSON(MKCoordinateRegion region) {
   return self.settings.myLocationButton;
 }
 
-- (void)setMinZoomLevel:(CGFloat)minZoomLevel {
+- (void)setMinZoom:(CGFloat)minZoomLevel {
   [self setMinZoom:minZoomLevel maxZoom:self.maxZoom ];
 }
 
-- (void)setMaxZoomLevel:(CGFloat)maxZoomLevel {
+- (void)setMaxZoom:(CGFloat)maxZoomLevel {
   [self setMinZoom:self.minZoom maxZoom:maxZoomLevel ];
 }
 

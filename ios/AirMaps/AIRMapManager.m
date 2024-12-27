@@ -1175,11 +1175,11 @@ static int kDragCenterContext;
 
     CGFloat zoomLevel = [mapView getZoomLevel];
 
-    if (zoomLevel < mapView.minZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
+    if (zoomLevel < mapView.minZoom) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoom animated:TRUE mapView:mapView];
     }
-    else if (zoomLevel > mapView.maxZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
+    else if (zoomLevel > mapView.maxZoom) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoom animated:TRUE mapView:mapView];
     }
 }
 

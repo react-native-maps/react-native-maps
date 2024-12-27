@@ -16,7 +16,6 @@ import {
   NativeComponent,
   ProviderContext,
 } from './decorateMapComponent';
-import * as ProviderConstants from './ProviderConstants';
 import {
   CalloutPressEvent,
   ClickEvent,
@@ -70,8 +69,6 @@ export const MAP_TYPES: MapTypes = {
   SATELLITE_FLYOVER: 'satelliteFlyover',
   HYBRID_FLYOVER: 'hybridFlyover',
 };
-
-const GOOGLE_MAPS_ONLY_TYPES: MapType[] = [MAP_TYPES.TERRAIN, MAP_TYPES.NONE];
 
 export type MapViewProps = ViewProps & {
   /**
@@ -1123,10 +1120,7 @@ class MapView extends React.Component<MapViewProps, State> {
   };
 
   render() {
-    if (
-      Platform.OS === 'ios' &&
-      this.props.provider === ProviderConstants.PROVIDER_DEFAULT
-    ) {
+    if (Platform.OS === 'ios') {
       const AIRMap = FabricMapView;
       // Define props specifically for MapFabricNativeProps
       /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -1142,6 +1136,8 @@ class MapView extends React.Component<MapViewProps, State> {
         onRegionChange,
         onRegionChangeComplete,
         onPress,
+        minZoomLevel,
+        maxZoomLevel,
         region,
         ...restProps
       } = this.props;
@@ -1157,6 +1153,8 @@ class MapView extends React.Component<MapViewProps, State> {
         onMarkerSelect: this.handleMarkerSelect,
         onMarkerDeselect: this.handleMarkerDeselect,
         userInterfaceStyle: userInterfaceStyle,
+        minZoom: minZoomLevel,
+        maxZoom: maxZoomLevel,
         onRegionChange: this.handleRegionChange,
         ...restProps,
       };
@@ -1169,13 +1167,7 @@ class MapView extends React.Component<MapViewProps, State> {
         };
       }
 
-      if (this.state.isReady) {
-        if (props.mapType && GOOGLE_MAPS_ONLY_TYPES.includes(props.mapType)) {
-          props.mapType = MAP_TYPES.STANDARD;
-
-          console.log('ready');
-        }
-      } else {
+      if (!this.state.isReady) {
         props.style = this.props.style;
         props.initialCamera = this.props.initialCamera;
         props.onLayout = this.props.onLayout;

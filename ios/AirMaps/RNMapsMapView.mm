@@ -255,28 +255,6 @@ using namespace facebook::react;
                   .width = [positionDict[@"width"] doubleValue],
                   .height = [positionDict[@"height"] doubleValue],
               };
-/*
- std::string action;
-OnCalloutPressFrame frame;
-std::string id;
-OnCalloutPressPoint point;
-OnCalloutPressCoordinate coordinate;
-OnCalloutPressPosition position;
- id event = @{
-              @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
-              @"id": marker.identifier ?: @"unknown",
-              @"point": @{
-                      @"x": @(touchPointReal.x),
-                      @"y": @(touchPointReal.y),
-                      },
-              @"frame": @{
-                  @"x": @(bubbleFrame.origin.x),
-                  @"y": @(bubbleFrame.origin.y),
-                  @"width": @(bubbleFrame.size.width),
-                  @"height": @(bubbleFrame.size.height),
-                  }
-              };
- */
 
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsMapViewEventEmitter::OnCalloutPress data = {
@@ -482,9 +460,9 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
     REMAP_MAPVIEW_PROP(scrollEnabled)
 
     REMAP_MAPVIEW_PROP(maxDelta)
-    REMAP_MAPVIEW_PROP(maxZoomLevel)
+    REMAP_MAPVIEW_PROP(maxZoom)
     REMAP_MAPVIEW_PROP(minDelta)
-    REMAP_MAPVIEW_PROP(minZoomLevel)
+    REMAP_MAPVIEW_PROP(minZoom)
 
     REMAP_MAPVIEW_PROP(showsCompass)
     REMAP_MAPVIEW_PROP(showsScale)
@@ -508,7 +486,6 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
     REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)
     REMAP_MAPVIEW_COLOR_PROP(tintColor)
 
-    // userLocationAnnotationTitle
     REMAP_MAPVIEW_STRING_PROP(userLocationAnnotationTitle)
 
     if (oldViewProps.mapType != newViewProps.mapType){
