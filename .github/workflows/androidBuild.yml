@@ -36,6 +36,11 @@ jobs:
       - name: Install dependencies
         run: yarn --cwd example --frozen-lockfile
 
+      - name: Modify package.json
+        run: |
+          jq '.codegenConfig.jsSrcsDir = "/src/specs"' package.json > package.tmp.json
+          mv package.tmp.json package.json
+
       - name: Write local.properties
         run: echo MAPS_API_KEY=your_api_key_here >> example/android/local.properties
 
