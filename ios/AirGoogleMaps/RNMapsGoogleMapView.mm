@@ -76,7 +76,7 @@ using namespace facebook::react;
 
     NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
     
-    [_view fitToCoordinates:coordinatesArr withEdgePadding:edgePadding animated:animated];
+   // [_view fitToCoordinates:coordinatesArr withEdgePadding:edgePadding animated:animated];
 }
 
 #pragma mark - Native commands

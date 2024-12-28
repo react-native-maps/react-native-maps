@@ -9,15 +9,16 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTBridge.h>
 #import "AIRGMSPolyline.h"
-#import "AIRMapCoordinate.h"
 #import "AIRGoogleMapMarker.h"
+
+#import "AIRGoogleMapCoordinate.h"
 
 @interface AIRGoogleMapPolyline : UIView
 
 @property (nonatomic, weak) RCTBridge *bridge;
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, strong) AIRGMSPolyline *polyline;
-@property (nonatomic, strong) NSArray<AIRMapCoordinate *> *coordinates;
+@property (nonatomic, strong) NSArray<AIRGoogleMapCoordinate *> *coordinates;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, strong) GMSMapView *originalMap;
 

@@ -17,12 +17,12 @@
 #import "AIRGoogleMapUrlTile.h"
 #import "AIRGoogleMapWMSTile.h"
 #import "AIRGoogleMapOverlay.h"
-#import "AIRMapCoordinate.h"
+#import "AIRGoogleMapCoordinate.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import <React/UIView+React.h>
 #import <React/RCTBridge.h>
-#import "RCTConvert+AirMap.h"
+#import <React/RCTConvert.h>
 #import <objc/runtime.h>
 
 #ifdef HAVE_GOOGLE_MAPS_UTILS
@@ -87,7 +87,7 @@ id regionAsJSON(MKCoordinateRegion region) {
         [options setCamera:camera];
     }
     self = [super initWithOptions:options];
- 
+
     if (self) {
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
@@ -146,12 +146,12 @@ id regionAsJSON(MKCoordinateRegion region) {
            };
 }
 
--(void) fitToCoordinates:(NSArray<AIRMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated
+-(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated
 {
     CLLocationCoordinate2D myLocation = coordinates.firstObject.coordinate;
          GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
 
-         for (AIRMapCoordinate *coordinate in coordinates)
+         for (AIRGoogleMapCoordinate *coordinate in coordinates)
            bounds = [bounds includingCoordinate:coordinate.coordinate];
 
          // Set Map viewport
@@ -693,7 +693,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGMSMarker *airMarker = (AIRGMSMarker *) self.selectedMarker;
     AIRGoogleMapMarker *fakeAirMarker = (AIRGoogleMapMarker *) airMarker.fakeMarker;
     AIRGoogleMapMarker *fakeSelectedMarker = (AIRGoogleMapMarker *) selectedMarker.fakeMarker;
-    
+
     if (airMarker && airMarker.onDeselect) {
         airMarker.onDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
     }
@@ -701,7 +701,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     if (airMarker && self.onMarkerDeselect) {
         self.onMarkerDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
     }
-    
+
     if (selectedMarker && selectedMarker.onSelect) {
         selectedMarker.onSelect([fakeSelectedMarker makeEventData:@"marker-select"]);
     }
@@ -1117,7 +1117,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 // do nothing, passed as options on initialization
 - (void)setLoadingBackgroundColor:(UIColor *)loadingBackgroundColor {
-    
+
 }
 
 

@@ -33,7 +33,7 @@ jobs:
           mv package.tmp.json package.json
 
       - name: Install pods
-        run: USE_FRAMEWORKS=static NO_FLIPPER=1 bundle exec pod install
+        run: USE_FRAMEWORKS=static bundle exec pod install
         working-directory: example/ios
 
       - name: Write Config.xcconfig

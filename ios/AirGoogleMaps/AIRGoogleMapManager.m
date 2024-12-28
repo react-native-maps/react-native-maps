@@ -19,14 +19,9 @@
 #import <React/UIView+React.h>
 #import "RCTConvert+GMSMapViewType.h"
 #import "AIRGoogleMap.h"
-#import "AIRMapMarker.h"
-#import "AIRMapPolyline.h"
-#import "AIRMapPolygon.h"
-#import "AIRMapCircle.h"
-#import "SMCalloutView.h"
 #import "AIRGoogleMapMarker.h"
-#import "RCTConvert+AirMap.h"
-
+#import "AIRGoogleMapCoordinate.h"
+#import "RCTConvert+GMSMapViewType.h"
 #import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -236,7 +231,7 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
 }
 
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
-                  coordinates:(nonnull NSArray<AIRMapCoordinate *> *)coordinates
+                  coordinates:(nonnull NSArray<AIRGoogleMapCoordinate *> *)coordinates
                   edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)
 {
