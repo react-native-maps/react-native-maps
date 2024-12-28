@@ -54,10 +54,20 @@ import {
 } from './MapView.types';
 import {Modify} from './sharedTypesInternal';
 import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
-import type {MapFabricNativeProps} from './specs/NativeComponentMapView';
+
+import FabricMapView, {
+  Commands as FabricCommands,
+  MapFabricNativeProps,
+} from './specs/NativeComponentMapView';
+import GoogleMapView, {
+  Commands as GoogleCommands,
+} from './specs/NativeComponentGoogleMapView';
+import createFabricMap, {FabricMapHandle} from './createFabricMap';
+
+const FabricMap = createFabricMap(FabricMapView, FabricCommands);
+const FabricGoogleMap = createFabricMap(GoogleMapView, GoogleCommands);
 
 import AnimatedRegion from './AnimatedRegion';
-import FabricMapView, {FabricMapHandle} from './FabricMapView';
 
 export const MAP_TYPES: MapTypes = {
   STANDARD: 'standard',
@@ -1121,7 +1131,6 @@ class MapView extends React.Component<MapViewProps, State> {
 
   render() {
     if (Platform.OS === 'ios') {
-      const AIRMap = FabricMapView;
       // Define props specifically for MapFabricNativeProps
       /* eslint-disable @typescript-eslint/no-unused-vars */
       const {
@@ -1139,8 +1148,10 @@ class MapView extends React.Component<MapViewProps, State> {
         minZoomLevel,
         maxZoomLevel,
         region,
+        provider,
         ...restProps
       } = this.props;
+
       /* eslint-enable @typescript-eslint/no-unused-vars */
       const userInterfaceStyle = this.props.userInterfaceStyle || 'system';
       const props: MapFabricNativeProps = {
@@ -1173,12 +1184,19 @@ class MapView extends React.Component<MapViewProps, State> {
         props.onLayout = this.props.onLayout;
       }
 
-      // Render AIRMap with MapFabricNativeProps
-      return (
-        <ProviderContext.Provider value={this.props.provider}>
-          <AIRMap {...props} ref={this.fabricMap} />
-        </ProviderContext.Provider>
-      );
+      if (provider === 'google') {
+        return (
+          <ProviderContext.Provider value={this.props.provider}>
+            <FabricGoogleMap {...props} ref={this.fabricMap} />
+          </ProviderContext.Provider>
+        );
+      } else {
+        return (
+          <ProviderContext.Provider value={this.props.provider}>
+            <FabricMap {...props} ref={this.fabricMap} />
+          </ProviderContext.Provider>
+        );
+      }
     } else {
       const AIRMap = getNativeMapComponent(this.props.provider);
 

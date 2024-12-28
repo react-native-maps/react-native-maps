@@ -350,23 +350,8 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
             AIRMap *mapView = (AIRMap *)view;
-
-            // Create Polyline with coordinates
-            CLLocationCoordinate2D coords[coordinates.count];
-            for(int i = 0; i < coordinates.count; i++)
-            {
-                coords[i] = coordinates[i].coordinate;
-            }
-            MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordinates.count];
-
-            // Set Map viewport
-            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-
-            [mapView setVisibleMapRect:[polyline boundingMapRect] edgePadding:UIEdgeInsetsMake(top, left, bottom, right) animated:animated];
-
+            UIEdgeInsets edgeInsets = [RCTConvert UIEdgeInsets:edgePadding];
+            [mapView fitToCoordinates: coordinates edgePadding:edgeInsets animated:animated];
         }
     }];
 }

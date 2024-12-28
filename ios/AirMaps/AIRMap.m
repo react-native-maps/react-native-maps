@@ -199,7 +199,19 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
     return marker;
 }
+// Create Polyline with coordinates
+-(void) fitToCoordinates:(NSArray<AIRMapCoordinate*>*) coordinates edgePadding:(UIEdgeInsets) edgeInsets animated:(Boolean) animated {
+CLLocationCoordinate2D coords[coordinates.count];
+for(int i = 0; i < coordinates.count; i++)
+{
+    coords[i] = coordinates[i].coordinate;
+}
+MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordinates.count];
 
+// Set Map viewport
+
+[self setVisibleMapRect:[polyline boundingMapRect] edgePadding:edgeInsets animated:animated];
+}
 - (CGRect) frameForMarker:(AIRMapMarker*) mrkAnn {
     MKAnnotationView* mrkView = [self viewForAnnotation: mrkAnn];
     CGRect mrkFrame = mrkView.frame;

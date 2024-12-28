@@ -27,6 +27,7 @@
   };
 }
 
+
 + (MKMapCamera*)MKMapCamera:(id)json
 {
     json = [self NSDictionary:json];
@@ -48,6 +49,7 @@
                                               options:NSJSONReadingMutableContainers
                                                 error:&jsonError];
 }
+
 
 + (MKMapCamera*)MKMapCameraWithDefaults:(id)json existingCamera:(MKMapCamera*)camera
 {
