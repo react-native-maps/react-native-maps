@@ -1,21 +1,16 @@
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-
-// Import your native commands for FabricMapView
-import type {MapBoundaries} from './specs/NativeAirMapsModule';
-import NativeAirMapsModule from './specs/NativeAirMapsModule';
-
-import type {
-  MapFabricNativeProps,
-  Camera,
-  Point,
-} from './specs/NativeComponentMapView';
-import FabricMapView, {Commands} from './specs/NativeComponentMapView';
-import GoogleMapView from './specs/NativeComponentGoogleMapView';
-
-//
-import {LatLng, Provider, Region} from './sharedTypes';
-import {Address, EdgePadding, SnapshotOptions} from './MapView.types';
 import {findNodeHandle} from 'react-native';
+import type {LatLng, Point, Region} from './sharedTypes';
+import type {
+  Address,
+  Camera,
+  EdgePadding,
+  SnapshotOptions,
+} from './MapView.types';
+import NativeAirMapsModule, {MapBoundaries} from './specs/NativeAirMapsModule';
+import {MapFabricNativeProps} from './specs/NativeComponentMapView';
+
+export type FabricMapViewProps = MapFabricNativeProps;
 
 export interface FabricMapHandle {
   getCamera: () => Promise<Camera>;
@@ -43,14 +38,11 @@ export interface FabricMapHandle {
   getPointForCoordinate: (coordinate: LatLng) => Promise<Point>;
   getCoordinateForPoint: (point: Point) => Promise<LatLng>;
 }
-export type FabricMapViewProps = MapFabricNativeProps & {
-  provider?: Provider;
-};
 
-export const FabricMap = forwardRef<FabricMapHandle, FabricMapViewProps>(
-  (props, ref) => {
-    const fabricRef = useRef<React.ElementRef<React.ComponentType>>(null);
-    // Use Imperative Handle to expose commands
+const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
+  return forwardRef<FabricMapHandle, FabricMapViewProps>((props, ref) => {
+    const fabricRef = useRef<React.ElementRef<typeof ViewComponent>>(null);
+
     useImperativeHandle(ref, () => ({
       async getMarkersFrames(onlyVisible: boolean) {
         if (fabricRef.current) {
@@ -237,12 +229,10 @@ export const FabricMap = forwardRef<FabricMapHandle, FabricMapViewProps>(
         }
       },
     }));
-    if (props.provider === 'google') {
-      return <GoogleMapView {...props} ref={fabricRef} />;
-    } else {
-      return <FabricMapView {...props} ref={fabricRef} />;
-    }
-  },
-);
 
-export default FabricMap;
+    // @ts-ignore
+    return <ViewComponent {...props} ref={fabricRef} />;
+  });
+};
+
+export default createFabricMap;

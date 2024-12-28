@@ -73,10 +73,14 @@ using namespace facebook::react;
 }
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
     NSArray* coordinatesArr = [RCTConvert arrayFromString:coordinatesJSON];
+    NSMutableArray<AIRGoogleMapCoordinate*>* coordinatesArray = [NSMutableArray new];
+    for (id json : coordinatesArr){
+        [coordinatesArray addObject:[RCTConvert AIRGoogleMapCoordinate:json]];
+    }
 
     NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
     
-   // [_view fitToCoordinates:coordinatesArr withEdgePadding:edgePadding animated:animated];
+    [_view fitToCoordinates:coordinatesArray withEdgePadding:edgePadding animated:animated];
 }
 
 #pragma mark - Native commands
@@ -128,7 +132,6 @@ using namespace facebook::react;
 
       _view.onMapReady = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
-              NSLog(@"mapReady");
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsGoogleMapViewEventEmitter::OnMapReady data = {};
               mapViewEventEmitter->onMapReady(data);
@@ -137,7 +140,6 @@ using namespace facebook::react;
     
     _view.onMapLoaded = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
-            NSLog(@"mapLoaded");
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
             facebook::react::RNMapsGoogleMapViewEventEmitter::OnMapLoaded data = {};
             mapViewEventEmitter->onMapLoaded(data);

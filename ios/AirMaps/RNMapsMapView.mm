@@ -76,6 +76,16 @@ using namespace facebook::react;
 
 }
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
+    NSArray* coordinatesArr = [RCTConvert arrayFromString:coordinatesJSON];
+    NSMutableArray<AIRMapCoordinate*>* mutableArray = [NSMutableArray new];
+    for (id json : coordinatesArr){
+        [mutableArray addObject:[RCTConvert AIRMapCoordinate:json]];
+    }
+
+    NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
+
+    UIEdgeInsets edgeInsets = [RCTConvert UIEdgeInsets:edgePadding];
+    [_view fitToCoordinates:mutableArray edgePadding:edgeInsets animated:animated];
 
 }
 
