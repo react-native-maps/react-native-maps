@@ -14,8 +14,8 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTViewManager.h>
 #import <React/UIView+React.h>
-#import "RCTConvert+AirMap.h"
 #import "AIRGoogleMapPolyline.h"
+#import "RCTConvert+GMSMapViewType.h"
 
 @interface AIRGoogleMapPolylineManager()
 
@@ -32,7 +32,7 @@ RCT_EXPORT_MODULE()
   return polyline;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(coordinates, AIRMapCoordinateArray)
+RCT_EXPORT_VIEW_PROPERTY(coordinates, AIRGoogleMapCoordinateArray)
 RCT_EXPORT_VIEW_PROPERTY(fillColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeColors, UIColorArray)

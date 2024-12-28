@@ -42,7 +42,7 @@
   }
 }
 
-- (void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates
+- (void)setCoordinates:(NSArray<AIRGoogleMapCoordinate *> *)coordinates
 {
   _coordinates = coordinates;
 
@@ -55,7 +55,7 @@
   _polygon.path = path;
 }
 
-- (void)setHoles:(NSArray<NSArray<AIRMapCoordinate *> *> *)holes
+- (void)setHoles:(NSArray<NSArray<AIRGoogleMapCoordinate *> *> *)holes
 {
   _holes = holes;
 

@@ -19,14 +19,9 @@
 #import <React/UIView+React.h>
 #import "RCTConvert+GMSMapViewType.h"
 #import "AIRGoogleMap.h"
-#import "AIRMapMarker.h"
-#import "AIRMapPolyline.h"
-#import "AIRMapPolygon.h"
-#import "AIRMapCircle.h"
-#import "SMCalloutView.h"
 #import "AIRGoogleMapMarker.h"
-#import "RCTConvert+AirMap.h"
-
+#import "AIRGoogleMapCoordinate.h"
+#import "RCTConvert+GMSMapViewType.h"
 #import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -45,26 +40,22 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-  NSString* googleMapId  = nil;
-  BOOL zoomTapEnabled = YES;
-  UIColor* backgroundColor = nil;
-  GMSCameraPosition* camera = nil;
 
   if (self.initialProps){
       if (self.initialProps[@"googleMapId"]){
-          googleMapId  = self.initialProps[@"googleMapId"];
+          _googleMapId  = self.initialProps[@"googleMapId"];
       }
       if (self.initialProps[@"zoomTapEnabled"]){
-          zoomTapEnabled = self.initialProps[@"zoomTapEnabled"];
+          _zoomTapEnabled = self.initialProps[@"zoomTapEnabled"];
       }
       if (self.initialProps[@"loadingBackgroundColor"]){
-          backgroundColor = [RCTConvert UIColor:self.initialProps[@"loadingBackgroundColor"]];
+          _backgroundColor = [RCTConvert UIColor:self.initialProps[@"loadingBackgroundColor"]];
       }
       if (self.initialProps[@"initialCamera"]){
-          camera = [RCTConvert GMSCameraPositionWithDefaults:self.initialProps[@"initialCamera"] existingCamera:nil];
+          _camera = [RCTConvert GMSCameraPositionWithDefaults:self.initialProps[@"initialCamera"] existingCamera:nil];
       }
   }
-  AIRGoogleMap *map = [[AIRGoogleMap alloc] initWithMapId:googleMapId initialCamera:camera backgroundColor:backgroundColor andZoomTapEnabled:zoomTapEnabled];
+  AIRGoogleMap *map = [[AIRGoogleMap alloc] initWithMapId:self.googleMapId initialCamera:self.camera backgroundColor:self.backgroundColor andZoomTapEnabled:self.zoomTapEnabled];
   map.bridge = self.bridge;
   map.delegate = self;
   map.isAccessibilityElement = NO;
@@ -217,32 +208,8 @@ RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
       RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
     } else {
-      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-
-      CLLocationCoordinate2D myLocation = ((AIRGoogleMapMarker *)(mapView.markers.firstObject)).realMarker.position;
-      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
-
-      for (AIRGoogleMapMarker *marker in mapView.markers)
-        bounds = [bounds includingCoordinate:marker.realMarker.position];
-
-        GMSCameraUpdate* cameraUpdate;
-
-        if ([edgePadding count] != 0) {
-            // Set Map viewport
-            CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-            CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-            CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-            CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-
-            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
-        } else {
-            cameraUpdate = [GMSCameraUpdate fitBounds:bounds withPadding:55.0f];
-        }
-      if (animated) {
-        [mapView animateWithCameraUpdate: cameraUpdate];
-      } else {
-        [mapView moveCamera: cameraUpdate];
-      }
+        AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+        [mapView fitToElementsWithEdgePadding:edgePadding animated:animated];
     }
   }];
 }
@@ -257,40 +224,14 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
       RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
     } else {
-      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-
-      NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)evaluatedObject;
-        return [marker isKindOfClass:[AIRGoogleMapMarker class]] && [markers containsObject:marker.identifier];
-      }];
-
-      NSArray *filteredMarkers = [mapView.markers filteredArrayUsingPredicate:filterMarkers];
-
-      CLLocationCoordinate2D myLocation = ((AIRGoogleMapMarker *)(filteredMarkers.firstObject)).realMarker.position;
-      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
-
-      for (AIRGoogleMapMarker *marker in filteredMarkers)
-        bounds = [bounds includingCoordinate:marker.realMarker.position];
-
-      // Set Map viewport
-      CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-      CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-      CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-      CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-
-      GMSCameraUpdate* cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
-      if (animated) {
-        [mapView animateWithCameraUpdate:cameraUpdate
-         ];
-      } else {
-        [mapView moveCamera: cameraUpdate];
-      }
+        AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+        [mapView fitToSuppliedMarkers:markers withEdgePadding:edgePadding animated:animated];
     }
   }];
 }
 
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
-                  coordinates:(nonnull NSArray<AIRMapCoordinate *> *)coordinates
+                  coordinates:(nonnull NSArray<AIRGoogleMapCoordinate *> *)coordinates
                   edgePadding:(nonnull NSDictionary *)edgePadding
                   animated:(BOOL)animated)
 {
@@ -300,26 +241,7 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
       RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
     } else {
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-
-      CLLocationCoordinate2D myLocation = coordinates.firstObject.coordinate;
-      GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
-
-      for (AIRMapCoordinate *coordinate in coordinates)
-        bounds = [bounds includingCoordinate:coordinate.coordinate];
-
-      // Set Map viewport
-      CGFloat top = [RCTConvert CGFloat:edgePadding[@"top"]];
-      CGFloat right = [RCTConvert CGFloat:edgePadding[@"right"]];
-      CGFloat bottom = [RCTConvert CGFloat:edgePadding[@"bottom"]];
-      CGFloat left = [RCTConvert CGFloat:edgePadding[@"left"]];
-
-      GMSCameraUpdate *cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
-
-      if (animated) {
-        [mapView animateWithCameraUpdate: cameraUpdate];
-      } else {
-        [mapView moveCamera: cameraUpdate];
-      }
+        [mapView fitToCoordinates:coordinates withEdgePadding:edgePadding animated:animated];
     }
   }];
 }

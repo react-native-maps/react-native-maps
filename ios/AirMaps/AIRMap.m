@@ -85,8 +85,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
         
-        self.minZoomLevel = 0;
-        self.maxZoomLevel = AIRMapMaxZoomLevel;
+        self.minZoom = 0;
+        self.maxZoom = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
         self.legacyZoomConstraintsEnabled = YES;
     }

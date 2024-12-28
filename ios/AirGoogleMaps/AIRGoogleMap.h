@@ -13,7 +13,8 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
-#import "RCTConvert+AirMap.h"
+
+#import "AIRGoogleMapCoordinate.h"
 
 @interface AIRGoogleMap : GMSMapView
 
@@ -84,6 +85,10 @@
 
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
 - (instancetype)initWithMapId:(NSString *)mapId initialCamera:(GMSCameraPosition*) camera backgroundColor:(UIColor *) backgroundColor andZoomTapEnabled:(BOOL)zoomTapEnabled;
+-(void) fitToSuppliedMarkers:(NSArray*) markers withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated;
+-(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated;
+-(void) fitToElementsWithEdgePadding:(nonnull NSDictionary *)edgePadding
+             animated:(BOOL)animated;
 @end
 
 #endif
