@@ -121,7 +121,7 @@ type OverlayPressEvent = NativeSyntheticEvent<{
   action: 'overlay-press' | 'image-overlay-press';
 
   /**
-   * @platform iOS: Apple maps
+   * @platform iOS: Apple Maps
    */
   name?: string;
 

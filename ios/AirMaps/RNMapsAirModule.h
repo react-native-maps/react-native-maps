@@ -1,5 +1,6 @@
 //  RCTNativeLocalStorage.h
 //  TurboModuleExample
+#ifdef RCT_NEW_ARCH_ENABLED
 
 #import <Foundation/Foundation.h>
 #import <RNMapsSpecs/RNMapsSpecs.h>
@@ -11,3 +12,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

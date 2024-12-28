@@ -10,7 +10,10 @@ import type {
   Point,
 } from './specs/NativeComponentMapView';
 import FabricMapView, {Commands} from './specs/NativeComponentMapView';
-import {LatLng, Region} from './sharedTypes';
+import GoogleMapView from './specs/NativeComponentGoogleMapView';
+
+//
+import {LatLng, Provider, Region} from './sharedTypes';
 import {Address, EdgePadding, SnapshotOptions} from './MapView.types';
 import {findNodeHandle} from 'react-native';
 
@@ -40,8 +43,11 @@ export interface FabricMapHandle {
   getPointForCoordinate: (coordinate: LatLng) => Promise<Point>;
   getCoordinateForPoint: (point: Point) => Promise<LatLng>;
 }
+export type FabricMapViewProps = MapFabricNativeProps & {
+  provider?: Provider;
+};
 
-export const FabricMap = forwardRef<FabricMapHandle, MapFabricNativeProps>(
+export const FabricMap = forwardRef<FabricMapHandle, FabricMapViewProps>(
   (props, ref) => {
     const fabricRef = useRef<React.ElementRef<React.ComponentType>>(null);
     // Use Imperative Handle to expose commands
@@ -231,8 +237,11 @@ export const FabricMap = forwardRef<FabricMapHandle, MapFabricNativeProps>(
         }
       },
     }));
-
-    return <FabricMapView {...props} ref={fabricRef} />;
+    if (props.provider === 'google') {
+      return <GoogleMapView {...props} ref={fabricRef} />;
+    } else {
+      return <FabricMapView {...props} ref={fabricRef} />;
+    }
   },
 );
 

@@ -353,15 +353,6 @@ export type CameraZoomRange = Readonly<{
 
 export interface MapFabricNativeProps extends ViewProps {
   /**
-   * If `true` map will be cached and displayed as an image instead of being interactable, for performance usage.
-   *
-   * @default false
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  cacheEnabled?: boolean;
-
-  /**
    * The camera view the map should display.
    *
    * Use the camera system, instead of the region system, if you need control over
@@ -370,34 +361,6 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform Android: Supported
    */
   camera?: Camera;
-
-  /**
-   * If set, changes the position of the compass.
-   *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
-   */
-  compassOffset?: Point;
-
-  /**
-   * If `true` the map will focus on the user's location.
-   * This only works if `showsUserLocation` is true and the user has shared their location.
-   *
-   * @default false
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
-   */
-  followsUserLocation?: boolean;
-
-  /**
-   * If `false` the map will not capture PoI clicks
-   * This can improve click handling on the map for android
-   *
-   * @default true
-   * @platform iOS: Not supported
-   * @platform Android: supported
-   */
-  poiClickEnabled?: boolean;
 
   /**
    * The initial camera view the map should use.  Use this prop instead of `camera`
@@ -437,35 +400,10 @@ export interface MapFabricNativeProps extends ViewProps {
   kmlSrc?: string;
 
   /**
-   * If set, changes the position of the "Legal" label link in Apple Maps.
-   *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
-   */
-  legalLabelInsets?: EdgePadding;
-
-  /**
-   * Enables lite mode on Android
-   *
-   * @platform iOS: Not supported
-   * @platform Android: Supported
-   */
-  liteMode?: boolean;
-
-  /**
    * https://developers.google.com/maps/documentation/get-map-id
    * google cloud mapId to enable cloud styling and more
    */
   googleMapId?: string;
-
-  /**
-   * https://developers.google.com/maps/documentation/android-sdk/renderer
-   * google maps renderer
-   * @default `LATEST`
-   * @platform iOS: Not supported
-   * @platform Android: Supported
-   */
-  googleRenderer?: WithDefault<'LATEST' | 'LEGACY', 'LATEST'>;
 
   /**
    * Sets loading background color.
@@ -475,24 +413,6 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform Android: Supported
    */
   loadingBackgroundColor?: ColorValue;
-
-  /**
-   * If `true` a loading indicator will show while the map is loading.
-   *
-   * @default false
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingEnabled?: boolean;
-
-  /**
-   * Sets loading indicator color.
-   *
-   * @default `#606060`
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  loadingIndicatorColor?: ColorValue;
 
   /**
    * Adds custom padding to each side of the map. Useful when map elements/markers are obscured.
@@ -522,14 +442,6 @@ export interface MapFabricNativeProps extends ViewProps {
   >;
 
   /**
-   * TODO: Add documentation
-   *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
-   */
-  maxDelta?: Double;
-
-  /**
    * Maximum zoom value for the map, must be between 0 and 20
    *
    * @default 20
@@ -540,14 +452,6 @@ export interface MapFabricNativeProps extends ViewProps {
   maxZoom?: Float;
 
   /**
-   * TODO: Add documentation
-   *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
-   */
-  minDelta?: Double;
-
-  /**
    * Minimum zoom value for the map, must be between 0 and 20
    *
    * @default 0
@@ -556,31 +460,6 @@ export interface MapFabricNativeProps extends ViewProps {
    * @deprecated on Apple Maps, use `cameraZoomRange` instead
    */
   minZoom?: Float;
-
-  /**
-   * If `false` the map won't move to the marker when pressed.
-   *
-   * @default true
-   * @platform iOS: Not supported
-   * @platform Android: Supported
-   */
-  moveOnMarkerPress?: boolean;
-
-  /**
-   * Callback that is called when a callout is tapped by the user.
-   *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  onCalloutPress?: CalloutPressEventHandler;
-
-  /**
-   * Callback that is called when user double taps on the map.
-   *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  onDoublePress?: ClickEvent;
 
   /**
    * Callback that is called when an indoor building is focused/unfocused
@@ -891,24 +770,6 @@ export interface MapFabricNativeProps extends ViewProps {
   showsUserLocation?: boolean;
 
   /**
-   * Sets the tint color of the map. (Changes the color of the position indicator)
-   *
-   * @default System Blue
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
-   */
-  tintColor?: ColorValue;
-
-  /**
-   * If `false` will hide 'Navigate' and 'Open in Maps' buttons on marker press
-   *
-   * @default true
-   * @platform iOS: Not supported
-   * @platform Android: Supported
-   */
-  toolbarEnabled?: boolean;
-
-  /**
    * Sets the map to the style selected.
    *
    * @default System setting
@@ -916,17 +777,6 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform Android: Not supported
    */
   userInterfaceStyle?: WithDefault<'system' | 'light' | 'dark', 'system'>;
-
-  /**
-   * The title of the annotation for current user location.
-   *
-   * This only works if `showsUserLocation` is true.
-   *
-   * @default `My Location`
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
-   */
-  userLocationAnnotationTitle?: string;
 
   /**
    * If `true` clicking user location will show the default callout for userLocation annotation.
@@ -1002,16 +852,6 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform Android: Not supported
    */
   zoomTapEnabled?: boolean;
-
-  /**
-   * Map camera distance limits. `minCenterCoordinateDistance` for minimum distance, `maxCenterCoordinateDistance` for maximum.
-   * `animated` for animated zoom changes.
-   * Takes precedence if conflicting with `minZoomLevel`, `maxZoomLevel`.
-   *
-   * @platform iOS: 13.0+
-   * @platform Android: Not supported
-   */
-  cameraZoomRange?: CameraZoomRange;
 }
 
 export interface NativeCommands {
@@ -1064,6 +904,9 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   ],
 });
 
-export default codegenNativeComponent<MapFabricNativeProps>('RNMapsMapView', {
-  excludedPlatforms: ['android'],
-}) as HostComponent<MapFabricNativeProps>;
+export default codegenNativeComponent<MapFabricNativeProps>(
+  'RNMapsGoogleMapView',
+  {
+    excludedPlatforms: ['android'],
+  },
+) as HostComponent<MapFabricNativeProps>;

@@ -13,8 +13,8 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTViewManager.h>
 #import <React/UIView+React.h>
-#import "RCTConvert+AirMap.h"
 #import "AIRGoogleMapPolygon.h"
+#import "RCTConvert+GMSMapViewType.h"
 
 @interface AIRGoogleMapPolygonManager()
 
@@ -31,8 +31,8 @@ RCT_EXPORT_MODULE()
   return polygon;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(coordinates, AIRMapCoordinateArray)
-RCT_EXPORT_VIEW_PROPERTY(holes, AIRMapCoordinateArrayArray)
+RCT_EXPORT_VIEW_PROPERTY(coordinates, AIRGoogleMapCoordinateArray)
+RCT_EXPORT_VIEW_PROPERTY(holes, AIRGoogleMapCoordinateArrayArray)
 RCT_EXPORT_VIEW_PROPERTY(fillColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeWidth, double)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)

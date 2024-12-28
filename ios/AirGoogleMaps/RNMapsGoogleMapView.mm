@@ -1,15 +1,17 @@
 //
-//  RNMapsMarker.m
-//  AirMaps
+//  RNMapsGoogleMapView.mm
+//  
 //
 //  Created by Salah Ghanim on 23.11.24.
 //  Copyright © 2024 react-native-maps. All rights reserved.
 //
+#ifdef HAVE_GOOGLE_MAPS
 
-#import "RNMapsMapView.h"
-#import "AirMap.h"
+#import "RNMapsGoogleMapView.h"
+#import "AirGoogleMap.h"
 #import "AIRMapMarker.h"
-#import "AIRMapManager.h"
+#import "AirGoogleMapManager.h"
+
 #import <react/renderer/components/RNMapsSpecs/ComponentDescriptors.h>
 #import <react/renderer/components/RNMapsSpecs/EventEmitters.h>
 #import <react/renderer/components/RNMapsSpecs/Props.h>
@@ -17,90 +19,83 @@
 
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
+#import "RCTConvert+GMSMapViewType.h"
+#import "RCTConvert+AirMap.h"
+
 
 using namespace facebook::react;
 
-@interface RNMapsMapView () <RCTRNMapsMapViewViewProtocol>
+@interface RNMapsGoogleMapView () <RCTRNMapsGoogleMapViewViewProtocol>
 @end
 
-@implementation RNMapsMapView {
-    AIRMap *_view;
-    AIRMapManager* _legacyMapManager;
+@implementation RNMapsGoogleMapView {
+    AIRGoogleMap *_view;
+    AIRGoogleMapManager* _legacyMapManager;
 }
 
 
-- (AIRMap *) mapView {
+- (AIRGoogleMap *) mapView {
     return _view;
 }
 
 #pragma mark - JS Commands
 - (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration{
     NSDictionary* regionDic = [RCTConvert dictonaryFromString:regionJSON];
-    [AIRMap animateWithDuration:duration/1000 animations:^{
-        [self->_view setRegion:[RCTConvert MKCoordinateRegion:regionDic] animated:YES];
-    }];
+    MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:regionDic];
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:duration/1000];
+    GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:_view andMKCoordinateRegion:region];
+    [self->_view animateToCameraPosition:camera];
+    [CATransaction commit];
 }
 - (void)setCamera:(NSString *)cameraJSON{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
-    MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:cameraDic existingCamera:[_view camera]];
+    GMSCameraPosition* camera = [RCTConvert GMSCameraPositionWithDefaults:cameraDic existingCamera:[_view camera]];
     [_view setCamera:camera];
 }
 
 - (void)animateCamera:(NSString *)cameraJSON duration:(NSInteger)duration{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
-    MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:cameraDic existingCamera:[_view camera]];
-
-    // don't emit region change events when we are setting the camera
-    BOOL originalIgnore = _view.ignoreRegionChanges;
-    _view.ignoreRegionChanges = YES;
-    [AIRMap animateWithDuration:duration/1000 animations:^{
-        [self->_view setCamera:camera animated:YES];
-    } completion:^(BOOL finished){
-        self->_view.ignoreRegionChanges = originalIgnore;
-    }];
-
+    GMSCameraPosition* camera = [RCTConvert GMSCameraPositionWithDefaults:cameraDic existingCamera:[_view camera]];
+    [_view animateToCameraPosition:camera];
 }
 
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated {
-    [_view showAnnotations:_view.annotations animated:animated];
+    NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
+    [_view fitToElementsWithEdgePadding:edgePadding animated:animated];
 }
 
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
     NSArray* markers = [RCTConvert arrayFromString:markersJSON];
-    NSPredicate *filterMarkers = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        AIRMapMarker *marker = (AIRMapMarker *)evaluatedObject;
-        return [marker isKindOfClass:[AIRMapMarker class]] && [markers containsObject:marker.identifier];
-    }];
-    NSArray *filteredMarkers = [_view.annotations filteredArrayUsingPredicate:filterMarkers];
-    [_view showAnnotations:filteredMarkers animated:animated];
+    NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
+    [_view fitToSuppliedMarkers:markers withEdgePadding:edgePadding animated:animated];
 
 }
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
+    NSArray* coordinatesArr = [RCTConvert arrayFromString:coordinatesJSON];
 
+    NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
+    
+   // [_view fitToCoordinates:coordinatesArr withEdgePadding:edgePadding animated:animated];
 }
 
 #pragma mark - Native commands
 
 - (void)handleCommand:(const NSString *)commandName args:(const NSArray *)args
 {
-    RCTRNMapsMapViewHandleCommand(self, commandName, args);
+    RCTRNMapsGoogleMapViewHandleCommand(self, commandName, args);
 }
 
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RNMapsMapViewComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNMapsGoogleMapViewComponentDescriptor>();
 }
 
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-  if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNMapsMapViewProps>();
-    _props = defaultProps;
-      _legacyMapManager = [[AIRMapManager alloc] init];
-    _view = (AIRMap *)[_legacyMapManager view];
-
+- (void) prepareContentView {
+   
+    _view = (AIRGoogleMap *)[_legacyMapManager view];
+    
     self.contentView = _view;
 
       _view.onPress = [self](NSDictionary* dictionary) {
@@ -110,19 +105,19 @@ using namespace facebook::react;
                 NSDictionary* positionDict = dictionary[@"position"];
 
                 // Populate the OnMapPressCoordinate struct
-                facebook::react::RNMapsMapViewEventEmitter::OnPressCoordinate coordinate = {
+                facebook::react::RNMapsGoogleMapViewEventEmitter::OnPressCoordinate coordinate = {
                     .latitude = [coordinateDict[@"latitude"] doubleValue],
                     .longitude = [coordinateDict[@"longitude"] doubleValue],
                 };
 
                 // Populate the OnMapPressPosition struct
-                facebook::react::RNMapsMapViewEventEmitter::OnPressPosition position = {
+                facebook::react::RNMapsGoogleMapViewEventEmitter::OnPressPosition position = {
                     .x = [positionDict[@"x"] doubleValue],
                     .y = [positionDict[@"y"] doubleValue],
                 };
 
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnPress data = {
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnPress data = {
                   .action = std::string([@"press" UTF8String]),
                   .position = position,
                   .coordinate = coordinate
@@ -131,21 +126,38 @@ using namespace facebook::react;
           }
       };
 
-
       _view.onMapReady = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
-
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnMapReady data = {};
+              NSLog(@"mapReady");
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnMapReady data = {};
               mapViewEventEmitter->onMapReady(data);
+          }
+      };
+    
+    _view.onMapLoaded = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+            NSLog(@"mapLoaded");
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnMapLoaded data = {};
+            mapViewEventEmitter->onMapLoaded(data);
+        }
+    };
+      
+      _view.onKmlReady = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnKmlReady data = {};
+              mapViewEventEmitter->onKmlReady(data);
           }
       };
       _view.onChange = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
               NSDictionary* regionDict = dictionary[@"region"];
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnRegionChange data = {
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChange data = {
                   .region.latitude = [regionDict[@"latitude"] doubleValue],
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
@@ -153,33 +165,6 @@ using namespace facebook::react;
                   .continuous = [dictionary[@"continuous"] boolValue],
                  };
               mapViewEventEmitter->onRegionChange(data);
-          }
-      };
-      _view.onDoublePress = [self](NSDictionary* dictionary) {
-          if (_eventEmitter) {
-
-              NSDictionary* coordinateDict = dictionary[@"coordinate"];
-              NSDictionary* positionDict = dictionary[@"position"];
-
-              // Populate the OnMapPressCoordinate struct
-              facebook::react::RNMapsMapViewEventEmitter::OnDoublePressCoordinate coordinate = {
-                  .latitude = [coordinateDict[@"latitude"] doubleValue],
-                  .longitude = [coordinateDict[@"longitude"] doubleValue],
-              };
-
-              // Populate the OnMapDouplePressPosition struct
-              facebook::react::RNMapsMapViewEventEmitter::OnDoublePressPosition position = {
-                  .x = [positionDict[@"x"] doubleValue],
-                  .y = [positionDict[@"y"] doubleValue],
-              };
-
-
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnDoublePress data = {
-                  .position = position,
-                  .coordinate = coordinate
-                 };
-              mapViewEventEmitter->onDoublePress(data);
           }
       };
 
@@ -190,19 +175,19 @@ using namespace facebook::react;
               NSDictionary* positionDict = dictionary[@"position"];
 
               // Populate the OnMapPressCoordinate struct
-              facebook::react::RNMapsMapViewEventEmitter::OnPanDragCoordinate coordinate = {
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnPanDragCoordinate coordinate = {
                   .latitude = [coordinateDict[@"latitude"] doubleValue],
                   .longitude = [coordinateDict[@"longitude"] doubleValue],
               };
 
               // Populate the OnMapDouplePressPosition struct
-              facebook::react::RNMapsMapViewEventEmitter::OnPanDragPosition position = {
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnPanDragPosition position = {
                   .x = [positionDict[@"x"] doubleValue],
                   .y = [positionDict[@"y"] doubleValue],
               };
 
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnPanDrag data = {
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnPanDrag data = {
                         .position = position,
                         .coordinate = coordinate,
                  };
@@ -218,17 +203,22 @@ using namespace facebook::react;
 
 
               // Populate the OnMapPressCoordinate struct
-              facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
                   .latitude = [coordinateDict[@"latitude"] doubleValue],
                   .longitude = [coordinateDict[@"longitude"] doubleValue],
               };
-              facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeError error = {
-                  .message = std::string([errorDict[@"message"] UTF8String]),
+              NSString* str = @"";
+              if (errorDict){
+                  str = errorDict[@"message"];
+              }
+              
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnUserLocationChangeError error = {
+                  .message = std::string([str UTF8String]),
               };
 
 
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChange data = {
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnUserLocationChange data = {
                   .coordinate = coordinate,
                   .error = error,
                  };
@@ -236,44 +226,14 @@ using namespace facebook::react;
           }
       };
 
-      _view.onCalloutPress = [self](NSDictionary* dictionary) {
-          if (_eventEmitter) {
-
-              NSDictionary* coordinateDict = dictionary[@"coordinate"];
-              NSDictionary* positionDict = dictionary[@"position"];
-
-              // Populate the OnCalloutPressPoint struct
-              facebook::react::RNMapsMapViewEventEmitter::OnCalloutPressPoint point = {
-                  .x = [coordinateDict[@"x"] doubleValue],
-                  .y = [coordinateDict[@"y"] doubleValue],
-              };
-
-
-              facebook::react::RNMapsMapViewEventEmitter::OnCalloutPressFrame frame = {
-                  .x = [positionDict[@"x"] doubleValue],
-                  .y = [positionDict[@"y"] doubleValue],
-                  .width = [positionDict[@"width"] doubleValue],
-                  .height = [positionDict[@"height"] doubleValue],
-              };
-
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnCalloutPress data = {
-                  .action = std::string([dictionary[@"action"] UTF8String]),
-                  .id = std::string([dictionary[@"id"] UTF8String]),
-                  .point = point,
-                  .frame = frame,
-                 };
-              mapViewEventEmitter->onCalloutPress(data);
-          }
-      };
 
 
       _view.onRegionChangeStart = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
               NSDictionary* regionDict = dictionary[@"region"];
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsMapViewEventEmitter::OnRegionChangeStart data = {
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChangeStart data = {
                   .region.latitude = [regionDict[@"latitude"] doubleValue],
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
@@ -283,14 +243,46 @@ using namespace facebook::react;
               mapViewEventEmitter->onRegionChangeStart(data);
           }
       };
+      
+      _view.onRegionChange = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* regionDict = dictionary[@"region"];
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChange data = {
+                  .region.latitude = [regionDict[@"latitude"] doubleValue],
+                  .region.longitude = [regionDict[@"longitude"] doubleValue],
+                  .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
+                  .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                  .continuous = [dictionary[@"continuous"] boolValue],
+                 };
+              mapViewEventEmitter->onRegionChange(data);
+          }
+      };
+      
+      _view.onRegionChangeComplete = [self](NSDictionary* dictionary) {
+          if (_eventEmitter) {
+
+              NSDictionary* regionDict = dictionary[@"region"];
+              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChangeComplete data = {
+                  .region.latitude = [regionDict[@"latitude"] doubleValue],
+                  .region.longitude = [regionDict[@"longitude"] doubleValue],
+                  .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
+                  .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                  .continuous = [dictionary[@"continuous"] boolValue],
+                 };
+              mapViewEventEmitter->onRegionChangeComplete(data);
+          }
+      };
 
 
 #define HANDLE_MARKER_DRAG_EVENT(eventName, emitterFunction)                     \
     if (_eventEmitter) {                                                        \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];               \
         auto mapViewEventEmitter =                                              \
-            std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter); \
-        facebook::react::RNMapsMapViewEventEmitter::eventName data = {          \
+            std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter); \
+        facebook::react::RNMapsGoogleMapViewEventEmitter::eventName data = {          \
             .coordinate.latitude = [coordinateDict[@"latitude"] doubleValue],   \
             .coordinate.longitude = [coordinateDict[@"longitude"] doubleValue], \
             .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),     \
@@ -303,32 +295,20 @@ using namespace facebook::react;
 #define HANDLE_MARKER_EVENT(eventName, emitterFunction, actionName)                \
     if (_eventEmitter) {                                                          \
         NSDictionary* coordinateDict = dictionary[@"coordinate"];                 \
-        facebook::react::RNMapsMapViewEventEmitter::eventName##Coordinate coordinate = { \
+        facebook::react::RNMapsGoogleMapViewEventEmitter::eventName##Coordinate coordinate = { \
             .latitude = [coordinateDict[@"latitude"] doubleValue],                 \
             .longitude = [coordinateDict[@"longitude"] doubleValue],               \
         };                                                                        \
                                                                                   \
         auto mapViewEventEmitter =                                                \
-            std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter); \
-        facebook::react::RNMapsMapViewEventEmitter::eventName data = {            \
+            std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter); \
+        facebook::react::RNMapsGoogleMapViewEventEmitter::eventName data = {            \
             .action = std::string([@actionName UTF8String]),                      \
             .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),       \
             .coordinate = coordinate                                              \
         };                                                                        \
         mapViewEventEmitter->emitterFunction(data);                               \
     }
-
-      _view.onMarkerDrag = [self](NSDictionary* dictionary) {
-          HANDLE_MARKER_DRAG_EVENT(OnMarkerDrag, onMarkerDrag);
-      };
-
-      _view.onMarkerDragStart = [self](NSDictionary* dictionary) {
-          HANDLE_MARKER_DRAG_EVENT(OnMarkerDragStart, onMarkerDragStart);
-      };
-
-      _view.onMarkerDragEnd = [self](NSDictionary* dictionary) {
-          HANDLE_MARKER_DRAG_EVENT(OnMarkerDragEnd, onMarkerDragEnd);
-      };
 
       _view.onMarkerSelect = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_EVENT(OnMarkerSelect, onMarkerSelect, "marker-select");
@@ -341,9 +321,14 @@ using namespace facebook::react;
       _view.onMarkerPress = [self](NSDictionary* dictionary) {
           HANDLE_MARKER_EVENT(OnMarkerPress, onMarkerPress, "marker-press");
       };
+}
 
-
-
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNMapsGoogleMapViewProps>();
+    _props = defaultProps;
+    _legacyMapManager = [[AIRGoogleMapManager alloc] init];
   }
 
   return self;
@@ -373,23 +358,50 @@ using namespace facebook::react;
     }
 }
 
-MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
-    switch (rnMapType) {
-        case RNMapsMapViewMapType::Standard: return MKMapTypeStandard;
-        case RNMapsMapViewMapType::Satellite: return MKMapTypeSatellite;
-        case RNMapsMapViewMapType::Hybrid: return MKMapTypeHybrid;
-        case RNMapsMapViewMapType::MutedStandard: return MKMapTypeMutedStandard;
-        case RNMapsMapViewMapType::SatelliteFlyover: return MKMapTypeSatelliteFlyover;
-        case RNMapsMapViewMapType::HybridFlyover: return MKMapTypeHybridFlyover;
-        default: return MKMapTypeStandard; // Default case
-    }
-}
-
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &oldViewProps = *std::static_pointer_cast<RNMapsMapViewProps const>(_props);
-  const auto &newViewProps = *std::static_pointer_cast<RNMapsMapViewProps const>(props);
+  const auto &oldViewProps = *std::static_pointer_cast<RNMapsGoogleMapViewProps const>(_props);
+  const auto &newViewProps = *std::static_pointer_cast<RNMapsGoogleMapViewProps const>(props);
+    
+
+    if (oldViewProps.googleMapId != newViewProps.googleMapId) {
+        NSString* mapID = RCTNSStringFromString(newViewProps.googleMapId);
+        if (mapID && [mapID length]){
+            _legacyMapManager.googleMapId = mapID;
+        }
+    }
+    if (!newViewProps.zoomTapEnabled) {
+        _legacyMapManager.zoomTapEnabled = newViewProps.zoomTapEnabled;
+    } else {
+        _legacyMapManager.zoomTapEnabled = true;
+    }
+    if (oldViewProps.loadingBackgroundColor != newViewProps.loadingBackgroundColor){
+        _legacyMapManager.backgroundColor = RCTUIColorFromSharedColor(newViewProps.backgroundColor);
+    }
+    
+    NSLog(@"initialCamera lat:%f lng:%f pitch:%f zoom:%f heading: %f", newViewProps.initialCamera.center.latitude, newViewProps.initialCamera.center.longitude, newViewProps.initialCamera.pitch, newViewProps.initialCamera.zoom, newViewProps.initialCamera.heading);
+
+    // bug with zoom / pitch / heading where value is not 0 even though
+    // nothing is passed from JS so we depend on lat / lng comparison for now
+    if (newViewProps.initialCamera.center.latitude != oldViewProps.initialCamera.center.latitude ||
+        newViewProps.initialCamera.center.longitude != oldViewProps.initialCamera.center.longitude ||
+        newViewProps.initialCamera.pitch != oldViewProps.initialCamera.pitch ||
+        newViewProps.initialCamera.zoom != oldViewProps.initialCamera.zoom
+        || newViewProps.initialCamera.heading != oldViewProps.initialCamera.heading) {
+        GMSCameraPosition* camera = [GMSCameraPosition cameraWithLatitude:newViewProps.initialCamera.center.latitude
+                                                                longitude:newViewProps.initialCamera.center.longitude
+                                                                     zoom:newViewProps.initialCamera.zoom
+                                                                  bearing:newViewProps.initialCamera.heading
+                                                             viewingAngle:newViewProps.initialCamera.pitch];
+        _legacyMapManager.camera = camera;
+    }
+
+    
+
+    if (!_view){
+        [self prepareContentView];
+    }
 
 #define REMAP_MAPVIEW_PROP(name)                    \
     if (oldViewProps.name != newViewProps.name) {   \
@@ -399,11 +411,6 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
 #define REMAP_MAPVIEW_STRING_PROP(name)                             \
     if (oldViewProps.name != newViewProps.name) {                   \
         _view.name = RCTNSStringFromString(newViewProps.name);      \
-    }
-
-#define REMAP_MAPVIEW_COLOR_PROP(name)                                   \
-    if (oldViewProps.name != newViewProps.name) {                        \
-        _view.name = RCTUIColorFromSharedColor(newViewProps.name);       \
     }
 
 #define REMAP_MAPVIEW_POINT_PROP(name)                               \
@@ -424,20 +431,20 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
         _view.name = region;                                                 \
     }
 
-#define REMAP_MAPVIEW_CAMERA_PROP(name)                                    \
+#define REMAP_GOOGLEMAPVIEW_CAMERA_PROP(name)                                    \
     if (newViewProps.name.center.latitude != oldViewProps.name.center.latitude || \
         newViewProps.name.center.longitude != oldViewProps.name.center.longitude || \
         newViewProps.name.heading != oldViewProps.name.heading ||         \
-        newViewProps.name.pitch != oldViewProps.name.pitch) {             \
-        CLLocationCoordinate2D center = CLLocationCoordinate2DMake(       \
-            newViewProps.name.center.latitude,                            \
-            newViewProps.name.center.longitude);                          \
-        MKMapCamera* camera = [[MKMapCamera alloc] init];                 \
-        camera.centerCoordinate = center;                                 \
-        camera.heading = newViewProps.name.heading;                       \
-        camera.pitch = newViewProps.name.pitch;                           \
+        newViewProps.name.pitch != oldViewProps.name.pitch ||             \
+        newViewProps.name.zoom != oldViewProps.name.zoom) {               \
+        GMSCameraPosition* camera = [GMSCameraPosition cameraWithLatitude:newViewProps.name.center.latitude \
+                                                                longitude:newViewProps.name.center.longitude \
+                                                                     zoom:newViewProps.name.zoom   \
+                                                                  bearing:newViewProps.name.heading  \
+                                                             viewingAngle:newViewProps.name.pitch]; \
         _view.name = camera;                                              \
     }
+
 
 #define REMAP_MAPVIEW_EDGEINSETS_PROP(name)                               \
     if (newViewProps.name.top != oldViewProps.name.top ||                 \
@@ -450,67 +457,62 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
                                       newViewProps.name.right);           \
     }
 
-#define REMAP_MAPVIEW_MAPTYPE(rnMapType) MKMapType##rnMapType
 
-
-    REMAP_MAPVIEW_PROP(cacheEnabled)
-
-    REMAP_MAPVIEW_PROP(followsUserLocation)
-    REMAP_MAPVIEW_PROP(loadingEnabled)
+    REMAP_MAPVIEW_PROP(pitchEnabled)
+    
+    REMAP_MAPVIEW_PROP(zoomTapEnabled)
+    
     REMAP_MAPVIEW_PROP(scrollEnabled)
-
-    REMAP_MAPVIEW_PROP(maxDelta)
-    REMAP_MAPVIEW_PROP(maxZoom)
-    REMAP_MAPVIEW_PROP(minDelta)
-    REMAP_MAPVIEW_PROP(minZoom)
+    
+    if (newViewProps.minZoom != oldViewProps.minZoom || newViewProps.maxZoom != oldViewProps.maxZoom){
+        [_view setMinZoom:newViewProps.minZoom maxZoom:newViewProps.maxZoom];
+    }
 
     REMAP_MAPVIEW_PROP(showsCompass)
-    REMAP_MAPVIEW_PROP(showsScale)
     REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
-    REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
     REMAP_MAPVIEW_PROP(zoomEnabled)
 
-    REMAP_MAPVIEW_POINT_PROP(compassOffset)
 
     REMAP_MAPVIEW_REGION_PROP(region)
     REMAP_MAPVIEW_REGION_PROP(initialRegion)
 
-    REMAP_MAPVIEW_CAMERA_PROP(initialCamera)
-    REMAP_MAPVIEW_CAMERA_PROP(camera)
-
-    REMAP_MAPVIEW_EDGEINSETS_PROP(legalLabelInsets)
+    REMAP_GOOGLEMAPVIEW_CAMERA_PROP(camera)
+    
+    
     REMAP_MAPVIEW_EDGEINSETS_PROP(mapPadding)
 
-    REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)
-    REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)
-    REMAP_MAPVIEW_COLOR_PROP(tintColor)
-
-    REMAP_MAPVIEW_STRING_PROP(userLocationAnnotationTitle)
 
     if (oldViewProps.mapType != newViewProps.mapType){
-        _view.mapType = mapRNTypeToMKMapType(newViewProps.mapType);
-    }
-    if (oldViewProps.userInterfaceStyle != newViewProps.userInterfaceStyle){
-        switch (newViewProps.userInterfaceStyle) {
-            case RNMapsMapViewUserInterfaceStyle::Light:
-                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+        switch (newViewProps.mapType) {
+            case RNMapsGoogleMapViewMapType::Standard:
+                _view.mapType = kGMSTypeNormal;
                 break;
-            case RNMapsMapViewUserInterfaceStyle::Dark:
-                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+            case RNMapsGoogleMapViewMapType::Satellite:
+                _view.mapType = kGMSTypeSatellite;
                 break;
-            case RNMapsMapViewUserInterfaceStyle::System:
-                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
+            case RNMapsGoogleMapViewMapType::Terrain:
+                _view.mapType = kGMSTypeTerrain;
+            case RNMapsGoogleMapViewMapType::Hybrid:
+                _view.mapType = kGMSTypeHybrid;
+            default:
+                _view.mapType = kGMSTypeNormal;
                 break;
         }
     }
-
-    if (oldViewProps.cameraZoomRange.minCenterCoordinateDistance != newViewProps.cameraZoomRange.minCenterCoordinateDistance ||
-        oldViewProps.cameraZoomRange.maxCenterCoordinateDistance != newViewProps.cameraZoomRange.maxCenterCoordinateDistance ||
-        oldViewProps.cameraZoomRange.animated != newViewProps.cameraZoomRange.animated) {
-
-        MKMapCameraZoomRange* zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:newViewProps.cameraZoomRange.minCenterCoordinateDistance maxCenterCoordinateDistance:newViewProps.cameraZoomRange.maxCenterCoordinateDistance];
-        [_view setCameraZoomRange:zoomRange animated:newViewProps.cameraZoomRange.animated];
+    
+    if (oldViewProps.userInterfaceStyle != newViewProps.userInterfaceStyle){
+        switch (newViewProps.userInterfaceStyle) {
+            case RNMapsGoogleMapViewUserInterfaceStyle::Light:
+                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+                break;
+            case RNMapsGoogleMapViewUserInterfaceStyle::Dark:
+                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+                break;
+            case RNMapsGoogleMapViewUserInterfaceStyle::System:
+                _view.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
+                break;
+        }
     }
 
 
@@ -519,7 +521,9 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
 
 @end
 
-Class<RCTComponentViewProtocol> RNMapsMapViewCls(void)
+Class<RCTComponentViewProtocol> RNMapsGoogleMapViewCls(void)
 {
-  return RNMapsMapView.class;
+  return RNMapsGoogleMapView.class;
 }
+
+#endif

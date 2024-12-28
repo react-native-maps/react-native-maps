@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGMSPolyline.h"
-#import "AIRMapCoordinate.h"
 #import "AIRGoogleMapMarker.h"
 #import "AIRGoogleMapMarkerManager.h"
 #import <GoogleMaps/GoogleMaps.h>
@@ -26,13 +25,13 @@
   return self;
 }
 
--(void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates
+-(void)setCoordinates:(NSArray<AIRGoogleMapCoordinate *> *)coordinates
 {
   _coordinates = coordinates;
 
   GMSMutablePath *path = [GMSMutablePath path];
 
-  if (!coordinates || coordinates.count == 0) 
+  if (!coordinates || coordinates.count == 0)
   {
     [path removeAllCoordinates];
     return;
