@@ -12,7 +12,7 @@
 
 @class AIRGoogleMapMarker;
 
-@interface AIRGMSMarker : GMSMarker
+@interface AIRGMSMarker : GMSAdvancedMarker
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, weak) AIRGoogleMapMarker *fakeMarker;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;

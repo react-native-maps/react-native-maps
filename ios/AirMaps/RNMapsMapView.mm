@@ -14,9 +14,9 @@
 #import <react/renderer/components/RNMapsSpecs/EventEmitters.h>
 #import <react/renderer/components/RNMapsSpecs/Props.h>
 #import <react/renderer/components/RNMapsSpecs/RCTComponentViewHelpers.h>
-
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
+#import "UIView+AirMap.h"
 
 using namespace facebook::react;
 
@@ -359,27 +359,22 @@ using namespace facebook::react;
   return self;
 }
 
-- (id)getPaperViewFromChildComponentView:(UIView *)childComponentView {
-    // Check if the childComponentView responds to the "adapter" selector
-    if ([childComponentView respondsToSelector:@selector(paperView)]) {
-        // Safely return the paperView
-        return [childComponentView valueForKey:@"paperView"];
-    }
-    // Return nil if paperView is not accessible
-    return nil;
-}
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
-    id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
+    id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
     if (paperView){
         [_view insertReactSubview:paperView atIndex:index];
+    } else {
+        [_view insertReactSubview:childComponentView atIndex:index];
     }
 }
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
+    id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
     if (paperView){
         [_view removeReactSubview:paperView];
+    } else {
+        [_view removeReactSubview:childComponentView];
     }
 }
 
