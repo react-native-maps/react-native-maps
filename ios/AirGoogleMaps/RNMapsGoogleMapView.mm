@@ -21,7 +21,7 @@
 #import <React/RCTConversions.h>
 #import "RCTConvert+GMSMapViewType.h"
 #import "RCTConvert+AirMap.h"
-
+#import "UIView+AirMap.h"
 
 using namespace facebook::react;
 
@@ -380,18 +380,9 @@ using namespace facebook::react;
   return self;
 }
 
-- (id)getPaperViewFromChildComponentView:(UIView *)childComponentView {
-    // Check if the childComponentView responds to the "adapter" selector
-    if ([childComponentView respondsToSelector:@selector(paperView)]) {
-        // Safely return the paperView
-        return [childComponentView valueForKey:@"paperView"];
-    }
-    // Return nil if paperView is not accessible
-    return nil;
-}
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
-    id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
+    id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
     if (paperView){
         if(_view && [_view isReady]){
             [_view insertReactSubview:paperView atIndex:index];
@@ -402,7 +393,7 @@ using namespace facebook::react;
 }
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
+    id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
     if (paperView){
         if(_view && [_view isReady]){
             [_view removeReactSubview:paperView];
