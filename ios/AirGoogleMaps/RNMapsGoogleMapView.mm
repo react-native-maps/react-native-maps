@@ -31,6 +31,7 @@ using namespace facebook::react;
 @implementation RNMapsGoogleMapView {
     AIRGoogleMap *_view;
     AIRGoogleMapManager* _legacyMapManager;
+    NSMutableDictionary<NSNumber*, UIView*>* _pendingInsertsSubviews;
 }
 
 
@@ -95,6 +96,19 @@ using namespace facebook::react;
 {
   return concreteComponentDescriptorProvider<RNMapsGoogleMapViewComponentDescriptor>();
 }
+- (void) loadPendingInsertSubviews
+{
+    if ([_pendingInsertsSubviews count] > 0){
+        NSArray<NSNumber *> *sortedKeys = [[_pendingInsertsSubviews allKeys] sortedArrayUsingSelector:@selector(compare:)];
+        for (NSNumber *key in sortedKeys) {
+            // Get the corresponding view
+            UIView *view = [_pendingInsertsSubviews objectForKey:key];
+            [_view insertReactSubview:view atIndex:[key integerValue]];
+            // Remove the entry from the dictionary
+            [_pendingInsertsSubviews removeObjectForKey:key];
+        }
+    }
+}
 
 - (void) prepareContentView {
    
@@ -129,8 +143,37 @@ using namespace facebook::react;
               mapViewEventEmitter->onPress(data);
           }
       };
+    
+    _view.onLongPress = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+            // Extract values from the NSDictionary
+              NSDictionary* coordinateDict = dictionary[@"coordinate"];
+              NSDictionary* positionDict = dictionary[@"position"];
+
+              // Populate the OnMapPressCoordinate struct
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnLongPressCoordinate coordinate = {
+                  .latitude = [coordinateDict[@"latitude"] doubleValue],
+                  .longitude = [coordinateDict[@"longitude"] doubleValue],
+              };
+
+              // Populate the OnMapPressPosition struct
+              facebook::react::RNMapsGoogleMapViewEventEmitter::OnLongPressPosition position = {
+                  .x = [positionDict[@"x"] doubleValue],
+                  .y = [positionDict[@"y"] doubleValue],
+              };
+
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnLongPress data = {
+                .action = std::string([@"press" UTF8String]),
+                .position = position,
+                .coordinate = coordinate
+            };
+            mapViewEventEmitter->onLongPress(data);
+        }
+    };
 
       _view.onMapReady = [self](NSDictionary* dictionary) {
+          [self loadPendingInsertSubviews];
           if (_eventEmitter) {
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsGoogleMapViewEventEmitter::OnMapReady data = {};
@@ -331,6 +374,7 @@ using namespace facebook::react;
     static const auto defaultProps = std::make_shared<const RNMapsGoogleMapViewProps>();
     _props = defaultProps;
     _legacyMapManager = [[AIRGoogleMapManager alloc] init];
+      _pendingInsertsSubviews = [NSMutableDictionary new];
   }
 
   return self;
@@ -349,14 +393,22 @@ using namespace facebook::react;
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
     id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
     if (paperView){
-        [_view insertReactSubview:paperView atIndex:index];
+        if(_view && [_view isReady]){
+            [_view insertReactSubview:paperView atIndex:index];
+        } else {
+            [_pendingInsertsSubviews setObject:paperView forKey:[NSNumber numberWithInteger:index]];
+        }
     }
 }
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
     id<RCTComponent> paperView = [self getPaperViewFromChildComponentView:childComponentView];
     if (paperView){
-        [_view removeReactSubview:paperView];
+        if(_view && [_view isReady]){
+            [_view removeReactSubview:paperView];
+        } else {
+            [_pendingInsertsSubviews removeObjectForKey:[NSNumber numberWithInteger:index]];
+        }
     }
 }
 
@@ -381,8 +433,6 @@ using namespace facebook::react;
     if (oldViewProps.loadingBackgroundColor != newViewProps.loadingBackgroundColor){
         _legacyMapManager.backgroundColor = RCTUIColorFromSharedColor(newViewProps.backgroundColor);
     }
-    
-    NSLog(@"initialCamera lat:%f lng:%f pitch:%f zoom:%f heading: %f", newViewProps.initialCamera.center.latitude, newViewProps.initialCamera.center.longitude, newViewProps.initialCamera.pitch, newViewProps.initialCamera.zoom, newViewProps.initialCamera.heading);
 
     // bug with zoom / pitch / heading where value is not 0 even though
     // nothing is passed from JS so we depend on lat / lng comparison for now
