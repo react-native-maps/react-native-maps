@@ -146,6 +146,10 @@ id regionAsJSON(MKCoordinateRegion region) {
            };
 }
 
+- (BOOL) isReady {
+    return _didPrepareMap;
+}
+
 -(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated
 {
     CLLocationCoordinate2D myLocation = coordinates.firstObject.coordinate;

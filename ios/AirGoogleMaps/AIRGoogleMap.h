@@ -67,6 +67,7 @@
 @property (nonatomic, assign) BOOL showsIndoorLevelPicker;
 @property (nonatomic, assign) NSString *kmlSrc;
 
+- (BOOL) isReady;
 - (void)didPrepareMap;
 - (void)mapViewDidFinishTileRendering;
 - (BOOL)didTapMarker:(GMSMarker *)marker;
