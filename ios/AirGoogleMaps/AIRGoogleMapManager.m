@@ -253,7 +253,7 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
                   format:(nonnull NSString *)format
                   quality:(nonnull NSNumber *)quality
                   result:(nonnull NSString *)result
-                  withCallback:(RCTResponseSenderBlock)callback)
+                  withCallback:(RCTPromiseResolveBlock)callback)
 {
   NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
   NSString *pathComponent = [NSString stringWithFormat:@"Documents/snapshot-%.20lf.%@", timeStamp, format];
@@ -264,7 +264,17 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
         RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
     } else {
-      AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+        AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+        NSMutableDictionary* config = [NSMutableDictionary new];
+        
+        [mapView takeSnapshotWithConfig:config callback:callback];
+        
+        [config setObject:width forKey:@"width"];
+        [config setObject:height forKey:@"height"];
+        [config setObject:format forKey:@"format"];
+        [config setObject:quality forKey:@"quality"];
+        [config setObject:result forKey:@"result"];
+        [config setObject:filePath forKey:@"filePath"];
 
       // TODO: currently we are ignoring width, height, region
 
@@ -310,13 +320,7 @@ RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
       RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
     } else {
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-
-      CGPoint touchPoint = [mapView.projection pointForCoordinate:coord];
-
-      resolve(@{
-                @"x": @(touchPoint.x),
-                @"y": @(touchPoint.y),
-                });
+        resolve([mapView getPointForCoordinates:coord]);
     }
   }];
 }
@@ -337,13 +341,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
       RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
     } else {
       AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-
-      CLLocationCoordinate2D coordinate = [mapView.projection coordinateForPoint:pt];
-
-      resolve(@{
-                @"latitude": @(coordinate.latitude),
-                @"longitude": @(coordinate.longitude),
-                });
+        resolve([view getCoordinatesForPoint:pt]);
     }
   }];
 }
@@ -373,18 +371,7 @@ RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
     if (![view isKindOfClass:[AIRGoogleMap class]]) {
       RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
     } else {
-        NSArray *boundingBox = [view getMapBoundaries];
-
-        resolve(@{
-          @"northEast" : @{
-            @"longitude" : boundingBox[0][0],
-            @"latitude" : boundingBox[0][1]
-          },
-          @"southWest" : @{
-            @"longitude" : boundingBox[1][0],
-            @"latitude" : boundingBox[1][1]
-          }
-        });
+        resolve([view getMapBoundaries]);
     }
   }];
 }

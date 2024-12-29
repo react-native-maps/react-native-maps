@@ -10,13 +10,13 @@
 
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
+#import "RNMapsHostVewDelegate.h"
+
 @class AIRGoogleMap;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNMapsGoogleMapView : RCTViewComponentView
-
-- (AIRGoogleMap *) mapView;
+@interface RNMapsGoogleMapView : RCTViewComponentView<RNMapsHostVewDelegate>
 
 @end
 

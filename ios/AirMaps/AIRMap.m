@@ -20,6 +20,7 @@
 #import "AIRMapWMSTile.h"
 #import "AIRMapLocalTile.h"
 #import "AIRMapOverlay.h"
+#import "AIRMapSnapshot.h"
 
 const NSTimeInterval AIRMapRegionChangeObserveInterval = 0.1;
 const CGFloat AIRMapZoomBoundBuffer = 0.01;
@@ -218,29 +219,6 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
     return mrkFrame;
 }
 
-- (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible {
-    NSMutableDictionary* markersFrames = [NSMutableDictionary new];
-    for (AIRMapMarker* mrkAnn in self.markers) {
-        CGRect frame = [self frameForMarker:mrkAnn];
-        CGPoint point = [self convertCoordinate:mrkAnn.coordinate toPointToView:self];
-        NSDictionary* frameDict = @{
-            @"x": @(frame.origin.x),
-            @"y": @(frame.origin.y),
-            @"width": @(frame.size.width),
-            @"height": @(frame.size.height)
-        };
-        NSDictionary* pointDict = @{
-            @"x": @(point.x),
-            @"y": @(point.y)
-        };
-        NSString* k = mrkAnn.identifier;
-        BOOL isVisible = CGRectIntersectsRect(self.bounds, frame);
-        if (k != nil && (!onlyVisible || isVisible)) {
-            [markersFrames setObject:@{ @"frame": frameDict, @"point": pointDict } forKey:k];
-        }
-    }
-    return markersFrames;
-}
 
 - (AIRMapMarker*) markerAtPoint:(CGPoint)point {
     AIRMapMarker* mrk = nil;
@@ -334,7 +312,7 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
     return kSMCalloutViewRepositionDelayForUIScrollView;
 }
 
-#pragma mark Accessors
+#pragma mark RNMapsAirModuleDelegate.h
 
 - (NSArray *)getMapBoundaries
 {
@@ -354,6 +332,169 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
         ]
     ];
 }
+- (NSDictionary *) getPointForCoordinates:(CLLocationCoordinate2D) location
+{
+    CGPoint touchPoint = [self convertCoordinate:location toPointToView:self];
+    
+    return @{
+              @"x": @(touchPoint.x),
+              @"y": @(touchPoint.y),
+    };
+}
+- (NSDictionary *) getCoordinatesForPoint:(CGPoint)point
+{
+    CLLocationCoordinate2D coordinate = [self convertPoint:point toCoordinateFromView:self];
+    return @{
+              @"latitude": @(coordinate.latitude),
+              @"longitude": @(coordinate.longitude),
+    };
+    
+}
+
+- (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible {
+    NSMutableDictionary* markersFrames = [NSMutableDictionary new];
+    for (AIRMapMarker* mrkAnn in self.markers) {
+        CGRect frame = [self frameForMarker:mrkAnn];
+        CGPoint point = [self convertCoordinate:mrkAnn.coordinate toPointToView:self];
+        NSDictionary* frameDict = @{
+            @"x": @(frame.origin.x),
+            @"y": @(frame.origin.y),
+            @"width": @(frame.size.width),
+            @"height": @(frame.size.height)
+        };
+        NSDictionary* pointDict = @{
+            @"x": @(point.x),
+            @"y": @(point.y)
+        };
+        NSString* k = mrkAnn.identifier;
+        BOOL isVisible = CGRectIntersectsRect(self.bounds, frame);
+        if (k != nil && (!onlyVisible || isVisible)) {
+            [markersFrames setObject:@{ @"frame": frameDict, @"point": pointDict } forKey:k];
+        }
+    }
+    return markersFrames;
+}
+
+- (NSDictionary *) getCamera {
+    MKMapCamera *camera = [self camera];
+    return @{
+              @"center": @{
+                      @"latitude": @(camera.centerCoordinate.latitude),
+                      @"longitude": @(camera.centerCoordinate.longitude),
+              },
+              @"pitch": @(camera.pitch),
+              @"heading": @(camera.heading),
+              @"altitude": @(camera.altitude),
+    };
+}
+- (void)takeSnapshotWithConfig:(NSDictionary *)config
+                      callback:(RCTPromiseResolveBlock) callback
+{
+    
+  MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
+ 
+  options.mapType = self.mapType;
+  NSNumber *width = config[@"width"];
+  NSNumber *height = config[@"height"];
+  NSNumber *quality = config[@"quality"];
+  NSString*format =config[@"format"];
+  NSString*result =config[@"result"];
+  MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:config[@"region"]];
+ 
+
+  options.region = (region.center.latitude && region.center.longitude) ? region : self.region;
+  options.size = CGSizeMake(
+    ([width floatValue] == 0) ? self.bounds.size.width : [width floatValue],
+    ([height floatValue] == 0) ? self.bounds.size.height : [height floatValue]
+  );
+  
+  options.scale = [[UIScreen mainScreen] scale];
+
+
+  MKMapSnapshotter *snapshotter = [[MKMapSnapshotter alloc] initWithOptions:options];
+
+  [self takeMapSnapshot:snapshotter
+                 format:format
+                quality:[quality floatValue]
+                 result:result
+               callback:callback];
+}
+
+#pragma mark Take Snapshot
+- (void)takeMapSnapshot:(MKMapSnapshotter *) snapshotter
+        format:(NSString *)format
+        quality:(CGFloat) quality
+        result:(NSString *)result
+        callback:(RCTPromiseResolveBlock) callback {
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSString *pathComponent = [NSString stringWithFormat:@"Documents/snapshot-%.20lf.%@", timeStamp, format];
+    NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent: pathComponent];
+
+    [snapshotter startWithQueue:dispatch_get_main_queue()
+              completionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
+                  if (error) {
+                      callback(@[error]);
+                      return;
+                  }
+                  MKAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:nil reuseIdentifier:nil];
+
+                  UIImage *image = snapshot.image;
+                  UIGraphicsBeginImageContextWithOptions(image.size, YES, image.scale);
+                  {
+                      [image drawAtPoint:CGPointMake(0.0f, 0.0f)];
+
+                      CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
+
+                      for (id <AIRMapSnapshot> overlay in self.overlays) {
+                          if ([overlay respondsToSelector:@selector(drawToSnapshot:context:)]) {
+                                  [overlay drawToSnapshot:snapshot context:UIGraphicsGetCurrentContext()];
+                          }
+                      }
+                      
+                      for (id <MKAnnotation> annotation in self.annotations) {
+                          CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
+                          
+                          MKAnnotationView* anView = [self viewForAnnotation: annotation];
+                          
+                          if (anView){
+                              pin = anView;
+                          }
+                          
+                          if (CGRectContainsPoint(rect, point)) {
+                              point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
+                              point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
+                              if (pin.image) {
+                                  [pin.image drawAtPoint:point];
+                              } else {
+                                  CGRect pinRect = CGRectMake(point.x, point.y, pin.bounds.size.width, pin.bounds.size.height);
+                                  [pin drawViewHierarchyInRect:pinRect afterScreenUpdates:NO];
+                              }
+                          }
+                      }
+
+                      UIImage *compositeImage = UIGraphicsGetImageFromCurrentImageContext();
+
+                      NSData *data;
+                      if ([format isEqualToString:@"png"]) {
+                          data = UIImagePNGRepresentation(compositeImage);
+                      }
+                      else if([format isEqualToString:@"jpg"]) {
+                          data = UIImageJPEGRepresentation(compositeImage, quality);
+                      }
+
+                      if ([result isEqualToString:@"file"]) {
+                          [data writeToFile:filePath atomically:YES];
+                          callback(filePath);
+                      }
+                      else if ([result isEqualToString:@"base64"]) {
+                          callback([data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]);
+                      }
+                  }
+                  UIGraphicsEndImageContext();
+              }];
+}
+
+
 
 - (void)setShowsUserLocation:(BOOL)showsUserLocation
 {
