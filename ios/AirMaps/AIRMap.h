@@ -14,6 +14,8 @@
 #import "SMCalloutView.h"
 #import "RCTConvert+AirMap.h"
 #import "AIRMapCalloutSubview.h"
+#import "RNMapsAirModuleDelegate.h"
+
 @class AIRMapCoordinate;
 @class AIRMapMarker;
 
@@ -21,7 +23,7 @@ extern const NSTimeInterval AIRMapRegionChangeObserveInterval;
 extern const CGFloat AIRMapZoomBoundBuffer;
 extern const NSInteger AIRMapMaxZoomLevel;
 
-@interface AIRMap: MKMapView<SMCalloutViewDelegate>
+@interface AIRMap: MKMapView<SMCalloutViewDelegate, RNMapsAirModuleDelegate>
 
 @property (nonatomic, strong) SMCalloutView *calloutView;
 @property (nonatomic, strong) UIImageView *cacheImageView;

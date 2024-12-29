@@ -34,7 +34,7 @@ using namespace facebook::react;
 }
 
 
-- (AIRGoogleMap *) mapView {
+- (id<RNMapsAirModuleDelegate>) mapView {
     return _view;
 }
 

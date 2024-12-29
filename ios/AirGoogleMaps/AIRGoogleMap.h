@@ -13,10 +13,10 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
-
+#import "RNMapsAirModuleDelegate.h"
 #import "AIRGoogleMapCoordinate.h"
 
-@interface AIRGoogleMap : GMSMapView
+@interface AIRGoogleMap : GMSMapView <RNMapsAirModuleDelegate>
 
 // TODO: don't use MK region?
 @property (nonatomic, weak) RCTBridge *bridge;

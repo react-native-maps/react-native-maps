@@ -748,6 +748,63 @@ id regionAsJSON(MKCoordinateRegion region) {
   return [map cameraForBounds:bounds insets:UIEdgeInsetsZero];
 }
 
+#pragma mark - RNMapsAirModuleDelegate
+
+- (NSDictionary *) getCoordinatesForPoint:(CGPoint)point
+{
+    CLLocationCoordinate2D coordinate = [self.projection coordinateForPoint:point];
+    return @{
+              @"latitude": @(coordinate.latitude),
+              @"longitude": @(coordinate.longitude),
+    };
+}
+
+- (NSDictionary *) getPointForCoordinates:(CLLocationCoordinate2D)location
+{
+    CGPoint touchPoint = [self.projection pointForCoordinate:location];
+    return @{
+        @"x": @(touchPoint.x),
+        @"y": @(touchPoint.y),
+    };
+}
+
+-(void) takeSnapshotWithConfig:(NSDictionary *)config callback:(RCTPromiseResolveBlock) callback
+{
+    /* unused
+    NSNumber *width = [config objectForKey:@"width"];
+    NSNumber *height = [config objectForKey:@"height"];
+    */
+    NSNumber *quality = [config objectForKey:@"quality"];
+
+    NSString *format = [config objectForKey:@"format"];
+    NSString *result = [config objectForKey:@"result"];
+    NSString *filePath = [config objectForKey:@"filePath"];
+
+    
+    // TODO: currently we are ignoring width, height, region
+
+    UIGraphicsBeginImageContextWithOptions(self.frame.size, YES, 0.0f);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+
+    NSData *data;
+    if ([format isEqualToString:@"png"]) {
+        data = UIImagePNGRepresentation(image);
+
+    } else if([format isEqualToString:@"jpg"]) {
+          data = UIImageJPEGRepresentation(image, quality.floatValue);
+    }
+    
+    if ([result isEqualToString:@"file"]) {
+        [data writeToFile:filePath atomically:YES];
+        callback(filePath);
+    } else if ([result isEqualToString:@"base64"]) {
+          callback([data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]);
+    }
+  
+  UIGraphicsEndImageContext();
+}
+
 #pragma mark - Utils
 
 - (CGRect) frameForMarker:(AIRGoogleMapMarker*) mrkView {

@@ -29,7 +29,7 @@ using namespace facebook::react;
 }
 
 
-- (AIRMap *) mapView {
+- (id<RNMapsAirModuleDelegate>) mapView {
     return _view;
 }
 
