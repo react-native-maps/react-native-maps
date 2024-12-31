@@ -239,7 +239,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   // This is where we intercept them and do the appropriate underlying mapview action.
   if ([subview isKindOfClass:[AIRGoogleMapMarker class]]) {
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker*)subview;
-    marker.realMarker.map = self;
+    [marker didInsertInMap:self];
     [self.markers addObject:marker];
   } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
     AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
@@ -784,7 +784,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     NSString *result = [config objectForKey:@"result"];
     NSString *filePath = [config objectForKey:@"filePath"];
 
-    
+
     // TODO: currently we are ignoring width, height, region
 
     UIGraphicsBeginImageContextWithOptions(self.frame.size, YES, 0.0f);
@@ -798,14 +798,14 @@ id regionAsJSON(MKCoordinateRegion region) {
     } else if([format isEqualToString:@"jpg"]) {
           data = UIImageJPEGRepresentation(image, quality.floatValue);
     }
-    
+
     if ([result isEqualToString:@"file"]) {
         [data writeToFile:filePath atomically:YES];
         callback(filePath);
     } else if ([result isEqualToString:@"base64"]) {
           callback([data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]);
     }
-  
+
   UIGraphicsEndImageContext();
 }
 

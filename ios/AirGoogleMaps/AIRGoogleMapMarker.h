@@ -53,6 +53,8 @@
 - (void)didDragMarker:(AIRGMSMarker *)marker;
 - (id)makeEventData;
 - (id)makeEventData:(NSString *)action;
+- (UIView *) iconView;
+- (void) didInsertInMap:(AIRGoogleMap *) map;
 @end
 
 #endif

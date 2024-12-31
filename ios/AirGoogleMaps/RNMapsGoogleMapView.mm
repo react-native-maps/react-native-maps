@@ -389,8 +389,11 @@ using namespace facebook::react;
         } else {
             [_pendingInsertsSubviews setObject:paperView forKey:[NSNumber numberWithInteger:index]];
         }
+    } else {
+        [_view insertReactSubview:childComponentView atIndex:index];
     }
 }
+
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
     id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
@@ -400,7 +403,19 @@ using namespace facebook::react;
         } else {
             [_pendingInsertsSubviews removeObjectForKey:[NSNumber numberWithInteger:index]];
         }
+    } else {
+        [_view removeReactSubview:childComponentView];
     }
+}
+- (void) prepareForRecycle
+{
+    [super prepareForRecycle];
+    static const auto defaultProps = std::make_shared<const RNMapsGoogleMapViewProps>();
+    _props = defaultProps;
+    _legacyMapManager = [[AIRGoogleMapManager alloc] init];
+      _pendingInsertsSubviews = [NSMutableDictionary new];
+    [_view removeFromSuperview];
+    _view = nil;
 }
 
 

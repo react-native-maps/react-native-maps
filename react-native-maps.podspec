@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
   s.homepage     = package["homepage"]
   s.license      = package["license"]
-  s.platform     = :ios, "11.0"
+  s.platform     = :ios, "12.0"
 
   s.source       = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
   s.source_files  = "ios/AirMaps/**/*.{h,m,mm,swift}"
