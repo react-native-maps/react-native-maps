@@ -779,7 +779,7 @@ class MapView extends React.Component<MapViewProps, State> {
     this.map = React.createRef<MapViewNativeComponentType>();
     this.fabricMap = React.createRef<FabricMapHandle>();
     this.state = {
-      isReady: Platform.OS === 'ios',
+      isReady: false,
     };
 
     this._onMapReady = this._onMapReady.bind(this);
@@ -1149,6 +1149,7 @@ class MapView extends React.Component<MapViewProps, State> {
         maxZoomLevel,
         region,
         provider,
+        children,
         ...restProps
       } = this.props;
 
@@ -1184,16 +1185,22 @@ class MapView extends React.Component<MapViewProps, State> {
         props.onLayout = this.props.onLayout;
       }
 
+      const childrenNodes = this.state.isReady ? children : null;
+
       if (provider === 'google') {
         return (
           <ProviderContext.Provider value={this.props.provider}>
-            <FabricGoogleMap {...props} ref={this.fabricMap} />
+            <FabricGoogleMap {...props} ref={this.fabricMap}>
+              {childrenNodes}
+            </FabricGoogleMap>
           </ProviderContext.Provider>
         );
       } else {
         return (
           <ProviderContext.Provider value={this.props.provider}>
-            <FabricMap {...props} ref={this.fabricMap} />
+            <FabricMap {...props} ref={this.fabricMap}>
+              {childrenNodes}
+            </FabricMap>
           </ProviderContext.Provider>
         );
       }
