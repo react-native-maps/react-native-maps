@@ -232,8 +232,13 @@ using namespace facebook::react;
                 .latitude = [coordinateDict[@"latitude"] doubleValue],
                 .longitude = [coordinateDict[@"longitude"] doubleValue],
             };
+            NSString* str = @"";
+            if (errorDict){
+                str = errorDict[@"message"];
+            }
+            
             facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeError error = {
-                .message = std::string([errorDict[@"message"] UTF8String]),
+                .message = std::string([str UTF8String]),
             };
             
             
