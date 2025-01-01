@@ -52,6 +52,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     UIView *_legalLabel;
     BOOL _initialRegionSet;
     BOOL _initialCameraSet;
+    BOOL _initialized;
     
     // Array to manually track RN subviews
     //
@@ -90,6 +91,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.maxZoom = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
         self.legacyZoomConstraintsEnabled = YES;
+        _initialized = YES;
     }
     return self;
 }
@@ -544,6 +546,11 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 
 - (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated
 {
+    // setRegion gets called in [super init]
+    if (!_initialized){
+        [super setRegion:region animated:animated];
+        return;
+    }
     // If location is invalid, abort
     if (!CLLocationCoordinate2DIsValid(region.center)) {
         return;
@@ -559,9 +566,13 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
     
     // Animate/move to new position
     [super setRegion:region animated:animated];
+    _initialRegionSet = YES;
 }
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
+    if (!CLLocationCoordinate2DIsValid(initialRegion.center)) {
+        return;
+    }
     if (!_initialRegionSet) {
         _initialRegionSet = YES;
         [self setRegion:initialRegion animated:NO];
