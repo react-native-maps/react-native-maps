@@ -359,6 +359,7 @@ CGRect unionRect(CGRect a, CGRect b) {
         _iconImageView = empyImageView;
         [self iconViewInsertSubview:_iconImageView atIndex:0];
     }
+    __weak AIRGoogleMapMarker* weakSelf = self;
 
     _reloadImageCancellationBlock = [[_bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                                                size:self.bounds.size
@@ -372,10 +373,12 @@ CGRect unionRect(CGRect a, CGRect b) {
             // TODO(lmr): do something with the error?
             NSLog(@"%@", error);
         }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            __strong AIRGoogleMapMarker* strongSelf  = weakSelf;
 
             // TODO(gil): This way allows different image sizes
-            if (self->_iconImageView) [self->_iconImageView removeFromSuperview];
+            if (strongSelf->_iconImageView) [strongSelf->_iconImageView removeFromSuperview];
 
             // ... but this way is more efficient?
             //                                                                   if (_iconImageView) {
@@ -399,10 +402,12 @@ CGRect unionRect(CGRect a, CGRect b) {
             //       when the image loads IF the image is larger than the UIView.
             //       Shouldn't required images have size info automatically via RN?
             CGRect selfBounds = unionRect(bounds, self.bounds);
-            [self setFrame:selfBounds];
+            [strongSelf setFrame:selfBounds];
 
-            self->_iconImageView = imageView;
-            [self iconViewInsertSubview:imageView atIndex:0];
+            strongSelf->_iconImageView = imageView;
+            [strongSelf iconViewInsertSubview:imageView atIndex:0];
+            [strongSelf layoutSubviews];
+            [strongSelf.realMarker setIconView:strongSelf.iconView];
         });
     }];
 }

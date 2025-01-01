@@ -5,6 +5,7 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 
 import MapView, {MAP_TYPES} from 'react-native-maps';
@@ -62,11 +63,14 @@ class DisplayLatLng extends React.Component<any, any> {
 
   randomCoordinate() {
     const region = this.state.region;
+    const scaleFactor = Math.random() * 10;
     return {
       latitude:
-        region.latitude + (Math.random() - 0.5) * (region.latitudeDelta / 2),
+        region.latitude +
+        (Math.random() - 0.5) * (region.latitudeDelta * scaleFactor),
       longitude:
-        region.longitude + (Math.random() - 0.5) * (region.longitudeDelta / 2),
+        region.longitude +
+        (Math.random() - 0.5) * (region.longitudeDelta * scaleFactor),
     };
   }
 
@@ -79,7 +83,7 @@ class DisplayLatLng extends React.Component<any, any> {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <MapView
           provider={this.props.provider}
           ref={ref => {
@@ -87,7 +91,7 @@ class DisplayLatLng extends React.Component<any, any> {
           }}
           mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
-          initialRegion={this.state.region}
+          region={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
         />
         <View style={[styles.bubble, styles.latlng]}>
@@ -112,6 +116,8 @@ class DisplayLatLng extends React.Component<any, any> {
             style={[styles.bubble, styles.button]}>
             <Text style={styles.buttonText}>Animate (Coordinate)</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.animateToRandomBearing()}
             style={[styles.bubble, styles.button]}>
@@ -123,7 +129,7 @@ class DisplayLatLng extends React.Component<any, any> {
             <Text style={styles.buttonText}>Animate (View Angle)</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -156,7 +162,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginVertical: 20,
+    marginVertical: 8,
     backgroundColor: 'transparent',
   },
   buttonText: {

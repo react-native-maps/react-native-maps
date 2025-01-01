@@ -52,6 +52,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     UIView *_legalLabel;
     BOOL _initialRegionSet;
     BOOL _initialCameraSet;
+    BOOL _initialized;
     
     // Array to manually track RN subviews
     //
@@ -90,6 +91,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.maxZoom = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
         self.legacyZoomConstraintsEnabled = YES;
+        _initialized = YES;
     }
     return self;
 }
@@ -100,6 +102,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else {
         [super addSubview:view];
     }
+}
+- (void) didSetRegion {
+    _initialRegionSet = YES;
 }
 
 #pragma clang diagnostic push
@@ -562,6 +567,9 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 }
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
+    if (!CLLocationCoordinate2DIsValid(initialRegion.center)) {
+        return;
+    }
     if (!_initialRegionSet) {
         _initialRegionSet = YES;
         [self setRegion:initialRegion animated:NO];

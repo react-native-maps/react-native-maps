@@ -951,6 +951,8 @@ static int kDragCenterContext;
 
     mapView.pendingCenter = mapView.region.center;
     mapView.pendingSpan = mapView.region.span;
+    // reset original state (checkout setCamera / region animated)
+    mapView.ignoreRegionChanges = NO;
 }
 
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView
@@ -965,6 +967,7 @@ static int kDragCenterContext;
 - (void)mapViewDidFinishRenderingMap:(AIRMap *)mapView fullyRendered:(BOOL)fullyRendered
 {
     [mapView finishLoading];
+    mapView.ignoreRegionChanges = NO;
 }
 
 #pragma mark Private
