@@ -103,6 +103,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         [super addSubview:view];
     }
 }
+- (void) didSetRegion {
+    _initialRegionSet = YES;
+}
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
@@ -546,11 +549,6 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 
 - (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated
 {
-    // setRegion gets called in [super init]
-    if (!_initialized){
-        [super setRegion:region animated:animated];
-        return;
-    }
     // If location is invalid, abort
     if (!CLLocationCoordinate2DIsValid(region.center)) {
         return;
@@ -566,7 +564,6 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
     
     // Animate/move to new position
     [super setRegion:region animated:animated];
-    _initialRegionSet = YES;
 }
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
