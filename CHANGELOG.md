@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.14](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.13...v1.21.0-alpha.14) (2025-01-01)
+
+
+### Features
+
+* **ios:** support for Fabric GoogleMaps ([449ac52](https://github.com/react-native-maps/react-native-maps/commit/449ac528bc8ed5428312921886d73beee4a418f6))
+
 # [1.21.0-alpha.13](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.12...v1.21.0-alpha.13) (2025-01-01)
 
 
