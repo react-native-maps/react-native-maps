@@ -545,8 +545,10 @@ using namespace facebook::react;
                 break;
             case RNMapsGoogleMapViewMapType::Terrain:
                 _view.mapType = kGMSTypeTerrain;
+                break;
             case RNMapsGoogleMapViewMapType::Hybrid:
                 _view.mapType = kGMSTypeHybrid;
+                break;
             default:
                 _view.mapType = kGMSTypeNormal;
                 break;
