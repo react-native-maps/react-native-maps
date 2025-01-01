@@ -69,6 +69,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   BOOL _didPrepareMap;
   BOOL _didCallOnMapReady;
   BOOL _zoomTapEnabled;
+  BOOL _isAnimating;
   NSString* _googleMapId;
 }
 
@@ -390,7 +391,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setRegion:(MKCoordinateRegion)region {
-  // TODO: The JS component is repeatedly setting region unnecessarily. We might want to deal with that in here.
+    if (_isAnimating || !CLLocationCoordinate2DIsValid(region.center)) return;
   _region = region;
   if(_didLayoutSubviews) {
     self.camera = [AIRGoogleMap makeGMSCameraPositionFromMap:self  andMKCoordinateRegion:region];
@@ -410,6 +411,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setCameraProp:(GMSCameraPosition*)camera {
+    if (_isAnimating || !CLLocationCoordinate2DIsValid([camera target])) return;
     _initialCamera = camera;
     if(_didLayoutSubviews) {
       self.camera = camera;
@@ -491,6 +493,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)willMove:(BOOL)gesture {
+    _isAnimating = YES;
   id event = @{@"isGesture": [NSNumber numberWithBool:gesture]};
   if (self.onRegionChangeStart) self.onRegionChangeStart(event);
 }
@@ -524,6 +527,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                @"isGesture": [NSNumber numberWithBool:isGesture],
                };
   if (self.onChange) self.onChange(event);  // complete
+    _isAnimating = NO;
 }
 
 - (void)setMapPadding:(UIEdgeInsets)mapPadding {

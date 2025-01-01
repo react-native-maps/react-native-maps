@@ -43,11 +43,8 @@ using namespace facebook::react;
 - (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration{
     NSDictionary* regionDic = [RCTConvert dictonaryFromString:regionJSON];
     MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:regionDic];
-    [CATransaction begin];
-    [CATransaction setAnimationDuration:duration/1000];
     GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:_view andMKCoordinateRegion:region];
-    [self->_view animateToCameraPosition:camera];
-    [CATransaction commit];
+    [_view animateToCameraPosition:camera];
 }
 - (void)setCamera:(NSString *)cameraJSON{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
@@ -489,20 +486,6 @@ using namespace facebook::react;
         _view.name = region;                                                 \
     }
 
-#define REMAP_GOOGLEMAPVIEW_CAMERA_PROP(name)                                    \
-    if (newViewProps.name.center.latitude != oldViewProps.name.center.latitude || \
-        newViewProps.name.center.longitude != oldViewProps.name.center.longitude || \
-        newViewProps.name.heading != oldViewProps.name.heading ||         \
-        newViewProps.name.pitch != oldViewProps.name.pitch ||             \
-        newViewProps.name.zoom != oldViewProps.name.zoom) {               \
-        GMSCameraPosition* camera = [GMSCameraPosition cameraWithLatitude:newViewProps.name.center.latitude \
-                                                                longitude:newViewProps.name.center.longitude \
-                                                                     zoom:newViewProps.name.zoom   \
-                                                                  bearing:newViewProps.name.heading  \
-                                                             viewingAngle:newViewProps.name.pitch]; \
-        _view.name = camera;                                              \
-    }
-
 
 #define REMAP_MAPVIEW_EDGEINSETS_PROP(name)                               \
     if (newViewProps.name.top != oldViewProps.name.top ||                 \
@@ -535,7 +518,18 @@ using namespace facebook::react;
     REMAP_MAPVIEW_REGION_PROP(region)
     REMAP_MAPVIEW_REGION_PROP(initialRegion)
 
-    REMAP_GOOGLEMAPVIEW_CAMERA_PROP(camera)
+    if (newViewProps.camera.center.latitude != oldViewProps.camera.center.latitude ||
+          newViewProps.camera.center.longitude != oldViewProps.camera.center.longitude ||
+          newViewProps.camera.heading != oldViewProps.camera.heading ||
+          newViewProps.camera.pitch != oldViewProps.camera.pitch ||
+          newViewProps.camera.zoom != oldViewProps.camera.zoom) {
+          GMSCameraPosition* camera = [GMSCameraPosition cameraWithLatitude:newViewProps.camera.center.latitude
+                                                                  longitude:newViewProps.camera.center.longitude
+                                                                       zoom:newViewProps.camera.zoom
+                                                                    bearing:newViewProps.camera.heading
+                                                               viewingAngle:newViewProps.camera.pitch];
+        _view.cameraProp = camera;
+      }
     
     
     REMAP_MAPVIEW_EDGEINSETS_PROP(mapPadding)

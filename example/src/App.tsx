@@ -142,7 +142,7 @@ export default class App extends React.Component<any, any> {
         // [<component>, <component description>, <Google compatible>, <Google add'l description>]
         [StaticMap, 'StaticMap', true],
         [ThemeMap, 'ThemeMap', true],
-        [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
+        [DisplayLatLng, 'Tracking Position', true],
         [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
         [EventListener, 'Events', true, '(incomplete)'],
         [MarkerTypes, 'Image Based Markers', true],
