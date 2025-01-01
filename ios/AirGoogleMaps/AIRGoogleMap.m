@@ -244,7 +244,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     [self.markers addObject:marker];
   } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
     AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
-    polygon.polygon.map = self;
+    [polygon didInsertInMap:self];
     [self.polygons addObject:polygon];
   } else if ([subview isKindOfClass:[AIRGoogleMapPolyline class]]) {
     AIRGoogleMapPolyline *polyline = (AIRGoogleMapPolyline*)subview;

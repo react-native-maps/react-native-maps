@@ -10,6 +10,7 @@
 #import <React/RCTBridge.h>
 #import "AIRGMSPolygon.h"
 #import "AIRGoogleMapCoordinate.h"
+#import "AIRGoogleMap.h"
 
 @interface AIRGoogleMapPolygon : UIView
 
@@ -26,7 +27,7 @@
 @property (nonatomic, assign) BOOL geodesic;
 @property (nonatomic, assign) int zIndex;
 @property (nonatomic, assign) BOOL tappable;
-
+- (void) didInsertInMap:(AIRGoogleMap *) map;
 @end
 
 #endif
