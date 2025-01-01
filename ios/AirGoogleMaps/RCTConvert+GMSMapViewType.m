@@ -33,6 +33,8 @@
 
 + (AIRGoogleMapCoordinate *)AIRGoogleMapCoordinate:(id)json
 {
+    // empty coordinates
+    if ([json isKindOfClass:[NSArray class]] && [json count] == 0) return nil;
     AIRGoogleMapCoordinate *coord = [AIRGoogleMapCoordinate new];
     coord.coordinate = [self CLLocationCoordinate2D:json];
     return coord;

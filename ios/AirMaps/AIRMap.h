@@ -75,6 +75,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 - (void)cacheViewIfNeeded;
 - (void)beginLoading;
+- (void)didSetRegion;
 - (void)finishLoading;
 - (double)getZoomLevel;
 - (NSArray *)getMapBoundaries;
