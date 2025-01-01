@@ -36,9 +36,8 @@ using namespace facebook::react;
 #pragma mark - JS Commands
 - (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration{
     NSDictionary* regionDic = [RCTConvert dictonaryFromString:regionJSON];
-    [AIRMap animateWithDuration:duration/1000 animations:^{
-        [self->_view setRegion:[RCTConvert MKCoordinateRegion:regionDic] animated:YES];
-    }];
+    MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:regionDic];
+    [_view setRegion:region animated:YES];
 }
 - (void)setCamera:(NSString *)cameraJSON{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
@@ -53,12 +52,8 @@ using namespace facebook::react;
     // don't emit region change events when we are setting the camera
     BOOL originalIgnore = _view.ignoreRegionChanges;
     _view.ignoreRegionChanges = YES;
-    [AIRMap animateWithDuration:duration/1000 animations:^{
-        [self->_view setCamera:camera animated:YES];
-    } completion:^(BOOL finished){
-        self->_view.ignoreRegionChanges = originalIgnore;
-    }];
-
+    [_view setCamera:camera animated:YES];
+   _view.ignoreRegionChanges = originalIgnore;
 }
 
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated {
