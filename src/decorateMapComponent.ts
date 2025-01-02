@@ -20,6 +20,7 @@ import {MapPolyline} from './MapPolyline';
 import {MapUrlTile} from './MapUrlTile';
 import {MapWMSTile} from './MapWMSTile';
 import {Commands} from './MapViewNativeComponent';
+import GooglePolygon from './specs/NativeComponentGooglePolygon';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -83,6 +84,16 @@ export default function decorateMapComponent<Type extends Component>(
       if (Platform.OS !== 'android' && Platform.OS !== 'ios') {
         throw new Error(`react-native-maps doesn't support ${Platform.OS}`);
       }
+      if (
+        componentName === 'Polygon' &&
+        provider === PROVIDER_GOOGLE &&
+        Platform.OS === 'ios' &&
+        googleMapIsInstalled
+      ) {
+        // @ts-ignore
+        return GooglePolygon;
+      }
+
       const platformSupport = providerInfo[Platform.OS];
       const nativeComponentName = getNativeComponentName(
         provider,

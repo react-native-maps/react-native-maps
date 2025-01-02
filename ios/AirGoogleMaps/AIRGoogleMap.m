@@ -246,6 +246,11 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
     [polygon didInsertInMap:self];
     [self.polygons addObject:polygon];
+      
+  } else if ([NSStringFromClass([subview class]) isEqualToString:@"RNMapsGooglePolygonView"]){
+//      RNMapsGooglePolygonView *polygon = (RNMapsGooglePolygonView*)subview;
+//      [polygon didInsertInMap:self];
+      [self.polygons addObject:subview];
   } else if ([subview isKindOfClass:[AIRGoogleMapPolyline class]]) {
     AIRGoogleMapPolyline *polyline = (AIRGoogleMapPolyline*)subview;
     polyline.polyline.map = self;
@@ -290,7 +295,9 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker*)subview;
     marker.realMarker.map = nil;
     [self.markers removeObject:marker];
-  } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
+  } else if ([NSStringFromClass([subview class]) isEqualToString:@"RNMapsGooglePolygonView"]) {
+      [self.polygons removeObject:subview];
+   } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
     AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
     polygon.polygon.map = nil;
     [self.polygons removeObject:polygon];
