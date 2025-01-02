@@ -1,6 +1,6 @@
 //
 //  RNMapsGoogleMapView.mm
-//  
+//
 //
 //  Created by Salah Ghanim on 23.11.24.
 //  Copyright © 2024 react-native-maps. All rights reserved.
@@ -8,6 +8,7 @@
 #ifdef HAVE_GOOGLE_MAPS
 
 #import "RNMapsGoogleMapView.h"
+#import "RNMapsGooglePolygonView.h"
 #import "AirGoogleMap.h"
 #import "AIRMapMarker.h"
 #import "AirGoogleMapManager.h"
@@ -32,6 +33,7 @@ using namespace facebook::react;
     AIRGoogleMap *_view;
     AIRGoogleMapManager* _legacyMapManager;
     NSMutableDictionary<NSNumber*, UIView*>* _pendingInsertsSubviews;
+    NSMutableArray *_polygons;
 }
 
 
@@ -77,7 +79,7 @@ using namespace facebook::react;
     }
 
     NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
-    
+
     [_view fitToCoordinates:coordinatesArray withEdgePadding:edgePadding animated:animated];
 }
 
@@ -108,9 +110,10 @@ using namespace facebook::react;
 }
 
 - (void) prepareContentView {
-   
+
     _view = (AIRGoogleMap *)[_legacyMapManager view];
-    
+    _polygons = [NSMutableArray new];
+
     self.contentView = _view;
 
       _view.onPress = [self](NSDictionary* dictionary) {
@@ -140,7 +143,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onPress(data);
           }
       };
-    
+
     _view.onLongPress = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -177,7 +180,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onMapReady(data);
           }
       };
-    
+
     _view.onMapLoaded = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
@@ -185,7 +188,7 @@ using namespace facebook::react;
             mapViewEventEmitter->onMapLoaded(data);
         }
     };
-      
+
       _view.onKmlReady = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -253,7 +256,7 @@ using namespace facebook::react;
               if (errorDict){
                   str = errorDict[@"message"];
               }
-              
+
               facebook::react::RNMapsGoogleMapViewEventEmitter::OnUserLocationChangeError error = {
                   .message = std::string([str UTF8String]),
               };
@@ -285,7 +288,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onRegionChangeStart(data);
           }
       };
-      
+
       _view.onRegionChange = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -301,7 +304,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onRegionChange(data);
           }
       };
-      
+
       _view.onRegionChangeComplete = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -388,6 +391,11 @@ using namespace facebook::react;
         }
     } else {
         [_view insertReactSubview:childComponentView atIndex:index];
+        if ([childComponentView isKindOfClass:[RNMapsGooglePolygonView class]]){
+            RNMapsGooglePolygonView* polygon = (RNMapsGooglePolygonView *) childComponentView;
+            [_polygons addObject:childComponentView];
+            [polygon didInsertInMap:_view];
+        }
     }
 }
 
@@ -402,6 +410,11 @@ using namespace facebook::react;
         }
     } else {
         [_view removeReactSubview:childComponentView];
+        if ([childComponentView isKindOfClass:[RNMapsGooglePolygonView class]]){
+            RNMapsGooglePolygonView* polygon = (RNMapsGooglePolygonView *) childComponentView;
+            [_polygons removeObject:childComponentView];
+            [polygon didRemoveFromMap];
+        }
     }
 }
 - (void) prepareForRecycle
@@ -420,7 +433,7 @@ using namespace facebook::react;
 {
   const auto &oldViewProps = *std::static_pointer_cast<RNMapsGoogleMapViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<RNMapsGoogleMapViewProps const>(props);
-    
+
 
     if (oldViewProps.googleMapId != newViewProps.googleMapId) {
         NSString* mapID = RCTNSStringFromString(newViewProps.googleMapId);
@@ -452,7 +465,7 @@ using namespace facebook::react;
         _legacyMapManager.camera = camera;
     }
 
-    
+
 
     if (!_view){
         [self prepareContentView];
@@ -500,11 +513,11 @@ using namespace facebook::react;
 
 
     REMAP_MAPVIEW_PROP(pitchEnabled)
-    
+
     REMAP_MAPVIEW_PROP(zoomTapEnabled)
-    
+
     REMAP_MAPVIEW_PROP(scrollEnabled)
-    
+
     if (newViewProps.minZoom != oldViewProps.minZoom || newViewProps.maxZoom != oldViewProps.maxZoom){
         [_view setMinZoom:newViewProps.minZoom maxZoom:newViewProps.maxZoom];
     }
@@ -530,8 +543,8 @@ using namespace facebook::react;
                                                                viewingAngle:newViewProps.camera.pitch];
         _view.cameraProp = camera;
       }
-    
-    
+
+
     REMAP_MAPVIEW_EDGEINSETS_PROP(mapPadding)
 
 
@@ -554,7 +567,7 @@ using namespace facebook::react;
                 break;
         }
     }
-    
+
     if (oldViewProps.userInterfaceStyle != newViewProps.userInterfaceStyle){
         switch (newViewProps.userInterfaceStyle) {
             case RNMapsGoogleMapViewUserInterfaceStyle::Light:
