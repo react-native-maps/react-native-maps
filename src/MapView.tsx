@@ -1179,7 +1179,11 @@ class MapView extends React.Component<MapViewProps, State> {
         };
       }
 
-      if (!this.state.isReady) {
+      if (this.state.isReady) {
+        if (props.onPanDrag) {
+          props.handlePanDrag = !!props.onPanDrag;
+        }
+      } else {
         props.style = this.props.style;
         props.initialCamera = this.props.initialCamera;
         props.onLayout = this.props.onLayout;
@@ -1223,11 +1227,7 @@ class MapView extends React.Component<MapViewProps, State> {
         ...this.props,
       };
 
-      if (this.state.isReady) {
-        if (props.onPanDrag) {
-          props.handlePanDrag = !!props.onPanDrag;
-        }
-      } else {
+      if (!this.state.isReady) {
         props.style = this.props.style;
         props.initialCamera = this.props.initialCamera;
         props.onLayout = this.props.onLayout;

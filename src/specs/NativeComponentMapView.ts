@@ -693,6 +693,12 @@ export interface MapFabricNativeProps extends ViewProps {
    */
   onPanDrag?: PanDragEventHandler;
 
+  /*
+  internal flag to enable pan gesture handling on iOS manually
+  * see MapView.ts line 1228
+   */
+  handlePanDrag?: boolean;
+
   /**
    * Callback that is called when user click on a POI.
    *
