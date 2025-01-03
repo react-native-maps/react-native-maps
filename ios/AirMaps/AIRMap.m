@@ -538,13 +538,14 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
     _userLocationCalloutEnabled = calloutEnabled;
 }
 
-- (void)setHandlePanDrag:(BOOL)handleMapDrag {
+- (void)setHandlePanDrag:(BOOL)handlePanDrag {
     for (UIGestureRecognizer *recognizer in [self gestureRecognizers]) {
         if ([recognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
-            recognizer.enabled = handleMapDrag;
+            recognizer.enabled = handlePanDrag;
             break;
         }
     }
+    _handlePanDrag = handlePanDrag;
 }
 
 - (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated
