@@ -10,6 +10,7 @@
 #import "AirMap.h"
 #import "AIRMapMarker.h"
 #import "AIRMapManager.h"
+#import "RNMapsMarkerView.h"
 #import <react/renderer/components/RNMapsSpecs/ComponentDescriptors.h>
 #import <react/renderer/components/RNMapsSpecs/EventEmitters.h>
 #import <react/renderer/components/RNMapsSpecs/Props.h>
@@ -371,16 +372,25 @@ mapViewEventEmitter->emitterFunction(data);                               \
     id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
     if (paperView){
         [_view insertReactSubview:paperView atIndex:index];
-    } else {
+    } else if ([childComponentView isKindOfClass:[RNMapsMarkerView class]]){
+        RNMapsMarkerView* fabricMarker = (RNMapsMarkerView *) childComponentView;
+        [_view insertReactSubview:[fabricMarker marker] atIndex:index];
+    }
+    else  {
         [_view insertReactSubview:childComponentView atIndex:index];
     }
 }
+
 - (void) unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
     id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
     if (paperView){
         [_view removeReactSubview:paperView];
-    } else {
+    }
+    else if ([childComponentView isKindOfClass:[RNMapsMarkerView class]]){
+       RNMapsMarkerView* fabricMarker = (RNMapsMarkerView *) childComponentView;
+        [_view removeReactSubview:[fabricMarker marker]];
+   } else {
         [_view removeReactSubview:childComponentView];
     }
 }

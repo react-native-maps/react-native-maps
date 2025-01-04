@@ -21,6 +21,7 @@ import {MapUrlTile} from './MapUrlTile';
 import {MapWMSTile} from './MapWMSTile';
 import {Commands} from './MapViewNativeComponent';
 import GooglePolygon from './specs/NativeComponentGooglePolygon';
+import FabricMarker from './specs/NativeComponentMarker';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -69,6 +70,14 @@ export default function decorateMapComponent<Type extends Component>(
   Component.prototype.getNativeComponent =
     function getNativeComponent(): NativeComponent {
       const provider = this.context;
+      if (
+        componentName === 'Marker' &&
+        provider !== PROVIDER_GOOGLE &&
+        Platform.OS === 'ios'
+      ) {
+        // @ts-ignore
+        return FabricMarker;
+      }
       const key = provider || 'default';
       if (components[key]) {
         return components[key];

@@ -14,6 +14,8 @@
 #import <React/RCTImageLoaderProtocol.h>
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
+#import <React/RCTImageLoader.h>
+#import <React/RCTBridge+Private.h>
 
 NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
@@ -68,6 +70,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         self.calloutView = (AIRMapCallout *)subview;
     } else {
         [super insertReactSubview:(UIView *)subview atIndex:atIndex];
+        [self addSubview:subview];
     }
 }
 - (void) setFrame:(CGRect)frame {
@@ -84,6 +87,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         self.calloutView = nil;
     } else {
         [super removeReactSubview:(UIView *)subview];
+        [(UIView *) subview removeFromSuperview];
     }
 }
 
@@ -344,7 +348,8 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
     }
-    _reloadImageCancellationBlock = [[_bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+    
+    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                             size:self.bounds.size
                                                                            scale:RCTScreenScale()
                                                                          clipped:YES
@@ -352,9 +357,10 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
                                                                    progressBlock:nil
                                                                 partialLoadBlock:nil
                                                                  completionBlock:^(NSError *error, UIImage *image) {
+        NSLog(@"image load completed");
                                                                      if (error) {
                                                                          // TODO(lmr): do something with the error?
-                                                                         NSLog(@"%@", error);
+                                                                         NSLog(@"failed to load image: %@", error);
                                                                      }
                                                                      dispatch_async(dispatch_get_main_queue(), ^{
                                                                          self.image = image;
