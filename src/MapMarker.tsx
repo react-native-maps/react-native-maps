@@ -6,6 +6,7 @@ import {
   ViewProps,
   ImageURISource,
   ImageRequireSource,
+  Platform,
 } from 'react-native';
 
 import decorateMapComponent, {
@@ -31,6 +32,8 @@ import {
   Point,
 } from './sharedTypes';
 import {Modify} from './sharedTypesInternal';
+
+import {PROVIDER_GOOGLE} from './ProviderConstants';
 
 type AppleMarkerVisibility = 'hidden' | 'adaptive' | 'visible';
 
@@ -73,7 +76,7 @@ export type MapMarkerProps = ViewProps & {
    *
    * @default {x: 0.0, y: 0.0}
    * @platform iOS: Apple Maps only. For Google Maps, see the `calloutAnchor` prop
-   * @platform Android: Not supported. See see the `calloutAnchor` prop
+   * @platform Android: Not supported. see the `calloutAnchor` prop
    */
   calloutOffset?: Point;
 
@@ -86,7 +89,7 @@ export type MapMarkerProps = ViewProps & {
    *
    * @default {x: 0.0, y: 0.0}
    * @platform iOS: Apple Maps only. For Google Maps, see the `anchor` prop
-   * @platform Android: Not supported. See see the `anchor` prop
+   * @platform Android: Not supported. see the `anchor` prop
    */
   centerOffset?: Point;
 
@@ -419,11 +422,6 @@ export class MapMarker extends React.Component<MapMarkerProps> {
 
   render() {
     const {stopPropagation = false} = this.props;
-    let image;
-    if (this.props.image) {
-      image = Image.resolveAssetSource(this.props.image) || {};
-      image = image.uri || this.props.image;
-    }
 
     let icon;
     if (this.props.icon) {
@@ -432,6 +430,16 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     }
 
     const AIRMapMarker = this.getNativeComponent();
+    const provider = this.context;
+    let image;
+    if (this.props.image) {
+      if (provider !== PROVIDER_GOOGLE && Platform.OS === 'ios') {
+        image = this.props.image;
+      } else {
+        image = Image.resolveAssetSource(this.props.image) || {};
+        image = image.uri || this.props.image;
+      }
+    }
 
     return (
       <AIRMapMarker
