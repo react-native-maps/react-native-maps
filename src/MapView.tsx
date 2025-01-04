@@ -552,7 +552,7 @@ export type MapViewProps = ViewProps & {
    * If `false` compass won't be displayed on the map.
    *
    * @default true
-   * @platform iOS: Supported
+   * @platform iOS: Supported (adaptive on Apple Maps, visible only if map is not pointing north)
    * @platform Android: Supported
    */
   showsCompass?: boolean;
@@ -585,33 +585,13 @@ export type MapViewProps = ViewProps & {
   showsMyLocationButton?: boolean;
 
   /**
-   * If `false` points of interest won't be displayed on the map.
-   * TODO: DEPRECATED? Doesn't seem to do anything
-   *
-   * @default true
-   * @platform iOS: Maybe Apple Maps?
-   * @platform Android: Not supported
-   */
-  showsPointsOfInterest?: boolean;
-
-  /**
    * A Boolean indicating whether the map shows scale information.
    *
-   * @default true
+   * @default false
    * @platform iOS: Apple Maps only
    * @platform Android: Not supported
    */
   showsScale?: boolean;
-
-  /**
-   * A Boolean value indicating whether the map displays traffic information.
-   * TODO: Look into android support
-   *
-   * @default false
-   * @platform iOS: Supported
-   * @platform Android: Not supported?
-   */
-  showsTraffic?: boolean;
 
   /**
    * If `true` the users location will be displayed on the map.

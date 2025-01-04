@@ -39,8 +39,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, assign) NSNumber *shouldZoomEnabled;
 @property (nonatomic, assign) NSNumber *shouldScrollEnabled;
-@property (nonatomic, strong) MKCompassButton *defaultCompassButton;
-@property (nonatomic, strong) MKCompassButton *overlayCompassButton;
 
 - (void)updateScrollEnabled;
 - (void)updateZoomEnabled;
@@ -53,7 +51,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     BOOL _initialRegionSet;
     BOOL _initialCameraSet;
     BOOL _initialized;
-    
+
     // Array to manually track RN subviews
     //
     // AIRMap implicitly creates subviews that aren't regular RN children
@@ -71,7 +69,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     if ((self = [super init])) {
         _hasStartedRendering = NO;
         _reactSubviews = [NSMutableArray new];
-        
+
         // Find Apple link label
         for (UIView *subview in self.subviews) {
             if ([NSStringFromClass(subview.class) isEqualToString:@"MKAttributionLabel"]) {
@@ -81,12 +79,12 @@ const NSInteger AIRMapMaxZoomLevel = 20;
                 break;
             }
         }
-        
+
         // 3rd-party callout view for MapKit that has more options than the built-in. It's painstakingly built to
         // be identical to the built-in callout view (which has a private API)
         self.calloutView = [SMCalloutView platformCalloutView];
         self.calloutView.delegate = self;
-        
+
         self.minZoom = 0;
         self.maxZoom = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
@@ -252,16 +250,16 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 // Allow touches to be sent to our calloutview.
 // See this for some discussion of why we need to override this: https://github.com/nfarina/calloutview/pull/9
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    
+
     CGPoint touchPoint = [self.calloutView convertPoint:point fromView:self];
     UIView *touchedView = [self.calloutView hitTest:touchPoint withEvent:event];
-    
+
     if (touchedView) {
         UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
         AIRMapCalloutSubview* calloutSubview = nil;
         AIRMapCallout* callout = nil;
         AIRMapMarker* marker = nil;
-        
+
         UIView* tmp = touchedView;
         while (tmp && tmp != win && tmp != self.calloutView) {
             if ([tmp respondsToSelector:@selector(onPress)]) {
@@ -273,7 +271,7 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
             }
             tmp = tmp.superview;
         }
-        
+
         if (callout) {
             marker = [self markerForCallout:callout];
             if (marker) {
@@ -283,36 +281,36 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
                 }
             }
         }
-        
+
         return calloutSubview ? calloutSubview : touchedView;
     }
-    
+
     return [super hitTest:point withEvent:event];
 }
 
 #pragma mark SMCalloutViewDelegate
 
 - (NSTimeInterval)calloutView:(SMCalloutView *)calloutView delayForRepositionWithSize:(CGSize)offset {
-    
+
     // When the callout is being asked to present in a way where it or its target will be partially offscreen, it asks us
     // if we'd like to reposition our surface first so the callout is completely visible. Here we scroll the map into view,
     // but it takes some math because we have to deal in lon/lat instead of the given offset in pixels.
-    
+
     CLLocationCoordinate2D coordinate = self.region.center;
-    
+
     // where's the center coordinate in terms of our view?
     CGPoint center = [self convertCoordinate:coordinate toPointToView:self];
-    
+
     // move it by the requested offset
     center.x -= offset.width;
     center.y -= offset.height;
-    
+
     // and translate it back into map coordinates
     coordinate = [self convertPoint:center toCoordinateFromView:self];
-    
+
     // move the map!
     [self setCenterCoordinate:coordinate animated:YES];
-    
+
     // tell the callout to wait for a while while we scroll (we assume the scroll delay for MKMapView matches UIScrollView)
     return kSMCalloutViewRepositionDelayForUIScrollView;
 }
@@ -322,10 +320,10 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 - (NSArray *)getMapBoundaries
 {
     MKMapRect mapRect = self.visibleMapRect;
-    
+
     CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
     CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
-    
+
     return @[
         @[
             [NSNumber numberWithDouble:northEast.longitude],
@@ -340,7 +338,7 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 - (NSDictionary *) getPointForCoordinates:(CLLocationCoordinate2D) location
 {
     CGPoint touchPoint = [self convertCoordinate:location toPointToView:self];
-    
+
     return @{
               @"x": @(touchPoint.x),
               @"y": @(touchPoint.y),
@@ -353,7 +351,7 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
               @"latitude": @(coordinate.latitude),
               @"longitude": @(coordinate.longitude),
     };
-    
+
 }
 
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible {
@@ -395,9 +393,9 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 - (void)takeSnapshotWithConfig:(NSDictionary *)config
                       callback:(RCTPromiseResolveBlock) callback
 {
-    
+
   MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
- 
+
   options.mapType = self.mapType;
   NSNumber *width = config[@"width"];
   NSNumber *height = config[@"height"];
@@ -405,14 +403,14 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
   NSString*format =config[@"format"];
   NSString*result =config[@"result"];
   MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:config[@"region"]];
- 
+
 
   options.region = (region.center.latitude && region.center.longitude) ? region : self.region;
   options.size = CGSizeMake(
     ([width floatValue] == 0) ? self.bounds.size.width : [width floatValue],
     ([height floatValue] == 0) ? self.bounds.size.height : [height floatValue]
   );
-  
+
   options.scale = [[UIScreen mainScreen] scale];
 
 
@@ -455,16 +453,16 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
                                   [overlay drawToSnapshot:snapshot context:UIGraphicsGetCurrentContext()];
                           }
                       }
-                      
+
                       for (id <MKAnnotation> annotation in self.annotations) {
                           CGPoint point = [snapshot pointForCoordinate:annotation.coordinate];
-                          
+
                           MKAnnotationView* anView = [self viewForAnnotation: annotation];
-                          
+
                           if (anView){
                               pin = anView;
                           }
-                          
+
                           if (CGRectContainsPoint(rect, point)) {
                               point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2.0f);
                               point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2.0f);
@@ -554,7 +552,7 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
     if (!CLLocationCoordinate2DIsValid(region.center)) {
         return;
     }
-    
+
     // If new span values are nil, use old values instead
     if (!region.span.latitudeDelta) {
         region.span.latitudeDelta = self.region.span.latitudeDelta;
@@ -562,7 +560,7 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
     if (!region.span.longitudeDelta) {
         region.span.longitudeDelta = self.region.span.longitudeDelta;
     }
-    
+
     // Animate/move to new position
     [super setRegion:region animated:animated];
 }
@@ -633,25 +631,25 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 
 - (void)setCameraZoomRange:(NSDictionary *)cameraZoomRange {
     if (@available(iOS 13.0, *)) {
-        
+
         if (cameraZoomRange == nil) {
             cameraZoomRange = @{};
         }
-        
+
         NSNumber *minValue = cameraZoomRange[@"minCenterCoordinateDistance"];
         NSNumber *maxValue = cameraZoomRange[@"maxCenterCoordinateDistance"];
-        
+
         if (minValue == nil && maxValue == nil) {
             self.legacyZoomConstraintsEnabled = YES;
-            
+
             MKMapCameraZoomRange *defaultZoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:MKMapCameraZoomDefault maxCenterCoordinateDistance:MKMapCameraZoomDefault];
             [super setCameraZoomRange:defaultZoomRange animated:NO];
-            
+
             return;
         }
-        
+
         MKMapCameraZoomRange *zoomRange = nil;
-        
+
         if (minValue != nil && maxValue != nil) {
             zoomRange = [[MKMapCameraZoomRange alloc] initWithMinCenterCoordinateDistance:[minValue doubleValue] maxCenterCoordinateDistance:[maxValue doubleValue]];
         } else if (minValue != nil) {
@@ -659,61 +657,14 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
         } else if (maxValue != nil) {
             zoomRange = [[MKMapCameraZoomRange alloc] initWithMaxCenterCoordinateDistance:[maxValue doubleValue]];
         }
-        
+
         BOOL animated = [cameraZoomRange[@"animated"] boolValue];
-        
+
         self.legacyZoomConstraintsEnabled = NO;
         [super setCameraZoomRange:zoomRange animated:animated];
     }
 }
 
-// Include properties of MKMapView which are only available on iOS 9+
-// and check if their selector is available before calling super method.
-
-- (void)setShowsCompass:(BOOL)showsCompass {
-    if (self.overlayCompassButton != nil) {
-        self.overlayCompassButton.compassVisibility = showsCompass ? MKFeatureVisibilityAdaptive : MKFeatureVisibilityHidden;
-    }
-    if ([MKMapView instancesRespondToSelector:@selector(setShowsCompass:)]) {
-        [super setShowsCompass:showsCompass];
-    }
-}
-
-- (BOOL)showsCompass {
-    if ([MKMapView instancesRespondToSelector:@selector(showsCompass)]) {
-        return [super showsCompass];
-    } else {
-        return NO;
-    }
-}
-
-- (void)setShowsScale:(BOOL)showsScale {
-    if ([MKMapView instancesRespondToSelector:@selector(setShowsScale:)]) {
-        [super setShowsScale:showsScale];
-    }
-}
-
-- (BOOL)showsScale {
-    if ([MKMapView instancesRespondToSelector:@selector(showsScale)]) {
-        return [super showsScale];
-    } else {
-        return NO;
-    }
-}
-
-- (void)setShowsTraffic:(BOOL)showsTraffic {
-    if ([MKMapView instancesRespondToSelector:@selector(setShowsTraffic:)]) {
-        [super setShowsTraffic:showsTraffic];
-    }
-}
-
-- (BOOL)showsTraffic {
-    if ([MKMapView instancesRespondToSelector:@selector(showsTraffic)]) {
-        return [super showsTraffic];
-    } else {
-        return NO;
-    }
-}
 
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
     self.shouldScrollEnabled = [NSNumber numberWithBool:scrollEnabled];
@@ -759,7 +710,7 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
         else {
             self.cacheImageView.image = nil;
             self.cacheImageView.hidden = YES;
-            
+
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 self.cacheImageView.image = nil;
                 self.cacheImageView.hidden = YES;
@@ -767,12 +718,12 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
                 [self.layer renderInContext:UIGraphicsGetCurrentContext()];
                 UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
-                
+
                 self.cacheImageView.image = image;
                 self.cacheImageView.hidden = NO;
             });
         }
-        
+
         [self updateScrollEnabled];
         [self updateZoomEnabled];
         [self updateLegalLabelInsets];
@@ -868,50 +819,27 @@ MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordina
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self cacheViewIfNeeded];
-    
-    if (self.overlayCompassButton == nil) {
-        for (UIView *subview in self.subviews) {
-            if (![NSStringFromClass(subview.class) isEqualToString:@"MKPassThroughStackView"]) continue;
-            self.overlayCompassButton = [MKCompassButton compassButtonWithMapView:self];
-            [subview addSubview:self.overlayCompassButton];
-            self.overlayCompassButton.frame = CGRectMake(self.overlayCompassButton.frame.origin.x + _compassOffset.x, self.overlayCompassButton.frame.origin.y + _compassOffset.y, self.overlayCompassButton.frame.size.width, self.overlayCompassButton.frame.size.height);
-            break;
-        }
-    }
-    
-    if (self.defaultCompassButton == nil) {
-        for (UIView *subview in self.subviews) {
-            if (![NSStringFromClass(subview.class) isEqualToString:@"MKPassThroughStackView"]) continue;
-            for (UIView *subview2 in subview.subviews) {
-                if (![NSStringFromClass(subview2.class) isEqualToString:@"MKCompassView"]) continue;
-                self.defaultCompassButton = subview2;
-                self.defaultCompassButton.hidden = YES;
-            }
-            break;
-        }
-    }
-    
 }
 
 // based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
 - (CGFloat)getZoomLevel {
     CGFloat cameraAngle = self.camera.heading;
-    
+
     if (cameraAngle > 270) {
         cameraAngle = 360 - cameraAngle;
     } else if (cameraAngle > 90) {
         cameraAngle = fabs(cameraAngle - 180);
     }
-    
+
     CGFloat angleRad = M_PI * cameraAngle / 180; // map rotation in radians
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;
     CGFloat heightOffset = 20; // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
-    
+
     // calculating Longitude span corresponding to normal (non-rotated) width
     CGFloat spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad));
     int normalizingFactor = 512;
-    
+
     return log2(360 * ((width / normalizingFactor) / spanStraight));
 }
 
