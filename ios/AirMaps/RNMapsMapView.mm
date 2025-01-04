@@ -471,14 +471,9 @@ newViewProps.name.right);           \
 
     REMAP_MAPVIEW_PROP(followsUserLocation)
     REMAP_MAPVIEW_PROP(loadingEnabled)
-    if (_view.scrollEnabled != newViewProps.scrollEnabled){
-        [_view setScrollEnabled:newViewProps.scrollEnabled];
-    }
-    if (_view.handlePanDrag != newViewProps.handlePanDrag){
-        [_view setHandlePanDrag:newViewProps.handlePanDrag];
-    }
 
     REMAP_MAPVIEW_PROP(scrollEnabled)
+    REMAP_MAPVIEW_PROP(handlePanDrag)
 
     REMAP_MAPVIEW_PROP(maxDelta)
     REMAP_MAPVIEW_PROP(maxZoom)
@@ -487,7 +482,6 @@ newViewProps.name.right);           \
 
     REMAP_MAPVIEW_PROP(showsCompass)
     REMAP_MAPVIEW_PROP(showsScale)
-    REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
     REMAP_MAPVIEW_PROP(zoomEnabled)

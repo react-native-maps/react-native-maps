@@ -564,7 +564,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
-  moveOnMarkerPress?: boolean;
+  moveOnMarkerPress?: WithDefault<boolean, true>;
 
   /**
    * Callback that is called when a callout is tapped by the user.
@@ -773,7 +773,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  pitchEnabled?: boolean;
+  pitchEnabled?: WithDefault<boolean, true>;
 
   /**
    * The region to be displayed by the map.
@@ -791,7 +791,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  rotateEnabled?: boolean;
+  rotateEnabled?: WithDefault<boolean, true>;
 
   /**
    * If `false` the map will stay centered while rotating or zooming.
@@ -800,7 +800,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  scrollDuringRotateOrZoomEnabled?: boolean;
+  scrollDuringRotateOrZoomEnabled?: WithDefault<boolean, true>;
 
   /**
    * If `false` the user won't be able to change the map region being displayed.
@@ -809,7 +809,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  scrollEnabled?: boolean;
+  scrollEnabled?: WithDefault<boolean, true>;
 
   /**
    * A Boolean indicating whether the map displays extruded building information.
@@ -818,7 +818,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
-  showsBuildings?: boolean;
+  showsBuildings?: WithDefault<boolean, true>;
 
   /**
    * If `false` compass won't be displayed on the map.
@@ -827,7 +827,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  showsCompass?: boolean;
+  showsCompass?: WithDefault<boolean, true>;
 
   /**
    * A Boolean indicating whether indoor level picker should be enabled.
@@ -845,7 +845,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  showsIndoors?: boolean;
+  showsIndoors?: WithDefault<boolean, true>;
 
   /**
    * If `false` hide the button to move map to the current user's location.
@@ -854,36 +854,16 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  showsMyLocationButton?: boolean;
-
-  /**
-   * If `false` points of interest won't be displayed on the map.
-   * TODO: DEPRECATED? Doesn't seem to do anything
-   *
-   * @default true
-   * @platform iOS: Maybe Apple Maps?
-   * @platform Android: Not supported
-   */
-  showsPointsOfInterest?: boolean;
+  showsMyLocationButton?: WithDefault<boolean, true>;
 
   /**
    * A Boolean indicating whether the map shows scale information.
    *
-   * @default true
+   * @default false
    * @platform iOS: Apple Maps only
    * @platform Android: Not supported
    */
   showsScale?: boolean;
-
-  /**
-   * A Boolean value indicating whether the map displays traffic information.
-   * TODO: Look into android support
-   *
-   * @default false
-   * @platform iOS: Supported
-   * @platform Android: Not supported?
-   */
-  showsTraffic?: boolean;
 
   /**
    * If `true` the users location will be displayed on the map.
@@ -912,7 +892,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
-  toolbarEnabled?: boolean;
+  toolbarEnabled?: WithDefault<boolean, true>;
 
   /**
    * Sets the map to the style selected.
@@ -952,7 +932,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
-  userLocationFastestInterval?: Int32;
+  userLocationFastestInterval?: WithDefault<Int32, 5000>;
 
   /**
    * Set power priority of user location tracking.
@@ -977,7 +957,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
-  userLocationUpdateInterval?: Int32;
+  userLocationUpdateInterval?: WithDefault<Int32, 5000>;
 
   /**
    * If `false` the zoom control at the bottom right of the map won't be visible.
@@ -986,7 +966,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Not supported
    * @platform Android: Supported
    */
-  zoomControlEnabled?: boolean;
+  zoomControlEnabled?: WithDefault<boolean, true>;
 
   /**
    * If `false` the user won't be able to pinch/zoom the map.
@@ -997,7 +977,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  zoomEnabled?: boolean;
+  zoomEnabled?: WithDefault<boolean, true>;
 
   /**
    * If `false` the user won't be able to double tap to zoom the map.
@@ -1007,7 +987,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Not supported
    */
-  zoomTapEnabled?: boolean;
+  zoomTapEnabled?: WithDefault<boolean, true>;
 
   /**
    * Map camera distance limits. `minCenterCoordinateDistance` for minimum distance, `maxCenterCoordinateDistance` for maximum.
