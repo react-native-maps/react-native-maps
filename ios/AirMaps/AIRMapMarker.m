@@ -30,6 +30,13 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     BOOL _calloutIsOpen;
     NSInteger _zIndexBeforeOpen;
     BOOL _useLegacyPinView;
+    
+    CADisplayLink *_displayLink;
+    CLLocationCoordinate2D _startCoordinate;
+    CLLocationCoordinate2D _endCoordinate;
+    NSTimeInterval _animationStartTime;
+    NSTimeInterval _animationDuration;
+    BOOL _isAnimating;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -402,6 +409,49 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
 - (void)setUseLegacyPinView:(BOOL)value {
     _useLegacyPinView = value;
+}
+
+- (void)animateToCoordinate:(CLLocationCoordinate2D)newCoordinate duration:(NSTimeInterval)duration {
+    if (_isAnimating) {
+        NSLog(@"Animation already in progress. Rejecting new animation request.");
+        return;
+    }
+    
+    // Mark as animating
+    _isAnimating = YES;
+
+    // Store animation parameters
+    _startCoordinate = self.coordinate;
+    _endCoordinate = newCoordinate;
+    _animationDuration = duration;
+    _animationStartTime = [NSDate timeIntervalSinceReferenceDate];
+
+    // Start a CADisplayLink
+    if (_displayLink) {
+        [_displayLink invalidate];
+    }
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updatePosition)];
+    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+}
+
+- (void)updatePosition {
+    NSTimeInterval elapsed = [NSDate timeIntervalSinceReferenceDate] - _animationStartTime;
+    CGFloat progress = MIN(elapsed / _animationDuration, 1.0);
+
+    // Interpolate coordinates
+    CLLocationDegrees currentLatitude = _startCoordinate.latitude + progress * (_endCoordinate.latitude - _startCoordinate.latitude);
+    CLLocationDegrees currentLongitude = _startCoordinate.longitude + progress * (_endCoordinate.longitude - _startCoordinate.longitude);
+
+    // Update annotation's coordinate
+    CLLocationCoordinate2D currentCoordinate = CLLocationCoordinate2DMake(currentLatitude, currentLongitude);
+    [self setValue:[NSValue valueWithMKCoordinate:currentCoordinate] forKey:@"coordinate"];
+
+    // Stop the animation when complete
+    if (progress == 1.0) {
+        [_displayLink invalidate];
+        _displayLink = nil;
+        _isAnimating = NO; // Reset the animation state
+    }
 }
 
 @end
