@@ -21,6 +21,8 @@ import {
   Commands,
   MapMarkerNativeComponentType,
 } from './MapMarkerNativeComponent';
+
+import {Commands as FabricCommands} from './specs/NativeComponentMarker';
 import {
   CalloutPressEvent,
   LatLng,
@@ -363,6 +365,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   static Animated: Animated.AnimatedComponent<typeof MapMarker>;
 
   private marker: NativeProps['ref'];
+  private fabricMarker = false;
 
   constructor(props: MapMarkerProps) {
     super(props);
@@ -373,6 +376,9 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     this.setCoordinates = this.setCoordinates.bind(this);
     this.redrawCallout = this.redrawCallout.bind(this);
     this.animateMarkerToCoordinate = this.animateMarkerToCoordinate.bind(this);
+    const provider = this.context;
+
+    this.fabricMarker = provider !== PROVIDER_GOOGLE && Platform.OS === 'ios';
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -382,35 +388,69 @@ export class MapMarker extends React.Component<MapMarkerProps> {
 
   showCallout() {
     if (this.marker.current) {
-      Commands.showCallout(this.marker.current);
+      if (this.fabricMarker) {
+        // @ts-ignore
+        FabricCommands.showCallout(this.marker.current);
+      } else {
+        Commands.showCallout(this.marker.current);
+      }
     }
   }
 
   hideCallout() {
     if (this.marker.current) {
-      Commands.hideCallout(this.marker.current);
+      if (this.fabricMarker) {
+        // @ts-ignore
+        FabricCommands.hideCallout(this.marker.current);
+      } else {
+        Commands.hideCallout(this.marker.current);
+      }
     }
   }
 
   setCoordinates(coordinate: LatLng) {
     if (this.marker.current) {
-      Commands.setCoordinates(this.marker.current, coordinate);
+      if (this.fabricMarker) {
+        FabricCommands.setCoordinates(
+          // @ts-ignore
+          this.marker.current,
+          coordinate.latitude,
+          coordinate.longitude,
+        );
+      } else {
+        Commands.setCoordinates(this.marker.current, coordinate);
+      }
     }
   }
 
   redrawCallout() {
     if (this.marker.current) {
-      Commands.redrawCallout(this.marker.current);
+      if (this.fabricMarker) {
+        // @ts-ignore
+        FabricCommands.redrawCallout(this.marker.current);
+      } else {
+        Commands.redrawCallout(this.marker.current);
+      }
     }
   }
 
   animateMarkerToCoordinate(coordinate: LatLng, duration: number = 500) {
     if (this.marker.current) {
-      Commands.animateMarkerToCoordinate(
-        this.marker.current,
-        coordinate,
-        duration,
-      );
+      if (this.fabricMarker) {
+        FabricCommands.animateToCoordinates(
+          // @ts-ignore
+          this.marker.current,
+          coordinate.latitude,
+          coordinate.longitude,
+          duration,
+        );
+      } else {
+        Commands.animateMarkerToCoordinate(
+          this.marker.current,
+          coordinate,
+          duration,
+        );
+      }
     }
   }
 
@@ -430,10 +470,9 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     }
 
     const AIRMapMarker = this.getNativeComponent();
-    const provider = this.context;
     let image;
     if (this.props.image) {
-      if (provider !== PROVIDER_GOOGLE && Platform.OS === 'ios') {
+      if (this.fabricMarker) {
         image = this.props.image;
       } else {
         image = Image.resolveAssetSource(this.props.image) || {};

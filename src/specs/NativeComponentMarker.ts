@@ -285,6 +285,11 @@ export interface NativeCommands {
     longitude: Double,
     duration: Int32,
   ) => void;
+  setCoordinates: (
+    viewRef: React.ElementRef<React.ComponentType>,
+    latitude: Double,
+    longitude: Double,
+  ) => void;
   showCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
   hideCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
   redrawCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
@@ -293,6 +298,7 @@ export interface NativeCommands {
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   supportedCommands: [
+    'setCoordinates',
     'animateToCoordinates',
     'showCallout',
     'hideCallout',
