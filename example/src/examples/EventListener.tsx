@@ -167,13 +167,25 @@ class EventListener extends React.Component<any, any> {
 }
 
 const styles = StyleSheet.create({
-  callout: {
-    width: 60,
-  },
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  eventList: {
+    position: 'absolute',
+    top: (2 / 3) * height, // Start from two-thirds of the screen
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#fff', // Ensure it's not transparent
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: height / 3, // Adjust to one-third of the screen
   },
   event: {
     borderBottomWidth: 1,
@@ -190,19 +202,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#222',
   },
-  eventList: {
-    position: 'absolute',
-    top: height / 2,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: height / 2,
+  callout: {
+    width: 60,
   },
   bubble: {
     backgroundColor: 'rgba(255,255,255,0.7)',
