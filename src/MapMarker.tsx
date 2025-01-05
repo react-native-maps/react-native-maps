@@ -376,14 +376,16 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     this.setCoordinates = this.setCoordinates.bind(this);
     this.redrawCallout = this.redrawCallout.bind(this);
     this.animateMarkerToCoordinate = this.animateMarkerToCoordinate.bind(this);
-    const provider = this.context;
-
-    this.fabricMarker = provider !== PROVIDER_GOOGLE && Platform.OS === 'ios';
   }
 
   setNativeProps(props: Partial<NativeProps>) {
     // @ts-ignore
     this.marker.current?.setNativeProps(props);
+  }
+
+  componentDidMount() {
+    const provider = this.context;
+    this.fabricMarker = provider !== PROVIDER_GOOGLE && Platform.OS === 'ios';
   }
 
   showCallout() {

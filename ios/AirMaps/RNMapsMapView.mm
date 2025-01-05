@@ -153,7 +153,6 @@ using namespace facebook::react;
     };
     _view.onChange = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
-
             NSDictionary* regionDict = dictionary[@"region"];
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
             facebook::react::RNMapsMapViewEventEmitter::OnRegionChange data = {
