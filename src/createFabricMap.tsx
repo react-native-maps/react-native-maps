@@ -96,7 +96,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         if (fabricRef.current) {
           return NativeAirMapsModule.takeSnapshot(
             findNodeHandle(fabricRef.current) ?? -1,
-            config,
+            JSON.stringify(config),
           );
         } else {
           throw new Error('takeSnapshot is only supported on iOS with Fabric.');

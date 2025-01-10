@@ -783,8 +783,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     };
 }
 
--(void) takeSnapshotWithConfig:(NSDictionary *)config callback:(RCTPromiseResolveBlock) callback
-{
+-(void) takeSnapshotWithConfig:(NSDictionary *)config success:(RCTPromiseResolveBlock)success error:(RCTPromiseRejectBlock)error {
     /* unused
     NSNumber *width = [config objectForKey:@"width"];
     NSNumber *height = [config objectForKey:@"height"];
@@ -793,8 +792,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 
     NSString *format = [config objectForKey:@"format"];
     NSString *result = [config objectForKey:@"result"];
-    NSString *filePath = [config objectForKey:@"filePath"];
-
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSString *pathComponent = [NSString stringWithFormat:@"Documents/snapshot-%.20lf.%@", timeStamp, format];
+    NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent: pathComponent];
 
     // TODO: currently we are ignoring width, height, region
 
@@ -812,9 +812,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 
     if ([result isEqualToString:@"file"]) {
         [data writeToFile:filePath atomically:YES];
-        callback(filePath);
+        success(filePath);
     } else if ([result isEqualToString:@"base64"]) {
-          callback([data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]);
+        success([data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn]);
     }
 
   UIGraphicsEndImageContext();

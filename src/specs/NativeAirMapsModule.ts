@@ -1,9 +1,6 @@
 import type {TurboModule} from 'react-native';
 import {TurboModuleRegistry} from 'react-native';
-import type {
-  Double,
-  UnsafeObject,
-} from 'react-native/Libraries/Types/CodegenTypes';
+import type {Double} from 'react-native/Libraries/Types/CodegenTypes';
 import type {Camera} from './NativeComponentMapView';
 import {Address} from 'react-native-maps';
 
@@ -30,7 +27,7 @@ export interface Spec extends TurboModule {
   getCamera(tag: Double): Promise<Camera>;
   getMarkersFrames(tag: Double, onlyVisible: boolean): Promise<unknown>;
   getMapBoundaries(tag: Double): Promise<MapBoundaries>;
-  takeSnapshot(tag: Double, config: UnsafeObject): Promise<string>;
+  takeSnapshot(tag: Double, config: string): Promise<string>;
   getAddressFromCoordinates(tag: Double, coordinate: LatLng): Promise<Address>;
   getPointForCoordinate(tag: Double, coordinate: LatLng): Promise<Point>;
   getCoordinateForPoint(tag: Double, point: Point): Promise<LatLng>;
