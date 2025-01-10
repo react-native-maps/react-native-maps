@@ -365,7 +365,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   static Animated: Animated.AnimatedComponent<typeof MapMarker>;
 
   private marker: NativeProps['ref'];
-  private fabricMarker = false;
+  private fabricMarker?: Boolean = undefined;
 
   constructor(props: MapMarkerProps) {
     super(props);
@@ -381,11 +381,6 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   setNativeProps(props: Partial<NativeProps>) {
     // @ts-ignore
     this.marker.current?.setNativeProps(props);
-  }
-
-  componentDidMount() {
-    const provider = this.context;
-    this.fabricMarker = provider !== PROVIDER_GOOGLE && Platform.OS === 'ios';
   }
 
   showCallout() {
@@ -464,6 +459,10 @@ export class MapMarker extends React.Component<MapMarkerProps> {
 
   render() {
     const {stopPropagation = false} = this.props;
+    if (this.fabricMarker === undefined) {
+      const provider = this.context;
+      this.fabricMarker = provider !== PROVIDER_GOOGLE && Platform.OS === 'ios';
+    }
 
     let icon;
     if (this.props.icon) {

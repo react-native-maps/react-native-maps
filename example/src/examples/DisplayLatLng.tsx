@@ -91,7 +91,7 @@ class DisplayLatLng extends React.Component<any, any> {
           }}
           mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
-          region={this.state.region}
+          initialRegion={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
         />
         <View style={[styles.bubble, styles.latlng]}>
