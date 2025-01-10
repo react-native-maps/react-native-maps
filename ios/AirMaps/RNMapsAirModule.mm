@@ -60,12 +60,13 @@
     } reject:reject];
 }
 - (void)takeSnapshot:(double)tag
-              config:(NSDictionary *)config
+              config:(NSString *)configStr
              resolve:(RCTPromiseResolveBlock)resolve
               reject:(RCTPromiseRejectBlock)reject
 {
+    NSDictionary* config = [RCTConvert dictonaryFromString:configStr];
     [self executeWithMapView:tag success:^(id<RNMapsAirModuleDelegate> mapView) {
-        [mapView takeSnapshotWithConfig:config callback:resolve];
+        [mapView takeSnapshotWithConfig:config success:resolve error:reject];
     } reject:reject];
 }
 

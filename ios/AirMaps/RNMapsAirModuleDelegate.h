@@ -14,7 +14,7 @@
 @required
 
 - (void)takeSnapshotWithConfig:(NSDictionary *)config
-                      callback:(RCTPromiseResolveBlock) callback;
+                      success:(RCTPromiseResolveBlock) success error:(RCTPromiseRejectBlock) error;
 
 - (NSDictionary *) getCamera;
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;

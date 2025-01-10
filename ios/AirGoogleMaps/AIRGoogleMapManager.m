@@ -267,7 +267,9 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         AIRGoogleMap *mapView = (AIRGoogleMap *)view;
         NSMutableDictionary* config = [NSMutableDictionary new];
         
-        [mapView takeSnapshotWithConfig:config callback:callback];
+        [mapView takeSnapshotWithConfig:config success:callback error:^(NSString *code, NSString *message, NSError *error) {
+            callback(@[error]);
+        }];
         
         [config setObject:width forKey:@"width"];
         [config setObject:height forKey:@"height"];
