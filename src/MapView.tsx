@@ -834,6 +834,12 @@ class MapView extends React.Component<MapViewProps, State> {
       Commands.animateToRegion(this.map.current, region, duration);
     }
   }
+  setRegion(region: Region) {
+    if (this.fabricMap.current) {
+      this.fabricMap.current.animateToRegion(region, 0);
+    }
+    //TODO fix for android
+  }
 
   fitToElements(options: FitToOptions = {}) {
     const {

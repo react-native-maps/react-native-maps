@@ -47,8 +47,9 @@ using namespace facebook::react;
 - (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration{
     NSDictionary* regionDic = [RCTConvert dictonaryFromString:regionJSON];
     MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:regionDic];
-    _view.ignoreRegionChanges = YES;
-    [_view setRegion:region animated:YES];
+    Boolean animated = duration == 0 ? NO :YES;
+    _view.ignoreRegionChanges = animated;
+    [_view setRegion:region animated:animated];
 }
 - (void)setCamera:(NSString *)cameraJSON{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
