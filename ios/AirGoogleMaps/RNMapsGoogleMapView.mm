@@ -46,7 +46,11 @@ using namespace facebook::react;
     NSDictionary* regionDic = [RCTConvert dictonaryFromString:regionJSON];
     MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:regionDic];
     GMSCameraPosition *camera = [AIRGoogleMap makeGMSCameraPositionFromMap:_view andMKCoordinateRegion:region];
-    [_view animateToCameraPosition:camera];
+    if (duration == 0){
+        [_view setRegion:region];
+    } else {
+        [_view animateToCameraPosition:camera];
+    }
 }
 - (void)setCamera:(NSString *)cameraJSON{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];

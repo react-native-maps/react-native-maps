@@ -38,7 +38,7 @@ class DisplayLatLng extends React.Component<any, any> {
   }
 
   jumpRandom() {
-    this.setState({region: this.randomRegion()});
+    this.map.setRegion(this.randomRegion());
   }
 
   animateRandom() {
