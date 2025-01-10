@@ -30,7 +30,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     BOOL _calloutIsOpen;
     NSInteger _zIndexBeforeOpen;
     BOOL _useLegacyPinView;
-    
+
     CADisplayLink *_displayLink;
     CLLocationCoordinate2D _startCoordinate;
     CLLocationCoordinate2D _endCoordinate;
@@ -355,7 +355,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
     }
-    
+
     _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                             size:self.bounds.size
                                                                            scale:RCTScreenScale()
@@ -416,7 +416,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         NSLog(@"Animation already in progress. Rejecting new animation request.");
         return;
     }
-    
+
     // Mark as animating
     _isAnimating = YES;
 
