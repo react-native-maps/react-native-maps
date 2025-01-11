@@ -41,7 +41,7 @@ class CustomTiles extends React.Component<any, any> {
           style={styles.map}
           initialRegion={region}>
           <UrlTile
-            urlTemplate="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
+            urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             zIndex={-1}
           />
         </MapView>
