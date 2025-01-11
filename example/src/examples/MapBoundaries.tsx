@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
 
-import MapView from 'react-native-maps';
+import MapView, {BoundingBox} from 'react-native-maps';
 
 const {width, height} = Dimensions.get('window');
 
@@ -11,49 +11,43 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class MapBoundaries extends React.Component<any, any> {
-  map: any;
-  constructor(props: any) {
-    super(props);
+const MapBoundaries = (props: any) => {
+  const [region] = useState({
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
+  });
 
-    this.state = {
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      mapBoundaries: null,
-    };
-  }
+  const [mapBoundaries, setMapBoundaries] = useState<BoundingBox | null>(null);
+  const mapRef = useRef<MapView>(null);
 
-  async onRegionChangeComplete() {
-    this.setState({
-      mapBoundaries: await this.map.getMapBoundaries(),
-    });
-  }
+  const onRegionChangeComplete = () => {
+    if (mapRef.current) {
+      mapRef.current.getMapBoundaries().then(boundaries => {
+        setMapBoundaries(boundaries);
+      });
+    }
+  };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <MapView
-          ref={ref => {
-            this.map = ref;
-          }}
-          provider={this.props.provider}
-          style={styles.map}
-          initialRegion={this.state.region}
-          onRegionChangeComplete={() => this.onRegionChangeComplete()}
-        />
-        <View style={styles.buttonContainer}>
-          <View style={styles.bubble}>
-            <Text>{JSON.stringify(this.state.mapBoundaries)}</Text>
-          </View>
+  return (
+    <View style={styles.container}>
+      <MapView
+        ref={mapRef}
+        provider={props.provider}
+        style={styles.map}
+        initialRegion={region}
+        onMapReady={onRegionChangeComplete}
+        onRegionChangeComplete={onRegionChangeComplete}
+      />
+      <View style={styles.buttonContainer}>
+        <View style={styles.bubble}>
+          <Text>{JSON.stringify(mapBoundaries)}</Text>
         </View>
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
