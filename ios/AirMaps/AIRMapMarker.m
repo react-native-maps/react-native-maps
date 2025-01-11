@@ -115,7 +115,8 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             
             _pinView.draggable = self.draggable;
             _pinView.layer.zPosition = self.zIndex;
-            
+            _pinView.displayPriority = self.displayPriority;
+            _pinView.zPriority = self.zIndex;
             return _pinView;
         }
         
@@ -131,6 +132,9 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             _markerView.markerTintColor = self.pinColor;
             _markerView.titleVisibility = self.titleVisibility ?: MKFeatureVisibilityHidden;
             _markerView.subtitleVisibility = self.subtitleVisibility ?: MKFeatureVisibilityHidden;
+            _markerView.displayPriority = self.displayPriority;
+            _markerView.zPriority = self.zIndex;
+
             
         }
         return _markerView ?: _pinView;
@@ -140,6 +144,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         // In either case, we want to return the AIRMapMarker since it is both an MKAnnotation and an
         // MKAnnotationView all at the same time.
         self.layer.zPosition = self.zIndex;
+        self.zPriority = self.zIndex;
         return self;
     }
 }

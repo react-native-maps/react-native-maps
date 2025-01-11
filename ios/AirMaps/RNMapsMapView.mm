@@ -496,6 +496,7 @@ newViewProps.name.right);           \
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
     REMAP_MAPVIEW_PROP(zoomEnabled)
 
+
     REMAP_MAPVIEW_POINT_PROP(compassOffset)
 
     if (![_view ignoreRegionChanges]){

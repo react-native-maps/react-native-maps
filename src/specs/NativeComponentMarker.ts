@@ -64,6 +64,8 @@ export type CalloutPressEventHandler = BubblingEventHandler<
 
 type AppleMarkerVisibility = 'hidden' | 'adaptive' | 'visible';
 
+export type AppleMarkerPriority = 'required' | 'high' | 'low';
+
 export type Point = Readonly<{
   x: Double; // Non-nullable Double for x
   y: Double; // Non-nullable Double for y
@@ -118,6 +120,17 @@ export interface MarkerFabricNativeProps extends ViewProps {
    * @platform Android: Not supported. See the `calloutAnchor` prop
    */
   calloutOffset?: Point;
+  /**
+     Constants that indicates the display priority for annotations.
+     @default required
+     @platform iOS: Apple Maps only.
+     @platform Android: Not supported
+
+      Required: A constant indicating that the item is required.
+      High: A constant indicating that the item’s display priority is high.
+      Low: A constant indicating that the item’s display priority is Low.
+     */
+  displayPriority?: WithDefault<AppleMarkerPriority, 'required'>;
 
   /**
    * The coordinate for the marker.

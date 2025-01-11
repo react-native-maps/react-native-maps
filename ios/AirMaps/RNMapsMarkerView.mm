@@ -390,6 +390,21 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
                 
         }
     }
+    
+    if (newViewProps.displayPriority != oldViewProps.displayPriority){
+        switch (newViewProps.displayPriority) {
+            case RNMapsMarkerDisplayPriority::Required:
+                [_view setDisplayPriority:MKFeatureDisplayPriorityRequired];
+                break;
+            case RNMapsMarkerDisplayPriority::High:
+                [_view setDisplayPriority:MKFeatureDisplayPriorityDefaultHigh];
+                break;
+            case RNMapsMarkerDisplayPriority::Low:
+                [_view setDisplayPriority:MKFeatureDisplayPriorityDefaultLow];
+                break;
+                
+        }
+    }
 
     
     [super updateProps:props oldProps:oldProps];

@@ -23,6 +23,8 @@ import {
 } from './MapMarkerNativeComponent';
 
 import {Commands as FabricCommands} from './specs/NativeComponentMarker';
+import type {AppleMarkerPriority} from './specs/NativeComponentMarker';
+
 import {
   CalloutPressEvent,
   LatLng,
@@ -322,6 +324,18 @@ export type MapMarkerProps = ViewProps & {
    * @platform Android: Supported
    */
   zIndex?: number;
+
+  /**
+   Constants that indicates the display priority for annotations.
+   @default required
+   @platform iOS: Apple Maps only.
+   @platform Android: Not supported
+
+    Required: A constant indicating that the item is required.
+    High: A constant indicating that the item’s display priority is high.
+    Low: A constant indicating that the item’s display priority is Low.
+   */
+  displayPriority?: AppleMarkerPriority;
 
   /**
    * Visibility of the title text rendered beneath Marker balloon
