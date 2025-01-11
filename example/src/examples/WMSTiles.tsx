@@ -41,7 +41,7 @@ class WMSTiles extends React.Component<any, any> {
           initialRegion={region}>
           {this.state.isWMSTilesActive && (
             <WMSTile
-              urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
+              urlTemplate="https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?service=WMS&version=1.1.1&request=GetMap&layers=MODIS_Terra_CorrectedReflectance_TrueColor&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width=256&height=256&srs=EPSG:3857"
               zIndex={1}
               opacity={0.5}
               tileSize={512}
