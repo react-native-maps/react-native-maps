@@ -90,6 +90,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.compassOffset = CGPointMake(0, 0);
         self.legacyZoomConstraintsEnabled = YES;
         _initialized = YES;
+        [self listenToMemoryWarnings];
     }
     return self;
 }
@@ -733,6 +734,35 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         [self updateZoomEnabled];
         [self updateLegalLabelInsets];
     }
+}
+
+- (void) listenToMemoryWarnings
+{
+    __weak typeof(self) weakSelf = self;
+    static dispatch_once_t onceToken;
+    static dispatch_source_t source;
+    dispatch_once(&onceToken, ^{
+            source = dispatch_source_create(DISPATCH_SOURCE_TYPE_MEMORYPRESSURE, 0, DISPATCH_MEMORYPRESSURE_WARN|DISPATCH_MEMORYPRESSURE_CRITICAL, dispatch_get_main_queue());
+            dispatch_source_set_event_handler(source, ^{
+                [weakSelf handleMemoryWarning];
+            });
+            dispatch_resume(source);
+    });
+}
+/*
+ hacky way to release all cache
+ this is our last chance to release cache before app crash
+ */
+- (void) handleMemoryWarning
+{
+    NSLog(@"handleMemoryWarning warning");
+    MKMapType type = self.mapType;
+    if (type == MKMapTypeSatellite){
+        self.mapType = MKMapTypeStandard;
+    } else {
+        self.mapType = MKMapTypeSatellite;
+    }
+    self.mapType = type;
 }
 
 - (void)updateLegalLabelInsets {

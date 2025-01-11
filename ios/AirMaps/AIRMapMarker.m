@@ -30,7 +30,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     BOOL _calloutIsOpen;
     NSInteger _zIndexBeforeOpen;
     BOOL _useLegacyPinView;
-
+    
     CADisplayLink *_displayLink;
     CLLocationCoordinate2D _startCoordinate;
     CLLocationCoordinate2D _endCoordinate;
@@ -52,22 +52,22 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     // Make sure we use the image size when available
     CGSize size = self.image ? self.image.size : frame.size;
     CGRect bounds = {CGPointZero, size};
-
+    
     // The MapView is basically in charge of figuring out the center position of the marker view. If the view changed in
     // height though, we need to compensate in such a way that the bottom of the marker stays at the same spot on the
     // map.
     CGFloat dy = (bounds.size.height - self.bounds.size.height) / 2;
     CGPoint center = (CGPoint){ self.center.x, self.center.y - dy };
-
+    
     // Avoid crashes due to nan coords
     if (isnan(center.x) || isnan(center.y) ||
-            isnan(bounds.origin.x) || isnan(bounds.origin.y) ||
-            isnan(bounds.size.width) || isnan(bounds.size.height)) {
+        isnan(bounds.origin.x) || isnan(bounds.origin.y) ||
+        isnan(bounds.size.width) || isnan(bounds.size.height)) {
         RCTLogError(@"Invalid layout for (%@)%@. position: %@. bounds: %@",
-                self.reactTag, self, NSStringFromCGPoint(center), NSStringFromCGRect(bounds));
+                    self.reactTag, self, NSStringFromCGPoint(center), NSStringFromCGRect(bounds));
         return;
     }
-
+    
     self.center = center;
     self.bounds = bounds;
 }
@@ -102,36 +102,36 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     if ([self shouldUsePinView]) {
         // In this case, we want to render a platform "default" legacy marker.
-
-
+        
+        
         if (_pinView == nil && _useLegacyPinView) {
             _pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
             [self addGestureRecognizerToView:_pinView];
             _pinView.annotation = self;
-
+            
             if ([_pinView respondsToSelector:@selector(setPinTintColor:)]) {
                 _pinView.pinTintColor = self.pinColor;
             }
-
+            
             _pinView.draggable = self.draggable;
             _pinView.layer.zPosition = self.zIndex;
-
+            
             return _pinView;
         }
-
-
-
+        
+        
+        
         if (_markerView == nil && !_useLegacyPinView) {
             _markerView = [[MKMarkerAnnotationView alloc] initWithAnnotation:self reuseIdentifier: nil];
             [self addGestureRecognizerToView:_markerView];
             _markerView.annotation = self;
-
-        _markerView.draggable = self.draggable;
-        _markerView.layer.zPosition = self.zIndex;
-        _markerView.markerTintColor = self.pinColor;
-        _markerView.titleVisibility = self.titleVisibility ?: MKFeatureVisibilityHidden;
-        _markerView.subtitleVisibility = self.subtitleVisibility ?: MKFeatureVisibilityHidden;
-
+            
+            _markerView.draggable = self.draggable;
+            _markerView.layer.zPosition = self.zIndex;
+            _markerView.markerTintColor = self.pinColor;
+            _markerView.titleVisibility = self.titleVisibility ?: MKFeatureVisibilityHidden;
+            _markerView.subtitleVisibility = self.subtitleVisibility ?: MKFeatureVisibilityHidden;
+            
         }
         return _markerView ?: _pinView;
     } else {
@@ -147,14 +147,14 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 - (void)fillCalloutView:(SMCalloutView *)calloutView
 {
     // Set everything necessary on the calloutView before it becomes visible.
-
+    
     // Apply the MKAnnotationView's desired calloutOffset (from the top-middle of the view)
-     if ([self shouldUsePinView] && !_hasSetCalloutOffset && _useLegacyPinView) {
+    if ([self shouldUsePinView] && !_hasSetCalloutOffset && _useLegacyPinView) {
         calloutView.calloutOffset = CGPointMake(-8,0);
     } else {
         calloutView.calloutOffset = self.calloutOffset;
     }
-
+    
     if (self.calloutView) {
         calloutView.title = nil;
         calloutView.subtitle = nil;
@@ -167,13 +167,13 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             // as a result, we use the default "masked" background view.
             calloutView.backgroundView = [SMCalloutMaskedBackgroundView new];
         }
-
+        
         // when this is set, the callout's content will be whatever react views the user has put as the callout's
         // children.
         calloutView.contentView = self.calloutView;
-
+        
     } else {
-
+        
         // if there is no calloutView, it means the user wants to use the default callout behavior with title/subtitle
         // pairs.
         calloutView.title = self.title;
@@ -187,37 +187,37 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     _calloutIsOpen = YES;
     [self setZIndex:_zIndexBeforeOpen];
-
+    
     MKAnnotationView *annotationView = [self getAnnotationView];
-
+    
     [self setSelected:YES animated:NO];
     [self.map selectAnnotation:self animated:NO];
-
+    
     id event = @{
-            @"action": @"marker-select",
-            @"id": self.identifier ?: @"unknown",
-            @"coordinate": @{
-                    @"latitude": @(self.coordinate.latitude),
-                    @"longitude": @(self.coordinate.longitude)
-            }
+        @"action": @"marker-select",
+        @"id": self.identifier ?: @"unknown",
+        @"coordinate": @{
+            @"latitude": @(self.coordinate.latitude),
+            @"longitude": @(self.coordinate.longitude)
+        }
     };
-
+    
     if (self.map.onMarkerSelect) self.map.onMarkerSelect(event);
     if (self.onSelect) self.onSelect(event);
-
+    
     if (![self shouldShowCalloutView]) {
         // no callout to show
         return;
     }
-
+    
     [self fillCalloutView:self.map.calloutView];
-
+    
     // This is where we present our custom callout view... MapKit's built-in callout doesn't have the flexibility
     // we need, but a lot of work was done by Nick Farina to make this identical to MapKit's built-in.
     [self.map.calloutView presentCalloutFromRect:annotationView.bounds
-                                         inView:annotationView
-                              constrainedToView:self.map
-                                       animated:YES];
+                                          inView:annotationView
+                               constrainedToView:self.map
+                                        animated:YES];
 }
 
 #pragma mark - Tap Gesture & Events.
@@ -239,12 +239,12 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 - (void)_handleTap:(UITapGestureRecognizer *)recognizer {
     AIRMapMarker *marker = self;
     if (!marker) return;
-
+    
     if (marker.selected) {
         CGPoint touchPoint = [recognizer locationInView:marker.map.calloutView];
         CGRect bubbleFrame = [self.calloutView convertRect:marker.map.calloutView.bounds toView:marker.map];
         CGPoint touchPointReal = [recognizer locationInView:self.calloutView];
-
+        
         UIView *calloutView = [marker.map.calloutView hitTest:touchPoint withEvent:nil];
         if (calloutView) {
             // the callout (or its subview) got clicked, not the marker
@@ -258,22 +258,22 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
                 }
                 tmp = tmp.superview;
             }
-
+            
             id event = @{
-                         @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
-                         @"id": marker.identifier ?: @"unknown",
-                         @"point": @{
-                                 @"x": @(touchPointReal.x),
-                                 @"y": @(touchPointReal.y),
-                                 },
-                         @"frame": @{
-                             @"x": @(bubbleFrame.origin.x),
-                             @"y": @(bubbleFrame.origin.y),
-                             @"width": @(bubbleFrame.size.width),
-                             @"height": @(bubbleFrame.size.height),
-                             }
-                         };
-
+                @"action": calloutSubview ? @"callout-inside-press" : @"callout-press",
+                @"id": marker.identifier ?: @"unknown",
+                @"point": @{
+                    @"x": @(touchPointReal.x),
+                    @"y": @(touchPointReal.y),
+                },
+                @"frame": @{
+                    @"x": @(bubbleFrame.origin.x),
+                    @"y": @(bubbleFrame.origin.y),
+                    @"width": @(bubbleFrame.size.width),
+                    @"height": @(bubbleFrame.size.height),
+                }
+            };
+            
             if (calloutSubview) calloutSubview.onPress(event);
             if (marker.onCalloutPress) marker.onCalloutPress(event);
             if (marker.calloutView && marker.calloutView.onPress) marker.calloutView.onPress(event);
@@ -281,25 +281,25 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             return;
         }
     }
-
+    
     // the actual marker got clicked
     CGPoint touchPointReal = [recognizer locationInView:self.calloutView];
     id event = @{
-                 @"action": @"marker-press",
-                 @"id": marker.identifier ?: @"unknown",
-                 @"coordinate": @{
-                         @"latitude": @(marker.coordinate.latitude),
-                         @"longitude": @(marker.coordinate.longitude)
-                         },
-                 @"position": @{
-                         @"x": @(touchPointReal.x),
-                         @"y": @(touchPointReal.y),
-                         }
-                 };
-
+        @"action": @"marker-press",
+        @"id": marker.identifier ?: @"unknown",
+        @"coordinate": @{
+            @"latitude": @(marker.coordinate.latitude),
+            @"longitude": @(marker.coordinate.longitude)
+        },
+        @"position": @{
+            @"x": @(touchPointReal.x),
+            @"y": @(touchPointReal.y),
+        }
+    };
+    
     if (marker.onPress) marker.onPress(event);
     if (marker.map.onMarkerPress) marker.map.onMarkerPress(event);
-
+    
     [marker.map selectAnnotation:marker animated:NO];
 }
 
@@ -309,19 +309,19 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     [self setZIndex:_zIndexBeforeOpen];
     // hide the callout view
     [self.map.calloutView dismissCalloutAnimated:YES];
-
+    
     [self setSelected:NO animated:NO];
     [self.map deselectAnnotation:self animated:NO];
-
+    
     id event = @{
-            @"action": @"marker-deselect",
-            @"id": self.identifier ?: @"unknown",
-            @"coordinate": @{
-                    @"latitude": @(self.coordinate.latitude),
-                    @"longitude": @(self.coordinate.longitude)
-            }
+        @"action": @"marker-deselect",
+        @"id": self.identifier ?: @"unknown",
+        @"coordinate": @{
+            @"latitude": @(self.coordinate.latitude),
+            @"longitude": @(self.coordinate.longitude)
+        }
     };
-
+    
     if (self.map.onMarkerDeselect) self.map.onMarkerDeselect(event);
     if (self.onDeselect) self.onDeselect(event);
 }
@@ -344,41 +344,42 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
 - (void)setOpacity:(double)opacity
 {
-  [self setAlpha:opacity];
+    [self setAlpha:opacity];
 }
 
 - (void)setImageSrc:(NSString *)imageSrc
 {
     _imageSrc = imageSrc;
-
+    
     if (_reloadImageCancellationBlock) {
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
     }
-
+    __weak __typeof(self) weakSelf = self;
+    
     _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
-                                                                            size:self.bounds.size
-                                                                           scale:RCTScreenScale()
-                                                                         clipped:YES
-                                                                      resizeMode:RCTResizeModeCenter
-                                                                   progressBlock:nil
-                                                                partialLoadBlock:nil
-                                                                 completionBlock:^(NSError *error, UIImage *image) {
-        NSLog(@"image load completed");
-                                                                     if (error) {
-                                                                         // TODO(lmr): do something with the error?
-                                                                         NSLog(@"failed to load image: %@", error);
-                                                                     }
-                                                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                                                         self.image = image;
-                                                                     });
-                                                                 }];
+                                                                                                                 size:self.bounds.size
+                                                                                                                scale:RCTScreenScale()
+                                                                                                              clipped:YES
+                                                                                                           resizeMode:RCTResizeModeCenter
+                                                                                                        progressBlock:nil
+                                                                                                     partialLoadBlock:nil
+                                                                                                      completionBlock:^(NSError *error, UIImage *image) {
+        if (error) {
+            // TODO(lmr): do something with the error?
+            NSLog(@"failed to load image: %@", error);
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf.image = image;
+        });
+    }];
 }
 
 - (void)setPinColor:(UIColor *)pinColor
 {
     _pinColor = pinColor;
-
+    
     if(_useLegacyPinView && [_pinView respondsToSelector:@selector(setPinTintColor:)]) {
         _pinView.pinTintColor = _pinColor;
     } else {
@@ -394,7 +395,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 }
 
 - (BOOL)isSelected {
-  return _isPreselected || [super isSelected];
+    return _isPreselected || [super isSelected];
 }
 
 - (void)dealloc {
@@ -416,16 +417,16 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         NSLog(@"Animation already in progress. Rejecting new animation request.");
         return;
     }
-
+    
     // Mark as animating
     _isAnimating = YES;
-
+    
     // Store animation parameters
     _startCoordinate = self.coordinate;
     _endCoordinate = newCoordinate;
     _animationDuration = duration;
     _animationStartTime = [NSDate timeIntervalSinceReferenceDate];
-
+    
     // Start a CADisplayLink
     if (_displayLink) {
         [_displayLink invalidate];
@@ -437,15 +438,15 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 - (void)updatePosition {
     NSTimeInterval elapsed = [NSDate timeIntervalSinceReferenceDate] - _animationStartTime;
     CGFloat progress = MIN(elapsed / _animationDuration, 1.0);
-
+    
     // Interpolate coordinates
     CLLocationDegrees currentLatitude = _startCoordinate.latitude + progress * (_endCoordinate.latitude - _startCoordinate.latitude);
     CLLocationDegrees currentLongitude = _startCoordinate.longitude + progress * (_endCoordinate.longitude - _startCoordinate.longitude);
-
+    
     // Update annotation's coordinate
     CLLocationCoordinate2D currentCoordinate = CLLocationCoordinate2DMake(currentLatitude, currentLongitude);
     [self setValue:[NSValue valueWithMKCoordinate:currentCoordinate] forKey:@"coordinate"];
-
+    
     // Stop the animation when complete
     if (progress == 1.0) {
         [_displayLink invalidate];

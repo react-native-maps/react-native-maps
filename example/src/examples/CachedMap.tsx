@@ -18,7 +18,7 @@ class CachedMap extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      data: {...COUNTRIES},
+      data: [...COUNTRIES],
       cache: true,
     };
   }
@@ -30,7 +30,7 @@ class CachedMap extends React.Component<any, any> {
     });
     this.setState({
       cache: !this.state.cache,
-      data: {...COUNTRIES},
+      data: [...COUNTRIES],
     });
   }
 
