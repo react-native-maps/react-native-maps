@@ -459,6 +459,7 @@ MKMapCamera* camera = [[MKMapCamera alloc] init];                 \
 camera.centerCoordinate = center;                                 \
 camera.heading = newViewProps.name.heading;                       \
 camera.pitch = newViewProps.name.pitch;                           \
+camera.centerCoordinateDistance = newViewProps.name.altitude;     \
 _view.name = camera;                                              \
 }
 

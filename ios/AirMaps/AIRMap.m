@@ -599,7 +599,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 
 - (void)setInitialCamera:(MKMapCamera*)initialCamera {
-    if (!_initialCameraSet) {
+    _initialCamera = initialCamera;
+    if (!_initialCameraSet && _loadingStarted) {
         _initialCameraSet = YES;
         [self setCamera:initialCamera animated:NO];
     }
@@ -820,8 +821,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         }
     }
     _loadingStarted = YES;
-    // loadRegion
+    // display initialRegion/Camera
     [self setInitialRegion:_initialRegion];
+    [self setInitialCamera:_initialCamera];
 }
 
 - (void)finishLoading {
