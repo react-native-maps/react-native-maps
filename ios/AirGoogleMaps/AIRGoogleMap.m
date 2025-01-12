@@ -363,15 +363,15 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (NSDictionary *) getCameraDic {
-    MKMapCamera *camera = [self camera];
+    GMSCameraPosition *camera = [self camera];
     return @{
         @"center": @{
-            @"latitude": @(camera.centerCoordinate.latitude),
-            @"longitude": @(camera.centerCoordinate.longitude),
-        },
-        @"pitch": @(camera.pitch),
-        @"heading": @(camera.heading),
-        @"altitude": @(camera.altitude),
+                @"latitude": @(camera.target.latitude),
+                @"longitude": @(camera.target.longitude),
+                },
+        @"pitch": @(camera.viewingAngle),
+        @"heading": @(camera.bearing),
+        @"zoom": @(camera.zoom),
     };
 }
 
