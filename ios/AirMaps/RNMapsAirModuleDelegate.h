@@ -16,7 +16,7 @@
 - (void)takeSnapshotWithConfig:(NSDictionary *)config
                       success:(RCTPromiseResolveBlock) success error:(RCTPromiseRejectBlock) error;
 
-- (NSDictionary *) getCamera;
+- (NSDictionary *) getCameraDic;
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
 - (NSArray *) getMapBoundaries;
 - (NSDictionary *) getPointForCoordinates:(CLLocationCoordinate2D) location;

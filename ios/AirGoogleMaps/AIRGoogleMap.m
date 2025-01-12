@@ -362,6 +362,19 @@ id regionAsJSON(MKCoordinateRegion region) {
     ];
 }
 
+- (NSDictionary *) getCameraDic {
+    MKMapCamera *camera = [self camera];
+    return @{
+        @"center": @{
+            @"latitude": @(camera.centerCoordinate.latitude),
+            @"longitude": @(camera.centerCoordinate.longitude),
+        },
+        @"pitch": @(camera.pitch),
+        @"heading": @(camera.heading),
+        @"altitude": @(camera.altitude),
+    };
+}
+
 - (void)layoutSubviews {
   [super layoutSubviews];
   if(_didLayoutSubviews) return;
