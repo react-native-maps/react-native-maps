@@ -267,6 +267,9 @@ using namespace facebook::react;
 }
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
+    if (!_view){
+        [self prepareMarkerView];
+    }
     id<RCTComponent> paperView = [childComponentView getPaperViewFromChildComponentView];
     if (paperView){
         [_view insertReactSubview:paperView atIndex:index];
