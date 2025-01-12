@@ -51,6 +51,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     BOOL _initialRegionSet;
     BOOL _initialCameraSet;
     BOOL _initialized;
+    BOOL _loadingStarted;
 
     // Array to manually track RN subviews
     //
@@ -101,9 +102,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else {
         [super addSubview:view];
     }
-}
-- (void) didSetRegion {
-    _initialRegionSet = YES;
 }
 
 #pragma clang diagnostic push
@@ -572,12 +570,23 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     // Animate/move to new position
     [super setRegion:region animated:animated];
 }
+- (void) setRegion:(MKCoordinateRegion)region
+{
+    if (!CLLocationCoordinate2DIsValid(region.center)) {
+        return;
+    }
+    if (!CLLocationCoordinate2DIsValid(_initialRegion.center)) {
+        [self setInitialRegion:region];
+    }
+    [self setRegion:region animated:NO];
+}
 
 - (void)setInitialRegion:(MKCoordinateRegion)initialRegion {
     if (!CLLocationCoordinate2DIsValid(initialRegion.center)) {
         return;
     }
-    if (!_initialRegionSet) {
+    _initialRegion = initialRegion;
+    if (!_initialRegionSet && _loadingStarted) {
         _initialRegionSet = YES;
         [self setRegion:initialRegion animated:NO];
     }
@@ -810,6 +819,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
             self.loadingView.hidden = YES;
         }
     }
+    _loadingStarted = YES;
+    // loadRegion
+    [self setInitialRegion:_initialRegion];
 }
 
 - (void)finishLoading {
