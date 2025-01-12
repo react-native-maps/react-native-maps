@@ -445,7 +445,6 @@ newViewProps.name.longitudeDelta); \
 MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake( \
 newViewProps.name.latitude, newViewProps.name.longitude), span); \
 _view.name = region;                                                 \
-[_view didSetRegion];                                                 \
 }
 
 #define REMAP_MAPVIEW_CAMERA_PROP(name)                                    \
