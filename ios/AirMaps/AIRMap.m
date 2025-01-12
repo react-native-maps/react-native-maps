@@ -379,7 +379,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     return markersFrames;
 }
 
-- (NSDictionary *) getCamera {
+- (NSDictionary *) getCameraDic {
     MKMapCamera *camera = [self camera];
     return @{
         @"center": @{

@@ -37,7 +37,7 @@
           resolve:(RCTPromiseResolveBlock)resolve
            reject:(RCTPromiseRejectBlock)reject {
     [self executeWithMapView:tag success:^(id<RNMapsAirModuleDelegate> mapView) {
-        resolve([mapView getCamera]);
+        resolve([mapView getCameraDic]);
     } reject:reject];
 
 }
