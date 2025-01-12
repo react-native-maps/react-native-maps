@@ -44,7 +44,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) CGFloat maxDelta;
 @property (nonatomic, assign) UIEdgeInsets legalLabelInsets;
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
-@property (nonatomic, assign) MKMapCamera *initialCamera;
+@property (nonatomic, retain) MKMapCamera *initialCamera;
 @property (nonatomic, assign) CGFloat minZoom;
 @property (nonatomic, assign) CGFloat maxZoom;
 @property (nonatomic, assign) CGPoint compassOffset;
