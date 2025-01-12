@@ -525,7 +525,7 @@ using namespace facebook::react;
         [_view setMinZoom:newViewProps.minZoom maxZoom:newViewProps.maxZoom];
     }
 
-    REMAP_MAPVIEW_PROP(showsCompass)
+    [_view setShowsCompass:newViewProps.showsCompass];
     REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(zoomEnabled)
