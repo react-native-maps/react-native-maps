@@ -66,6 +66,24 @@ export type MapHeatmapProps = ViewProps & {
    * @platform Android: Supported
    */
   radius?: number;
+
+  /**
+   * The minimum zoom intensity used for normalizing intensities.
+   *
+   * @default 5
+   * @platform iOS: Google Maps only
+   * @platform Android: Not supported
+   */
+  minimumZoomIntensity?: number;
+
+  /**
+   * The maximum zoom intensity used for normalizing intensities.
+   *
+   * @default 10
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  maximumZoomIntensity?: number;
 };
 
 type NativeProps = Modify<

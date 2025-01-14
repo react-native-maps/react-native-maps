@@ -71,4 +71,9 @@ public class MapHeatmapManager extends ViewGroupManager<MapHeatmap> {
     public void setRadius(MapHeatmap view, int radius) {
         view.setRadius(radius);
     }
+
+    @ReactProp(name = "maximumZoomIntensity")
+    public void setMaximumZoomIntensity(MapHeatmap view, double maximumZoomIntensity) {
+        view.setMaximumZoomIntensity(maximumZoomIntensity);
+    }
 }

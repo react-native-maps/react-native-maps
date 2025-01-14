@@ -28,5 +28,7 @@ RCT_EXPORT_VIEW_PROPERTY(points, NSArray<NSDictionary *>)
 RCT_EXPORT_VIEW_PROPERTY(radius, NSUInteger)
 RCT_EXPORT_VIEW_PROPERTY(opacity, float)
 RCT_EXPORT_VIEW_PROPERTY(gradient, NSDictionary *)
+RCT_EXPORT_VIEW_PROPERTY(minimumZoomIntensity, float)
+RCT_EXPORT_VIEW_PROPERTY(maximumZoomIntensity, float)
 
 @end
