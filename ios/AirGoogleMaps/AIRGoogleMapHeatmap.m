@@ -40,12 +40,28 @@
 {
     _radius = radius;
     [self.heatmap setRadius:radius];
+    [self.heatmap clearTileCache];
 }
 
 - (void)setOpacity:(float)opacity
 {
     _opacity = opacity;
     [self.heatmap setOpacity:opacity];
+    [self.heatmap clearTileCache];
+}
+
+- (void)setMinimumZoomIntensity:(float)minimumZoomIntensity
+{
+    _minimumZoomIntensity = minimumZoomIntensity;
+    [self.heatmap setMinimumZoomIntensity:minimumZoomIntensity];
+    [self.heatmap clearTileCache];
+}
+
+- (void)setMaximumZoomIntensity:(float)maximumZoomIntensity
+{
+    _maximumZoomIntensity = maximumZoomIntensity;
+    [self.heatmap setMaximumZoomIntensity:maximumZoomIntensity];
+    [self.heatmap clearTileCache];
 }
 
 - (void)setGradient:(NSDictionary *)gradient
@@ -59,6 +75,7 @@
                                        colorMapSize:colorMapSize];
     _gradient = gmuGradient;
     [self.heatmap setGradient:gmuGradient];
+    [self.heatmap clearTileCache];
 }
 
 @end

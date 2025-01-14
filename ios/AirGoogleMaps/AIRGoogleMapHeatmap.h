@@ -13,5 +13,7 @@
 @property (nonatomic, assign) NSUInteger radius;
 @property (nonatomic, assign) float opacity;
 @property (nonatomic, assign) GMUGradient *gradient;
+@property (nonatomic, assign) float minimumZoomIntensity;
+@property (nonatomic, assign) float maximumZoomIntensity;
 
 @end

@@ -23,6 +23,7 @@ public class MapHeatmap extends MapFeature {
     private Gradient gradient;
     private Double opacity;
     private Integer radius;
+    private Double maximumZoomIntensity;
 
     public MapHeatmap(Context context) {
         super(context);
@@ -62,6 +63,16 @@ public class MapHeatmap extends MapFeature {
         this.radius = radius;
         if (heatmapTileProvider != null) {
             heatmapTileProvider.setRadius(radius);
+        }
+        if (heatmap != null) {
+            heatmap.clearTileCache();
+        }
+    }
+
+    public void setMaximumZoomIntensity(double maximumZoomIntensity) {
+        this.maximumZoomIntensity = maximumZoomIntensity;
+        if (heatmapTileProvider != null) {
+            heatmapTileProvider.setMaxIntensity(maximumZoomIntensity);
         }
         if (heatmap != null) {
             heatmap.clearTileCache();
