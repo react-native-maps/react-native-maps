@@ -100,6 +100,9 @@ public class MapHeatmap extends MapFeature {
             if (gradient != null) {
                 builder.gradient(gradient);
             }
+            if (maximumZoomIntensity != null) {
+                builder.maxIntensity(maximumZoomIntensity);
+            }
             heatmapTileProvider = builder.build();
         }
         options.tileProvider(heatmapTileProvider);
