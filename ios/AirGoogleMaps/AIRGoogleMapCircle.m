@@ -38,6 +38,9 @@
     if(_strokeWidth) {
       _circle.strokeWidth = _strokeWidth;
     }
+    if (_zIndex) {
+        _circle.zIndex = _zIndex;
+    }
 }
 - (void) didMoveToSuperview
 {

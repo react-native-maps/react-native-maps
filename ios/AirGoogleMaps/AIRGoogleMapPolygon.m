@@ -66,6 +66,9 @@
     if (_holes){
         [self setHoles:_holes];
     }
+    if (_zIndex){
+        _polygon.zIndex = _zIndex;
+    }
     [_polygon setMap:map];
 }
 
