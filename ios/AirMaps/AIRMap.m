@@ -600,9 +600,11 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (void)setInitialCamera:(MKMapCamera*)initialCamera {
     _initialCamera = initialCamera;
-    if (!_initialCameraSet && _loadingStarted) {
-        _initialCameraSet = YES;
-        [self setCamera:initialCamera animated:NO];
+    if (initialCamera){
+        if (!_initialCameraSet && _loadingStarted) {
+            _initialCameraSet = YES;
+            [self setCamera:initialCamera animated:NO];
+        }
     }
 }
 
