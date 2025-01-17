@@ -436,16 +436,23 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
 }
 
 #define REMAP_MAPVIEW_REGION_PROP(name)                                      \
-if (newViewProps.name.latitude != oldViewProps.name.latitude ||          \
-newViewProps.name.longitude != oldViewProps.name.longitude ||        \
-newViewProps.name.latitudeDelta != oldViewProps.name.latitudeDelta ||\
-newViewProps.name.longitudeDelta != oldViewProps.name.longitudeDelta) { \
-MKCoordinateSpan span = MKCoordinateSpanMake(newViewProps.name.latitudeDelta, \
-newViewProps.name.longitudeDelta); \
-MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake( \
-newViewProps.name.latitude, newViewProps.name.longitude), span); \
-_view.name = region;                                                 \
+if (!(newViewProps.name.latitude == 0 &&                                    \
+      newViewProps.name.longitude == 0 &&                                   \
+      newViewProps.name.latitudeDelta == 0 &&                               \
+      newViewProps.name.longitudeDelta == 0)) {                             \
+    if (newViewProps.name.latitude != oldViewProps.name.latitude ||         \
+        newViewProps.name.longitude != oldViewProps.name.longitude ||       \
+        newViewProps.name.latitudeDelta != oldViewProps.name.latitudeDelta ||\
+        newViewProps.name.longitudeDelta != oldViewProps.name.longitudeDelta) { \
+        MKCoordinateSpan span = MKCoordinateSpanMake(newViewProps.name.latitudeDelta, \
+                                                     newViewProps.name.longitudeDelta); \
+        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake( \
+                                                           newViewProps.name.latitude, \
+                                                           newViewProps.name.longitude), span); \
+        _view.name = region;                                                 \
+    }                                                                        \
 }
+
 
 #define REMAP_MAPVIEW_CAMERA_PROP(name)                                    \
 if (newViewProps.name.center.latitude != oldViewProps.name.center.latitude || \
