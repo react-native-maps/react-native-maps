@@ -520,6 +520,7 @@ using namespace facebook::react;
     REMAP_MAPVIEW_PROP(zoomTapEnabled)
     REMAP_MAPVIEW_PROP(scrollEnabled)
 
+    REMAP_MAPVIEW_STRING_PROP(kmlSrc)
 
     if (newViewProps.minZoom != oldViewProps.minZoom || newViewProps.maxZoom != oldViewProps.maxZoom){
         [_view setMinZoom:newViewProps.minZoom maxZoom:newViewProps.maxZoom];
