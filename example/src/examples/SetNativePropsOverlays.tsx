@@ -154,21 +154,23 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    paddingBottom: 10, // Ensure buttons are visible
   },
   map: {
     ...StyleSheet.absoluteFillObject,
   },
   bubble: {
-    flex: 1,
     backgroundColor: 'rgba(255,255,255,0.7)',
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 20,
+    zIndex: 11, // Ensure above other elements
   },
   buttonContainer: {
     flexDirection: 'row',
     marginVertical: 20,
     backgroundColor: 'transparent',
+    zIndex: 10, // Ensure above MapView
   },
 });
 
