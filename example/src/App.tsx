@@ -36,7 +36,6 @@ import WMSTiles from './examples/WMSTiles';
 import ZIndexMarkers from './examples/ZIndexMarkers';
 import StaticMap from './examples/StaticMap';
 import ThemeMap from './examples/ThemeMap';
-import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
@@ -167,7 +166,6 @@ export default class App extends React.Component<any, any> {
         [CustomTiles, 'Custom Tiles', true],
         [WMSTiles, 'WMS Tiles', true],
         [ZIndexMarkers, 'Position Markers with Z-index', true],
-        [MapStyle, 'Customize the style of the map', true],
         [LegalLabel, 'Reposition the legal label', true],
         [SetNativePropsOverlays, 'Update native props', true],
         [CustomOverlay, 'Custom Overlay Component', true],
