@@ -1087,6 +1087,51 @@ id regionAsJSON(MKCoordinateRegion region) {
   return _kmlSrc;
 }
 
+- (void) setKMLData:(NSData *) urlData {
+    GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
+    [parser parse];
+
+    NSUInteger index = 0;
+    NSMutableArray *markers = [[NSMutableArray alloc]init];
+
+    for (GMUPlacemark *place in parser.placemarks) {
+
+      CLLocationCoordinate2D location =((GMUPoint *) place.geometry).coordinate;
+
+      AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)[[AIRGoogleMapMarkerManager alloc] view];
+      if (!marker.bridge) {
+        marker.bridge = _bridge;
+      }
+      marker.identifier = place.title;
+      marker.coordinate = location;
+      marker.title = place.title;
+      marker.subtitle = place.snippet;
+      marker.pinColor = place.style.fillColor;
+      marker.imageSrc = [AIRGoogleMap GetIconUrl:place parser:parser];
+      marker.layer.backgroundColor = [UIColor clearColor].CGColor;
+      marker.layer.position = CGPointZero;
+
+      [self insertReactSubview:(UIView *) marker atIndex:index];
+
+      [markers addObject:@{@"id": marker.identifier,
+                           @"title": marker.title,
+                           @"description": marker.subtitle,
+                           @"coordinate": @{
+                               @"latitude": @(location.latitude),
+                               @"longitude": @(location.longitude)
+                               }
+                           }];
+
+      index++;
+    }
+
+    id event = @{@"markers": markers};
+    if (self.onKmlReady) self.onKmlReady(event);
+  #else
+      REQUIRES_GOOGLE_MAPS_UTILS();
+  #endif
+}
+
 - (void)setKmlSrc:(NSString *)kmlUrl {
 #ifdef HAVE_GOOGLE_MAPS_UTILS
 
@@ -1096,53 +1141,28 @@ id regionAsJSON(MKCoordinateRegion region) {
   NSData *urlData = nil;
 
   if ([url isFileURL]) {
-    urlData = [NSData dataWithContentsOfURL:url];
+      [self setKMLData:[NSData dataWithContentsOfURL:url]];
   } else {
-    urlData = [[NSFileManager defaultManager] contentsAtPath:kmlUrl];
+      __weak AIRGoogleMap *weakSelf = self;
+ 
+      NSURLSession *session = [NSURLSession sharedSession];
+      NSURLSessionDataTask *dataTask = [session dataTaskWithURL:url
+                                              completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+          if (error) {
+              NSLog(@"Error fetching data: %@", error.localizedDescription);
+              return;
+          } else {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  AIRGoogleMap *strongSelf = weakSelf;
+                  [strongSelf setKMLData:data];
+              });
+
+          }
+      }];
+      [dataTask resume];
   }
 
-  GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
-  [parser parse];
-
-  NSUInteger index = 0;
-  NSMutableArray *markers = [[NSMutableArray alloc]init];
-
-  for (GMUPlacemark *place in parser.placemarks) {
-
-    CLLocationCoordinate2D location =((GMUPoint *) place.geometry).coordinate;
-
-    AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)[[AIRGoogleMapMarkerManager alloc] view];
-    if (!marker.bridge) {
-      marker.bridge = _bridge;
-    }
-    marker.identifier = place.title;
-    marker.coordinate = location;
-    marker.title = place.title;
-    marker.subtitle = place.snippet;
-    marker.pinColor = place.style.fillColor;
-    marker.imageSrc = [AIRGoogleMap GetIconUrl:place parser:parser];
-    marker.layer.backgroundColor = [UIColor clearColor].CGColor;
-    marker.layer.position = CGPointZero;
-
-    [self insertReactSubview:(UIView *) marker atIndex:index];
-
-    [markers addObject:@{@"id": marker.identifier,
-                         @"title": marker.title,
-                         @"description": marker.subtitle,
-                         @"coordinate": @{
-                             @"latitude": @(location.latitude),
-                             @"longitude": @(location.longitude)
-                             }
-                         }];
-
-    index++;
-  }
-
-  id event = @{@"markers": markers};
-  if (self.onKmlReady) self.onKmlReady(event);
-#else
-    REQUIRES_GOOGLE_MAPS_UTILS();
-#endif
+  
 }
 
 
