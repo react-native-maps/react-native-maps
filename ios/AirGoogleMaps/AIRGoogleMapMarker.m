@@ -140,6 +140,9 @@ CGRect unionRect(CGRect a, CGRect b) {
     if (_onPress){
         [_realMarker setOnPress:_onPress];
     }
+    if (_zIndex){
+        [_realMarker setZIndex:_zIndex];
+    }
     [_realMarker setMap:map];
 }
 
