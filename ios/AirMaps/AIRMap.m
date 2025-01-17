@@ -49,6 +49,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 {
     UIView *_legalLabel;
     BOOL _initialRegionSet;
+    BOOL _initialRegionProvided;
+    BOOL _initialCameraProvided;
     BOOL _initialCameraSet;
     BOOL _initialized;
     BOOL _loadingStarted;
@@ -586,6 +588,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         return;
     }
     _initialRegion = initialRegion;
+    _initialRegionProvided = YES;
     if (!_initialRegionSet && _loadingStarted) {
         _initialRegionSet = YES;
         [self setRegion:initialRegion animated:NO];
@@ -600,6 +603,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (void)setInitialCamera:(MKMapCamera*)initialCamera {
     _initialCamera = initialCamera;
+    _initialCameraProvided = YES;
     if (initialCamera){
         if (!_initialCameraSet && _loadingStarted) {
             _initialCameraSet = YES;
@@ -824,8 +828,12 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
     _loadingStarted = YES;
     // display initialRegion/Camera
-    [self setInitialRegion:_initialRegion];
-    [self setInitialCamera:_initialCamera];
+    if (_initialRegionProvided){
+        [self setInitialRegion:_initialRegion];
+    }
+    if (_initialCameraProvided){
+        [self setInitialCamera:_initialCamera];
+    }
 }
 
 - (void)finishLoading {
