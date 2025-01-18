@@ -274,6 +274,35 @@ using namespace facebook::react;
               mapViewEventEmitter->onUserLocationChange(data);
           }
       };
+    
+    _view.onPoiClick =  [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+
+            NSDictionary* coordinateDict = dictionary[@"coordinate"];
+            NSDictionary* positionDict = dictionary[@"position"];
+
+            // Populate the OnMapPressCoordinate struct
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnPoiClickCoordinate coordinate = {
+                .latitude = [coordinateDict[@"latitude"] doubleValue],
+                .longitude = [coordinateDict[@"longitude"] doubleValue],
+            };
+            // Populate the OnMapDouplePressPosition struct
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnPoiClickPosition position = {
+                .x = [positionDict[@"x"] doubleValue],
+                .y = [positionDict[@"y"] doubleValue],
+            };
+
+
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnPoiClick data = {
+                .coordinate = coordinate,
+                .position = position,
+                .placeId = [dictionary[@"placeId"] UTF8String],
+                .name = [dictionary[@"name"] UTF8String],
+               };
+            mapViewEventEmitter->onPoiClick(data);
+        }
+    };
 
 
 
