@@ -70,6 +70,14 @@ using namespace facebook::react;
     [_view.map deselectAnnotation:_view animated:YES];
 
 }
+- (void) redraw
+{
+   // do nothing
+}
+- (void) redrawCallout
+{
+    // do nothing
+}
 
 - (void) setCoordinates:(double)latitude longitude:(double)longitude
 {
