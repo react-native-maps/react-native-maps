@@ -1,5 +1,6 @@
 package com.rnmaps.fabric;
 
+import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -30,7 +31,7 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
     }
 
     @Override
-    public void takeSnapshot(double tag, ReadableMap config, Promise promise) {
+    public void takeSnapshot(double tag, String config, Promise promise) {
 
     }
 
