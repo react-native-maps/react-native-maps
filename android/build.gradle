@@ -45,6 +45,13 @@ android {
     namespace "com.rnmaps.maps"
   }
 
+  if (rootProject.hasProperty("ndkPath")) {
+    ndkPath rootProject.ext.ndkPath
+  }
+  if (rootProject.hasProperty("ndkVersion")) {
+    ndkVersion rootProject.ext.ndkVersion
+  }
+
   compileSdk safeExtGet('compileSdkVersion', 34)
 
   defaultConfig {
@@ -52,13 +59,34 @@ android {
     targetSdkVersion safeExtGet('targetSdkVersion', 34)
 
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+
+    ndk {
+      abiFilters(*reactNativeArchitectures())
+    }
   }
   packagingOptions {
     excludes = [
             "META-INF",
             "META-INF/**",
-            ]
+            "**/libreact_render*.so",
+    ]
   }
+
+  sourceSets {
+    main {
+      if (isNewArchitectureEnabled()) {
+        java.srcDirs += [
+                "generated/java",
+                "generated/jni"
+        ]
+      }
+    }
+  }
+}
+
+def reactNativeArchitectures() {
+  def value = project.getProperties().get("reactNativeArchitectures")
+  return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
 repositories {
@@ -66,11 +94,7 @@ repositories {
   mavenCentral()
   maven {
     // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-    url "$rootDir/../node_modules/react-native/android"
-  }
-  maven {
-    // Android JSC is installed from npm
-    url "$rootDir/../node_modules/jsc-android/dist"
+    url "$projectDir/../node_modules/react-native/android"
   }
   google()
 }

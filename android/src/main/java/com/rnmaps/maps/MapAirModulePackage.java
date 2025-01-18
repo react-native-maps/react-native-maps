@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.rnmaps.fabric.NativeAirMapsModule;
-import com.rnmaps.fabric.NativeAirMapsModuleSpec;
+import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
 
 import java.util.HashMap;
 import java.util.Map;

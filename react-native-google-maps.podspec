@@ -12,13 +12,13 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "14"
 
   s.source       = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
-  s.source_files  = "ios/AirGoogleMaps/**/*.{h,m,mm}"
+  s.source_files = 'ios/AirGoogleMaps/**/*.{h,m,mm,swift}'
   s.resource_bundles = {
       'GoogleMapsPrivacy' => ['ios/AirGoogleMaps/Resources/GoogleMapsPrivacy.bundle']
   }
   s.compiler_flags = '-DHAVE_GOOGLE_MAPS=1 -DHAVE_GOOGLE_MAPS_UTILS=1'
   s.pod_target_xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps"' }
-
+  s.dependency 'react-native-maps-generated'
   s.dependency 'GoogleMaps', '8.4.0'
   s.dependency 'Google-Maps-iOS-Utils', '5.0.0'
   install_modules_dependencies(s)
