@@ -490,8 +490,8 @@ export class MapMarker extends React.Component<MapMarkerProps> {
       if (this.fabricMarker) {
         image = this.props.image;
       } else {
-        image = Image.resolveAssetSource(this.props.image) || {};
-        image = image.uri || this.props.image;
+        const resolvedImage = Image.resolveAssetSource(this.props.image) || {};
+        image = resolvedImage.uri || this.props.image;
       }
     }
 

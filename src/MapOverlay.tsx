@@ -87,16 +87,9 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
 
   render() {
     const {opacity = 1.0} = this.props;
-    let image: string | undefined;
-    if (
-      typeof this.props.image !== 'number' &&
-      this.props.image.uri?.startsWith('http')
-    ) {
-      image = this.props.image.uri;
-    } else {
-      const sourceAsset = Image.resolveAssetSource(this.props.image) || {};
-      image = sourceAsset.uri;
-    }
+    let image: any;
+    const resolvedImage = Image.resolveAssetSource(this.props.image) || {};
+    image = resolvedImage.uri || this.props.image;
 
     const AIRMapOverlay = this.getNativeComponent();
 
