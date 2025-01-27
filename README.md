@@ -22,6 +22,8 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
   This feature is currently under development. Fabric is enabled by default in React Native `0.76` and above, so **please disable it** for now.  
   Follow updates on this issue here: [react-native-maps/issues/5206](https://github.com/react-native-maps/react-native-maps/issues/5206).  
   Kindly refrain from opening duplicate tickets regarding this matter.
+  - [Disable Fabric for bare react native projects](https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here#opt-out)
+  - [Disable Fabric for expo projects](https://docs.expo.dev/guides/new-architecture/#disable-the-new-architecture-in-an-existing-project)
 
 ### Version Requirements:
 
