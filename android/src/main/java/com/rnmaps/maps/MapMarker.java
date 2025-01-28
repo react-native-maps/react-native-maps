@@ -81,7 +81,7 @@ public class MapMarker extends MapFeature {
   private final MapMarkerManager markerManager;
   private String imageUri;
 
-  private final DraweeHolder<?> logoHolder;
+  private DraweeHolder<?> logoHolder;
   private DataSource<CloseableReference<CloseableImage>> dataSource;
   private final ControllerListener<ImageInfo> mLogoControllerListener =
       new BaseControllerListener<ImageInfo>() {
@@ -123,16 +123,12 @@ public class MapMarker extends MapFeature {
     super(context);
     this.context = context;
     this.markerManager = markerManager;
-    logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
-    logoHolder.onAttach();
   }
 
   public MapMarker(Context context, MarkerOptions options, MapMarkerManager markerManager) {
     super(context);
     this.context = context;
     this.markerManager = markerManager;
-    logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
-    logoHolder.onAttach();
 
     position = options.getPosition();
     setAnchor(options.getAnchorU(), options.getAnchorV());
@@ -350,6 +346,10 @@ public class MapMarker extends MapFeature {
       update(true);
     } else if (uri.startsWith("http://") || uri.startsWith("https://") ||
         uri.startsWith("file://") || uri.startsWith("asset://") || uri.startsWith("data:")) {
+        if (logoHolder == null) {
+            logoHolder = DraweeHolder.create(createDraweeHierarchy(), context);
+            logoHolder.onAttach();
+         }
       ImageRequest imageRequest = ImageRequestBuilder
           .newBuilderWithSource(Uri.parse(uri))
           .build();
