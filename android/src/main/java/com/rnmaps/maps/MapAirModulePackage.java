@@ -7,17 +7,30 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
+import com.facebook.react.uimanager.ViewManager;
+import com.rnmaps.fabric.MapViewManager;
 import com.rnmaps.fabric.NativeAirMapsModule;
 import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MapAirModulePackage extends TurboReactPackage {
 
     @Override
+    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+        return Collections.singletonList(new MapViewManager(reactContext));
+    }
+
+
+    @Override
     public NativeModule getModule(String name, ReactApplicationContext reactContext) {
-        if (name.equals(NativeAirMapsModuleSpec.NAME)) {
+        if (MapViewManager.REACT_CLASS.equals(name)) {
+            return new MapViewManager(reactContext);
+        }
+        if (NativeAirMapsModuleSpec.NAME.equals(name)) {
             return new NativeAirMapsModule(reactContext);
         } else {
             return null;
