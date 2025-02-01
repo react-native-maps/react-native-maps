@@ -1050,6 +1050,7 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   ],
 });
 
-export default codegenNativeComponent<MapFabricNativeProps>('RNMapsMapView', {
-  excludedPlatforms: ['android'],
-}) as HostComponent<MapFabricNativeProps>;
+export default codegenNativeComponent<MapFabricNativeProps>(
+  'RNMapsMapView',
+  {},
+) as HostComponent<MapFabricNativeProps>;

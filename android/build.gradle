@@ -12,7 +12,7 @@ buildscript {
       mavenCentral()
     }
     dependencies {
-      classpath("com.android.tools.build:gradle:7.6.3")
+      classpath("com.android.tools.build:gradle:8.6.0")
     }
   }
 }
@@ -52,7 +52,7 @@ android {
     ndkVersion rootProject.ext.ndkVersion
   }
 
-  compileSdk safeExtGet('compileSdkVersion', 34)
+  compileSdk safeExtGet('compileSdkVersion', 35)
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 21)

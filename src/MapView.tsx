@@ -65,8 +65,10 @@ import GoogleMapView, {
 import createFabricMap, {FabricMapHandle} from './createFabricMap';
 
 const FabricMap = createFabricMap(FabricMapView, FabricCommands);
-const FabricGoogleMap = createFabricMap(GoogleMapView, GoogleCommands);
-
+var FabricGoogleMap: any = null;
+if (Platform.OS === 'ios') {
+  FabricGoogleMap = createFabricMap(GoogleMapView, GoogleCommands);
+}
 import AnimatedRegion from './AnimatedRegion';
 
 export const MAP_TYPES: MapTypes = {
@@ -1116,113 +1118,80 @@ class MapView extends React.Component<MapViewProps, State> {
   };
 
   render() {
-    if (Platform.OS === 'ios') {
-      // Define props specifically for MapFabricNativeProps
-      /* eslint-disable @typescript-eslint/no-unused-vars */
-      const {
-        onCalloutPress,
-        onIndoorBuildingFocused,
-        onKmlReady,
-        onLongPress,
-        onMarkerDeselect,
-        onMarkerPress,
-        onMarkerSelect,
-        onRegionChangeStart,
-        onRegionChange,
-        onRegionChangeComplete,
-        onPress,
-        minZoomLevel,
-        maxZoomLevel,
-        region,
-        provider,
-        children,
-        ...restProps
-      } = this.props;
+    // Define props specifically for MapFabricNativeProps
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    const {
+      onCalloutPress,
+      onIndoorBuildingFocused,
+      onKmlReady,
+      onLongPress,
+      onMarkerDeselect,
+      onMarkerPress,
+      onMarkerSelect,
+      onRegionChangeStart,
+      onRegionChange,
+      onRegionChangeComplete,
+      onPress,
+      minZoomLevel,
+      maxZoomLevel,
+      region,
+      provider,
+      children,
+      ...restProps
+    } = this.props;
 
-      /* eslint-enable @typescript-eslint/no-unused-vars */
-      const userInterfaceStyle = this.props.userInterfaceStyle || 'system';
-      const props: MapFabricNativeProps = {
-        onMapReady: this._onMapReady,
-        liteMode: this.props.liteMode,
-        googleMapId: this.props.googleMapId,
-        googleRenderer: this.props.googleRenderer,
-        onPress: this.handleMapPress,
-        onMarkerPress: this.handleMarkerPress,
-        onMarkerSelect: this.handleMarkerSelect,
-        onMarkerDeselect: this.handleMarkerDeselect,
-        userInterfaceStyle: userInterfaceStyle,
-        minZoom: minZoomLevel,
-        maxZoom: maxZoomLevel,
-        onRegionChange: this.handleRegionChange,
-        ...restProps,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
+    const userInterfaceStyle = this.props.userInterfaceStyle || 'system';
+    const props: MapFabricNativeProps = {
+      onMapReady: this._onMapReady,
+      liteMode: this.props.liteMode,
+      googleMapId: this.props.googleMapId,
+      googleRenderer: this.props.googleRenderer,
+      onPress: this.handleMapPress,
+      onMarkerPress: this.handleMarkerPress,
+      onMarkerSelect: this.handleMarkerSelect,
+      onMarkerDeselect: this.handleMarkerDeselect,
+      userInterfaceStyle: userInterfaceStyle,
+      minZoom: minZoomLevel,
+      maxZoom: maxZoomLevel,
+      onRegionChange: this.handleRegionChange,
+      ...restProps,
+    };
+    if (this.props.region) {
+      props.region = {
+        latitude: this.props.region.latitude,
+        longitude: this.props.region.longitude,
+        latitudeDelta: this.props.region.latitudeDelta,
+        longitudeDelta: this.props.region.longitudeDelta,
       };
-      if (this.props.region) {
-        props.region = {
-          latitude: this.props.region.latitude,
-          longitude: this.props.region.longitude,
-          latitudeDelta: this.props.region.latitudeDelta,
-          longitudeDelta: this.props.region.longitudeDelta,
-        };
-      }
+    }
 
-      if (this.state.isReady) {
-        if (props.onPanDrag) {
-          props.handlePanDrag = !!props.onPanDrag;
-        }
-      } else {
-        props.style = this.props.style;
-        props.initialCamera = this.props.initialCamera;
-        props.onLayout = this.props.onLayout;
-      }
-
-      const childrenNodes = this.state.isReady ? children : null;
-
-      if (provider === 'google') {
-        return (
-          <ProviderContext.Provider value={this.props.provider}>
-            <FabricGoogleMap {...props} ref={this.fabricMap}>
-              {childrenNodes}
-            </FabricGoogleMap>
-          </ProviderContext.Provider>
-        );
-      } else {
-        return (
-          <ProviderContext.Provider value={this.props.provider}>
-            <FabricMap {...props} ref={this.fabricMap}>
-              {childrenNodes}
-            </FabricMap>
-          </ProviderContext.Provider>
-        );
+    if (this.state.isReady) {
+      if (props.onPanDrag) {
+        props.handlePanDrag = !!props.onPanDrag;
       }
     } else {
-      const AIRMap = getNativeMapComponent(this.props.provider);
+      props.style = this.props.style;
+      props.initialCamera = this.props.initialCamera;
+      props.onLayout = this.props.onLayout;
+    }
 
-      // Define props specifically for NativeProps
-      const props: NativeProps = {
-        region: null,
-        initialRegion: null,
-        onChange: this._onChange,
-        onMapReady: this._onMapReady,
-        liteMode: this.props.liteMode,
-        googleMapId: this.props.googleMapId,
-        googleRenderer: this.props.googleRenderer,
-        ref: this.map,
-        customMapStyleString: this.props.customMapStyle
-          ? JSON.stringify(this.props.customMapStyle)
-          : undefined,
-        ...this.props,
-      };
+    const childrenNodes = this.state.isReady ? children : null;
 
-      if (!this.state.isReady) {
-        props.style = this.props.style;
-        props.initialCamera = this.props.initialCamera;
-        props.onLayout = this.props.onLayout;
-      }
-
-      // Render AIRMap with NativeProps
+    if (provider === 'google' && Platform.OS === 'ios') {
       return (
         <ProviderContext.Provider value={this.props.provider}>
-          <AIRMap {...props} />
+          <FabricGoogleMap {...props} ref={this.fabricMap}>
+            {childrenNodes}
+          </FabricGoogleMap>
+        </ProviderContext.Provider>
+      );
+    } else {
+      return (
+        <ProviderContext.Provider value={this.props.provider}>
+          <FabricMap {...props} ref={this.fabricMap}>
+            {childrenNodes}
+          </FabricMap>
         </ProviderContext.Provider>
       );
     }
@@ -1246,8 +1215,6 @@ if (Platform.OS === 'android') {
         'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
       );
 }
-const getNativeMapComponent = (provider: Provider) =>
-  airMaps[provider || 'default'];
 
 export const AnimatedMapView = RNAnimated.createAnimatedComponent(MapView);
 
