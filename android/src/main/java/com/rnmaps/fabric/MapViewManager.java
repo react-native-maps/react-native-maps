@@ -1,6 +1,8 @@
 package com.rnmaps.fabric;
 
 
+import static com.rnmaps.maps.MapManager.MY_LOCATION_PRIORITY;
+
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -23,7 +25,7 @@ import java.util.Map;
 public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsMapViewManagerInterface<MapView> {
 
 
-    public MapViewManager(ReactApplicationContext context){
+    public MapViewManager(ReactApplicationContext context) {
         super(context);
     }
     private GoogleMapOptions options;
@@ -72,12 +74,12 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setCompassOffset(MapView view, @Nullable ReadableMap value) {
-
+        // not supported
     }
 
     @Override
     public void setFollowsUserLocation(MapView view, boolean value) {
-
+        // not supported
     }
 
     @Override
@@ -102,7 +104,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setLegalLabelInsets(MapView view, @Nullable ReadableMap value) {
-
+        // not supported
     }
 
     @Override
@@ -122,22 +124,47 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setLoadingBackgroundColor(MapView view, @Nullable Integer value) {
-
+        view.setLoadingBackgroundColor(value);
     }
 
     @Override
     public void setLoadingEnabled(MapView view, boolean value) {
-
+        view.setLoadingEnabled(value);
     }
 
     @Override
     public void setLoadingIndicatorColor(MapView view, @Nullable Integer value) {
-
+        view.setLoadingIndicatorColor(value);
     }
 
     @Override
-    public void setMapPadding(MapView view, @Nullable ReadableMap value) {
+    public void setMapPadding(MapView view, @Nullable ReadableMap padding) {
+        int left = 0;
+        int top = 0;
+        int right = 0;
+        int bottom = 0;
+        double density = (double) view.getResources().getDisplayMetrics().density;
 
+        if (padding != null) {
+            if (padding.hasKey("left")) {
+                left = (int) (padding.getDouble("left") * density);
+            }
+
+            if (padding.hasKey("top")) {
+                top = (int) (padding.getDouble("top") * density);
+            }
+
+            if (padding.hasKey("right")) {
+                right = (int) (padding.getDouble("right") * density);
+            }
+
+            if (padding.hasKey("bottom")) {
+                bottom = (int) (padding.getDouble("bottom") * density);
+            }
+        }
+
+        view.applyBaseMapPadding(left, top, right, bottom);
+        view.map.setPadding(left, top, right, bottom);
     }
 
     @Override
@@ -148,47 +175,47 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     @Override
     public void setMapType(MapView view, @Nullable String value) {
         //hybrid | none | satellite | standard | terrain
-        if ("hybrid".equals(value)){
+        if ("hybrid".equals(value)) {
             view.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        } else if ("none".equals(value)){
+        } else if ("none".equals(value)) {
             view.setMapType(GoogleMap.MAP_TYPE_NONE);
-        } else if ("satellite".equals(value)){
+        } else if ("satellite".equals(value)) {
             view.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        } else if ("standard".equals(value)){
+        } else if ("standard".equals(value)) {
             view.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        } else if ("terrain".equals(value)){
+        } else if ("terrain".equals(value)) {
             view.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         }
     }
 
     @Override
     public void setMaxDelta(MapView view, double value) {
-
+        // not supported
     }
 
     @Override
     public void setMaxZoom(MapView view, float value) {
-
+        view.setMaxZoomLevel(value);
     }
 
     @Override
     public void setMinDelta(MapView view, double value) {
-
+        // not supported
     }
 
     @Override
     public void setMinZoom(MapView view, float value) {
-
+        view.setMinZoomLevel(value);
     }
 
     @Override
     public void setMoveOnMarkerPress(MapView view, boolean value) {
-
+            view.setMoveOnMarkerPress(value);
     }
 
     @Override
     public void setHandlePanDrag(MapView view, boolean value) {
-
+        view.setHandlePanDrag(value);
     }
 
     @Override
@@ -198,27 +225,27 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setPitchEnabled(MapView view, boolean value) {
-
+        view.setPitchEnabled(value);
     }
 
     @Override
     public void setRegion(MapView view, @Nullable ReadableMap value) {
-
+        view.setRegion(value);
     }
 
     @Override
     public void setRotateEnabled(MapView view, boolean value) {
-
+        view.setRotateEnabled(value);
     }
 
     @Override
     public void setScrollDuringRotateOrZoomEnabled(MapView view, boolean value) {
-
+        view.setScrollDuringRotateOrZoomEnabled(value);
     }
 
     @Override
     public void setScrollEnabled(MapView view, boolean value) {
-
+        view.setScrollEnabled(value);
     }
 
     @Override
@@ -228,92 +255,92 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setShowsCompass(MapView view, boolean value) {
-
+        view.setShowsCompass(value);
     }
 
     @Override
     public void setShowsIndoorLevelPicker(MapView view, boolean value) {
-
+        view.setShowsIndoorLevelPicker(value);
     }
 
     @Override
     public void setShowsIndoors(MapView view, boolean value) {
-
+        view.setShowIndoors(value);
     }
 
     @Override
     public void setShowsMyLocationButton(MapView view, boolean value) {
-
+        view.setShowsMyLocationButton(value);
     }
 
     @Override
     public void setShowsScale(MapView view, boolean value) {
-
+        // not supported
     }
 
     @Override
     public void setShowsUserLocation(MapView view, boolean value) {
-
+        view.setShowsUserLocation(value);
     }
 
     @Override
     public void setTintColor(MapView view, @Nullable Integer value) {
-
+        // not supported
     }
 
     @Override
     public void setToolbarEnabled(MapView view, boolean value) {
-
+        view.setToolbarEnabled(value);
     }
 
     @Override
     public void setUserInterfaceStyle(MapView view, @Nullable String value) {
-
+        // not supported
     }
 
     @Override
     public void setUserLocationAnnotationTitle(MapView view, @Nullable String value) {
-
+        // not supported
     }
 
     @Override
     public void setUserLocationCalloutEnabled(MapView view, boolean value) {
-
+        // not supported
     }
 
     @Override
     public void setUserLocationFastestInterval(MapView view, int value) {
-
+        view.setUserLocationFastestInterval(value);
     }
 
     @Override
     public void setUserLocationPriority(MapView view, @Nullable String value) {
-
+        view.setUserLocationPriority(MY_LOCATION_PRIORITY.get(value));
     }
 
     @Override
     public void setUserLocationUpdateInterval(MapView view, int value) {
-
+        view.setUserLocationUpdateInterval(value);
     }
 
     @Override
     public void setZoomControlEnabled(MapView view, boolean value) {
-
+        view.setZoomControlEnabled(value);
     }
 
     @Override
     public void setZoomEnabled(MapView view, boolean value) {
-
+        view.setZoomEnabled(value);
     }
 
     @Override
     public void setZoomTapEnabled(MapView view, boolean value) {
-
+        // not supported
     }
 
     @Override
     public void setCameraZoomRange(MapView view, @Nullable ReadableMap value) {
-
+        // not supported
     }
 
     @Override
