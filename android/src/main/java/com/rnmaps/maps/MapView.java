@@ -37,7 +37,6 @@ import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerHelper;
-import com.facebook.react.uimanager.common.UIManagerType;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.CameraUpdate;
@@ -69,7 +68,6 @@ import com.google.maps.android.collections.PolylineManager;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
-import com.google.maps.android.data.kml.KmlStyle;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -141,6 +139,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   private final ViewAttacherGroup attacherGroup;
   private LatLng tapLocation;
+  private Float maxZoomLevel;
+  private Float minZoomLevel;
+  private Boolean pitchEnabled;
+  private Boolean showsCompass;
+  private Boolean rotateEnabled;
+  private Boolean zoomEnabled;
+  private Boolean zoomControlEnabled;
+  private Boolean setShowBuildings;
+  private Boolean showsIndoorLevelPicker;
+  private Boolean showIndoors;
+  private Boolean scrollEnabled;
+  private Boolean scrollDuringRotateOrZoomEnabled;
 
   private static boolean contextHasBug(Context context) {
     return context == null ||
@@ -260,6 +270,42 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       return;
     }
     this.map = map;
+    if (maxZoomLevel != null){
+      setMaxZoomLevel(maxZoomLevel);
+    }
+    if (minZoomLevel != null){
+      setMinZoomLevel(minZoomLevel);
+    }
+    if (pitchEnabled != null){
+      setPitchEnabled(pitchEnabled);
+    }
+    if (showsCompass != null){
+      setShowsCompass(showsCompass);
+    }
+    if (rotateEnabled != null){
+      setRotateEnabled(rotateEnabled);
+    }
+    if (zoomEnabled != null){
+      setZoomEnabled(zoomEnabled);
+    }
+    if (zoomControlEnabled != null){
+      setZoomControlEnabled(zoomControlEnabled);
+    }
+    if (setShowBuildings != null){
+      setShowBuildings(setShowBuildings);
+    }
+    if (showsIndoorLevelPicker != null){
+      setShowsIndoorLevelPicker(showsIndoorLevelPicker);
+    }
+    if (showIndoors != null){
+      setShowIndoors(showIndoors);
+    }
+    if (scrollEnabled != null){
+      setScrollEnabled(scrollEnabled);
+    }
+    if (scrollDuringRotateOrZoomEnabled != null){
+      setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
+    }
 
     markerManager = new MarkerManager(map);
     markerCollection = markerManager.newCollection();
@@ -748,7 +794,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
     map.setOnPoiClickListener(poiClickEnabled ? this : null);
   }
 
-  public void enableMapLoading(boolean loadingEnabled) {
+  public void setLoadingEnabled(boolean loadingEnabled) {
     if (loadingEnabled && !this.isMapLoaded) {
       this.getMapLoadingLayoutView().setVisibility(View.VISIBLE);
     }
@@ -757,6 +803,79 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   public void setMoveOnMarkerPress(boolean moveOnPress) {
     this.moveOnMarkerPress = moveOnPress;
   }
+  public void setMaxZoomLevel(float maxZoomLevel){
+    this.maxZoomLevel = maxZoomLevel;
+    if (map != null) {
+      map.setMaxZoomPreference(maxZoomLevel);
+    }
+  }
+  public void setMinZoomLevel(float minZoomLevel){
+    this.minZoomLevel = minZoomLevel;
+    if (map != null) {
+      map.setMinZoomPreference(minZoomLevel);
+    }
+  }
+  public void setPitchEnabled(boolean pitchEnabled){
+    this.pitchEnabled = pitchEnabled;
+    if (map != null) {
+      map.getUiSettings().setTiltGesturesEnabled(pitchEnabled);
+    }
+  }
+  public void setShowsCompass(boolean showsCompass){
+    this.showsCompass = showsCompass;
+    if (map != null) {
+      map.getUiSettings().setCompassEnabled(showsCompass);
+    }
+  }
+  public void setRotateEnabled(boolean rotateEnabled){
+    this.rotateEnabled = rotateEnabled;
+    if (map != null) {
+      map.getUiSettings().setRotateGesturesEnabled(rotateEnabled);
+    }
+  }
+  public void setZoomEnabled(boolean zoomEnabled){
+    this.zoomEnabled = zoomEnabled;
+    if (map != null) {
+      map.getUiSettings().setZoomGesturesEnabled(zoomEnabled);
+    }
+  }
+  public void setZoomControlEnabled(boolean zoomControlEnabled){
+    this.zoomControlEnabled = zoomControlEnabled;
+    if (map != null) {
+      map.getUiSettings().setZoomControlsEnabled(zoomControlEnabled);
+    }
+  }
+  public void setScrollDuringRotateOrZoomEnabled(boolean scrollDuringRotateOrZoomEnabled){
+    this.scrollDuringRotateOrZoomEnabled = scrollDuringRotateOrZoomEnabled;
+    if (map != null) {
+      map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollDuringRotateOrZoomEnabled);
+    }
+  }
+  public void setScrollEnabled(boolean scrollEnabled){
+    this.scrollEnabled = scrollEnabled;
+    if (map != null) {
+      map.getUiSettings().setScrollGesturesEnabled(scrollEnabled);
+    }
+  }
+  public void setShowIndoors(boolean showIndoors){
+    this.showIndoors = showIndoors;
+    if (map != null) {
+      map.setIndoorEnabled(showIndoors);
+    }
+  }
+  public void setShowsIndoorLevelPicker(boolean showsIndoorLevelPicker) {
+    this.showsIndoorLevelPicker = showsIndoorLevelPicker;
+    if (map != null) {
+      map.getUiSettings().setIndoorLevelPickerEnabled(showsIndoorLevelPicker);
+    }
+  }
+  public void setShowBuildings(boolean showBuildings) {
+    this.setShowBuildings = showBuildings;
+    if (map != null) {
+      map.setBuildingsEnabled(showBuildings);
+    }
+  }
+
 
   public void setLoadingBackgroundColor(Integer loadingBackgroundColor) {
     this.loadingBackgroundColor = loadingBackgroundColor;
