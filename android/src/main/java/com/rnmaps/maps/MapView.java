@@ -392,8 +392,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       public void onMapLongClick(@NonNull LatLng point) {
         WritableMap event = makeClickEventData(point);
         event.putString("action", "long-press");
-        // todo: use Fabric events
-       // manager.pushEvent(context, view, "onLongPress", makeClickEventData(point));
+        dispatchEvent(event, OnLongPressEvent::new);
       }
     });
 
@@ -521,8 +520,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       event = makeClickEventData(selectedMarker.getPosition());
       event.putString("action", "marker-deselect");
       event.putString("id", selectedMarker.getIdentifier());
-      // todo: use Fabric events
-   //   manager.pushEvent(context, this, "onMarkerDeselect", event);
+      dispatchEvent(event, OnMarkerDeselectEvent::new);
     }
 
     if (target != null) {
@@ -535,8 +533,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       event = makeClickEventData(target.getPosition());
       event.putString("action", "marker-select");
       event.putString("id", target.getIdentifier());
-      // todo: use Fabric events
-     // manager.pushEvent(context, this, "onMarkerSelect", event);
+      dispatchEvent(event, OnMarkerSelectEvent::new);
     }
 
      selectedMarker = target;
@@ -549,10 +546,17 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
 
   public static Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
-    return MapBuilder.of(
-            OnMarkerPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerPressEvent.EVENT_NAME),
-            OnPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPressEvent.EVENT_NAME)
-    );
+    MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
+    builder.put(OnMarkerPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerPressEvent.EVENT_NAME));
+    builder.put(OnPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPressEvent.EVENT_NAME));
+    builder.put(OnMarkerSelectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerSelectEvent.EVENT_NAME));
+    builder.put(OnMarkerDeselectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDeselectEvent.EVENT_NAME));
+    builder.put(OnMarkerDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEvent.EVENT_NAME));
+    builder.put(OnMarkerDragStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragStartEvent.EVENT_NAME));
+    builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
+    builder.put(OnPoiClickEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPoiClickEvent.EVENT_NAME));
+    builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnLongPressEvent.EVENT_NAME));
+    return builder.build();
   }
 
   public static Map<String, Object> getExportedCustomDirectEventTypeConstants() {
@@ -1237,7 +1241,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   public void onMarkerDragStart(Marker marker) {
     WritableMap event = makeClickEventData(marker.getPosition());
     // todo: use Fabric events
-   // manager.pushEvent(context, this, "onMarkerDragStart", event);
+    dispatchEvent(event, OnMarkerDragStartEvent::new);
 
     MapMarker markerView = getMarkerMap(marker);
     event = makeClickEventData(marker.getPosition());
@@ -1248,8 +1252,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   @Override
   public void onMarkerDrag(Marker marker) {
     WritableMap event = makeClickEventData(marker.getPosition());
-    // todo: use Fabric events
-    /// manager.pushEvent(context, this, "onMarkerDrag", event);
+    dispatchEvent(event, OnMarkerDragEvent::new);
 
     MapMarker markerView = getMarkerMap(marker);
     event = makeClickEventData(marker.getPosition());
@@ -1260,8 +1263,8 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   @Override
   public void onMarkerDragEnd(Marker marker) {
     WritableMap event = makeClickEventData(marker.getPosition());
-    // todo: use Fabric events
-   // manager.pushEvent(context, this, "onMarkerDragEnd", event);
+    dispatchEvent(event, OnMarkerDragEndEvent::new);
+
 
     MapMarker markerView = getMarkerMap(marker);
     event = makeClickEventData(marker.getPosition());
@@ -1275,8 +1278,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
     event.putString("placeId", poi.placeId);
     event.putString("name", poi.name);
-    // todo: use Fabric events
-    // manager.pushEvent(context, this, "onPoiClick", event);
+    dispatchEvent(event, OnPoiClickEvent::new);
   }
 
   private ProgressBar getMapLoadingProgressBar() {
