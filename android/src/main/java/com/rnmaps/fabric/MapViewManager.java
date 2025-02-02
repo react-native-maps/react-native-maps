@@ -1,24 +1,22 @@
 package com.rnmaps.fabric;
 
 
+import android.view.View;
+
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerDelegate;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.rnmaps.maps.MapView;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @ReactModule(name = MapViewManager.REACT_CLASS)
@@ -140,6 +138,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     @Override
     public void setMapPadding(MapView view, @Nullable ReadableMap value) {
 
+    }
+
+    @Override
+    public void addView(MapView parent, View child, int index) {
+        parent.addFeature(child, index);
     }
 
     @Override

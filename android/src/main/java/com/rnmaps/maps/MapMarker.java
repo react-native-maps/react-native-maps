@@ -32,13 +32,27 @@ import com.facebook.imagepipeline.image.CloseableStaticBitmap;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.events.Event;
+import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.collections.MarkerManager;
+import com.rnmaps.fabric.event.OnDeselectEvent;
+import com.rnmaps.fabric.event.OnDragEndEvent;
+import com.rnmaps.fabric.event.OnDragEvent;
+import com.rnmaps.fabric.event.OnDragStartEvent;
+import com.rnmaps.fabric.event.OnPressEvent;
+import com.rnmaps.fabric.event.OnSelectEvent;
+
+import java.util.Map;
 
 public class MapMarker extends MapFeature {
 
@@ -155,7 +169,10 @@ public class MapMarker extends MapFeature {
   }
 
   public void setCoordinate(ReadableMap coordinate) {
-    position = new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude"));
+    setCoordinate(new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
+  }
+  public void setCoordinate(LatLng position){
+    this.position = position;
     if (marker != null) {
       marker.setPosition(position);
     }
@@ -618,8 +635,43 @@ public class MapMarker extends MapFeature {
         getContext().getPackageName());
   }
 
+  @FunctionalInterface
+  public interface EventCreator<T extends Event> {
+    T create(int surfaceId, int viewId, WritableMap payload);
+  }
+  private <T extends Event> void dispatchEvent(WritableMap payload, MapView.EventCreator<T> creator) {
+    // Cast context to ReactContext
+    ReactContext reactContext = (ReactContext) context;
+
+    // Get the event dispatcher
+    EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, getId());
+
+    // If there is a dispatcher, create and dispatch the event
+    if (eventDispatcher != null) {
+      int surfaceId = UIManagerHelper.getSurfaceId(reactContext);
+      T event = creator.create(surfaceId, getId(), payload);
+      eventDispatcher.dispatchEvent(event);
+    }
+  }
+
   private BitmapDescriptor getBitmapDescriptorByName(String name) {
     return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
+  }
+
+  public static Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
+    MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
+    builder.put(OnSelectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnSelectEvent.EVENT_NAME));
+    builder.put(OnDeselectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDeselectEvent.EVENT_NAME));
+    builder.put(OnPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPressEvent.EVENT_NAME));
+    return builder.build();
+  }
+
+  public static Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+    return MapBuilder.of(
+            OnDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDragEvent.EVENT_NAME),
+            OnDragStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDragStartEvent.EVENT_NAME),
+            OnDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDragEndEvent.EVENT_NAME)
+    );
   }
 
 }
