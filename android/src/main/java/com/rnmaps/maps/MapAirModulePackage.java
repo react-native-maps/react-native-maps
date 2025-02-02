@@ -9,10 +9,10 @@ import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.uimanager.ViewManager;
 import com.rnmaps.fabric.MapViewManager;
+import com.rnmaps.fabric.MarkerManager;
 import com.rnmaps.fabric.NativeAirMapsModule;
 import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +21,15 @@ public class MapAirModulePackage extends TurboReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.singletonList(new MapViewManager(reactContext));
+        return List.of(new MapViewManager(reactContext), new MarkerManager(reactContext));
     }
 
 
     @Override
     public NativeModule getModule(String name, ReactApplicationContext reactContext) {
+        if (MarkerManager.REACT_CLASS.equals(name)) {
+            return new MarkerManager(reactContext);
+        }
         if (MapViewManager.REACT_CLASS.equals(name)) {
             return new MapViewManager(reactContext);
         }

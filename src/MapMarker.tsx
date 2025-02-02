@@ -475,7 +475,9 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     const {stopPropagation = false} = this.props;
     if (this.fabricMarker === undefined) {
       const provider = this.context;
-      this.fabricMarker = provider !== PROVIDER_GOOGLE && Platform.OS === 'ios';
+      this.fabricMarker = !(
+        Platform.OS === 'ios' && provider !== PROVIDER_GOOGLE
+      );
     }
 
     let icon;

@@ -72,8 +72,7 @@ export default function decorateMapComponent<Type extends Component>(
       const provider = this.context;
       if (
         componentName === 'Marker' &&
-        provider !== PROVIDER_GOOGLE &&
-        Platform.OS === 'ios'
+        (Platform.OS !== 'ios' || provider !== PROVIDER_GOOGLE)
       ) {
         // @ts-ignore
         return FabricMarker;
