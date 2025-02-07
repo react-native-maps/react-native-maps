@@ -1,15 +1,17 @@
 package com.rnmaps.fabric;
 
 
-import static com.rnmaps.maps.MapManager.MY_LOCATION_PRIORITY;
-
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
@@ -17,23 +19,31 @@ import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerDelegate;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.rnmaps.maps.MapView;
+import com.rnmaps.maps.SizeReportingShadowNode;
 
+import java.util.List;
 import java.util.Map;
 
 @ReactModule(name = MapViewManager.REACT_CLASS)
-public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsMapViewManagerInterface<MapView> {
+public class MapViewManager extends ViewGroupManager<MapViewWrapper> implements RNMapsMapViewManagerInterface<MapViewWrapper> {
+
+    private GoogleMapOptions options;
+    private boolean rendererInitialized = false;
+    private final RNMapsMapViewManagerDelegate<MapViewWrapper, MapViewManager> delegate =
+            new RNMapsMapViewManagerDelegate<>(this);
 
 
     public MapViewManager(ReactApplicationContext context) {
         super(context);
+        options = new GoogleMapOptions();
     }
-    private GoogleMapOptions options;
-    private final RNMapsMapViewManagerDelegate<MapView, MapViewManager> delegate =
-            new RNMapsMapViewManagerDelegate<>(this);
+
 
     @Override
-    public ViewManagerDelegate<MapView> getDelegate() {
+    public ViewManagerDelegate<MapViewWrapper> getDelegate() {
         return delegate;
     }
 
@@ -43,8 +53,9 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
-    public MapView createViewInstance(ThemedReactContext context) {
-        return new MapView(context, options);
+    public MapViewWrapper createViewInstance(ThemedReactContext context) {
+        Log.e(MapViewManager.class.getName(), "createViewInstance");
+        return new MapViewWrapper(context);
     }
 
 
@@ -56,6 +67,14 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         return MapView.getExportedCustomBubblingEventTypeConstants();
     }
 
+
+    @Override
+    public LayoutShadowNode createShadowNodeInstance() {
+        // A custom shadow node is needed in order to pass back the width/height of the map to the
+        // view manager so that it can start applying camera moves with bounds.
+        return new SizeReportingShadowNode();
+    }
+
     @Nullable
     @Override
     public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
@@ -63,313 +82,396 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
-    public void setCacheEnabled(MapView view, boolean value) {
+    public void setCacheEnabled(MapViewWrapper view, boolean value) {
         view.setCacheEnabled(value);
     }
 
     @Override
-    public void setCamera(MapView view, @Nullable ReadableMap value) {
+    public void setCamera(MapViewWrapper view, @Nullable ReadableMap value) {
         view.setCamera(value);
     }
 
     @Override
-    public void setCompassOffset(MapView view, @Nullable ReadableMap value) {
+    public void setCompassOffset(MapViewWrapper view, @Nullable ReadableMap value) {
         // not supported
     }
 
     @Override
-    public void setFollowsUserLocation(MapView view, boolean value) {
+    public void setFollowsUserLocation(MapViewWrapper view, boolean value) {
         // not supported
     }
 
     @Override
-    public void setPoiClickEnabled(MapView view, boolean value) {
+    public void setPoiClickEnabled(MapViewWrapper view, boolean value) {
         view.setPoiClickEnabled(value);
     }
 
     @Override
-    public void setInitialCamera(MapView view, @Nullable ReadableMap value) {
-        view.setInitialCamera(value);
+    public void setInitialCamera(MapViewWrapper view, @Nullable ReadableMap value) {
+        CameraPosition camera = MapView.cameraPositionFromMap(value);
+        if (camera != null){
+            options.camera(camera);
+            view.setInitialCameraSet(true);
+        }
     }
 
     @Override
-    public void setInitialRegion(MapView view, @Nullable ReadableMap value) {
+    protected MapViewWrapper recycleView(@NonNull ThemedReactContext var1, @NonNull MapViewWrapper wrapper){
+        wrapper.prepareToRecycleView();
+        return wrapper;
+    }
+
+
+    @Override
+    public void setInitialRegion(MapViewWrapper view, @Nullable ReadableMap value) {
         view.setInitialRegion(value);
     }
 
     @Override
-    public void setKmlSrc(MapView view, @Nullable String value) {
+    public void setKmlSrc(MapViewWrapper view, @Nullable String value) {
         view.setKmlSrc(value);
     }
 
     @Override
-    public void setLegalLabelInsets(MapView view, @Nullable ReadableMap value) {
+    public void setLegalLabelInsets(MapViewWrapper view, @Nullable ReadableMap value) {
         // not supported
     }
 
     @Override
-    public void setLiteMode(MapView view, boolean value) {
+    public void setLiteMode(MapViewWrapper view, boolean value) {
+        options.liteMode(value);
+    }
+
+    @Override
+    public void setGoogleMapId(MapViewWrapper view, @Nullable String value) {
+        options.mapId(value);
+    }
+
+    @Override
+    public void setGoogleRenderer(MapViewWrapper view, @Nullable String value) {
+        if (!rendererInitialized) {
+            MapsInitializer.Renderer renderer =  MapsInitializer.Renderer.LATEST;
+            if ("LEGACY".equals(value)){
+                renderer = MapsInitializer.Renderer.LEGACY;
+            }
+            MapsInitializer.initialize(getReactApplicationContext(), renderer, r -> Log.d("AirMapRenderer", "Init with renderer: " + r));
+            rendererInitialized = true;
+        }
 
     }
 
     @Override
-    public void setGoogleMapId(MapView view, @Nullable String value) {
-
-    }
-
-    @Override
-    public void setGoogleRenderer(MapView view, @Nullable String value) {
-
-    }
-
-    @Override
-    public void setLoadingBackgroundColor(MapView view, @Nullable Integer value) {
+    public void setLoadingBackgroundColor(MapViewWrapper view, @Nullable Integer value) {
         view.setLoadingBackgroundColor(value);
     }
 
     @Override
-    public void setLoadingEnabled(MapView view, boolean value) {
+    public void setLoadingEnabled(MapViewWrapper view, boolean value) {
         view.setLoadingEnabled(value);
     }
 
     @Override
-    public void setLoadingIndicatorColor(MapView view, @Nullable Integer value) {
+    public void setLoadingIndicatorColor(MapViewWrapper view, @Nullable Integer value) {
         view.setLoadingIndicatorColor(value);
     }
 
     @Override
-    public void setMapPadding(MapView view, @Nullable ReadableMap padding) {
-        int left = 0;
-        int top = 0;
-        int right = 0;
-        int bottom = 0;
-        double density = (double) view.getResources().getDisplayMetrics().density;
+    public void setMapPadding(MapViewWrapper view, @Nullable ReadableMap padding) {
+        view.setMapPadding(padding);
+    }
 
-        if (padding != null) {
-            if (padding.hasKey("left")) {
-                left = (int) (padding.getDouble("left") * density);
-            }
+    @Override
+    public void addView(MapViewWrapper parent, View child, int index) {
+        parent.getMapView().addFeature(child, index);
+        Log.e("MapViewManager", "addView  " + child.getId() + " at index: " + index);
 
-            if (padding.hasKey("top")) {
-                top = (int) (padding.getDouble("top") * density);
-            }
-
-            if (padding.hasKey("right")) {
-                right = (int) (padding.getDouble("right") * density);
-            }
-
-            if (padding.hasKey("bottom")) {
-                bottom = (int) (padding.getDouble("bottom") * density);
-            }
+    }
+    @Override
+    public void addViews(MapViewWrapper parent, List<View> views){
+        for (View view : views){
+            parent.getMapView().addView(view);
+            Log.e("MapViewManager", "addViews  " + view.getId());
         }
 
-        view.applyBaseMapPadding(left, top, right, bottom);
-        view.map.setPadding(left, top, right, bottom);
     }
 
-    @Override
-    public void addView(MapView parent, View child, int index) {
-        parent.addFeature(child, index);
-    }
 
     @Override
-    public void setMapType(MapView view, @Nullable String value) {
+    public void setMapType(MapViewWrapper view, @Nullable String value) {
+        int mapType;
         //hybrid | none | satellite | standard | terrain
         if ("hybrid".equals(value)) {
-            view.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            mapType = GoogleMap.MAP_TYPE_HYBRID;
         } else if ("none".equals(value)) {
-            view.setMapType(GoogleMap.MAP_TYPE_NONE);
+            mapType = GoogleMap.MAP_TYPE_NONE;
         } else if ("satellite".equals(value)) {
-            view.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            mapType = GoogleMap.MAP_TYPE_SATELLITE;
         } else if ("standard".equals(value)) {
-            view.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            mapType = GoogleMap.MAP_TYPE_NORMAL;
         } else if ("terrain".equals(value)) {
-            view.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            mapType = GoogleMap.MAP_TYPE_TERRAIN;
+        } else {
+          mapType = GoogleMap.MAP_TYPE_NORMAL;
+        }
+        options.mapType(mapType);
+        if (view.getMapView() != null){
+            view.getMapView().setMapType(mapType);
         }
     }
 
     @Override
-    public void setMaxDelta(MapView view, double value) {
+    public void setMaxDelta(MapViewWrapper view, double value) {
         // not supported
     }
 
     @Override
-    public void setMaxZoom(MapView view, float value) {
-        view.setMaxZoomLevel(value);
+    public void setMaxZoom(MapViewWrapper view, float value) {
+        options.maxZoomPreference(value);
+        if (view.getMapView() != null) {
+            view.getMapView().setMaxZoomLevel(value);
+        }
     }
 
     @Override
-    public void setMinDelta(MapView view, double value) {
+    public void setMinDelta(MapViewWrapper view, double value) {
         // not supported
     }
 
     @Override
-    public void setMinZoom(MapView view, float value) {
-        view.setMinZoomLevel(value);
+    public void setMinZoom(MapViewWrapper view, float value) {
+        options.minZoomPreference(value);
+        if (view.getMapView() != null) {
+            view.getMapView().setMinZoomLevel(value);
+        }
     }
 
     @Override
-    public void setMoveOnMarkerPress(MapView view, boolean value) {
+    public void setMoveOnMarkerPress(MapViewWrapper view, boolean value) {
             view.setMoveOnMarkerPress(value);
     }
 
     @Override
-    public void setHandlePanDrag(MapView view, boolean value) {
+    public void setHandlePanDrag(MapViewWrapper view, boolean value) {
         view.setHandlePanDrag(value);
     }
 
     @Override
-    public void setPaddingAdjustmentBehavior(MapView view, @Nullable String value) {
-
+    public void setPaddingAdjustmentBehavior(MapViewWrapper view, @Nullable String value) {
+        // not supported
     }
 
     @Override
-    public void setPitchEnabled(MapView view, boolean value) {
-        view.setPitchEnabled(value);
+    public void setPitchEnabled(MapViewWrapper view, boolean value) {
+        options.tiltGesturesEnabled(value);
+        if (view.getMapView() != null) {
+            view.getMapView().setPitchEnabled(value);
+        }
     }
 
     @Override
-    public void setRegion(MapView view, @Nullable ReadableMap value) {
+    public void setRegion(MapViewWrapper view, @Nullable ReadableMap value) {
         view.setRegion(value);
     }
 
     @Override
-    public void setRotateEnabled(MapView view, boolean value) {
-        view.setRotateEnabled(value);
+    public void setRotateEnabled(MapViewWrapper view, boolean value) {
+        options.rotateGesturesEnabled(value);
+        if (view.getMapView() != null) {
+            view.getMapView().setRotateEnabled(value);
+        }
     }
 
     @Override
-    public void setScrollDuringRotateOrZoomEnabled(MapView view, boolean value) {
-        view.setScrollDuringRotateOrZoomEnabled(value);
+    public void setScrollDuringRotateOrZoomEnabled(MapViewWrapper view, boolean value) {
+        options.scrollGesturesEnabledDuringRotateOrZoom(value);
+        if (view.getMapView() != null) {
+            view.getMapView().setScrollDuringRotateOrZoomEnabled(value);
+        }
     }
 
     @Override
-    public void setScrollEnabled(MapView view, boolean value) {
-        view.setScrollEnabled(value);
+    public void setScrollEnabled(MapViewWrapper view, boolean value) {
+        options.scrollGesturesEnabled(value);
+        if (view.getMapView() != null) {
+            view.getMapView().setScrollEnabled(value);
+        }
     }
 
     @Override
-    public void setShowsBuildings(MapView view, boolean value) {
-
+    public void setShowsBuildings(MapViewWrapper view, boolean value) {
+        view.setShowsBuildings(value);
     }
 
     @Override
-    public void setShowsCompass(MapView view, boolean value) {
+    public void setShowsCompass(MapViewWrapper view, boolean value) {
+        options.compassEnabled(value);
         view.setShowsCompass(value);
     }
 
     @Override
-    public void setShowsIndoorLevelPicker(MapView view, boolean value) {
+    public void setShowsIndoorLevelPicker(MapViewWrapper view, boolean value) {
         view.setShowsIndoorLevelPicker(value);
     }
 
     @Override
-    public void setShowsIndoors(MapView view, boolean value) {
-        view.setShowIndoors(value);
+    public void setShowsIndoors(MapViewWrapper view, boolean value) {
+        view.setShowsIndoors(value);
     }
 
     @Override
-    public void setShowsMyLocationButton(MapView view, boolean value) {
+    public void setShowsMyLocationButton(MapViewWrapper view, boolean value) {
         view.setShowsMyLocationButton(value);
     }
 
     @Override
-    public void setShowsScale(MapView view, boolean value) {
+    public void setShowsScale(MapViewWrapper view, boolean value) {
         // not supported
     }
 
     @Override
-    public void setShowsUserLocation(MapView view, boolean value) {
+    public void setShowsUserLocation(MapViewWrapper view, boolean value) {
         view.setShowsUserLocation(value);
     }
 
     @Override
-    public void setTintColor(MapView view, @Nullable Integer value) {
+    public void setTintColor(MapViewWrapper view, @Nullable Integer value) {
         // not supported
     }
 
     @Override
-    public void setToolbarEnabled(MapView view, boolean value) {
-        view.setToolbarEnabled(value);
+    public void setToolbarEnabled(MapViewWrapper view, boolean value) {
+        options.mapToolbarEnabled(value);
+        if (view.getMapView() != null) {
+            view.getMapView().setToolbarEnabled(value);
+        }
     }
 
     @Override
-    public void setUserInterfaceStyle(MapView view, @Nullable String value) {
+    public void setUserInterfaceStyle(MapViewWrapper view, @Nullable String value) {
+        // todo update google maps SDK and add support for MapColorScheme
+    }
+
+    @Override
+    public void setUserLocationAnnotationTitle(MapViewWrapper view, @Nullable String value) {
         // not supported
     }
 
     @Override
-    public void setUserLocationAnnotationTitle(MapView view, @Nullable String value) {
+    public void setUserLocationCalloutEnabled(MapViewWrapper view, boolean value) {
         // not supported
     }
 
     @Override
-    public void setUserLocationCalloutEnabled(MapView view, boolean value) {
-        // not supported
-    }
-
-    @Override
-    public void setUserLocationFastestInterval(MapView view, int value) {
+    public void setUserLocationFastestInterval(MapViewWrapper view, int value) {
         view.setUserLocationFastestInterval(value);
     }
 
     @Override
-    public void setUserLocationPriority(MapView view, @Nullable String value) {
-        view.setUserLocationPriority(MY_LOCATION_PRIORITY.get(value));
+    public void setUserLocationPriority(MapViewWrapper view, @Nullable String value) {
+        view.setUserLocationPriority(value);
     }
 
     @Override
-    public void setUserLocationUpdateInterval(MapView view, int value) {
+    public void setUserLocationUpdateInterval(MapViewWrapper view, int value) {
         view.setUserLocationUpdateInterval(value);
     }
 
     @Override
-    public void setZoomControlEnabled(MapView view, boolean value) {
-        view.setZoomControlEnabled(value);
+    public void setZoomControlEnabled(MapViewWrapper view, boolean value) {
+        options.zoomControlsEnabled(value);
+        if (view.getMapView() != null) {
+            view.setZoomControlEnabled(value);
+        }
     }
 
     @Override
-    public void setZoomEnabled(MapView view, boolean value) {
-        view.setZoomEnabled(value);
+    public void setZoomEnabled(MapViewWrapper view, boolean value) {
+        options.zoomGesturesEnabled(value);
+        if (view.getMapView() != null) {
+            view.setZoomEnabled(value);
+        }
     }
 
     @Override
-    public void setZoomTapEnabled(MapView view, boolean value) {
+    public void setZoomTapEnabled(MapViewWrapper view, boolean value) {
         // not supported
     }
 
     @Override
-    public void setCameraZoomRange(MapView view, @Nullable ReadableMap value) {
+    public void setCameraZoomRange(MapViewWrapper view, @Nullable ReadableMap value) {
         // not supported
     }
 
     @Override
-    public void animateToRegion(MapView view, String regionJSON, int duration) {
+    public void animateToRegion(MapViewWrapper view, String regionJSON, int duration) {
 
     }
 
     @Override
-    public void setCamera(MapView view, String cameraJSON) {
+    public void setCamera(MapViewWrapper view, String cameraJSON) {
 
     }
 
     @Override
-    public void animateCamera(MapView view, String cameraJSON, int duration) {
+    public void animateCamera(MapViewWrapper view, String cameraJSON, int duration) {
 
     }
 
     @Override
-    public void fitToElements(MapView view, String edgePaddingJSON, boolean animated) {
+    public void fitToElements(MapViewWrapper view, String edgePaddingJSON, boolean animated) {
 
     }
 
     @Override
-    public void fitToSuppliedMarkers(MapView view, String markersJSON, String edgePaddingJSON, boolean animated) {
+    public void fitToSuppliedMarkers(MapViewWrapper view, String markersJSON, String edgePaddingJSON, boolean animated) {
 
     }
 
     @Override
-    public void fitToCoordinates(MapView view, String coordinatesJSON, String edgePaddingJSON, boolean animated) {
+    public void fitToCoordinates(MapViewWrapper view, String coordinatesJSON, String edgePaddingJSON, boolean animated) {
 
+    }
+    @Override
+    public int getChildCount(MapViewWrapper parent) {
+        if (parent.getMapView() != null) {
+            return parent.getMapView().getChildCount();
+        }
+        return 0;
+    }
+
+    @Override
+    public View getChildAt(MapViewWrapper parent, int index) {
+        if (parent.getMapView() != null) {
+            return parent.getMapView().getChildAt(index);
+        }
+        return null;
+    }
+
+    @Override
+    public void removeViewAt(MapViewWrapper parent, int index) {
+        if (parent.getMapView() != null) {
+            parent.getMapView().removeViewAt(index);
+        }
+    }
+
+    public void removeView(MapViewWrapper parent, View view) {
+        if (parent.getMapView() != null) {
+            parent.getMapView().removeView(view);
+        }
+    }
+
+
+    @Override
+    protected void onAfterUpdateTransaction(@NonNull MapViewWrapper view) {
+        super.onAfterUpdateTransaction(view);
+        setGoogleRenderer(view, null);
+        view.initializeMapView(options);
+        options = new GoogleMapOptions();
+        Log.e("MapViewManager", "onAfterUpdateTransaction tag: " + view.getId());
+    }
+    @Override
+    public void onDropViewInstance(MapViewWrapper view) {
+        super.onDropViewInstance(view);
+        view.prepareToRecycleView();
     }
 }

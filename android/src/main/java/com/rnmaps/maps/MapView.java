@@ -43,7 +43,6 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -185,7 +184,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                  GoogleMapOptions googleMapOptions) {
     super(context, googleMapOptions);
     // todo add support for legacy renderer
-    MapsInitializer.initialize(context, MapsInitializer.Renderer.LATEST, renderer -> Log.d("AirMapRenderer", renderer.toString()));
     this.context = context;
     super.onCreate(null);
     super.onResume();
@@ -634,6 +632,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     onDestroy();
   }
 
+  public void setInitialCameraSet(boolean initialCameraSet){
+    this.initialCameraSet = initialCameraSet;
+  }
+
   public void setInitialRegion(ReadableMap initialRegion) {
     this.initialRegion = initialRegion;
     // Theoretically onMapReady might be called before setInitialRegion
@@ -669,18 +671,23 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
     this.setPoiClickEnabled(poiClickEnabled);
   }
+public static LatLngBounds latLngBoundsFromRegion(ReadableMap region){
+  if (region == null) return null;
 
+  double lng = region.getDouble("longitude");
+  double lat = region.getDouble("latitude");
+  double lngDelta = region.getDouble("longitudeDelta");
+  double latDelta = region.getDouble("latitudeDelta");
+  return  new LatLngBounds(
+          new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+          new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+  );
+}
   private void moveToRegion(ReadableMap region) {
-    if (region == null) return;
-
+    LatLngBounds bounds = latLngBoundsFromRegion(region);
+    if (bounds == null) return;
     double lng = region.getDouble("longitude");
     double lat = region.getDouble("latitude");
-    double lngDelta = region.getDouble("longitudeDelta");
-    double latDelta = region.getDouble("latitudeDelta");
-    LatLngBounds bounds = new LatLngBounds(
-            new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
-            new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
-    );
     if (super.getHeight() <= 0 || super.getWidth() <= 0) {
       // in this case, our map has not been laid out yet, so we save the bounds in a local
       // variable, and make a guess of zoomLevel 10. Not to worry, though: as soon as layout
@@ -770,18 +777,24 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   }
 
   public void setShowsMyLocationButton(boolean showMyLocationButton) {
-    if (hasPermissions() || !showMyLocationButton) {
-      map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
+    if (map != null) {
+      if (hasPermissions() || !showMyLocationButton) {
+        map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
+      }
     }
   }
 
   public void setToolbarEnabled(boolean toolbarEnabled) {
-    if (hasPermissions() || !toolbarEnabled) {
-      map.getUiSettings().setMapToolbarEnabled(toolbarEnabled);
+    if (map != null) {
+      if (hasPermissions() || !toolbarEnabled) {
+        map.getUiSettings().setMapToolbarEnabled(toolbarEnabled);
+      }
     }
   }
   public void setMapType(int mapType){
-    map.setMapType(mapType);
+    if (map != null) {
+      map.setMapType(mapType);
+    }
   }
 
   public void setCacheEnabled(boolean cacheEnabled) {
@@ -791,7 +804,9 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
 
   public void setPoiClickEnabled(boolean poiClickEnabled) {
     this.poiClickEnabled = poiClickEnabled;
-    map.setOnPoiClickListener(poiClickEnabled ? this : null);
+    if (map != null) {
+      map.setOnPoiClickListener(poiClickEnabled ? this : null);
+    }
   }
 
   public void setLoadingEnabled(boolean loadingEnabled) {
