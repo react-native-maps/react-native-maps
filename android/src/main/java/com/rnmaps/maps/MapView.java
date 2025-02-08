@@ -465,7 +465,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
       @Override
       public void onCameraMove() {
-        Log.e("MapView", "onCameraMove");
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
 
         cameraLastIdleBounds = null;
@@ -552,7 +551,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     if (selectedMarker == target) {
       return;
     }
-    
+
     WritableMap event;
 
     if (selectedMarker != null) {
@@ -1350,7 +1349,7 @@ public static CameraPosition cameraPositionFromMap(ReadableMap camera){
   public boolean dispatchTouchEvent(MotionEvent ev) {
     gestureDetector.onTouchEvent(ev);
 
-    int X = (int)ev.getX();          
+    int X = (int)ev.getX();
     int Y = (int)ev.getY();
     if(map != null) {
       tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
