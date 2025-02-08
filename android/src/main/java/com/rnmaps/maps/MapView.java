@@ -465,6 +465,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
       @Override
       public void onCameraMove() {
+        Log.e("MapView", "onCameraMove");
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
 
         cameraLastIdleBounds = null;

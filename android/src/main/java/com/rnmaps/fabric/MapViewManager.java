@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactStylesDiffMap;
 import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
@@ -62,9 +63,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         // override parent to block recycling / allow reliable GoogleMapsOptions passing
     }
 
-    @Override
-    protected MapView createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext, @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
-        MapView view = null;
+    private GoogleMapOptions optionsForInitialProps(ReactStylesDiffMap initialProps){
         GoogleMapOptions options = new GoogleMapOptions();
         if (initialProps != null) {
             setGoogleRenderer(null, initialProps.getString("googleRenderer"));
@@ -122,8 +121,12 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
                 options.zoomGesturesEnabled(initialProps.getBoolean("zoomEnabled", true));
             }
         }
-
-        view = new MapView(reactContext, options);
+        return options;
+    }
+    @Override
+    protected MapView createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext, @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
+        MapView view = null;
+        view = new MapView(reactContext, optionsForInitialProps(initialProps));
         view.setId(reactTag);
         this.addEventEmitters(reactContext, view);
         if (initialProps != null) {
@@ -212,13 +215,12 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setLiteMode(MapView view, boolean value) {
-
+        // do nothing (initialProp)
     }
 
     @Override
     public void setGoogleMapId(MapView view, @Nullable String value) {
         // do nothing (initialProp)
-
     }
 
     @Override
