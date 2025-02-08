@@ -796,12 +796,8 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   getCamera(): Promise<Camera> {
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.getCamera(this._getHandle());
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getCamera();
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getCamera();
     }
     return Promise.reject('getCamera not supported on this platform');
   }
