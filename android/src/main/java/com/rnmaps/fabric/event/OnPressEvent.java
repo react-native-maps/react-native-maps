@@ -1,5 +1,7 @@
 package com.rnmaps.fabric.event;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.Event;
 
@@ -12,6 +14,7 @@ public class OnPressEvent extends Event<OnPressEvent> {
         this.payload = payload;
     }
 
+    @NonNull
     @Override
     public String getEventName() {
         return EVENT_NAME;

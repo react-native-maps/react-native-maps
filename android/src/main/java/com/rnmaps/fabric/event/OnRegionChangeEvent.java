@@ -1,5 +1,8 @@
 package com.rnmaps.fabric.event;
 
+import androidx.annotation.NonNull;
+
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.events.Event;
@@ -7,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 public class OnRegionChangeEvent extends Event<OnRegionChangeEvent> {
-  public static final String EVENT_NAME = "topChange";
+  public static final String EVENT_NAME = "topRegionChange";
 
   private final WritableMap payload;
 
@@ -30,14 +33,16 @@ public class OnRegionChangeEvent extends Event<OnRegionChangeEvent> {
     return event;
   }
 
+  @NonNull
   @Override
   public String getEventName() {
     return EVENT_NAME;
   }
 
+
   @Override
-  public boolean canCoalesce() {
-    return false;
+  protected WritableMap getEventData() {
+    return payload;
   }
 
 }
