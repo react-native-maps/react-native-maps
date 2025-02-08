@@ -9,8 +9,15 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactStylesDiffMap;
@@ -25,6 +32,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
@@ -467,32 +476,97 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void animateToRegion(MapView view, String regionJSON, int duration) {
+        try {
+            JSONObject region = new JSONObject(regionJSON);
+            double lng = region.getDouble("longitude");
+            double lat = region.getDouble("latitude");
+            double lngDelta = region.getDouble("longitudeDelta");
+            double latDelta = region.getDouble("latitudeDelta");
+            LatLngBounds bounds = new LatLngBounds(
+                    new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+                    new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+            );
+            view.animateToRegion(bounds, duration);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     @Override
     public void setCamera(MapView view, String cameraJSON) {
-
+        try {
+            JSONObject camera = new JSONObject(cameraJSON);
+            CameraPosition position = view.cameraPositionFromJSON(camera);
+            view.moveToCamera(position);
+        } catch (JSONException e) {
+            Log.e("MapViewManager", "parse camera exception " + e);
+        }
     }
 
     @Override
     public void animateCamera(MapView view, String cameraJSON, int duration) {
-
+        try {
+            JSONObject camera = new JSONObject(cameraJSON);
+            CameraPosition position = view.cameraPositionFromJSON(camera);
+            view.animateToCamera(position, duration);
+        } catch (JSONException e) {
+            Log.e("MapViewManager", "parse camera exception " + e);
+        }
     }
 
     @Override
     public void fitToElements(MapView view, String edgePaddingJSON, boolean animated) {
+        try {
+            WritableMap map = null;
+            if (edgePaddingJSON != null) {
+                JSONObject jsonObject = new JSONObject(edgePaddingJSON);
+                map = JSONUtil.convertJsonToWritable(jsonObject);
+            }
+            view.fitToElements(map, animated);
+        } catch (JSONException e){
+            Log.e("MapViewManager", "parse edgePaddingJSON exception " + e);
+        }
 
     }
 
     @Override
     public void fitToSuppliedMarkers(MapView view, String markersJSON, String edgePaddingJSON, boolean animated) {
+        try {
+            WritableArray markers = null;
+            if (markersJSON != null) {
+                JSONArray array = new JSONArray(markersJSON);
+                markers = JSONUtil.convertJsonArrayToWritable(array);
+            }
+            WritableMap edgePadding = null;
+            if (edgePaddingJSON != null) {
+                JSONObject jsonObject = new JSONObject(edgePaddingJSON);
+                edgePadding = JSONUtil.convertJsonToWritable(jsonObject);
+            }
+            view.fitToSuppliedMarkers(markers, edgePadding, animated);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     @Override
     public void fitToCoordinates(MapView view, String coordinatesJSON, String edgePaddingJSON, boolean animated) {
-
+        try {
+            WritableArray coordinates = null;
+            if (coordinatesJSON != null) {
+                JSONArray array = new JSONArray(coordinatesJSON);
+                coordinates = JSONUtil.convertJsonArrayToWritable(array);
+            }
+            WritableMap edgePadding = null;
+            if (edgePaddingJSON != null) {
+                JSONObject jsonObject = new JSONObject(edgePaddingJSON);
+                edgePadding = JSONUtil.convertJsonToWritable(jsonObject);
+            }
+            view.fitToCoordinates(coordinates, edgePadding, animated);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
