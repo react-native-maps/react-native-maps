@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
@@ -23,7 +22,6 @@ import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactStylesDiffMap;
 import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
@@ -34,6 +32,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapColorScheme;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
@@ -103,6 +102,16 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
             if (initialProps.hasKey("maxZoom")) {
                 if (initialProps.getInt("maxZoom", 0) != 0) {
                     options.maxZoomPreference(initialProps.getInt("maxZoom", 0));
+                }
+            }
+            if (initialProps.hasKey("userInterfaceStyle")){
+                String style = initialProps.getString("userInterfaceStyle");
+                if ("system".equals(style)) {
+                    options.mapColorScheme(MapColorScheme.FOLLOW_SYSTEM);
+                } else if ("light".equals(style)){
+                    options.mapColorScheme(MapColorScheme.LIGHT);
+                } else if ("dark".equals(style)){
+                    options.mapColorScheme(MapColorScheme.DARK);
                 }
             }
             if (initialProps.hasKey("pitchEnabled")) {
@@ -426,7 +435,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setUserInterfaceStyle(MapView view, @Nullable String value) {
-        // todo update google maps SDK and add support for MapColorScheme
+        // do nothing (initialProp)
     }
 
     @Override
