@@ -14,10 +14,11 @@ import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
-import com.facebook.react.uimanager.BaseViewManagerInterface;
+import com.facebook.react.uimanager.LayoutShadowNode;
 
-public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNMapsMarkerManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMapsMarkerManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMapsMarkerManagerDelegate(U viewManager) {
     super(viewManager);
   }
