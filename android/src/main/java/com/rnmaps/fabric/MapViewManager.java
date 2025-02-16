@@ -3,6 +3,8 @@ package com.rnmaps.fabric;
 
 import static com.rnmaps.maps.MapManager.MY_LOCATION_PRIORITY;
 
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 
@@ -26,6 +28,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerDelegate;
+import com.google.android.gms.common.images.ImageManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapsInitializer;
@@ -33,6 +36,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapColorScheme;
+import com.rnmaps.maps.MapMarker;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
@@ -301,7 +305,13 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void addView(MapView parent, View child, int index) {
-        parent.addFeature(child, index);
+        if (child instanceof MapMarker && ((MapMarker) child).isLoadingImage()){
+            ((MapMarker) child).setImageLoadedListener((uri, drawable, b) -> {
+                parent.addFeature(child, parent.getFeatureCount());
+            });
+        } else {
+            parent.addFeature(child, index);
+        }
     }
 
     @Override
