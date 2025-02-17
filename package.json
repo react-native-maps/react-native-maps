@@ -1,11 +1,11 @@
 {
-  "name": "react-native-maps",
+  "name": "@tausi-app/react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
   "source": "src/index",
   "main": "lib/index.js",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
-  "version": "4.6.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
