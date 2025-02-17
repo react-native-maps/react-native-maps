@@ -4,7 +4,6 @@ import type {
   ColorValue,
   ImageSourcePropType as ImageSource,
 } from 'react-native';
-
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import {
@@ -320,7 +319,6 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   ],
 });
 
-export default codegenNativeComponent<MarkerFabricNativeProps>(
-  'RNMapsMarker',
-  {},
-) as HostComponent<MarkerFabricNativeProps>;
+export default codegenNativeComponent<MarkerFabricNativeProps>('RNMapsMarker', {
+  excludedPlatforms: ['android'],
+}) as HostComponent<MarkerFabricNativeProps>;

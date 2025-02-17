@@ -12,7 +12,8 @@ buildscript {
       mavenCentral()
     }
     dependencies {
-      classpath("com.android.tools.build:gradle:8.6.0")
+      classpath("com.android.tools.build:gradle:8.7.2")
+      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
     }
   }
 }
@@ -34,11 +35,11 @@ def isNewArchitectureEnabled() {
   return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
 if (isNewArchitectureEnabled()) {
   apply plugin: 'com.facebook.react'
 }
-apply plugin: 'kotlin-android'
 
 android {
   if (supportsNamespace()) {
@@ -56,7 +57,7 @@ android {
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 21)
-    targetSdkVersion safeExtGet('targetSdkVersion', 34)
+    targetSdkVersion safeExtGet('targetSdkVersion', 35)
 
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
@@ -82,6 +83,12 @@ android {
       }
     }
   }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
 }
 
 def reactNativeArchitectures() {
@@ -89,21 +96,21 @@ def reactNativeArchitectures() {
   return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
+
 repositories {
   mavenLocal()
   mavenCentral()
-  maven {
-    // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-    url "$projectDir/../node_modules/react-native/android"
-  }
   google()
 }
 
 dependencies {
-  implementation 'com.facebook.react:react-native:+'
+    implementation "com.facebook.react:react-android"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.10"
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
   implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '18.5.0')}"
-  implementation "com.google.android.gms:play-services-maps:${safeExtGet('playServicesVersion', '18.5.0')}"
-  implementation "com.google.android.gms:play-services-location:21.0.1"
+  implementation "com.google.android.gms:play-services-maps:${safeExtGet('playServicesVersion', '19.0.0')}"
+  implementation "com.google.android.gms:play-services-location:21.3.0"
   implementation 'com.google.maps.android:android-maps-utils:3.10.0'
-  implementation "androidx.work:work-runtime:2.7.1"
+  implementation "androidx.work:work-runtime:2.10.0"
 }

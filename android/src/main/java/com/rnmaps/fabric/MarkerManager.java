@@ -14,7 +14,7 @@ import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
-import com.facebook.react.viewmanagers.RNMapsMarkerManagerDelegate;
+import com.facebook.react.viewmanagers.RNMapsMapViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsMarkerManagerInterface;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -29,13 +29,13 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     public MarkerManager(ReactApplicationContext context){
         super(context);
     }
-    private final RNMapsMarkerManagerDelegate<MapMarker, MarkerManager> delegate =
-            new RNMapsMarkerManagerDelegate<>(this);
-
-    @Override
-    public ViewManagerDelegate<MapMarker> getDelegate() {
-        return delegate;
-    }
+//    private final RNMapsMapViewManagerDelegate<MapMarker, MarkerManager> delegate =
+//            new RNMapsMarkerManagerDelegate<>(this);
+//
+//    @Override
+//    public ViewManagerDelegate<MapMarker> getDelegate() {
+//        return delegate;
+//    }
 
     @Override
     public String getName() {
