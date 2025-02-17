@@ -39,6 +39,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
+import com.google.android.gms.common.images.ImageManager;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -94,11 +95,17 @@ public class MapMarker extends MapFeature {
   private boolean hasCustomMarkerView = false;
   private final MapMarkerManager markerManager;
   private String imageUri;
+  private boolean loadingImage;
 
   private final DraweeHolder<?> logoHolder;
+  private ImageManager.OnImageLoadedListener imageLoadedListener;
   private DataSource<CloseableReference<CloseableImage>> dataSource;
   private final ControllerListener<ImageInfo> mLogoControllerListener =
       new BaseControllerListener<ImageInfo>() {
+    @Override
+    public void onSubmit(String id, Object callerContext){
+        loadingImage = true;
+    }
         @Override
         public void onFinalImageSet(
             String id,
@@ -130,6 +137,12 @@ public class MapMarker extends MapFeature {
                 .updateIcon(iconBitmapDescriptor, iconBitmap);
           }
           update(true);
+          loadingImage = false;
+          if (imageLoadedListener != null){
+            imageLoadedListener.onImageLoaded(null, null, false);
+            // fire and forget
+            imageLoadedListener = null;
+          }
         }
       };
 
@@ -157,7 +170,7 @@ public class MapMarker extends MapFeature {
     setFlat(options.isFlat());
     setDraggable(options.isDraggable());
     setZIndex(Math.round(options.getZIndex()));
-    setAlpha(options.getAlpha());
+    setOpacity(options.getAlpha());
     iconBitmapDescriptor = options.getIcon();
   }
 
@@ -438,7 +451,6 @@ public class MapMarker extends MapFeature {
         updateTracksViewChanges();
         update(true);
       }
-
     }
   }
 
@@ -635,11 +647,23 @@ public class MapMarker extends MapFeature {
         getContext().getPackageName());
   }
 
-  @FunctionalInterface
+    public boolean isLoadingImage() {
+        return loadingImage;
+    }
+
+    public ImageManager.OnImageLoadedListener getImageLoadedListener() {
+        return imageLoadedListener;
+    }
+
+    public void setImageLoadedListener(ImageManager.OnImageLoadedListener imageLoadedListener) {
+        this.imageLoadedListener = imageLoadedListener;
+    }
+
+    @FunctionalInterface
   public interface EventCreator<T extends Event> {
     T create(int surfaceId, int viewId, WritableMap payload);
   }
-  private <T extends Event> void dispatchEvent(WritableMap payload, MapView.EventCreator<T> creator) {
+  public  <T extends Event> void dispatchEvent(WritableMap payload, MapView.EventCreator<T> creator) {
     // Cast context to ReactContext
     ReactContext reactContext = (ReactContext) context;
 
