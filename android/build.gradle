@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
       classpath("com.android.tools.build:gradle:8.7.2")
-      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
+//      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
     }
   }
 }
@@ -105,7 +105,7 @@ repositories {
 
 dependencies {
     implementation "com.facebook.react:react-android"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.10"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.10"
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
   implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '18.5.0')}"

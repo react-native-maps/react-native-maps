@@ -319,6 +319,7 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
   ],
 });
 
-export default codegenNativeComponent<MarkerFabricNativeProps>('RNMapsMarker', {
-  excludedPlatforms: ['android'],
-}) as HostComponent<MarkerFabricNativeProps>;
+export default codegenNativeComponent<MarkerFabricNativeProps>(
+  'RNMapsMarker',
+  {},
+) as HostComponent<MarkerFabricNativeProps>;
