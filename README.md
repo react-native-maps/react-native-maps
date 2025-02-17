@@ -371,6 +371,44 @@ So far, `<Circle />`, `<Polygon />`, and `<Polyline />` are available to pass in
 
 ![](http://i.giphy.com/xT77XZCH8JpEhzVcNG.gif) ![](http://i.giphy.com/xT77XZyA0aYeOX5jsA.gif)
 
+`<Circle />` example as follows.
+
+```jsx
+import React from "react";
+import { StyleSheet } from "react-native";
+import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+
+export default function App() {
+  const RADIUS = 300;
+  return (
+    <MapView
+      provider={PROVIDER_GOOGLE} // Specify Google Maps as the provider
+      style={styles.map}
+      initialRegion={{
+        latitude: -37.721,
+        longitude: 145.046,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      }}
+    >
+
+      <Circle center={{
+        latitude: -37.721407,
+        longitude: 145.046530,
+      }} radius={200}>
+      </Circle>
+      
+    </MapView>
+  );
+}
+
+const styles = StyleSheet.create({
+  map: {
+    flex: 1,
+  },
+});
+```
+
 ### Gradient Polylines (iOS MapKit only)
 
 Gradient polylines can be created using the `strokeColors` prop of the `<Polyline>` component.
