@@ -629,7 +629,7 @@ export type MapViewProps = ViewProps & {
    *
    * @default System setting
    * @platform iOS: Apple Maps only (iOS >= 13.0)
-   * @platform Android: Not supported
+   * @platform Android: Supported
    */
   userInterfaceStyle?: 'light' | 'dark';
 
