@@ -23,7 +23,7 @@ export type MapPolylineProps = ViewProps & {
    * The fill color to use for the path.
    *
    * @default `#000`, `rgba(r,g,b,0.5)`
-   * @platform iOS: Supported
+   * @platform iOS: Apple Maps only
    * @platform Android: Not supported
    */
   fillColor?: string;
