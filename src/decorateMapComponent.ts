@@ -22,6 +22,7 @@ import {MapWMSTile} from './MapWMSTile';
 import {Commands} from './MapViewNativeComponent';
 import GooglePolygon from './specs/NativeComponentGooglePolygon';
 import FabricMarker from './specs/NativeComponentMarker';
+import FabricCallout from './specs/NativeComponentCallout';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -76,6 +77,10 @@ export default function decorateMapComponent<Type extends Component>(
       ) {
         // @ts-ignore
         return FabricMarker;
+      }
+      if (componentName === 'Callout' && Platform.OS === 'android') {
+        // @ts-ignore
+        return FabricCallout;
       }
       const key = provider || 'default';
       if (components[key]) {

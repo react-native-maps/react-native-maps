@@ -13,6 +13,28 @@
 
 namespace facebook::react {
 
+void RNMapsCalloutEventEmitter::onPress(OnPress $event) const {
+  dispatchEvent("press", [$event=std::move($event)](jsi::Runtime &runtime) {
+    auto $payload = jsi::Object(runtime);
+    $payload.setProperty(runtime, "action", $event.action);
+$payload.setProperty(runtime, "id", $event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", $event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", $event.coordinate.longitude);
+  $payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", $event.position.x);
+  position.setProperty(runtime, "y", $event.position.y);
+  $payload.setProperty(runtime, "position", position);
+}
+    return $payload;
+  });
+}
+
+
 void RNMapsGoogleMapViewEventEmitter::onIndoorBuildingFocused(OnIndoorBuildingFocused $event) const {
   dispatchEvent("indoorBuildingFocused", [$event=std::move($event)](jsi::Runtime &runtime) {
     auto $payload = jsi::Object(runtime);

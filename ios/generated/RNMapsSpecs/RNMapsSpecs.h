@@ -30,6 +30,8 @@
 #import <optional>
 #import <vector>
 
+
+NS_ASSUME_NONNULL_BEGIN
 namespace JS {
   namespace NativeAirMapsModule {
     struct LatLng {
@@ -131,4 +133,5 @@ inline double JS::NativeAirMapsModule::Point::y() const
   id const p = _v[@"y"];
   return RCTBridgingToDouble(p);
 }
+NS_ASSUME_NONNULL_END
 #endif // RNMapsSpecs_H

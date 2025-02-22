@@ -13,6 +13,28 @@
 
 
 namespace facebook::react {
+class RNMapsCalloutEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  struct OnPressCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnPressPosition {
+      double x;
+    double y;
+    };
+
+  struct OnPress {
+      std::string action;
+    std::string id;
+    OnPressCoordinate coordinate;
+    OnPressPosition position;
+    };
+  void onPress(OnPress value) const;
+};
 class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
  public:
   using ViewEventEmitter::ViewEventEmitter;
