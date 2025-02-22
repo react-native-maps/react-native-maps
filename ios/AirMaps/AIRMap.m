@@ -516,7 +516,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (void)setUserInterfaceStyle:(NSString*)userInterfaceStyle
 {
-    if (@available(iOS 13.0, *)) {
         if([userInterfaceStyle isEqualToString:@"light"]) {
             self.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
         } else if([userInterfaceStyle isEqualToString:@"dark"]) {
@@ -524,9 +523,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         } else {
             self.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
         }
-    } else {
-        NSLog(@"UserInterfaceStyle not supported below iOS 13");
-    }
 }
 
 - (void)setTintColor:(UIColor *)tintColor
@@ -654,8 +650,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 }
 
 - (void)setCameraZoomRange:(NSDictionary *)cameraZoomRange {
-    if (@available(iOS 13.0, *)) {
-
         if (cameraZoomRange == nil) {
             cameraZoomRange = @{};
         }
@@ -686,7 +680,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
         self.legacyZoomConstraintsEnabled = NO;
         [super setCameraZoomRange:zoomRange animated:animated];
-    }
 }
 
 
