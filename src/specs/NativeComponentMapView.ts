@@ -898,8 +898,8 @@ export interface MapFabricNativeProps extends ViewProps {
    * Sets the map to the style selected.
    *
    * @default System setting
-   * @platform iOS: Apple Maps only (iOS >= 13.0)
-   * @platform Android: Not supported
+   * @platform iOS: Supported
+   * @platform Android: Supported
    */
   userInterfaceStyle?: WithDefault<'system' | 'light' | 'dark', 'system'>;
 

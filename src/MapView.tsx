@@ -628,7 +628,7 @@ export type MapViewProps = ViewProps & {
    * Sets the map to the style selected.
    *
    * @default System setting
-   * @platform iOS: Apple Maps only (iOS >= 13.0)
+   * @platform iOS: Supported
    * @platform Android: Supported
    */
   userInterfaceStyle?: 'light' | 'dark';
