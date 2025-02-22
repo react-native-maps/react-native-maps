@@ -14,6 +14,18 @@
 
 namespace facebook::react {
 
+class RNMapsCalloutState {
+public:
+  RNMapsCalloutState() = default;
+
+#ifdef ANDROID
+  RNMapsCalloutState(RNMapsCalloutState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+#endif
+};
+
 class RNMapsGoogleMapViewState {
 public:
   RNMapsGoogleMapViewState() = default;

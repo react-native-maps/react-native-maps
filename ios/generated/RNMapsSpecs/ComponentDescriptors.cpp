@@ -16,6 +16,7 @@ namespace facebook::react {
 
 void RNMapsSpecs_registerComponentDescriptorsFromCodegen(
   std::shared_ptr<const ComponentDescriptorProviderRegistry> registry) {
+registry->add(concreteComponentDescriptorProvider<RNMapsCalloutComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsGoogleMapViewComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsGooglePolygonComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsMapViewComponentDescriptor>());

@@ -2,6 +2,7 @@ package com.rnmaps.fabric;
 
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +18,9 @@ import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsMarkerManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsMarkerManagerInterface;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.rnmaps.maps.MapCallout;
 import com.rnmaps.maps.MapMarker;
 
 import java.util.Map;
@@ -220,12 +223,13 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void showCallout(MapMarker view) {
+        ((Marker) view.getFeature()).showInfoWindow();
 
     }
 
     @Override
     public void hideCallout(MapMarker view) {
-
+        ((Marker) view.getFeature()).hideInfoWindow();
     }
 
     @Override
@@ -236,5 +240,16 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     @Override
     public void redraw(MapMarker view) {
 
+    }
+    @Override
+    public void addView(MapMarker parent, View child, int index) {
+        // if an <Callout /> component is a child, then it is a callout view, NOT part of the
+        // marker.
+        if (child instanceof MapCallout) {
+            parent.setCalloutView((MapCallout) child);
+        } else {
+            super.addView(parent, child, index);
+            parent.update(true);
+        }
     }
 }

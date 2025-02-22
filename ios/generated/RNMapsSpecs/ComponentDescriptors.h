@@ -16,6 +16,7 @@
 
 namespace facebook::react {
 
+using RNMapsCalloutComponentDescriptor = ConcreteComponentDescriptor<RNMapsCalloutShadowNode>;
 using RNMapsGoogleMapViewComponentDescriptor = ConcreteComponentDescriptor<RNMapsGoogleMapViewShadowNode>;
 using RNMapsGooglePolygonComponentDescriptor = ConcreteComponentDescriptor<RNMapsGooglePolygonShadowNode>;
 using RNMapsMapViewComponentDescriptor = ConcreteComponentDescriptor<RNMapsMapViewShadowNode>;
