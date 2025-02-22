@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.64](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.63...v1.21.0-alpha.64) (2025-02-22)
+
+
+### Bug Fixes
+
+* **ios:** removed unsupported fill color props ([#5360](https://github.com/react-native-maps/react-native-maps/issues/5360)) ([ed71d3c](https://github.com/react-native-maps/react-native-maps/commit/ed71d3c8aef209edfcf6383e584bb8076a8f0495))
+
 # [1.21.0-alpha.63](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.62...v1.21.0-alpha.63) (2025-02-22)
 
 
