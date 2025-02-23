@@ -18,6 +18,17 @@
 
 namespace facebook::react {
 
+class RNMapsCalloutProps final : public ViewProps {
+ public:
+  RNMapsCalloutProps() = default;
+  RNMapsCalloutProps(const PropsParserContext& context, const RNMapsCalloutProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  bool alphaHitTest{false};
+  bool tooltip{false};
+};
+
 enum class RNMapsGoogleMapViewMapType { Hybrid, MutedStandard, None, Satellite, Standard, Terrain, SatelliteFlyover, HybridFlyover };
 
 static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsGoogleMapViewMapType &result) {

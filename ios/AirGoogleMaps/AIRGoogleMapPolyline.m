@@ -19,7 +19,6 @@
 {
   if (self = [super init]) {
     _polyline = [[AIRGMSPolyline alloc] init];
-    _polyline.spans = @[[GMSStyleSpan spanWithColor:_strokeColor]];
     _polyline.strokeColor = _strokeColor;
   }
   return self;
@@ -77,12 +76,6 @@
 {
   _strokeWidth = strokeWidth;
   _polyline.strokeWidth = strokeWidth;
-}
-
--(void)setFillColor:(UIColor *)fillColor
-{
-  _fillColor = fillColor;
-  _polyline.spans = @[[GMSStyleSpan spanWithColor:fillColor]];
 }
 
 - (void)setLineDashPattern:(NSArray<NSNumber *> *)lineDashPattern {

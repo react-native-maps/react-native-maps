@@ -356,17 +356,15 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 MapMarker airMapMarker = getMarkerMap(marker);
 
                 WritableMap eventData = makeClickEventData(marker.getPosition());
-                eventData.putString("action", "marker-press");
+                eventData.putString("action", "press");
                 eventData.putString("id", airMapMarker.getIdentifier());
+                airMapMarker.dispatchEvent(eventData, OnPressEvent::new);
 
-                dispatchEvent(eventData, OnMarkerPressEvent::new);
+                WritableMap mapEventData = makeClickEventData(marker.getPosition());
+                mapEventData.putString("action", "marker-press");
+                mapEventData.putString("id", airMapMarker.getIdentifier());
 
-
-                eventData = makeClickEventData(marker.getPosition());
-                eventData.putString("action", "marker-press");
-                eventData.putString("id", airMapMarker.getIdentifier());
-
-                dispatchEvent(eventData, OnPressEvent::new);
+                dispatchEvent(mapEventData, OnMarkerPressEvent::new);
 
 
                 handleMarkerSelection(airMapMarker);
@@ -564,8 +562,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             event = makeClickEventData(selectedMarker.getPosition());
             event.putString("action", "marker-deselect");
             event.putString("id", selectedMarker.getIdentifier());
-            // todo: use Fabric events
-            //  manager.pushEvent(context, selectedMarker, "onDeselect", event);
+            selectedMarker.dispatchEvent(event, OnDeselectEvent::new);
 
             event = makeClickEventData(selectedMarker.getPosition());
             event.putString("action", "marker-deselect");
@@ -577,8 +574,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             event = makeClickEventData(target.getPosition());
             event.putString("action", "marker-select");
             event.putString("id", target.getIdentifier());
-            // todo: use Fabric events
-            // manager.pushEvent(context, target, "onSelect", event);
+            target.dispatchEvent(event, OnSelectEvent::new);
 
             event = makeClickEventData(target.getPosition());
             event.putString("action", "marker-select");

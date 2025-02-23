@@ -203,7 +203,7 @@ export interface MarkerFabricNativeProps extends ViewProps {
    * Callback that is called when the marker is deselected, before the callout is hidden.
    *
    * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
+   * @platform Android: supported
    */
   onDeselect?: MarkerPressEventHandler;
 

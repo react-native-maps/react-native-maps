@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapColorScheme;
+import com.rnmaps.maps.MapMarker;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
@@ -301,7 +302,13 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void addView(MapView parent, View child, int index) {
-        parent.addFeature(child, index);
+        if (child instanceof MapMarker && ((MapMarker) child).isLoadingImage()){
+            ((MapMarker) child).setImageLoadedListener((uri, drawable, b) -> {
+                parent.addFeature(child, parent.getFeatureCount());
+            });
+        } else {
+            parent.addFeature(child, index);
+        }
     }
 
     @Override

@@ -15,6 +15,14 @@
 
 namespace facebook::react {
 
+RNMapsCalloutProps::RNMapsCalloutProps(
+    const PropsParserContext &context,
+    const RNMapsCalloutProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    alphaHitTest(convertRawProp(context, rawProps, "alphaHitTest", sourceProps.alphaHitTest, {false})),
+    tooltip(convertRawProp(context, rawProps, "tooltip", sourceProps.tooltip, {false}))
+      {}
 RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     const PropsParserContext &context,
     const RNMapsGoogleMapViewProps &sourceProps,

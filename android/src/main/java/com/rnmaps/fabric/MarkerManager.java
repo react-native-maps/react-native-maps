@@ -1,23 +1,27 @@
 package com.rnmaps.fabric;
 
 
+import android.util.Log;
+import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.uimanager.ReactStylesDiffMap;
+import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
-import com.facebook.react.viewmanagers.RNMapsMapViewManagerDelegate;
-import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
 import com.facebook.react.viewmanagers.RNMapsMarkerManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsMarkerManagerInterface;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.rnmaps.maps.MapCallout;
 import com.rnmaps.maps.MapMarker;
-import com.rnmaps.maps.MapView;
 
 import java.util.Map;
 
@@ -28,7 +32,6 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     public MarkerManager(ReactApplicationContext context){
         super(context);
     }
-    private GoogleMapOptions options;
     private final RNMapsMarkerManagerDelegate<MapMarker, MarkerManager> delegate =
             new RNMapsMarkerManagerDelegate<>(this);
 
@@ -45,6 +48,70 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     @Override
     public MapMarker createViewInstance(ThemedReactContext context) {
         return new MapMarker(context, null);
+    }
+    private MarkerOptions optionsForInitialProps(ReactStylesDiffMap initialProps){
+        MarkerOptions options = new MarkerOptions();
+        if (initialProps != null) {
+            if (initialProps.hasKey("opacity")) {
+                options.alpha(initialProps.getFloat("opacity", 1));
+            }
+            if (initialProps.hasKey("anchor")) {
+                ReadableMap map = initialProps.getMap("anchor");
+                float x = (float) (map != null && map.hasKey("x") ? map.getDouble("x") : 0.5);
+                float y = (float) (map != null && map.hasKey("y") ? map.getDouble("y") : 1.0);
+                options.anchor(x, y);
+            }
+
+            if (initialProps.hasKey("coordinate")) {
+                ReadableMap coordinate = initialProps.getMap("coordinate");
+                LatLng position = new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude"));
+                options.position(position);
+            }
+            if (initialProps.hasKey("title")) {
+                options.title(initialProps.getString("title"));
+            }
+            if (initialProps.hasKey("description")) {
+                options.snippet(initialProps.getString("description"));
+            }
+            if (initialProps.hasKey("draggable")){
+                options.draggable(initialProps.getBoolean("draggable", false));
+            }
+            if (initialProps.hasKey("rotation")){
+                options.rotation(initialProps.getFloat("rotation", 0));
+            }
+            if (initialProps.hasKey("flat")) {
+                options.flat(initialProps.getBoolean("flat", false));
+            }
+            if (initialProps.hasKey("calloutAnchor")){
+                ReadableMap map = initialProps.getMap("calloutAnchor");
+                float x = (float) (map != null && map.hasKey("x") ? map.getDouble("x") : 0.5);
+                float y = (float) (map != null && map.hasKey("y") ? map.getDouble("y") : 1.0);
+                options.infoWindowAnchor(x, y);
+            }
+
+            if (initialProps.hasKey("zIndex")){
+                options.zIndex(initialProps.getFloat("zIndex", 0));
+            }
+        }
+        return options;
+    }
+
+    @Override
+    protected MapMarker createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext, @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
+        MapMarker view = null;
+        view = new MapMarker(reactContext, optionsForInitialProps(initialProps), null);
+        view.setId(reactTag);
+        this.addEventEmitters(reactContext, view);
+        if (initialProps != null) {
+            this.updateProperties(view, initialProps);
+        }
+        if (stateWrapper != null) {
+            Object extraData = this.updateState(view, initialProps, stateWrapper);
+            if (extraData != null) {
+                this.updateExtraData(view, extraData);
+            }
+        }
+        return view;
     }
 
 
@@ -76,7 +143,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void setImage(MapMarker view, @Nullable ReadableMap value) {
-
+        view.setImage(value.getString("uri"));
     }
 
     @Override
@@ -156,12 +223,13 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void showCallout(MapMarker view) {
+        ((Marker) view.getFeature()).showInfoWindow();
 
     }
 
     @Override
     public void hideCallout(MapMarker view) {
-
+        ((Marker) view.getFeature()).hideInfoWindow();
     }
 
     @Override
@@ -172,5 +240,16 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     @Override
     public void redraw(MapMarker view) {
 
+    }
+    @Override
+    public void addView(MapMarker parent, View child, int index) {
+        // if an <Callout /> component is a child, then it is a callout view, NOT part of the
+        // marker.
+        if (child instanceof MapCallout) {
+            parent.setCalloutView((MapCallout) child);
+        } else {
+            super.addView(parent, child, index);
+            parent.update(true);
+        }
     }
 }

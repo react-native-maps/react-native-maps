@@ -1,5 +1,40 @@
 # Changelog
 
+# [1.21.0-alpha.66](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.65...v1.21.0-alpha.66) (2025-02-22)
+
+
+### Features
+
+* **android:** support for Fabric ([e445b01](https://github.com/react-native-maps/react-native-maps/commit/e445b01104a571590309ff88c731d8ad2a89ca4f))
+
+# [1.21.0-alpha.65](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.64...v1.21.0-alpha.65) (2025-02-22)
+
+
+### Features
+
+* **android:** support for Fabric ([af95dd2](https://github.com/react-native-maps/react-native-maps/commit/af95dd2d68a0d3751c2693b9b39c831f6c795b6b))
+
+# [1.21.0-alpha.64](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.63...v1.21.0-alpha.64) (2025-02-22)
+
+
+### Bug Fixes
+
+* **ios:** removed unsupported fill color props ([#5360](https://github.com/react-native-maps/react-native-maps/issues/5360)) ([ed71d3c](https://github.com/react-native-maps/react-native-maps/commit/ed71d3c8aef209edfcf6383e584bb8076a8f0495))
+
+# [1.21.0-alpha.63](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.62...v1.21.0-alpha.63) (2025-02-22)
+
+
+### Features
+
+* **ios:** support for Fabric ([0f5dd8b](https://github.com/react-native-maps/react-native-maps/commit/0f5dd8b8adf46fb936c072ddfa2e3bfbaf517a12))
+
+# [1.21.0-alpha.62](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.61...v1.21.0-alpha.62) (2025-02-16)
+
+
+### Features
+
+* **android:** support for Fabric ([a2ec407](https://github.com/react-native-maps/react-native-maps/commit/a2ec407f195351f521a428b5b83926458d970594))
+
 # [1.21.0-alpha.61](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.60...v1.21.0-alpha.61) (2025-02-15)
 
 

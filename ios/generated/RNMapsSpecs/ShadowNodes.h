@@ -18,6 +18,17 @@
 
 namespace facebook::react {
 
+JSI_EXPORT extern const char RNMapsCalloutComponentName[];
+
+/*
+ * `ShadowNode` for <RNMapsCallout> component.
+ */
+using RNMapsCalloutShadowNode = ConcreteViewShadowNode<
+    RNMapsCalloutComponentName,
+    RNMapsCalloutProps,
+    RNMapsCalloutEventEmitter,
+    RNMapsCalloutState>;
+
 JSI_EXPORT extern const char RNMapsGoogleMapViewComponentName[];
 
 /*
