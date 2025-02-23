@@ -1,6 +1,7 @@
 package com.rnmaps.fabric;
 
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 
@@ -163,7 +164,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void setDescription(MapMarker view, @Nullable String value) {
-
+        view.setSnippet(value);
     }
 
     @Override
@@ -193,7 +194,10 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void setPinColor(MapMarker view, @Nullable Integer value) {
-
+        float[] hsv = new float[3];
+        Color.colorToHSV(value, hsv);
+        // NOTE: android only supports a hue
+        view.setMarkerHue(hsv[0]);
     }
 
     @Override
@@ -213,7 +217,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void animateToCoordinates(MapMarker view, double latitude, double longitude, int duration) {
-
+        view.animateToCoodinate(new LatLng(latitude, longitude), duration);
     }
 
     @Override

@@ -453,46 +453,32 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         });
 
-        map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-            @Override
-            public void onCameraMoveStarted(int reason) {
-                cameraMoveReason = reason;
-                boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
-                WritableMap event = new WritableNativeMap();
-                event.putBoolean("isGesture", isGesture);
-            //    dispatchEvent(event, OnRegionChangeEvent::new);
-                // todo: use Fabric events
-                // manager.pushEvent(context, view, "onRegionChangeStart", event);
-            }
+        map.setOnCameraMoveStartedListener(reason -> {
+            cameraMoveReason = reason;
+            boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
+            WritableMap event = new WritableNativeMap();
+            event.putBoolean("isGesture", isGesture);
+            dispatchEvent(event, OnRegionChangeStartEvent::new);
         });
 
-        map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
-            @Override
-            public void onCameraMove() {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+        map.setOnCameraMoveListener(() -> {
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+            cameraLastIdleBounds = null;
+            boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, false, isGesture);
+            dispatchEvent(payload, OnRegionChangeStartEvent::new);
+        });
 
-                cameraLastIdleBounds = null;
+        map.setOnCameraIdleListener(() -> {
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+            if ((cameraMoveReason != 0) &&
+                    ((cameraLastIdleBounds == null) ||
+                            LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
+
+                cameraLastIdleBounds = bounds;
                 boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-                WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, true, isGesture);
-                dispatchEvent(payload, OnRegionChangeEvent::new);
-            }
-        });
-
-        map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-                if ((cameraMoveReason != 0) &&
-                        ((cameraLastIdleBounds == null) ||
-                                LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
-
-                    cameraLastIdleBounds = bounds;
-                    boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-
-                    RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, false, isGesture);
-                    // todo: use Fabric events
-                    // eventDispatcher.dispatchEvent(event);
-                }
+                WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, false, isGesture);
+                dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
             }
         });
 
@@ -603,6 +589,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
         builder.put(OnPoiClickEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPoiClickEvent.EVENT_NAME));
         builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnLongPressEvent.EVENT_NAME));
+        builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
+        builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeCompleteEvent.EVENT_NAME));
         return builder.build();
     }
 
