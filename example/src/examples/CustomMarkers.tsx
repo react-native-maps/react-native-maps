@@ -9,6 +9,7 @@ import {
 
 import MapView, {Marker} from 'react-native-maps';
 import flagPinkImg from './assets/flag-pink.png';
+import flagBlueImg from './assets/flag-blue.png';
 
 const {width, height} = Dimensions.get('window');
 
@@ -20,6 +21,8 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
 class CustomMarkers extends React.Component<any, any> {
+  private pinkMarker: Boolean = true;
+
   constructor(props: any) {
     super(props);
 
@@ -37,12 +40,15 @@ class CustomMarkers extends React.Component<any, any> {
   }
 
   onMapPress(e: any) {
+    this.pinkMarker = !this.pinkMarker;
+
     this.setState({
       markers: [
         ...this.state.markers,
         {
           coordinate: e.nativeEvent.coordinate,
           key: `foo${id++}`,
+          pink: this.pinkMarker,
         },
       ],
     });
@@ -59,7 +65,7 @@ class CustomMarkers extends React.Component<any, any> {
           {this.state.markers.map((marker: any) => (
             <Marker
               title={marker.key}
-              image={flagPinkImg}
+              image={marker.pink ? flagPinkImg : flagBlueImg}
               key={marker.key}
               coordinate={marker.coordinate}
             />
