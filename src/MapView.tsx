@@ -954,14 +954,9 @@ class MapView extends React.Component<MapViewProps, State> {
       throw new Error('Invalid result specified');
     }
 
-    // Call native function
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.takeSnapshot(this._getHandle(), config);
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        // @ts-ignore
-        return this.fabricMap.current.takeSnapshot(config);
-      }
+    if (this.fabricMap.current) {
+      // @ts-ignore
+      return this.fabricMap.current.takeSnapshot(config);
     }
     return Promise.reject('takeSnapshot not supported on this platform');
   }
