@@ -482,14 +482,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         });
 
-        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                isMapLoaded = true;
-                // todo: use Fabric events
-                //  manager.pushEvent(context, view, "onMapLoaded", new WritableNativeMap());
-                MapView.this.cacheView();
-            }
+        map.setOnMapLoadedCallback(() -> {
+            isMapLoaded = true;
+            dispatchEvent(new WritableNativeMap(), OnMapLoadedEvent::new);
+            MapView.this.cacheView();
         });
 
         // We need to be sure to disable location-tracking when app enters background, in-case some
@@ -1421,13 +1417,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     @Override
     public void onMarkerDragStart(Marker marker) {
         WritableMap event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
         dispatchEvent(event, OnMarkerDragStartEvent::new);
 
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
-        //  manager.pushEvent(context, markerView, "onDragStart", event);
+        dispatchEvent(event, OnMarkerDragStartEvent::new, markerView.getId(), context);
     }
 
     @Override
@@ -1437,20 +1431,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
-        // manager.pushEvent(context, markerView, "onDrag", event);
+        dispatchEvent(event, OnMarkerDragEvent::new, markerView.getId(), context);
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
         WritableMap event = makeClickEventData(marker.getPosition());
         dispatchEvent(event, OnMarkerDragEndEvent::new);
-
-
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
-        // manager.pushEvent(context, markerView, "onDragEnd", event);
+        dispatchEvent(event, OnMarkerDragEndEvent::new, markerView.getId(), context);
     }
 
     @Override
