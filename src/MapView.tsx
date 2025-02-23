@@ -1034,11 +1034,9 @@ class MapView extends React.Component<MapViewProps, State> {
   getMarkersFrames(onlyVisible: boolean = false): Promise<{
     [key: string]: {point: Point; frame: Frame};
   }> {
-    if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        // @ts-ignore
-        return this.fabricMap.current.getMarkersFrames(onlyVisible);
-      }
+    if (this.fabricMap.current) {
+      // @ts-ignore
+      return this.fabricMap.current.getMarkersFrames(onlyVisible);
     }
     return Promise.reject('getMarkersFrames not supported on this platform');
   }

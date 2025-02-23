@@ -68,16 +68,11 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
     @Override
     public void getMarkersFrames(double tag, boolean onlyVisible, Promise promise) {
 
-    }
-
-    @Override
-    public void getMapBoundaries(double tag, Promise promise) {
         UIManager uiManager = UIManagerHelper.getUIManagerForReactTag(getReactApplicationContext(), (int) tag);
-        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
-            @Override
-            public void run() {
-                MapView view = (MapView) uiManager.resolveView((int) tag);
-                double[][] boundaries = view.getMapBoundaries();
+        getReactApplicationContext().runOnUiQueueThread(() -> {
+            MapView view = (MapView) uiManager.resolveView((int) tag);
+            double[][] boundaries = view.getMarkersFrames(onlyVisible);
+            if (boundaries != null) {
                 WritableMap coordinates = new WritableNativeMap();
                 WritableMap northEastHash = new WritableNativeMap();
                 WritableMap southWestHash = new WritableNativeMap();
@@ -91,7 +86,31 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
                 coordinates.putMap("southWest", southWestHash);
 
                 promise.resolve(coordinates);
+            } else {
+                promise.resolve(null);
             }
+        });
+    }
+
+    @Override
+    public void getMapBoundaries(double tag, Promise promise) {
+        UIManager uiManager = UIManagerHelper.getUIManagerForReactTag(getReactApplicationContext(), (int) tag);
+        getReactApplicationContext().runOnUiQueueThread(() -> {
+            MapView view = (MapView) uiManager.resolveView((int) tag);
+            double[][] boundaries = view.getMapBoundaries();
+            WritableMap coordinates = new WritableNativeMap();
+            WritableMap northEastHash = new WritableNativeMap();
+            WritableMap southWestHash = new WritableNativeMap();
+
+            northEastHash.putDouble("longitude", boundaries[0][0]);
+            northEastHash.putDouble("latitude", boundaries[0][1]);
+            southWestHash.putDouble("longitude", boundaries[1][0]);
+            southWestHash.putDouble("latitude", boundaries[1][1]);
+
+            coordinates.putMap("northEast", northEastHash);
+            coordinates.putMap("southWest", southWestHash);
+
+            promise.resolve(coordinates);
         });
     }
 
