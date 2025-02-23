@@ -246,6 +246,35 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     }
 
+    public double[][] getMarkersFrames(boolean onlyVisible) {
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        boolean addedPosition = false;
+        LatLngBounds mapBounds = map.getProjection().getVisibleRegion().latLngBounds;
+        for (MapFeature feature : features) {
+            if (feature instanceof MapMarker) {
+                Marker marker = (Marker) feature.getFeature();
+                if (!onlyVisible ||
+                        mapBounds.contains(marker.getPosition())) {
+                    builder.include(marker.getPosition());
+                    addedPosition = true;
+                }
+            }
+        }
+        if (addedPosition) {
+
+           LatLngBounds bounds = builder.build();
+            LatLng northEast = bounds.northeast;
+            LatLng southWest = bounds.southwest;
+
+            return new double[][]{
+                    {northEast.longitude, northEast.latitude},
+                    {southWest.longitude, southWest.latitude}
+            };
+        }
+        return null;
+    }
+
 
     @FunctionalInterface
     public interface EventCreator<T extends Event> {
@@ -255,7 +284,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private <T extends Event> void dispatchEvent(WritableMap payload, EventCreator<T> creator) {
         dispatchEvent(payload, creator, getId(), context);
     }
-    public static <T extends Event> void dispatchEvent(WritableMap payload, EventCreator<T> creator, int viewId, ReactContext context){
+
+    public static <T extends Event> void dispatchEvent(WritableMap payload, EventCreator<T> creator, int viewId, ReactContext context) {
         // Cast context to ReactContext
         ReactContext reactContext = context;
 
@@ -747,12 +777,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         if (camera.has("heading")) {
             builder.bearing((float) camera.getDouble("heading"));
-        }  else {
+        } else {
             builder.bearing(map.getCameraPosition().bearing);
         }
         if (camera.has("zoom")) {
             builder.zoom((float) camera.getDouble("zoom"));
-        }  else {
+        } else {
             builder.zoom(map.getCameraPosition().zoom);
         }
 
