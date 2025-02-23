@@ -109,9 +109,9 @@ class Callouts extends React.Component<any, any> {
                 Alert.alert('callout pressed');
               }}
               style={styles.customView}>
-              {Platform.OS === 'ios' && (
-                <CustomCallout>
-                  <Text>{`This is a custom callout bubble view ${this.state.cnt}`}</Text>
+              <CustomCallout>
+                <Text>{`This is a custom callout bubble view ${this.state.cnt}`}</Text>
+                {Platform.OS === 'ios' && (
                   <CalloutSubview
                     onPress={() => {
                       this.setState({cnt: this.state.cnt + 1}, () => {
@@ -121,8 +121,8 @@ class Callouts extends React.Component<any, any> {
                     style={[styles.calloutButton]}>
                     <Text>Click me</Text>
                   </CalloutSubview>
-                </CustomCallout>
-              )}
+                )}
+              </CustomCallout>
             </Callout>
           </Marker>
           <Marker
@@ -159,7 +159,7 @@ class Callouts extends React.Component<any, any> {
 const styles = StyleSheet.create({
   customView: {
     width: 140,
-    height: 140,
+    height: Platform.select({android: 100, default: 140}),
   },
   plainView: {
     width: 60,
