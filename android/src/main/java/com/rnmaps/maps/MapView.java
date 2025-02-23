@@ -99,6 +99,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private RelativeLayout mapLoadingLayout;
     private ImageView cacheImageView;
     private Boolean isMapLoaded = false;
+
+    private Boolean isMapReady = false;
+
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
 
@@ -153,6 +156,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private Boolean showIndoors;
     private Boolean scrollEnabled;
     private Boolean scrollDuringRotateOrZoomEnabled;
+    private String kmlSrc = null;
 
     private static boolean contextHasBug(Context context) {
         return context == null ||
@@ -562,6 +566,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         };
 
         context.addLifecycleEventListener(lifecycleListener);
+        isMapReady = true;
+        if (kmlSrc != null){
+            setKmlSrc(kmlSrc);
+            kmlSrc = null;
+        }
     }
 
     private synchronized void handleMarkerSelection(MapMarker target) {
@@ -1587,64 +1596,66 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setKmlSrc(String kmlSrc) {
-        try {
-            InputStream kmlStream = new FileUtil(context).execute(kmlSrc).get();
+        if (isMapReady) {
+            try {
+                InputStream kmlStream = new FileUtil(context).execute(kmlSrc).get();
 
-            if (kmlStream == null) {
-                return;
-            }
-
-            KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context, markerManager, polygonManager, polylineManager, groundOverlayManager, null);
-            kmlLayer.addLayerToMap();
-
-            WritableMap pointers = new WritableNativeMap();
-            WritableArray markers = new WritableNativeArray();
-
-            if (kmlLayer.getContainers() == null) {
-                // todo: use Fabric events
-                // manager.pushEvent(context, this, "onKmlReady", pointers);
-                return;
-            }
-
-            //Retrieve a nested container within the first container
-            KmlContainer container = kmlLayer.getContainers().iterator().next();
-            if (container == null || container.getContainers() == null) {
-                // todo: use Fabric events
-                // manager.pushEvent(context, this, "onKmlReady", pointers);
-                return;
-            }
-
-
-            if (container.getContainers().iterator().hasNext()) {
-                container = container.getContainers().iterator().next();
-            }
-
-            int index = 0;
-            for (KmlPlacemark placemark : container.getPlacemarks()) {
-                MarkerOptions options = new MarkerOptions();
-
-                if (placemark.getInlineStyle() != null) {
-                    options = placemark.getMarkerOptions();
-                } else {
-                    options.icon(BitmapDescriptorFactory.defaultMarker());
+                if (kmlStream == null) {
+                    return;
                 }
 
-                LatLng latLng = ((LatLng) placemark.getGeometry().getGeometryObject());
-                String title = "";
-                String snippet = "";
+                KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context, markerManager, polygonManager, polylineManager, groundOverlayManager, null);
 
-                if (placemark.hasProperty("name")) {
-                    title = placemark.getProperty("name");
+                kmlLayer.addLayerToMap();
+
+                WritableMap pointers = new WritableNativeMap();
+                WritableArray markers = new WritableNativeArray();
+
+                if (kmlLayer.getContainers() == null) {
+                    // todo: use Fabric events
+                    // manager.pushEvent(context, this, "onKmlReady", pointers);
+                    return;
                 }
 
-                if (placemark.hasProperty("description")) {
-                    snippet = placemark.getProperty("description");
+                //Retrieve a nested container within the first container
+                KmlContainer container = kmlLayer.getContainers().iterator().next();
+                if (container == null || container.getContainers() == null) {
+                    // todo: use Fabric events
+                    // manager.pushEvent(context, this, "onKmlReady", pointers);
+                    return;
                 }
 
-                options.position(latLng);
-                options.title(title);
-                options.snippet(snippet);
-                // FIXME: get markerManager from somewhere
+
+                if (container.getContainers().iterator().hasNext()) {
+                    container = container.getContainers().iterator().next();
+                }
+
+                int index = 0;
+                for (KmlPlacemark placemark : container.getPlacemarks()) {
+                    MarkerOptions options = new MarkerOptions();
+
+                    if (placemark.getInlineStyle() != null) {
+                        options = placemark.getMarkerOptions();
+                    } else {
+                        options.icon(BitmapDescriptorFactory.defaultMarker());
+                    }
+
+                    LatLng latLng = ((LatLng) placemark.getGeometry().getGeometryObject());
+                    String title = "";
+                    String snippet = "";
+
+                    if (placemark.hasProperty("name")) {
+                        title = placemark.getProperty("name");
+                    }
+
+                    if (placemark.hasProperty("description")) {
+                        snippet = placemark.getProperty("description");
+                    }
+
+                    options.position(latLng);
+                    options.title(title);
+                    options.snippet(snippet);
+                    // FIXME: get markerManager from somewhere
         /*
         MapMarker marker = new MapMarker(context, options, this.manager.getMarkerManager());
 
@@ -1670,15 +1681,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         markers.pushMap(loadedMarker);
          */
+                }
+
+                pointers.putArray("markers", markers);
+                // todo: use Fabric events
+                //  manager.pushEvent(context, this, "onKmlReady", pointers);
+
+            } catch (XmlPullParserException | IOException | InterruptedException |
+                     ExecutionException e) {
+                e.printStackTrace();
             }
-
-            pointers.putArray("markers", markers);
-            // todo: use Fabric events
-            //  manager.pushEvent(context, this, "onKmlReady", pointers);
-
-        } catch (XmlPullParserException | IOException | InterruptedException |
-                 ExecutionException e) {
-            e.printStackTrace();
+        } else {
+           this.kmlSrc = kmlSrc;
         }
     }
 
