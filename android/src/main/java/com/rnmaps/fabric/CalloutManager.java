@@ -20,7 +20,6 @@ import java.util.Map;
 @ReactModule(name = CalloutManager.REACT_CLASS)
 public class CalloutManager extends ViewGroupManager<MapCallout> implements RNMapsCalloutManagerInterface<MapCallout> {
 
-
     public CalloutManager(ReactApplicationContext context){
         super(context);
     }
@@ -75,15 +74,4 @@ public class CalloutManager extends ViewGroupManager<MapCallout> implements RNMa
         return new SizeReportingShadowNode();
     }
 
-    @Override
-    public void updateExtraData(MapCallout view, Object extraData) {
-        // This method is called from the shadow node with the width/height of the rendered
-        // marker view.
-        //noinspection unchecked
-        Map<String, Float> data = (Map<String, Float>) extraData;
-        float width = data.get("width");
-        float height = data.get("height");
-        view.width = (int) width;
-        view.height = (int) height;
-    }
 }

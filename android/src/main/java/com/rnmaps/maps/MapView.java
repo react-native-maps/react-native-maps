@@ -253,16 +253,19 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     private <T extends Event> void dispatchEvent(WritableMap payload, EventCreator<T> creator) {
+        dispatchEvent(payload, creator, getId(), context);
+    }
+    public static <T extends Event> void dispatchEvent(WritableMap payload, EventCreator<T> creator, int viewId, ReactContext context){
         // Cast context to ReactContext
         ReactContext reactContext = context;
 
         // Get the event dispatcher
-        EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, getId());
+        EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, viewId);
 
         // If there is a dispatcher, create and dispatch the event
         if (eventDispatcher != null) {
             int surfaceId = UIManagerHelper.getSurfaceId(reactContext);
-            T event = creator.create(surfaceId, getId(), payload);
+            T event = creator.create(surfaceId, viewId, payload);
             eventDispatcher.dispatchEvent(event);
         }
     }
@@ -401,25 +404,22 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         });
 
-        markerCollection.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(@NonNull Marker marker) {
-                WritableMap event = makeClickEventData(marker.getPosition());
-                event.putString("action", "callout-press");
-                // todo: use Fabric events
-//        manager.pushEvent(context, view, "onCalloutPress", event);
+        markerCollection.setOnInfoWindowClickListener(marker -> {
+            WritableMap event = makeClickEventData(marker.getPosition());
+            event.putString("action", "callout-press");
+            dispatchEvent(event, OnCalloutPressEvent::new);
 
+
+            event = makeClickEventData(marker.getPosition());
+            event.putString("action", "callout-press");
+            MapMarker markerView = getMarkerMap(marker);
+            dispatchEvent(event, OnCalloutPressEvent::new, markerView.getId(), context);
+
+            MapCallout infoWindow = markerView.getCalloutView();
+            if (infoWindow != null) {
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "callout-press");
-                MapMarker markerView = getMarkerMap(marker);
-                // todo: use Fabric events
-                //  manager.pushEvent(context, markerView, "onCalloutPress", event);
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "callout-press");
-                MapCallout infoWindow = markerView.getCalloutView();
-                // todo: use Fabric events
-                // if (infoWindow != null) manager.pushEvent(context, infoWindow, "onPress", event);
+                dispatchEvent(event, OnPressEvent::new, infoWindow.getId(), context);
             }
         });
 
@@ -460,6 +460,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
                 WritableMap event = new WritableNativeMap();
                 event.putBoolean("isGesture", isGesture);
+            //    dispatchEvent(event, OnRegionChangeEvent::new);
                 // todo: use Fabric events
                 // manager.pushEvent(context, view, "onRegionChangeStart", event);
             }
