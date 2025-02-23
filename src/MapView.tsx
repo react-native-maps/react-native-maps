@@ -899,14 +899,8 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the bounding box ({ northEast: <LatLng>, southWest: <LatLng> })
    */
   async getMapBoundaries(): Promise<BoundingBox> {
-    if (Platform.OS === 'android') {
-      return await NativeModules.AirMapModule.getMapBoundaries(
-        this._getHandle(),
-      );
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getMapBoundaries();
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getMapBoundaries();
     }
     return Promise.reject('getMapBoundaries not supported on this platform');
   }
@@ -1107,6 +1101,18 @@ class MapView extends React.Component<MapViewProps, State> {
       this.props.onRegionChangeComplete(event.nativeEvent.region, details);
     }
   };
+  private handleRegionChangeStarted = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onRegionChangeStart) {
+      this.props.onRegionChangeStart(event);
+    }
+  };
+  private handleRegionChangeComplete = (event: NativeSyntheticEvent<any>) => {
+    const isGesture = event.nativeEvent.isGesture;
+    const details = {isGesture};
+    if (this.props.onRegionChangeComplete) {
+      this.props.onRegionChangeComplete(event.nativeEvent.region, details);
+    }
+  };
 
   render() {
     // Define props specifically for MapFabricNativeProps
@@ -1146,6 +1152,8 @@ class MapView extends React.Component<MapViewProps, State> {
       minZoom: minZoomLevel,
       maxZoom: maxZoomLevel,
       onRegionChange: this.handleRegionChange,
+      onRegionChangeStart: this.handleRegionChangeStarted,
+      onRegionChangeComplete: this.handleRegionChangeComplete,
       ...restProps,
     };
     if (this.props.region) {

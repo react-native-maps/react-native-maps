@@ -20,6 +20,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.UIManager;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -71,7 +72,27 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
 
     @Override
     public void getMapBoundaries(double tag, Promise promise) {
+        UIManager uiManager = UIManagerHelper.getUIManagerForReactTag(getReactApplicationContext(), (int) tag);
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                MapView view = (MapView) uiManager.resolveView((int) tag);
+                double[][] boundaries = view.getMapBoundaries();
+                WritableMap coordinates = new WritableNativeMap();
+                WritableMap northEastHash = new WritableNativeMap();
+                WritableMap southWestHash = new WritableNativeMap();
 
+                northEastHash.putDouble("longitude", boundaries[0][0]);
+                northEastHash.putDouble("latitude", boundaries[0][1]);
+                southWestHash.putDouble("longitude", boundaries[1][0]);
+                southWestHash.putDouble("latitude", boundaries[1][1]);
+
+                coordinates.putMap("northEast", northEastHash);
+                coordinates.putMap("southWest", southWestHash);
+
+                promise.resolve(coordinates);
+            }
+        });
     }
 
     @Override
