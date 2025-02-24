@@ -99,6 +99,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private RelativeLayout mapLoadingLayout;
     private ImageView cacheImageView;
     private Boolean isMapLoaded = false;
+
+    private Boolean isMapReady = false;
+
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
 
@@ -153,6 +156,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private Boolean showIndoors;
     private Boolean scrollEnabled;
     private Boolean scrollDuringRotateOrZoomEnabled;
+    private String kmlSrc = null;
 
     private static boolean contextHasBug(Context context) {
         return context == null ||
@@ -246,6 +250,35 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     }
 
+    public double[][] getMarkersFrames(boolean onlyVisible) {
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        boolean addedPosition = false;
+        LatLngBounds mapBounds = map.getProjection().getVisibleRegion().latLngBounds;
+        for (MapFeature feature : features) {
+            if (feature instanceof MapMarker) {
+                Marker marker = (Marker) feature.getFeature();
+                if (!onlyVisible ||
+                        mapBounds.contains(marker.getPosition())) {
+                    builder.include(marker.getPosition());
+                    addedPosition = true;
+                }
+            }
+        }
+        if (addedPosition) {
+
+           LatLngBounds bounds = builder.build();
+            LatLng northEast = bounds.northeast;
+            LatLng southWest = bounds.southwest;
+
+            return new double[][]{
+                    {northEast.longitude, northEast.latitude},
+                    {southWest.longitude, southWest.latitude}
+            };
+        }
+        return null;
+    }
+
 
     @FunctionalInterface
     public interface EventCreator<T extends Event> {
@@ -253,16 +286,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     private <T extends Event> void dispatchEvent(WritableMap payload, EventCreator<T> creator) {
+        dispatchEvent(payload, creator, getId(), context);
+    }
+
+    public static <T extends Event> void dispatchEvent(WritableMap payload, EventCreator<T> creator, int viewId, ReactContext context) {
         // Cast context to ReactContext
         ReactContext reactContext = context;
 
         // Get the event dispatcher
-        EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, getId());
+        EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, viewId);
 
         // If there is a dispatcher, create and dispatch the event
         if (eventDispatcher != null) {
             int surfaceId = UIManagerHelper.getSurfaceId(reactContext);
-            T event = creator.create(surfaceId, getId(), payload);
+            T event = creator.create(surfaceId, viewId, payload);
             eventDispatcher.dispatchEvent(event);
         }
     }
@@ -401,25 +438,22 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         });
 
-        markerCollection.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(@NonNull Marker marker) {
-                WritableMap event = makeClickEventData(marker.getPosition());
-                event.putString("action", "callout-press");
-                // todo: use Fabric events
-//        manager.pushEvent(context, view, "onCalloutPress", event);
+        markerCollection.setOnInfoWindowClickListener(marker -> {
+            WritableMap event = makeClickEventData(marker.getPosition());
+            event.putString("action", "callout-press");
+            dispatchEvent(event, OnCalloutPressEvent::new);
 
+
+            event = makeClickEventData(marker.getPosition());
+            event.putString("action", "callout-press");
+            MapMarker markerView = getMarkerMap(marker);
+            dispatchEvent(event, OnCalloutPressEvent::new, markerView.getId(), context);
+
+            MapCallout infoWindow = markerView.getCalloutView();
+            if (infoWindow != null) {
                 event = makeClickEventData(marker.getPosition());
                 event.putString("action", "callout-press");
-                MapMarker markerView = getMarkerMap(marker);
-                // todo: use Fabric events
-                //  manager.pushEvent(context, markerView, "onCalloutPress", event);
-
-                event = makeClickEventData(marker.getPosition());
-                event.putString("action", "callout-press");
-                MapCallout infoWindow = markerView.getCalloutView();
-                // todo: use Fabric events
-                // if (infoWindow != null) manager.pushEvent(context, infoWindow, "onPress", event);
+                dispatchEvent(event, OnPressEvent::new, infoWindow.getId(), context);
             }
         });
 
@@ -453,56 +487,39 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         });
 
-        map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-            @Override
-            public void onCameraMoveStarted(int reason) {
-                cameraMoveReason = reason;
-                boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
-                WritableMap event = new WritableNativeMap();
-                event.putBoolean("isGesture", isGesture);
-                // todo: use Fabric events
-                // manager.pushEvent(context, view, "onRegionChangeStart", event);
-            }
+        map.setOnCameraMoveStartedListener(reason -> {
+            cameraMoveReason = reason;
+            boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
+            WritableMap event = new WritableNativeMap();
+            event.putBoolean("isGesture", isGesture);
+            dispatchEvent(event, OnRegionChangeStartEvent::new);
         });
 
-        map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
-            @Override
-            public void onCameraMove() {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+        map.setOnCameraMoveListener(() -> {
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+            cameraLastIdleBounds = null;
+            boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, false, isGesture);
+            dispatchEvent(payload, OnRegionChangeStartEvent::new);
+        });
 
-                cameraLastIdleBounds = null;
+        map.setOnCameraIdleListener(() -> {
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+            if ((cameraMoveReason != 0) &&
+                    ((cameraLastIdleBounds == null) ||
+                            LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
+
+                cameraLastIdleBounds = bounds;
                 boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-                WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, true, isGesture);
-                dispatchEvent(payload, OnRegionChangeEvent::new);
+                WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, false, isGesture);
+                dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
             }
         });
 
-        map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-                if ((cameraMoveReason != 0) &&
-                        ((cameraLastIdleBounds == null) ||
-                                LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
-
-                    cameraLastIdleBounds = bounds;
-                    boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-
-                    RegionChangeEvent event = new RegionChangeEvent(getId(), bounds, false, isGesture);
-                    // todo: use Fabric events
-                    // eventDispatcher.dispatchEvent(event);
-                }
-            }
-        });
-
-        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                isMapLoaded = true;
-                // todo: use Fabric events
-                //  manager.pushEvent(context, view, "onMapLoaded", new WritableNativeMap());
-                MapView.this.cacheView();
-            }
+        map.setOnMapLoadedCallback(() -> {
+            isMapLoaded = true;
+            dispatchEvent(new WritableNativeMap(), OnMapLoadedEvent::new);
+            MapView.this.cacheView();
         });
 
         // We need to be sure to disable location-tracking when app enters background, in-case some
@@ -549,6 +566,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         };
 
         context.addLifecycleEventListener(lifecycleListener);
+        isMapReady = true;
+        if (kmlSrc != null){
+            setKmlSrc(kmlSrc);
+            kmlSrc = null;
+        }
     }
 
     private synchronized void handleMarkerSelection(MapMarker target) {
@@ -602,6 +624,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
         builder.put(OnPoiClickEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPoiClickEvent.EVENT_NAME));
         builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnLongPressEvent.EVENT_NAME));
+        builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
+        builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeCompleteEvent.EVENT_NAME));
         return builder.build();
     }
 
@@ -762,12 +786,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         if (camera.has("heading")) {
             builder.bearing((float) camera.getDouble("heading"));
-        }  else {
+        } else {
             builder.bearing(map.getCameraPosition().bearing);
         }
         if (camera.has("zoom")) {
             builder.zoom((float) camera.getDouble("zoom"));
-        }  else {
+        } else {
             builder.zoom(map.getCameraPosition().zoom);
         }
 
@@ -1432,13 +1456,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     @Override
     public void onMarkerDragStart(Marker marker) {
         WritableMap event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
         dispatchEvent(event, OnMarkerDragStartEvent::new);
 
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
-        //  manager.pushEvent(context, markerView, "onDragStart", event);
+        dispatchEvent(event, OnMarkerDragStartEvent::new, markerView.getId(), context);
     }
 
     @Override
@@ -1448,20 +1470,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
-        // manager.pushEvent(context, markerView, "onDrag", event);
+        dispatchEvent(event, OnMarkerDragEvent::new, markerView.getId(), context);
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
         WritableMap event = makeClickEventData(marker.getPosition());
         dispatchEvent(event, OnMarkerDragEndEvent::new);
-
-
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        // todo: use Fabric events
-        // manager.pushEvent(context, markerView, "onDragEnd", event);
+        dispatchEvent(event, OnMarkerDragEndEvent::new, markerView.getId(), context);
     }
 
     @Override
@@ -1578,64 +1596,66 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setKmlSrc(String kmlSrc) {
-        try {
-            InputStream kmlStream = new FileUtil(context).execute(kmlSrc).get();
+        if (isMapReady) {
+            try {
+                InputStream kmlStream = new FileUtil(context).execute(kmlSrc).get();
 
-            if (kmlStream == null) {
-                return;
-            }
-
-            KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context, markerManager, polygonManager, polylineManager, groundOverlayManager, null);
-            kmlLayer.addLayerToMap();
-
-            WritableMap pointers = new WritableNativeMap();
-            WritableArray markers = new WritableNativeArray();
-
-            if (kmlLayer.getContainers() == null) {
-                // todo: use Fabric events
-                // manager.pushEvent(context, this, "onKmlReady", pointers);
-                return;
-            }
-
-            //Retrieve a nested container within the first container
-            KmlContainer container = kmlLayer.getContainers().iterator().next();
-            if (container == null || container.getContainers() == null) {
-                // todo: use Fabric events
-                // manager.pushEvent(context, this, "onKmlReady", pointers);
-                return;
-            }
-
-
-            if (container.getContainers().iterator().hasNext()) {
-                container = container.getContainers().iterator().next();
-            }
-
-            int index = 0;
-            for (KmlPlacemark placemark : container.getPlacemarks()) {
-                MarkerOptions options = new MarkerOptions();
-
-                if (placemark.getInlineStyle() != null) {
-                    options = placemark.getMarkerOptions();
-                } else {
-                    options.icon(BitmapDescriptorFactory.defaultMarker());
+                if (kmlStream == null) {
+                    return;
                 }
 
-                LatLng latLng = ((LatLng) placemark.getGeometry().getGeometryObject());
-                String title = "";
-                String snippet = "";
+                KmlLayer kmlLayer = new KmlLayer(map, kmlStream, context, markerManager, polygonManager, polylineManager, groundOverlayManager, null);
 
-                if (placemark.hasProperty("name")) {
-                    title = placemark.getProperty("name");
+                kmlLayer.addLayerToMap();
+
+                WritableMap pointers = new WritableNativeMap();
+                WritableArray markers = new WritableNativeArray();
+
+                if (kmlLayer.getContainers() == null) {
+                    // todo: use Fabric events
+                    // manager.pushEvent(context, this, "onKmlReady", pointers);
+                    return;
                 }
 
-                if (placemark.hasProperty("description")) {
-                    snippet = placemark.getProperty("description");
+                //Retrieve a nested container within the first container
+                KmlContainer container = kmlLayer.getContainers().iterator().next();
+                if (container == null || container.getContainers() == null) {
+                    // todo: use Fabric events
+                    // manager.pushEvent(context, this, "onKmlReady", pointers);
+                    return;
                 }
 
-                options.position(latLng);
-                options.title(title);
-                options.snippet(snippet);
-                // FIXME: get markerManager from somewhere
+
+                if (container.getContainers().iterator().hasNext()) {
+                    container = container.getContainers().iterator().next();
+                }
+
+                int index = 0;
+                for (KmlPlacemark placemark : container.getPlacemarks()) {
+                    MarkerOptions options = new MarkerOptions();
+
+                    if (placemark.getInlineStyle() != null) {
+                        options = placemark.getMarkerOptions();
+                    } else {
+                        options.icon(BitmapDescriptorFactory.defaultMarker());
+                    }
+
+                    LatLng latLng = ((LatLng) placemark.getGeometry().getGeometryObject());
+                    String title = "";
+                    String snippet = "";
+
+                    if (placemark.hasProperty("name")) {
+                        title = placemark.getProperty("name");
+                    }
+
+                    if (placemark.hasProperty("description")) {
+                        snippet = placemark.getProperty("description");
+                    }
+
+                    options.position(latLng);
+                    options.title(title);
+                    options.snippet(snippet);
+                    // FIXME: get markerManager from somewhere
         /*
         MapMarker marker = new MapMarker(context, options, this.manager.getMarkerManager());
 
@@ -1661,15 +1681,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         markers.pushMap(loadedMarker);
          */
+                }
+
+                pointers.putArray("markers", markers);
+                // todo: use Fabric events
+                //  manager.pushEvent(context, this, "onKmlReady", pointers);
+
+            } catch (XmlPullParserException | IOException | InterruptedException |
+                     ExecutionException e) {
+                e.printStackTrace();
             }
-
-            pointers.putArray("markers", markers);
-            // todo: use Fabric events
-            //  manager.pushEvent(context, this, "onKmlReady", pointers);
-
-        } catch (XmlPullParserException | IOException | InterruptedException |
-                 ExecutionException e) {
-            e.printStackTrace();
+        } else {
+           this.kmlSrc = kmlSrc;
         }
     }
 

@@ -4,14 +4,6 @@ import android.content.Context;
 
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.views.view.ReactViewGroup;
-import com.rnmaps.fabric.event.OnLongPressEvent;
-import com.rnmaps.fabric.event.OnMarkerDeselectEvent;
-import com.rnmaps.fabric.event.OnMarkerDragEndEvent;
-import com.rnmaps.fabric.event.OnMarkerDragEvent;
-import com.rnmaps.fabric.event.OnMarkerDragStartEvent;
-import com.rnmaps.fabric.event.OnMarkerPressEvent;
-import com.rnmaps.fabric.event.OnMarkerSelectEvent;
-import com.rnmaps.fabric.event.OnPoiClickEvent;
 import com.rnmaps.fabric.event.OnPressEvent;
 
 import java.util.Map;
@@ -31,6 +23,13 @@ public class MapCallout extends ReactViewGroup {
 
   public boolean getTooltip() {
     return this.tooltip;
+  }
+
+  @Override
+  protected void onLayout(boolean changed,
+                                   int left, int top, int right, int bottom){
+    width = right - left;
+    height = bottom - top;
   }
 
 
