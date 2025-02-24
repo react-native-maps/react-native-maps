@@ -37,6 +37,7 @@ export interface FabricMapHandle {
   getAddressFromCoordinates: (coordinate: LatLng) => Promise<Address>;
   getPointForCoordinate: (coordinate: LatLng) => Promise<Point>;
   getCoordinateForPoint: (point: Point) => Promise<LatLng>;
+  setIndoorActiveLevelIndex: (activeLevelIndex: number) => void;
 }
 
 const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
@@ -217,6 +218,20 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
           );
         }
       },
+      setIndoorActiveLevelIndex(activeLevelIndex: number) {
+        if (fabricRef.current) {
+          try {
+            Commands.setIndoorActiveLevelIndex(
+              fabricRef.current,
+              activeLevelIndex,
+            );
+          } catch (error) {
+            console.error('Failed to set camera:', error);
+          }
+        } else {
+          console.warn('setIndoorActiveLevelIndex is not supported.');
+        }
+      },
       setCamera(camera: Partial<Camera>) {
         if (fabricRef.current) {
           try {
@@ -225,7 +240,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             console.error('Failed to set camera:', error);
           }
         } else {
-          console.warn('setCamera is only supported on iOS with Fabric.');
+          console.warn('setCamera is not supported');
         }
       },
     }));

@@ -481,6 +481,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public void setShowsTraffic(MapView view, boolean value) {
+        view.setShowsTraffic(value);
+    }
+
+    @Override
     public void setZoomTapEnabled(MapView view, boolean value) {
         // not supported
     }
@@ -583,6 +588,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void setIndoorActiveLevelIndex(MapView view, int activeLevelIndex) {
+        view.setIndoorActiveLevelIndex(activeLevelIndex);
     }
 
     @Override

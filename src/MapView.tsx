@@ -31,6 +31,7 @@ import {
   Region,
 } from './sharedTypes';
 import {
+  ActiveIndoorLevel,
   Address,
   BoundingBox,
   Camera,
@@ -39,8 +40,7 @@ import {
   Details,
   EdgePadding,
   FitToOptions,
-  IndoorBuildingEvent,
-  IndoorLevelActivatedEvent,
+  IndoorBuilding,
   KmlMapEvent,
   LongPressEvent,
   MapPressEvent,
@@ -318,7 +318,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  onIndoorBuildingFocused?: (event: IndoorBuildingEvent) => void;
+  onIndoorBuildingFocused?: (indoorBuilding: IndoorBuilding) => void;
 
   /**
    * Callback that is called when a level on indoor building is activated
@@ -326,7 +326,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  onIndoorLevelActivated?: (event: IndoorLevelActivatedEvent) => void;
+  onIndoorLevelActivated?: (indoorLevel: ActiveIndoorLevel) => void;
 
   /**
    * Callback that is called once the kml is fully loaded.
@@ -912,9 +912,10 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setIndoorActiveLevelIndex(activeLevelIndex: number) {
-    if (this.map.current) {
-      Commands.setIndoorActiveLevelIndex(this.map.current, activeLevelIndex);
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.setIndoorActiveLevelIndex(activeLevelIndex);
     }
+    return Promise.reject('getMapBoundaries not supported on this platform');
   }
 
   /**
@@ -1104,6 +1105,19 @@ class MapView extends React.Component<MapViewProps, State> {
       this.props.onRegionChangeStart(event);
     }
   };
+
+  private handleIndoorBuildingFocused = (event: any) => {
+    if (this.props.onIndoorBuildingFocused) {
+      this.props.onIndoorBuildingFocused(event);
+    }
+  };
+
+  private handleIndoorLevelActivated = (event: any) => {
+    if (this.props.onIndoorLevelActivated) {
+      this.props.onIndoorLevelActivated(event);
+    }
+  };
+
   private handleRegionChangeComplete = (event: NativeSyntheticEvent<any>) => {
     const isGesture = event.nativeEvent.isGesture;
     const details = {isGesture};
@@ -1152,6 +1166,9 @@ class MapView extends React.Component<MapViewProps, State> {
       onRegionChange: this.handleRegionChange,
       onRegionChangeStart: this.handleRegionChangeStarted,
       onRegionChangeComplete: this.handleRegionChangeComplete,
+      onIndoorBuildingFocused: this.handleIndoorBuildingFocused,
+      // @ts-ignore
+      onIndoorLevelActivated: this.handleIndoorLevelActivated,
       ...restProps,
     };
     if (this.props.region) {

@@ -111,6 +111,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private CameraUpdate cameraToSet;
     private boolean setPaddingDeferred = false;
     private boolean showUserLocation = false;
+
+    private boolean showsTraffic = false;
+
     private boolean handlePanDrag = false;
     private boolean moveOnMarkerPress = true;
     private boolean cacheEnabled = false;
@@ -330,6 +333,13 @@ public void onCreate(LifecycleOwner owner) {
             };
         }
         return null;
+    }
+
+    public void setShowsTraffic(boolean value) {
+        showsTraffic = value;
+        if (map != null){
+            map.setTrafficEnabled(value);
+        }
     }
 
 
@@ -576,6 +586,8 @@ public void onCreate(LifecycleOwner owner) {
         });
 
 
+        map.setTrafficEnabled(showsTraffic);
+
 
         isMapReady = true;
         if (kmlSrc != null){
@@ -635,8 +647,8 @@ public void onCreate(LifecycleOwner owner) {
         builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
         builder.put(OnPoiClickEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPoiClickEvent.EVENT_NAME));
         builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnLongPressEvent.EVENT_NAME));
-        builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
-        builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeCompleteEvent.EVENT_NAME));
+        builder.put(OnRegionChangeStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
+        builder.put(OnDoublePressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDoublePressEvent.EVENT_NAME));
         return builder.build();
     }
 
@@ -644,7 +656,9 @@ public void onCreate(LifecycleOwner owner) {
         return MapBuilder.of(
                 OnMapReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapReadyEvent.EVENT_NAME),
                 OnUserLocationChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnUserLocationChangeEvent.EVENT_NAME),
-                OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME)
+                OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME),
+                OnIndoorBuildingFocusedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorBuildingFocusedEvent.EVENT_NAME),
+                OnIndoorLevelActivatedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorLevelActivatedEvent.EVENT_NAME)
         );
     }
 
@@ -1603,7 +1617,8 @@ public void onCreate(LifecycleOwner owner) {
         LatLng coords = this.map.getProjection().fromScreenLocation(point);
         WritableMap event = makeClickEventData(coords);
         // todo: use Fabric events
-        // manager.pushEvent(context, this, "onDoublePress", event);
+        dispatchEvent(event, OnDoublePressEvent::new);
+
     }
 
     public void setKmlSrc(String kmlSrc) {
@@ -1728,9 +1743,8 @@ public void onCreate(LifecycleOwner owner) {
             indoorBuilding.putInt("activeLevelIndex", building.getActiveLevelIndex());
             indoorBuilding.putBoolean("underground", building.isUnderground());
 
-            event.putMap("IndoorBuilding", indoorBuilding);
-            // todo: use Fabric events
-            // manager.pushEvent(context, this, "onIndoorBuildingFocused", event);
+            event.putMap("indoorBuilding", indoorBuilding);
+            dispatchEvent(event, OnIndoorBuildingFocusedEvent::new);
         } else {
             WritableMap event = Arguments.createMap();
             WritableArray levelsArray = Arguments.createArray();
@@ -1739,9 +1753,8 @@ public void onCreate(LifecycleOwner owner) {
             indoorBuilding.putInt("activeLevelIndex", 0);
             indoorBuilding.putBoolean("underground", false);
 
-            event.putMap("IndoorBuilding", indoorBuilding);
-            // todo: use Fabric events
-            // manager.pushEvent(context, this, "onIndoorBuildingFocused", event);
+            event.putMap("indoorBuilding", indoorBuilding);
+            dispatchEvent(event, OnIndoorBuildingFocusedEvent::new);
         }
     }
 
@@ -1763,9 +1776,8 @@ public void onCreate(LifecycleOwner owner) {
         indoorlevel.putString("name", level.getName());
         indoorlevel.putString("shortName", level.getShortName());
 
-        event.putMap("IndoorLevel", indoorlevel);
-        // todo: use Fabric events
-        // manager.pushEvent(context, this, "onIndoorLevelActivated", event);
+        event.putMap("indoorLevel", indoorlevel);
+        dispatchEvent(event, OnIndoorLevelActivatedEvent::new);
     }
 
     public void setIndoorActiveLevelIndex(int activeLevelIndex) {

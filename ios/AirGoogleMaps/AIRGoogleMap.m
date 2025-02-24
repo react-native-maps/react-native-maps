@@ -1193,7 +1193,7 @@ id regionAsJSON(MKCoordinateRegion region) {
         return;
     }
     self.onIndoorBuildingFocused(@{
-        @"IndoorBuilding": @{
+        @"indoorBuilding": @{
                 @"activeLevelIndex": @(building.defaultLevelIndex),
                 @"underground": @(building.underground),
                 @"levels": arrayLevels
@@ -1213,7 +1213,7 @@ id regionAsJSON(MKCoordinateRegion region) {
         i++;
     }
     self.onIndoorLevelActivated(@{
-        @"IndoorLevel": @{
+        @"indoorLevel": @{
                 @"activeLevelIndex": @(i),
                 @"name": level.name,
                 @"shortName": level.shortName

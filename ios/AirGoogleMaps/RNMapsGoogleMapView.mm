@@ -86,6 +86,16 @@ using namespace facebook::react;
 
     [_view fitToCoordinates:coordinatesArray withEdgePadding:edgePadding animated:animated];
 }
+- (void) setIndoorActiveLevelIndex:(NSInteger)activeLevelIndex
+{
+    if (!_view.indoorDisplay) {
+      return;
+    }
+    if ( activeLevelIndex < [_view.indoorDisplay.activeBuilding.levels count]) {
+        _view.indoorDisplay.activeLevel = _view.indoorDisplay.activeBuilding.levels[activeLevelIndex];
+    }
+    
+}
 
 #pragma mark - Native commands
 
@@ -184,6 +194,40 @@ using namespace facebook::react;
               mapViewEventEmitter->onMapReady(data);
           }
       };
+    
+    _view.onIndoorLevelActivated = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorLevelActivatedIndoorLevel level = {
+                .activeLevelIndex= (int) [dictionary[@"activeLevelIndex"] integerValue],
+                .name = [dictionary[@"name"] UTF8String],
+                .shortName = [dictionary[@"shortName"] UTF8String],
+            };
+            
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorLevelActivated data = {
+                .indoorLevel = level,
+            };
+            mapViewEventEmitter->onIndoorLevelActivated(data);
+        }
+    };
+    
+    _view.onIndoorBuildingFocused = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorBuildingFocused building = {
+                .activeLevelIndex= (int) [dictionary[@"activeLevelIndex"] integerValue],
+                .name = [dictionary[@"name"] UTF8String],
+                .shortName = [dictionary[@"shortName"] UTF8String],
+            };
+            
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorBuildingFocused data = {
+                .indoorLevel = level,
+            };
+            mapViewEventEmitter->onIndoorLevelActivated(data);
+        }
+    };
 
     _view.onMapLoaded = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
