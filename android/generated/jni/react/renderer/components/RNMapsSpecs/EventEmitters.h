@@ -45,7 +45,7 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
     };
 
   struct OnIndoorBuildingFocused {
-      OnIndoorBuildingFocusedIndoorBuilding IndoorBuilding;
+      OnIndoorBuildingFocusedIndoorBuilding indoorBuilding;
     };
 
   struct OnIndoorLevelActivatedIndoorLevel {
@@ -55,7 +55,7 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
     };
 
   struct OnIndoorLevelActivated {
-      OnIndoorLevelActivatedIndoorLevel IndoorLevel;
+      OnIndoorLevelActivatedIndoorLevel indoorLevel;
     };
 
   struct OnKmlReady {

@@ -125,6 +125,7 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     userLocationUpdateInterval(convertRawProp(context, rawProps, "userLocationUpdateInterval", sourceProps.userLocationUpdateInterval, {5000})),
     zoomControlEnabled(convertRawProp(context, rawProps, "zoomControlEnabled", sourceProps.zoomControlEnabled, {true})),
     zoomEnabled(convertRawProp(context, rawProps, "zoomEnabled", sourceProps.zoomEnabled, {true})),
+    showsTraffic(convertRawProp(context, rawProps, "showsTraffic", sourceProps.showsTraffic, {false})),
     zoomTapEnabled(convertRawProp(context, rawProps, "zoomTapEnabled", sourceProps.zoomTapEnabled, {true})),
     cameraZoomRange(convertRawProp(context, rawProps, "cameraZoomRange", sourceProps.cameraZoomRange, {}))
       {}

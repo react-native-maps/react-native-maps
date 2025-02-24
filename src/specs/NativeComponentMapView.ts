@@ -980,6 +980,15 @@ export interface MapFabricNativeProps extends ViewProps {
   zoomEnabled?: WithDefault<boolean, true>;
 
   /**
+   * A Boolean value indicating whether the map displays traffic information.
+   *
+   * @default false
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  showsTraffic?: boolean;
+
+  /**
    * If `false` the user won't be able to double tap to zoom the map.
    * **Note:** But it will greatly decrease delay of tap gesture recognition.
    *
@@ -1037,6 +1046,11 @@ export interface NativeCommands {
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
+
+  setIndoorActiveLevelIndex: (
+    viewRef: React.ElementRef<React.ComponentType>,
+    activeLevelIndex: Int32,
+  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -1047,6 +1061,7 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'fitToElements',
     'fitToSuppliedMarkers',
     'fitToCoordinates',
+    'setIndoorActiveLevelIndex',
   ],
 });
 
