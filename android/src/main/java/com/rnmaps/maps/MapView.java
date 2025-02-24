@@ -2,13 +2,16 @@ package com.rnmaps.maps;
 
 import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
-import android.util.Log;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +29,6 @@ import androidx.core.view.MotionEventCompat;
 import com.facebook.react.common.MapBuilder;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -84,7 +86,7 @@ import java.util.concurrent.ExecutionException;
 import com.rnmaps.fabric.event.*;
 
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
-        GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener {
+        GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener, DefaultLifecycleObserver {
     public GoogleMap map;
     private MarkerManager markerManager;
     private MarkerManager.Collection markerCollection;
@@ -136,7 +138,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private final Map<TileOverlay, MapHeatmap> heatmapMap = new HashMap<>();
     private final Map<TileOverlay, MapGradientPolyline> gradientPolylineMap = new HashMap<>();
     private final GestureDetectorCompat gestureDetector;
-    private LifecycleEventListener lifecycleListener;
     private boolean paused = false;
     private boolean destroyed = false;
     private final ThemedReactContext context;
@@ -188,13 +189,65 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return superContext;
     }
 
+
+@Override
+public void onCreate(LifecycleOwner owner) {
+    super.onCreate(null);
+}
+
+    @Override
+    public void onStart(LifecycleOwner owner) {
+        super.onStart();
+    }
+    @Override
+    public void onResume(LifecycleOwner owner) {
+        if (hasPermissions() && map != null) {
+            //noinspection MissingPermission
+            map.setMyLocationEnabled(showUserLocation);
+            map.setLocationSource(fusedLocationSource);
+        }
+        synchronized (MapView.this) {
+            if (!destroyed) {
+                MapView.this.onResume();
+            }
+            paused = false;
+        }
+    }
+
+
+    @Override
+    public void onPause(LifecycleOwner owner){
+        super.onPause();
+        if (hasPermissions() && map != null) {
+            //noinspection MissingPermission
+            map.setMyLocationEnabled(false);
+        }
+        synchronized (MapView.this) {
+            if (!destroyed) {
+                MapView.this.onPause();
+            }
+            paused = true;
+        }
+    }
+
+    @Override
+    public void onStop(LifecycleOwner owner) {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy(LifecycleOwner owner){
+        MapView.this.doDestroy();
+    }
+
     public MapView(ThemedReactContext context,
                    GoogleMapOptions googleMapOptions) {
         super(context, googleMapOptions);
-        // todo add support for legacy renderer
         this.context = context;
-        super.onCreate(null);
-        super.onResume();
+        Activity activity = context.getCurrentActivity();
+        if (activity instanceof LifecycleOwner) {
+          ((LifecycleOwner) activity).getLifecycle().addObserver(this);
+        }
         super.getMapAsync(this);
 
         final MapView view = this;
@@ -522,50 +575,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             MapView.this.cacheView();
         });
 
-        // We need to be sure to disable location-tracking when app enters background, in-case some
-        // other module
-        // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager
-        // will be left
-        // updating location constantly, killing the battery, even though some other location-mgmt
-        // module may
-        // desire to shut-down location-services.
-        lifecycleListener = new LifecycleEventListener() {
-            @Override
-            public void onHostResume() {
-                if (hasPermissions() && map != null) {
-                    //noinspection MissingPermission
-                    map.setMyLocationEnabled(showUserLocation);
-                    map.setLocationSource(fusedLocationSource);
-                }
-                synchronized (MapView.this) {
-                    if (!destroyed) {
-                        MapView.this.onResume();
-                    }
-                    paused = false;
-                }
-            }
 
-            @Override
-            public void onHostPause() {
-                if (hasPermissions() && map != null) {
-                    //noinspection MissingPermission
-                    map.setMyLocationEnabled(false);
-                }
-                synchronized (MapView.this) {
-                    if (!destroyed) {
-                        MapView.this.onPause();
-                    }
-                    paused = true;
-                }
-            }
 
-            @Override
-            public void onHostDestroy() {
-                MapView.this.doDestroy();
-            }
-        };
-
-        context.addLifecycleEventListener(lifecycleListener);
         isMapReady = true;
         if (kmlSrc != null){
             setKmlSrc(kmlSrc);
@@ -647,9 +658,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         destroyed = true;
 
-        if (lifecycleListener != null && context != null) {
-            context.removeLifecycleEventListener(lifecycleListener);
-            lifecycleListener = null;
+        Activity activity = context.getCurrentActivity();
+        if (activity instanceof LifecycleOwner) {
+            ((LifecycleOwner) activity).getLifecycle().removeObserver(this);
         }
         if (!paused) {
             onPause();
