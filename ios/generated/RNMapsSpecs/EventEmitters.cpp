@@ -39,10 +39,10 @@ void RNMapsGoogleMapViewEventEmitter::onIndoorBuildingFocused(OnIndoorBuildingFo
   dispatchEvent("indoorBuildingFocused", [$event=std::move($event)](jsi::Runtime &runtime) {
     auto $payload = jsi::Object(runtime);
     {
-  auto IndoorBuilding = jsi::Object(runtime);
-  IndoorBuilding.setProperty(runtime, "underground", $event.IndoorBuilding.underground);
-  IndoorBuilding.setProperty(runtime, "activeLevelIndex", $event.IndoorBuilding.activeLevelIndex);
-  $payload.setProperty(runtime, "IndoorBuilding", IndoorBuilding);
+  auto indoorBuilding = jsi::Object(runtime);
+  indoorBuilding.setProperty(runtime, "underground", $event.indoorBuilding.underground);
+  indoorBuilding.setProperty(runtime, "activeLevelIndex", $event.indoorBuilding.activeLevelIndex);
+  $payload.setProperty(runtime, "indoorBuilding", indoorBuilding);
 }
     return $payload;
   });
@@ -53,11 +53,11 @@ void RNMapsGoogleMapViewEventEmitter::onIndoorLevelActivated(OnIndoorLevelActiva
   dispatchEvent("indoorLevelActivated", [$event=std::move($event)](jsi::Runtime &runtime) {
     auto $payload = jsi::Object(runtime);
     {
-  auto IndoorLevel = jsi::Object(runtime);
-  IndoorLevel.setProperty(runtime, "activeLevelIndex", $event.IndoorLevel.activeLevelIndex);
-  IndoorLevel.setProperty(runtime, "name", $event.IndoorLevel.name);
-  IndoorLevel.setProperty(runtime, "shortName", $event.IndoorLevel.shortName);
-  $payload.setProperty(runtime, "IndoorLevel", IndoorLevel);
+  auto indoorLevel = jsi::Object(runtime);
+  indoorLevel.setProperty(runtime, "activeLevelIndex", $event.indoorLevel.activeLevelIndex);
+  indoorLevel.setProperty(runtime, "name", $event.indoorLevel.name);
+  indoorLevel.setProperty(runtime, "shortName", $event.indoorLevel.shortName);
+  $payload.setProperty(runtime, "indoorLevel", indoorLevel);
 }
     return $payload;
   });

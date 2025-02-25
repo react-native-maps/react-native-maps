@@ -181,7 +181,7 @@ export type IndoorLevel = Readonly<{
 
 export type IndoorLevelActivatedEventHandler = DirectEventHandler<
   Readonly<{
-    IndoorLevel: {
+    indoorLevel: {
       activeLevelIndex: Int32; // Int32 for integers
       name: string; // Non-nullable string
       shortName: string; // Non-nullable string
@@ -197,7 +197,7 @@ export type IndoorBuilding = Readonly<{
 
 export type IndoorBuildingEventHandler = DirectEventHandler<
   Readonly<{
-    IndoorBuilding: {
+    indoorBuilding: {
       underground: boolean; // Non-nullable boolean
       activeLevelIndex: Int32; // Int32 for integers
     };
@@ -750,7 +750,6 @@ export interface MapFabricNativeProps extends ViewProps {
 
   /**
    * A Boolean value indicating whether the map displays traffic information.
-   * TODO: Look into android support
    *
    * @default false
    * @platform iOS: Supported
@@ -891,6 +890,10 @@ export interface NativeCommands {
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
+  setIndoorActiveLevelIndex: (
+    viewRef: React.ElementRef<React.ComponentType>,
+    activeLevelIndex: Int32,
+  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -901,6 +904,7 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'fitToElements',
     'fitToSuppliedMarkers',
     'fitToCoordinates',
+    'setIndoorActiveLevelIndex',
   ],
 });
 

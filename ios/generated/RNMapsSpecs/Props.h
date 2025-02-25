@@ -888,6 +888,7 @@ class RNMapsMapViewProps final : public ViewProps {
   int userLocationUpdateInterval{5000};
   bool zoomControlEnabled{true};
   bool zoomEnabled{true};
+  bool showsTraffic{false};
   bool zoomTapEnabled{true};
   RNMapsMapViewCameraZoomRangeStruct cameraZoomRange{};
 };

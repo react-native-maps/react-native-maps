@@ -60,6 +60,7 @@ public interface RNMapsMapViewManagerInterface<T extends View> {
   void setUserLocationUpdateInterval(T view, int value);
   void setZoomControlEnabled(T view, boolean value);
   void setZoomEnabled(T view, boolean value);
+  void setShowsTraffic(T view, boolean value);
   void setZoomTapEnabled(T view, boolean value);
   void setCameraZoomRange(T view, @Nullable ReadableMap value);
   void animateToRegion(T view, String regionJSON, int duration);
@@ -68,4 +69,5 @@ public interface RNMapsMapViewManagerInterface<T extends View> {
   void fitToElements(T view, String edgePaddingJSON, boolean animated);
   void fitToSuppliedMarkers(T view, String markersJSON, String edgePaddingJSON, boolean animated);
   void fitToCoordinates(T view, String coordinatesJSON, String edgePaddingJSON, boolean animated);
+  void setIndoorActiveLevelIndex(T view, int activeLevelIndex);
 }

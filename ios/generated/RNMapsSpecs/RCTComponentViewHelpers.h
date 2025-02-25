@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated;
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
+- (void)setIndoorActiveLevelIndex:(NSInteger)activeLevelIndex;
 @end
 
 RCT_EXTERN inline void RCTRNMapsGoogleMapViewHandleCommand(
@@ -203,6 +204,26 @@ NSObject *arg2 = args[2];
   return;
 }
 
+if ([commandName isEqualToString:@"setIndoorActiveLevelIndex"]) {
+#if RCT_DEBUG
+  if ([args count] != 1) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMapView", commandName, (int)[args count], 1);
+    return;
+  }
+#endif
+
+  NSObject *arg0 = args[0];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg0, [NSNumber class], @"number", @"RNMapsGoogleMapView", commandName, @"1st")) {
+    return;
+  }
+#endif
+  NSInteger activeLevelIndex = [(NSNumber *)arg0 intValue];
+
+  [componentView setIndoorActiveLevelIndex:activeLevelIndex];
+  return;
+}
+
 #if RCT_DEBUG
   RCTLogError(@"%@ received command %@, which is not a supported command.", @"RNMapsGoogleMapView", commandName);
 #endif
@@ -219,6 +240,7 @@ NSObject *arg2 = args[2];
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated;
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
+- (void)setIndoorActiveLevelIndex:(NSInteger)activeLevelIndex;
 @end
 
 RCT_EXTERN inline void RCTRNMapsMapViewHandleCommand(
@@ -399,6 +421,26 @@ NSObject *arg2 = args[2];
   BOOL animated = [(NSNumber *)arg2 boolValue];
 
   [componentView fitToCoordinates:coordinatesJSON edgePaddingJSON:edgePaddingJSON animated:animated];
+  return;
+}
+
+if ([commandName isEqualToString:@"setIndoorActiveLevelIndex"]) {
+#if RCT_DEBUG
+  if ([args count] != 1) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsMapView", commandName, (int)[args count], 1);
+    return;
+  }
+#endif
+
+  NSObject *arg0 = args[0];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg0, [NSNumber class], @"number", @"RNMapsMapView", commandName, @"1st")) {
+    return;
+  }
+#endif
+  NSInteger activeLevelIndex = [(NSNumber *)arg0 intValue];
+
+  [componentView setIndoorActiveLevelIndex:activeLevelIndex];
   return;
 }
 

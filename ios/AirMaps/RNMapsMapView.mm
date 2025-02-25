@@ -92,6 +92,11 @@ using namespace facebook::react;
 
 }
 
+- (void) setIndoorActiveLevelIndex:(NSInteger) activeLevelIndex
+{
+    // do nothing (google only)
+}
+
 #pragma mark - Native commands
 
 - (void)handleCommand:(const NSString *)commandName args:(const NSArray *)args

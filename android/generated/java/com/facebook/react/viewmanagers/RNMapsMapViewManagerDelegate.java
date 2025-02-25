@@ -163,6 +163,9 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
       case "zoomEnabled":
         mViewManager.setZoomEnabled(view, value == null ? true : (boolean) value);
         break;
+      case "showsTraffic":
+        mViewManager.setShowsTraffic(view, value == null ? false : (boolean) value);
+        break;
       case "zoomTapEnabled":
         mViewManager.setZoomTapEnabled(view, value == null ? true : (boolean) value);
         break;
@@ -194,6 +197,9 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
         break;
       case "fitToCoordinates":
         mViewManager.fitToCoordinates(view, args.getString(0), args.getString(1), args.getBoolean(2));
+        break;
+      case "setIndoorActiveLevelIndex":
+        mViewManager.setIndoorActiveLevelIndex(view, args.getInt(0));
         break;
     }
   }
