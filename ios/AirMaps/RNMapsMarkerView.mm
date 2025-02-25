@@ -7,7 +7,7 @@
 //
 
 #import "RNMapsMarkerView.h"
-#import "AirMap.h"
+#import "AIRMap.h"
 #import "AIRMapMarker.h"
 #import "AIRMapMarkerManager.h"
 #import <react-native-maps-generated/ComponentDescriptors.h>
@@ -93,8 +93,8 @@ using namespace facebook::react;
     _props = defaultProps;
     _legacyMapManager = [[AIRMapMarkerManager alloc] init];
     _view = (AIRMapMarker *)[_legacyMapManager view];
-    
-    
+
+
     _view.onPress = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -123,7 +123,7 @@ using namespace facebook::react;
             eventEmitter->onPress(data);
         }
     };
-    
+
     _view.onDeselect = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -152,7 +152,7 @@ using namespace facebook::react;
             eventEmitter->onDeselect(data);
         }
     };
-    
+
     _view.onDrag = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -190,7 +190,7 @@ using namespace facebook::react;
             eventEmitter->onDragStart(data);
         }
     };
-    
+
     _view.onDragEnd = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -210,7 +210,7 @@ using namespace facebook::react;
             eventEmitter->onDragEnd(data);
         }
     };
-    
+
     _view.onSelect = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -239,8 +239,8 @@ using namespace facebook::react;
             eventEmitter->onSelect(data);
         }
     };
-    
-    
+
+
     _view.onCalloutPress = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -271,7 +271,7 @@ using namespace facebook::react;
             eventEmitter->onCalloutPress(data);
         }
     };
-    
+
 }
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index{
@@ -300,7 +300,7 @@ using namespace facebook::react;
     if (self = [super initWithFrame:frame]) {
         [self prepareMarkerView];
     }
-    
+
     return self;
 }
 
@@ -310,28 +310,28 @@ using namespace facebook::react;
     const auto &oldViewProps = *std::static_pointer_cast<RNMapsMarkerProps const>(_props);
     const auto &newViewProps = *std::static_pointer_cast<RNMapsMarkerProps const>(props);
     BOOL completionHandlerCalled = false;
-    
+
 #define REMAP_MAPVIEW_PROP(name)                    \
 if (oldViewProps.name != newViewProps.name) {   \
 _view.name = newViewProps.name;             \
 }
-    
+
 #define REMAP_MAPVIEW_STRING_PROP(name)                             \
 if (oldViewProps.name != newViewProps.name) {                   \
 _view.name = RCTNSStringFromString(newViewProps.name);      \
 }
-    
+
 #define REMAP_MAPVIEW_COLOR_PROP(name)                                   \
 if (oldViewProps.name != newViewProps.name) {                        \
 _view.name = RCTUIColorFromSharedColor(newViewProps.name);       \
 }
-    
+
 #define REMAP_MAPVIEW_POINT_PROP(name)                               \
 if (newViewProps.name.x != oldViewProps.name.x ||                \
 newViewProps.name.y != oldViewProps.name.y) {                \
 _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
 }
-    
+
     if (newViewProps.zIndex != oldViewProps.zIndex){
         if (newViewProps.zIndex.has_value()){
             _view.zIndex = newViewProps.zIndex.value();
@@ -348,17 +348,17 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
             [_view setImageSrc:nil];
         }
     }
-    
+
     REMAP_MAPVIEW_PROP(useLegacyPinView)
-    
-    
+
+
     REMAP_MAPVIEW_PROP(opacity)
     REMAP_MAPVIEW_PROP(draggable)
     REMAP_MAPVIEW_PROP(isPreselected)
-    
+
     REMAP_MAPVIEW_COLOR_PROP(pinColor)
 
-    
+
     REMAP_MAPVIEW_POINT_PROP(calloutOffset)
     if (newViewProps.coordinate.latitude != oldViewProps.coordinate.latitude ||
         newViewProps.coordinate.longitude != oldViewProps.coordinate.longitude) {
@@ -367,8 +367,8 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
                                                                         newViewProps.coordinate.longitude);
         _view.coordinate = coordinates;
     }
-    
-    
+
+
     if (newViewProps.description != oldViewProps.description){
         _view.subtitle = RCTNSStringFromString(newViewProps.description);
     }
@@ -398,10 +398,10 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
             case RNMapsMarkerSubtitleVisibility::Hidden:
                 [_view setSubtitleVisibility:MKFeatureVisibilityHidden];
                 break;
-                
+
         }
     }
-    
+
     if (newViewProps.displayPriority != oldViewProps.displayPriority){
         switch (newViewProps.displayPriority) {
             case RNMapsMarkerDisplayPriority::Required:
@@ -413,11 +413,11 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
             case RNMapsMarkerDisplayPriority::Low:
                 [_view setDisplayPriority:MKFeatureDisplayPriorityDefaultLow];
                 break;
-                
+
         }
     }
 
-    
+
     [super updateProps:props oldProps:oldProps];
 }
 

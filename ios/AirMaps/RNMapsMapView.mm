@@ -7,7 +7,7 @@
 //
 
 #import "RNMapsMapView.h"
-#import "AirMap.h"
+#import "AIRMap.h"
 #import "AIRMapMarker.h"
 #import "AIRMapManager.h"
 #import "RNMapsMarkerView.h"
