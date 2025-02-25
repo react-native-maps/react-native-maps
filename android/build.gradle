@@ -3,6 +3,7 @@ def safeExtGet(prop, fallback) {
 }
 
 buildscript {
+  def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '2.0.21'
   // The Android Gradle plugin is only required when opening the android folder stand-alone.
   // This avoids unnecessary downloads and potential conflicts when the library is included as a
   // module dependency in an application project.
@@ -13,7 +14,7 @@ buildscript {
     }
     dependencies {
       classpath("com.android.tools.build:gradle:8.7.2")
-      classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${safeExtGet('kotlinVersion', '2.0.21')}")
+      classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}")
     }
   }
 }
@@ -57,7 +58,7 @@ android {
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 21)
-    targetSdkVersion safeExtGet('targetSdkVersion', 34)
+    targetSdkVersion safeExtGet('targetSdkVersion', 35)
 
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
@@ -83,6 +84,11 @@ android {
       }
     }
   }
+
+  buildFeatures {
+          buildConfig = true
+          prefab = true
+  }
 }
 
 def reactNativeArchitectures() {
@@ -103,7 +109,7 @@ repositories {
 dependencies {
   implementation 'com.facebook.react:react-native:+'
   implementation "com.google.android.gms:play-services-base:${safeExtGet('googlePlayServicesBaseVersion', '18.5.0')}"
-  implementation "com.google.android.gms:play-services-maps:${safeExtGet('googlePlayServicesMapsVersion', '19.0.0')}"
+  implementation "com.google.android.gms:play-services-maps:${safeExtGet('googlePlayServicesMapsVersion', '19.1.0')}"
   implementation "com.google.android.gms:play-services-location:${safeExtGet('googlePlayServicesLocationVersion', '21.3.0')}"
   implementation 'com.google.maps.android:android-maps-utils:3.10.0'
   implementation "androidx.work:work-runtime:2.9.1"

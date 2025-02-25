@@ -12,8 +12,8 @@ const LATITUDE_DELTA = 0.152;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class WMSTiles extends React.Component<any, any> {
-  constructor(props: any, context: any) {
-    super(props, context);
+  constructor(props: any) {
+    super(props);
 
     this.state = {
       region: {
