@@ -246,7 +246,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
     [polygon didInsertInMap:self];
     [self.polygons addObject:polygon];
-      
+
   } else if ([NSStringFromClass([subview class]) isEqualToString:@"RNMapsGooglePolygonView"]){
 //      RNMapsGooglePolygonView *polygon = (RNMapsGooglePolygonView*)subview;
 //      [polygon didInsertInMap:self];
@@ -1144,7 +1144,7 @@ id regionAsJSON(MKCoordinateRegion region) {
       [self setKMLData:[NSData dataWithContentsOfURL:url]];
   } else {
       __weak AIRGoogleMap *weakSelf = self;
- 
+
       NSURLSession *session = [NSURLSession sharedSession];
       NSURLSessionDataTask *dataTask = [session dataTaskWithURL:url
                                               completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -1162,7 +1162,7 @@ id regionAsJSON(MKCoordinateRegion region) {
       [dataTask resume];
   }
 
-  
+
 }
 
 
@@ -1172,7 +1172,7 @@ id regionAsJSON(MKCoordinateRegion region) {
             return;
         }
         self.onIndoorBuildingFocused(@{
-            @"IndoorBuilding": @{
+            @"indoorBuilding": @{
                     @"activeLevelIndex": @0,
                     @"underground": @false,
                     @"levels": [[NSMutableArray alloc]init]

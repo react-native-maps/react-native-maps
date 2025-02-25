@@ -11,8 +11,8 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class CustomTiles extends React.Component<any, any> {
-  constructor(props: any, context: any) {
-    super(props, context);
+  constructor(props: any) {
+    super(props);
 
     this.state = {
       region: {
