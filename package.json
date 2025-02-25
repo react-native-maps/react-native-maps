@@ -20,15 +20,23 @@
     "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
   },
   "files": [
+    "src",
     "lib",
     "android",
     "ios",
-    "react-native-maps.podspec",
-    "!android/build",
+    "cpp",
+    "*.podspec",
+    "react-native.config.js",
     "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
     "!**/__tests__",
     "!**/__fixtures__",
-    "!**/__mocks__"
+    "!**/__mocks__",
+    "!**/.*"
   ],
   "repository": {
     "type": "git",
