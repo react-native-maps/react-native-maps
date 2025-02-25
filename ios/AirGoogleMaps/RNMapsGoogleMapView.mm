@@ -9,9 +9,9 @@
 
 #import "RNMapsGoogleMapView.h"
 #import "RNMapsGooglePolygonView.h"
-#import "AirGoogleMap.h"
+#import "AIRGoogleMap.h"
 #import "AIRMapMarker.h"
-#import "AirGoogleMapManager.h"
+#import "AIRGoogleMapManager.h"
 
 #import <react-native-maps-generated/ComponentDescriptors.h>
 #import <react-native-maps-generated/EventEmitters.h>
