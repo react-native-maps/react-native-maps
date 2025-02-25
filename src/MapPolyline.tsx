@@ -146,7 +146,7 @@ export type MapPolylineProps = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = MapPolylineProps & {ref: React.RefObject<View>};
+type NativeProps = MapPolylineProps & {ref: React.RefObject<View | null>};
 
 export class MapPolyline extends React.Component<MapPolylineProps> {
   // declaration only, as they are set through decorateMap

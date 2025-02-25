@@ -739,7 +739,7 @@ export type NativeProps = Omit<
   ModifiedProps,
   'customMapStyle' | 'onRegionChange' | 'onRegionChangeComplete'
 > & {
-  ref: React.RefObject<MapViewNativeComponentType>;
+  ref: React.RefObject<MapViewNativeComponentType | null>;
   customMapStyleString?: string;
   handlePanDrag?: boolean;
   onChange?: (e: ChangeEvent) => void;
@@ -753,7 +753,7 @@ class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
 
-  private fabricMap: React.RefObject<FabricMapHandle>;
+  private fabricMap: React.RefObject<FabricMapHandle | null>;
 
   constructor(props: MapViewProps) {
     super(props);

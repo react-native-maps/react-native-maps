@@ -366,7 +366,7 @@ export type NativeProps = Modify<
   OmittedProps,
   {icon?: string; image?: MapMarkerProps['image'] | string}
 > & {
-  ref: React.RefObject<MapMarkerNativeComponentType>;
+  ref: React.RefObject<MapMarkerNativeComponentType | null>;
 };
 
 export class MapMarker extends React.Component<MapMarkerProps> {

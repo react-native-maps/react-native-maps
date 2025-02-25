@@ -51,7 +51,9 @@ export default class NavigationMap extends Component<any, any> {
     return (
       <View style={styles.flex}>
         <MapView
-          ref={el => (this.map = el)}
+          ref={ref => {
+            this.map = ref;
+          }}
           style={styles.flex}
           minZoomLevel={15}
           initialRegion={{
