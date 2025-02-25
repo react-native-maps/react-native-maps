@@ -486,8 +486,12 @@ public void onCreate(LifecycleOwner owner) {
             public void onPolygonClick(@NonNull Polygon polygon) {
                 WritableMap event = makeClickEventData(tapLocation);
                 event.putString("action", "polygon-press");
-                // todo: use Fabric events
-                // manager.pushEvent(context, polygonMap.get(polygon), "onPress", event);
+                MapPolygon mapPolygon = polygonMap.get(polygon);
+                mapPolygon.dispatchEvent(event, OnPressEvent::new, context);
+                event = makeClickEventData(tapLocation);
+                event.putString("action", "polygon-press");
+                event.putString("id", String.valueOf(mapPolygon.getId()));
+                dispatchEvent(event, OnPressEvent::new);
             }
         });
 
