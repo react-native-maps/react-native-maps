@@ -90,7 +90,5 @@ export interface PolygonFabricNativeProps extends ViewProps {
 
 export default codegenNativeComponent<PolygonFabricNativeProps>(
   'RNMapsGooglePolygon',
-  {
-    excludedPlatforms: ['android'],
-  },
+  {},
 ) as HostComponent<PolygonFabricNativeProps>;

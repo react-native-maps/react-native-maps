@@ -78,6 +78,16 @@ export default function decorateMapComponent<Type extends Component>(
         // @ts-ignore
         return FabricMarker;
       }
+      if (
+        componentName === 'Polygon' &&
+        ((provider === PROVIDER_GOOGLE &&
+          Platform.OS === 'ios' &&
+          googleMapIsInstalled) ||
+          Platform.OS === 'android')
+      ) {
+        // @ts-ignore
+        return GooglePolygon;
+      }
       if (componentName === 'Callout' && Platform.OS === 'android') {
         // @ts-ignore
         return FabricCallout;
@@ -96,15 +106,6 @@ export default function decorateMapComponent<Type extends Component>(
       // quick fix. Previous code assumed android | ios
       if (Platform.OS !== 'android' && Platform.OS !== 'ios') {
         throw new Error(`react-native-maps doesn't support ${Platform.OS}`);
-      }
-      if (
-        componentName === 'Polygon' &&
-        provider === PROVIDER_GOOGLE &&
-        Platform.OS === 'ios' &&
-        googleMapIsInstalled
-      ) {
-        // @ts-ignore
-        return GooglePolygon;
       }
 
       const platformSupport = providerInfo[Platform.OS];
