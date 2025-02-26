@@ -1,6 +1,6 @@
 //
 //  RNMapsGoogleMapView.mm
-//  
+//
 //
 //  Created by Salah Ghanim on 23.11.24.
 //  Copyright © 2024 react-native-maps. All rights reserved.
@@ -11,10 +11,10 @@
 #import "AIRGMSPolygon.h"
 #import "AIRGoogleMap.h"
 
-#import <react-native-maps-generated/ComponentDescriptors.h>
-#import <react-native-maps-generated/EventEmitters.h>
-#import <react-native-maps-generated/Props.h>
-#import <react-native-maps-generated/RCTComponentViewHelpers.h>
+#import  "../generated/RNMapsSpecs/ComponentDescriptors.h"
+#import  "../generated/RNMapsSpecs/EventEmitters.h"
+#import  "../generated/RNMapsSpecs/Props.h"
+#import  "../generated/RNMapsSpecs/RCTComponentViewHelpers.h"
 
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
@@ -39,7 +39,7 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
         if (newHole.size() != oldHole.size()) {
             return false;
         }
- 
+
     }
 
     return true;
@@ -74,7 +74,7 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
 }
 
 - (void) prepareContentView {
-   
+
     _view = [AIRGMSPolygon new];
     _view.onPress = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
@@ -169,7 +169,7 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
         }
         _view.path = path;
     }
-    
+
     if (!areHolesEqual(newViewProps.holes, oldViewProps.holes)){
         NSMutableArray<GMSMutablePath *> *interiorPolygons = [NSMutableArray array];
         for(int h = 0; h < newViewProps.holes.size(); h++)
@@ -186,19 +186,19 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
         }
         _view.holes = interiorPolygons;
     }
-    
- 
+
+
     REMAP_MAPVIEW_PROP(tappable)
 
     if (newViewProps.fillColor){
         _view.fillColor = RCTUIColorFromSharedColor(newViewProps.fillColor);
     }
-    
+
     if (newViewProps.strokeColor){
         _view.strokeColor = RCTUIColorFromSharedColor(newViewProps.strokeColor);
     }
-    
-    
+
+
 
 
   [super updateProps:props oldProps:oldProps];

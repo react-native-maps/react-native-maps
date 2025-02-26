@@ -8,6 +8,7 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 platform :ios, min_ios_version_supported
+$RNMapsEnableGoogleMapsSupport = true
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
@@ -24,12 +25,6 @@ target 'rnmshowcase' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
-    rn_maps_path = '../..'
-    pod 'react-native-maps-generated', :path => rn_maps_path
-    pod 'react-native-google-maps', :path => rn_maps_path
-    pod 'react-native-maps', :path => rn_maps_path
-
 
   pre_install do |installer|
     system("cd ../../ && npx bob build --target codegen")
