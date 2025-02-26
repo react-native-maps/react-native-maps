@@ -17,8 +17,8 @@ import decorateMapComponent, {
   UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
-import { LatLng, Point } from './sharedTypes';
-import { Modify } from './sharedTypesInternal';
+import {LatLng, Point} from './sharedTypes';
+import {Modify} from './sharedTypesInternal';
 
 export type MapOverlayProps = ViewProps & {
   /**
@@ -74,11 +74,11 @@ export type MapOverlayProps = ViewProps & {
   tappable?: boolean;
 };
 
-type NativeProps = Modify<MapOverlayProps, { image?: string }>;
+type NativeProps = Modify<MapOverlayProps, {image?: string}>;
 
 export class MapOverlay extends React.Component<MapOverlayProps> {
   // declaration only, as they are set through decorateMap
-  context!: React.ContextType<typeof ProviderContext>;
+  declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
@@ -86,7 +86,7 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
   static Animated: Animated.AnimatedComponent<typeof MapOverlay>;
 
   render() {
-    const { opacity = 1.0 } = this.props;
+    const {opacity = 1.0} = this.props;
     let image: any;
     const resolvedImage = Image.resolveAssetSource(this.props.image) || {};
     image = resolvedImage.uri || this.props.image;

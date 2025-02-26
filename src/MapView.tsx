@@ -52,8 +52,8 @@ import {
   SnapshotOptions,
   UserLocationChangeEvent,
 } from './MapView.types';
-import { Modify } from './sharedTypesInternal';
-import { Commands, MapViewNativeComponentType } from './MapViewNativeComponent';
+import {Modify} from './sharedTypesInternal';
+import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
 
 import FabricMapView, {
   Commands as FabricCommands,
@@ -62,7 +62,7 @@ import FabricMapView, {
 import GoogleMapView, {
   Commands as GoogleCommands,
 } from './specs/NativeComponentGoogleMapView';
-import createFabricMap, { FabricMapHandle } from './createFabricMap';
+import createFabricMap, {FabricMapHandle} from './createFabricMap';
 
 const FabricMap = createFabricMap(FabricMapView, FabricCommands);
 var FabricGoogleMap: any = null;
@@ -774,17 +774,17 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   private _onMapReady() {
-    const { onMapReady } = this.props;
-    this.setState({ isReady: true }, () => {
+    const {onMapReady} = this.props;
+    this.setState({isReady: true}, () => {
       if (onMapReady) {
         onMapReady();
       }
     });
   }
 
-  private _onChange({ nativeEvent }: ChangeEvent) {
+  private _onChange({nativeEvent}: ChangeEvent) {
     const isGesture = nativeEvent.isGesture;
-    const details = { isGesture };
+    const details = {isGesture};
 
     if (nativeEvent.continuous) {
       if (this.props.onRegionChange) {
@@ -810,17 +810,17 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
-  animateCamera(camera: Partial<Camera>, opts?: { duration?: number }) {
+  animateCamera(camera: Partial<Camera>, opts?: {duration?: number}) {
     if (this.fabricMap.current) {
       this.fabricMap.current.animateCamera(
         camera,
-        opts?.duration ? opts.duration : 500
+        opts?.duration ? opts.duration : 500,
       );
     } else if (this.map.current) {
       Commands.animateCamera(
         this.map.current,
         camera,
-        opts?.duration ? opts.duration : 500
+        opts?.duration ? opts.duration : 500,
       );
     }
   }
@@ -841,7 +841,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   fitToElements(options: FitToOptions = {}) {
     const {
-      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
     if (this.fabricMap.current) {
@@ -853,42 +853,42 @@ class MapView extends React.Component<MapViewProps, State> {
 
   fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
     const {
-      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
     if (this.fabricMap.current) {
       this.fabricMap.current.fitToSuppliedMarkers(
         markers,
         edgePadding,
-        animated
+        animated,
       );
     } else if (this.map.current) {
       Commands.fitToSuppliedMarkers(
         this.map.current,
         markers,
         edgePadding,
-        animated
+        animated,
       );
     }
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
     const {
-      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
       animated = true,
     } = options;
     if (this.fabricMap.current) {
       this.fabricMap.current.fitToCoordinates(
         coordinates,
         edgePadding,
-        animated
+        animated,
       );
     } else if (this.map.current) {
       Commands.fitToCoordinates(
         this.map.current,
         coordinates,
         edgePadding,
-        animated
+        animated,
       );
     }
   }
@@ -969,7 +969,7 @@ class MapView extends React.Component<MapViewProps, State> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.getAddressFromCoordinates(
         this._getHandle(),
-        coordinate
+        coordinate,
       );
     } else if (Platform.OS === 'ios') {
       if (this.fabricMap.current) {
@@ -992,7 +992,7 @@ class MapView extends React.Component<MapViewProps, State> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.pointForCoordinate(
         this._getHandle(),
-        coordinate
+        coordinate,
       );
     } else if (Platform.OS === 'ios') {
       if (this.fabricMap.current) {
@@ -1015,7 +1015,7 @@ class MapView extends React.Component<MapViewProps, State> {
     if (Platform.OS === 'android') {
       return NativeModules.AirMapModule.coordinateForPoint(
         this._getHandle(),
-        point
+        point,
       );
     } else if (Platform.OS === 'ios') {
       if (this.fabricMap.current) {
@@ -1033,7 +1033,7 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with { <identifier>: { point: Point, frame: Frame } }
    */
   getMarkersFrames(onlyVisible: boolean = false): Promise<{
-    [key: string]: { point: Point; frame: Frame };
+    [key: string]: {point: Point; frame: Frame};
   }> {
     if (this.fabricMap.current) {
       // @ts-ignore
@@ -1091,7 +1091,7 @@ class MapView extends React.Component<MapViewProps, State> {
   };
   private handleRegionChange = (event: NativeSyntheticEvent<any>) => {
     const isGesture = event.nativeEvent.isGesture;
-    const details = { isGesture };
+    const details = {isGesture};
     if (event.nativeEvent.continuous) {
       if (this.props.onRegionChange) {
         this.props.onRegionChange(event.nativeEvent.region, details);
@@ -1120,7 +1120,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   private handleRegionChangeComplete = (event: NativeSyntheticEvent<any>) => {
     const isGesture = event.nativeEvent.isGesture;
-    const details = { isGesture };
+    const details = {isGesture};
     if (this.props.onRegionChangeComplete) {
       this.props.onRegionChangeComplete(event.nativeEvent.region, details);
     }
@@ -1226,7 +1226,7 @@ if (Platform.OS === 'android') {
   airMaps.google = googleMapIsInstalled
     ? requireNativeComponent<NativeProps>('AIRGoogleMap')
     : createNotSupportedComponent(
-        'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.'
+        'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
       );
 }
 

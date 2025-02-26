@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import {createContext} from 'react';
 import {
   requireNativeComponent,
   NativeModules,
@@ -6,20 +6,20 @@ import {
   UIManager,
   HostComponent,
 } from 'react-native';
-import { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from './ProviderConstants';
-import { Provider } from './sharedTypes';
-import { MapCallout } from './MapCallout';
-import { MapOverlay } from './MapOverlay';
-import { MapCalloutSubview } from './MapCalloutSubview';
-import { MapCircle } from './MapCircle';
-import { MapHeatmap } from './MapHeatmap';
-import { MapLocalTile } from './MapLocalTile';
-import { MapMarker } from './MapMarker';
-import { MapPolygon } from './MapPolygon';
-import { MapPolyline } from './MapPolyline';
-import { MapUrlTile } from './MapUrlTile';
-import { MapWMSTile } from './MapWMSTile';
-import { Commands } from './MapViewNativeComponent';
+import {PROVIDER_DEFAULT, PROVIDER_GOOGLE} from './ProviderConstants';
+import {Provider} from './sharedTypes';
+import {MapCallout} from './MapCallout';
+import {MapOverlay} from './MapOverlay';
+import {MapCalloutSubview} from './MapCalloutSubview';
+import {MapCircle} from './MapCircle';
+import {MapHeatmap} from './MapHeatmap';
+import {MapLocalTile} from './MapLocalTile';
+import {MapMarker} from './MapMarker';
+import {MapPolygon} from './MapPolygon';
+import {MapPolyline} from './MapPolyline';
+import {MapUrlTile} from './MapUrlTile';
+import {MapWMSTile} from './MapWMSTile';
+import {Commands} from './MapViewNativeComponent';
 import GooglePolygon from './specs/NativeComponentGooglePolygon';
 import FabricMarker from './specs/NativeComponentMarker';
 import FabricCallout from './specs/NativeComponentCallout';
@@ -51,13 +51,13 @@ export const createNotSupportedComponent = (message: string) => () => {
 };
 
 export const googleMapIsInstalled = !!UIManager.hasViewManagerConfig(
-  getNativeMapName(PROVIDER_GOOGLE)
+  getNativeMapName(PROVIDER_GOOGLE),
 );
 
 export default function decorateMapComponent<Type extends Component>(
   Component: Type,
   componentName: ComponentName,
-  providers: Providers
+  providers: Providers,
 ): Type {
   const components: {
     [key: string]: NativeComponent;
@@ -111,11 +111,11 @@ export default function decorateMapComponent<Type extends Component>(
       const platformSupport = providerInfo[Platform.OS];
       const nativeComponentName = getNativeComponentName(
         provider,
-        componentName
+        componentName,
       );
       if (platformSupport === NOT_SUPPORTED) {
         components[key] = createNotSupportedComponent(
-          `react-native-maps: ${nativeComponentName} is not supported on ${Platform.OS}`
+          `react-native-maps: ${nativeComponentName} is not supported on ${Platform.OS}`,
         );
       } else if (platformSupport === SUPPORTED) {
         if (
@@ -136,21 +136,21 @@ export default function decorateMapComponent<Type extends Component>(
     };
 
   Component.prototype.getUIManagerCommand = function getUIManagerCommand(
-    name: string
+    name: string,
   ): UIManagerCommand {
     const nativeComponentName = getNativeComponentName(
       this.context,
-      componentName
+      componentName,
     );
     return UIManager.getViewManagerConfig(nativeComponentName).Commands[name];
   };
 
   Component.prototype.getMapManagerCommand = function getMapManagerCommand(
-    name: string
+    name: string,
   ): MapManagerCommand {
     const nativeComponentName = `${getNativeComponentName(
       this.context,
-      componentName
+      componentName,
     )}Manager`;
     return NativeModules[nativeComponentName][name];
   };

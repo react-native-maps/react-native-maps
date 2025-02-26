@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, ViewProps } from 'react-native';
+import {StyleSheet, ViewProps} from 'react-native';
 import decorateMapComponent, {
   MapManagerCommand,
   NativeComponent,
@@ -8,7 +8,7 @@ import decorateMapComponent, {
   UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
 } from './decorateMapComponent';
-import { CalloutPressEvent } from './sharedTypes';
+import {CalloutPressEvent} from './sharedTypes';
 
 export type MapCalloutProps = ViewProps & {
   /**
@@ -43,13 +43,13 @@ type NativeProps = MapCalloutProps;
 
 export class MapCallout extends React.Component<MapCalloutProps> {
   // declaration only, as they are set through decorateMap
-  context!: React.ContextType<typeof ProviderContext>;
+  declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
 
   render() {
-    const { tooltip = false, alphaHitTest = false } = this.props;
+    const {tooltip = false, alphaHitTest = false} = this.props;
     const AIRMapCallout = this.getNativeComponent();
     console.log('renderCallout ' + AIRMapCallout);
     return (

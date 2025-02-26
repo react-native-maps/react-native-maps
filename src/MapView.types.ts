@@ -1,5 +1,5 @@
-import { ClickEvent, LatLng, Point, Region } from './sharedTypes';
-import { NativeSyntheticEvent } from 'react-native';
+import {ClickEvent, LatLng, Point, Region} from './sharedTypes';
+import {NativeSyntheticEvent} from 'react-native';
 
 // All types in this file are directly exported with the package for external
 // use.
@@ -87,7 +87,7 @@ export type KmlMarker = {
   position: Point;
 };
 
-export type KmlMapEvent = NativeSyntheticEvent<{ markers: KmlMarker[] }>;
+export type KmlMapEvent = NativeSyntheticEvent<{markers: KmlMarker[]}>;
 
 export type LongPressEvent = ClickEvent<{
   /**
@@ -158,7 +158,7 @@ export type FitToOptions = {
   animated?: boolean;
 };
 
-export type BoundingBox = { northEast: LatLng; southWest: LatLng };
+export type BoundingBox = {northEast: LatLng; southWest: LatLng};
 
 export type SnapshotOptions = {
   /** optional, when omitted the view-width is used */

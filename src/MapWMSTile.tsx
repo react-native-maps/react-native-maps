@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ViewProps } from 'react-native';
+import {ViewProps} from 'react-native';
 
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
@@ -128,7 +128,7 @@ type NativeProps = MapWMSTileProps;
 
 export class MapWMSTile extends React.Component<MapWMSTileProps> {
   // declaration only, as they are set through decorateMap
-  context!: React.ContextType<typeof ProviderContext>;
+  declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
