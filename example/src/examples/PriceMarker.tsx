@@ -1,14 +1,14 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 class PriceMarker extends React.Component<any, any> {
   render() {
-    const {fontSize, amount} = this.props;
+    const { fontSize, amount } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.bubble}>
           <Text style={styles.dollar}>$</Text>
-          <Text style={[styles.amount, {fontSize}]}>{amount}</Text>
+          <Text style={[styles.amount, { fontSize }]}>{amount}</Text>
         </View>
         <View style={styles.arrowBorder} />
         <View style={styles.arrow} />

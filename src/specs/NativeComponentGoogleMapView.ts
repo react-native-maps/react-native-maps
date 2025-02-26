@@ -1,4 +1,4 @@
-import type {HostComponent, ViewProps, ColorValue} from 'react-native';
+import type { HostComponent, ViewProps, ColorValue } from 'react-native';
 
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
@@ -857,42 +857,42 @@ export interface NativeCommands {
   animateToRegion: (
     viewRef: React.ElementRef<React.ComponentType>,
     regionJSON: string,
-    duration: Int32,
+    duration: Int32
   ) => void;
 
   setCamera: (
     viewRef: React.ElementRef<React.ComponentType>,
-    cameraJSON: string,
+    cameraJSON: string
   ) => void;
 
   animateCamera: (
     viewRef: React.ElementRef<React.ComponentType>,
     cameraJSON: string,
-    duration: Int32,
+    duration: Int32
   ) => void;
 
   fitToElements: (
     viewRef: React.ElementRef<React.ComponentType>,
     edgePaddingJSON: string,
-    animated: boolean,
+    animated: boolean
   ) => void;
 
   fitToSuppliedMarkers: (
     viewRef: React.ElementRef<React.ComponentType>,
     markersJSON: string,
     edgePaddingJSON: string,
-    animated: boolean,
+    animated: boolean
   ) => void;
 
   fitToCoordinates: (
     viewRef: React.ElementRef<React.ComponentType>,
     coordinatesJSON: string,
     edgePaddingJSON: string,
-    animated: boolean,
+    animated: boolean
   ) => void;
   setIndoorActiveLevelIndex: (
     viewRef: React.ElementRef<React.ComponentType>,
-    activeLevelIndex: Int32,
+    activeLevelIndex: Int32
   ) => void;
 }
 
@@ -912,5 +912,5 @@ export default codegenNativeComponent<MapFabricNativeProps>(
   'RNMapsGoogleMapView',
   {
     excludedPlatforms: ['android'],
-  },
+  }
 ) as HostComponent<MapFabricNativeProps>;

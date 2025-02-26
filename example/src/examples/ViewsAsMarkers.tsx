@@ -6,10 +6,10 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -37,11 +37,11 @@ class ViewsAsMarkers extends React.Component<any, any> {
   }
 
   increment() {
-    this.setState({amount: this.state.amount + 1});
+    this.setState({ amount: this.state.amount + 1 });
   }
 
   decrement() {
-    this.setState({amount: this.state.amount - 1});
+    this.setState({ amount: this.state.amount - 1 });
   }
 
   render() {
@@ -50,7 +50,8 @@ class ViewsAsMarkers extends React.Component<any, any> {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          initialRegion={this.state.region}>
+          initialRegion={this.state.region}
+        >
           <Marker coordinate={this.state.coordinate}>
             <PriceMarker amount={this.state.amount} />
           </Marker>
@@ -58,12 +59,14 @@ class ViewsAsMarkers extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.decrement()}
-            style={[styles.bubble, styles.button]}>
+            style={[styles.bubble, styles.button]}
+          >
             <Text style={styles.ammountButton}>-</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.increment()}
-            style={[styles.bubble, styles.button]}>
+            style={[styles.bubble, styles.button]}
+          >
             <Text style={styles.ammountButton}>+</Text>
           </TouchableOpacity>
         </View>
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     backgroundColor: 'transparent',
   },
-  ammountButton: {fontSize: 20, fontWeight: 'bold'},
+  ammountButton: { fontSize: 20, fontWeight: 'bold' },
 });
 
 export default ViewsAsMarkers;

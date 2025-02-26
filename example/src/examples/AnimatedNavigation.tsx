@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 // @ts-ignore
 import carImage from './assets/car.png';
 
@@ -12,7 +12,7 @@ export default class NavigationMap extends Component<any, any> {
     super(props);
     this.state = {
       prevPos: null,
-      curPos: {latitude: 37.420814, longitude: -122.081949},
+      curPos: { latitude: 37.420814, longitude: -122.081949 },
       curAng: 45,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
@@ -27,7 +27,7 @@ export default class NavigationMap extends Component<any, any> {
     const longitude = this.state.curPos.longitude + lonOffset;
     this.setState({
       prevPos: this.state.curPos,
-      curPos: {latitude, longitude},
+      curPos: { latitude, longitude },
     });
     this.updateMap();
   }
@@ -42,16 +42,16 @@ export default class NavigationMap extends Component<any, any> {
   }
 
   updateMap() {
-    const {curPos, prevPos, curAng} = this.state;
+    const { curPos, prevPos, curAng } = this.state;
     const curRot = this.getRotation(prevPos, curPos);
-    this.map.animateCamera({heading: curRot, center: curPos, pitch: curAng});
+    this.map.animateCamera({ heading: curRot, center: curPos, pitch: curAng });
   }
 
   render() {
     return (
       <View style={styles.flex}>
         <MapView
-          ref={ref => {
+          ref={(ref) => {
             this.map = ref;
           }}
           style={styles.flex}
@@ -60,34 +60,39 @@ export default class NavigationMap extends Component<any, any> {
             ...this.state.curPos,
             latitudeDelta: this.state.latitudeDelta,
             longitudeDelta: this.state.longitudeDelta,
-          }}>
+          }}
+        >
           <Marker
             coordinate={this.state.curPos}
-            anchor={{x: 0.5, y: 0.5}}
+            anchor={{ x: 0.5, y: 0.5 }}
             image={carImage}
           />
         </MapView>
         <View style={styles.buttonContainerUpDown}>
           <TouchableOpacity
             style={[styles.button, styles.up]}
-            onPress={() => this.changePosition(0.0001, 0)}>
+            onPress={() => this.changePosition(0.0001, 0)}
+          >
             <Text>+ Lat</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.down]}
-            onPress={() => this.changePosition(-0.0001, 0)}>
+            onPress={() => this.changePosition(-0.0001, 0)}
+          >
             <Text>- Lat</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainerLeftRight}>
           <TouchableOpacity
             style={[styles.button, styles.left]}
-            onPress={() => this.changePosition(0, -0.0001)}>
+            onPress={() => this.changePosition(0, -0.0001)}
+          >
             <Text>- Lon</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.right]}
-            onPress={() => this.changePosition(0, 0.0001)}>
+            onPress={() => this.changePosition(0, 0.0001)}
+          >
             <Text>+ Lon</Text>
           </TouchableOpacity>
         </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Dimensions, Animated, Text} from 'react-native';
+import { StyleSheet, View, Dimensions, Animated, Text } from 'react-native';
 
 import {
   Animated as AnimatedMap,
@@ -66,7 +66,7 @@ function getMarkerState(panX: any, panY: any, scrollY: any, i: any) {
       inputRange: [0, BREAKPOINT1],
       outputRange: [0, 1],
       extrapolate: 'clamp',
-    }),
+    })
   );
 
   const scale = Animated.add(
@@ -77,8 +77,8 @@ function getMarkerState(panX: any, panY: any, scrollY: any, i: any) {
         inputRange: [BREAKPOINT1, BREAKPOINT2],
         outputRange: [0, SCALE_END - 1],
         extrapolate: 'clamp',
-      }),
-    ),
+      })
+    )
   );
 
   // [0 => 1]
@@ -185,7 +185,7 @@ class AnimatedViews extends React.Component<any, any> {
     ];
 
     const animations = markers.map((m, i) =>
-      getMarkerState(panX, panY, scrollY, i),
+      getMarkerState(panX, panY, scrollY, i)
     );
 
     this.state = {
@@ -210,7 +210,7 @@ class AnimatedViews extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    const {region, panX, panY, scrollX, markers} = this.state;
+    const { region, panX, panY, scrollX, markers } = this.state;
 
     panX.addListener(this.onPanXChange);
     panY.addListener(this.onPanYChange);
@@ -236,8 +236,8 @@ class AnimatedViews extends React.Component<any, any> {
     // we only want to move the view if they are starting the gesture on top
     // of the view, so this calculates that and returns true if so. If we return
     // false, the gesture should get passed to the map view appropriately.
-    const {panY} = this.state;
-    const {pageY} = e.nativeEvent;
+    const { panY } = this.state;
+    const { pageY } = e.nativeEvent;
     const topOfMainWindow = ITEM_PREVIEW_HEIGHT + panY.__getValue();
     const topOfTap = screen.height - pageY;
 
@@ -245,30 +245,30 @@ class AnimatedViews extends React.Component<any, any> {
   };
 
   onMoveShouldSetPanResponder = (e: any) => {
-    const {panY} = this.state;
-    const {pageY} = e.nativeEvent;
+    const { panY } = this.state;
+    const { pageY } = e.nativeEvent;
     const topOfMainWindow = ITEM_PREVIEW_HEIGHT + panY.__getValue();
     const topOfTap = screen.height - pageY;
 
     return topOfTap < topOfMainWindow;
   };
 
-  onPanXChange = ({value}: any) => {
-    const {index} = this.state;
+  onPanXChange = ({ value }: any) => {
+    const { index } = this.state;
     const newIndex = Math.floor((-1 * value + SNAP_WIDTH / 2) / SNAP_WIDTH);
     if (index !== newIndex) {
-      this.setState({index: newIndex});
+      this.setState({ index: newIndex });
     }
   };
 
-  onPanYChange = ({value}: any) => {
-    const {canMoveHorizontal, region, scrollY, scrollX, markers, index} =
+  onPanYChange = ({ value }: any) => {
+    const { canMoveHorizontal, region, scrollY, scrollX, markers, index } =
       this.state;
     const shouldBeMovable = Math.abs(value) < 2;
     if (shouldBeMovable !== canMoveHorizontal) {
-      this.setState({canMoveHorizontal: shouldBeMovable});
+      this.setState({ canMoveHorizontal: shouldBeMovable });
       if (!shouldBeMovable) {
-        const {coordinate} = markers[index];
+        const { coordinate } = markers[index];
         region.stopAnimation();
         region
           .timing({
@@ -350,21 +350,23 @@ class AnimatedViews extends React.Component<any, any> {
           panY={panY}
           panX={panX}
           onStartShouldSetPanResponder={this.onStartShouldSetPanResponder}
-          onMoveShouldSetPanResponder={this.onMoveShouldSetPanResponder}>
+          onMoveShouldSetPanResponder={this.onMoveShouldSetPanResponder}
+        >
           <AnimatedMap
             provider={this.props.provider}
             style={styles.map}
             region={region}
-            onRegionChange={this.onRegionChange}>
+            onRegionChange={this.onRegionChange}
+          >
             {markers.map((marker: any, i: any) => {
-              const {selected, markerOpacity, markerScale} = animations[i];
+              const { selected, markerOpacity, markerScale } = animations[i];
 
               return (
                 <Marker key={marker.id} coordinate={marker.coordinate}>
                   <PriceMarker
                     style={{
                       opacity: markerOpacity,
-                      transform: [{scale: markerScale}],
+                      transform: [{ scale: markerScale }],
                     }}
                     amount={marker.amount}
                     selected={selected}
@@ -375,7 +377,7 @@ class AnimatedViews extends React.Component<any, any> {
           </AnimatedMap>
           <View style={styles.itemContainer}>
             {markers.map((marker: any, i: any) => {
-              const {translateY, translateX, scale, opacity} = animations[i];
+              const { translateY, translateX, scale, opacity } = animations[i];
 
               return (
                 <Animated.View
@@ -384,7 +386,7 @@ class AnimatedViews extends React.Component<any, any> {
                     styles.item,
                     {
                       opacity,
-                      transform: [{translateY}, {translateX}, {scale}],
+                      transform: [{ translateY }, { translateX }, { scale }],
                     },
                   ]}
                 />

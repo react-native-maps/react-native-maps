@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 
-import MapView, {Callout, Marker} from 'react-native-maps';
+import MapView, { Callout, Marker } from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -43,7 +43,8 @@ class OnPoiClick extends React.Component<any, any> {
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
-          onPoiClick={this.onPoiClick}>
+          onPoiClick={this.onPoiClick}
+        >
           {this.state.poi && (
             <Marker coordinate={this.state.poi.coordinate}>
               <Callout>

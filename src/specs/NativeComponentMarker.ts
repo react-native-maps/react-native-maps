@@ -1,4 +1,4 @@
-import {HostComponent} from 'react-native';
+import { HostComponent } from 'react-native';
 import type {
   ViewProps,
   ColorValue,
@@ -296,12 +296,12 @@ export interface NativeCommands {
     viewRef: React.ElementRef<React.ComponentType>,
     latitude: Double,
     longitude: Double,
-    duration: Int32,
+    duration: Int32
   ) => void;
   setCoordinates: (
     viewRef: React.ElementRef<React.ComponentType>,
     latitude: Double,
-    longitude: Double,
+    longitude: Double
   ) => void;
   showCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
   hideCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
@@ -322,5 +322,5 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
 
 export default codegenNativeComponent<MarkerFabricNativeProps>(
   'RNMapsMarker',
-  {},
+  {}
 ) as HostComponent<MarkerFabricNativeProps>;

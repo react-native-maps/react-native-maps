@@ -1,14 +1,16 @@
-import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-import {findNodeHandle} from 'react-native';
-import type {LatLng, Point, Region} from './sharedTypes';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { findNodeHandle } from 'react-native';
+import type { LatLng, Point, Region } from './sharedTypes';
 import type {
   Address,
   Camera,
   EdgePadding,
   SnapshotOptions,
 } from './MapView.types';
-import NativeAirMapsModule, {MapBoundaries} from './specs/NativeAirMapsModule';
-import {MapFabricNativeProps} from './specs/NativeComponentMapView';
+import NativeAirMapsModule, {
+  MapBoundaries,
+} from './specs/NativeAirMapsModule';
+import { MapFabricNativeProps } from './specs/NativeComponentMapView';
 
 export type FabricMapViewProps = MapFabricNativeProps;
 
@@ -23,13 +25,13 @@ export interface FabricMapHandle {
   fitToSuppliedMarkers: (
     markers: string[],
     edgePadding: EdgePadding,
-    animated: boolean,
+    animated: boolean
   ) => void;
 
   fitToCoordinates: (
     coordinates: LatLng[],
     edgePadding: EdgePadding,
-    animated: boolean,
+    animated: boolean
   ) => void;
 
   getMapBoundaries: () => Promise<MapBoundaries>;
@@ -49,11 +51,11 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         if (fabricRef.current) {
           return NativeAirMapsModule.getMarkersFrames(
             findNodeHandle(fabricRef.current) ?? -1,
-            onlyVisible,
+            onlyVisible
           );
         } else {
           throw new Error(
-            'getMarkersFrames is only supported on iOS with Fabric.',
+            'getMarkersFrames is only supported on iOS with Fabric.'
           );
         }
       },
@@ -61,11 +63,11 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         if (fabricRef.current) {
           return NativeAirMapsModule.getCoordinateForPoint(
             findNodeHandle(fabricRef.current) ?? -1,
-            point,
+            point
           );
         } else {
           throw new Error(
-            'getCoordinateForPoint is only supported on iOS with Fabric.',
+            'getCoordinateForPoint is only supported on iOS with Fabric.'
           );
         }
       },
@@ -73,11 +75,11 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         if (fabricRef.current) {
           return NativeAirMapsModule.getPointForCoordinate(
             findNodeHandle(fabricRef.current) ?? -1,
-            coordinate,
+            coordinate
           );
         } else {
           throw new Error(
-            'getPointForCoordinate is only supported on iOS with Fabric.',
+            'getPointForCoordinate is only supported on iOS with Fabric.'
           );
         }
       },
@@ -85,11 +87,11 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         if (fabricRef.current) {
           return NativeAirMapsModule.getAddressFromCoordinates(
             findNodeHandle(fabricRef.current) ?? -1,
-            coordinate,
+            coordinate
           );
         } else {
           throw new Error(
-            'getAddressFromCoordinates is only supported on iOS with Fabric.',
+            'getAddressFromCoordinates is only supported on iOS with Fabric.'
           );
         }
       },
@@ -97,7 +99,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         if (fabricRef.current) {
           return NativeAirMapsModule.takeSnapshot(
             findNodeHandle(fabricRef.current) ?? -1,
-            JSON.stringify(config),
+            JSON.stringify(config)
           );
         } else {
           throw new Error('takeSnapshot is only supported on iOS with Fabric.');
@@ -106,7 +108,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
       async getCamera() {
         if (fabricRef.current) {
           return NativeAirMapsModule.getCamera(
-            findNodeHandle(fabricRef.current) ?? -1,
+            findNodeHandle(fabricRef.current) ?? -1
           );
         } else {
           throw new Error('getCamera is only supported on iOS with Fabric.');
@@ -115,11 +117,11 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
       async getMapBoundaries() {
         if (fabricRef.current) {
           return NativeAirMapsModule.getMapBoundaries(
-            findNodeHandle(fabricRef.current) ?? -1,
+            findNodeHandle(fabricRef.current) ?? -1
           );
         } else {
           throw new Error(
-            'getMapBoundaries is only supported on iOS with Fabric.',
+            'getMapBoundaries is only supported on iOS with Fabric.'
           );
         }
       },
@@ -129,14 +131,14 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             Commands.animateToRegion(
               fabricRef.current,
               JSON.stringify(region),
-              duration,
+              duration
             );
           } catch (error) {
             throw new Error('Failed to animateToRegion');
           }
         } else {
           throw new Error(
-            'animateToRegion is only supported on iOS with Fabric.',
+            'animateToRegion is only supported on iOS with Fabric.'
           );
         }
       },
@@ -146,21 +148,21 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             Commands.fitToElements(
               fabricRef.current,
               JSON.stringify(edgePadding),
-              animated,
+              animated
             );
           } catch (error) {
             throw new Error('Failed to fitToElements');
           }
         } else {
           throw new Error(
-            'fitToElements is only supported on iOS with Fabric.',
+            'fitToElements is only supported on iOS with Fabric.'
           );
         }
       },
       fitToSuppliedMarkers(
         markers: string[],
         edgePadding: EdgePadding,
-        animated: boolean,
+        animated: boolean
       ) {
         if (fabricRef.current) {
           try {
@@ -168,14 +170,14 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
               fabricRef.current,
               JSON.stringify(markers),
               JSON.stringify(edgePadding),
-              animated,
+              animated
             );
           } catch (error) {
             throw new Error('Failed to fitToSuppliedMarkers');
           }
         } else {
           throw new Error(
-            'fitToSuppliedMarkers is only supported on iOS with Fabric.',
+            'fitToSuppliedMarkers is only supported on iOS with Fabric.'
           );
         }
       },
@@ -185,21 +187,21 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             Commands.animateCamera(
               fabricRef.current,
               JSON.stringify(camera),
-              duration,
+              duration
             );
           } catch (error) {
             throw new Error('Failed to animateCamera');
           }
         } else {
           throw new Error(
-            'animateCamera is only supported on iOS with Fabric.',
+            'animateCamera is only supported on iOS with Fabric.'
           );
         }
       },
       fitToCoordinates(
         coordinates: LatLng[],
         edgePadding: EdgePadding,
-        animated: boolean,
+        animated: boolean
       ) {
         if (fabricRef.current) {
           try {
@@ -207,14 +209,14 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
               fabricRef.current,
               JSON.stringify(coordinates),
               JSON.stringify(edgePadding),
-              animated,
+              animated
             );
           } catch (error) {
             throw new Error('Failed to fitToCoordinates');
           }
         } else {
           throw new Error(
-            'fitToCoordinates is only supported on iOS with Fabric.',
+            'fitToCoordinates is only supported on iOS with Fabric.'
           );
         }
       },
@@ -223,7 +225,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
           try {
             Commands.setIndoorActiveLevelIndex(
               fabricRef.current,
-              activeLevelIndex,
+              activeLevelIndex
             );
           } catch (error) {
             console.error('Failed to set camera:', error);

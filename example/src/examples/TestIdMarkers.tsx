@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Dimensions} from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -39,15 +39,16 @@ export default class MarkerTypes extends React.Component<any, any> {
             longitude: LONGITUDE,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
-          }}>
+          }}
+        >
           <Marker
             testID="marker"
             coordinate={this.state.a}
-            onSelect={e => log('onSelect', e)}
-            onDrag={e => log('onDrag', e)}
-            onDragStart={e => log('onDragStart', e)}
-            onDragEnd={e => log('onDragEnd', e)}
-            onPress={e => log('onPress', e)}
+            onSelect={(e) => log('onSelect', e)}
+            onDrag={(e) => log('onDrag', e)}
+            onDragStart={(e) => log('onDragStart', e)}
+            onDragEnd={(e) => log('onDragEnd', e)}
+            onPress={(e) => log('onPress', e)}
             draggable
           />
         </MapView>

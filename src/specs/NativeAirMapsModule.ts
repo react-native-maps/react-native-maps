@@ -1,8 +1,8 @@
-import type {TurboModule} from 'react-native';
-import {TurboModuleRegistry} from 'react-native';
-import type {Double} from 'react-native/Libraries/Types/CodegenTypes';
-import type {Camera} from './NativeComponentMapView';
-import {Address} from 'react-native-maps';
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
+import type { Double } from 'react-native/Libraries/Types/CodegenTypes';
+import type { Camera } from './NativeComponentMapView';
+import { Address } from 'react-native-maps';
 
 type LatLng = {
   latitude: Double;
@@ -21,7 +21,7 @@ export type Region = Readonly<
   }
 >;
 
-export type MapBoundaries = {northEast: LatLng; southWest: LatLng};
+export type MapBoundaries = { northEast: LatLng; southWest: LatLng };
 
 export interface Spec extends TurboModule {
   getCamera(tag: Double): Promise<Camera>;

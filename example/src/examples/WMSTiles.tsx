@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 
-import MapView, {MAP_TYPES, WMSTile} from 'react-native-maps';
+import MapView, { MAP_TYPES, WMSTile } from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 63.5;
@@ -27,18 +27,19 @@ class WMSTiles extends React.Component<any, any> {
   }
 
   toggleWMSTiles() {
-    this.setState({isWMSTilesActive: !this.state.isWMSTilesActive});
+    this.setState({ isWMSTilesActive: !this.state.isWMSTilesActive });
   }
 
   render() {
-    const {region} = this.state;
+    const { region } = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
           mapType={MAP_TYPES.SATELLITE}
           style={styles.map}
-          initialRegion={region}>
+          initialRegion={region}
+        >
           {this.state.isWMSTilesActive && (
             <WMSTile
               urlTemplate="https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?service=WMS&version=1.1.1&request=GetMap&layers=MODIS_Terra_CorrectedReflectance_TrueColor&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width=256&height=256&srs=EPSG:3857"

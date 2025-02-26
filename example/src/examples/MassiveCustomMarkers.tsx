@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import flagPinkImg from './assets/flag-pink.png';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -38,7 +38,7 @@ class MassiveCustomMarkers extends React.Component<any, any> {
 
   generateMarkers(fromCoordinate: any) {
     const result = [];
-    const {latitude, longitude} = fromCoordinate;
+    const { latitude, longitude } = fromCoordinate;
     for (let i = 0; i < 100; i++) {
       const newMarker = {
         coordinate: {
@@ -68,7 +68,8 @@ class MassiveCustomMarkers extends React.Component<any, any> {
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
-          onPress={this.onMapPress}>
+          onPress={this.onMapPress}
+        >
           {this.state.markers.map((marker: any) => (
             <Marker
               title={marker.key}
@@ -80,8 +81,9 @@ class MassiveCustomMarkers extends React.Component<any, any> {
         </MapView>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={() => this.setState({markers: []})}
-            style={styles.bubble}>
+            onPress={() => this.setState({ markers: [] })}
+            style={styles.bubble}
+          >
             <Text>Tap map to create 100 markers</Text>
           </TouchableOpacity>
         </View>

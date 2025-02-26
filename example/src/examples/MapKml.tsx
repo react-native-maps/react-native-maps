@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, Dimensions} from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = -18.9193508;
@@ -29,21 +29,22 @@ export default class MapKml extends React.Component<any, any> {
   }
 
   onKmlReady() {
-    this.map.fitToElements({animated: true});
+    this.map.fitToElements({ animated: true });
   }
 
   render() {
     return (
       <View style={styles.container}>
         <MapView
-          ref={ref => {
+          ref={(ref) => {
             this.map = ref;
           }}
           provider={this.props.provider}
           style={styles.map}
           initialRegion={this.state.region}
           kmlSrc={KML_FILE}
-          onKmlReady={this.onKmlReady}>
+          onKmlReady={this.onKmlReady}
+        >
           <Marker
             coordinate={this.state.region}
             title="Test"

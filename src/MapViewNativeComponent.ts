@@ -1,8 +1,8 @@
-import type {HostComponent} from 'react-native';
+import type { HostComponent } from 'react-native';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
-import {NativeProps} from './MapView';
-import {Camera, EdgePadding} from './MapView.types';
-import {LatLng, Region} from './sharedTypes';
+import { NativeProps } from './MapView';
+import { Camera, EdgePadding } from './MapView.types';
+import { LatLng, Region } from './sharedTypes';
 
 export type MapViewNativeComponentType = HostComponent<NativeProps>;
 
@@ -12,14 +12,14 @@ interface NativeCommands {
       React.RefObject<MapViewNativeComponentType>['current']
     >,
     region: Region,
-    duration: number,
+    duration: number
   ) => void;
 
   setCamera: (
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
     >,
-    camera: Partial<Camera>,
+    camera: Partial<Camera>
   ) => void;
 
   animateCamera: (
@@ -27,7 +27,7 @@ interface NativeCommands {
       React.RefObject<MapViewNativeComponentType>['current']
     >,
     camera: Partial<Camera>,
-    duration: number,
+    duration: number
   ) => void;
 
   fitToElements: (
@@ -35,7 +35,7 @@ interface NativeCommands {
       React.RefObject<MapViewNativeComponentType>['current']
     >,
     edgePadding: EdgePadding,
-    animated: boolean,
+    animated: boolean
   ) => void;
 
   fitToSuppliedMarkers: (
@@ -44,7 +44,7 @@ interface NativeCommands {
     >,
     markers: string[],
     edgePadding: EdgePadding,
-    animated: boolean,
+    animated: boolean
   ) => void;
 
   fitToCoordinates: (
@@ -53,7 +53,7 @@ interface NativeCommands {
     >,
     coordinates: LatLng[],
     edgePadding: EdgePadding,
-    animated: boolean,
+    animated: boolean
   ) => void;
 
   setMapBoundaries: (
@@ -61,14 +61,14 @@ interface NativeCommands {
       React.RefObject<MapViewNativeComponentType>['current']
     >,
     northEast: LatLng,
-    southWest: LatLng,
+    southWest: LatLng
   ) => void;
 
   setIndoorActiveLevelIndex: (
     viewRef: NonNullable<
       React.RefObject<MapViewNativeComponentType>['current']
     >,
-    activeLevelIndex: number,
+    activeLevelIndex: number
   ) => void;
 }
 

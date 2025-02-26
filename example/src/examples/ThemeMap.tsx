@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, Text, Dimensions, ScrollView} from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import { StyleSheet, View, Text, Dimensions, ScrollView } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -36,7 +36,8 @@ class ThemeMap extends React.Component<any, any> {
             zoomEnabled={false}
             pitchEnabled={false}
             rotateEnabled={false}
-            initialRegion={this.state.region}>
+            initialRegion={this.state.region}
+          >
             <Marker
               title="This is a title"
               description="This is a description"
@@ -53,7 +54,8 @@ class ThemeMap extends React.Component<any, any> {
             pitchEnabled={false}
             rotateEnabled={false}
             initialRegion={this.state.region}
-            userInterfaceStyle="light">
+            userInterfaceStyle="light"
+          >
             <Marker
               title="This is a title"
               description="This is a description"
@@ -69,7 +71,8 @@ class ThemeMap extends React.Component<any, any> {
             pitchEnabled={false}
             rotateEnabled={false}
             initialRegion={this.state.region}
-            userInterfaceStyle="dark">
+            userInterfaceStyle="dark"
+          >
             <Marker
               title="This is a title"
               description="This is a description"

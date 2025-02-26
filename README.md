@@ -110,7 +110,7 @@ render() {
 ### Rendering a list of markers on a map
 
 ```jsx
-import {Marker} from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 
 <MapView region={this.state.region} onRegionChange={this.onRegionChange}>
   {this.state.markers.map((marker, index) => (
@@ -132,8 +132,8 @@ import {Marker} from 'react-native-maps';
 
 ```jsx
 <Marker
-  coordinate={{latitude: latitude, longitude: longitude}}
-  image={{uri: 'custom_pin'}}
+  coordinate={{ latitude: latitude, longitude: longitude }}
+  image={{ uri: 'custom_pin' }}
 />
 ```
 
@@ -144,7 +144,7 @@ Note: You can also pass the image binary data like `image={require('custom_pin.p
 Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the headache)
 
 ```jsx
-<Marker coordinate={{latitude: latitude, longitude: longitude}}>
+<Marker coordinate={{ latitude: latitude, longitude: longitude }}>
   <MyCustomMarkerView {...marker} />
 </Marker>
 ```
@@ -152,7 +152,7 @@ Note: This has performance implications, if you wish for a simpler solution go w
 ### Rendering a custom Marker with a custom Callout
 
 ```jsx
-import {Callout} from 'react-native-maps';
+import { Callout } from 'react-native-maps';
 
 <Marker coordinate={marker.latlng}>
   <MyCustomMarkerView {...marker} />
@@ -178,7 +178,7 @@ import {Callout} from 'react-native-maps';
 #### Tile Overlay using tile server
 
 ```jsx
-import {UrlTile} from 'react-native-maps';
+import { UrlTile } from 'react-native-maps';
 
 <MapView region={this.state.region} onRegionChange={this.onRegionChange}>
   <UrlTile
@@ -265,7 +265,7 @@ checkout the example project to see it in action.
 Tiles can be stored locally within device using xyz tiling scheme and displayed as tile overlay as well. This is usefull especially for offline map usage when tiles are available for selected map region within device storage.
 
 ```jsx
-import {LocalTile} from 'react-native-maps';
+import { LocalTile } from 'react-native-maps';
 
 <MapView region={this.state.region} onRegionChange={this.onRegionChange}>
   <LocalTile
@@ -615,7 +615,7 @@ Bad:
 ```jsx
 <View style={StyleSheet.absoluteFillObject}>
   <MapView style={StyleSheet.absoluteFillObject}>
-    <View style={{position: 'absolute', top: 100, left: 50}} />
+    <View style={{ position: 'absolute', top: 100, left: 50 }} />
   </MapView>
 </View>
 ```
@@ -625,7 +625,7 @@ Good:
 ```jsx
 <View style={StyleSheet.absoluteFillObject}>
   <MapView style={StyleSheet.absoluteFillObject} />
-  <View style={{position: 'absolute', top: 100, left: 50}} />
+  <View style={{ position: 'absolute', top: 100, left: 50 }} />
 </View>
 ```
 

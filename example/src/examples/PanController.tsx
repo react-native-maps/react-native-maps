@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {View, Animated, PanResponder} from 'react-native';
+import { View, Animated, PanResponder } from 'react-native';
 
 class PanController extends React.Component<any, any> {
   _responder: any = null;
@@ -25,7 +25,7 @@ class PanController extends React.Component<any, any> {
         if (this.props.onPanResponderGrant) {
           this.props.onPanResponderGrant(...args);
         }
-        let {panX, panY, horizontal, vertical, xMode, yMode} = this.props;
+        let { panX, panY, horizontal, vertical, xMode, yMode } = this.props;
 
         this.handleResponderGrant(panX, xMode);
         this.handleResponderGrant(panY, yMode);
@@ -34,7 +34,7 @@ class PanController extends React.Component<any, any> {
           horizontal && !vertical ? 'x' : vertical && !horizontal ? 'y' : null;
       },
 
-      onPanResponderMove: (_, {dx, dy, x0, y0}) => {
+      onPanResponderMove: (_, { dx, dy, x0, y0 }) => {
         let {
           panX,
           panY,
@@ -54,7 +54,7 @@ class PanController extends React.Component<any, any> {
           if (dx2 + dy2 > directionLockDistance) {
             this._direction = dx2 > dy2 ? 'x' : 'y';
             if (this.props.onDirectionChange) {
-              this.props.onDirectionChange(this._direction, {dx, dy, x0, y0});
+              this.props.onDirectionChange(this._direction, { dx, dy, x0, y0 });
             }
           }
         }
@@ -62,7 +62,7 @@ class PanController extends React.Component<any, any> {
         const dir = this._direction;
 
         if (this.props.onPanResponderMove) {
-          this.props.onPanResponderMove(_, {dx, dy, x0, y0});
+          this.props.onPanResponderMove(_, { dx, dy, x0, y0 });
         }
 
         if (horizontal && (!lockDirection || dir === 'x')) {
@@ -78,7 +78,7 @@ class PanController extends React.Component<any, any> {
         }
       },
 
-      onPanResponderRelease: (_, {vx, vy, dx, dy}) => {
+      onPanResponderRelease: (_, { vx, vy, dx, dy }) => {
         let {
           panX,
           panY,
@@ -100,13 +100,13 @@ class PanController extends React.Component<any, any> {
         const dir = this._direction;
 
         if (this.props.onRelease) {
-          cancel = this.props.onRelease({vx, vy, dx, dy}) === false;
+          cancel = this.props.onRelease({ vx, vy, dx, dy }) === false;
         }
 
         if (!cancel && horizontal && (!lockDirection || dir === 'x')) {
           let [xMin, xMax] = xBounds;
           if (this.props.onReleaseX) {
-            cancel = this.props.onReleaseX({vx, vy, dx, dy}) === false;
+            cancel = this.props.onReleaseX({ vx, vy, dx, dy }) === false;
           }
           !cancel &&
             this.handleResponderRelease(
@@ -116,14 +116,14 @@ class PanController extends React.Component<any, any> {
               vx,
               overshootX,
               xMode,
-              snapSpacingX,
+              snapSpacingX
             );
         }
 
         if (!cancel && vertical && (!lockDirection || dir === 'y')) {
           let [yMin, yMax] = yBounds;
           if (this.props.onReleaseY) {
-            cancel = this.props.onReleaseY({vx, vy, dx, dy}) === false;
+            cancel = this.props.onReleaseY({ vx, vy, dx, dy }) === false;
           }
           !cancel &&
             this.handleResponderRelease(
@@ -133,7 +133,7 @@ class PanController extends React.Component<any, any> {
               vy,
               overshootY,
               yMode,
-              snapSpacingY,
+              snapSpacingY
             );
         }
 
@@ -148,7 +148,7 @@ class PanController extends React.Component<any, any> {
     delta: any,
     min: any,
     max: any,
-    overshoot: any,
+    overshoot: any
   ) {
     let val = anim._offset + delta;
 
@@ -183,7 +183,7 @@ class PanController extends React.Component<any, any> {
     velocity: any,
     overshoot: any,
     mode: any,
-    snapSpacing: any,
+    snapSpacing: any
   ) {
     anim.flattenOffset();
 
@@ -258,7 +258,7 @@ class PanController extends React.Component<any, any> {
     min: any,
     max: any,
     velocity: any,
-    overshoot: any,
+    overshoot: any
   ) {
     Animated.decay(anim, {
       ...this.props.momentumDecayConfig,
@@ -267,7 +267,7 @@ class PanController extends React.Component<any, any> {
       anim.removeListener(this._listener);
     });
 
-    this._listener = anim.addListener(({value}: any) => {
+    this._listener = anim.addListener(({ value }: any) => {
       if (value < min) {
         anim.removeListener(this._listener);
         if (this.props.onOvershoot) {
@@ -311,7 +311,7 @@ class PanController extends React.Component<any, any> {
     min: any,
     max: any,
     velocity: any,
-    spacing: any,
+    spacing: any
   ) {
     let endX = this.momentumCenter(anim._value, velocity, spacing);
     endX = Math.max(endX, min);
@@ -319,7 +319,7 @@ class PanController extends React.Component<any, any> {
     const bounds = [endX - spacing / 2, endX + spacing / 2];
     const endV = this.velocityAtBounds(anim._value, velocity, bounds);
 
-    this._listener = anim.addListener(({value}: any) => {
+    this._listener = anim.addListener(({ value }: any) => {
       if (value > bounds[0] && value < bounds[1]) {
         Animated.spring(anim, {
           toValue: endX,

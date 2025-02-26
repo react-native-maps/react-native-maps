@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 
-import MapView, {Marker, AnimatedRegion} from 'react-native-maps';
+import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
 
 const screen = Dimensions.get('window');
 
@@ -33,7 +33,7 @@ class AnimatedMarkers extends React.Component<any, any> {
   }
 
   animate() {
-    const {coordinate} = this.state;
+    const { coordinate } = this.state;
     const newCoordinate = {
       latitude: LATITUDE + (Math.random() - 0.5) * (LATITUDE_DELTA / 2),
       longitude: LONGITUDE + (Math.random() - 0.5) * (LONGITUDE_DELTA / 2),
@@ -45,12 +45,12 @@ class AnimatedMarkers extends React.Component<any, any> {
       }
     } else {
       // `useNativeDriver` defaults to false if not passed explicitly
-      coordinate.timing({...newCoordinate, useNativeDriver: true}).start();
+      coordinate.timing({ ...newCoordinate, useNativeDriver: true }).start();
     }
   }
 
   render() {
-    const {supported} = this.state;
+    const { supported } = this.state;
     if (!supported) {
       return (
         <Text style={styles.error}>
@@ -68,7 +68,8 @@ class AnimatedMarkers extends React.Component<any, any> {
             longitude: LONGITUDE,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
-          }}>
+          }}
+        >
           <Marker
             ref={(marker: any) => {
               this.marker = marker;
@@ -79,7 +80,8 @@ class AnimatedMarkers extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.animate()}
-            style={[styles.bubble, styles.button]}>
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Animate</Text>
           </TouchableOpacity>
         </View>

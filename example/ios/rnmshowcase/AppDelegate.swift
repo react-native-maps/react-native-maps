@@ -11,7 +11,7 @@ class AppDelegate: RCTAppDelegate {
     if let MAPS_API_KEY = Bundle.main.object(forInfoDictionaryKey: "MAPS_API_KEY") as? String {
         GMSServices.provideAPIKey(MAPS_API_KEY)
     }
-  
+
     self.moduleName = "rnmshowcase"
     self.dependencyProvider = RCTAppDependencyProvider()
 

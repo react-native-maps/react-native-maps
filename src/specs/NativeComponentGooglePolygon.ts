@@ -1,4 +1,4 @@
-import type {HostComponent, ViewProps, ColorValue} from 'react-native';
+import type { HostComponent, ViewProps, ColorValue } from 'react-native';
 
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
@@ -90,5 +90,5 @@ export interface PolygonFabricNativeProps extends ViewProps {
 
 export default codegenNativeComponent<PolygonFabricNativeProps>(
   'RNMapsGooglePolygon',
-  {},
+  {}
 ) as HostComponent<PolygonFabricNativeProps>;

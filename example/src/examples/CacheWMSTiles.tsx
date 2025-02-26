@@ -1,9 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 
-import MapView, {MAP_TYPES, PROVIDER_DEFAULT, WMSTile} from 'react-native-maps';
+import MapView, {
+  MAP_TYPES,
+  PROVIDER_DEFAULT,
+  WMSTile,
+} from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 63.5;
@@ -33,14 +37,15 @@ class CustomTiles extends React.Component<any, any> {
   }
 
   render() {
-    const {region} = this.state;
+    const { region } = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
           mapType={MAP_TYPES.SATELLITE}
           style={styles.map}
-          initialRegion={region}>
+          initialRegion={region}
+        >
           <WMSTile
             urlTemplate="https://julkinen.vayla.fi/inspirepalvelu/wms?service=WMS&version=1.1.1&request=GetMap&layers=avoin:TL137&format=image/png&transparent=true&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:3857"
             zIndex={2}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Text, Alert} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, Alert } from 'react-native';
 
 import MapView from 'react-native-maps';
 
@@ -10,7 +10,7 @@ class CameraControl extends React.Component<any, any> {
   map: any;
   async getCamera() {
     const camera = await this.map.getCamera();
-    Alert.alert('Current camera', JSON.stringify(camera), [{text: 'OK'}], {
+    Alert.alert('Current camera', JSON.stringify(camera), [{ text: 'OK' }], {
       cancelable: true,
     });
   }
@@ -31,7 +31,7 @@ class CameraControl extends React.Component<any, any> {
     camera.altitude += 1000;
     camera.zoom -= 1;
     camera.center.latitude += 0.5;
-    this.map.animateCamera(camera, {duration: 2000});
+    this.map.animateCamera(camera, { duration: 2000 });
   }
 
   render() {
@@ -39,7 +39,7 @@ class CameraControl extends React.Component<any, any> {
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-          ref={ref => {
+          ref={(ref) => {
             this.map = ref;
           }}
           style={styles.map}
@@ -57,17 +57,20 @@ class CameraControl extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.getCamera()}
-            style={[styles.bubble, styles.button]}>
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Get current camera</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.setCamera()}
-            style={[styles.bubble, styles.button]}>
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Set Camera</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.animateCamera()}
-            style={[styles.bubble, styles.button]}>
+            style={[styles.bubble, styles.button]}
+          >
             <Text>Animate Camera</Text>
           </TouchableOpacity>
         </View>

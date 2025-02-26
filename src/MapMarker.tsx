@@ -22,8 +22,8 @@ import {
   MapMarkerNativeComponentType,
 } from './MapMarkerNativeComponent';
 
-import {Commands as FabricCommands} from './specs/NativeComponentMarker';
-import type {AppleMarkerPriority} from './specs/NativeComponentMarker';
+import { Commands as FabricCommands } from './specs/NativeComponentMarker';
+import type { AppleMarkerPriority } from './specs/NativeComponentMarker';
 
 import {
   CalloutPressEvent,
@@ -35,9 +35,9 @@ import {
   MarkerSelectEvent,
   Point,
 } from './sharedTypes';
-import {Modify} from './sharedTypesInternal';
+import { Modify } from './sharedTypesInternal';
 
-import {PROVIDER_GOOGLE} from './ProviderConstants';
+import { PROVIDER_GOOGLE } from './ProviderConstants';
 
 type AppleMarkerVisibility = 'hidden' | 'adaptive' | 'visible';
 
@@ -364,14 +364,14 @@ type OmittedProps = Omit<MapMarkerProps, 'stopPropagation'>;
 
 export type NativeProps = Modify<
   OmittedProps,
-  {icon?: string; image?: MapMarkerProps['image'] | string}
+  { icon?: string; image?: MapMarkerProps['image'] | string }
 > & {
   ref: React.RefObject<MapMarkerNativeComponentType | null>;
 };
 
 export class MapMarker extends React.Component<MapMarkerProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
@@ -426,7 +426,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
           // @ts-ignore
           this.marker.current,
           coordinate.latitude,
-          coordinate.longitude,
+          coordinate.longitude
         );
       } else {
         Commands.setCoordinates(this.marker.current, coordinate);
@@ -453,13 +453,13 @@ export class MapMarker extends React.Component<MapMarkerProps> {
           this.marker.current,
           coordinate.latitude,
           coordinate.longitude,
-          duration,
+          duration
         );
       } else {
         Commands.animateMarkerToCoordinate(
           this.marker.current,
           coordinate,
-          duration,
+          duration
         );
       }
     }
@@ -472,7 +472,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
   }
 
   render() {
-    const {stopPropagation = false} = this.props;
+    const { stopPropagation = false } = this.props;
     if (this.fabricMarker === undefined) {
       const provider = this.context;
       this.fabricMarker = !(
@@ -504,7 +504,7 @@ export class MapMarker extends React.Component<MapMarkerProps> {
         image={image}
         icon={icon}
         style={[styles.marker, this.props.style]}
-        onPress={event => {
+        onPress={(event) => {
           if (stopPropagation) {
             event.stopPropagation();
           }

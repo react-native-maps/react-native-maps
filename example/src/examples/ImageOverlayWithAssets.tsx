@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Dimensions} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
 
-import MapView, {Overlay} from 'react-native-maps';
+import MapView, { Overlay } from 'react-native-maps';
 import flagPinkImg from './assets/flag-pink.png';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 35.679976;
@@ -40,7 +40,8 @@ export default class ImageOverlayWithURL extends Component<any, any> {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          initialRegion={this.state.region}>
+          initialRegion={this.state.region}
+        >
           <Overlay
             bounds={this.state.overlay.bounds}
             image={this.state.overlay.image}

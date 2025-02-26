@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, Dimensions} from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -98,7 +98,7 @@ class FocusOnMarkers extends React.Component<any, any> {
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-          ref={ref => {
+          ref={(ref) => {
             this.map = ref;
           }}
           style={styles.map}
@@ -107,7 +107,8 @@ class FocusOnMarkers extends React.Component<any, any> {
             longitude: LONGITUDE,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
-          }}>
+          }}
+        >
           <Marker identifier="Marker1" coordinate={this.state.a} />
           <Marker identifier="Marker2" coordinate={this.state.b} />
           <Marker identifier="Marker3" coordinate={this.state.c} />

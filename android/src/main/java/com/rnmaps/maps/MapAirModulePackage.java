@@ -12,7 +12,7 @@ import com.rnmaps.fabric.CalloutManager;
 import com.rnmaps.fabric.MapViewManager;
 import com.rnmaps.fabric.MarkerManager;
 import com.rnmaps.fabric.NativeAirMapsModule;
-import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
+import com.rnmaps.fabric.NativeAirMapsModuleSpec;
 import com.rnmaps.fabric.PolygonManager;
 
 import java.util.HashMap;

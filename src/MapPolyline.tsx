@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {NativeSyntheticEvent, View, ViewProps} from 'react-native';
+import { NativeSyntheticEvent, View, ViewProps } from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
@@ -8,7 +8,7 @@ import decorateMapComponent, {
   MapManagerCommand,
   UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
+import { LatLng, LineCapType, LineJoinType, Point } from './sharedTypes';
 
 export type MapPolylineProps = ViewProps & {
   /**
@@ -146,11 +146,11 @@ export type MapPolylineProps = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = MapPolylineProps & {ref: React.RefObject<View | null>};
+type NativeProps = MapPolylineProps & { ref: React.RefObject<View | null> };
 
 export class MapPolyline extends React.Component<MapPolylineProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;

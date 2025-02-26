@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 class CustomCallout extends React.Component<any, any> {
   render() {
