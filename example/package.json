@@ -12,11 +12,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@": "semantic-release/changelog",
-    "@semantic-release/git": "^10.0.1",
     "react": "19.0.0",
-    "react-native": "0.78.0",
-    "semantic-release": "^24.2.3"
+    "react-native": "0.78.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
