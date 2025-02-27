@@ -34,6 +34,7 @@
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
+    "!*.test.js",
     "!**/.*"
   ],
   "scripts": {
