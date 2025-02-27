@@ -40,9 +40,9 @@
   "scripts": {
     "lint": "yarn prettier:check && yarn lint:js:check && yarn lint:android:check && yarn lint:ios:check",
     "lint:js:check": "eslint  \"**/*.{js,ts,tsx}\" --max-warnings 0",
-    "lint:android:check": "google-java-format --set-exit-if-changed --replace --dry-run --glob=\"android/src/**/*.java\"",
+    "lint:android:check": "google-java-format --set-exit-if-changed --dry-run --glob=\"android/src/**/*.java\"",
     "lint:android:fix": "google-java-format --replace --glob=\"android/src/**/*.java\"",
-    "lint:ios:check": "clang-format --glob=\"ios/**/*.{h,cpp,m,mm}\" --style=Google -n -Werror",
+    "lint:ios:check": "clang-format --dry-run --glob=\"ios/**/*.{h,cpp,m,mm}\" --style=Google -n -Werror",
     "lint:ios:fix": "clang-format -i --glob=\"ios/**/*.{h,cpp,m,mm}\" --style=Google",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",

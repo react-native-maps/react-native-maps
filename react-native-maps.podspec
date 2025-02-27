@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
 			sp.resource_bundles = {
 				'GoogleMapsPrivacy' => ['ios/AirGoogleMaps/Resources/GoogleMapsPrivacy.bundle']
 			}
-			sp.compiler_flags = '-DHAVE_GOOGLE_MAPS=1', '-DHAVE_GOOGLE_MAPS_UTILS=1'
+			sp.compiler_flags = '-DHAVE_GOOGLE_MAPS=1'
 			sp.dependency 'GoogleMaps', '9.3.0'
 			sp.dependency 'Google-Maps-iOS-Utils', '6.1.0'
 		end
