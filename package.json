@@ -46,8 +46,8 @@
     "release": "semantic-release",
     "bundle-install": "cd example && bundle install",
     "pod-install": "cd example/ios && bundle exec pod install",
-    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib"
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install --repo-update",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/android/app/.cxx example/ios/build example/ios/Pods lib"
   },
   "keywords": [
     "react",
@@ -76,7 +76,6 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
-    "@evilmartians/lefthook": "^1.5.0",
     "@react-native-community/cli": "15.0.1",
     "@react-native/eslint-config": "^0.73.1",
     "@types/jest": "^29.5.5",
