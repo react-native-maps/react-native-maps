@@ -1,5 +1,30 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "react-native-maps": ["./src/index"]
+    },
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-native",
+    "lib": ["es2017"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "lib",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext"
+  }
+}
+
+/// TODO: replace with the config below
+/*
+{
+  "compilerOptions": {
     "rootDir": ".",
     "paths": {
       "react-native-maps": ["./src/index"]
@@ -28,3 +53,4 @@
     "verbatimModuleSyntax": false
   }
 }
+*/
