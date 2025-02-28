@@ -78,8 +78,7 @@ type NativeProps = Modify<MapOverlayProps, {image?: string}>;
 
 export class MapOverlay extends React.Component<MapOverlayProps> {
   // declaration only, as they are set through decorateMap
-  /// @ts-ignore
-  context!: React.ContextType<typeof ProviderContext>;
+  declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;

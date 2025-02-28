@@ -43,8 +43,7 @@ type NativeProps = MapCalloutProps;
 
 export class MapCallout extends React.Component<MapCalloutProps> {
   // declaration only, as they are set through decorateMap
-  /// @ts-ignore
-  context!: React.ContextType<typeof ProviderContext>;
+  declare context: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
