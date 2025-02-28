@@ -41,7 +41,7 @@ jobs:
         working-directory: example
 
       - name: Write local.properties
-        run: echo MAPS_API_KEY=your_api_key_here >> android/secrets.properties
+        run: echo >> android/local.properties && echo MAPS_API_KEY=your_api_key_here >> android/secrets.properties
         working-directory: example
 
       - name: Build Android
