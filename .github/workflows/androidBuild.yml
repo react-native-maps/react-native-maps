@@ -12,14 +12,14 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: temurin
+          distribution: zulu
 
       - name: Setup Android SDK
         uses: amyu/setup-android@v4
         with:
           cache-disabled: true
-          sdk-version: 34
-          build-tools-version: 33.0.2
+          sdk-version: 35
+          build-tools-version: 35.0.0
 
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -33,11 +33,17 @@ jobs:
           node-version: 'lts/*'
           cache: yarn
 
-      - name: Install dependencies
-        run: yarn --cwd example --frozen-lockfile
+      - name: Install root dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Install root dependencies
+        run: yarn --frozen-lockfile
+        working-directory: example
 
       - name: Write local.properties
-        run: echo MAPS_API_KEY=your_api_key_here >> example/android/local.properties
+        run: echo MAPS_API_KEY=your_api_key_here >> android/local.properties
+        working-directory: example
 
       - name: Build Android
-        run: cd example/android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug
+        run: cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug
+        working-directory: example

@@ -1,22 +1,34 @@
-def safeExtGet(prop, fallback) {
-  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+buildscript {
+  ext.getExtOrDefault = {name ->
+    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['RNAIRMap_' + name]
+  }
+
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:8.7.2"
+    // noinspection DifferentKotlinGradleVersion
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
+  }
 }
 
-buildscript {
-  def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '2.0.21'
-  // The Android Gradle plugin is only required when opening the android folder stand-alone.
-  // This avoids unnecessary downloads and potential conflicts when the library is included as a
-  // module dependency in an application project.
-  if (project == rootProject) {
-    repositories {
-      google()
-      mavenCentral()
-    }
-    dependencies {
-      classpath("com.android.tools.build:gradle:8.7.2")
-      classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}")
-    }
-  }
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: "com.facebook.react"
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["RNAIRMap_" + name]).toInteger()
 }
 
 def supportsNamespace() {
@@ -25,92 +37,74 @@ def supportsNamespace() {
   def minor = parsed[1].toInteger()
 
   // Namespace support was added in 7.3.0
-  if (major == 7 && minor >= 3) {
-    return true
-  }
-
-  return major >= 8
+  return (major == 7 && minor >= 3) || major >= 8
 }
-
-def isNewArchitectureEnabled() {
-  return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
-}
-
-apply plugin: 'com.android.library'
-if (isNewArchitectureEnabled()) {
-  apply plugin: 'com.facebook.react'
-}
-apply plugin: 'kotlin-android'
 
 android {
   if (supportsNamespace()) {
     namespace "com.rnmaps.maps"
   }
 
-  if (rootProject.hasProperty("ndkPath")) {
-    ndkPath rootProject.ext.ndkPath
-  }
-  if (rootProject.hasProperty("ndkVersion")) {
-    ndkVersion rootProject.ext.ndkVersion
-  }
-
-  compileSdk safeExtGet('compileSdkVersion', 35)
+  compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
   defaultConfig {
-    minSdkVersion safeExtGet('minSdkVersion', 21)
-    targetSdkVersion safeExtGet('targetSdkVersion', 35)
-
+    minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+  }
 
-    ndk {
-      abiFilters(*reactNativeArchitectures())
+  buildFeatures {
+    buildConfig true
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
     }
   }
-  packagingOptions {
-    excludes = [
-            "META-INF",
-            "META-INF/**",
-            "**/libreact_render*.so",
-    ]
+
+  lintOptions {
+    disable "GradleCompatible"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
 
   sourceSets {
     main {
       if (isNewArchitectureEnabled()) {
-        java.srcDirs += [
-                "generated/java",
-                "generated/jni"
-        ]
+          java.srcDirs += [
+            "generated/java",
+            "generated/jni"
+          ]
       }
     }
   }
-
-  buildFeatures {
-          buildConfig = true
-          prefab = true
-  }
-}
-
-def reactNativeArchitectures() {
-  def value = project.getProperties().get("reactNativeArchitectures")
-  return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
 repositories {
-  mavenLocal()
   mavenCentral()
-  maven {
-    // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-    url "$projectDir/../node_modules/react-native/android"
-  }
   google()
 }
 
+def kotlin_version = getExtOrDefault("kotlinVersion")
+
 dependencies {
-  implementation 'com.facebook.react:react-native:+'
-  implementation "com.google.android.gms:play-services-base:${safeExtGet('googlePlayServicesBaseVersion', '18.5.0')}"
-  implementation "com.google.android.gms:play-services-maps:${safeExtGet('googlePlayServicesMapsVersion', '19.1.0')}"
-  implementation "com.google.android.gms:play-services-location:${safeExtGet('googlePlayServicesLocationVersion', '21.3.0')}"
-  implementation 'com.google.maps.android:android-maps-utils:3.10.0'
-  implementation "androidx.work:work-runtime:2.9.1"
+  implementation "com.facebook.react:react-android"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "com.google.android.gms:play-services-base:${getExtOrDefault('googlePlayServicesBaseVersion')}"
+    implementation "com.google.android.gms:play-services-maps:${getExtOrDefault('googlePlayServicesMapsVersion')}"
+    implementation "com.google.android.gms:play-services-location:${getExtOrDefault('googlePlayServicesLocationVersion')}"
+    implementation 'com.google.maps.android:android-maps-utils:3.10.0'
+    implementation "androidx.work:work-runtime:2.9.1"
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "Maps"
+    codegenJavaPackageName = "com.maps"
+  }
 }

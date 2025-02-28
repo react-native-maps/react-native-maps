@@ -64,7 +64,7 @@ import GoogleMapView, {
 } from './specs/NativeComponentGoogleMapView';
 import createFabricMap, {FabricMapHandle} from './createFabricMap';
 
-const FabricMap = createFabricMap(FabricMapView, FabricCommands);
+const FabricMap: any = createFabricMap(FabricMapView, FabricCommands);
 var FabricGoogleMap: any = null;
 if (Platform.OS === 'ios') {
   FabricGoogleMap = createFabricMap(GoogleMapView, GoogleCommands);
