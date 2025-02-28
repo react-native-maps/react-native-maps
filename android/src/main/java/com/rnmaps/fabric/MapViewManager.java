@@ -68,6 +68,21 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public int getChildCount(MapView view) {
+        return view.getFeatureCount();
+    }
+
+    @Override
+    public View getChildAt(MapView view, int index) {
+        return view.getFeatureAt(index);
+    }
+
+    @Override
+    public void removeViewAt(MapView parent, int index) {
+        parent.removeFeatureAt(index);
+    }
+
+    @Override
     protected void setupViewRecycling() {
         // override parent to block recycling / allow reliable GoogleMapsOptions passing
     }
