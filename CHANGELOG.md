@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.79](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.78...v1.21.0-alpha.79) (2025-02-28)
+
+
+### Features
+
+* **android:** support for Fabric ([2c52024](https://github.com/react-native-maps/react-native-maps/commit/2c5202454307abdd2bc2e29bb78a24125cedc6b3))
+
 # [1.21.0-alpha.78](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.77...v1.21.0-alpha.78) (2025-02-25)
 
 
