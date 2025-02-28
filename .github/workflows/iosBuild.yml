@@ -35,8 +35,8 @@ jobs:
         run: bundle exec pod install
         working-directory: example/ios
 
-      - name: Write Config.xcconfig
-        run: echo MAPS_API_KEY=your_api_key_here >> ios/Config.xcconfig
+      - name: Write Secrets.xcconfig
+        run: echo MAPS_API_KEY=your_api_key_here >> ios/Secrets.xcconfig
         working-directory: example
 
       - name: Build iOS

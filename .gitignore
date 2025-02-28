@@ -30,6 +30,7 @@ DerivedData
 project.xcworkspace
 **/.xcode.env.local
 Config.xcconfig
+Secrets.xcconfig
 
 # Android/IJ
 #
@@ -41,6 +42,7 @@ Config.xcconfig
 .settings
 local.properties
 android.iml
+secrets.properties
 
 # Cocoapods
 #
