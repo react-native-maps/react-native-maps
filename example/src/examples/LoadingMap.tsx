@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View, Dimensions, StyleSheet } from 'react-native';
+import {Text, View, Dimensions, StyleSheet} from 'react-native';
 
-import MapView, { Marker, Callout } from 'react-native-maps';
+import MapView, {Marker, Callout} from 'react-native-maps';
 import flagImg from './assets/flag-blue.png';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -36,15 +36,14 @@ class LoadingMap extends React.Component<any, any> {
           initialRegion={this.state.region}
           loadingEnabled
           loadingIndicatorColor="#666666"
-          loadingBackgroundColor="#eeeeee"
-        >
+          loadingBackgroundColor="#eeeeee">
           <Marker
             coordinate={{
               latitude: LATITUDE + SPACE,
               longitude: LONGITUDE + SPACE,
             }}
-            centerOffset={{ x: -18, y: -60 }}
-            anchor={{ x: 0.69, y: 1 }}
+            centerOffset={{x: -18, y: -60}}
+            anchor={{x: 0.69, y: 1}}
             image={flagImg}
           />
           <Marker
@@ -52,9 +51,8 @@ class LoadingMap extends React.Component<any, any> {
               latitude: LATITUDE - SPACE,
               longitude: LONGITUDE - SPACE,
             }}
-            centerOffset={{ x: -42, y: -60 }}
-            anchor={{ x: 0.84, y: 1 }}
-          >
+            centerOffset={{x: -42, y: -60}}
+            anchor={{x: 0.84, y: 1}}>
             <Callout>
               <View>
                 <Text>This is a plain view</Text>

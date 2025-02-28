@@ -7,9 +7,9 @@ import {
   Text,
 } from 'react-native';
 
-import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -32,7 +32,7 @@ const MARKERS = [
   createMarker(4),
 ];
 
-const DEFAULT_PADDING = { top: 40, right: 40, bottom: 40, left: 40 };
+const DEFAULT_PADDING = {top: 40, right: 40, bottom: 40, left: 40};
 
 class FitToCoordinates extends React.Component<any, any> {
   map: any;
@@ -45,7 +45,7 @@ class FitToCoordinates extends React.Component<any, any> {
 
   fitPadding() {
     this.map.fitToCoordinates([MARKERS[2], MARKERS[3]], {
-      edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+      edgePadding: {top: 100, right: 100, bottom: 100, left: 100},
       animated: true,
     });
   }
@@ -68,7 +68,7 @@ class FitToCoordinates extends React.Component<any, any> {
     return (
       <View style={styles.container}>
         <MapView
-          ref={(ref) => {
+          ref={ref => {
             this.map = ref;
           }}
           provider={this.props.provider}
@@ -78,8 +78,7 @@ class FitToCoordinates extends React.Component<any, any> {
             longitude: LONGITUDE,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
-          }}
-        >
+          }}>
           {MARKERS.map((marker, i) => (
             <Marker key={i} identifier={`id${i}`} coordinate={marker} />
           ))}
@@ -87,26 +86,22 @@ class FitToCoordinates extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.fitPadding()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text>Fit Bottom Two Markers with Padding</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.fitBottomTwoMarkers()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text>Fit Bottom Two Markers</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.fitAllMarkers()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text>Fit All Markers</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.logFrames()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text>Log markers frames</Text>
           </TouchableOpacity>
         </View>

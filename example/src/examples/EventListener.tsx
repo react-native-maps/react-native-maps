@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions, ScrollView } from 'react-native';
-import MapView, { Marker, Polygon, Polyline, Callout } from 'react-native-maps';
+import {StyleSheet, View, Text, Dimensions, ScrollView} from 'react-native';
+import MapView, {Marker, Polygon, Polyline, Callout} from 'react-native-maps';
 import PriceMarker from './PriceMarker';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -18,7 +18,7 @@ class Event extends React.Component<any, any> {
   }
 
   render() {
-    const { event } = this.props;
+    const {event} = this.props;
     return (
       <View style={styles.event}>
         <Text style={styles.eventName}>{event.name}</Text>
@@ -76,7 +76,7 @@ class EventListener extends React.Component<any, any> {
           onRegionChangeStart={this.recordEvent('Map::onRegionChangeStart')}
           onRegionChange={this.recordEvent('Map::onRegionChange')}
           onRegionChangeComplete={this.recordEvent(
-            'Map::onRegionChangeComplete'
+            'Map::onRegionChangeComplete',
           )}
           onPress={this.recordEvent('Map::onPress')}
           onPanDrag={this.recordEvent('Map::onPanDrag')}
@@ -85,8 +85,7 @@ class EventListener extends React.Component<any, any> {
           onMarkerSelect={this.recordEvent('Map::onMarkerSelect')}
           onMarkerDeselect={this.recordEvent('Map::onMarkerDeselect')}
           onCalloutPress={this.recordEvent('Map::onCalloutPress')}
-          onUserLocationChange={this.recordEvent('Map::onUserLocationChange')}
-        >
+          onUserLocationChange={this.recordEvent('Map::onUserLocationChange')}>
           <Marker
             coordinate={{
               latitude: LATITUDE + LATITUDE_DELTA / 2,
@@ -106,13 +105,11 @@ class EventListener extends React.Component<any, any> {
             onPress={this.recordEvent('Marker::onPress')}
             onSelect={this.recordEvent('Marker::onSelect')}
             onDeselect={this.recordEvent('Marker::onDeselect')}
-            onCalloutPress={this.recordEvent('Marker::onCalloutPress')}
-          >
+            onCalloutPress={this.recordEvent('Marker::onCalloutPress')}>
             <PriceMarker amount={99} />
             <Callout
               style={styles.callout}
-              onPress={this.recordEvent('Callout::onPress')}
-            >
+              onPress={this.recordEvent('Callout::onPress')}>
               <View>
                 <Text>Well hello there...</Text>
               </View>

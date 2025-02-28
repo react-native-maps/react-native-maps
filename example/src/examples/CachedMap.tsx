@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import flagImg from './assets/flag-blue.png';
 
 const HORIZONTAL_PADDING = 12;
@@ -35,15 +35,14 @@ class CachedMap extends React.Component<any, any> {
   }
 
   render() {
-    const { width } = Dimensions.get('window');
+    const {width} = Dimensions.get('window');
     const mapSize = width - HORIZONTAL_PADDING * 2;
     return (
       <View style={styles.container}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.toggleCache()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.buttonText}>
               {this.state.cache ? 'Cached' : 'Not cached'}
             </Text>
@@ -51,7 +50,7 @@ class CachedMap extends React.Component<any, any> {
         </View>
         <FlatList
           data={this.state.data}
-          renderItem={({ item: region }) => (
+          renderItem={({item: region}) => (
             <View style={styles.item}>
               <Text>{region.name}</Text>
               <MapView
@@ -64,12 +63,11 @@ class CachedMap extends React.Component<any, any> {
                 cacheEnabled={this.state.cache}
                 zoomEnabled
                 loadingIndicatorColor="#666666"
-                loadingBackgroundColor="#eeeeee"
-              >
+                loadingBackgroundColor="#eeeeee">
                 <Marker
                   coordinate={region}
-                  centerOffset={{ x: -18, y: -60 }}
-                  anchor={{ x: 0.69, y: 1 }}
+                  centerOffset={{x: -18, y: -60}}
+                  anchor={{x: 0.69, y: 1}}
                   image={flagImg}
                 />
               </MapView>

@@ -8,10 +8,10 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import MapView, { Marker, Callout, CalloutSubview } from 'react-native-maps';
+import MapView, {Marker, Callout, CalloutSubview} from 'react-native-maps';
 import CustomCallout from './CustomCallout';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
@@ -72,17 +72,16 @@ class Callouts extends React.Component<any, any> {
   }
 
   render() {
-    const { region, markers } = this.state;
+    const {region, markers} = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
           style={styles.map}
           initialRegion={region}
-          zoomTapEnabled={false}
-        >
+          zoomTapEnabled={false}>
           <Marker
-            ref={(ref) => {
+            ref={ref => {
               this.marker1 = ref;
             }}
             coordinate={markers[0].coordinate}
@@ -98,31 +97,28 @@ class Callouts extends React.Component<any, any> {
           </Marker>
           <Marker
             coordinate={markers[2].coordinate}
-            calloutOffset={{ x: -8, y: 28 }}
-            calloutAnchor={{ x: 0.5, y: 0.4 }}
-            ref={(ref) => {
+            calloutOffset={{x: -8, y: 28}}
+            calloutAnchor={{x: 0.5, y: 0.4}}
+            ref={ref => {
               this.marker2 = ref;
-            }}
-          >
+            }}>
             <Callout
               alphaHitTest
               tooltip
-              onPress={(_) => {
+              onPress={_ => {
                 Alert.alert('callout pressed');
               }}
-              style={styles.customView}
-            >
+              style={styles.customView}>
               <CustomCallout>
                 <Text>{`This is a custom callout bubble view ${this.state.cnt}`}</Text>
                 {Platform.OS === 'ios' && (
                   <CalloutSubview
                     onPress={() => {
-                      this.setState({ cnt: this.state.cnt + 1 }, () => {
+                      this.setState({cnt: this.state.cnt + 1}, () => {
                         this.marker2.redrawCallout();
                       });
                     }}
-                    style={[styles.calloutButton]}
-                  >
+                    style={[styles.calloutButton]}>
                     <Text>Click me</Text>
                   </CalloutSubview>
                 )}
@@ -130,7 +126,7 @@ class Callouts extends React.Component<any, any> {
             </Callout>
           </Marker>
           <Marker
-            ref={(ref) => {
+            ref={ref => {
               this.marker4 = ref;
             }}
             coordinate={markers[3].coordinate}
@@ -146,14 +142,12 @@ class Callouts extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.show()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text>Show</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.hide()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text>Hide</Text>
           </TouchableOpacity>
         </View>
@@ -165,7 +159,7 @@ class Callouts extends React.Component<any, any> {
 const styles = StyleSheet.create({
   customView: {
     width: 140,
-    height: Platform.select({ android: 100, default: 140 }),
+    height: Platform.select({android: 100, default: 140}),
   },
   plainView: {
     width: 60,

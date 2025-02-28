@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
-import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.733858;
@@ -50,7 +50,7 @@ class ZIndexMarkers extends React.Component<any, any> {
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
-          ref={(ref) => {
+          ref={ref => {
             this.map = ref;
           }}
           style={styles.map}
@@ -59,8 +59,7 @@ class ZIndexMarkers extends React.Component<any, any> {
             longitude: LONGITUDE,
             latitudeDelta: MAP_LATITUDE_DELTA,
             longitudeDelta: MAP_LONGITUDE_DELTA,
-          }}
-        >
+          }}>
           {markers}
         </MapView>
         <View style={styles.textContainer}>

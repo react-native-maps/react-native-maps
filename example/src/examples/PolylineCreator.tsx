@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView, { Polyline } from 'react-native-maps';
+import MapView, {Polyline} from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -35,7 +35,7 @@ class PolylineCreator extends React.Component<any, any> {
   }
 
   finish() {
-    const { polylines, editing } = this.state;
+    const {polylines, editing} = this.state;
     this.setState({
       polylines: [...polylines, editing],
       editing: null,
@@ -43,7 +43,7 @@ class PolylineCreator extends React.Component<any, any> {
   }
 
   onPanDrag(e: any) {
-    const { editing } = this.state;
+    const {editing} = this.state;
     if (!editing) {
       this.setState({
         editing: {
@@ -69,8 +69,7 @@ class PolylineCreator extends React.Component<any, any> {
           style={styles.map}
           initialRegion={this.state.region}
           scrollEnabled={false}
-          onPanDrag={(e) => this.onPanDrag(e)}
-        >
+          onPanDrag={e => this.onPanDrag(e)}>
           {this.state.polylines.map((polyline: any) => (
             <Polyline
               key={polyline.id}
@@ -94,8 +93,7 @@ class PolylineCreator extends React.Component<any, any> {
           {this.state.editing && (
             <TouchableOpacity
               onPress={() => this.finish()}
-              style={[styles.bubble, styles.button]}
-            >
+              style={[styles.bubble, styles.button]}>
               <Text>Finish</Text>
             </TouchableOpacity>
           )}

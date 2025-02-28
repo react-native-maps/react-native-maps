@@ -8,9 +8,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-import MapView, { MAP_TYPES } from 'react-native-maps';
+import MapView, {MAP_TYPES} from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -34,7 +34,7 @@ class DisplayLatLng extends React.Component<any, any> {
   }
 
   onRegionChange(region: any) {
-    this.setState({ region });
+    this.setState({region});
   }
 
   jumpRandom() {
@@ -46,15 +46,15 @@ class DisplayLatLng extends React.Component<any, any> {
   }
 
   animateRandomCoordinate() {
-    this.map.animateCamera({ center: this.randomCoordinate() });
+    this.map.animateCamera({center: this.randomCoordinate()});
   }
 
   animateToRandomBearing() {
-    this.map.animateCamera({ heading: this.getRandomFloat(-360, 360) });
+    this.map.animateCamera({heading: this.getRandomFloat(-360, 360)});
   }
 
   animateToRandomViewingAngle() {
-    this.map.animateCamera({ pitch: this.getRandomFloat(0, 90) });
+    this.map.animateCamera({pitch: this.getRandomFloat(0, 90)});
   }
 
   getRandomFloat(min: any, max: any) {
@@ -86,13 +86,13 @@ class DisplayLatLng extends React.Component<any, any> {
       <SafeAreaView style={styles.container}>
         <MapView
           provider={this.props.provider}
-          ref={(ref) => {
+          ref={ref => {
             this.map = ref;
           }}
           mapType={MAP_TYPES.TERRAIN}
           style={styles.map}
           initialRegion={this.state.region}
-          onRegionChange={(region) => this.onRegionChange(region)}
+          onRegionChange={region => this.onRegionChange(region)}
         />
         <View style={[styles.bubble, styles.latlng]}>
           <Text style={styles.centeredText}>
@@ -103,34 +103,29 @@ class DisplayLatLng extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.jumpRandom()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.buttonText}>Jump</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.animateRandom()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.buttonText}>Animate (Region)</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.animateRandomCoordinate()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.buttonText}>Animate (Coordinate)</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.animateToRandomBearing()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.buttonText}>Animate (Bearing)</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.animateToRandomViewingAngle()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.buttonText}>Animate (View Angle)</Text>
           </TouchableOpacity>
         </View>
@@ -173,7 +168,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
   },
-  centeredText: { textAlign: 'center' },
+  centeredText: {textAlign: 'center'},
 });
 
 export default DisplayLatLng;

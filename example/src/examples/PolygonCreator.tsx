@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import MapView, { MAP_TYPES, Polygon } from 'react-native-maps';
+import MapView, {MAP_TYPES, Polygon} from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -36,7 +36,7 @@ class PolygonCreator extends React.Component<any, any> {
   }
 
   finish() {
-    const { polygons, editing } = this.state;
+    const {polygons, editing} = this.state;
     this.setState({
       polygons: [...polygons, editing],
       editing: null,
@@ -45,7 +45,7 @@ class PolygonCreator extends React.Component<any, any> {
   }
 
   createHole() {
-    const { editing, creatingHole } = this.state;
+    const {editing, creatingHole} = this.state;
     if (!creatingHole) {
       this.setState({
         creatingHole: true,
@@ -65,12 +65,12 @@ class PolygonCreator extends React.Component<any, any> {
           },
         });
       }
-      this.setState({ creatingHole: false });
+      this.setState({creatingHole: false});
     }
   }
 
   onPress(e: any) {
-    const { editing, creatingHole } = this.state;
+    const {editing, creatingHole} = this.state;
     if (!editing) {
       this.setState({
         editing: {
@@ -120,9 +120,8 @@ class PolygonCreator extends React.Component<any, any> {
           style={styles.map}
           mapType={MAP_TYPES.HYBRID}
           initialRegion={this.state.region}
-          onPress={(e) => this.onPress(e)}
-          {...mapOptions}
-        >
+          onPress={e => this.onPress(e)}
+          {...mapOptions}>
           {this.state.polygons.map((polygon: any) => (
             <Polygon
               key={polygon.id}
@@ -148,8 +147,7 @@ class PolygonCreator extends React.Component<any, any> {
           {this.state.editing && (
             <TouchableOpacity
               onPress={() => this.createHole()}
-              style={[styles.bubble, styles.button]}
-            >
+              style={[styles.bubble, styles.button]}>
               <Text>
                 {this.state.creatingHole ? 'Finish Hole' : 'Create Hole'}
               </Text>
@@ -158,8 +156,7 @@ class PolygonCreator extends React.Component<any, any> {
           {this.state.editing && (
             <TouchableOpacity
               onPress={() => this.finish()}
-              style={[styles.bubble, styles.button]}
-            >
+              style={[styles.bubble, styles.button]}>
               <Text>Finish</Text>
             </TouchableOpacity>
           )}

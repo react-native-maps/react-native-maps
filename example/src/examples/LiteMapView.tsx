@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {StyleSheet, Dimensions, ScrollView} from 'react-native';
 
 import MapView from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -28,7 +28,7 @@ class LiteMapView extends React.Component {
           key={`map_${i}`}
           style={styles.map}
           initialRegion={SAMPLE_REGION}
-        />
+        />,
       );
     }
     return (

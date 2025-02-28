@@ -7,9 +7,9 @@ import {
   Dimensions,
 } from 'react-native';
 
-import MapView, { Circle, Polygon, Polyline } from 'react-native-maps';
+import MapView, {Circle, Polygon, Polyline} from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -75,23 +75,22 @@ class SetNativePropsOverlays extends React.Component<any, any> {
   }
 
   handleColorChange(color: any) {
-    const props = { strokeColor: color };
+    const props = {strokeColor: color};
     this.circle.setNativeProps(props);
     this.polygon.setNativeProps(props);
     this.polyline.setNativeProps(props);
   }
 
   render() {
-    const { region, circle, polygon, polyline } = this.state;
+    const {region, circle, polygon, polyline} = this.state;
     return (
       <View style={styles.container}>
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          initialRegion={region}
-        >
+          initialRegion={region}>
           <Circle
-            ref={(ref) => {
+            ref={ref => {
               this.circle = ref;
             }}
             center={circle.center}
@@ -102,7 +101,7 @@ class SetNativePropsOverlays extends React.Component<any, any> {
             strokeWidth={3}
           />
           <Polygon
-            ref={(ref) => {
+            ref={ref => {
               this.polygon = ref;
             }}
             coordinates={polygon}
@@ -111,7 +110,7 @@ class SetNativePropsOverlays extends React.Component<any, any> {
             strokeWidth={2}
           />
           <Polyline
-            ref={(ref) => {
+            ref={ref => {
               this.polyline = ref;
             }}
             coordinates={polyline}
@@ -123,8 +122,7 @@ class SetNativePropsOverlays extends React.Component<any, any> {
           <TouchableOpacity
             onPress={() => {
               this.handleColorChange('green');
-            }}
-          >
+            }}>
             <View style={styles.bubble}>
               <Text>Green</Text>
             </View>
@@ -132,8 +130,7 @@ class SetNativePropsOverlays extends React.Component<any, any> {
           <TouchableOpacity
             onPress={() => {
               this.handleColorChange('black');
-            }}
-          >
+            }}>
             <View style={styles.bubble}>
               <Text>Black</Text>
             </View>
@@ -141,8 +138,7 @@ class SetNativePropsOverlays extends React.Component<any, any> {
           <TouchableOpacity
             onPress={() => {
               this.handleColorChange('red');
-            }}
-          >
+            }}>
             <View style={styles.bubble}>
               <Text>Red</Text>
             </View>

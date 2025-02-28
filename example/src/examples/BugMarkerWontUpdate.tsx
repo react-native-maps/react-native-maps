@@ -9,7 +9,7 @@ import {
 import MapView from 'react-native-maps';
 import MyLocationMapMarker from './MyLocationMapMarker';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -38,15 +38,15 @@ class BugMarkerWontUpdate extends React.Component<any, any> {
   }
 
   increment() {
-    this.setState({ amount: this.state.amount + 10 });
+    this.setState({amount: this.state.amount + 10});
   }
 
   decrement() {
-    this.setState({ amount: this.state.amount - 10 });
+    this.setState({amount: this.state.amount - 10});
   }
 
   toggleHack() {
-    this.setState({ enableHack: !this.state.enableHack });
+    this.setState({enableHack: !this.state.enableHack});
   }
 
   render() {
@@ -55,8 +55,7 @@ class BugMarkerWontUpdate extends React.Component<any, any> {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          initialRegion={this.state.region}
-        >
+          initialRegion={this.state.region}>
           <MyLocationMapMarker
           // coordinate={this.state.coordinate}
           // heading={this.state.amount}
@@ -66,8 +65,7 @@ class BugMarkerWontUpdate extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.toggleHack()}
-            style={[styles.bubble, styles.button, styles.hackButton]}
-          >
+            style={[styles.bubble, styles.button, styles.hackButton]}>
             <Text style={styles.toggleHack}>
               {this.state.enableHack ? 'Disable Hack' : 'Enable Hack'}
             </Text>
@@ -76,14 +74,12 @@ class BugMarkerWontUpdate extends React.Component<any, any> {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => this.decrement()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.ammountButton}>-</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.increment()}
-            style={[styles.bubble, styles.button]}
-          >
+            style={[styles.bubble, styles.button]}>
             <Text style={styles.ammountButton}>+</Text>
           </TouchableOpacity>
         </View>
@@ -125,8 +121,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     backgroundColor: 'transparent',
   },
-  toggleHack: { fontSize: 12, fontWeight: 'bold' },
-  ammountButton: { fontSize: 20, fontWeight: 'bold' },
+  toggleHack: {fontSize: 12, fontWeight: 'bold'},
+  ammountButton: {fontSize: 20, fontWeight: 'bold'},
 });
 
 export default BugMarkerWontUpdate;

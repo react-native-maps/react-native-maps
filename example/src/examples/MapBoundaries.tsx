@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, View, Text, Dimensions} from 'react-native';
 
-import MapView, { BoundingBox } from 'react-native-maps';
+import MapView, {BoundingBox} from 'react-native-maps';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE = 37.78825;
@@ -24,7 +24,7 @@ const MapBoundaries = (props: any) => {
 
   const onRegionChangeComplete = () => {
     if (mapRef.current) {
-      mapRef.current.getMapBoundaries().then((boundaries) => {
+      mapRef.current.getMapBoundaries().then(boundaries => {
         setMapBoundaries(boundaries);
       });
     }
