@@ -7,6 +7,7 @@ import {
   ImageURISource,
   ImageRequireSource,
   NativeSyntheticEvent,
+  Platform,
 } from 'react-native';
 
 import decorateMapComponent, {
@@ -85,18 +86,36 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
 
   static Animated: Animated.AnimatedComponent<typeof MapOverlay>;
 
+  private fabricOverlay?: Boolean = undefined;
+
   render() {
     const {opacity = 1.0} = this.props;
-    let image: any;
-    const resolvedImage = Image.resolveAssetSource(this.props.image) || {};
-    image = resolvedImage.uri || this.props.image;
+
+    if (this.fabricOverlay === undefined) {
+      this.fabricOverlay = Platform.OS === 'android';
+    }
 
     const AIRMapOverlay = this.getNativeComponent();
+    let image;
+    if (this.props.image) {
+      if (this.fabricOverlay) {
+        if (typeof this.props.image === 'string') {
+          image = {uri: this.props.image};
+        } else {
+          image = this.props.image;
+        }
+      } else {
+        const resolvedImage = Image.resolveAssetSource(this.props.image) || {};
+        image = resolvedImage.uri || this.props.image;
+      }
+    }
+    console.log('MapOverlay image: ' + image);
 
     return (
       <AIRMapOverlay
         {...this.props}
         opacity={opacity}
+        // @ts-ignore
         image={image}
         style={[styles.overlay, this.props.style]}
       />

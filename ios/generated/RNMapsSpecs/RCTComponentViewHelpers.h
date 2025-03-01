@@ -592,6 +592,10 @@ if ([commandName isEqualToString:@"redraw"]) {
 #endif
 }
 
+@protocol RCTRNMapsOverlayViewProtocol <NSObject>
+
+@end
+
 @protocol RCTRNMapsPolylineViewProtocol <NSObject>
 
 @end

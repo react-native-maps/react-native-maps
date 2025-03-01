@@ -25,6 +25,7 @@ import FabricMarker from './specs/NativeComponentMarker';
 import FabricCallout from './specs/NativeComponentCallout';
 import FabricPolyline from './specs/NativeComponentPolyline';
 import FabricCircle from './specs/NativeComponentCircle';
+import FabricOverlay from './specs/NativeComponentOverlay';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -100,6 +101,9 @@ export default function decorateMapComponent<Type extends Component>(
         } else if (componentName === 'Circle') {
           // @ts-ignore
           return FabricCircle;
+        } else if (componentName === 'Overlay') {
+          // @ts-ignore
+          return FabricOverlay;
         }
       }
       const key = provider || 'default';

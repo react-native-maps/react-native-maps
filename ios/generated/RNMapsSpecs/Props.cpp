@@ -163,6 +163,17 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     subtitleVisibility(convertRawProp(context, rawProps, "subtitleVisibility", sourceProps.subtitleVisibility, {RNMapsMarkerSubtitleVisibility::Adaptive})),
     useLegacyPinView(convertRawProp(context, rawProps, "useLegacyPinView", sourceProps.useLegacyPinView, {false}))
       {}
+RNMapsOverlayProps::RNMapsOverlayProps(
+    const PropsParserContext &context,
+    const RNMapsOverlayProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    bearing(convertRawProp(context, rawProps, "bearing", sourceProps.bearing, {0.0})),
+    bounds(convertRawProp(context, rawProps, "bounds", sourceProps.bounds, {})),
+    image(convertRawProp(context, rawProps, "image", sourceProps.image, {})),
+    opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
+      {}
 RNMapsPolylineProps::RNMapsPolylineProps(
     const PropsParserContext &context,
     const RNMapsPolylineProps &sourceProps,

@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapColorScheme;
 import com.rnmaps.maps.MapMarker;
+import com.rnmaps.maps.MapOverlay;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
@@ -321,6 +322,10 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
             ((MapMarker) child).setImageLoadedListener((uri, drawable, b) -> {
                 parent.addFeature(child, parent.getFeatureCount());
             });
+//        } else if (child instanceof MapOverlay && ((MapOverlay) child).isLoadingImage()){
+//            ((MapOverlay) child).setImageLoadedListener((uri, drawable, b) -> {
+//                parent.addFeature(child, parent.getFeatureCount());
+//            });
         } else {
             parent.addFeature(child, index);
         }

@@ -86,6 +86,18 @@ public:
 #endif
 };
 
+class RNMapsOverlayState {
+public:
+  RNMapsOverlayState() = default;
+
+#ifdef ANDROID
+  RNMapsOverlayState(RNMapsOverlayState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+#endif
+};
+
 class RNMapsPolylineState {
 public:
   RNMapsPolylineState() = default;

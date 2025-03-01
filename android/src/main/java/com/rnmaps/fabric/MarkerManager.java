@@ -2,7 +2,6 @@ package com.rnmaps.fabric;
 
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;

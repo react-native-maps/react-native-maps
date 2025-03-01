@@ -1092,6 +1092,51 @@ class RNMapsMarkerProps final : public ViewProps {
   bool useLegacyPinView{false};
 };
 
+struct RNMapsOverlayBoundsStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
+  }
+}
+
+static inline std::string toString(const RNMapsOverlayBoundsStruct &value) {
+  return "[Object RNMapsOverlayBoundsStruct]";
+}
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, std::vector<RNMapsOverlayBoundsStruct> &result) {
+  auto items = (std::vector<RawValue>)value;
+  for (const auto &item : items) {
+    RNMapsOverlayBoundsStruct newItem;
+    fromRawValue(context, item, newItem);
+    result.emplace_back(newItem);
+  }
+}
+
+class RNMapsOverlayProps final : public ViewProps {
+ public:
+  RNMapsOverlayProps() = default;
+  RNMapsOverlayProps(const PropsParserContext& context, const RNMapsOverlayProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  Float bearing{0.0};
+  std::vector<RNMapsOverlayBoundsStruct> bounds{};
+  ImageSource image{};
+  Float opacity{1.0};
+  bool tappable{false};
+};
+
 enum class RNMapsPolylineLineCap { Butt, Round, Square };
 
 static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolylineLineCap &result) {

@@ -18,6 +18,7 @@ extern const char RNMapsGoogleMapViewComponentName[] = "RNMapsGoogleMapView";
 extern const char RNMapsGooglePolygonComponentName[] = "RNMapsGooglePolygon";
 extern const char RNMapsMapViewComponentName[] = "RNMapsMapView";
 extern const char RNMapsMarkerComponentName[] = "RNMapsMarker";
+extern const char RNMapsOverlayComponentName[] = "RNMapsOverlay";
 extern const char RNMapsPolylineComponentName[] = "RNMapsPolyline";
 
 } // namespace facebook::react
