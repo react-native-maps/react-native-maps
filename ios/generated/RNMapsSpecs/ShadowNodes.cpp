@@ -13,6 +13,7 @@
 namespace facebook::react {
 
 extern const char RNMapsCalloutComponentName[] = "RNMapsCallout";
+extern const char RNMapsCircleComponentName[] = "RNMapsCircle";
 extern const char RNMapsGoogleMapViewComponentName[] = "RNMapsGoogleMapView";
 extern const char RNMapsGooglePolygonComponentName[] = "RNMapsGooglePolygon";
 extern const char RNMapsMapViewComponentName[] = "RNMapsMapView";

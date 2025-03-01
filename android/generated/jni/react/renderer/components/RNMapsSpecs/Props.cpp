@@ -23,6 +23,18 @@ RNMapsCalloutProps::RNMapsCalloutProps(
     alphaHitTest(convertRawProp(context, rawProps, "alphaHitTest", sourceProps.alphaHitTest, {false})),
     tooltip(convertRawProp(context, rawProps, "tooltip", sourceProps.tooltip, {false}))
       {}
+RNMapsCircleProps::RNMapsCircleProps(
+    const PropsParserContext &context,
+    const RNMapsCircleProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    center(convertRawProp(context, rawProps, "center", sourceProps.center, {})),
+    fillColor(convertRawProp(context, rawProps, "fillColor", sourceProps.fillColor, {})),
+    radius(convertRawProp(context, rawProps, "radius", sourceProps.radius, {0.0})),
+    strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
+      {}
 RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     const PropsParserContext &context,
     const RNMapsGoogleMapViewProps &sourceProps,

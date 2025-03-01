@@ -9,6 +9,7 @@ import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.uimanager.ViewManager;
 import com.rnmaps.fabric.CalloutManager;
+import com.rnmaps.fabric.CircleManager;
 import com.rnmaps.fabric.MapViewManager;
 import com.rnmaps.fabric.MarkerManager;
 import com.rnmaps.fabric.NativeAirMapsModule;
@@ -24,12 +25,15 @@ public class MapAirModulePackage extends TurboReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return List.of(new MapViewManager(reactContext), new MarkerManager(reactContext), new CalloutManager(reactContext), new PolygonManager(reactContext), new PolylineManager(reactContext));
+        return List.of(new MapViewManager(reactContext), new MarkerManager(reactContext), new CalloutManager(reactContext), new PolygonManager(reactContext), new PolylineManager(reactContext), new CircleManager(reactContext));
     }
 
 
     @Override
     public NativeModule getModule(String name, ReactApplicationContext reactContext) {
+        if (CircleManager.REACT_CLASS.equals(name)) {
+            return new CircleManager(reactContext);
+        }
         if (PolylineManager.REACT_CLASS.equals(name)) {
             return new PolylineManager(reactContext);
         }

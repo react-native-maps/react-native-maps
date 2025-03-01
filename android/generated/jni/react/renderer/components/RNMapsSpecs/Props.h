@@ -29,6 +29,42 @@ class RNMapsCalloutProps final : public ViewProps {
   bool tooltip{false};
 };
 
+struct RNMapsCircleCenterStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsCircleCenterStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
+  }
+}
+
+static inline std::string toString(const RNMapsCircleCenterStruct &value) {
+  return "[Object RNMapsCircleCenterStruct]";
+}
+class RNMapsCircleProps final : public ViewProps {
+ public:
+  RNMapsCircleProps() = default;
+  RNMapsCircleProps(const PropsParserContext& context, const RNMapsCircleProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  RNMapsCircleCenterStruct center{};
+  SharedColor fillColor{};
+  double radius{0.0};
+  SharedColor strokeColor{};
+  Float strokeWidth{0.0};
+  bool tappable{false};
+};
+
 enum class RNMapsGoogleMapViewMapType { Hybrid, MutedStandard, None, Satellite, Standard, Terrain, SatelliteFlyover, HybridFlyover };
 
 static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsGoogleMapViewMapType &result) {

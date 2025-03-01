@@ -26,6 +26,18 @@ public:
 #endif
 };
 
+class RNMapsCircleState {
+public:
+  RNMapsCircleState() = default;
+
+#ifdef ANDROID
+  RNMapsCircleState(RNMapsCircleState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+#endif
+};
+
 class RNMapsGoogleMapViewState {
 public:
   RNMapsGoogleMapViewState() = default;

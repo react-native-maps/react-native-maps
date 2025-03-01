@@ -13,6 +13,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol RCTRNMapsCircleViewProtocol <NSObject>
+
+@end
+
 @protocol RCTRNMapsGoogleMapViewViewProtocol <NSObject>
 - (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration;
 - (void)setCamera:(NSString *)cameraJSON;

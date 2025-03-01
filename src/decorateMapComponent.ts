@@ -24,6 +24,7 @@ import GooglePolygon from './specs/NativeComponentGooglePolygon';
 import FabricMarker from './specs/NativeComponentMarker';
 import FabricCallout from './specs/NativeComponentCallout';
 import FabricPolyline from './specs/NativeComponentPolyline';
+import FabricCircle from './specs/NativeComponentCircle';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -96,6 +97,9 @@ export default function decorateMapComponent<Type extends Component>(
         } else if (componentName === 'Polyline') {
           // @ts-ignore
           return FabricPolyline;
+        } else if (componentName === 'Circle') {
+          // @ts-ignore
+          return FabricCircle;
         }
       }
       const key = provider || 'default';

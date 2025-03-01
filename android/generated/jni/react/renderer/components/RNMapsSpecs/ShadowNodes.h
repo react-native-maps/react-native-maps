@@ -29,6 +29,17 @@ using RNMapsCalloutShadowNode = ConcreteViewShadowNode<
     RNMapsCalloutEventEmitter,
     RNMapsCalloutState>;
 
+JSI_EXPORT extern const char RNMapsCircleComponentName[];
+
+/*
+ * `ShadowNode` for <RNMapsCircle> component.
+ */
+using RNMapsCircleShadowNode = ConcreteViewShadowNode<
+    RNMapsCircleComponentName,
+    RNMapsCircleProps,
+    RNMapsCircleEventEmitter,
+    RNMapsCircleState>;
+
 JSI_EXPORT extern const char RNMapsGoogleMapViewComponentName[];
 
 /*
