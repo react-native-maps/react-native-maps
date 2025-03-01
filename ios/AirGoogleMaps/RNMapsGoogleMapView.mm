@@ -217,8 +217,9 @@ using namespace facebook::react;
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
 
             facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorBuildingFocusedIndoorBuilding indoorBuilding = {
-                .underground = [dictionary[@"underground"] boolValue],
-                .activeLevelIndex = (int) [dictionary[@"activeLevelIndex"] integerValue]
+                .activeLevelIndex = (int) [dictionary[@"activeLevelIndex"] integerValue],
+                .underground = [dictionary[@"underground"] boolValue]
+                /// TODO: levels missing
             };
 
             facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorBuildingFocused data = {
