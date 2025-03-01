@@ -21,6 +21,7 @@ using RNMapsGoogleMapViewComponentDescriptor = ConcreteComponentDescriptor<RNMap
 using RNMapsGooglePolygonComponentDescriptor = ConcreteComponentDescriptor<RNMapsGooglePolygonShadowNode>;
 using RNMapsMapViewComponentDescriptor = ConcreteComponentDescriptor<RNMapsMapViewShadowNode>;
 using RNMapsMarkerComponentDescriptor = ConcreteComponentDescriptor<RNMapsMarkerShadowNode>;
+using RNMapsPolylineComponentDescriptor = ConcreteComponentDescriptor<RNMapsPolylineShadowNode>;
 
 void RNMapsSpecs_registerComponentDescriptorsFromCodegen(
   std::shared_ptr<const ComponentDescriptorProviderRegistry> registry);

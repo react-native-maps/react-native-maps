@@ -23,6 +23,7 @@ import {Commands} from './MapViewNativeComponent';
 import GooglePolygon from './specs/NativeComponentGooglePolygon';
 import FabricMarker from './specs/NativeComponentMarker';
 import FabricCallout from './specs/NativeComponentCallout';
+import FabricPolyline from './specs/NativeComponentPolyline';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -88,9 +89,14 @@ export default function decorateMapComponent<Type extends Component>(
         // @ts-ignore
         return GooglePolygon;
       }
-      if (componentName === 'Callout' && Platform.OS === 'android') {
-        // @ts-ignore
-        return FabricCallout;
+      if (Platform.OS === 'android') {
+        if (componentName === 'Callout') {
+          // @ts-ignore
+          return FabricCallout;
+        } else if (componentName === 'Polyline') {
+          // @ts-ignore
+          return FabricPolyline;
+        }
       }
       const key = provider || 'default';
       if (components[key]) {

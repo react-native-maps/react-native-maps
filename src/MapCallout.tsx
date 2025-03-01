@@ -51,7 +51,6 @@ export class MapCallout extends React.Component<MapCalloutProps> {
   render() {
     const {tooltip = false, alphaHitTest = false} = this.props;
     const AIRMapCallout = this.getNativeComponent();
-    console.log('renderCallout ' + AIRMapCallout);
     return (
       <AIRMapCallout
         {...this.props}

@@ -74,4 +74,16 @@ public:
 #endif
 };
 
+class RNMapsPolylineState {
+public:
+  RNMapsPolylineState() = default;
+
+#ifdef ANDROID
+  RNMapsPolylineState(RNMapsPolylineState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+#endif
+};
+
 } // namespace facebook::react

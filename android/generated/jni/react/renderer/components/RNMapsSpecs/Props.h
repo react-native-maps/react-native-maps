@@ -1056,4 +1056,87 @@ class RNMapsMarkerProps final : public ViewProps {
   bool useLegacyPinView{false};
 };
 
+enum class RNMapsPolylineLineCap { Butt, Round, Square };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolylineLineCap &result) {
+  auto string = (std::string)value;
+  if (string == "butt") { result = RNMapsPolylineLineCap::Butt; return; }
+  if (string == "round") { result = RNMapsPolylineLineCap::Round; return; }
+  if (string == "square") { result = RNMapsPolylineLineCap::Square; return; }
+  abort();
+}
+
+static inline std::string toString(const RNMapsPolylineLineCap &value) {
+  switch (value) {
+    case RNMapsPolylineLineCap::Butt: return "butt";
+    case RNMapsPolylineLineCap::Round: return "round";
+    case RNMapsPolylineLineCap::Square: return "square";
+  }
+}
+enum class RNMapsPolylineLineJoin { Miter, Round, Bevel };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolylineLineJoin &result) {
+  auto string = (std::string)value;
+  if (string == "miter") { result = RNMapsPolylineLineJoin::Miter; return; }
+  if (string == "round") { result = RNMapsPolylineLineJoin::Round; return; }
+  if (string == "bevel") { result = RNMapsPolylineLineJoin::Bevel; return; }
+  abort();
+}
+
+static inline std::string toString(const RNMapsPolylineLineJoin &value) {
+  switch (value) {
+    case RNMapsPolylineLineJoin::Miter: return "miter";
+    case RNMapsPolylineLineJoin::Round: return "round";
+    case RNMapsPolylineLineJoin::Bevel: return "bevel";
+  }
+}
+struct RNMapsPolylineCoordinatesStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolylineCoordinatesStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
+  }
+}
+
+static inline std::string toString(const RNMapsPolylineCoordinatesStruct &value) {
+  return "[Object RNMapsPolylineCoordinatesStruct]";
+}
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, std::vector<RNMapsPolylineCoordinatesStruct> &result) {
+  auto items = (std::vector<RawValue>)value;
+  for (const auto &item : items) {
+    RNMapsPolylineCoordinatesStruct newItem;
+    fromRawValue(context, item, newItem);
+    result.emplace_back(newItem);
+  }
+}
+
+class RNMapsPolylineProps final : public ViewProps {
+ public:
+  RNMapsPolylineProps() = default;
+  RNMapsPolylineProps(const PropsParserContext& context, const RNMapsPolylineProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  std::vector<RNMapsPolylineCoordinatesStruct> coordinates{};
+  bool geodesic{false};
+  RNMapsPolylineLineCap lineCap{RNMapsPolylineLineCap::Butt};
+  std::vector<double> lineDashPattern{};
+  RNMapsPolylineLineJoin lineJoin{RNMapsPolylineLineJoin::Miter};
+  SharedColor strokeColor{};
+  std::vector<SharedColor> strokeColors{};
+  Float strokeWidth{0.0};
+  bool tappable{false};
+};
+
 } // namespace facebook::react

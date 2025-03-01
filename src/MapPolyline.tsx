@@ -43,8 +43,8 @@ export type MapPolylineProps = ViewProps & {
    *
    * @default `round`
    * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
+   * @platform Android: supported
+   * */
   lineCap?: LineCapType;
 
   /**
@@ -54,8 +54,8 @@ export type MapPolylineProps = ViewProps & {
    * The values in the array alternate, starting with the first line segment length,
    * followed by the first gap length, followed by the second line segment length, and so on.
    *
-   * @platform iOS: Supported
-   * @platform Android: Supported
+   * @platform iOS: Apple Maps only
+   * @platform Android: supported
    */
   lineDashPattern?: number[];
 
@@ -74,7 +74,7 @@ export type MapPolylineProps = ViewProps & {
    * The line join style to apply to corners of the path.
    *
    * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
+   * @platform Android: supported
    */
   lineJoin?: LineJoinType;
 

@@ -588,4 +588,8 @@ if ([commandName isEqualToString:@"redraw"]) {
 #endif
 }
 
+@protocol RCTRNMapsPolylineViewProtocol <NSObject>
+
+@end
+
 NS_ASSUME_NONNULL_END

@@ -784,4 +784,26 @@ class RNMapsMarkerEventEmitter : public ViewEventEmitter {
 
   void onSelect(OnSelect value) const;
 };
+class RNMapsPolylineEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  struct OnPressCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnPressPosition {
+      double x;
+    double y;
+    };
+
+  struct OnPress {
+      std::string action;
+    std::string id;
+    OnPressCoordinate coordinate;
+    OnPressPosition position;
+    };
+  void onPress(OnPress value) const;
+};
 } // namespace facebook::react

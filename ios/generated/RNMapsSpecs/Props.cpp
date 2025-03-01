@@ -151,5 +151,20 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     subtitleVisibility(convertRawProp(context, rawProps, "subtitleVisibility", sourceProps.subtitleVisibility, {RNMapsMarkerSubtitleVisibility::Adaptive})),
     useLegacyPinView(convertRawProp(context, rawProps, "useLegacyPinView", sourceProps.useLegacyPinView, {false}))
       {}
+RNMapsPolylineProps::RNMapsPolylineProps(
+    const PropsParserContext &context,
+    const RNMapsPolylineProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    coordinates(convertRawProp(context, rawProps, "coordinates", sourceProps.coordinates, {})),
+    geodesic(convertRawProp(context, rawProps, "geodesic", sourceProps.geodesic, {false})),
+    lineCap(convertRawProp(context, rawProps, "lineCap", sourceProps.lineCap, {RNMapsPolylineLineCap::Butt})),
+    lineDashPattern(convertRawProp(context, rawProps, "lineDashPattern", sourceProps.lineDashPattern, {})),
+    lineJoin(convertRawProp(context, rawProps, "lineJoin", sourceProps.lineJoin, {RNMapsPolylineLineJoin::Miter})),
+    strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
+    strokeColors(convertRawProp(context, rawProps, "strokeColors", sourceProps.strokeColors, {})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
+      {}
 
 } // namespace facebook::react

@@ -14,6 +14,7 @@ import com.rnmaps.fabric.MarkerManager;
 import com.rnmaps.fabric.NativeAirMapsModule;
 import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
 import com.rnmaps.fabric.PolygonManager;
+import com.rnmaps.fabric.PolylineManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,12 +24,15 @@ public class MapAirModulePackage extends TurboReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return List.of(new MapViewManager(reactContext), new MarkerManager(reactContext), new CalloutManager(reactContext), new PolygonManager(reactContext));
+        return List.of(new MapViewManager(reactContext), new MarkerManager(reactContext), new CalloutManager(reactContext), new PolygonManager(reactContext), new PolylineManager(reactContext));
     }
 
 
     @Override
     public NativeModule getModule(String name, ReactApplicationContext reactContext) {
+        if (PolylineManager.REACT_CLASS.equals(name)) {
+            return new PolylineManager(reactContext);
+        }
         if (PolygonManager.REACT_CLASS.equals(name)) {
             return new PolygonManager(reactContext);
         }
