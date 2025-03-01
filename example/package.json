@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "postinstall": "node ../scripts/postinstall.js",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
@@ -28,5 +29,8 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "react-native-maps": {
+    "withGoogleMaps": true
   }
 }

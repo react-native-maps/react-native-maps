@@ -49,6 +49,7 @@
     "format": "yarn prettier:fix && yarn lint:android:fix && yarn lint:ios:fix",
     "build": "tsc --project tsconfig.build.json",
     "test": "jest",
+    "postinstall": "node scripts/postinstall.js",
     "prepare": "husky && bob build",
     "release": "semantic-release",
     "bundle-install": "cd example && bundle install",

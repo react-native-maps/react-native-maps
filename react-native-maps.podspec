@@ -3,6 +3,14 @@ require 'json'
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
+rn_maps_config_path = File.join(__dir__, 'rn-maps-config.json')
+
+$RNMapsWithGoogleMaps = false
+if File.exist?(rn_maps_config_path)
+	config = JSON.parse(File.read(rn_maps_config_path))
+	$RNMapsWithGoogleMaps = config["withGoogleMaps"] == true
+end
+
 Pod::Spec.new do |s|
 	s.name         = "react-native-maps"
 	s.version      = package['version']
@@ -15,7 +23,6 @@ Pod::Spec.new do |s|
 	s.source       = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
 
 	s.source_files = "ios/AirMaps/**/*.{h,m,mm,swift}"
-
 	s.resource_bundles = {
 		'ReactNativeMapsPrivacy' => ['ios/PrivacyInfo.xcprivacy']
 	}
@@ -28,14 +35,13 @@ Pod::Spec.new do |s|
 		sp.private_header_files = "ios/generated/**/*.h"
 	end
 
-	if defined?($RNMapsEnableGoogleMapsSupport) && ($RNMapsEnableGoogleMapsSupport == true)
+	if $RNMapsWithGoogleMaps
 		Pod::UI.puts "#{s.name}: react-native-google-maps pod enabled"
 		s.subspec 'react-native-google-maps' do |sp|
 			sp.name         = "react-native-google-maps"
 			sp.platform     = :ios, "15.0"
 
 			sp.source_files = "ios/AirGoogleMaps/**/*.{h,m,mm,swift}"
-
 			sp.resource_bundles = {
 				'GoogleMapsPrivacy' => ['ios/AirGoogleMaps/Resources/GoogleMapsPrivacy.bundle']
 			}
@@ -44,7 +50,6 @@ Pod::Spec.new do |s|
 			sp.dependency 'Google-Maps-iOS-Utils', '6.1.0'
 		end
 	end
-
 
 	# Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
 	# See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
@@ -69,4 +74,3 @@ Pod::Spec.new do |s|
 		end
 	end
 end
-

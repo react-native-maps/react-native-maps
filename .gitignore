@@ -87,3 +87,6 @@ android/generated
 
 # React Native Nitro Modules
 nitrogen/
+
+# react-native-maps
+/rn-maps-config.json
