@@ -3,7 +3,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import <Foundation/Foundation.h>
-#import <react-native-maps-generated/RNMapsSpecs.h>
+#import "react-native-maps-generated-umbrella.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

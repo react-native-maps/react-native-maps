@@ -13,7 +13,6 @@ Pod::Spec.new do |s|
   s.license = package["license"]
   s.platform = :ios, "13.0"
   s.source = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
-  s.module_map = "ios/generated/module.modulemap"
 
   # Define the default base subspec
   s.default_subspec = 'base'

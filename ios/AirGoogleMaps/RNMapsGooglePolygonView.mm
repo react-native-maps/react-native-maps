@@ -11,10 +11,8 @@
 #import "AIRGMSPolygon.h"
 #import "AIRGoogleMap.h"
 
-#import <react-native-maps-generated/ComponentDescriptors.h>
-#import <react-native-maps-generated/EventEmitters.h>
-#import <react-native-maps-generated/Props.h>
-#import <react-native-maps-generated/RCTComponentViewHelpers.h>
+#import "react-native-maps-generated-umbrella.h"
+
 
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>

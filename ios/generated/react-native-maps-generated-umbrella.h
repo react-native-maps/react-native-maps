@@ -5,6 +5,7 @@
 #import "RNMapsSpecs/EventEmitters.h"
 #import "RNMapsSpecs/Props.h"
 #import "RNMapsSpecs/RCTComponentViewHelpers.h"
+#import "RNMapsSpecs/RNMapsSpecs.h"
 
 #endif /* REACT_NATIVE_MAPS_GENERATED_UMBRELLA_H */
 
