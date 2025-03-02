@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.subspec 'base' do |sp|
     sp.source_files = "ios/AirMaps/**/*.{h,m,mm,swift}"
     sp.dependency "React-Core"
-    sp.dependency "react-native-maps-generated", :path => __dir__
+    sp.dependency "react-native-maps-generated"
     sp.compiler_flags = folly_compiler_flags
     install_modules_dependencies(sp)
   end
@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
       'GoogleMapsPrivacy' => ['ios/AirGoogleMaps/Resources/GoogleMapsPrivacy.bundle']
     }
     sp.compiler_flags = folly_compiler_flags + ' -DHAVE_GOOGLE_MAPS=1 -DHAVE_GOOGLE_MAPS_UTILS=1'
-    sp.dependency "react-native-maps-generated", :path => __dir__
+    sp.dependency "react-native-maps-generated"
     sp.dependency 'GoogleMaps', '9.3.0'
     sp.dependency 'Google-Maps-iOS-Utils', '6.1.0'
     install_modules_dependencies(sp)
