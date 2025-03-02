@@ -5,18 +5,7 @@
   "source": "./src/index.ts",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./lib/typescript/module/src/index.d.ts",
-        "default": "./lib/module/index.js"
-      },
-      "require": {
-        "types": "./lib/typescript/commonjs/src/index.d.ts",
-        "default": "./lib/commonjs/index.js"
-      }
-    }
-  },
+  "types": "./lib/typescript/index.d.ts",
   "files": [
     "src",
     "lib",
@@ -26,11 +15,15 @@
     "*.podspec",
     "react-native.config.js",
     "!ios/build",
+    "!ios/generated",
     "!android/build",
+    "!android/generated",
     "!android/gradle",
     "!android/gradlew",
     "!android/gradlew.bat",
     "!android/local.properties",
+    "!**/*.d.ts.map",
+    "!**/*.js.map",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
@@ -47,7 +40,6 @@
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "format": "yarn prettier:fix && yarn lint:android:fix && yarn lint:ios:fix",
-    "build": "tsc --project tsconfig.build.json",
     "test": "jest",
     "postinstall": "node scripts/postinstall.js",
     "prepare": "husky && bob build",
@@ -104,7 +96,6 @@
     "react-native": "0.78.0",
     "react-native-builder-bob": "0.37.0",
     "semantic-release": "24.2.3",
-    "turbo": "1.10.7",
     "typescript": "5.2.2"
   },
   "resolutions": {
@@ -186,22 +177,15 @@
     "targets": [
       "codegen",
       [
-        "commonjs",
-        {
-          "esm": true
-        }
+        "commonjs"
       ],
       [
-        "module",
-        {
-          "esm": true
-        }
+        "module"
       ],
       [
         "typescript",
         {
-          "project": "tsconfig.build.json",
-          "esm": true
+          "project": "tsconfig.build.json"
         }
       ]
     ]

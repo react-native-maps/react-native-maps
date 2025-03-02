@@ -1,40 +1,21 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "rootDir": "./src",
     "paths": {
       "react-native-maps": ["./src/index"]
     },
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "jsx": "react-native",
-    "lib": ["es2017"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "lib",
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext"
-  }
-}
-
-/// TODO: replace with the config below
-/*
-{
-  "compilerOptions": {
-    "rootDir": ".",
-    "paths": {
-      "react-native-maps": ["./src/index"]
-    },
+    "sourceMap": false,
+    "declarationMap": false,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "lib": ["ESNext"],
+    "lib": [
+      "ESNext"
+    ],
+    "outDir": "./lib",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "noEmit": true,
@@ -42,8 +23,10 @@
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
+    /// TODO: enabled again
+    "noUncheckedIndexedAccess": false,
+    /// TODO: enabled again
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "resolvePackageJsonImports": false,
@@ -53,4 +36,3 @@
     "verbatimModuleSyntax": false
   }
 }
-*/
