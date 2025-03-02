@@ -1084,6 +1084,12 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   };
 
+  private handleKmlReady = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onKmlReady) {
+      this.props.onKmlReady(event);
+    }
+  };
+
   private handleMarkerDeselect = (event: NativeSyntheticEvent<any>) => {
     if (this.props.onMarkerDeselect) {
       this.props.onMarkerDeselect(event);
@@ -1160,6 +1166,7 @@ class MapView extends React.Component<MapViewProps, State> {
       onMarkerPress: this.handleMarkerPress,
       onMarkerSelect: this.handleMarkerSelect,
       onMarkerDeselect: this.handleMarkerDeselect,
+      onKmlReady: this.handleKmlReady,
       userInterfaceStyle: userInterfaceStyle,
       minZoom: minZoomLevel,
       maxZoom: maxZoomLevel,
