@@ -48,7 +48,17 @@ Pod::Spec.new do |s|
       'ios/generated/**/RCTThirdPartyComponentsProvider.{h,mm}',
       'ios/generated/**/RCTModulesConformingToProtocolsProvider.{h,mm}'
     ]
-    sp.public_header_files = "ios/generated/react-native-maps-generated-umbrella.h"
+
+
+    sp.public_header_files = [
+        'ios/generated/react-native-maps-generated-umbrella.h',
+        'ios/generated/RNMapsSpecs/ComponentDescriptors.h',
+        'ios/generated/RNMapsSpecs/EventEmitters.h',
+        'ios/generated/RNMapsSpecs/Props.h',
+        'ios/generated/RNMapsSpecs/RCTComponentViewHelpers.h',
+        'ios/generated/RNMapsSpecs/RNMapsSpecs.h'
+    ]
+    sp.header_mappings_dir = 'ios/generated'
     sp.resource_bundles = {
       'ReactNativeMapsPrivacy' => ['ios/PrivacyInfo.xcprivacy']
     }
