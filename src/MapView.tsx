@@ -966,15 +966,8 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise with return type Address
    */
   addressForCoordinate(coordinate: LatLng): Promise<Address> {
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.getAddressFromCoordinates(
-        this._getHandle(),
-        coordinate,
-      );
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getAddressFromCoordinates(coordinate);
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getAddressFromCoordinates(coordinate);
     }
     return Promise.reject('getAddress not supported on this platform');
   }
