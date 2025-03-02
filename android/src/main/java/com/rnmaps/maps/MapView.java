@@ -12,6 +12,7 @@ import android.location.Location;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -653,6 +654,7 @@ public void onCreate(LifecycleOwner owner) {
         builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnLongPressEvent.EVENT_NAME));
         builder.put(OnRegionChangeStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
         builder.put(OnDoublePressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDoublePressEvent.EVENT_NAME));
+        builder.put(OnPanDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPanDragEvent.EVENT_NAME));
         return builder.build();
     }
 
@@ -1611,8 +1613,7 @@ public void onCreate(LifecycleOwner owner) {
         Point point = new Point((int) ev.getX(), (int) ev.getY());
         LatLng coords = this.map.getProjection().fromScreenLocation(point);
         WritableMap event = makeClickEventData(coords);
-        // todo: use Fabric events
-        // manager.pushEvent(context, this, "onPanDrag", event);
+        dispatchEvent(event, OnPanDragEvent::new);
     }
 
     public void onDoublePress(MotionEvent ev) {
@@ -1620,7 +1621,6 @@ public void onCreate(LifecycleOwner owner) {
         Point point = new Point((int) ev.getX(), (int) ev.getY());
         LatLng coords = this.map.getProjection().fromScreenLocation(point);
         WritableMap event = makeClickEventData(coords);
-        // todo: use Fabric events
         dispatchEvent(event, OnDoublePressEvent::new);
 
     }

@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapColorScheme;
 import com.rnmaps.maps.MapMarker;
+import com.rnmaps.maps.MapOverlay;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
@@ -65,6 +66,21 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     @Override
     public MapView createViewInstance(ThemedReactContext context) {
         return new MapView(context, new GoogleMapOptions());
+    }
+
+    @Override
+    public int getChildCount(MapView view) {
+        return view.getFeatureCount();
+    }
+
+    @Override
+    public View getChildAt(MapView view, int index) {
+        return view.getFeatureAt(index);
+    }
+
+    @Override
+    public void removeViewAt(MapView parent, int index) {
+        parent.removeFeatureAt(index);
     }
 
     @Override
@@ -306,6 +322,10 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
             ((MapMarker) child).setImageLoadedListener((uri, drawable, b) -> {
                 parent.addFeature(child, parent.getFeatureCount());
             });
+//        } else if (child instanceof MapOverlay && ((MapOverlay) child).isLoadingImage()){
+//            ((MapOverlay) child).setImageLoadedListener((uri, drawable, b) -> {
+//                parent.addFeature(child, parent.getFeatureCount());
+//            });
         } else {
             parent.addFeature(child, index);
         }
