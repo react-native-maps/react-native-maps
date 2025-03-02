@@ -84,7 +84,8 @@ public class OverlayManager extends ViewGroupManager<MapOverlay> implements RNMa
 
     @Override
     public void setOpacity(MapOverlay view, float value) {
-        view.setTransparency(value);
+        // todo report to google that it's not working / fix it
+       // view.setTransparency(value);
     }
 
     @Override

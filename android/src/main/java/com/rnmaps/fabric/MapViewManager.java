@@ -322,10 +322,6 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
             ((MapMarker) child).setImageLoadedListener((uri, drawable, b) -> {
                 parent.addFeature(child, parent.getFeatureCount());
             });
-//        } else if (child instanceof MapOverlay && ((MapOverlay) child).isLoadingImage()){
-//            ((MapOverlay) child).setImageLoadedListener((uri, drawable, b) -> {
-//                parent.addFeature(child, parent.getFeatureCount());
-//            });
         } else {
             parent.addFeature(child, index);
         }
