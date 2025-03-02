@@ -12,7 +12,6 @@ import android.location.Location;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -80,6 +79,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -501,8 +501,10 @@ public void onCreate(LifecycleOwner owner) {
             public void onPolylineClick(@NonNull Polyline polyline) {
                 WritableMap event = makeClickEventData(tapLocation);
                 event.putString("action", "polyline-press");
-                // todo: use Fabric events
-                //  manager.pushEvent(context, polylineMap.get(polyline), "onPress", event);
+                dispatchEvent(event, OnPressEvent::new);
+                event = makeClickEventData(tapLocation);
+                dispatchEvent(event, OnPressEvent::new, polylineMap.get(polyline).getId(), context);
+
             }
         });
 
@@ -550,8 +552,10 @@ public void onCreate(LifecycleOwner owner) {
             public void onGroundOverlayClick(@NonNull GroundOverlay groundOverlay) {
                 WritableMap event = makeClickEventData(groundOverlay.getPosition());
                 event.putString("action", "overlay-press");
-                // todo: use Fabric events
-                //  manager.pushEvent(context, overlayMap.get(groundOverlay), "onPress", event);
+
+                dispatchEvent(event, OnPressEvent::new);
+                event =  makeClickEventData(groundOverlay.getPosition());
+                dispatchEvent(event, OnPressEvent::new,overlayMap.get(groundOverlay).getId(), context);
             }
         });
 
@@ -664,7 +668,8 @@ public void onCreate(LifecycleOwner owner) {
                 OnUserLocationChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnUserLocationChangeEvent.EVENT_NAME),
                 OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME),
                 OnIndoorBuildingFocusedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorBuildingFocusedEvent.EVENT_NAME),
-                OnIndoorLevelActivatedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorLevelActivatedEvent.EVENT_NAME)
+                OnIndoorLevelActivatedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorLevelActivatedEvent.EVENT_NAME),
+                OnKmlReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnKmlReadyEvent.EVENT_NAME)
         );
     }
 
@@ -1255,15 +1260,16 @@ public void onCreate(LifecycleOwner owner) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         boolean addedPosition = false;
-
-        for (MapFeature feature : features) {
-            if (feature instanceof MapMarker) {
-                Marker marker = (Marker) feature.getFeature();
-                builder.include(marker.getPosition());
-                addedPosition = true;
-            }
-            // TODO(lmr): may want to include shapes / etc.
-        }
+       if (features.size() > 0) {
+           for (MapFeature feature : features) {
+               if (feature instanceof MapMarker) {
+                   Marker marker = (Marker) feature.getFeature();
+                   builder.include(marker.getPosition());
+                   addedPosition = true;
+               }
+               // TODO(lmr): may want to include shapes / etc.
+           }
+       }
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
@@ -1642,16 +1648,14 @@ public void onCreate(LifecycleOwner owner) {
                 WritableArray markers = new WritableNativeArray();
 
                 if (kmlLayer.getContainers() == null) {
-                    // todo: use Fabric events
-                    // manager.pushEvent(context, this, "onKmlReady", pointers);
+                    dispatchEvent(pointers, OnKmlReadyEvent::new);
                     return;
                 }
 
                 //Retrieve a nested container within the first container
                 KmlContainer container = kmlLayer.getContainers().iterator().next();
                 if (container == null || container.getContainers() == null) {
-                    // todo: use Fabric events
-                    // manager.pushEvent(context, this, "onKmlReady", pointers);
+                    dispatchEvent(pointers, OnKmlReadyEvent::new);
                     return;
                 }
 
@@ -1714,8 +1718,7 @@ public void onCreate(LifecycleOwner owner) {
                 }
 
                 pointers.putArray("markers", markers);
-                // todo: use Fabric events
-                //  manager.pushEvent(context, this, "onKmlReady", pointers);
+                dispatchEvent(new WritableNativeMap(), OnKmlReadyEvent::new);
 
             } catch (XmlPullParserException | IOException | InterruptedException |
                      ExecutionException e) {

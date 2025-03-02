@@ -7,6 +7,9 @@ import static com.rnmaps.maps.MapModule.SNAPSHOT_RESULT_FILE;
 import static com.rnmaps.maps.MapModule.closeQuietly;
 
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -23,8 +26,8 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.rnmaps.fabric.NativeAirMapsModuleSpec;
-
 import com.rnmaps.maps.MapUIBlock;
 import com.rnmaps.maps.MapView;
 
@@ -34,6 +37,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
     public NativeAirMapsModule(ReactApplicationContext reactContext) {
@@ -189,16 +194,91 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
 
     @Override
     public void getAddressFromCoordinates(double tag, ReadableMap coordinate, Promise promise) {
+        final ReactApplicationContext context = getReactApplicationContext();
+
+        if (coordinate == null ||
+                !coordinate.hasKey("latitude") ||
+                !coordinate.hasKey("longitude")) {
+            promise.reject("Invalid coordinate format");
+            return;
+        }
+        Geocoder geocoder = new Geocoder(context);
+        try {
+            List<Address> list =
+                    geocoder.getFromLocation(coordinate.getDouble("latitude"), coordinate.getDouble("longitude"), 1);
+            if (list.isEmpty()) {
+                promise.reject("Can not get address location");
+                return;
+            }
+            Address address = list.get(0);
+
+            WritableMap addressJson = new WritableNativeMap();
+            addressJson.putString("name", address.getFeatureName());
+            addressJson.putString("locality", address.getLocality());
+            addressJson.putString("thoroughfare", address.getThoroughfare());
+            addressJson.putString("subThoroughfare", address.getSubThoroughfare());
+            addressJson.putString("subLocality", address.getSubLocality());
+            addressJson.putString("administrativeArea", address.getAdminArea());
+            addressJson.putString("subAdministrativeArea", address.getSubAdminArea());
+            addressJson.putString("postalCode", address.getPostalCode());
+            addressJson.putString("countryCode", address.getCountryCode());
+            addressJson.putString("country", address.getCountryName());
+
+            promise.resolve(addressJson);
+        } catch (IOException e) {
+            promise.reject("Can not get address location");
+        }
+
 
     }
 
     @Override
     public void getPointForCoordinate(double tag, ReadableMap coordinate, Promise promise) {
+        final ReactApplicationContext context = getReactApplicationContext();
+        final double density = (double) context.getResources().getDisplayMetrics().density;
 
+        final LatLng coord = new LatLng(
+                coordinate.hasKey("latitude") ? coordinate.getDouble("latitude") : 0.0,
+                coordinate.hasKey("longitude") ? coordinate.getDouble("longitude") : 0.0
+        );
+
+        MapUIBlock uiBlock = new MapUIBlock((int) tag, promise, context, view -> {
+            Point pt = view.map.getProjection().toScreenLocation(coord);
+
+            WritableMap ptJson = new WritableNativeMap();
+            ptJson.putDouble("x", (double) pt.x / density);
+            ptJson.putDouble("y", (double) pt.y / density);
+
+            promise.resolve(ptJson);
+
+            return null;
+        });
+
+        uiBlock.addToUIManager();
     }
 
     @Override
     public void getCoordinateForPoint(double tag, ReadableMap point, Promise promise) {
+        final ReactApplicationContext context = getReactApplicationContext();
+        final double density = (double) context.getResources().getDisplayMetrics().density;
 
+        final Point pt = new Point(
+                point.hasKey("x") ? (int) (point.getDouble("x") * density) : 0,
+                point.hasKey("y") ? (int) (point.getDouble("y") * density) : 0
+        );
+
+        MapUIBlock uiBlock = new MapUIBlock((int)tag, promise, context, view -> {
+            LatLng coord = view.map.getProjection().fromScreenLocation(pt);
+
+            WritableMap coordJson = new WritableNativeMap();
+            coordJson.putDouble("latitude", coord.latitude);
+            coordJson.putDouble("longitude", coord.longitude);
+
+            promise.resolve(coordJson);
+
+            return null;
+        });
+
+        uiBlock.addToUIManager();
     }
 }

@@ -77,7 +77,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
           );
         } else {
           throw new Error(
-            'getPointForCoordinate is only supported on iOS with Fabric.',
+            'getPointForCoordinate is not supported on this platform.',
           );
         }
       },
@@ -89,7 +89,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
           );
         } else {
           throw new Error(
-            'getAddressFromCoordinates is only supported on iOS with Fabric.',
+            'getAddressFromCoordinates is not supported on this platform',
           );
         }
       },

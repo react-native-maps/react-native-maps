@@ -1,7 +1,7 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Color;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -42,6 +42,7 @@ public class MapPolygon extends MapFeature {
 
   public MapPolygon(Context context) {
     super(context);
+    strokeWidth = 10;
   }
 
     public static Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
@@ -193,6 +194,7 @@ public class MapPolygon extends MapFeature {
     options.geodesic(geodesic);
     options.zIndex(zIndex);
     options.strokePattern(this.pattern);
+    options.clickable(this.tappable);
 
     if (this.holes != null) {
       for (int i = 0; i < holes.size(); i++) {
@@ -212,7 +214,6 @@ public class MapPolygon extends MapFeature {
   public void addToMap(Object collection) {
     PolygonManager.Collection polygonCollection = (PolygonManager.Collection) collection;
     polygon = polygonCollection.addPolygon(getPolygonOptions());
-    polygon.setClickable(this.tappable);
   }
 
   @Override

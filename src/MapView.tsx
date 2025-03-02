@@ -4,7 +4,6 @@ import {
   Animated,
   findNodeHandle,
   HostComponent,
-  NativeModules,
   NativeSyntheticEvent,
   Platform,
   requireNativeComponent,
@@ -966,15 +965,8 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise with return type Address
    */
   addressForCoordinate(coordinate: LatLng): Promise<Address> {
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.getAddressFromCoordinates(
-        this._getHandle(),
-        coordinate,
-      );
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getAddressFromCoordinates(coordinate);
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getAddressFromCoordinates(coordinate);
     }
     return Promise.reject('getAddress not supported on this platform');
   }
@@ -989,15 +981,8 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the point ({ x: Number, y: Number })
    */
   pointForCoordinate(coordinate: LatLng): Promise<Point> {
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.pointForCoordinate(
-        this._getHandle(),
-        coordinate,
-      );
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getPointForCoordinate(coordinate);
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getPointForCoordinate(coordinate);
     }
     return Promise.reject('pointForCoordinate not supported on this platform');
   }
@@ -1012,15 +997,8 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the coordinate ({ latitude: Number, longitude: Number })
    */
   coordinateForPoint(point: Point): Promise<LatLng> {
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.coordinateForPoint(
-        this._getHandle(),
-        point,
-      );
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getCoordinateForPoint(point);
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getCoordinateForPoint(point);
     }
     return Promise.reject('coordinateForPoint not supported on this platform');
   }
@@ -1081,6 +1059,12 @@ class MapView extends React.Component<MapViewProps, State> {
   private handleMarkerSelect = (event: NativeSyntheticEvent<any>) => {
     if (this.props.onMarkerSelect) {
       this.props.onMarkerSelect(event);
+    }
+  };
+
+  private handleKmlReady = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onKmlReady) {
+      this.props.onKmlReady(event);
     }
   };
 
@@ -1160,6 +1144,7 @@ class MapView extends React.Component<MapViewProps, State> {
       onMarkerPress: this.handleMarkerPress,
       onMarkerSelect: this.handleMarkerSelect,
       onMarkerDeselect: this.handleMarkerDeselect,
+      onKmlReady: this.handleKmlReady,
       userInterfaceStyle: userInterfaceStyle,
       minZoom: minZoomLevel,
       maxZoom: maxZoomLevel,

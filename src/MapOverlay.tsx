@@ -110,8 +110,6 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
         image = resolvedImage.uri || this.props.image;
       }
     }
-    console.log('MapOverlay image: ' + image);
-
     return (
       <AIRMapOverlay
         {...this.props}
