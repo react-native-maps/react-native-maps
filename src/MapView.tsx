@@ -4,7 +4,6 @@ import {
   Animated,
   findNodeHandle,
   HostComponent,
-  NativeModules,
   NativeSyntheticEvent,
   Platform,
   requireNativeComponent,
@@ -982,15 +981,8 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the point ({ x: Number, y: Number })
    */
   pointForCoordinate(coordinate: LatLng): Promise<Point> {
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.pointForCoordinate(
-        this._getHandle(),
-        coordinate,
-      );
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getPointForCoordinate(coordinate);
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getPointForCoordinate(coordinate);
     }
     return Promise.reject('pointForCoordinate not supported on this platform');
   }
@@ -1005,15 +997,8 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with the coordinate ({ latitude: Number, longitude: Number })
    */
   coordinateForPoint(point: Point): Promise<LatLng> {
-    if (Platform.OS === 'android') {
-      return NativeModules.AirMapModule.coordinateForPoint(
-        this._getHandle(),
-        point,
-      );
-    } else if (Platform.OS === 'ios') {
-      if (this.fabricMap.current) {
-        return this.fabricMap.current.getCoordinateForPoint(point);
-      }
+    if (this.fabricMap.current) {
+      return this.fabricMap.current.getCoordinateForPoint(point);
     }
     return Promise.reject('coordinateForPoint not supported on this platform');
   }

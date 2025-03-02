@@ -7,6 +7,7 @@ import static com.rnmaps.maps.MapModule.SNAPSHOT_RESULT_FILE;
 import static com.rnmaps.maps.MapModule.closeQuietly;
 
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.rnmaps.maps.MapUIBlock;
 import com.rnmaps.maps.MapView;
 
@@ -232,11 +234,51 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
 
     @Override
     public void getPointForCoordinate(double tag, ReadableMap coordinate, Promise promise) {
+        final ReactApplicationContext context = getReactApplicationContext();
+        final double density = (double) context.getResources().getDisplayMetrics().density;
 
+        final LatLng coord = new LatLng(
+                coordinate.hasKey("latitude") ? coordinate.getDouble("latitude") : 0.0,
+                coordinate.hasKey("longitude") ? coordinate.getDouble("longitude") : 0.0
+        );
+
+        MapUIBlock uiBlock = new MapUIBlock((int) tag, promise, context, view -> {
+            Point pt = view.map.getProjection().toScreenLocation(coord);
+
+            WritableMap ptJson = new WritableNativeMap();
+            ptJson.putDouble("x", (double) pt.x / density);
+            ptJson.putDouble("y", (double) pt.y / density);
+
+            promise.resolve(ptJson);
+
+            return null;
+        });
+
+        uiBlock.addToUIManager();
     }
 
     @Override
     public void getCoordinateForPoint(double tag, ReadableMap point, Promise promise) {
+        final ReactApplicationContext context = getReactApplicationContext();
+        final double density = (double) context.getResources().getDisplayMetrics().density;
 
+        final Point pt = new Point(
+                point.hasKey("x") ? (int) (point.getDouble("x") * density) : 0,
+                point.hasKey("y") ? (int) (point.getDouble("y") * density) : 0
+        );
+
+        MapUIBlock uiBlock = new MapUIBlock((int)tag, promise, context, view -> {
+            LatLng coord = view.map.getProjection().fromScreenLocation(pt);
+
+            WritableMap coordJson = new WritableNativeMap();
+            coordJson.putDouble("latitude", coord.latitude);
+            coordJson.putDouble("longitude", coord.longitude);
+
+            promise.resolve(coordJson);
+
+            return null;
+        });
+
+        uiBlock.addToUIManager();
     }
 }
