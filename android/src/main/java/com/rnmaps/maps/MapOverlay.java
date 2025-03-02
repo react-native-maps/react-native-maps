@@ -2,32 +2,21 @@ package com.rnmaps.maps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-
-import androidx.annotation.Nullable;
 
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.BaseDataSubscriber;
 import com.facebook.datasource.DataSource;
 import com.facebook.datasource.DataSubscriber;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.view.DraweeHolder;
 import com.facebook.imagepipeline.core.ImagePipeline;
 import com.facebook.imagepipeline.image.CloseableBitmap;
 import com.facebook.imagepipeline.image.CloseableImage;
-import com.facebook.imagepipeline.image.CloseableStaticBitmap;
-import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableArray;
@@ -45,7 +34,7 @@ import com.rnmaps.fabric.event.OnPressEvent;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-public class MapOverlay extends MapFeature implements ImageReadable {
+public class MapOverlay extends MapFeature {
 
 
     private String imageUri;
@@ -267,23 +256,12 @@ public class MapOverlay extends MapFeature implements ImageReadable {
         groundOverlayCollection = null;
     }
 
-    @Override
-    public void setIconBitmap(Bitmap bitmap) {
-    }
-
-    @Override
-    public void setBitmapDescriptor(
-            BitmapDescriptor bitmapDescriptor) {
-        this.bitmapDescriptor = bitmapDescriptor;
-    }
-
-    @Override
     public void update() {
         this.groundOverlay = getGroundOverlay();
         if (this.groundOverlay != null) {
             this.groundOverlay.setVisible(true);
             this.groundOverlay.setImage(this.bitmapDescriptor);
-  //          this.groundOverlay.setTransparency(this.transparency);
+            //          this.groundOverlay.setTransparency(this.transparency);
             this.groundOverlay.setClickable(this.tappable);
         }
     }
