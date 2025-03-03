@@ -1,0 +1,4 @@
+module react-native-maps-generated {
+    umbrella header "react-native-maps-generated-umbrella.h"
+    export RNMapsSpecs
+}
