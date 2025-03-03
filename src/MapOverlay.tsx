@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   StyleSheet,
-  Image,
   Animated,
   ViewProps,
   ImageURISource,
@@ -20,6 +19,7 @@ import decorateMapComponent, {
 } from './decorateMapComponent';
 import {LatLng, Point} from './sharedTypes';
 import {Modify} from './sharedTypesInternal';
+import {fixImageProp} from './fixImageProp';
 
 export type MapOverlayProps = ViewProps & {
   /**
@@ -96,18 +96,9 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
     }
 
     const AIRMapOverlay = this.getNativeComponent();
-    let image;
-    if (this.props.image) {
-      if (this.fabricOverlay) {
-        if (typeof this.props.image === 'string') {
-          image = {uri: this.props.image};
-        } else {
-          image = this.props.image;
-        }
-      } else {
-        const resolvedImage = Image.resolveAssetSource(this.props.image) || {};
-        image = resolvedImage.uri || this.props.image;
-      }
+    let image: any = this.props.image;
+    if (this.props.image && this.fabricOverlay) {
+      image = fixImageProp(this.props.image);
     }
     return (
       <AIRMapOverlay
