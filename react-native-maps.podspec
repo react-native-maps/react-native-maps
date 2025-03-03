@@ -22,17 +22,23 @@ Pod::Spec.new do |s|
 
 	s.source       = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
 
-	s.source_files = "ios/AirMaps/**/*.{h,m,mm,swift}"
-	s.resource_bundles = {
-		'ReactNativeMapsPrivacy' => ['ios/PrivacyInfo.xcprivacy']
-	}
+	s.source_files = 'ios/generated/**/*.{h,m,mm,cpp}'
+	s.private_header_files = "ios/generated/**/*.h"
+	s.header_mappings_dir = 'ios'
 
-	s.subspec 'generated' do |sp|
-		sp.name         = "generated"
+	if ENV["USE_FRAMEWORKS"]
+		s.pod_target_xcconfig = {
+			'HEADER_SEARCH_PATHS' => '$(PODS_TARGET_SRCROOT)/ios'
+		}
+	end
+	s.subspec 'react-native-apple-maps' do |sp|
+		sp.name         = "react-native-apple-maps"
 		sp.platform     = :ios, "13.0"
 
-		sp.source_files = 'ios/generated/**/*.{h,m,mm,cpp}'
-		sp.private_header_files = "ios/generated/**/*.h"
+		sp.source_files = "ios/AirMaps/**/*.{h,m,mm,swift}"
+		sp.resource_bundles = {
+			'ReactNativeMapsPrivacy' => ['ios/PrivacyInfo.xcprivacy']
+		}
 	end
 
 	if $RNMapsWithGoogleMaps

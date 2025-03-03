@@ -1256,7 +1256,7 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-maps/generated (= 0.0.0)
+    - react-native-maps/react-native-apple-maps (= 0.0.0)
     - react-native-maps/react-native-google-maps (= 0.0.0)
     - React-NativeModulesApple
     - React-RCTFabric
@@ -1266,7 +1266,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-maps/generated (0.0.0):
+  - react-native-maps/react-native-apple-maps (0.0.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1854,7 +1854,7 @@ SPEC CHECKSUMS:
   React-logger: 018826bfd51b9f18e87f67db1590bc510ad20664
   React-Mapbuffer: 3c11cee7737609275c7b66bd0b1de475f094cedf
   React-microtasksnativemodule: 843f352b32aacbe13a9c750190d34df44c3e6c2c
-  react-native-maps: ff6f66df89d373614f2bb28430875654fce2da04
+  react-native-maps: 3d9831db0f45efc95fcd3d38857a764c563630a4
   React-NativeModulesApple: 88433b6946778bea9c153e27b671de15411bf225
   React-perflogger: 9e8d3c0dc0194eb932162812a168aa5dc662f418
   React-performancetimeline: 5a2d6efef52bdcefac079c7baa30934978acd023

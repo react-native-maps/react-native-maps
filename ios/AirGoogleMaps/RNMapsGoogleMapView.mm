@@ -13,10 +13,10 @@
 #import "AIRMapMarker.h"
 #import "AIRGoogleMapManager.h"
 
-#import "../generated/RNMapsSpecs/ComponentDescriptors.h"
-#import "../generated/RNMapsSpecs/EventEmitters.h"
-#import "../generated/RNMapsSpecs/Props.h"
-#import "../generated/RNMapsSpecs/RCTComponentViewHelpers.h"
+#import "generated/RNMapsSpecs/ComponentDescriptors.h"
+#import "generated/RNMapsSpecs/EventEmitters.h"
+#import "generated/RNMapsSpecs/Props.h"
+#import "generated/RNMapsSpecs/RCTComponentViewHelpers.h"
 
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
