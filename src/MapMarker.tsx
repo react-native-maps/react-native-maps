@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   StyleSheet,
   Animated,
-  Image,
   ViewProps,
   ImageURISource,
   ImageRequireSource,
@@ -482,21 +481,15 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     }
 
     let icon;
-    if (this.props.icon) {
-      icon = Image.resolveAssetSource(this.props.icon) || {};
-      icon = icon.uri;
-      if (this.fabricMarker) {
-        icon = fixImageProp(this.props.icon);
-      }
+    if (this.props.icon && this.fabricMarker) {
+      icon = fixImageProp(this.props.icon);
+    }
+    let image;
+    if (this.props.image && this.fabricMarker) {
+      image = fixImageProp(this.props.image);
     }
 
     const AIRMapMarker = this.getNativeComponent();
-    let image;
-    if (this.props.image) {
-      if (this.fabricMarker) {
-        image = fixImageProp(this.props.image);
-      }
-    }
 
     return (
       <AIRMapMarker
