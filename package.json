@@ -16,9 +16,7 @@
     "react-native.config.js",
     "scripts",
     "!ios/build",
-    "!ios/generated",
     "!android/build",
-    "!android/generated",
     "!android/gradle",
     "!android/gradlew",
     "!android/gradlew.bat",
@@ -201,6 +199,7 @@
     },
     "android": {
       "javaPackageName": "com.rnmaps.fabric"
-    }
+    },
+    "includesGeneratedCode": true
   }
 }
