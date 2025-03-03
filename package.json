@@ -14,6 +14,7 @@
     "cpp",
     "*.podspec",
     "react-native.config.js",
+    "scripts",
     "!ios/build",
     "!ios/generated",
     "!android/build",
@@ -200,7 +201,6 @@
     },
     "android": {
       "javaPackageName": "com.rnmaps.fabric"
-    },
-    "includesGeneratedCode": true
+    }
   }
 }
