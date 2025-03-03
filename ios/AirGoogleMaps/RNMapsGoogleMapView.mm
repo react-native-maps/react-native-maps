@@ -12,7 +12,10 @@
 #import "AIRGoogleMap.h"
 #import "AIRMapMarker.h"
 #import "AIRGoogleMapManager.h"
-#import "react-native-maps-generated-umbrella.h"
+#import <react/renderer/components/RNMapsSpecs/ComponentDescriptors.h>
+#import <react/renderer/components/RNMapsSpecs/EventEmitters.h>
+#import <react/renderer/components/RNMapsSpecs/Props.h>
+#import <react/renderer/components/RNMapsSpecs/RCTComponentViewHelpers.h>
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
 #import "RCTConvert+GMSMapViewType.h"
