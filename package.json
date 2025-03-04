@@ -16,7 +16,9 @@
     "react-native.config.js",
     "scripts",
     "!ios/build",
+    "!ios/generated",
     "!android/build",
+    "!android/generated",
     "!android/gradle",
     "!android/gradlew",
     "!android/gradlew.bat",
@@ -40,7 +42,6 @@
     "prettier:fix": "prettier --write .",
     "format": "yarn prettier:fix && yarn lint:android:fix && yarn lint:ios:fix",
     "test": "jest",
-    "postinstall": "node scripts/postinstall.js",
     "prepare": "husky && bob build",
     "release": "semantic-release",
     "bundle-install": "cd example && bundle install",
@@ -199,7 +200,6 @@
     },
     "android": {
       "javaPackageName": "com.rnmaps.fabric"
-    },
-    "includesGeneratedCode": true
+    }
   }
 }

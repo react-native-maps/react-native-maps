@@ -29,8 +29,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "react-native-maps": {
-    "withGoogleMaps": true
   }
 }
