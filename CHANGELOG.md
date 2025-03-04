@@ -1,5 +1,40 @@
 # Changelog
 
+# [1.21.0-alpha.95](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.94...v1.21.0-alpha.95) (2025-03-03)
+
+
+### Features
+
+* **ios:** support for Fabric ([19e03e3](https://github.com/react-native-maps/react-native-maps/commit/19e03e3b91d78c5ae2474860f5048d0b51ac445f))
+
+# [1.21.0-alpha.94](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.93...v1.21.0-alpha.94) (2025-03-03)
+
+
+### Features
+
+* **ios:** support for Fabric ([0324c3a](https://github.com/react-native-maps/react-native-maps/commit/0324c3a863825e2cc9c976f91b310a6727720c9b))
+
+# [1.21.0-alpha.93](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.92...v1.21.0-alpha.93) (2025-03-03)
+
+
+### Features
+
+* **ios:** support for Fabric ([634405c](https://github.com/react-native-maps/react-native-maps/commit/634405cdb12b726c8b959667efea0b80dc81ee6f))
+
+# [1.21.0-alpha.92](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.91...v1.21.0-alpha.92) (2025-03-03)
+
+
+### Features
+
+* **ios:** support for Fabric ([eb8a1e7](https://github.com/react-native-maps/react-native-maps/commit/eb8a1e7ad24fac33409160141d0a6859cd4aa49b))
+
+# [1.21.0-alpha.91](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.90...v1.21.0-alpha.91) (2025-03-03)
+
+
+### Features
+
+* **ios:** support for Fabric ([5ca2cdc](https://github.com/react-native-maps/react-native-maps/commit/5ca2cdcce50dcabd681075bb6750fedcfa268f1c))
+
 # [1.21.0-alpha.90](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.89...v1.21.0-alpha.90) (2025-03-02)
 
 

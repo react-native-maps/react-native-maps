@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   StyleSheet,
   Animated,
-  Image,
   ViewProps,
   ImageURISource,
   ImageRequireSource,
@@ -38,6 +37,7 @@ import {
 import {Modify} from './sharedTypesInternal';
 
 import {PROVIDER_GOOGLE} from './ProviderConstants';
+import {fixImageProp} from './fixImageProp';
 
 type AppleMarkerVisibility = 'hidden' | 'adaptive' | 'visible';
 
@@ -477,36 +477,28 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     if (this.fabricMarker === undefined) {
       const provider = this.context;
       this.fabricMarker = !(
-        Platform.OS === 'ios' && provider !== PROVIDER_GOOGLE
+        Platform.OS === 'ios' && provider === PROVIDER_GOOGLE
       );
     }
 
     let icon;
-    if (this.props.icon) {
-      icon = Image.resolveAssetSource(this.props.icon) || {};
-      icon = icon.uri;
+    if (this.props.icon && this.fabricMarker) {
+      icon = fixImageProp(this.props.icon);
+    }
+    let image;
+    if (this.props.image && this.fabricMarker) {
+      image = fixImageProp(this.props.image);
     }
 
     const AIRMapMarker = this.getNativeComponent();
-    let image;
-    if (this.props.image) {
-      if (this.fabricMarker) {
-        if (typeof this.props.image === 'string') {
-          image = {uri: this.props.image};
-        } else {
-          image = this.props.image;
-        }
-      } else {
-        const resolvedImage = Image.resolveAssetSource(this.props.image) || {};
-        image = resolvedImage.uri || this.props.image;
-      }
-    }
 
     return (
       <AIRMapMarker
         {...this.props}
         ref={this.marker}
+        // @ts-ignore
         image={image}
+        // @ts-ignore
         icon={icon}
         style={[styles.marker, this.props.style]}
         onPress={event => {
