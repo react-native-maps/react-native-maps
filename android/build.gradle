@@ -105,6 +105,6 @@ if (isNewArchitectureEnabled()) {
   react {
     jsRootDir = file("../src/")
     libraryName = "RNMaps"
-    codegenJavaPackageName = "com.maps.fabric"
+    codegenJavaPackageName = "com.rnmaps.fabric"
   }
 }
