@@ -1244,8 +1244,6 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
   - react-native-maps (0.0.0):
-    - react-native-maps/base (= 0.0.0)
-  - react-native-maps/base (0.0.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1258,7 +1256,8 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-maps/generated
+    - react-native-maps/react-native-apple-maps (= 0.0.0)
+    - react-native-maps/react-native-google-maps (= 0.0.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1267,7 +1266,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-maps/generated (0.0.0):
+  - react-native-maps/react-native-apple-maps (0.0.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1288,7 +1287,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-maps/google-maps (0.0.0):
+  - react-native-maps/react-native-google-maps (0.0.0):
     - DoubleConversion
     - glog
     - Google-Maps-iOS-Utils (= 6.1.0)
@@ -1303,7 +1302,6 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-maps/generated
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1643,7 +1641,6 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-maps (from `../..`)
-  - react-native-maps/google-maps (from `../..`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-performancetimeline (from `../node_modules/react-native/ReactCommon/react/performance/timeline`)
@@ -1857,7 +1854,7 @@ SPEC CHECKSUMS:
   React-logger: 018826bfd51b9f18e87f67db1590bc510ad20664
   React-Mapbuffer: 3c11cee7737609275c7b66bd0b1de475f094cedf
   React-microtasksnativemodule: 843f352b32aacbe13a9c750190d34df44c3e6c2c
-  react-native-maps: dc21890b6b3ff84cc150f2183e7a0ff3fda624bb
+  react-native-maps: 3d9831db0f45efc95fcd3d38857a764c563630a4
   React-NativeModulesApple: 88433b6946778bea9c153e27b671de15411bf225
   React-perflogger: 9e8d3c0dc0194eb932162812a168aa5dc662f418
   React-performancetimeline: 5a2d6efef52bdcefac079c7baa30934978acd023
@@ -1889,6 +1886,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: afd04ff05ebe0121a00c468a8a3c8080221cb14c
 
-PODFILE CHECKSUM: 07c6d8445f7797c8cbf411601d06e7df3b3fd352
+PODFILE CHECKSUM: 39aa86dad46173fb835ef5bdb3f5d36ec6e08f11
 
 COCOAPODS: 1.16.2

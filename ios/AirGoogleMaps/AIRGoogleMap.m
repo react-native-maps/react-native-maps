@@ -24,22 +24,10 @@
 #import <React/RCTBridge.h>
 #import <React/RCTConvert.h>
 #import <objc/runtime.h>
-
-#ifdef HAVE_GOOGLE_MAPS_UTILS
 #import "GMUKMLParser.h"
 #import "GMUPlacemark.h"
 #import "GMUPoint.h"
 #import "GMUGeometryRenderer.h"
-#define REQUIRES_GOOGLE_MAPS_UTILS(feature) do {} while (0)
-#else
-#define GMUKMLParser void
-#define GMUPlacemark void
-#define REQUIRES_GOOGLE_MAPS_UTILS(feature) do { \
- [NSException raise:@"ReactNativeMapsDependencyMissing" \
-             format:@"Use of " feature "requires Google-Maps-iOS-Utils, you  must install via CocoaPods to use this feature"]; \
-} while (0)
-#endif
-
 
 id regionAsJSON(MKCoordinateRegion region) {
   return @{
@@ -1068,7 +1056,6 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 + (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
-#ifdef HAVE_GOOGLE_MAPS_UTILS
   if (marker.style.styleID != nil) {
     for (GMUStyle *style in parser.styles) {
       if (style.styleID == marker.style.styleID) {
@@ -1078,9 +1065,6 @@ id regionAsJSON(MKCoordinateRegion region) {
   }
 
   return marker.style.iconUrl;
-#else
-    REQUIRES_GOOGLE_MAPS_UTILS("GetIconUrl:parser:"); return @"";
-#endif
 }
 
 - (NSString *)KmlSrc {
@@ -1127,14 +1111,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 
     id event = @{@"markers": markers};
     if (self.onKmlReady) self.onKmlReady(event);
-  #else
-      REQUIRES_GOOGLE_MAPS_UTILS();
-  #endif
 }
 
 - (void)setKmlSrc:(NSString *)kmlUrl {
-#ifdef HAVE_GOOGLE_MAPS_UTILS
-
   _kmlSrc = kmlUrl;
 
   NSURL *url = [NSURL URLWithString:kmlUrl];

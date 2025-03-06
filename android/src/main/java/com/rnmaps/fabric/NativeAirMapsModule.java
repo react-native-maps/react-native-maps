@@ -16,7 +16,6 @@ import android.util.DisplayMetrics;
 
 import androidx.annotation.Nullable;
 
-import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -28,6 +27,7 @@ import com.facebook.react.uimanager.UIManagerHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.rnmaps.fabric.NativeAirMapsModuleSpec;
 import com.rnmaps.maps.MapUIBlock;
 import com.rnmaps.maps.MapView;
 
