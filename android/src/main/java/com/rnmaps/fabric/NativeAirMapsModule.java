@@ -16,7 +16,7 @@ import android.util.DisplayMetrics;
 
 import androidx.annotation.Nullable;
 
-import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
+import com.rnmaps.fabric.NativeAirMapsModuleSpec;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;

@@ -13,7 +13,7 @@ import com.rnmaps.fabric.CircleManager;
 import com.rnmaps.fabric.MapViewManager;
 import com.rnmaps.fabric.MarkerManager;
 import com.rnmaps.fabric.NativeAirMapsModule;
-import com.facebook.fbreact.specs.NativeAirMapsModuleSpec;
+import com.rnmaps.fabric.NativeAirMapsModuleSpec;
 import com.rnmaps.fabric.OverlayManager;
 import com.rnmaps.fabric.PolygonManager;
 import com.rnmaps.fabric.PolylineManager;
@@ -54,7 +54,7 @@ public class MapAirModulePackage extends TurboReactPackage {
             return new MapViewManager(reactContext);
         }
         if (NativeAirMapsModuleSpec.NAME.equals(name)) {
-            return new NativeAirMapsModule(reactContext);
+            return (NativeModule) new NativeAirMapsModule(reactContext);
         } else {
             return null;
         }
