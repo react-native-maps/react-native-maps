@@ -17,11 +17,11 @@
     "release": "semantic-release",
     "bundle-install": "cd example && bundle install",
     "pod-install": "cd example/ios && bundle exec pod install",
-    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install",
+    "prepack": "node updateCodegenConfig.js"
   },
   "files": [
     "lib",
-    "specs",
     "android",
     "ios",
     "react-native-maps.podspec",
@@ -94,7 +94,7 @@
   "codegenConfig": {
     "name": "RNMapsSpecs",
     "type": "all",
-    "jsSrcsDir": "./specs",
+    "jsSrcsDir": "./src/specs",
     "android": {
       "javaPackageName": "com.rnmaps.fabric"
     }

@@ -57,10 +57,10 @@ import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
 import FabricMapView, {
   Commands as FabricCommands,
   MapFabricNativeProps,
-} from '../specs/NativeComponentMapView';
+} from './specs/NativeComponentMapView';
 import GoogleMapView, {
   Commands as GoogleCommands,
-} from '../specs/NativeComponentGoogleMapView';
+} from './specs/NativeComponentGoogleMapView';
 import createFabricMap, {FabricMapHandle} from './createFabricMap';
 
 const FabricMap = createFabricMap(FabricMapView, FabricCommands);

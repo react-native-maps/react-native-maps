@@ -20,12 +20,12 @@ import {MapPolyline} from './MapPolyline';
 import {MapUrlTile} from './MapUrlTile';
 import {MapWMSTile} from './MapWMSTile';
 import {Commands} from './MapViewNativeComponent';
-import GooglePolygon from '../specs/NativeComponentGooglePolygon';
-import FabricMarker from '../specs/NativeComponentMarker';
-import FabricCallout from '../specs/NativeComponentCallout';
-import FabricPolyline from '../specs/NativeComponentPolyline';
-import FabricCircle from '../specs/NativeComponentCircle';
-import FabricOverlay from '../specs/NativeComponentOverlay';
+import GooglePolygon from './specs/NativeComponentGooglePolygon';
+import FabricMarker from './specs/NativeComponentMarker';
+import FabricCallout from './specs/NativeComponentCallout';
+import FabricPolyline from './specs/NativeComponentPolyline';
+import FabricCircle from './specs/NativeComponentCircle';
+import FabricOverlay from './specs/NativeComponentOverlay';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =

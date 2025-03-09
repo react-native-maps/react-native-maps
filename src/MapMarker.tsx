@@ -21,8 +21,8 @@ import {
   MapMarkerNativeComponentType,
 } from './MapMarkerNativeComponent';
 
-import {Commands as FabricCommands} from '../specs/NativeComponentMarker';
-import type {AppleMarkerPriority} from '../specs/NativeComponentMarker';
+import {Commands as FabricCommands} from './specs/NativeComponentMarker';
+import type {AppleMarkerPriority} from './specs/NativeComponentMarker';
 
 import {
   CalloutPressEvent,
