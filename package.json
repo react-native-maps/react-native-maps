@@ -95,10 +95,6 @@
     "name": "RNMapsSpecs",
     "type": "all",
     "jsSrcsDir": "./src/specs",
-    "outputDir": {
-      "ios": "ios/generated",
-      "android": "android/generated"
-    },
     "android": {
       "javaPackageName": "com.rnmaps.fabric"
     }
