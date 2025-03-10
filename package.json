@@ -26,6 +26,7 @@
     "android",
     "ios",
     "react-native-maps.podspec",
+    "react-native.config.json",
     "!android/build",
     "!ios/build",
     "!**/__tests__",
