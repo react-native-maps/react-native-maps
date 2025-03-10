@@ -21,6 +21,7 @@
     "prepack": "node updateCodegenConfig.js"
   },
   "files": [
+    "specs",
     "lib",
     "android",
     "ios",
