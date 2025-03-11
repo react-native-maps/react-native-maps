@@ -664,6 +664,7 @@ public void onCreate(LifecycleOwner owner) {
 
     public static Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.of(
+                OnMapLoadedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapLoadedEvent.EVENT_NAME),
                 OnMapReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapReadyEvent.EVENT_NAME),
                 OnUserLocationChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnUserLocationChangeEvent.EVENT_NAME),
                 OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME),
