@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {
   createNotSupportedComponent,
-  googleMapIsInstalled,
   NativeComponent,
   ProviderContext,
 } from './decorateMapComponent';
@@ -1208,11 +1207,9 @@ const airMaps: {
 if (Platform.OS === 'android') {
   airMaps.google = airMaps.default;
 } else {
-  airMaps.google = googleMapIsInstalled
-    ? requireNativeComponent<NativeProps>('AIRGoogleMap')
-    : createNotSupportedComponent(
-        'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
-      );
+  airMaps.google = createNotSupportedComponent(
+    'react-native-maps: AirGoogleMaps dir must be added to your xCode project to support GoogleMaps on iOS.',
+  );
 }
 
 export const AnimatedMapView = RNAnimated.createAnimatedComponent(MapView);
