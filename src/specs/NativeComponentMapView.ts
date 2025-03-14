@@ -8,7 +8,6 @@ import {
   WithDefault,
   Float,
   DirectEventHandler,
-  BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type EdgePadding = Readonly<{
@@ -33,7 +32,7 @@ export type Frame = Readonly<{
   height: Double;
 }>;
 
-export type ClickEvent = BubblingEventHandler<
+export type ClickEvent = DirectEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -60,7 +59,7 @@ export type KmlMarker = {
   }; // Non-nullable Point
 };
 
-export type LongPressEventHandler = BubblingEventHandler<
+export type LongPressEventHandler = DirectEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -74,7 +73,7 @@ export type LongPressEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type MarkerDeselectEventHandler = BubblingEventHandler<
+export type MarkerDeselectEventHandler = DirectEventHandler<
   Readonly<{
     action?: string;
     id: string;
@@ -85,7 +84,7 @@ export type MarkerDeselectEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type MarkerSelectEventHandler = BubblingEventHandler<
+export type MarkerSelectEventHandler = DirectEventHandler<
   Readonly<{
     action?: string;
     id: string;
@@ -96,7 +95,7 @@ export type MarkerSelectEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type CalloutPressEvent = BubblingEventHandler<{
+export type CalloutPressEvent = DirectEventHandler<{
   action?: string;
 
   /**
@@ -204,17 +203,11 @@ export type IndoorBuildingEventHandler = DirectEventHandler<
   }>
 >;
 
-export type KmlMapEventHandler = DirectEventHandler<Readonly<{}>>;
-
-export type MapLoadedEventHandler = DirectEventHandler<Readonly<{}>>;
-
-export type MapReadyEventHandler = DirectEventHandler<Readonly<{}>>;
-
 export type Details = Readonly<{
   isGesture?: boolean; // Optional boolean for gesture detail
 }>;
 
-export type MarkerDragEventHandler = BubblingEventHandler<
+export type MarkerDragEventHandler = DirectEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -228,7 +221,7 @@ export type MarkerDragEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type MarkerDragStartEndEventHandler = BubblingEventHandler<
+export type MarkerDragStartEndEventHandler = DirectEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -242,7 +235,7 @@ export type MarkerDragStartEndEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type MarkerPressEventHandler = BubblingEventHandler<
+export type MarkerPressEventHandler = DirectEventHandler<
   Readonly<{
     action?: string;
     id: string;
@@ -257,7 +250,7 @@ export type MarkerPressEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type PanDragEventHandler = BubblingEventHandler<
+export type PanDragEventHandler = DirectEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -270,7 +263,7 @@ export type PanDragEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type PoiClickEventHandler = BubblingEventHandler<
+export type PoiClickEventHandler = DirectEventHandler<
   Readonly<{
     placeId: string;
     name: string;
@@ -285,7 +278,7 @@ export type PoiClickEventHandler = BubblingEventHandler<
   }>
 >;
 
-export type MapPressEventHandler = BubblingEventHandler<
+export type MapPressEventHandler = DirectEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -298,9 +291,6 @@ export type MapPressEventHandler = BubblingEventHandler<
     action?: string;
   }>
 >;
-
-export type RegionChangeStartEventHandler = DirectEventHandler<Details>;
-
 export type RegionChangeEvent = Readonly<{
   region: {
     latitude: Double; // Non-nullable Double for latitude
@@ -310,9 +300,6 @@ export type RegionChangeEvent = Readonly<{
   }; // The region object
   continuous?: boolean;
 }>;
-
-export type RegionChangeEventHandler = BubblingEventHandler<RegionChangeEvent>;
-
 export type UserLocationChangeEvent = Readonly<{
   coordinate?: {
     latitude: Double; // Non-nullable Double for latitude
@@ -604,7 +591,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  onKmlReady?: KmlMapEventHandler;
+  onKmlReady?: DirectEventHandler<null>;
 
   /**
    * Callback that is called when user makes a "long press" somewhere on the map.
@@ -620,7 +607,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  onMapLoaded?: MapLoadedEventHandler;
+  onMapLoaded?: DirectEventHandler<null>;
 
   /**
    * Callback that is called once the map is ready.
@@ -631,7 +618,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onMapReady?: MapReadyEventHandler;
+  onMapReady?: DirectEventHandler<null>;
 
   /**
    * Callback that is called when a marker on the map becomes deselected.
@@ -723,7 +710,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onRegionChangeStart?: RegionChangeEventHandler;
+  onRegionChangeStart?: DirectEventHandler<RegionChangeEvent>;
 
   /**
    * Callback that is called continuously when the region changes, such as when a user is dragging the map.
@@ -733,7 +720,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onRegionChange?: RegionChangeEventHandler;
+  onRegionChange?: DirectEventHandler<RegionChangeEvent>;
 
   /**
    * Callback that is called once when the region changes, such as when the user is done moving the map.
@@ -743,7 +730,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onRegionChangeComplete?: RegionChangeEventHandler;
+  onRegionChangeComplete?: DirectEventHandler<RegionChangeEvent>;
 
   /**
    * Callback that is called when the underlying map figures our users current location

@@ -348,7 +348,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  onMapLoaded?: (event: NativeSyntheticEvent<{}>) => void;
+  onMapLoaded?: (event: NativeSyntheticEvent<null>) => void;
 
   /**
    * Callback that is called once the map is ready.
@@ -359,7 +359,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onMapReady?: (event?: NativeSyntheticEvent<{}>) => void;
+  onMapReady?: (event?: NativeSyntheticEvent<null>) => void;
 
   /**
    * Callback that is called when a marker on the map becomes deselected.

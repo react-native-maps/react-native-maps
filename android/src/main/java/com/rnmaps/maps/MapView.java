@@ -647,32 +647,33 @@ public void onCreate(LifecycleOwner owner) {
 
     public static Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
+        return builder.build();
+    }
+//                 , ,
+    public static Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+        MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
         builder.put(OnMarkerPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerPressEvent.EVENT_NAME));
         builder.put(OnPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPressEvent.EVENT_NAME));
-        builder.put(OnMarkerSelectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerSelectEvent.EVENT_NAME));
-        builder.put(OnMarkerDeselectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDeselectEvent.EVENT_NAME));
         builder.put(OnMarkerDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEvent.EVENT_NAME));
         builder.put(OnMarkerDragStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragStartEvent.EVENT_NAME));
         builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
         builder.put(OnPoiClickEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPoiClickEvent.EVENT_NAME));
         builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnLongPressEvent.EVENT_NAME));
-        builder.put(OnRegionChangeStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
-        builder.put(OnRegionChangeCompleteEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeCompleteEvent.EVENT_NAME));
         builder.put(OnDoublePressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDoublePressEvent.EVENT_NAME));
         builder.put(OnPanDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPanDragEvent.EVENT_NAME));
+        builder.put(OnMarkerSelectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerSelectEvent.EVENT_NAME));
+        builder.put(OnMarkerDeselectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDeselectEvent.EVENT_NAME));
+        builder.put(OnMapLoadedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapLoadedEvent.EVENT_NAME));
+        builder.put(OnMarkerDeselectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDeselectEvent.EVENT_NAME));
+        builder.put(OnMapReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapReadyEvent.EVENT_NAME));
+        builder.put(OnUserLocationChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnUserLocationChangeEvent.EVENT_NAME));
+        builder.put(OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME));
+        builder.put(OnRegionChangeStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
+        builder.put(OnRegionChangeCompleteEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeCompleteEvent.EVENT_NAME));
+        builder.put(OnIndoorBuildingFocusedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorBuildingFocusedEvent.EVENT_NAME));
+        builder.put(OnIndoorLevelActivatedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorLevelActivatedEvent.EVENT_NAME));
+        builder.put(OnKmlReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnKmlReadyEvent.EVENT_NAME));
         return builder.build();
-    }
-
-    public static Map<String, Object> getExportedCustomDirectEventTypeConstants() {
-        return MapBuilder.of(
-                OnMapLoadedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapLoadedEvent.EVENT_NAME),
-                OnMapReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapReadyEvent.EVENT_NAME),
-                OnUserLocationChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnUserLocationChangeEvent.EVENT_NAME),
-                OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME),
-                OnIndoorBuildingFocusedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorBuildingFocusedEvent.EVENT_NAME),
-                OnIndoorLevelActivatedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorLevelActivatedEvent.EVENT_NAME),
-                OnKmlReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnKmlReadyEvent.EVENT_NAME)
-        );
     }
 
 
