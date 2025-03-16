@@ -654,6 +654,7 @@ public void onCreate(LifecycleOwner owner) {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
         builder.put(OnMarkerPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerPressEvent.EVENT_NAME));
         builder.put(OnPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPressEvent.EVENT_NAME));
+        builder.put(OnCalloutPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnCalloutPressEvent.EVENT_NAME));
         builder.put(OnMarkerDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEvent.EVENT_NAME));
         builder.put(OnMarkerDragStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragStartEvent.EVENT_NAME));
         builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
@@ -664,7 +665,6 @@ public void onCreate(LifecycleOwner owner) {
         builder.put(OnMarkerSelectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerSelectEvent.EVENT_NAME));
         builder.put(OnMarkerDeselectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDeselectEvent.EVENT_NAME));
         builder.put(OnMapLoadedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapLoadedEvent.EVENT_NAME));
-        builder.put(OnMarkerDeselectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDeselectEvent.EVENT_NAME));
         builder.put(OnMapReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapReadyEvent.EVENT_NAME));
         builder.put(OnUserLocationChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnUserLocationChangeEvent.EVENT_NAME));
         builder.put(OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME));
