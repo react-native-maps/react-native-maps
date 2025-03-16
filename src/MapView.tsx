@@ -751,7 +751,8 @@ class MapView extends React.Component<MapViewProps, State> {
   static Animated: Animated.AnimatedComponent<typeof MapView>;
   private map: NativeProps['ref'];
 
-  private fabricMap: React.RefObject<FabricMapHandle | null>;
+  private fabricMap =
+    React.createRef<FabricMapHandle | null>() as React.RefObject<FabricMapHandle>;
 
   constructor(props: MapViewProps) {
     super(props);

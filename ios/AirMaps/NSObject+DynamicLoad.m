@@ -20,13 +20,8 @@
     if (!existingClass) {
         // If the class does not exist, create a new class that is a subclass of NSObject
         Class newClass = objc_allocateClassPair([NSObject class], className, 0);
-
         // Register the new class with the runtime
         objc_registerClassPair(newClass);
-
-        NSLog(@"Class %s created successfully.", className);
-    } else {
-        NSLog(@"Class %s already exists.", className);
     }
 }
 
