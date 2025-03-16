@@ -18,6 +18,7 @@
 #import <react/renderer/components/RNMapsSpecs/RCTComponentViewHelpers.h>
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
+#import <React/RCTUtils.h>
 #import "RCTConvert+GMSMapViewType.h"
 #import "RCTConvert+AirMap.h"
 #import "UIView+AirMap.h"
@@ -195,16 +196,13 @@ using namespace facebook::react;
 
     _view.onIndoorLevelActivated = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
+            
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
-
-            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorLevelActivatedIndoorLevel level = {
+            
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorLevelActivated data = {
                 .activeLevelIndex= (int) [dictionary[@"activeLevelIndex"] integerValue],
                 .name = [dictionary[@"name"] UTF8String],
                 .shortName = [dictionary[@"shortName"] UTF8String],
-            };
-
-            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorLevelActivated data = {
-                .indoorLevel = level,
             };
             mapViewEventEmitter->onIndoorLevelActivated(data);
         }
@@ -214,13 +212,13 @@ using namespace facebook::react;
         if (_eventEmitter) {
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
 
-            facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorBuildingFocusedIndoorBuilding indoorBuilding = {
-                .underground = [dictionary[@"underground"] boolValue],
-                .activeLevelIndex = (int) [dictionary[@"activeLevelIndex"] integerValue]
-            };
-
+            NSError *jsError = nil;
+            NSString *levelsStr = RCTJSONStringify(dictionary[@"levels"], &jsError);
+            
             facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorBuildingFocused data = {
-                .indoorBuilding = indoorBuilding
+                .underground = [dictionary[@"underground"] boolValue],
+                .activeLevelIndex = (int) [dictionary[@"activeLevelIndex"] integerValue],
+                .levels = [levelsStr  UTF8String]
             };
             mapViewEventEmitter->onIndoorBuildingFocused(data);
         }

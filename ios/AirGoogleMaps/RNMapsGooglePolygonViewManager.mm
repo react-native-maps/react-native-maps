@@ -18,6 +18,7 @@
 
 RCT_EXPORT_MODULE(RNMapsGooglePolygonViewManager)
 
+RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 
 
 @end

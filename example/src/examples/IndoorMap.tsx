@@ -17,8 +17,7 @@ export default class IndoorMap extends React.Component<any, any> {
   }
 
   handleIndoorFocus(event: any) {
-    const {indoorBuilding} = event.nativeEvent;
-    const {activeLevelIndex, levels} = indoorBuilding;
+    const {activeLevelIndex, levels} = event.nativeEvent;
     const levelNames = levels.map((lv: any) => lv.name || '');
     const msg = `Default Level: ${
       levels[activeLevelIndex].name

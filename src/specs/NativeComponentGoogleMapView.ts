@@ -181,11 +181,9 @@ export type IndoorLevel = Readonly<{
 
 export type IndoorLevelActivatedEventHandler = DirectEventHandler<
   Readonly<{
-    indoorLevel: {
-      activeLevelIndex: Int32; // Int32 for integers
-      name: string; // Non-nullable string
-      shortName: string; // Non-nullable string
-    }; // Nested ActiveIndoorLevel type
+    activeLevelIndex: Int32; // Int32 for integers
+    name: string; // Non-nullable string
+    shortName: string; // Non-nullable string
   }>
 >;
 
@@ -197,10 +195,9 @@ export type IndoorBuilding = Readonly<{
 
 export type IndoorBuildingEventHandler = DirectEventHandler<
   Readonly<{
-    indoorBuilding: {
-      underground: boolean; // Non-nullable boolean
-      activeLevelIndex: Int32; // Int32 for integers
-    };
+    underground: boolean; // Non-nullable boolean
+    activeLevelIndex: Int32; // Int32 for integers
+    levels: string; // Immutable array of IndoorLevel
   }>
 >;
 

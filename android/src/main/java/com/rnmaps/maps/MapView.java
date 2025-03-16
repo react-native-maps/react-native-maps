@@ -1747,24 +1747,20 @@ public void onCreate(LifecycleOwner owner) {
                 levelsArray.pushMap(levelMap);
                 index++;
             }
-            WritableMap event = Arguments.createMap();
             WritableMap indoorBuilding = Arguments.createMap();
             indoorBuilding.putArray("levels", levelsArray);
             indoorBuilding.putInt("activeLevelIndex", building.getActiveLevelIndex());
             indoorBuilding.putBoolean("underground", building.isUnderground());
 
-            event.putMap("indoorBuilding", indoorBuilding);
-            dispatchEvent(event, OnIndoorBuildingFocusedEvent::new);
+            dispatchEvent(indoorBuilding, OnIndoorBuildingFocusedEvent::new);
         } else {
-            WritableMap event = Arguments.createMap();
             WritableArray levelsArray = Arguments.createArray();
             WritableMap indoorBuilding = Arguments.createMap();
             indoorBuilding.putArray("levels", levelsArray);
             indoorBuilding.putInt("activeLevelIndex", 0);
             indoorBuilding.putBoolean("underground", false);
 
-            event.putMap("indoorBuilding", indoorBuilding);
-            dispatchEvent(event, OnIndoorBuildingFocusedEvent::new);
+            dispatchEvent(indoorBuilding, OnIndoorBuildingFocusedEvent::new);
         }
     }
 
@@ -1779,15 +1775,13 @@ public void onCreate(LifecycleOwner owner) {
         }
         IndoorLevel level = building.getLevels().get(activeLevelIndex);
 
-        WritableMap event = Arguments.createMap();
         WritableMap indoorlevel = Arguments.createMap();
 
         indoorlevel.putInt("activeLevelIndex", activeLevelIndex);
         indoorlevel.putString("name", level.getName());
         indoorlevel.putString("shortName", level.getShortName());
 
-        event.putMap("indoorLevel", indoorlevel);
-        dispatchEvent(event, OnIndoorLevelActivatedEvent::new);
+        dispatchEvent(indoorlevel, OnIndoorLevelActivatedEvent::new);
     }
 
     public void setIndoorActiveLevelIndex(int activeLevelIndex) {

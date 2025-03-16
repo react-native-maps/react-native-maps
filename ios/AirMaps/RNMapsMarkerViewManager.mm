@@ -17,5 +17,12 @@
 
 RCT_EXPORT_MODULE(RNMapsMarkerViewManager)
 
+RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onSelect, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onDeselect, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onDragStart, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onDrag, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onDragEnd, RCTDirectEventBlock)
 
 @end

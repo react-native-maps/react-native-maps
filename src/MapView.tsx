@@ -1091,6 +1091,9 @@ class MapView extends React.Component<MapViewProps, State> {
 
   private handleIndoorBuildingFocused = (event: any) => {
     if (this.props.onIndoorBuildingFocused) {
+      if (typeof event.nativeEvent.levels === 'string') {
+        event.nativeEvent.levels = JSON.parse(event.nativeEvent.levels);
+      }
       this.props.onIndoorBuildingFocused(event);
     }
   };

@@ -1172,11 +1172,9 @@ id regionAsJSON(MKCoordinateRegion region) {
             return;
         }
         self.onIndoorBuildingFocused(@{
-            @"indoorBuilding": @{
-                    @"activeLevelIndex": @0,
-                    @"underground": @false,
-                    @"levels": [[NSMutableArray alloc]init]
-            }
+            @"activeLevelIndex": @0,
+            @"underground": @false,
+            @"levels": [[NSMutableArray alloc]init]
         });
     }
     NSInteger i = 0;
@@ -1193,11 +1191,9 @@ id regionAsJSON(MKCoordinateRegion region) {
         return;
     }
     self.onIndoorBuildingFocused(@{
-        @"indoorBuilding": @{
-                @"activeLevelIndex": @(building.defaultLevelIndex),
-                @"underground": @(building.underground),
-                @"levels": arrayLevels
-        }
+            @"activeLevelIndex": @(building.defaultLevelIndex),
+            @"underground": @(building.underground),
+            @"levels": arrayLevels
     });
 }
 
@@ -1213,11 +1209,9 @@ id regionAsJSON(MKCoordinateRegion region) {
         i++;
     }
     self.onIndoorLevelActivated(@{
-        @"indoorLevel": @{
-                @"activeLevelIndex": @(i),
-                @"name": level.name,
-                @"shortName": level.shortName
-        }
+            @"activeLevelIndex": @(i),
+            @"name": level.name,
+            @"shortName": level.shortName
     });
 }
 // do nothing, passed as options on initialization

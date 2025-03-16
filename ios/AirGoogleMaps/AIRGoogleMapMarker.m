@@ -29,8 +29,8 @@ CGRect unionRect(CGRect a, CGRect b) {
 @implementation AIRGoogleMapMarker {
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     RCTBubblingEventBlock _onPress;
-    RCTBubblingEventBlock _onSelect;
-    RCTBubblingEventBlock _onDeselect;
+    RCTDirectEventBlock _onSelect;
+    RCTDirectEventBlock _onDeselect;
     __weak UIImageView *_iconImageView;
     UIView *_iconView;
     UIColor *_pinColor;
