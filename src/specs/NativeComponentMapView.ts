@@ -8,6 +8,7 @@ import {
   WithDefault,
   Float,
   DirectEventHandler,
+  BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type EdgePadding = Readonly<{
@@ -59,7 +60,7 @@ export type KmlMarker = {
   }; // Non-nullable Point
 };
 
-export type LongPressEventHandler = DirectEventHandler<
+export type LongPressEventHandler = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng
@@ -278,7 +279,7 @@ export type PoiClickEventHandler = DirectEventHandler<
   }>
 >;
 
-export type MapPressEventHandler = DirectEventHandler<
+export type MapPressEventHandler = BubblingEventHandler<
   Readonly<{
     coordinate: {
       latitude: Double; // Inlined LatLng

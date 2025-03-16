@@ -97,14 +97,13 @@ RCT_EXPORT_VIEW_PROPERTY(showsIndoorLevelPicker, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(customMapStyleString, NSString)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_REMAP_VIEW_PROPERTY(paddingAdjustmentBehavior, paddingAdjustmentBehaviorString, NSString)
-RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onMapLoaded, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onKmlReady, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMapLoaded, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onKmlReady, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDeselect, RCTDirectEventBlock)
@@ -266,11 +265,11 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
     } else {
         AIRGoogleMap *mapView = (AIRGoogleMap *)view;
         NSMutableDictionary* config = [NSMutableDictionary new];
-        
+
         [mapView takeSnapshotWithConfig:config success:callback error:^(NSString *code, NSString *message, NSError *error) {
             callback(@[error]);
         }];
-        
+
         [config setObject:width forKey:@"width"];
         [config setObject:height forKey:@"height"];
         [config setObject:format forKey:@"format"];

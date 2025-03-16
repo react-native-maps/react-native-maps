@@ -376,7 +376,7 @@ CGRect unionRect(CGRect a, CGRect b) {
             // TODO(lmr): do something with the error?
             NSLog(@"%@", error);
         }
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong AIRGoogleMapMarker* strongSelf  = weakSelf;
 

@@ -91,9 +91,9 @@
                        [NSNumber numberWithDouble:_MapX + (double)(x+1) * tile ],
                        [NSNumber numberWithDouble:_MapY - (double)y * tile ],
                        nil];
-    
+
     return result;
-    
+
 }
 
 - (UIImage *)tileForX:(NSUInteger)x y:(NSUInteger)y zoom:(NSUInteger)zoom

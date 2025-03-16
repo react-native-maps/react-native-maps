@@ -1,6 +1,6 @@
 //
 //  RNMapsGoogleMapView.mm
-//  
+//
 //
 //  Created by Salah Ghanim on 23.11.24.
 //  Copyright © 2024 react-native-maps. All rights reserved.

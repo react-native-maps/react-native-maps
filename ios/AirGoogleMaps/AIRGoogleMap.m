@@ -524,7 +524,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                @"isGesture": [NSNumber numberWithBool:isGesture],
                };
 
-  if (self.onChange) self.onChange(event);
+  if (self.onRegionChange) self.onRegionChange(event);
 }
 
 - (void)didTapPOIWithPlaceID:(NSString *)placeID
@@ -546,7 +546,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                @"isGesture": [NSNumber numberWithBool:isGesture],
                };
-  if (self.onChange) self.onChange(event);  // complete
+    if (self.onRegionChangeComplete) self.onRegionChangeComplete(event);  // complete
     _isAnimating = NO;
 }
 
@@ -1068,7 +1068,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 + (NSString *)GetIconUrl:(GMUPlacemark *) marker parser:(GMUKMLParser *) parser {
-#ifdef HAVE_GOOGLE_MAPS_UTILS
+#if HAVE_GOOGLE_MAPS_UTILS
   if (marker.style.styleID != nil) {
     for (GMUStyle *style in parser.styles) {
       if (style.styleID == marker.style.styleID) {
@@ -1133,7 +1133,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)setKmlSrc:(NSString *)kmlUrl {
-#ifdef HAVE_GOOGLE_MAPS_UTILS
+#if HAVE_GOOGLE_MAPS_UTILS
 
   _kmlSrc = kmlUrl;
 

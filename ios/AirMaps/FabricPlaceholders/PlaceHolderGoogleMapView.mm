@@ -38,7 +38,7 @@ using namespace facebook::react;
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
 }
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
-    
+
 }
 - (void) setIndoorActiveLevelIndex:(NSInteger)activeLevelIndex
 {

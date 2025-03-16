@@ -242,7 +242,7 @@ using namespace facebook::react;
               mapViewEventEmitter->onKmlReady(data);
           }
       };
-      _view.onChange = [self](NSDictionary* dictionary) {
+      _view.onRegionChange = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
               NSDictionary* regionDict = dictionary[@"region"];
@@ -360,22 +360,6 @@ using namespace facebook::react;
                   .continuous = [dictionary[@"continuous"] boolValue],
                  };
               mapViewEventEmitter->onRegionChangeStart(data);
-          }
-      };
-
-      _view.onRegionChange = [self](NSDictionary* dictionary) {
-          if (_eventEmitter) {
-
-              NSDictionary* regionDict = dictionary[@"region"];
-              auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
-              facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChange data = {
-                  .region.latitude = [regionDict[@"latitude"] doubleValue],
-                  .region.longitude = [regionDict[@"longitude"] doubleValue],
-                  .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
-                  .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                  .continuous = [dictionary[@"continuous"] boolValue],
-                 };
-              mapViewEventEmitter->onRegionChange(data);
           }
       };
 
