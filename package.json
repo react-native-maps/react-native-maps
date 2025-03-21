@@ -25,6 +25,7 @@
     "lib",
     "android",
     "ios",
+    "react-native-google-maps.podspec",
     "react-native-maps.podspec",
     "!android/build",
     "!ios/build",
