@@ -10,14 +10,15 @@ import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativ
 import {
   Int32,
   Double,
+  Float,
   BubblingEventHandler,
   DirectEventHandler,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type LatLng = Readonly<{
-  latitude: Double; // Non-nullable Double for latitude
-  longitude: Double; // Non-nullable Double for longitude
+  latitude: Float; // Non-nullable Float for latitude
+  longitude: Float; // Non-nullable Float for longitude
 }>;
 
 export type MarkerPressEventHandler = BubblingEventHandler<
