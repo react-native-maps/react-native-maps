@@ -1230,6 +1230,7 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
+    - react-native-maps-generated
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1239,6 +1240,28 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - react-native-maps (0.0.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - react-native-maps-generated
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-maps-generated (0.0.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1592,6 +1615,7 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-google-maps (from `../..`)
   - react-native-maps (from `../..`)
+  - react-native-maps-generated (from `../..`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1707,6 +1731,8 @@ EXTERNAL SOURCES:
     :path: "../.."
   react-native-maps:
     :path: "../.."
+  react-native-maps-generated:
+    :path: "../.."
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1807,8 +1833,9 @@ SPEC CHECKSUMS:
   React-logger: e7eeebaed32b88dcc29b10901aa8c5822dc397c4
   React-Mapbuffer: 73dd1210c4ecf0dfb4e2d4e06f2a13f824a801a9
   React-microtasksnativemodule: d03753688e2abf135edcd4160ab3ce7526da8b0d
-  react-native-google-maps: 6bab6b028e75edc7694bb0aa030af64445cf59da
-  react-native-maps: d397babed21c40f1d83b266c66df76a4723e9b72
+  react-native-google-maps: 243242c27c93d4412f24706eb41c91f9ee692b42
+  react-native-maps: 9e957fae794284331218d766b1b400e8c1b9a64a
+  react-native-maps-generated: 6beded4bc316f0009101dc613025c53cc44ceee2
   React-nativeconfig: cb207ebba7cafce30657c7ad9f1587a8f32e4564
   React-NativeModulesApple: 8411d548b1ad9d2b3e597beb9348e715c8020e0c
   React-perflogger: c4c3b7c18f8a50cdbe2bcdd2f15705ba029a5a02
@@ -1841,6 +1868,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 1fd059161b449018342943b095a6d4e69bcaa719
 
-PODFILE CHECKSUM: 4ec238670c0bb39b9218c0626db63b7bf25b9f14
+PODFILE CHECKSUM: 8de0338fe1e06b4ce674faf092edc686dde9605b
 
 COCOAPODS: 1.16.2

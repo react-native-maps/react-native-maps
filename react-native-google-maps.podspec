@@ -20,5 +20,6 @@ Pod::Spec.new do |s|
   s.compiler_flags = folly_compiler_flags + ' -DHAVE_GOOGLE_MAPS=1 -DHAVE_GOOGLE_MAPS_UTILS=1'
   s.dependency 'GoogleMaps', '9.3.0'
   s.dependency 'Google-Maps-iOS-Utils', '6.1.0'
+  s.dependency 'react-native-maps-generated'
   install_modules_dependencies(s)
 end

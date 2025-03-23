@@ -5,7 +5,7 @@ folly_config = get_folly_config()
 folly_compiler_flags = folly_config[:compiler_flags]
 
 Pod::Spec.new do |s|
-  s.name = "react-native-maps"
+  s.name = "react-native-maps-generated"
   s.version = package['version']
   s.summary = package["description"]
   s.authors = package["author"]
@@ -13,10 +13,19 @@ Pod::Spec.new do |s|
   s.license = package["license"]
   s.platform = :ios, "13.0"
   s.source = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
-
-  s.source_files = "ios/AirMaps/**/*.{h,m,mm,swift}"
+  s.source_files = "ios/generated/**/*.{h,m,mm,cpp,swift}"
+  s.exclude_files = [
+    "ios/generated/RCTAppDependencyProvider.h",
+    "ios/generated/RCTAppDependencyProvider.mm",
+    "ios/generated/RCTThirdPartyComponentsProvider.h",
+    "ios/generated/RCTThirdPartyComponentsProvider.mm",
+    "ios/generated/RCTModulesConformingToProtocolsProvider.h",
+    "ios/generated/RCTModulesConformingToProtocolsProvider.mm",
+  ]
+  s.public_header_files = "ios/generated/**/*.h"
+  s.module_name = 'ReactNativeMapsGenerated'
   s.dependency "React-Core"
   s.compiler_flags = folly_compiler_flags
-  s.dependency 'react-native-maps-generated'
   install_modules_dependencies(s)
+
 end

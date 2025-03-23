@@ -11,10 +11,10 @@
 #import "AIRMapMarker.h"
 #import "AIRMapManager.h"
 #import "RNMapsMarkerView.h"
-#import <react/renderer/components/RNMapsSpecs/ComponentDescriptors.h>
-#import <react/renderer/components/RNMapsSpecs/EventEmitters.h>
-#import <react/renderer/components/RNMapsSpecs/Props.h>
-#import <react/renderer/components/RNMapsSpecs/RCTComponentViewHelpers.h>
+#import <react-native-maps-generated/EventEmitters.h>
+#import <react-native-maps-generated/ComponentDescriptors.h>
+#import <react-native-maps-generated/Props.h>
+#import <react-native-maps-generated/RCTComponentViewHelpers.h>
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
 #import "UIView+AirMap.h"

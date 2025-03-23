@@ -17,14 +17,13 @@
     "release": "semantic-release",
     "bundle-install": "cd example && bundle install",
     "pod-install": "cd example/ios && bundle exec pod install",
-    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install",
-    "prepack": "node updateCodegenConfig.js"
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
   },
   "files": [
-    "specs",
     "lib",
     "android",
     "ios",
+    "react-native-maps-generated.podspec",
     "react-native-google-maps.podspec",
     "react-native-maps.podspec",
     "!android/build",
@@ -97,6 +96,11 @@
     "name": "RNMapsSpecs",
     "type": "all",
     "jsSrcsDir": "./src/specs",
+    "outputDir": {
+      "ios": "ios/generated",
+      "android": "android/generated"
+    },
+    "includesGeneratedCode": true,
     "android": {
       "javaPackageName": "com.rnmaps.fabric"
     }
