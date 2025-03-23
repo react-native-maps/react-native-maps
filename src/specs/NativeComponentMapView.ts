@@ -357,7 +357,23 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  camera?: Camera;
+  camera?: Readonly<{
+    /**
+     * Apple Maps
+     */
+    altitude?: Double; // Nullable Double for altitude
+    center: {
+      latitude: Double; // Inlined LatLng
+      longitude: Double;
+    }; // Non-nullable center
+    heading: Double; // Non-nullable Double for heading
+    pitch: Double; // Non-nullable Double for pitch
+
+    /**
+     * Google Maps
+     */
+    zoom?: Float; // Nullable Double for zoom
+  }>;
 
   /**
    * If set, changes the position of the compass.
@@ -401,7 +417,23 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  initialCamera?: Camera;
+  initialCamera?: Readonly<{
+    /**
+     * Apple Maps
+     */
+    altitude?: Double; // Nullable Double for altitude
+    center: {
+      latitude: Double; // Inlined LatLng
+      longitude: Double;
+    }; // Non-nullable center
+    heading: Double; // Non-nullable Double for heading
+    pitch: Double; // Non-nullable Double for pitch
+
+    /**
+     * Google Maps
+     */
+    zoom?: Float; // Nullable Double for zoom
+  }>;
 
   /**
    * The initial region to be displayed by the map.  Use this prop instead of `region`
@@ -682,9 +714,9 @@ export interface MapFabricNativeProps extends ViewProps {
   onPanDrag?: PanDragEventHandler;
 
   /*
-  internal flag to enable pan gesture handling on iOS manually
-  * see MapView.ts line 1228
-   */
+    internal flag to enable pan gesture handling on iOS manually
+    * see MapView.ts line 1228
+     */
   handlePanDrag?: boolean;
 
   /**
