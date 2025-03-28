@@ -85,5 +85,5 @@ export interface OverlayFabricNativeProps extends ViewProps {
 
 export default codegenNativeComponent<OverlayFabricNativeProps>(
   'RNMapsOverlay',
-  {},
+  {excludedPlatforms: ['iOS']},
 ) as HostComponent<OverlayFabricNativeProps>;

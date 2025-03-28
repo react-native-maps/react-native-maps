@@ -88,7 +88,6 @@ export interface CircleFabricNativeProps extends ViewProps {
   tappable?: boolean;
 }
 
-export default codegenNativeComponent<CircleFabricNativeProps>(
-  'RNMapsCircle',
-  {},
-) as HostComponent<CircleFabricNativeProps>;
+export default codegenNativeComponent<CircleFabricNativeProps>('RNMapsCircle', {
+  excludedPlatforms: ['iOS'],
+}) as HostComponent<CircleFabricNativeProps>;

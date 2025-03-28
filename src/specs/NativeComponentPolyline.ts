@@ -120,5 +120,5 @@ export interface PolylineFabricNativeProps extends ViewProps {
 
 export default codegenNativeComponent<PolylineFabricNativeProps>(
   'RNMapsPolyline',
-  {},
+  {excludedPlatforms: ['iOS']},
 ) as HostComponent<PolylineFabricNativeProps>;

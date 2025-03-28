@@ -13,10 +13,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol RCTRNMapsCircleViewProtocol <NSObject>
-
-@end
-
 @protocol RCTRNMapsGoogleMapViewViewProtocol <NSObject>
 - (void)animateToRegion:(NSString *)regionJSON duration:(NSInteger)duration;
 - (void)setCamera:(NSString *)cameraJSON;
@@ -591,13 +587,5 @@ if ([commandName isEqualToString:@"redraw"]) {
   RCTLogError(@"%@ received command %@, which is not a supported command.", @"RNMapsMarker", commandName);
 #endif
 }
-
-@protocol RCTRNMapsOverlayViewProtocol <NSObject>
-
-@end
-
-@protocol RCTRNMapsPolylineViewProtocol <NSObject>
-
-@end
 
 NS_ASSUME_NONNULL_END
