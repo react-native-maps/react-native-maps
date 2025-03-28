@@ -1,5 +1,17 @@
 # Changelog
 
+# [1.21.0-alpha.119](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.118...v1.21.0-alpha.119) (2025-03-28)
+
+
+### Features
+
+* **iOS:** support for Fabric ([b091399](https://github.com/react-native-maps/react-native-maps/commit/b091399551cc8a14067afc0b630c00531674f4b7))
+
+
+### Reverts
+
+* Revert "feat(iOS): support for Fabric" ([1e862c2](https://github.com/react-native-maps/react-native-maps/commit/1e862c2561a85e6e3c8dce2ac95461ce3635b3ac))
+
 # [1.21.0-alpha.118](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.117...v1.21.0-alpha.118) (2025-03-28)
 
 
