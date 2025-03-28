@@ -26,6 +26,7 @@
     "react-native-maps-generated.podspec",
     "react-native-google-maps.podspec",
     "react-native-maps.podspec",
+    "react-native.config.js",
     "!android/build",
     "!ios/build",
     "!**/__tests__",
