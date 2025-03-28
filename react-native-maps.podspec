@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
       {
           :name => 'Check react-native-google-maps Availability',
           :script => %(
-            GOOGLE_MAPS_HEADER_PATH="$PODS_ROOT/Headers/Public/react-native-google-maps/GoogleMaps.h"
+            GOOGLE_MAPS_HEADER_PATH="$PODS_ROOT/Headers/Public/react-native-google-maps/AIRGoogleMap.h"
             DEFINES_FILE="$CONFIGURATION_BUILD_DIR/react-native-maps/RNMapsDefines.h"
 
             # Ensure the defines file directory exists
@@ -46,6 +46,6 @@ Pod::Spec.new do |s|
 
   # Add the generated defines header to the header search path
   s.pod_target_xcconfig = {
-     'HEADER_SEARCH_PATHS' => '$(CONFIGURATION_BUILD_DIR)/react-native-maps'
+     'HEADER_SEARCH_PATHS' => '$(CONFIGURATION_BUILD_DIR)/react-native-google-maps'
   }
 end

@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		4E24ACCC2D96D64B004D4DD5 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E24ACCA2D96D64B004D4DD5 /* AppDelegate.mm */; };
-		4E24ACCD2D96D64B004D4DD5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E24ACCB2D96D64B004D4DD5 /* main.m */; };
+		4E6BA9AE2D97471D00E8205D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BA9AC2D97471D00E8205D /* AppDelegate.mm */; };
+		4E6BA9AF2D97471D00E8205D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BA9AD2D97471D00E8205D /* main.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9AF21FB28BBB5F42D348A59F /* libPods-rnmshowcase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D67CE84CDDFFC6433595B5C6 /* libPods-rnmshowcase.a */; };
 		AAA66AC4A1AC3A251109DCFE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
@@ -21,9 +21,9 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rnmshowcase/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = rnmshowcase/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = rnmshowcase/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		4E24ACC92D96D64B004D4DD5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		4E24ACCA2D96D64B004D4DD5 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		4E24ACCB2D96D64B004D4DD5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4E6BA9AB2D97471D00E8205D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = rnmshowcase/AppDelegate.h; sourceTree = "<group>"; };
+		4E6BA9AC2D97471D00E8205D /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = rnmshowcase/AppDelegate.mm; sourceTree = "<group>"; };
+		4E6BA9AD2D97471D00E8205D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = rnmshowcase/main.m; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = rnmshowcase/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8AF103BCA2ADFAB0C96A07BB /* Pods-rnmshowcase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rnmshowcase.release.xcconfig"; path = "Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase.release.xcconfig"; sourceTree = "<group>"; };
 		D67CE84CDDFFC6433595B5C6 /* libPods-rnmshowcase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rnmshowcase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,9 +45,9 @@
 		13B07FAE1A68108700A75B9A /* rnmshowcase */ = {
 			isa = PBXGroup;
 			children = (
-				4E24ACC92D96D64B004D4DD5 /* AppDelegate.h */,
-				4E24ACCA2D96D64B004D4DD5 /* AppDelegate.mm */,
-				4E24ACCB2D96D64B004D4DD5 /* main.m */,
+				4E6BA9AB2D97471D00E8205D /* AppDelegate.h */,
+				4E6BA9AC2D97471D00E8205D /* AppDelegate.mm */,
+				4E6BA9AD2D97471D00E8205D /* main.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -251,8 +251,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E24ACCC2D96D64B004D4DD5 /* AppDelegate.mm in Sources */,
-				4E24ACCD2D96D64B004D4DD5 /* main.m in Sources */,
+				4E6BA9AE2D97471D00E8205D /* AppDelegate.mm in Sources */,
+				4E6BA9AF2D97471D00E8205D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +383,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -452,7 +455,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
