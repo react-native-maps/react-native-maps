@@ -97,7 +97,7 @@
     "jsSrcsDir": "./src/specs",
     "outputDir": {
       "ios": "ios/generated",
-      "android": "android/src/generated"
+      "android": "android/generated"
     },
     "includesGeneratedCode": true,
     "android": {
