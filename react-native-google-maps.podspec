@@ -23,32 +23,4 @@ Pod::Spec.new do |s|
   s.dependency 'react-native-maps-generated'
   install_modules_dependencies(s)
 
-   # Add script phase to detect Google Maps
-   s.script_phases = [
-      {
-        :name => 'Check react-native-google-maps Availability',
-        :script => %(
-          GOOGLE_MAPS_HEADER_PATH="$PODS_ROOT/Headers/Public/react-native-google-maps/GoogleMaps.h"
-          DEFINES_FILE="$CONFIGURATION_BUILD_DIR/react-native-maps/RNMapsDefines.h"
-
-          # Ensure the defines file directory exists
-          mkdir -p "$(dirname "$DEFINES_FILE")"
-
-          # Check if Google Maps header exists
-          if [ -f "$GOOGLE_MAPS_HEADER_PATH" ]; then
-            echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
-            echo "Google Maps detected. HAVE_GOOGLE_MAPS defined."
-          else
-            echo "#define HAVE_GOOGLE_MAPS 0" > "$DEFINES_FILE"
-            echo "Google Maps not detected."
-          fi
-        ),
-        :execution_position => :before_compile
-      }
-    ]
-
-    # Add the generated defines header to the header search path
-    s.pod_target_xcconfig = {
-      'HEADER_SEARCH_PATHS' => '$(CONFIGURATION_BUILD_DIR)/react-native-maps'
-    }
 end
