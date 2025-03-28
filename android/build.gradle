@@ -74,10 +74,21 @@ android {
         ]
     }
 
-    buildFeatures {
-        buildConfig = true
-        prefab = true
+  sourceSets {
+    main {
+      if (isNewArchitectureEnabled()) {
+        java.srcDirs += [
+                "generated/java",
+                "generated/jni"
+        ]
+      }
     }
+  }
+
+  buildFeatures {
+          buildConfig = true
+          prefab = true
+  }
 }
 
 def reactNativeArchitectures() {
