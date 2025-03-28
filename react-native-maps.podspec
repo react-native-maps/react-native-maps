@@ -46,6 +46,6 @@ Pod::Spec.new do |s|
 
   # Add the generated defines header to the header search path
   s.pod_target_xcconfig = {
-     'HEADER_SEARCH_PATHS' => '$(CONFIGURATION_BUILD_DIR)/react-native-google-maps'
+    'HEADER_SEARCH_PATHS' => "\"$(CONFIGURATION_BUILD_DIR)/react-native-google-maps\" \"${PODS_ROOT}/Headers/Private/Yoga\""
   }
 end
