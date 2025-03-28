@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MAPS_API_KEY</key>
-	<string>$(MAPS_API_KEY)</string>
+	<string>AIzaSyChV2pqwxzcswkty1Ams4QjWhRD9io7lAA</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
