@@ -9,7 +9,7 @@ module.exports = {
   dependency: {
     platforms: {
       android: {
-        cmakeListsPath: '../android/generated/jni/CMakeLists.txt',
+        cmakeListsPath: '../android/src/main/jni/CMakeLists.txt',
       },
     },
   },
