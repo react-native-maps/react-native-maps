@@ -21,40 +21,40 @@ Pod::Spec.new do |s|
   install_modules_dependencies(s)
 
      # Add script phase to detect Google Maps
-  # Add script phase to detect Google Maps
-  s.script_phases = [{
-   : name => 'Check react-native-google-maps Availability',
-   : script => % (
-     set - x echo "Running Google Maps detection script..."
-     GOOGLE_MAPS_HEADER_PATH = "$PODS_ROOT/Headers/Public/react-native-google-maps/AIRGoogleMap.h"
-     DEFINES_DIR = "${PODS_TARGET_SRCROOT}/ios/AirMaps"
-     DEFINES_FILE = "${DEFINES_DIR}/RNMapsDefines.h"
+  s.script_phases = [
+      {
+          :name => 'Check react-native-google-maps Availability',
+          :script => %(
+            set - x echo "Running Google Maps detection script..."
+            GOOGLE_MAPS_HEADER_PATH = "$PODS_ROOT/Headers/Public/react-native-google-maps/AIRGoogleMap.h"
+            DEFINES_DIR = "${PODS_TARGET_SRCROOT}/ios/AirMaps"
+            DEFINES_FILE = "${DEFINES_DIR}/RNMapsDefines.h"
 
-     echo "GOOGLE_MAPS_HEADER_PATH=$GOOGLE_MAPS_HEADER_PATH"
-     echo "DEFINES_FILE=$DEFINES_FILE"
+            echo "GOOGLE_MAPS_HEADER_PATH=$GOOGLE_MAPS_HEADER_PATH"
+            echo "DEFINES_FILE=$DEFINES_FILE"
 
-     # Create directory with explicit bash commands /
-     bin / mkdir - p "$DEFINES_DIR"
+            # Create directory with explicit bash commands /
+            bin / mkdir - p "$DEFINES_DIR"
 
-     # Check
-     if Google Maps is available and write to the defines file
-     if [-f "$GOOGLE_MAPS_HEADER_PATH"]; then echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
-     echo "Google Maps detected. HAVE_GOOGLE_MAPS defined."
-     else
-       echo "#define HAVE_GOOGLE_MAPS 0" > "$DEFINES_FILE"
-     echo "Google Maps not detected."
-     fi
+            # Check
+            if Google Maps is available and write to the defines file
+            if [-f "$GOOGLE_MAPS_HEADER_PATH"]; then echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
+            echo "Google Maps detected. HAVE_GOOGLE_MAPS defined."
+            else
+              echo "#define HAVE_GOOGLE_MAPS 0" > "$DEFINES_FILE"
+            echo "Google Maps not detected."
+            fi
 
-     # Verify the file was written
-     if [-f "$DEFINES_FILE"]; then echo "Successfully wrote to $DEFINES_FILE"
-     cat "$DEFINES_FILE"
-     else
-       echo "ERROR: Failed to write to $DEFINES_FILE"
-     fi
-
-   ),
-   : execution_position =>: before_compile
-  }]
+            # Verify the file was written
+            if [-f "$DEFINES_FILE"]; then echo "Successfully wrote to $DEFINES_FILE"
+            cat "$DEFINES_FILE"
+            else
+              echo "ERROR: Failed to write to $DEFINES_FILE"
+            fi
+          ),
+          :execution_position => :before_compile
+      }
+  ]
 
   # Add the generated defines header to the header search path
   s.pod_target_xcconfig = {
