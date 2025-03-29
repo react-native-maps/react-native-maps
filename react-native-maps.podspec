@@ -23,28 +23,30 @@ Pod::Spec.new do |s|
      # Add script phase to detect Google Maps
   s.script_phases = [
       {
-          :name => 'Check react-native-google-maps Availability',
+          :name => 'Check react-native-google-Maps Availability',
           :script => %(
-            set - x echo "Running Google Maps detection script..."
-            GOOGLE_MAPS_HEADER_PATH = "$PODS_ROOT/Headers/Public/react-native-google-maps/AIRGoogleMap.h"
-            DEFINES_DIR = "${PODS_TARGET_SRCROOT}/ios/AirMaps"
-            DEFINES_FILE = "${DEFINES_DIR}/RNMapsDefines.h"
+            set -x
+            echo "Running Google Maps detection script..."
+            GOOGLE_MAPS_HEADER_PATH="$PODS_ROOT/Headers/Public/react-native-google-maps/AIRGoogleMap.h"
+            DEFINES_DIR="${PODS_TARGET_SRCROOT}/ios/AirMaps"
+            DEFINES_FILE="${DEFINES_DIR}/RNMapsDefines.h"
 
             echo "GOOGLE_MAPS_HEADER_PATH=$GOOGLE_MAPS_HEADER_PATH"
             echo "DEFINES_FILE=$DEFINES_FILE"
 
-            # Check
-            if Google Maps is available and write to the defines file
-            if [-f "$GOOGLE_MAPS_HEADER_PATH"]; then echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
-            echo "Google Maps detected. HAVE_GOOGLE_MAPS defined."
+            # Check if Google Maps is available and write to the defines file
+            if [ -f "$GOOGLE_MAPS_HEADER_PATH" ]; then
+              echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
+              echo "Google Maps detected. HAVE_GOOGLE_MAPS defined."
             else
               echo "#define HAVE_GOOGLE_MAPS 0" > "$DEFINES_FILE"
-            echo "Google Maps not detected."
+              echo "Google Maps not detected."
             fi
 
             # Verify the file was written
-            if [-f "$DEFINES_FILE"]; then echo "Successfully wrote to $DEFINES_FILE"
-            cat "$DEFINES_FILE"
+            if [ -f "$DEFINES_FILE" ]; then
+              echo "Successfully wrote to $DEFINES_FILE"
+              cat "$DEFINES_FILE"
             else
               echo "ERROR: Failed to write to $DEFINES_FILE"
             fi
