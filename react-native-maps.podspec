@@ -33,9 +33,6 @@ Pod::Spec.new do |s|
             echo "GOOGLE_MAPS_HEADER_PATH=$GOOGLE_MAPS_HEADER_PATH"
             echo "DEFINES_FILE=$DEFINES_FILE"
 
-            # Create directory with explicit bash commands /
-            bin / mkdir - p "$DEFINES_DIR"
-
             # Check
             if Google Maps is available and write to the defines file
             if [-f "$GOOGLE_MAPS_HEADER_PATH"]; then echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
