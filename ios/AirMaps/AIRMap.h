@@ -14,7 +14,7 @@
 #import "SMCalloutView.h"
 #import "RCTConvert+AirMap.h"
 #import "AIRMapCalloutSubview.h"
-#import "RNMapsAirModuleDelegate.h"
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
 
 @class AIRMapCoordinate;
 @class AIRMapMarker;

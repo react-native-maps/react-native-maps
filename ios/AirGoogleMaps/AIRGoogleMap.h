@@ -13,7 +13,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
-#import "RNMapsAirModuleDelegate.h"
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
 #import "AIRGoogleMapCoordinate.h"
 
 @interface AIRGoogleMap : GMSMapView <RNMapsAirModuleDelegate>

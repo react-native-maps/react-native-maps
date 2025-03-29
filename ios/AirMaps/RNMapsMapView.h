@@ -9,7 +9,7 @@
 
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
-#import "RNMapsHostVewDelegate.h"
+#import <react-native-maps-generated/RNMapsHostVewDelegate.h>
 
 @class AIRMap;
 
