@@ -865,7 +865,7 @@ public void onCreate(LifecycleOwner owner) {
 
     public void setShowsUserLocation(boolean showUserLocation) {
         this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
-        if (hasPermissions()) {
+        if (hasPermissions() && map != null) {
             map.setLocationSource(fusedLocationSource);
             //noinspection MissingPermission
             map.setMyLocationEnabled(showUserLocation);
