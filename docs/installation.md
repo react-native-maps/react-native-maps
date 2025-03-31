@@ -30,6 +30,7 @@ $ npx pod-install
 
 ### Enabling Google Maps
 
+For react native < v0.77 (Objective C) :
 If you want to enable Google Maps on iOS, obtain the Google API key and edit your `AppDelegate.m(m)` as follows:
 
 ```diff
@@ -46,6 +47,29 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
+For react native >= v0.77 (Swift):
+
+```diff
++ import GoogleMaps
+
+override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+) -> Bool {
++   GMSServices.provideAPIKey("_YOUR_API_KEY_") // add this line using the API key obtained from Google Console
+...
+    self.moduleName = "app"
+    self.dependencyProvider = RCTAppDependencyProvider()
+
+    // You can add your custom initial props in the dictionary below.
+    // They will be passed down to the ViewController used by React Native.
+    self.initialProps = [:]
+...
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+}
+...
+```
+
 Google Maps SDK for iOS requires iOS 14, so make sure that your deployment target is >= 4 in your iOS project settings.
 
 Also make sure that your Podfile deployment target is set to >= 14 at the top of your Podfile, eg:
@@ -60,7 +84,9 @@ Add the following to your Podfile above the `use_native_modules!` function and r
 # React Native Maps dependencies
 
 rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-maps', :path => rn_maps_path
 pod 'react-native-google-maps', :path => rn_maps_path
+pod 'react-native-maps-generated', :path => rn_maps_path
 ```
 
 The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.
