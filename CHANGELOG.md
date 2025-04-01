@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.133](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.132...v1.21.0-alpha.133) (2025-04-01)
+
+
+### Bug Fixes
+
+* onMapReady was blocking map rendering ([8cddc33](https://github.com/react-native-maps/react-native-maps/commit/8cddc33573cda1c530c2886642e61b92a8515aad))
+
 # [1.21.0-alpha.132](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.131...v1.21.0-alpha.132) (2025-03-30)
 
 
