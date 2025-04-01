@@ -1128,6 +1128,7 @@ class MapView extends React.Component<MapViewProps, State> {
       onRegionChange,
       onRegionChangeComplete,
       onPress,
+      onMapReady,
       minZoomLevel,
       maxZoomLevel,
       region,
