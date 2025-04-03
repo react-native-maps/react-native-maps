@@ -626,6 +626,9 @@ using namespace facebook::react;
             case RNMapsGoogleMapViewMapType::Hybrid:
                 _view.mapType = kGMSTypeHybrid;
                 break;
+            case RNMapsGoogleMapViewMapType::None:
+                _view.mapType = kGMSTypeNone;
+                break;
             default:
                 _view.mapType = kGMSTypeNormal;
                 break;
