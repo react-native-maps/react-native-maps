@@ -14,6 +14,7 @@
 @interface AIRGoogleMapManager : RCTViewManager
 
 @property (nonatomic, strong) NSString* googleMapId;
+@property (nonatomic, strong) NSString* customMapStyle;
 @property (nonatomic) BOOL zoomTapEnabled;
 @property (nonatomic, strong) UIColor* backgroundColor;
 @property (nonatomic, strong) GMSCameraPosition* camera;

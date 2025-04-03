@@ -196,9 +196,9 @@ using namespace facebook::react;
 
     _view.onIndoorLevelActivated = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
-            
+
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
-            
+
             facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorLevelActivated data = {
                 .activeLevelIndex= (int) [dictionary[@"activeLevelIndex"] integerValue],
                 .name = [dictionary[@"name"] UTF8String],
@@ -214,7 +214,7 @@ using namespace facebook::react;
 
             NSError *jsError = nil;
             NSString *levelsStr = RCTJSONStringify(dictionary[@"levels"], &jsError);
-            
+
             facebook::react::RNMapsGoogleMapViewEventEmitter::OnIndoorBuildingFocused data = {
                 .underground = [dictionary[@"underground"] boolValue],
                 .activeLevelIndex = (int) [dictionary[@"activeLevelIndex"] integerValue],
@@ -497,6 +497,12 @@ using namespace facebook::react;
             _legacyMapManager.googleMapId = mapID;
         }
     }
+    if (oldViewProps.customMapStyleString != newViewProps.customMapStyleString) {
+        NSString* customStyle = RCTNSStringFromString(newViewProps.customMapStyleString);
+        if (customStyle && [customStyle length]){
+            _legacyMapManager.customMapStyle = customStyle;
+        }
+    }
     if (!newViewProps.zoomTapEnabled) {
         _legacyMapManager.zoomTapEnabled = newViewProps.zoomTapEnabled;
     } else {
@@ -573,6 +579,8 @@ using namespace facebook::react;
     REMAP_MAPVIEW_PROP(scrollEnabled)
 
     REMAP_MAPVIEW_STRING_PROP(kmlSrc)
+    REMAP_MAPVIEW_STRING_PROP(customMapStyleString)
+
 
     if (newViewProps.minZoom != oldViewProps.minZoom || newViewProps.maxZoom != oldViewProps.maxZoom){
         [_view setMinZoom:newViewProps.minZoom maxZoom:newViewProps.maxZoom];

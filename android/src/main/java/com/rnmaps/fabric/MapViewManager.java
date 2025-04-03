@@ -462,6 +462,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public void setCustomMapStyleString(MapView view, @Nullable String value) {
+        view.setMapStyle(value);
+    }
+
+    @Override
     public void setUserLocationAnnotationTitle(MapView view, @Nullable String value) {
         // not supported
     }

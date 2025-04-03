@@ -1134,11 +1134,16 @@ class MapView extends React.Component<MapViewProps, State> {
       region,
       provider,
       children,
+      customMapStyle,
       ...restProps
     } = this.props;
 
     /* eslint-enable @typescript-eslint/no-unused-vars */
     const userInterfaceStyle = this.props.userInterfaceStyle || 'system';
+    const customMapStyleString = customMapStyle
+      ? JSON.stringify(this.props.customMapStyle)
+      : undefined;
+
     const props: MapFabricNativeProps = {
       onMapReady: this._onMapReady,
       liteMode: this.props.liteMode,
@@ -1150,6 +1155,7 @@ class MapView extends React.Component<MapViewProps, State> {
       onMarkerDeselect: this.handleMarkerDeselect,
       onKmlReady: this.handleKmlReady,
       userInterfaceStyle: userInterfaceStyle,
+      customMapStyleString,
       minZoom: minZoomLevel,
       maxZoom: maxZoomLevel,
       onRegionChange: this.handleRegionChange,

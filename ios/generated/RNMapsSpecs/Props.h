@@ -391,6 +391,7 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   bool showsTraffic{false};
   bool showsUserLocation{false};
   RNMapsGoogleMapViewUserInterfaceStyle userInterfaceStyle{RNMapsGoogleMapViewUserInterfaceStyle::System};
+  std::string customMapStyleString{};
   bool userLocationCalloutEnabled{false};
   int userLocationFastestInterval{0};
   RNMapsGoogleMapViewUserLocationPriority userLocationPriority{RNMapsGoogleMapViewUserLocationPriority::High};

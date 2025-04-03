@@ -142,6 +142,9 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
       case "userInterfaceStyle":
         mViewManager.setUserInterfaceStyle(view, (String) value);
         break;
+      case "customMapStyleString":
+        mViewManager.setCustomMapStyleString(view, value == null ? null : (String) value);
+        break;
       case "userLocationAnnotationTitle":
         mViewManager.setUserLocationAnnotationTitle(view, value == null ? null : (String) value);
         break;

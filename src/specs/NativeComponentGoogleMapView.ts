@@ -775,6 +775,15 @@ export interface MapFabricNativeProps extends ViewProps {
   userInterfaceStyle?: WithDefault<'system' | 'light' | 'dark', 'system'>;
 
   /**
+   * Adds custom styling to the map component.
+   * See [README](https://github.com/react-native-maps/react-native-maps#customizing-the-map-style) for more information.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  customMapStyleString?: string;
+
+  /**
    * If `true` clicking user location will show the default callout for userLocation annotation.
    *
    * @default false

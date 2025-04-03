@@ -391,6 +391,7 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   bool showsTraffic{false};
   bool showsUserLocation{false};
   RNMapsGoogleMapViewUserInterfaceStyle userInterfaceStyle{RNMapsGoogleMapViewUserInterfaceStyle::System};
+  std::string customMapStyleString{};
   bool userLocationCalloutEnabled{false};
   int userLocationFastestInterval{0};
   RNMapsGoogleMapViewUserLocationPriority userLocationPriority{RNMapsGoogleMapViewUserLocationPriority::High};
@@ -917,6 +918,7 @@ class RNMapsMapViewProps final : public ViewProps {
   SharedColor tintColor{};
   bool toolbarEnabled{true};
   RNMapsMapViewUserInterfaceStyle userInterfaceStyle{RNMapsMapViewUserInterfaceStyle::System};
+  std::string customMapStyleString{};
   std::string userLocationAnnotationTitle{};
   bool userLocationCalloutEnabled{false};
   int userLocationFastestInterval{5000};

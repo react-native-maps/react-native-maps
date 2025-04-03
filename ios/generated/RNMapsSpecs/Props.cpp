@@ -66,6 +66,7 @@ RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     showsTraffic(convertRawProp(context, rawProps, "showsTraffic", sourceProps.showsTraffic, {false})),
     showsUserLocation(convertRawProp(context, rawProps, "showsUserLocation", sourceProps.showsUserLocation, {false})),
     userInterfaceStyle(convertRawProp(context, rawProps, "userInterfaceStyle", sourceProps.userInterfaceStyle, {RNMapsGoogleMapViewUserInterfaceStyle::System})),
+    customMapStyleString(convertRawProp(context, rawProps, "customMapStyleString", sourceProps.customMapStyleString, {})),
     userLocationCalloutEnabled(convertRawProp(context, rawProps, "userLocationCalloutEnabled", sourceProps.userLocationCalloutEnabled, {false})),
     userLocationFastestInterval(convertRawProp(context, rawProps, "userLocationFastestInterval", sourceProps.userLocationFastestInterval, {0})),
     userLocationPriority(convertRawProp(context, rawProps, "userLocationPriority", sourceProps.userLocationPriority, {RNMapsGoogleMapViewUserLocationPriority::High})),

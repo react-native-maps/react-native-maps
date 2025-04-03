@@ -53,6 +53,7 @@ public interface RNMapsMapViewManagerInterface<T extends View> {
   void setTintColor(T view, @Nullable Integer value);
   void setToolbarEnabled(T view, boolean value);
   void setUserInterfaceStyle(T view, @Nullable String value);
+  void setCustomMapStyleString(T view, @Nullable String value);
   void setUserLocationAnnotationTitle(T view, @Nullable String value);
   void setUserLocationCalloutEnabled(T view, boolean value);
   void setUserLocationFastestInterval(T view, int value);

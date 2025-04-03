@@ -666,8 +666,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (!style) {
     NSLog(@"The style definition could not be loaded: %@", error);
   }
-
-  self.mapStyle = style;
+    [self setMapStyle:style];
 }
 
 - (BOOL)showsCompass {
