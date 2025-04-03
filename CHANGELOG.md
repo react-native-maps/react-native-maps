@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.134](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.133...v1.21.0-alpha.134) (2025-04-03)
+
+
+### Features
+
+* **google:** add support for mapStyle ([5d0d665](https://github.com/react-native-maps/react-native-maps/commit/5d0d6654d4e08297b4cf28a5fb08142779df8ea2))
+
 # [1.21.0-alpha.133](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.132...v1.21.0-alpha.133) (2025-04-01)
 
 
