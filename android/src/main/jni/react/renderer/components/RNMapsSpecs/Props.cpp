@@ -191,5 +191,22 @@ RNMapsPolylineProps::RNMapsPolylineProps(
     strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
       {}
+RNMapsUrlTileProps::RNMapsUrlTileProps(
+    const PropsParserContext &context,
+    const RNMapsUrlTileProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    doubleTileSize(convertRawProp(context, rawProps, "doubleTileSize", sourceProps.doubleTileSize, {false})),
+    flipY(convertRawProp(context, rawProps, "flipY", sourceProps.flipY, {false})),
+    maximumNativeZ(convertRawProp(context, rawProps, "maximumNativeZ", sourceProps.maximumNativeZ, {0})),
+    maximumZ(convertRawProp(context, rawProps, "maximumZ", sourceProps.maximumZ, {0})),
+    minimumZ(convertRawProp(context, rawProps, "minimumZ", sourceProps.minimumZ, {0})),
+    offlineMode(convertRawProp(context, rawProps, "offlineMode", sourceProps.offlineMode, {false})),
+    shouldReplaceMapContent(convertRawProp(context, rawProps, "shouldReplaceMapContent", sourceProps.shouldReplaceMapContent, {false})),
+    tileCacheMaxAge(convertRawProp(context, rawProps, "tileCacheMaxAge", sourceProps.tileCacheMaxAge, {0})),
+    tileCachePath(convertRawProp(context, rawProps, "tileCachePath", sourceProps.tileCachePath, {})),
+    tileSize(convertRawProp(context, rawProps, "tileSize", sourceProps.tileSize, {0})),
+    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {}))
+      {}
 
 } // namespace facebook::react

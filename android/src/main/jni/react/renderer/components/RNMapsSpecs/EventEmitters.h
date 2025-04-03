@@ -843,4 +843,11 @@ class RNMapsPolylineEventEmitter : public ViewEventEmitter {
     };
   void onPress(OnPress value) const;
 };
+class RNMapsUrlTileEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  
+  
+};
 } // namespace facebook::react

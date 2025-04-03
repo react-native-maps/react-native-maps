@@ -106,4 +106,15 @@ using RNMapsPolylineShadowNode = ConcreteViewShadowNode<
     RNMapsPolylineEventEmitter,
     RNMapsPolylineState>;
 
+JSI_EXPORT extern const char RNMapsUrlTileComponentName[];
+
+/*
+ * `ShadowNode` for <RNMapsUrlTile> component.
+ */
+using RNMapsUrlTileShadowNode = ConcreteViewShadowNode<
+    RNMapsUrlTileComponentName,
+    RNMapsUrlTileProps,
+    RNMapsUrlTileEventEmitter,
+    RNMapsUrlTileState>;
+
 } // namespace facebook::react

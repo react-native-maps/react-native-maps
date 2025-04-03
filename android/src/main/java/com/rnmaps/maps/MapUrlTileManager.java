@@ -13,10 +13,6 @@ public class MapUrlTileManager extends ViewGroupManager<MapUrlTile> {
 
   public MapUrlTileManager(ReactApplicationContext reactContext) {
     super();
-    DisplayMetrics metrics = new DisplayMetrics();
-    ((WindowManager) reactContext.getSystemService(Context.WINDOW_SERVICE))
-        .getDefaultDisplay()
-        .getRealMetrics(metrics);
   }
 
   @Override

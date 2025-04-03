@@ -17,6 +17,7 @@ import com.rnmaps.fabric.NativeAirMapsModule;
 import com.rnmaps.fabric.OverlayManager;
 import com.rnmaps.fabric.PolygonManager;
 import com.rnmaps.fabric.PolylineManager;
+import com.rnmaps.fabric.UrlTileManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,14 @@ public class MapAirModulePackage extends TurboReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return List.of(new MapViewManager(reactContext), new MarkerManager(reactContext), new CalloutManager(reactContext), new PolygonManager(reactContext), new PolylineManager(reactContext), new CircleManager(reactContext), new OverlayManager(reactContext));
+        return List.of(new MapViewManager(reactContext),
+                new MarkerManager(reactContext),
+                new CalloutManager(reactContext),
+                new PolygonManager(reactContext),
+                new PolylineManager(reactContext),
+                new CircleManager(reactContext),
+                new OverlayManager(reactContext),
+                new UrlTileManager(reactContext));
     }
 
 
@@ -53,8 +61,11 @@ public class MapAirModulePackage extends TurboReactPackage {
         if (MapViewManager.REACT_CLASS.equals(name)) {
             return new MapViewManager(reactContext);
         }
+        if (UrlTileManager.REACT_CLASS.equals(name)) {
+            return new UrlTileManager(reactContext);
+        }
         if (NativeAirMapsModuleSpec.NAME.equals(name)) {
-            return (NativeModule) new NativeAirMapsModule(reactContext);
+            return new NativeAirMapsModule(reactContext);
         } else {
             return null;
         }

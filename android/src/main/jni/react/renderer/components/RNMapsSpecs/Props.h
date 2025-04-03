@@ -1222,4 +1222,24 @@ class RNMapsPolylineProps final : public ViewProps {
   bool tappable{false};
 };
 
+class RNMapsUrlTileProps final : public ViewProps {
+ public:
+  RNMapsUrlTileProps() = default;
+  RNMapsUrlTileProps(const PropsParserContext& context, const RNMapsUrlTileProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  bool doubleTileSize{false};
+  bool flipY{false};
+  int maximumNativeZ{0};
+  int maximumZ{0};
+  int minimumZ{0};
+  bool offlineMode{false};
+  bool shouldReplaceMapContent{false};
+  int tileCacheMaxAge{0};
+  std::string tileCachePath{};
+  int tileSize{0};
+  std::string urlTemplate{};
+};
+
 } // namespace facebook::react

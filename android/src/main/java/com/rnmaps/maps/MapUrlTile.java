@@ -176,7 +176,7 @@ public class MapUrlTile extends MapFeature {
     if (tileProvider != null) {
       tileProvider.setCustomMode();
     }
-  } 
+  }
 
   protected TileOverlayOptions createTileOverlayOptions() {
     Log.d("urlTile ", "creating TileProvider");
