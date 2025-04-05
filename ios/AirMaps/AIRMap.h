@@ -14,7 +14,11 @@
 #import "SMCalloutView.h"
 #import "RCTConvert+AirMap.h"
 #import "AIRMapCalloutSubview.h"
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
+#else
 #import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
+#endif
 
 @class AIRMapCoordinate;
 @class AIRMapMarker;

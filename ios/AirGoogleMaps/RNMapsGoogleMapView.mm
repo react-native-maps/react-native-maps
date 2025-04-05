@@ -10,18 +10,31 @@
 #import "RNMapsGoogleMapView.h"
 #import "RNMapsGooglePolygonView.h"
 #import "AIRGoogleMap.h"
-#import "AIRMapMarker.h"
 #import "AIRGoogleMapManager.h"
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMapsGenerated/ComponentDescriptors.h>
+#import <ReactNativeMapsGenerated/EventEmitters.h>
+#import <ReactNativeMapsGenerated/Props.h>
+#import <ReactNativeMapsGenerated/RCTComponentViewHelpers.h>
+#else
 #import <react-native-maps-generated/ComponentDescriptors.h>
 #import <react-native-maps-generated/EventEmitters.h>
 #import <react-native-maps-generated/Props.h>
 #import <react-native-maps-generated/RCTComponentViewHelpers.h>
+#endif
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
 #import <React/RCTUtils.h>
 #import "RCTConvert+GMSMapViewType.h"
+#if __has_include(<ReactNativeMaps/RCTConvert+AirMap.h>)
+#import <ReactNativeMaps/RCTConvert+AirMap.h>
+#import <ReactNativeMaps/UIView+AirMap.h>
+#else
 #import "RCTConvert+AirMap.h"
 #import "UIView+AirMap.h"
+#endif
+
 
 using namespace facebook::react;
 

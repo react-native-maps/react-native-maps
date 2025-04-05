@@ -10,8 +10,11 @@
 
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsHostVewDelegate.h>
+#else
 #import <react-native-maps-generated/RNMapsHostVewDelegate.h>
-
+#endif
 @class AIRGoogleMap;
 
 NS_ASSUME_NONNULL_BEGIN

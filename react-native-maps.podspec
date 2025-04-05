@@ -15,6 +15,12 @@ Pod::Spec.new do |s|
   s.source = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
 
   s.source_files = "ios/AirMaps/**/*.{h,m,mm,swift}"
+  s.module_map = 'ios/AirMaps/module.modulemap'
+  s.public_header_files = [
+    'ios/AirMaps/UIView+AirMap.h',
+    'ios/AirMaps/RCTConvert+AirMap.h',
+  ]
+  s.module_name = 'ReactNativeMaps'
   s.dependency "React-Core"
   s.compiler_flags = folly_compiler_flags
   s.dependency 'react-native-maps-generated'

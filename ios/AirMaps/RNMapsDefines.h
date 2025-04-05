@@ -1,1 +1,1 @@
-#define HAVE_GOOGLE_MAPS 1
+#define HAVE_GOOGLE_MAPS 0

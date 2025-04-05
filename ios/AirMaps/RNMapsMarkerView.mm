@@ -10,10 +10,18 @@
 #import "AIRMap.h"
 #import "AIRMapMarker.h"
 #import "AIRMapMarkerManager.h"
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMapsGenerated/ComponentDescriptors.h>
+#import <ReactNativeMapsGenerated/EventEmitters.h>
+#import <ReactNativeMapsGenerated/Props.h>
+#import <ReactNativeMapsGenerated/RCTComponentViewHelpers.h>
+#else
 #import <react-native-maps-generated/ComponentDescriptors.h>
 #import <react-native-maps-generated/EventEmitters.h>
 #import <react-native-maps-generated/Props.h>
 #import <react-native-maps-generated/RCTComponentViewHelpers.h>
+#endif
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
 #import "UIView+AirMap.h"
