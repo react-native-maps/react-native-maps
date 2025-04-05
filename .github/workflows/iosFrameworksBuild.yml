@@ -28,7 +28,7 @@ jobs:
         run: yarn --cwd example --frozen-lockfile
 
       - name: Install pods
-        run: USE_FRAMEWORKS=static bundle exec pod install
+        run: RCT_NEW_ARCH_ENABLED=1 USE_FRAMEWORKS=static bundle exec pod install
         working-directory: example/ios
 
       - name: Write Config.xcconfig
