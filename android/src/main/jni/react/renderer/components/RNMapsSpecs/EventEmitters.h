@@ -850,4 +850,11 @@ class RNMapsUrlTileEventEmitter : public ViewEventEmitter {
   
   
 };
+class RNMapsWMSTileEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  
+  
+};
 } // namespace facebook::react

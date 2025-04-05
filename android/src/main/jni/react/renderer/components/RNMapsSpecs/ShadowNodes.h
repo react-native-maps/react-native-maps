@@ -117,4 +117,15 @@ using RNMapsUrlTileShadowNode = ConcreteViewShadowNode<
     RNMapsUrlTileEventEmitter,
     RNMapsUrlTileState>;
 
+JSI_EXPORT extern const char RNMapsWMSTileComponentName[];
+
+/*
+ * `ShadowNode` for <RNMapsWMSTile> component.
+ */
+using RNMapsWMSTileShadowNode = ConcreteViewShadowNode<
+    RNMapsWMSTileComponentName,
+    RNMapsWMSTileProps,
+    RNMapsWMSTileEventEmitter,
+    RNMapsWMSTileState>;
+
 } // namespace facebook::react

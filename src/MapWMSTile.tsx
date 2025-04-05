@@ -38,7 +38,7 @@ export type MapWMSTileProps = ViewProps & {
 
   /**
    * In offline-mode tiles are not fetched from the tile servers, rather only tiles stored in the cache directory are used.
-   * Furthermore automated tile scaling is activated: if tile at a desired zoom level is not found from the cache directory,
+   * Furthermore, automated tile scaling is activated: if tile at a desired zoom level is not found from the cache directory,
    * then lower zoom level tile is used (up to 4 levels lower) and scaled.
    *
    * @default false

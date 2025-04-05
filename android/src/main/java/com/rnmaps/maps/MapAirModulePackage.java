@@ -18,6 +18,7 @@ import com.rnmaps.fabric.OverlayManager;
 import com.rnmaps.fabric.PolygonManager;
 import com.rnmaps.fabric.PolylineManager;
 import com.rnmaps.fabric.UrlTileManager;
+import com.rnmaps.fabric.WMSTileManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,8 @@ public class MapAirModulePackage extends TurboReactPackage {
                 new PolylineManager(reactContext),
                 new CircleManager(reactContext),
                 new OverlayManager(reactContext),
-                new UrlTileManager(reactContext));
+                new UrlTileManager(reactContext),
+                new WMSTileManager(reactContext));
     }
 
 
@@ -63,6 +65,9 @@ public class MapAirModulePackage extends TurboReactPackage {
         }
         if (UrlTileManager.REACT_CLASS.equals(name)) {
             return new UrlTileManager(reactContext);
+        }
+        if (WMSTileManager.REACT_CLASS.equals(name)) {
+            return new WMSTileManager(reactContext);
         }
         if (NativeAirMapsModuleSpec.NAME.equals(name)) {
             return new NativeAirMapsModule(reactContext);

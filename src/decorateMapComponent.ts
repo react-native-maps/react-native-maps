@@ -23,6 +23,7 @@ import {Commands} from './MapViewNativeComponent';
 import GooglePolygon from './specs/NativeComponentGooglePolygon';
 import FabricMarker from './specs/NativeComponentMarker';
 import FabricUrlTile from './specs/NativeComponentUrlTile';
+import FabricWMSTile from './specs/NativeComponentWMSTile.ts';
 import FabricCallout from './specs/NativeComponentCallout';
 import FabricPolyline from './specs/NativeComponentPolyline';
 import FabricCircle from './specs/NativeComponentCircle';
@@ -108,6 +109,9 @@ export default function decorateMapComponent<Type extends Component>(
         } else if (componentName === 'UrlTile') {
           // @ts-ignore
           return FabricUrlTile;
+        } else if (componentName === 'WMSTile') {
+          // @ts-ignore
+          return FabricWMSTile;
         }
       }
       const key = provider || 'default';

@@ -1231,15 +1231,32 @@ class RNMapsUrlTileProps final : public ViewProps {
 
   bool doubleTileSize{false};
   bool flipY{false};
-  int maximumNativeZ{0};
-  int maximumZ{0};
+  int maximumNativeZ{100};
+  int maximumZ{100};
   int minimumZ{0};
   bool offlineMode{false};
   bool shouldReplaceMapContent{false};
   int tileCacheMaxAge{0};
   std::string tileCachePath{};
-  int tileSize{0};
+  int tileSize{256};
   std::string urlTemplate{};
+};
+
+class RNMapsWMSTileProps final : public ViewProps {
+ public:
+  RNMapsWMSTileProps() = default;
+  RNMapsWMSTileProps(const PropsParserContext& context, const RNMapsWMSTileProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  int maximumNativeZ{100};
+  int maximumZ{100};
+  int minimumZ{0};
+  bool offlineMode{false};
+  bool shouldReplaceMapContent{false};
+  int tileCacheMaxAge{0};
+  std::string tileCachePath{};
+  int tileSize{256};
 };
 
 } // namespace facebook::react

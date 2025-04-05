@@ -122,4 +122,16 @@ public:
 #endif
 };
 
+class RNMapsWMSTileState {
+public:
+  RNMapsWMSTileState() = default;
+
+#ifdef ANDROID
+  RNMapsWMSTileState(RNMapsWMSTileState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+#endif
+};
+
 } // namespace facebook::react

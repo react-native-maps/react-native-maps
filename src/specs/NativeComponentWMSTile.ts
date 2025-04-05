@@ -3,27 +3,7 @@ import type {HostComponent, ViewProps} from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {Int32, WithDefault} from 'react-native/Libraries/Types/CodegenTypes';
 
-export interface UrlTileFabricNativeProps extends ViewProps {
-  /**
-   * Doubles tile size from 256 to 512 utilising higher zoom levels
-   * i.e loading 4 higher zoom level tiles and combining them for one high-resolution tile.
-   * iOS does this automatically, even if it is not desirable always.
-   * NB! using this makes text labels smaller than in the original map style.
-   *
-   * @platform iOS: Not supported
-   * @platform Android: Supported
-   */
-  doubleTileSize?: boolean;
-
-  /**
-   * Allow tiles using the TMS coordinate system (origin bottom left) to be used,
-   * and displayed at their correct coordinates.
-   *
-   * @platform iOS: Supported
-   * @platform Android: Supported
-   */
-  flipY?: boolean;
-
+export interface WMSTileFabricNativeProps extends ViewProps {
   /**
    * The maximum native zoom level for this tile overlay i.e. the highest zoom level that the tile server provides.
    * Tiles are auto-scaled for higher zoom levels.
@@ -99,30 +79,15 @@ export interface UrlTileFabricNativeProps extends ViewProps {
    * Tile size, default size is 256 (for tiles of 256 _ 256 pixels).
    * High-res (aka 'retina') tiles are 512 (tiles of 512 _ 512 pixels)
    *
-   * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
-  tileSize?: WithDefault<Int32, 256>;
-
-  /**
-   * The url template of the map tileserver.
-   * (URLTile) The patterns {x} {y} {z} will be replaced at runtime.
-   * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png.
-   *
-   * It is also possible to refer to tiles in local filesystem with file:///top-level-directory/sub-directory/{z}/{x}/{y}.png URL-format.
-   * (WMSTile) The patterns {minX} {maxX} {minY} {maxY} {width} {height} will be replaced at runtime according to EPSG:900913 specification bounding box.
-   * For example, https://demo.geo-solutions.it/geoserver/tiger/wms?service=WMS&version=1.1.0&request=GetMap&layers=tiger:poi&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:900913&format=image/png&transparent=true&format_options=dpi:213.
-   *
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-
-  urlTemplate: string;
+  tileSize?: WithDefault<Int32, 256>;
 }
 
-export default codegenNativeComponent<UrlTileFabricNativeProps>(
-  'RNMapsUrlTile',
+export default codegenNativeComponent<WMSTileFabricNativeProps>(
+  'RNMapsWMSTile',
   {
     excludedPlatforms: ['iOS'],
   },
-) as HostComponent<UrlTileFabricNativeProps>;
+) as HostComponent<WMSTileFabricNativeProps>;
