@@ -1,4 +1,4 @@
-module ReactNativeMaps {
+framework module ReactNativeMaps {
   header "UIView+AirMap.h"
   header "RCTConvert+AirMap.h"
 
