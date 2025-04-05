@@ -46,6 +46,9 @@ public class RNMapsWMSTileManagerDelegate<T extends View, U extends BaseViewMana
       case "tileSize":
         mViewManager.setTileSize(view, value == null ? 256 : ((Double) value).intValue());
         break;
+      case "urlTemplate":
+        mViewManager.setUrlTemplate(view, value == null ? null : (String) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

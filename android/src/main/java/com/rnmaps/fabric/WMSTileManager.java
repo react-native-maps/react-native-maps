@@ -106,4 +106,9 @@ public class WMSTileManager extends ViewGroupManager<MapWMSTile> implements RNMa
         view.setTileSize(value);
     }
 
+    @Override
+    public void setUrlTemplate(MapWMSTile view, @Nullable String value) {
+        view.setUrlTemplate(value);
+    }
+
 }

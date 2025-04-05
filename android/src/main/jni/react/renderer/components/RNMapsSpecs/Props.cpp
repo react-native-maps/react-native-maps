@@ -220,7 +220,8 @@ RNMapsWMSTileProps::RNMapsWMSTileProps(
     shouldReplaceMapContent(convertRawProp(context, rawProps, "shouldReplaceMapContent", sourceProps.shouldReplaceMapContent, {false})),
     tileCacheMaxAge(convertRawProp(context, rawProps, "tileCacheMaxAge", sourceProps.tileCacheMaxAge, {0})),
     tileCachePath(convertRawProp(context, rawProps, "tileCachePath", sourceProps.tileCachePath, {})),
-    tileSize(convertRawProp(context, rawProps, "tileSize", sourceProps.tileSize, {256}))
+    tileSize(convertRawProp(context, rawProps, "tileSize", sourceProps.tileSize, {256})),
+    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {}))
       {}
 
 } // namespace facebook::react

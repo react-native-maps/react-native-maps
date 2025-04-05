@@ -1257,6 +1257,7 @@ class RNMapsWMSTileProps final : public ViewProps {
   int tileCacheMaxAge{0};
   std::string tileCachePath{};
   int tileSize{256};
+  std::string urlTemplate{};
 };
 
 } // namespace facebook::react

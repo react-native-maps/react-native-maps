@@ -83,6 +83,20 @@ export interface WMSTileFabricNativeProps extends ViewProps {
    * @platform Android: Supported
    */
   tileSize?: WithDefault<Int32, 256>;
+
+  /**
+   * The url template of the map tileserver.
+   * (URLTile) The patterns {x} {y} {z} will be replaced at runtime.
+   * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png.
+   *
+   * It is also possible to refer to tiles in local filesystem with file:///top-level-directory/sub-directory/{z}/{x}/{y}.png URL-format.
+   * (WMSTile) The patterns {minX} {maxX} {minY} {maxY} {width} {height} will be replaced at runtime according to EPSG:900913 specification bounding box.
+   * For example, https://demo.geo-solutions.it/geoserver/tiger/wms?service=WMS&version=1.1.0&request=GetMap&layers=tiger:poi&styles=&bbox={minX},{minY},{maxX},{maxY}&width={width}&height={height}&srs=EPSG:900913&format=image/png&transparent=true&format_options=dpi:213.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  urlTemplate: string;
 }
 
 export default codegenNativeComponent<WMSTileFabricNativeProps>(

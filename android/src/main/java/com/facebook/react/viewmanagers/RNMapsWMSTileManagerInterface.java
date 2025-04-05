@@ -21,4 +21,5 @@ public interface RNMapsWMSTileManagerInterface<T extends View> {
   void setTileCacheMaxAge(T view, int value);
   void setTileCachePath(T view, @Nullable String value);
   void setTileSize(T view, int value);
+  void setUrlTemplate(T view, @Nullable String value);
 }
