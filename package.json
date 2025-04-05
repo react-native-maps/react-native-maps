@@ -60,8 +60,8 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@commitlint/cli": "17.6.1",
-    "@commitlint/config-conventional": "17.6.1",
+    "@commitlint/cli": "19.8.0",
+    "@commitlint/config-conventional": "19.8.0",
     "@react-native-community/cli": "15.0.1",
     "@react-native/babel-preset": "0.76.8",
     "@react-native/eslint-config": "0.76.8",
@@ -84,6 +84,11 @@
   },
   "dependencies": {
     "@types/geojson": "^7946.0.13"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "jest": {
     "preset": "react-native",
