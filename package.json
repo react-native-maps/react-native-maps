@@ -79,11 +79,34 @@
     "react": "^18.3.1",
     "react-native": "^0.77.1",
     "react-test-renderer": "18.3.1",
-    "semantic-release": "24.2.0",
+    "semantic-release": "24.2.3",
     "typescript": "5.0.4"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.13"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogTitle": "# Changelog"
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ],
+      "@semantic-release/github"
+    ]
   },
   "jest": {
     "preset": "react-native",
