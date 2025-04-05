@@ -77,6 +77,13 @@ export type MapOverlayProps = ViewProps & {
 
 type NativeProps = Modify<MapOverlayProps, {image?: string}>;
 
+function normalizeBounds(bounds: [number, number][]): any {
+  return {
+    northEast: {latitude: bounds[0][0], longitude: bounds[0][1]},
+    southWest: {latitude: bounds[1][0], longitude: bounds[1][1]},
+  };
+}
+
 export class MapOverlay extends React.Component<MapOverlayProps> {
   // declaration only, as they are set through decorateMap
   /// @ts-ignore
@@ -90,7 +97,7 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
   private fabricOverlay?: Boolean = undefined;
 
   render() {
-    const {opacity = 1.0} = this.props;
+    const {opacity = 1.0, bounds} = this.props;
 
     if (this.fabricOverlay === undefined) {
       this.fabricOverlay = Platform.OS === 'android';
@@ -98,12 +105,27 @@ export class MapOverlay extends React.Component<MapOverlayProps> {
 
     const AIRMapOverlay = this.getNativeComponent();
     let image: any = this.props.image;
-    if (this.props.image && this.fabricOverlay) {
-      image = fixImageProp(this.props.image);
+
+    let boundsParam: any = bounds;
+    if (this.fabricOverlay) {
+      if (this.props.image) {
+        image = fixImageProp(this.props.image);
+      }
+      if (bounds) {
+        boundsParam = normalizeBounds(bounds);
+      }
+    } else {
+      if (this.props.image) {
+        image = fixImageProp(this.props.image);
+        if (image.uri) {
+          image = image.uri;
+        }
+      }
     }
     return (
       <AIRMapOverlay
-        {...this.props}
+        // @ts-ignore
+        bounds={boundsParam}
         opacity={opacity}
         // @ts-ignore
         image={image}

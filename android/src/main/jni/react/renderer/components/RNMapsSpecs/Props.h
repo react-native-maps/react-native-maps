@@ -1094,12 +1094,12 @@ class RNMapsMarkerProps final : public ViewProps {
   bool useLegacyPinView{false};
 };
 
-struct RNMapsOverlayBoundsStruct {
+struct RNMapsOverlayBoundsNorthEastStruct {
   double latitude{0.0};
   double longitude{0.0};
 };
 
-static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsStruct &result) {
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsNorthEastStruct &result) {
   auto map = (std::unordered_map<std::string, RawValue>)value;
 
   auto tmp_latitude = map.find("latitude");
@@ -1112,19 +1112,53 @@ static inline void fromRawValue(const PropsParserContext& context, const RawValu
   }
 }
 
-static inline std::string toString(const RNMapsOverlayBoundsStruct &value) {
-  return "[Object RNMapsOverlayBoundsStruct]";
+static inline std::string toString(const RNMapsOverlayBoundsNorthEastStruct &value) {
+  return "[Object RNMapsOverlayBoundsNorthEastStruct]";
 }
 
-static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, std::vector<RNMapsOverlayBoundsStruct> &result) {
-  auto items = (std::vector<RawValue>)value;
-  for (const auto &item : items) {
-    RNMapsOverlayBoundsStruct newItem;
-    fromRawValue(context, item, newItem);
-    result.emplace_back(newItem);
+struct RNMapsOverlayBoundsSouthWestStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsSouthWestStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
   }
 }
 
+static inline std::string toString(const RNMapsOverlayBoundsSouthWestStruct &value) {
+  return "[Object RNMapsOverlayBoundsSouthWestStruct]";
+}
+
+struct RNMapsOverlayBoundsStruct {
+  RNMapsOverlayBoundsNorthEastStruct northEast{};
+  RNMapsOverlayBoundsSouthWestStruct southWest{};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_northEast = map.find("northEast");
+  if (tmp_northEast != map.end()) {
+    fromRawValue(context, tmp_northEast->second, result.northEast);
+  }
+  auto tmp_southWest = map.find("southWest");
+  if (tmp_southWest != map.end()) {
+    fromRawValue(context, tmp_southWest->second, result.southWest);
+  }
+}
+
+static inline std::string toString(const RNMapsOverlayBoundsStruct &value) {
+  return "[Object RNMapsOverlayBoundsStruct]";
+}
 class RNMapsOverlayProps final : public ViewProps {
  public:
   RNMapsOverlayProps() = default;
@@ -1133,7 +1167,7 @@ class RNMapsOverlayProps final : public ViewProps {
 #pragma mark - Props
 
   Float bearing{0.0};
-  std::vector<RNMapsOverlayBoundsStruct> bounds{};
+  RNMapsOverlayBoundsStruct bounds{};
   ImageSource image{};
   Float opacity{1.0};
   bool tappable{false};

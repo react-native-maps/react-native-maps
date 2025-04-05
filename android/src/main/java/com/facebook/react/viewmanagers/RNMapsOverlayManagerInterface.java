@@ -11,12 +11,11 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 public interface RNMapsOverlayManagerInterface<T extends View> {
   void setBearing(T view, float value);
-  void setBounds(T view, @Nullable ReadableArray value);
+  void setBounds(T view, @Nullable ReadableMap value);
   void setImage(T view, @Nullable ReadableMap value);
   void setOpacity(T view, float value);
   void setTappable(T view, boolean value);

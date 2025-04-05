@@ -4,7 +4,6 @@ package com.rnmaps.fabric;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -12,6 +11,8 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsOverlayManagerDelegate;
 import com.facebook.react.viewmanagers.RNMapsOverlayManagerInterface;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.rnmaps.maps.MapOverlay;
 
 import java.util.HashMap;
@@ -70,8 +71,13 @@ public class OverlayManager extends ViewGroupManager<MapOverlay> implements RNMa
     }
 
     @Override
-    public void setBounds(MapOverlay view, @Nullable ReadableArray value) {
-            view.setBounds(value);
+    public void setBounds(MapOverlay view, @Nullable ReadableMap value) {
+        LatLng sw = new LatLng(value.getMap("southWest").getDouble("latitude"),
+                value.getMap("southWest").getDouble("longitude"));
+        LatLng ne = new LatLng(value.getMap("northEast").getDouble("latitude"),
+                value.getMap("northEast").getDouble("longitude"));
+        LatLngBounds bounds =  new LatLngBounds(sw, ne);
+        view.setBounds(bounds);
     }
 
     @Override

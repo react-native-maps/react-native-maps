@@ -46,7 +46,16 @@ export interface OverlayFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  bounds: ReadonlyArray<LatLng>;
+  bounds: Readonly<{
+    northEast: {
+      latitude: Double; // Non-nullable Double for latitude
+      longitude: Double; // Non-nullable Double for longitude
+    };
+    southWest: {
+      latitude: Double; // Non-nullable Double for latitude
+      longitude: Double; // Non-nullable Double for longitude
+    };
+  }>;
 
   /**
    * A custom image to be used as the overlay.

@@ -11,7 +11,6 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
@@ -28,7 +27,7 @@ public class RNMapsOverlayManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setBearing(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "bounds":
-        mViewManager.setBounds(view, (ReadableArray) value);
+        mViewManager.setBounds(view, (ReadableMap) value);
         break;
       case "image":
         mViewManager.setImage(view, (ReadableMap) value);
