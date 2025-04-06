@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.authors = package["author"]
   s.homepage = package["homepage"]
   s.license = package["license"]
-  s.platform = :ios, "13.0"
+  s.platform = :ios, "15.1"
   s.source = { :git => "https://github.com/react-native-maps/react-native-maps.git", :tag=> "v#{s.version}" }
   s.source_files = "ios/generated/**/*.{h,m,mm,cpp,swift}"
   s.exclude_files = [
@@ -24,7 +24,6 @@ Pod::Spec.new do |s|
   ]
   s.public_header_files = "ios/generated/**/*.h"
   s.module_name = 'ReactNativeMapsGenerated'
-  s.dependency "React-Core"
   s.compiler_flags = folly_compiler_flags
   install_modules_dependencies(s)
 

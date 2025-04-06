@@ -20,6 +20,7 @@
 #import <react-native-maps-generated/EventEmitters.h>
 #import <react-native-maps-generated/Props.h>
 #import <react-native-maps-generated/RCTComponentViewHelpers.h>
+#import <react-native-maps-generated/RNMapsHostVewDelegate.h>
 #endif
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>

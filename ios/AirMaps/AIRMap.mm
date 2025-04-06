@@ -26,8 +26,12 @@ const NSTimeInterval AIRMapRegionChangeObserveInterval = 0.1;
 const CGFloat AIRMapZoomBoundBuffer = 0.01;
 const NSInteger AIRMapMaxZoomLevel = 20;
 
-
-@interface MKMapView (UIGestureRecognizer)
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
+#else
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
+#endif
+@interface MKMapView (UIGestureRecognizer)<RNMapsAirModuleDelegate>
 
 // this tells the compiler that MKMapView actually implements this method
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch;

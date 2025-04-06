@@ -14,11 +14,7 @@
 #import "SMCalloutView.h"
 #import "RCTConvert+AirMap.h"
 #import "AIRMapCalloutSubview.h"
-#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
-#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
-#else
-#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
-#endif
+
 
 @class AIRMapCoordinate;
 @class AIRMapMarker;
@@ -27,7 +23,7 @@ extern const NSTimeInterval AIRMapRegionChangeObserveInterval;
 extern const CGFloat AIRMapZoomBoundBuffer;
 extern const NSInteger AIRMapMaxZoomLevel;
 
-@interface AIRMap: MKMapView<SMCalloutViewDelegate, RNMapsAirModuleDelegate>
+@interface AIRMap: MKMapView<SMCalloutViewDelegate>
 
 @property (nonatomic, strong) SMCalloutView *calloutView;
 @property (nonatomic, strong) UIImageView *cacheImageView;

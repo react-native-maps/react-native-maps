@@ -25,6 +25,12 @@
 #import <React/RCTConvert.h>
 #import <objc/runtime.h>
 
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
+#else
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
+#endif
+
 #ifdef HAVE_GOOGLE_MAPS_UTILS
 #import "GMUKMLParser.h"
 #import "GMUPlacemark.h"
@@ -50,7 +56,7 @@ id regionAsJSON(MKCoordinateRegion region) {
            };
 }
 
-@interface AIRGoogleMap () <GMSIndoorDisplayDelegate>
+@interface AIRGoogleMap () <GMSIndoorDisplayDelegate, RNMapsAirModuleDelegate>
 
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate;
 

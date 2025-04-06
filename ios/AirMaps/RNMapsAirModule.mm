@@ -5,6 +5,8 @@
 //  Created by Salah Ghanim on 23.11.24.
 //  Copyright © 2024 react-native-maps. All rights reserved.
 //
+#ifdef RCT_NEW_ARCH_ENABLED
+
 
 #import "RNMapsAirModule.h"
 #import <React/RCTUIManager.h>
@@ -14,6 +16,16 @@
 #import "AIRMapSnapshot.h"
 #import <MapKit/MapKit.h>
 #import "RCTConvert+AirMap.h"
+
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsSpecs.h>
+#import <ReactNativeMapsGenerated/RNMapsHostVewDelegate.h>
+#else
+#import <react-native-maps-generated/RNMapsSpecs.h>
+#import <react-native-maps-generated/RNMapsHostVewDelegate.h>
+#endif
+@interface RNMapsAirModule()<NativeAirMapsModuleSpec>
+@end
 
 @implementation RNMapsAirModule
 
@@ -148,3 +160,5 @@
 
 @end
 
+
+#endif

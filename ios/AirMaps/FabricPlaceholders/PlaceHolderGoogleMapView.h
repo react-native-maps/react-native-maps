@@ -12,9 +12,6 @@
 
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
-#import <react-native-maps-generated/RNMapsHostVewDelegate.h>
-
-
 
 NS_ASSUME_NONNULL_BEGIN
 
