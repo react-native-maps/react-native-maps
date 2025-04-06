@@ -11,10 +11,20 @@
 #import "AIRMapMarker.h"
 #import "AIRMapManager.h"
 #import "RNMapsMarkerView.h"
-#import <react-native-maps-generated/EventEmitters.h>
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsSpecs.h>
+#import <ReactNativeMapsGenerated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMapsGenerated/ComponentDescriptors.h>
+#import <ReactNativeMapsGenerated/EventEmitters.h>
+#import <ReactNativeMapsGenerated/Props.h>
+#import <ReactNativeMapsGenerated/RCTComponentViewHelpers.h>
+#else
+#import <react-native-maps-generated/RNMapsSpecs.h>
 #import <react-native-maps-generated/ComponentDescriptors.h>
+#import <react-native-maps-generated/EventEmitters.h>
 #import <react-native-maps-generated/Props.h>
 #import <react-native-maps-generated/RCTComponentViewHelpers.h>
+#endif
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
 #import "UIView+AirMap.h"
@@ -31,7 +41,7 @@ using namespace facebook::react;
 
 
 - (id<RNMapsAirModuleDelegate>) mapView {
-    return _view;
+    return nil;
 }
 
 - (void) prepareForRecycle

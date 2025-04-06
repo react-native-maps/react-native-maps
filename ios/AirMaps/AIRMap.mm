@@ -753,7 +753,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (void) listenToMemoryWarnings
 {
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     static dispatch_once_t onceToken;
     static dispatch_source_t source;
     dispatch_once(&onceToken, ^{
