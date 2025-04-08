@@ -12,12 +12,14 @@
 #import "AIRGoogleMap.h"
 #import "AIRGoogleMapManager.h"
 #if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
 #import <ReactNativeMapsGenerated/RNMapsHostVewDelegate.h>
 #import <ReactNativeMapsGenerated/ComponentDescriptors.h>
 #import <ReactNativeMapsGenerated/EventEmitters.h>
 #import <ReactNativeMapsGenerated/Props.h>
 #import <ReactNativeMapsGenerated/RCTComponentViewHelpers.h>
 #else
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
 #import <react-native-maps-generated/ComponentDescriptors.h>
 #import <react-native-maps-generated/EventEmitters.h>
 #import <react-native-maps-generated/Props.h>
