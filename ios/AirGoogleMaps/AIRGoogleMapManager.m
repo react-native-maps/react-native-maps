@@ -25,6 +25,12 @@
 #import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
+#else
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
+#endif
+
 static NSString *const RCTMapViewKey = @"MapView";
 
 
@@ -344,7 +350,7 @@ RCT_EXPORT_METHOD(coordinateForPoint:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRGoogleMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+            id<RNMapsAirModuleDelegate> mapView = (id<RNMapsAirModuleDelegate>) view;
             resolve([view getCoordinatesForPoint:pt]);
         }
     }];
