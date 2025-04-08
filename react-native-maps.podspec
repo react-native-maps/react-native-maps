@@ -61,4 +61,11 @@ Pod::Spec.new do |s|
       }
   ]
 
+  s.pod_target_xcconfig = {
+    'HEADER_SEARCH_PATHS' => [
+      '$(PODS_ROOT)/Headers/Public/React-Core',
+      '$(PODS_TARGET_SRCROOT)/../../../node_modules/react-native/React'
+    ]
+  }
+
 end
