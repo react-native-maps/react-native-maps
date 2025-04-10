@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.143](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.142...v1.21.0-alpha.143) (2025-04-10)
+
+
+### Bug Fixes
+
+* **android:** fabric mapPadding causes crash ([bf1f9af](https://github.com/react-native-maps/react-native-maps/commit/bf1f9af223968a6156aa43419904b50de2ef250d))
+
 # [1.21.0-alpha.142](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.141...v1.21.0-alpha.142) (2025-04-10)
 
 
