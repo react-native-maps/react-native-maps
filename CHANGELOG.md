@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.142](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.141...v1.21.0-alpha.142) (2025-04-10)
+
+
+### Bug Fixes
+
+* **ios:** fabric getMapBoundaries return correct dictionary ([bd095e7](https://github.com/react-native-maps/react-native-maps/commit/bd095e761a128769e2b71cde49137bb8492f3a9c))
+
 # [1.21.0-alpha.141](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.140...v1.21.0-alpha.141) (2025-04-05)
 
 
