@@ -25,11 +25,6 @@
 #import <React/RCTConvert.h>
 #import <objc/runtime.h>
 
-#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
-#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
-#else
-#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
-#endif
 
 #ifdef HAVE_GOOGLE_MAPS_UTILS
 #import "GMUKMLParser.h"
@@ -56,7 +51,7 @@ id regionAsJSON(MKCoordinateRegion region) {
            };
 }
 
-@interface AIRGoogleMap () <GMSIndoorDisplayDelegate, RNMapsAirModuleDelegate>
+@interface AIRGoogleMap () <GMSIndoorDisplayDelegate>
 
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate;
 
@@ -348,7 +343,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 #pragma clang diagnostic pop
 
-- (NSArray *)getMapBoundaries
+- (NSDictionary *)getMapBoundaries
 {
     GMSVisibleRegion visibleRegion = self.projection.visibleRegion;
     GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion:visibleRegion];
@@ -356,16 +351,16 @@ id regionAsJSON(MKCoordinateRegion region) {
     CLLocationCoordinate2D northEast = bounds.northEast;
     CLLocationCoordinate2D southWest = bounds.southWest;
 
-    return @[
-        @[
-            [NSNumber numberWithDouble:northEast.longitude],
-            [NSNumber numberWithDouble:northEast.latitude]
-        ],
-        @[
-            [NSNumber numberWithDouble:southWest.longitude],
-            [NSNumber numberWithDouble:southWest.latitude]
-        ]
-    ];
+    return @{
+        @"northEast": @{
+            @"latitude": [NSNumber numberWithDouble:northEast.latitude],
+            @"longitude": [NSNumber numberWithDouble:northEast.longitude],
+                },
+        @"southWest": @{
+            @"latitude": [NSNumber numberWithDouble:southWest.latitude],
+            @"longitude": [NSNumber numberWithDouble:southWest.longitude],
+            },
+    };
 }
 
 - (NSDictionary *) getCameraDic {

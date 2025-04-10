@@ -186,18 +186,7 @@ RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            NSArray *boundingBox = [view getMapBoundaries];
-
-            resolve(@{
-                @"northEast" : @{
-                    @"longitude" : boundingBox[0][0],
-                    @"latitude" : boundingBox[0][1]
-                },
-                @"southWest" : @{
-                    @"longitude" : boundingBox[1][0],
-                    @"latitude" : boundingBox[1][1]
-                }
-            });
+            resolve([view getMapBoundaries]);
         }
     }];
 }

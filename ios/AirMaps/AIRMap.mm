@@ -324,23 +324,23 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 #pragma mark RNMapsAirModuleDelegate.h
 
-- (NSArray *)getMapBoundaries
+- (NSDictionary *)getMapBoundaries
 {
     MKMapRect mapRect = self.visibleMapRect;
 
     CLLocationCoordinate2D northEast = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), mapRect.origin.y));
     CLLocationCoordinate2D southWest = MKCoordinateForMapPoint(MKMapPointMake(mapRect.origin.x, MKMapRectGetMaxY(mapRect)));
 
-    return @[
-        @[
-            [NSNumber numberWithDouble:northEast.longitude],
-            [NSNumber numberWithDouble:northEast.latitude]
-        ],
-        @[
-            [NSNumber numberWithDouble:southWest.longitude],
-            [NSNumber numberWithDouble:southWest.latitude]
-        ]
-    ];
+    return @{
+          @"northEast": @{
+              @"latitude": [NSNumber numberWithDouble:northEast.latitude],
+              @"longitude": [NSNumber numberWithDouble:northEast.longitude],
+                  },
+          @"southWest": @{
+              @"latitude": [NSNumber numberWithDouble:southWest.latitude],
+              @"longitude": [NSNumber numberWithDouble:southWest.longitude],
+              },
+      };
 }
 - (NSDictionary *) getPointForCoordinates:(CLLocationCoordinate2D) location
 {

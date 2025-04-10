@@ -18,7 +18,7 @@
 
 - (NSDictionary *) getCameraDic;
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
-- (NSArray *) getMapBoundaries;
+- (NSDictionary *) getMapBoundaries;
 - (NSDictionary *) getPointForCoordinates:(CLLocationCoordinate2D) location;
 - (NSDictionary *) getCoordinatesForPoint:(CGPoint) point;
 @end

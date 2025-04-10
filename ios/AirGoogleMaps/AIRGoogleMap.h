@@ -16,7 +16,13 @@
 
 #import "AIRGoogleMapCoordinate.h"
 
-@interface AIRGoogleMap : GMSMapView
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
+#else
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
+#endif
+
+@interface AIRGoogleMap : GMSMapView<RNMapsAirModuleDelegate>
 
 // TODO: don't use MK region?
 @property (nonatomic, weak) RCTBridge *bridge;
@@ -78,7 +84,7 @@
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
 - (void)didTapPOIWithPlaceID:(NSString *)placeID name:(NSString *) name location:(CLLocationCoordinate2D) location;
-- (NSArray *)getMapBoundaries;
+- (NSDictionary *)getMapBoundaries;
 
 + (MKCoordinateRegion)makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position;
 + (GMSCameraPosition*)makeGMSCameraPositionFromMap:(GMSMapView *)map andMKCoordinateRegion:(MKCoordinateRegion)region;

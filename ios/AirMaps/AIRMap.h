@@ -77,7 +77,7 @@ extern const NSInteger AIRMapMaxZoomLevel;
 - (void)beginLoading;
 - (void)finishLoading;
 - (double)getZoomLevel;
-- (NSArray *)getMapBoundaries;
+- (NSDictionary *)getMapBoundaries;
 
 - (AIRMapMarker*) markerAtPoint:(CGPoint)point;
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
