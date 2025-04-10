@@ -313,7 +313,6 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         }
 
         view.applyBaseMapPadding(left, top, right, bottom);
-        view.map.setPadding(left, top, right, bottom);
     }
 
     @Override

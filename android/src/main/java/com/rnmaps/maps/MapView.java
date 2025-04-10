@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
+
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -194,15 +195,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
 
-@Override
-public void onCreate(LifecycleOwner owner) {
-    super.onCreate(null);
-}
+    @Override
+    public void onCreate(LifecycleOwner owner) {
+        super.onCreate(null);
+    }
 
     @Override
     public void onStart(LifecycleOwner owner) {
         super.onStart();
     }
+
     @Override
     public void onResume(LifecycleOwner owner) {
         if (hasPermissions() && map != null) {
@@ -220,7 +222,7 @@ public void onCreate(LifecycleOwner owner) {
 
 
     @Override
-    public void onPause(LifecycleOwner owner){
+    public void onPause(LifecycleOwner owner) {
         super.onPause();
         if (hasPermissions() && map != null) {
             //noinspection MissingPermission
@@ -240,7 +242,7 @@ public void onCreate(LifecycleOwner owner) {
     }
 
     @Override
-    public void onDestroy(LifecycleOwner owner){
+    public void onDestroy(LifecycleOwner owner) {
         MapView.this.doDestroy();
     }
 
@@ -250,7 +252,7 @@ public void onCreate(LifecycleOwner owner) {
         this.context = context;
         Activity activity = context.getCurrentActivity();
         if (activity instanceof LifecycleOwner) {
-          ((LifecycleOwner) activity).getLifecycle().addObserver(this);
+            ((LifecycleOwner) activity).getLifecycle().addObserver(this);
         }
         super.getMapAsync(this);
 
@@ -324,7 +326,7 @@ public void onCreate(LifecycleOwner owner) {
         }
         if (addedPosition) {
 
-           LatLngBounds bounds = builder.build();
+            LatLngBounds bounds = builder.build();
             LatLng northEast = bounds.northeast;
             LatLng southWest = bounds.southwest;
 
@@ -338,7 +340,7 @@ public void onCreate(LifecycleOwner owner) {
 
     public void setShowsTraffic(boolean value) {
         showsTraffic = value;
-        if (map != null){
+        if (map != null) {
             map.setTrafficEnabled(value);
         }
     }
@@ -554,8 +556,8 @@ public void onCreate(LifecycleOwner owner) {
                 event.putString("action", "overlay-press");
 
                 dispatchEvent(event, OnPressEvent::new);
-                event =  makeClickEventData(groundOverlay.getPosition());
-                dispatchEvent(event, OnPressEvent::new,overlayMap.get(groundOverlay).getId(), context);
+                event = makeClickEventData(groundOverlay.getPosition());
+                dispatchEvent(event, OnPressEvent::new, overlayMap.get(groundOverlay).getId(), context);
             }
         });
 
@@ -599,7 +601,7 @@ public void onCreate(LifecycleOwner owner) {
 
 
         isMapReady = true;
-        if (kmlSrc != null){
+        if (kmlSrc != null) {
             setKmlSrc(kmlSrc);
             kmlSrc = null;
         }
@@ -651,7 +653,8 @@ public void onCreate(LifecycleOwner owner) {
         builder.put(OnLongPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnLongPressEvent.EVENT_NAME));
         return builder.build();
     }
-//                 , ,
+
+    //                 , ,
     public static Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
         builder.put(OnMarkerPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerPressEvent.EVENT_NAME));
@@ -735,6 +738,13 @@ public void onCreate(LifecycleOwner owner) {
             map.setMapStyle(new MapStyleOptions(customMapStyleString));
         }
         this.setPoiClickEnabled(poiClickEnabled);
+        if (setPaddingDeferred &&
+                (baseLeftMapPadding != 0 ||
+                        baseTopMapPadding != 0 ||
+                        baseRightMapPadding != 0 ||
+                        baseBottomMapPadding != 0)) {
+            applyBaseMapPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+        }
     }
 
     public static LatLngBounds latLngBoundsFromRegion(ReadableMap region) {
@@ -1219,6 +1229,7 @@ public void onCreate(LifecycleOwner owner) {
             cameraToSet = null;
         }
     }
+
     public void animateToCamera(CameraPosition position, int duration) {
         if (map == null) return;
         CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
@@ -1263,16 +1274,16 @@ public void onCreate(LifecycleOwner owner) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         boolean addedPosition = false;
-       if (features.size() > 0) {
-           for (MapFeature feature : features) {
-               if (feature instanceof MapMarker) {
-                   Marker marker = (Marker) feature.getFeature();
-                   builder.include(marker.getPosition());
-                   addedPosition = true;
-               }
-               // TODO(lmr): may want to include shapes / etc.
-           }
-       }
+        if (features.size() > 0) {
+            for (MapFeature feature : features) {
+                if (feature instanceof MapMarker) {
+                    Marker marker = (Marker) feature.getFeature();
+                    builder.include(marker.getPosition());
+                    addedPosition = true;
+                }
+                // TODO(lmr): may want to include shapes / etc.
+            }
+        }
         if (addedPosition) {
             LatLngBounds bounds = builder.build();
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
@@ -1379,6 +1390,7 @@ public void onCreate(LifecycleOwner owner) {
 
         // Move the google logo to the default base padding value.
         map.setPadding(left, top, right, bottom);
+        setPaddingDeferred = false;
     }
 
     public void fitToCoordinates(ReadableArray coordinatesArray, ReadableMap edgePadding,
@@ -1728,7 +1740,7 @@ public void onCreate(LifecycleOwner owner) {
                 e.printStackTrace();
             }
         } else {
-           this.kmlSrc = kmlSrc;
+            this.kmlSrc = kmlSrc;
         }
     }
 
