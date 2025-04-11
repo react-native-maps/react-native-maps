@@ -135,7 +135,7 @@ export type GeojsonProps = {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  markerComponent?: MarkerProps['children'];
+  renderMarkerComponent?: (overlay:AnyPointOverlay) => MarkerProps['children'];
 
   /**
    * The limiting value that helps avoid spikes at junctions between connected line segments.
@@ -235,7 +235,7 @@ const Geojson = (props: GeojsonProps) => {
     miterLimit,
     lineDashPhase,
     lineDashPattern,
-    markerComponent,
+    renderMarkerComponent,
   } = props;
   const pointOverlays = makePointOverlays(geojson.features);
   const lineOverlays = makeLineOverlays(geojson.features);
@@ -258,7 +258,7 @@ const Geojson = (props: GeojsonProps) => {
             anchor={anchor}
             centerOffset={centerOffset}
             onPress={() => onPress && onPress(overlay)}>
-            {markerComponent}
+            {renderMarkerComponent?.(overlay)}
           </Marker>
         );
       })}
