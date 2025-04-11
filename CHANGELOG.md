@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0-alpha.146](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.145...v1.21.0-alpha.146) (2025-04-11)
+
+
+### Bug Fixes
+
+* **ios:** fabric framework build works ([e8f7174](https://github.com/react-native-maps/react-native-maps/commit/e8f71749e268476d2e4c9bb0a7163cb811926082))
+
 # [1.21.0-alpha.145](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.144...v1.21.0-alpha.145) (2025-04-11)
 
 
