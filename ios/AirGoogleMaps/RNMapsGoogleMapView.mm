@@ -52,7 +52,7 @@ using namespace facebook::react;
 
 
 - (id<RNMapsAirModuleDelegate>) mapView {
-    return _view;
+    return (id<RNMapsAirModuleDelegate>)_view;
 }
 
 #pragma mark - JS Commands

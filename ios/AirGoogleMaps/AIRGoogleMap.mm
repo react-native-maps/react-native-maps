@@ -50,8 +50,12 @@ id regionAsJSON(MKCoordinateRegion region) {
            @"longitudeDelta": [NSNumber numberWithDouble:region.span.longitudeDelta],
            };
 }
-
-@interface AIRGoogleMap () <GMSIndoorDisplayDelegate>
+#if __has_include(<ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMapsGenerated/RNMapsAirModuleDelegate.h>
+#else
+#import <react-native-maps-generated/RNMapsAirModuleDelegate.h>
+#endif
+@interface AIRGoogleMap () <GMSIndoorDisplayDelegate, RNMapsAirModuleDelegate>
 
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate;
 

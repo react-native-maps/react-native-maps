@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
     "ios/generated/RCTModulesConformingToProtocolsProvider.h",
     "ios/generated/RCTModulesConformingToProtocolsProvider.mm",
   ]
+  s.module_map = 'ios/generated/module.modulemap'
   s.public_header_files = "ios/generated/**/*.h"
   s.module_name = 'ReactNativeMapsGenerated'
   s.compiler_flags = folly_compiler_flags

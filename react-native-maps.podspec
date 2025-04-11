@@ -32,15 +32,22 @@ Pod::Spec.new do |s|
           :script => %(
             set -x
             echo "Running Google Maps detection script..."
-            GOOGLE_MAPS_HEADER_PATH="$PODS_ROOT/Headers/Public/react-native-google-maps/AIRGoogleMap.h"
             DEFINES_DIR="${PODS_TARGET_SRCROOT}/ios/AirMaps"
             DEFINES_FILE="${DEFINES_DIR}/RNMapsDefines.h"
 
-            echo "GOOGLE_MAPS_HEADER_PATH=$GOOGLE_MAPS_HEADER_PATH"
-            echo "DEFINES_FILE=$DEFINES_FILE"
+            # Standard path
+            GOOGLE_MAPS_STANDARD_PATH="$PODS_ROOT/Headers/Public/react-native-google-maps/AIRGoogleMap.h"
 
-            # Check if Google Maps is available and write to the defines file
-            if [ -f "$GOOGLE_MAPS_HEADER_PATH" ]; then
+            # Framework paths
+            GOOGLE_MAPS_FRAMEWORK_MODULE="$PODS_ROOT/Target Support Files/react-native-google-maps/react-native-google-maps.modulemap"
+            GOOGLE_MAPS_UMBRELLA_HEADER="$PODS_ROOT/Target Support Files/react-native-google-maps/react-native-google-maps-umbrella.h"
+
+            echo "Checking standard path: $GOOGLE_MAPS_STANDARD_PATH"
+            echo "Checking framework module path: $GOOGLE_MAPS_FRAMEWORK_MODULE"
+            echo "Checking umbrella header path: $GOOGLE_MAPS_UMBRELLA_HEADER"
+
+            # Check if Google Maps is available via any detection method
+            if [ -f "$GOOGLE_MAPS_STANDARD_PATH" ] || [ -f "$GOOGLE_MAPS_FRAMEWORK_MODULE" ] || [ -f "$GOOGLE_MAPS_UMBRELLA_HEADER" ]; then
               echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
               echo "Google Maps detected. HAVE_GOOGLE_MAPS defined."
             else

@@ -272,10 +272,9 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRGoogleMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            AIRGoogleMap *mapView = (AIRGoogleMap *)view;
             NSMutableDictionary* config = [NSMutableDictionary new];
             
-            [mapView takeSnapshotWithConfig:config success:callback error:^(NSString *code, NSString *message, NSError *error) {
+            [view takeSnapshotWithConfig:config success:callback error:^(NSString *code, NSString *message, NSError *error) {
                 callback(@[error]);
             }];
             
@@ -287,6 +286,9 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
             [config setObject:filePath forKey:@"filePath"];
             
             // TODO: currently we are ignoring width, height, region
+            
+            AIRGoogleMap* mapView = (AIRGoogleMap *) view;
+
             
             UIGraphicsBeginImageContextWithOptions(mapView.frame.size, YES, 0.0f);
             [mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -329,7 +331,7 @@ RCT_EXPORT_METHOD(pointForCoordinate:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRGoogleMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            AIRGoogleMap *mapView = (AIRGoogleMap *)view;
+            id<RNMapsAirModuleDelegate> mapView = (id<RNMapsAirModuleDelegate>) view;
             resolve([mapView getPointForCoordinates:coord]);
         }
     }];
