@@ -86,6 +86,7 @@ class DisplayLatLng extends React.Component<any, any> {
       <SafeAreaView style={styles.container}>
         <MapView
           provider={this.props.provider}
+          rotateEnabled={false}
           ref={ref => {
             this.map = ref;
           }}

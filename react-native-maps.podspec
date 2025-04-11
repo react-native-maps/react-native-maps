@@ -23,7 +23,6 @@ Pod::Spec.new do |s|
   s.module_name = 'ReactNativeMaps'
   s.compiler_flags = folly_compiler_flags
   s.dependency 'react-native-maps-generated'
-  s.dependency "React-Core"
   install_modules_dependencies(s)
 
      # Add script phase to detect Google Maps
@@ -61,11 +60,5 @@ Pod::Spec.new do |s|
       }
   ]
 
-  s.pod_target_xcconfig = {
-    'HEADER_SEARCH_PATHS' => [
-      '$(PODS_ROOT)/Headers/Public/React-Core',
-      '$(PODS_TARGET_SRCROOT)/../../../node_modules/react-native/React'
-    ]
-  }
 
 end
