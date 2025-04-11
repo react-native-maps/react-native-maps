@@ -62,7 +62,7 @@
 {
     _urlTemplate = urlTemplate;
     WMSTileOverlay *tile = [[WMSTileOverlay alloc] init];
-    [tile setTemplate:urlTemplate];
+    [tile setUrlTemplate:urlTemplate];
     [tile setMaximumZ:  _maximumZ];
     [tile setMinimumZ: _minimumZ];
     [tile setOpacity: _opacity];
@@ -91,9 +91,9 @@
                        [NSNumber numberWithDouble:_MapX + (double)(x+1) * tile ],
                        [NSNumber numberWithDouble:_MapY - (double)y * tile ],
                        nil];
-    
+
     return result;
-    
+
 }
 
 - (UIImage *)tileForX:(NSUInteger)x y:(NSUInteger)y zoom:(NSUInteger)zoom
@@ -107,7 +107,7 @@
         return nil;
     }
     NSArray *bb = [self getBoundBox:x yAxis:y zoom:zoom];
-    NSMutableString *url = [self.template mutableCopy];
+    NSMutableString *url = [self.urlTemplate mutableCopy];
     [url replaceOccurrencesOfString: @"{minX}" withString:[NSString stringWithFormat:@"%@", bb[0]] options:0 range:NSMakeRange(0, url.length)];
     [url replaceOccurrencesOfString: @"{minY}" withString:[NSString stringWithFormat:@"%@", bb[1]] options:0 range:NSMakeRange(0, url.length)];
     [url replaceOccurrencesOfString: @"{maxX}" withString:[NSString stringWithFormat:@"%@", bb[2]] options:0 range:NSMakeRange(0, url.length)];

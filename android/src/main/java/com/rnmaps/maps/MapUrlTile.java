@@ -18,14 +18,14 @@ public class MapUrlTile extends MapFeature {
 
   protected String urlTemplate;
   protected float zIndex;
-  protected float maximumZ;
-  protected float maximumNativeZ = 100;
-  protected float minimumZ;
+  protected int maximumZ;
+  protected int maximumNativeZ = 100;
+  protected int minimumZ;
   protected boolean flipY = false;
-  protected float tileSize = 256;
+  protected int tileSize = 256;
   protected boolean doubleTileSize = false;
   protected String tileCachePath;
-  protected float tileCacheMaxAge;
+  protected int tileCacheMaxAge;
   protected boolean offlineMode = false;
   protected float opacity = 1;
   protected Context context;
@@ -53,20 +53,20 @@ public class MapUrlTile extends MapFeature {
     }
   }
 
-  public void setMaximumZ(float maximumZ) {
+  public void setMaximumZ(int maximumZ) {
     this.maximumZ = maximumZ;
     if (tileProvider != null) {
-      tileProvider.setMaximumZ((int)maximumZ);
+      tileProvider.setMaximumZ(maximumZ);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
     }
   }
 
-  public void setMaximumNativeZ(float maximumNativeZ) {
+  public void setMaximumNativeZ(int maximumNativeZ) {
     this.maximumNativeZ = maximumNativeZ;
     if (tileProvider != null) {
-      tileProvider.setMaximumNativeZ((int)maximumNativeZ);
+      tileProvider.setMaximumNativeZ(maximumNativeZ);
     }
     setCustomTileProviderMode();
     if (tileOverlay != null) {
@@ -74,10 +74,10 @@ public class MapUrlTile extends MapFeature {
     }
   }
 
-  public void setMinimumZ(float minimumZ) {
+  public void setMinimumZ(int minimumZ) {
     this.minimumZ = minimumZ;
     if (tileProvider != null) {
-      tileProvider.setMinimumZ((int)minimumZ);
+      tileProvider.setMinimumZ(minimumZ);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
@@ -105,10 +105,10 @@ public class MapUrlTile extends MapFeature {
     }
   }
 
-  public void setTileSize(float tileSize) {
+  public void setTileSize(int tileSize) {
     this.tileSize = tileSize;
     if (tileProvider != null) {
-      tileProvider.setTileSize((int)tileSize);
+      tileProvider.setTileSize(tileSize);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
@@ -136,10 +136,10 @@ public class MapUrlTile extends MapFeature {
     }
   }
 
-  public void setTileCacheMaxAge(float tileCacheMaxAge) {
+  public void setTileCacheMaxAge(int tileCacheMaxAge) {
     this.tileCacheMaxAge = tileCacheMaxAge;
     if (tileProvider != null) {
-      tileProvider.setTileCacheMaxAge((int)tileCacheMaxAge);
+      tileProvider.setTileCacheMaxAge(tileCacheMaxAge);
     }
     if (tileOverlay != null) {
       tileOverlay.clearTileCache();
@@ -176,7 +176,7 @@ public class MapUrlTile extends MapFeature {
     if (tileProvider != null) {
       tileProvider.setCustomMode();
     }
-  } 
+  }
 
   protected TileOverlayOptions createTileOverlayOptions() {
     Log.d("urlTile ", "creating TileProvider");
@@ -184,8 +184,8 @@ public class MapUrlTile extends MapFeature {
     options.zIndex(zIndex);
     options.transparency(1 - this.opacity);
     this.tileProvider = new MapTileProvider((int)this.tileSize, this.doubleTileSize, this.urlTemplate,
-      (int)this.maximumZ, (int)this.maximumNativeZ, (int)this.minimumZ, this.flipY, this.tileCachePath, 
-      (int)this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded);
+      this.maximumZ, this.maximumNativeZ, this.minimumZ, this.flipY, this.tileCachePath,
+      this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded);
     options.tileProvider(this.tileProvider);
     return options;
   }

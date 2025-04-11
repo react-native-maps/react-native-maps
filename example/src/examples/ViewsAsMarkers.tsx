@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  StyleSheet,
-  View,
-  Text,
   Dimensions,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import PriceMarker from './PriceMarker';
@@ -18,6 +18,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class ViewsAsMarkers extends React.Component<any, any> {
+  map: any;
   constructor(props: any) {
     super(props);
 
