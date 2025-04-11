@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.21.0](https://github.com/react-native-maps/react-native-maps/compare/v1.20.1...v1.21.0) (2025-04-11)
+
+
+### Features
+
+* major release for react-native-maps (Fabric Support !) ([cbb3170](https://github.com/react-native-maps/react-native-maps/commit/cbb3170804d09f06b83ef7d6ea70c85760368b4b))
+
 # [1.21.0-alpha.146](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.145...v1.21.0-alpha.146) (2025-04-11)
 
 
