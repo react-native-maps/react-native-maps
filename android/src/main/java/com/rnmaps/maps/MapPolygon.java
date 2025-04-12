@@ -1,9 +1,16 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
+import android.graphics.Color;
 
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.events.Event;
+import com.facebook.react.uimanager.events.EventDispatcher;
 import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
@@ -11,9 +18,11 @@ import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.collections.PolygonManager;
+import com.rnmaps.fabric.event.OnPressEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MapPolygon extends MapFeature {
 
@@ -33,7 +42,28 @@ public class MapPolygon extends MapFeature {
 
   public MapPolygon(Context context) {
     super(context);
+    strokeWidth = 10;
   }
+
+    public static Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
+      MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
+      builder.put(OnPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPressEvent.EVENT_NAME));
+      return builder.build();
+    }
+
+  public  <T extends Event> void dispatchEvent(WritableMap payload, MapView.EventCreator<T> creator, ReactContext reactContext) {
+
+    // Get the event dispatcher
+    EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, getId());
+
+    // If there is a dispatcher, create and dispatch the event
+    if (eventDispatcher != null) {
+      int surfaceId = UIManagerHelper.getSurfaceId(reactContext);
+      T event = creator.create(surfaceId, getId(), payload);
+      eventDispatcher.dispatchEvent(event);
+    }
+  }
+
 
   public void setCoordinates(ReadableArray coordinates) {
     // it's kind of a bummer that we can't run map() or anything on the ReadableArray
@@ -164,6 +194,7 @@ public class MapPolygon extends MapFeature {
     options.geodesic(geodesic);
     options.zIndex(zIndex);
     options.strokePattern(this.pattern);
+    options.clickable(this.tappable);
 
     if (this.holes != null) {
       for (int i = 0; i < holes.size(); i++) {
@@ -183,7 +214,6 @@ public class MapPolygon extends MapFeature {
   public void addToMap(Object collection) {
     PolygonManager.Collection polygonCollection = (PolygonManager.Collection) collection;
     polygon = polygonCollection.addPolygon(getPolygonOptions());
-    polygon.setClickable(this.tappable);
   }
 
   @Override

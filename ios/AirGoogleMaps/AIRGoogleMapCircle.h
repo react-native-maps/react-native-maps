@@ -7,7 +7,6 @@
 #ifdef HAVE_GOOGLE_MAPS
 
 #import <GoogleMaps/GoogleMaps.h>
-#import "AIRMapCoordinate.h"
 
 @interface AIRGoogleMapCircle : UIView
 

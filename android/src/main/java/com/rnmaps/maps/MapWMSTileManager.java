@@ -39,23 +39,23 @@ public class MapWMSTileManager extends ViewGroupManager<MapWMSTile> {
     view.setZIndex(zIndex);
   }
 
-  @ReactProp(name = "minimumZ", defaultFloat = 0.0f)
-  public void setMinimumZ(MapWMSTile view, float minimumZ) {
+  @ReactProp(name = "minimumZ", defaultInt = 0)
+  public void setMinimumZ(MapWMSTile view, int minimumZ) {
     view.setMinimumZ(minimumZ);
   }
 
-  @ReactProp(name = "maximumZ", defaultFloat = 100.0f)
-  public void setMaximumZ(MapWMSTile view, float maximumZ) {
+  @ReactProp(name = "maximumZ", defaultInt = 100)
+  public void setMaximumZ(MapWMSTile view, int maximumZ) {
     view.setMaximumZ(maximumZ);
   }
 
-  @ReactProp(name = "maximumNativeZ", defaultFloat = 100.0f)
-  public void setMaximumNativeZ(MapWMSTile view, float maximumNativeZ) {
+  @ReactProp(name = "maximumNativeZ", defaultInt= 100)
+  public void setMaximumNativeZ(MapWMSTile view, int maximumNativeZ) {
     view.setMaximumNativeZ(maximumNativeZ);
   }
 
-  @ReactProp(name = "tileSize", defaultFloat = 256.0f)
-  public void setTileSize(MapWMSTile view, float tileSize) {
+  @ReactProp(name = "tileSize", defaultInt = 256)
+  public void setTileSize(MapWMSTile view, int tileSize) {
     view.setTileSize(tileSize);
   }
 
@@ -64,8 +64,8 @@ public class MapWMSTileManager extends ViewGroupManager<MapWMSTile> {
     view.setTileCachePath(tileCachePath);
   }
 
-  @ReactProp(name = "tileCacheMaxAge", defaultFloat = 0.0f)
-  public void setTileCacheMaxAge(MapWMSTile view, float tileCacheMaxAge) {
+  @ReactProp(name = "tileCacheMaxAge", defaultInt = 0)
+  public void setTileCacheMaxAge(MapWMSTile view, int tileCacheMaxAge) {
     view.setTileCacheMaxAge(tileCacheMaxAge);
   }
 

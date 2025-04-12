@@ -1,0 +1,6 @@
+framework module ReactNativeMaps {
+  header "UIView+AirMap.h"
+  header "RCTConvert+AirMap.h"
+
+  export *
+}

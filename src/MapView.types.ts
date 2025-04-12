@@ -66,7 +66,7 @@ export type ActiveIndoorLevel = {
 };
 
 export type IndoorLevelActivatedEvent = NativeSyntheticEvent<{
-  IndoorLevel: ActiveIndoorLevel;
+  indoorLevel: ActiveIndoorLevel;
 }>;
 
 export type IndoorBuilding = {

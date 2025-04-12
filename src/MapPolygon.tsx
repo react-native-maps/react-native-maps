@@ -145,11 +145,12 @@ export type MapPolygonProps = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = MapPolygonProps & {ref: React.RefObject<View>};
+type NativeProps = MapPolygonProps & {ref: React.RefObject<View | null>};
 
 export class MapPolygon extends React.Component<MapPolygonProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
