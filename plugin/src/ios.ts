@@ -97,13 +97,14 @@ export function addMapsCocoapods(
   src: string,
   useGoogleMaps: boolean,
 ): MergeResults {
-  let newSrc = `  rn_maps_path = File.dirname(\`node --print "require.resolve('react-native-maps/package.json')"\`) \n`;
+  let newSrc =
+    '  rn_maps_path = File.dirname(`node --print "require.resolve(\'react-native-maps/package.json\')"`) \n';
 
   if (useGoogleMaps) {
-    newSrc += `  pod 'react-native-google-maps', :path => rn_maps_path \n`;
+    newSrc += "  pod 'react-native-google-maps', :path => rn_maps_path \n";
   }
 
-  newSrc += `  pod 'react-native-maps-generated', :path => rn_maps_path \n`;
+  newSrc += "  pod 'react-native-maps-generated', :path => rn_maps_path \n";
 
   return mergeContents({
     tag: 'react-native-maps',
@@ -119,25 +120,25 @@ const withMapsCocoaPods: ConfigPlugin<{useGoogleMaps: boolean}> = (
   config,
   {useGoogleMaps},
 ) => {
-  return withPodfile(config, async config => {
+  return withPodfile(config, async conf => {
     let results: MergeResults;
 
     try {
-      results = addMapsCocoapods(config.modResults.contents, useGoogleMaps);
+      results = addMapsCocoapods(conf.modResults.contents, useGoogleMaps);
     } catch (error: any) {
       if (error.code === 'ERR_NO_MATCH') {
         throw new Error(
-          `Cannot add react-native-maps to the project's ios/Podfile because it's malformed. Please report this with a copy of your project Podfile.`,
+          "Cannot add react-native-maps to the project's ios/Podfile because it's malformed. Please report this with a copy of your project Podfile.",
         );
       }
       throw error;
     }
 
     if (results.didMerge || results.didClear) {
-      config.modResults.contents = results.contents;
+      conf.modResults.contents = results.contents;
     }
 
-    return config;
+    return conf;
   });
 };
 
@@ -145,39 +146,39 @@ const withGoogleMapsAppDelegate: ConfigPlugin<{apiKey: string | null}> = (
   config,
   {apiKey},
 ) => {
-  return withAppDelegate(config, config => {
+  return withAppDelegate(config, conf => {
     if (!apiKey) {
-      config.modResults.contents = removeGoogleMapsAppDelegateImport(
-        config.modResults.contents,
+      conf.modResults.contents = removeGoogleMapsAppDelegateImport(
+        conf.modResults.contents,
       ).contents;
-      config.modResults.contents = removeGoogleMapsAppDelegateInit(
-        config.modResults.contents,
+      conf.modResults.contents = removeGoogleMapsAppDelegateInit(
+        conf.modResults.contents,
       ).contents;
-      return config;
+      return conf;
     }
 
-    if (config.modResults.language !== 'swift') {
+    if (conf.modResults.language !== 'swift') {
       throw new Error(
-        `Cannot setup Google Maps because the project AppDelegate is not a supported language: ${config.modResults.language}`,
+        `Cannot setup Google Maps because the project AppDelegate is not a supported language: ${conf.modResults.language}`,
       );
     }
 
     try {
-      config.modResults.contents = addGoogleMapsAppDelegateImport(
-        config.modResults.contents,
+      conf.modResults.contents = addGoogleMapsAppDelegateImport(
+        conf.modResults.contents,
       ).contents;
-      config.modResults.contents = addGoogleMapsAppDelegateInit(
-        config.modResults.contents,
+      conf.modResults.contents = addGoogleMapsAppDelegateInit(
+        conf.modResults.contents,
         apiKey,
       ).contents;
     } catch (error: any) {
       if (error.code === 'ERR_NO_MATCH') {
         throw new Error(
-          `Cannot add Google Maps to the project's AppDelegate because it's malformed. Please report this with a copy of your project AppDelegate.`,
+          "Cannot add Google Maps to the project's AppDelegate because it's malformed. Please report this with a copy of your project AppDelegate.",
         );
       }
       throw error;
     }
-    return config;
+    return conf;
   });
 };
