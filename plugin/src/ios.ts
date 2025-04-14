@@ -21,23 +21,22 @@ export const MATCH_INIT =
 
 export const withMapsIOS: ConfigPlugin<ConfigPluginProps> = (config, props) => {
   // Set in Info.plist
-  if (props.iosGoogleMapsApiKey) {
+  if (props?.iosGoogleMapsApiKey) {
     config = withInfoPlist(config, async config => {
-      config.ios.infoPlist.GMSApiKey = props.iosGoogleMapsApiKey;
+      config.ios.infoPlist.GMSApiKey = props?.iosGoogleMapsApiKey;
       return config;
     });
   }
 
   // Technically adds react-native-maps (Apple maps) and google maps.
-
-  debug('Google Maps API Key:', props.iosGoogleMapsApiKey);
+  debug('Google Maps API Key:', props?.iosGoogleMapsApiKey);
   config = withMapsCocoaPods(config, {
-    useGoogleMaps: !!props.iosGoogleMapsApiKey,
+    useGoogleMaps: !!props?.iosGoogleMapsApiKey,
   });
 
   // Adds/Removes AppDelegate setup for Google Maps API on iOS
   config = withGoogleMapsAppDelegate(config, {
-    apiKey: props.iosGoogleMapsApiKey,
+    apiKey: props?.iosGoogleMapsApiKey,
   });
 
   return config;

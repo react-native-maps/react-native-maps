@@ -12,11 +12,11 @@ const withMapsAndroid: ConfigPlugin<ConfigPluginProps> = (config, props) => {
 
     const mainApplication = getMainApplicationOrThrow(manifest);
 
-    if (props.androidGoogleMapsApiKey) {
+    if (props?.androidGoogleMapsApiKey) {
       addMetaDataItemToMainApplication(
         mainApplication,
         'com.google.android.geo.API_KEY',
-        props.androidGoogleMapsApiKey,
+        props?.androidGoogleMapsApiKey,
       );
     } else {
       removeMetaDataItemFromMainApplication(

@@ -1,4 +1,4 @@
 export type ConfigPluginProps = {
-  iosGoogleMapsApiKey: string;
-  androidGoogleMapsApiKey: string;
+  iosGoogleMapsApiKey?: string;
+  androidGoogleMapsApiKey?: string;
 };
