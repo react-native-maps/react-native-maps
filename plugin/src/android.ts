@@ -7,8 +7,8 @@ import {
 } from '@expo/config-plugins/build/android/Manifest';
 
 const withMapsAndroid: ConfigPlugin<ConfigPluginProps> = (config, props) => {
-  config = withAndroidManifest(config, async config => {
-    const manifest = config.modResults;
+  config = withAndroidManifest(config, async conf => {
+    const manifest = conf.modResults;
 
     const mainApplication = getMainApplicationOrThrow(manifest);
 
@@ -25,7 +25,7 @@ const withMapsAndroid: ConfigPlugin<ConfigPluginProps> = (config, props) => {
       );
     }
 
-    return config;
+    return conf;
   });
 
   return config;

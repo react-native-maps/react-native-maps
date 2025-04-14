@@ -22,9 +22,9 @@ export const MATCH_INIT =
 export const withMapsIOS: ConfigPlugin<ConfigPluginProps> = (config, props) => {
   // Set in Info.plist
   if (props?.iosGoogleMapsApiKey) {
-    config = withInfoPlist(config, async config => {
-      config.ios.infoPlist.GMSApiKey = props?.iosGoogleMapsApiKey;
-      return config;
+    config = withInfoPlist(config, async conf => {
+      conf.ios.infoPlist.GMSApiKey = props?.iosGoogleMapsApiKey;
+      return conf;
     });
   }
 
