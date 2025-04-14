@@ -38,13 +38,15 @@ If you're using Google as the map provider, also provide an API key for the resp
 ```json
 {
   "expo": {
-    "plugins": [[
-      "react-native-maps", 
-      {
-        "iosGoogleMapsApiKey": "YOUR_KEY_HERE",
-        "androidGoogleMapsApiKey": "YOUR_KEY_HERE"
-      }
-    ]]
+    "plugins": [
+      [
+        "react-native-maps", 
+        {
+          "iosGoogleMapsApiKey": "YOUR_KEY_HERE",
+          "androidGoogleMapsApiKey": "YOUR_KEY_HERE"
+        }
+      ]
+    ]
   }
 }
 ```
