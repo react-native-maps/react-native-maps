@@ -18,6 +18,38 @@ When using Google Maps on iOS, you need also to obtain an [API key for the iOS S
 
 ---
 
+## Expo
+
+If you're using Expo, you can add react-native-maps to your project by adding it to the plugins array in your `app.json` or `app.config.js`:
+
+```json
+{
+  "expo": {
+    "plugins": ["react-native-maps"]
+  }
+}
+```
+
+If you're using Google as the map provider, also provide an API key for the respective platform:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "react-native-maps",
+        {
+          "iosGoogleMapsApiKey": "YOUR_KEY_HERE",
+          "androidGoogleMapsApiKey": "YOUR_KEY_HERE"
+        }
+      ]
+    ]
+  }
+}
+```
+
+## For bare workflow projects, you'll need to follow the iOS and Android setup instructions below.
+
 ## iOS
 
 After installing the npm package, we need to install the pod.
@@ -250,3 +282,5 @@ A list of the current dependencies can be found [here](https://developers.google
 - Make sure that your emulator has Google Play (Go to Android studio -> Virtual Devices -> Check that you have icon in "Play Store" column)
 - Click to bottom dots icon in the emulator
 - Go to Google Play Tab and click Update
+
+---

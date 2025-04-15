@@ -50,9 +50,11 @@ function getNativeComponentName(provider: Provider, component: ComponentName) {
   return `${getNativeMapName(provider)}${component}`;
 }
 
-export const createNotSupportedComponent = (message: string) => () => {
-  console.error(message);
-  return null;
+export const createNotSupportedComponent = (message: string): (() => null) => {
+  return () => {
+    console.error(message);
+    return null;
+  };
 };
 
 export const googleMapIsInstalled = !!UIManager.hasViewManagerConfig(
