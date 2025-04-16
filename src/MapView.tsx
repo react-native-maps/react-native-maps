@@ -752,13 +752,13 @@ class MapView extends React.Component<MapViewProps, State> {
   private map: NativeProps['ref'];
 
   private fabricMap =
-    React.createRef<FabricMapHandle | null>() as React.RefObject<FabricMapHandle>;
+    React.createRef<FabricMapHandle | null>() as React.RefObject<FabricMapHandle | null>;
 
   constructor(props: MapViewProps) {
     super(props);
 
     this.map = React.createRef<MapViewNativeComponentType>();
-    this.fabricMap = React.createRef<FabricMapHandle>();
+    this.fabricMap = React.createRef<FabricMapHandle | null>();
     this.state = {
       isReady: false,
     };
@@ -1113,6 +1113,12 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   };
 
+  private handleLongPress = (event: NativeSyntheticEvent<any>) => {
+    if (this.props.onLongPress) {
+      this.props.onLongPress(event);
+    }
+  };
+
   render() {
     // Define props specifically for MapFabricNativeProps
     /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -1164,6 +1170,7 @@ class MapView extends React.Component<MapViewProps, State> {
       onIndoorBuildingFocused: this.handleIndoorBuildingFocused,
       // @ts-ignore
       onIndoorLevelActivated: this.handleIndoorLevelActivated,
+      onLongPress: this.handleLongPress,
       ...restProps,
     };
     if (this.props.region) {
