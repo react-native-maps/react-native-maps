@@ -109,7 +109,6 @@ android {
 
     secrets {
         propertiesFileName = "secrets.properties"
-        defaultPropertiesFileName = "local.properties"
     }
 }
 
