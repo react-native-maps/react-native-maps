@@ -37,6 +37,8 @@ local.properties
 *.keystore
 !debug.keystore
 .kotlin/
+local.properties
+secrets.properties
 
 # node.js
 #
@@ -67,7 +69,8 @@ lib/
 
 example/vendor/bundle/
 
-example/ios/Config.xcconfig
+Config.xcconfig
+Secrets.xcconfig
 
 # Ruby / CocoaPods
 **/Pods/
