@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.22.1](https://github.com/react-native-maps/react-native-maps/compare/v1.22.0...v1.22.1) (2025-04-16)
+
+
+### Bug Fixes
+
+* Mapview - onLongPress & fabrice Type ([#5420](https://github.com/react-native-maps/react-native-maps/issues/5420)) ([de464a0](https://github.com/react-native-maps/react-native-maps/commit/de464a0915e84e2c6967f65185a073f060df9012))
+
+# [1.22.0](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0...v1.22.0) (2025-04-15)
+
+
+### Features
+
+* add Expo config plugin ([#5409](https://github.com/react-native-maps/react-native-maps/issues/5409)) ([5a93956](https://github.com/react-native-maps/react-native-maps/commit/5a939565c23ffa5f40b963b19e1a3f9631958756))
+
 # [1.21.0](https://github.com/react-native-maps/react-native-maps/compare/v1.20.1...v1.21.0) (2025-04-11)
 
 
