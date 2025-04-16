@@ -36,8 +36,8 @@ jobs:
       - name: Install dependencies
         run: yarn --cwd example --frozen-lockfile
 
-      - name: Write local.properties
-        run: echo MAPS_API_KEY=your_api_key_here >> example/android/local.properties
+      - name: Write secrets.properties
+        run: echo MAPS_API_KEY=your_api_key_here >> example/android/secrets.properties
 
       - name: Build Android
         run: cd example/android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug
