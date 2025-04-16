@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09623F4370FE740E5493A779 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		4E6BA9AE2D97471D00E8205D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BA9AC2D97471D00E8205D /* AppDelegate.mm */; };
-		4E6BA9AF2D97471D00E8205D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BA9AD2D97471D00E8205D /* main.m */; };
+		1C1DA0B32D71CB7800166A6D /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1C1DA0B12D71CB7800166A6D /* Debug.xcconfig */; };
+		1C1DA0B42D71CB7800166A6D /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1C1DA0B22D71CB7800166A6D /* Release.xcconfig */; };
+		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		AAA66AC4A1AC3A251109DCFE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
-		F7ACC4A4599BFC520463EB30 /* Pods_rnmshowcase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F6F82F9523BFC3C42C3A250 /* Pods_rnmshowcase.framework */; };
+		81C39D5210BBDE3EEB7DBF37 /* libPods-rnmshowcase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 986E1ECE0B6D062E2412352D /* libPods-rnmshowcase.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,13 +21,14 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rnmshowcase/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = rnmshowcase/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = rnmshowcase/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		4E6BA9AB2D97471D00E8205D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = rnmshowcase/AppDelegate.h; sourceTree = "<group>"; };
-		4E6BA9AC2D97471D00E8205D /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = rnmshowcase/AppDelegate.mm; sourceTree = "<group>"; };
-		4E6BA9AD2D97471D00E8205D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = rnmshowcase/main.m; sourceTree = "<group>"; };
-		7F6F82F9523BFC3C42C3A250 /* Pods_rnmshowcase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rnmshowcase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C1DA0B02D71CB6C00166A6D /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		1C1DA0B12D71CB7800166A6D /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = rnmshowcase/Debug.xcconfig; sourceTree = "<group>"; };
+		1C1DA0B22D71CB7800166A6D /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = rnmshowcase/Release.xcconfig; sourceTree = "<group>"; };
+		3B4392A12AC88292D35C810B /* Pods-rnmshowcase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rnmshowcase.debug.xcconfig"; path = "Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase.debug.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-rnmshowcase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rnmshowcase.release.xcconfig"; path = "Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase.release.xcconfig"; sourceTree = "<group>"; };
+		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = rnmshowcase/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = rnmshowcase/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		ABB867FE81AF4A19E21BB186 /* Pods-rnmshowcase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rnmshowcase.release.xcconfig"; path = "Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase.release.xcconfig"; sourceTree = "<group>"; };
-		AD9BBFB86649B8C8747389A3 /* Pods-rnmshowcase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rnmshowcase.debug.xcconfig"; path = "Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase.debug.xcconfig"; sourceTree = "<group>"; };
+		986E1ECE0B6D062E2412352D /* libPods-rnmshowcase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rnmshowcase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -35,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7ACC4A4599BFC520463EB30 /* Pods_rnmshowcase.framework in Frameworks */,
+				81C39D5210BBDE3EEB7DBF37 /* libPods-rnmshowcase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,10 +47,10 @@
 		13B07FAE1A68108700A75B9A /* rnmshowcase */ = {
 			isa = PBXGroup;
 			children = (
-				4E6BA9AB2D97471D00E8205D /* AppDelegate.h */,
-				4E6BA9AC2D97471D00E8205D /* AppDelegate.mm */,
-				4E6BA9AD2D97471D00E8205D /* main.m */,
+				1C1DA0B12D71CB7800166A6D /* Debug.xcconfig */,
+				1C1DA0B22D71CB7800166A6D /* Release.xcconfig */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
@@ -60,7 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				7F6F82F9523BFC3C42C3A250 /* Pods_rnmshowcase.framework */,
+				986E1ECE0B6D062E2412352D /* libPods-rnmshowcase.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -80,6 +82,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				1C1DA0B02D71CB6C00166A6D /* Secrets.xcconfig */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -97,8 +100,8 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AD9BBFB86649B8C8747389A3 /* Pods-rnmshowcase.debug.xcconfig */,
-				ABB867FE81AF4A19E21BB186 /* Pods-rnmshowcase.release.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-rnmshowcase.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-rnmshowcase.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -110,13 +113,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "rnmshowcase" */;
 			buildPhases = (
-				561E52823DCF04639F795534 /* [CP] Check Pods Manifest.lock */,
+				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				62BD9FF9D1A621565B9449A4 /* [CP] Embed Pods Frameworks */,
-				5223ADB3F9600DBADDB38252 /* [CP] Copy Pods Resources */,
+				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
+				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -163,9 +166,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C1DA0B32D71CB7800166A6D /* Debug.xcconfig in Resources */,
+				1C1DA0B42D71CB7800166A6D /* Release.xcconfig in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				AAA66AC4A1AC3A251109DCFE /* PrivacyInfo.xcprivacy in Resources */,
+				09623F4370FE740E5493A779 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,24 +193,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		5223ADB3F9600DBADDB38252 /* [CP] Copy Pods Resources */ = {
+		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		561E52823DCF04639F795534 /* [CP] Check Pods Manifest.lock */ = {
+		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -227,21 +232,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		62BD9FF9D1A621565B9449A4 /* [CP] Embed Pods Frameworks */ = {
+		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rnmshowcase/Pods-rnmshowcase-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -251,8 +256,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E6BA9AE2D97471D00E8205D /* AppDelegate.mm in Sources */,
-				4E6BA9AF2D97471D00E8205D /* main.m in Sources */,
+				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,82 +265,12 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD9BBFB86649B8C8747389A3 /* Pods-rnmshowcase.debug.xcconfig */;
+			baseConfigurationReference = 1C1DA0B12D71CB7800166A6D /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9QXDAES5A8;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/DoubleConversion\"",
-					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
-					"\"${PODS_ROOT}/Headers/Public/Google-Maps-iOS-Utils\"",
-					"\"${PODS_ROOT}/Headers/Public/GoogleMaps\"",
-					"\"${PODS_ROOT}/Headers/Public/RCT-Folly\"",
-					"\"${PODS_ROOT}/Headers/Public/RCTDeprecation\"",
-					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
-					"\"${PODS_ROOT}/Headers/Public/RCTTypeSafety\"",
-					"\"${PODS_ROOT}/Headers/Public/React-Core\"",
-					"\"${PODS_ROOT}/Headers/Public/React-Fabric\"",
-					"\"${PODS_ROOT}/Headers/Public/React-FabricComponents\"",
-					"\"${PODS_ROOT}/Headers/Public/React-FabricImage\"",
-					"\"${PODS_ROOT}/Headers/Public/React-ImageManager\"",
-					"\"${PODS_ROOT}/Headers/Public/React-Mapbuffer\"",
-					"\"${PODS_ROOT}/Headers/Public/React-NativeModulesApple\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTAnimation\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTAppDelegate\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTBlob\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTFabric\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTText\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RuntimeApple\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RuntimeCore\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RuntimeHermes\"",
-					"\"${PODS_ROOT}/Headers/Public/React-callinvoker\"",
-					"\"${PODS_ROOT}/Headers/Public/React-cxxreact\"",
-					"\"${PODS_ROOT}/Headers/Public/React-debug\"",
-					"\"${PODS_ROOT}/Headers/Public/React-defaultsnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-domnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-featureflags\"",
-					"\"${PODS_ROOT}/Headers/Public/React-featureflagsnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-graphics\"",
-					"\"${PODS_ROOT}/Headers/Public/React-hermes\"",
-					"\"${PODS_ROOT}/Headers/Public/React-idlecallbacksnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jserrorhandler\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jsi\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jsiexecutor\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jsinspector\"",
-					"\"${PODS_ROOT}/Headers/Public/React-logger\"",
-					"\"${PODS_ROOT}/Headers/Public/React-microtasksnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-nativeconfig\"",
-					"\"${PODS_ROOT}/Headers/Public/React-perflogger\"",
-					"\"${PODS_ROOT}/Headers/Public/React-performancetimeline\"",
-					"\"${PODS_ROOT}/Headers/Public/React-rendererconsistency\"",
-					"\"${PODS_ROOT}/Headers/Public/React-rendererdebug\"",
-					"\"${PODS_ROOT}/Headers/Public/React-runtimeexecutor\"",
-					"\"${PODS_ROOT}/Headers/Public/React-runtimescheduler\"",
-					"\"${PODS_ROOT}/Headers/Public/React-timing\"",
-					"\"${PODS_ROOT}/Headers/Public/React-utils\"",
-					"\"${PODS_ROOT}/Headers/Public/ReactCodegen\"",
-					"\"${PODS_ROOT}/Headers/Public/ReactCommon\"",
-					"\"${PODS_ROOT}/Headers/Public/SocketRocket\"",
-					"\"${PODS_ROOT}/Headers/Public/Yoga\"",
-					"\"${PODS_ROOT}/Headers/Public/boost\"",
-					"\"${PODS_ROOT}/Headers/Public/fmt\"",
-					"\"${PODS_ROOT}/Headers/Public/glog\"",
-					"\"${PODS_ROOT}/Headers/Public/hermes-engine\"",
-					"\"${PODS_ROOT}/Headers/Public/react-native-google-maps\"",
-					"\"${PODS_ROOT}/Headers/Public/react-native-maps\"",
-					"\"${PODS_ROOT}/Headers/Public/react-native-maps-generated\"",
-					"\"$(PODS_ROOT)/DoubleConversion\"",
-					"\"$(PODS_ROOT)/boost\"",
-					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
-					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
-					"$(PODS_ROOT)/../../../node_modules/react-native/React/**",
-					"\"$(PODS_ROOT)/Headers/Private/Yoga\"",
-				);
 				INFOPLIST_FILE = rnmshowcase/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -349,7 +283,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.natives.exampless.--PRODUCT-NAME-rfc1034identifier-";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = rnmshowcase;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -359,80 +293,11 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ABB867FE81AF4A19E21BB186 /* Pods-rnmshowcase.release.xcconfig */;
+			baseConfigurationReference = 1C1DA0B22D71CB7800166A6D /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/DoubleConversion\"",
-					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
-					"\"${PODS_ROOT}/Headers/Public/Google-Maps-iOS-Utils\"",
-					"\"${PODS_ROOT}/Headers/Public/GoogleMaps\"",
-					"\"${PODS_ROOT}/Headers/Public/RCT-Folly\"",
-					"\"${PODS_ROOT}/Headers/Public/RCTDeprecation\"",
-					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
-					"\"${PODS_ROOT}/Headers/Public/RCTTypeSafety\"",
-					"\"${PODS_ROOT}/Headers/Public/React-Core\"",
-					"\"${PODS_ROOT}/Headers/Public/React-Fabric\"",
-					"\"${PODS_ROOT}/Headers/Public/React-FabricComponents\"",
-					"\"${PODS_ROOT}/Headers/Public/React-FabricImage\"",
-					"\"${PODS_ROOT}/Headers/Public/React-ImageManager\"",
-					"\"${PODS_ROOT}/Headers/Public/React-Mapbuffer\"",
-					"\"${PODS_ROOT}/Headers/Public/React-NativeModulesApple\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTAnimation\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTAppDelegate\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTBlob\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTFabric\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RCTText\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RuntimeApple\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RuntimeCore\"",
-					"\"${PODS_ROOT}/Headers/Public/React-RuntimeHermes\"",
-					"\"${PODS_ROOT}/Headers/Public/React-callinvoker\"",
-					"\"${PODS_ROOT}/Headers/Public/React-cxxreact\"",
-					"\"${PODS_ROOT}/Headers/Public/React-debug\"",
-					"\"${PODS_ROOT}/Headers/Public/React-defaultsnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-domnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-featureflags\"",
-					"\"${PODS_ROOT}/Headers/Public/React-featureflagsnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-graphics\"",
-					"\"${PODS_ROOT}/Headers/Public/React-hermes\"",
-					"\"${PODS_ROOT}/Headers/Public/React-idlecallbacksnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jserrorhandler\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jsi\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jsiexecutor\"",
-					"\"${PODS_ROOT}/Headers/Public/React-jsinspector\"",
-					"\"${PODS_ROOT}/Headers/Public/React-logger\"",
-					"\"${PODS_ROOT}/Headers/Public/React-microtasksnativemodule\"",
-					"\"${PODS_ROOT}/Headers/Public/React-nativeconfig\"",
-					"\"${PODS_ROOT}/Headers/Public/React-perflogger\"",
-					"\"${PODS_ROOT}/Headers/Public/React-performancetimeline\"",
-					"\"${PODS_ROOT}/Headers/Public/React-rendererconsistency\"",
-					"\"${PODS_ROOT}/Headers/Public/React-rendererdebug\"",
-					"\"${PODS_ROOT}/Headers/Public/React-runtimeexecutor\"",
-					"\"${PODS_ROOT}/Headers/Public/React-runtimescheduler\"",
-					"\"${PODS_ROOT}/Headers/Public/React-timing\"",
-					"\"${PODS_ROOT}/Headers/Public/React-utils\"",
-					"\"${PODS_ROOT}/Headers/Public/ReactCodegen\"",
-					"\"${PODS_ROOT}/Headers/Public/ReactCommon\"",
-					"\"${PODS_ROOT}/Headers/Public/SocketRocket\"",
-					"\"${PODS_ROOT}/Headers/Public/Yoga\"",
-					"\"${PODS_ROOT}/Headers/Public/boost\"",
-					"\"${PODS_ROOT}/Headers/Public/fmt\"",
-					"\"${PODS_ROOT}/Headers/Public/glog\"",
-					"\"${PODS_ROOT}/Headers/Public/hermes-engine\"",
-					"\"${PODS_ROOT}/Headers/Public/react-native-google-maps\"",
-					"\"${PODS_ROOT}/Headers/Public/react-native-maps\"",
-					"\"${PODS_ROOT}/Headers/Public/react-native-maps-generated\"",
-					"\"$(PODS_ROOT)/DoubleConversion\"",
-					"\"$(PODS_ROOT)/boost\"",
-					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
-					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
-					"$(PODS_ROOT)/../../../node_modules/react-native/React/**",
-					"\"$(PODS_ROOT)/Headers/Private/Yoga\"",
-				);
 				INFOPLIST_FILE = rnmshowcase/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -501,17 +366,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -585,17 +439,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
-					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
