@@ -23,6 +23,7 @@ public class MapHeatmap extends MapFeature {
     private Gradient gradient;
     private Double opacity;
     private Integer radius;
+    private Double maximumZoomIntensity;
 
     public MapHeatmap(Context context) {
         super(context);
@@ -68,6 +69,16 @@ public class MapHeatmap extends MapFeature {
         }
     }
 
+    public void setMaximumZoomIntensity(double maximumZoomIntensity) {
+        this.maximumZoomIntensity = maximumZoomIntensity;
+        if (heatmapTileProvider != null) {
+            heatmapTileProvider.setMaxIntensity(maximumZoomIntensity);
+        }
+        if (heatmap != null) {
+            heatmap.clearTileCache();
+        }
+    }
+
     public TileOverlayOptions getHeatmapOptions() {
         if (heatmapOptions == null) {
             heatmapOptions = createHeatmapOptions();
@@ -88,6 +99,9 @@ public class MapHeatmap extends MapFeature {
             }
             if (gradient != null) {
                 builder.gradient(gradient);
+            }
+            if (maximumZoomIntensity != null) {
+                builder.maxIntensity(maximumZoomIntensity);
             }
             heatmapTileProvider = builder.build();
         }
