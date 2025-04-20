@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.2](https://github.com/react-native-maps/react-native-maps/compare/v1.22.1...v1.22.2) (2025-04-20)
+
+
+### Bug Fixes
+
+* attempt to publish generated pod to trunk ([#5431](https://github.com/react-native-maps/react-native-maps/issues/5431)) ([7d0d9db](https://github.com/react-native-maps/react-native-maps/commit/7d0d9dbfcd5045d313c5cb048c31c652e7e8acc7))
+
 ## [1.22.1](https://github.com/react-native-maps/react-native-maps/compare/v1.22.0...v1.22.1) (2025-04-16)
 
 
