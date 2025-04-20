@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.3](https://github.com/react-native-maps/react-native-maps/compare/v1.22.2...v1.22.3) (2025-04-20)
+
+
+### Bug Fixes
+
+* simplified generated podspec to pass lint ([#5432](https://github.com/react-native-maps/react-native-maps/issues/5432)) ([582db46](https://github.com/react-native-maps/react-native-maps/commit/582db463529ffcd68f96e9a0595f9360f75b9e0b))
+
 ## [1.22.2](https://github.com/react-native-maps/react-native-maps/compare/v1.22.1...v1.22.2) (2025-04-20)
 
 
