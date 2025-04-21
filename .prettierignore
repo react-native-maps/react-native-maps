@@ -6,5 +6,7 @@ packages/example/android
 android/build
 packages/example/vendor/bundle/
 packages/lib/android/build
+packages/lib/dist
+packages/lib/plugin/build
 .yarn
 ios/DerivedData

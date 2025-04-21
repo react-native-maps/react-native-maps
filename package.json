@@ -6,14 +6,22 @@
     "format-check": "prettier --check .",
     "bundle-install": "cd example && bundle install",
     "pod-install": "cd example/ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
-    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "19.8.0",
     "@commitlint/config-conventional": "19.8.0",
+    "@react-native/babel-preset": "0.79.1",
     "@react-native/eslint-config": "0.76.8",
+    "@react-native/typescript-config": "0.76.8",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^19.1.2",
+    "@types/react-native": "^0.73.0",
     "eslint": "^8.19.0",
-    "prettier": "2.8.8"
+    "husky": "9.1.7",
+    "prettier": "2.8.8",
+    "typescript": "5.0.4"
   },
   "commitlint": {
     "extends": [
