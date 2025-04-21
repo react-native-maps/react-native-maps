@@ -3,7 +3,10 @@
   "scripts": {
     "lint": "eslint \"packages/**/*.{ts,tsx,js,jsx}\" --max-warnings 0",
     "tscheck": "tsc --noEmit",
-    "format-check": "prettier --check ."
+    "format-check": "prettier --check .",
+    "bundle-install": "cd example && bundle install",
+    "pod-install": "cd example/ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
+    "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
   },
   "devDependencies": {
     "@commitlint/cli": "19.8.0",

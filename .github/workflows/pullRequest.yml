@@ -22,7 +22,7 @@ jobs:
 
       - name: Install example dependencies
         run: yarn --frozen-lockfile
-        working-directory: example
+        working-directory: packages/example
 
       - name: Lint
         run: yarn lint
