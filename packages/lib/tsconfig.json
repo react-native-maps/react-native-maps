@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "strictNullChecks": false,
+    "paths": {
+      "react-native-maps": ["./src/index"]
+    }
+  },
+  "include": ["src", "plugin"]
+}
