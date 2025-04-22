@@ -22,7 +22,7 @@ jobs:
         with:
           ruby-version: '3.2.2'
           bundler-cache: true
-          working-directory: example
+          working-directory: packages/example
 
       - name: Install dependencies
         run: yarn --cwd packages/example --frozen-lockfile
