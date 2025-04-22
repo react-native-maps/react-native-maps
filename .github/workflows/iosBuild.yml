@@ -28,7 +28,8 @@ jobs:
         run: yarn --cwd packages/example --frozen-lockfile
 
       - name: Install pods
-        run: yarn pod-install
+        run: RCT_NEW_ARCH_ENABLED=1 bundle exec pod install
+        working-directory: packages/example/ios
 
       - name: Write Secrets.xcconfig
         run: echo MAPS_API_KEY=your_api_key_here >> packages/example/ios/Secrets.xcconfig
