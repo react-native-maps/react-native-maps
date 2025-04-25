@@ -58,6 +58,8 @@ id regionAsJSON(MKCoordinateRegion region) {
 @interface AIRGoogleMap () <GMSIndoorDisplayDelegate, RNMapsAirModuleDelegate>
 
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)addKmlSrc:(NSString *)kmlSrc;
+- (void)removeKmlSrc:(NSString *)kmlSrc;
 
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, NSDictionary*> *origGestureRecognizersMeta;
 
@@ -119,6 +121,7 @@ id regionAsJSON(MKCoordinateRegion region) {
               options:NSKeyValueObservingOptionNew
               context:NULL];
 
+    self.kmlLayers = [[NSMutableDictionary alloc] init];
     self.origGestureRecognizersMeta = [[NSMutableDictionary alloc] init];
 
     self.indoorDisplay.delegate = self;
@@ -134,6 +137,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   [self removeObserver:self
             forKeyPath:@"myLocation"
                context:NULL];
+  // Clean up KML renderer
+  if (self.kmlLayers) {
+    self.kmlLayers = nil;
+  }
 }
 
 - (id)eventFromCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -468,6 +475,13 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (BOOL)didTapMarker:(GMSMarker *)marker {
+    
+	if (![marker isKindOfClass:[AIRGMSMarker class]]) {
+	    // It's probably a Marker from KML, so we just use the default behavior
+	    NSLog(@"Tapped a marker that is not an AIRGMSMarker. Ignoring.");
+	    [super setSelectedMarker:marker];
+	    return NO;
+	}
   AIRGMSMarker *airMarker = (AIRGMSMarker *)marker;
 
   id event = @{@"action": @"marker-press",
@@ -488,6 +502,11 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didTapPolyline:(GMSOverlay *)polyline {
+	
+  if (![polyline isKindOfClass:[AIRGMSPolyline class]]) {
+    return;
+	}
+    
   AIRGMSPolyline *airPolyline = (AIRGMSPolyline *)polyline;
 
   id event = @{@"action": @"polyline-press",
@@ -498,6 +517,10 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didTapPolygon:(GMSOverlay *)polygon {
+		
+    if (![polygon isKindOfClass:[AIRGMSPolygon class]]) {
+			return;
+		}
     AIRGMSPolygon *airPolygon = (AIRGMSPolygon *)polygon;
 
     id event = @{@"action": @"polygon-press",
@@ -722,22 +745,25 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (selectedMarker == self.selectedMarker) {
     return;
   }
-    AIRGMSMarker *airMarker = (AIRGMSMarker *) self.selectedMarker;
-    AIRGoogleMapMarker *fakeAirMarker = (AIRGoogleMapMarker *) airMarker.fakeMarker;
+    if ([self.selectedMarker isKindOfClass:[AIRGMSMarker class]]){
+        AIRGMSMarker *airMarker = (AIRGMSMarker *) self.selectedMarker;
+        AIRGoogleMapMarker *fakeAirMarker = (AIRGoogleMapMarker *) airMarker.fakeMarker;
+	
+        if (airMarker && airMarker.onDeselect) {
+            airMarker.onDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
+        }
+	
+        if (airMarker && self.onMarkerDeselect) {
+            self.onMarkerDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
+        }
+    }
+	
     AIRGoogleMapMarker *fakeSelectedMarker = (AIRGoogleMapMarker *) selectedMarker.fakeMarker;
-
-    if (airMarker && airMarker.onDeselect) {
-        airMarker.onDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
-    }
-
-    if (airMarker && self.onMarkerDeselect) {
-        self.onMarkerDeselect([fakeAirMarker makeEventData:@"marker-deselect"]);
-    }
-
+	
     if (selectedMarker && selectedMarker.onSelect) {
         selectedMarker.onSelect([fakeSelectedMarker makeEventData:@"marker-select"]);
     }
-
+	
     if (selectedMarker && self.onMarkerSelect) {
         self.onMarkerSelect([fakeSelectedMarker makeEventData:@"marker-select"]);
     }
@@ -1087,86 +1113,97 @@ id regionAsJSON(MKCoordinateRegion region) {
 #endif
 }
 
-- (NSString *)KmlSrc {
-  return _kmlSrc;
-}
 
-- (void) setKMLData:(NSData *) urlData {
-    GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:urlData];
-    [parser parse];
+- (void)setKmlSrc:(NSMutableArray<NSString *> *)kmlSrcList {
+#ifdef HAVE_GOOGLE_MAPS_UTILS
 
-    NSUInteger index = 0;
-    NSMutableArray *markers = [[NSMutableArray alloc]init];
+    dispatch_group_t group = dispatch_group_create();
 
-    for (GMUPlacemark *place in parser.placemarks) {
-
-      CLLocationCoordinate2D location =((GMUPoint *) place.geometry).coordinate;
-
-      AIRGoogleMapMarker *marker = (AIRGoogleMapMarker *)[[AIRGoogleMapMarkerManager alloc] view];
-      if (!marker.bridge) {
-        marker.bridge = _bridge;
-      }
-      marker.identifier = place.title;
-      marker.coordinate = location;
-      marker.title = place.title;
-      marker.subtitle = place.snippet;
-      marker.pinColor = place.style.fillColor;
-      marker.imageSrc = [AIRGoogleMap GetIconUrl:place parser:parser];
-      marker.layer.backgroundColor = [UIColor clearColor].CGColor;
-      marker.layer.position = CGPointZero;
-
-      [self insertReactSubview:(UIView *) marker atIndex:index];
-
-      [markers addObject:@{@"id": marker.identifier,
-                           @"title": marker.title,
-                           @"description": marker.subtitle,
-                           @"coordinate": @{
-                               @"latitude": @(location.latitude),
-                               @"longitude": @(location.longitude)
-                               }
-                           }];
-
-      index++;
+    for (NSString *url in [self.kmlLayers allKeys]) {
+        if (![kmlSrcList containsObject:url]) {
+            [self removeKmlSrc:url];
+        }
     }
 
-    id event = @{@"markers": markers};
-    if (self.onKmlReady) self.onKmlReady(event);
-  #else
-      REQUIRES_GOOGLE_MAPS_UTILS();
-  #endif
+    for (NSString *url in kmlSrcList) {
+        if (![self.kmlLayers objectForKey:url]) {
+            [self addKmlSrc:url withGroup:group];
+        }
+    }
+
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (self.onKmlReady) {
+            if(kmlSrcList.count > 0 || [self.kmlLayers allKeys].count > 0){
+                self.onKmlReady(@{});
+            }
+        }
+    });
+
+#else
+    REQUIRES_GOOGLE_MAPS_UTILS();
+#endif
 }
 
-- (void)setKmlSrc:(NSString *)kmlUrl {
-#if HAVE_GOOGLE_MAPS_UTILS
 
-  _kmlSrc = kmlUrl;
+- (void)addKmlSrc:(NSString *)kmlSrc withGroup:(dispatch_group_t)group {
 
-  NSURL *url = [NSURL URLWithString:kmlUrl];
-  NSData *urlData = nil;
+    NSURL *url = [NSURL URLWithString:kmlSrc];
+    if ([url isFileURL]) {
+        // Local file URL handling
+        GMUKMLParser *parser = [[GMUKMLParser alloc] initWithURL:url];
+        [parser parse];
 
-  if ([url isFileURL]) {
-      [self setKMLData:[NSData dataWithContentsOfURL:url]];
-  } else {
-      __weak AIRGoogleMap *weakSelf = self;
+        GMUGeometryRenderer *renderer = [[GMUGeometryRenderer alloc]	initWithMap:self
+                                                                    	geometries:parser.placemarks
+                                                                    	styles:parser.styles
+                                                                    	styleMaps: parser.styleMaps];
+        [renderer render];
+        self.kmlLayers[kmlSrc] = renderer;
 
-      NSURLSession *session = [NSURLSession sharedSession];
-      NSURLSessionDataTask *dataTask = [session dataTaskWithURL:url
-                                              completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-          if (error) {
-              NSLog(@"Error fetching data: %@", error.localizedDescription);
-              return;
-          } else {
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  AIRGoogleMap *strongSelf = weakSelf;
-                  [strongSelf setKMLData:data];
-              });
+    } else {
+        dispatch_group_enter(group);
 
-          }
-      }];
-      [dataTask resume];
-  }
+        NSURLSessionDataTask *task = [[NSURLSession sharedSession]
+                                      dataTaskWithURL:url
+                                      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 
 
+            if (error) {
+                NSLog(@"Error loading KML: %@", error.localizedDescription);
+                dispatch_group_leave(group);
+                return;
+            }
+            if (data) {
+                // Parse the KML data from downloaded content
+                GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:data];
+                [parser parse];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    GMUGeometryRenderer *renderer = [[GMUGeometryRenderer alloc]	initWithMap:self
+                                                                                  geometries:parser.placemarks
+                                                                                	styles:parser.styles
+                                                                                	styleMaps: parser.styleMaps];
+
+                    [renderer render];
+                    self.kmlLayers[kmlSrc] = renderer;
+
+                    dispatch_group_leave(group);
+                });
+            } else {
+                dispatch_group_leave(group);
+            }
+
+        }];
+        [task resume];
+    }
+}
+
+
+
+- (void)removeKmlSrc:(NSString *)kmlSrc {
+    GMUGeometryRenderer *renderer = self.kmlLayers[kmlSrc];
+    [renderer clear];
+    [self.kmlLayers removeObjectForKey:kmlSrc];
 }
 
 

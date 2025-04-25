@@ -368,7 +368,7 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   RNMapsGoogleMapViewCameraStruct camera{};
   RNMapsGoogleMapViewInitialCameraStruct initialCamera{};
   RNMapsGoogleMapViewInitialRegionStruct initialRegion{};
-  std::string kmlSrc{};
+  std::vector<std::string> kmlSrc{};
   std::string googleMapId{};
   SharedColor loadingBackgroundColor{};
   RNMapsGoogleMapViewMapPaddingStruct mapPadding{};
@@ -886,7 +886,7 @@ class RNMapsMapViewProps final : public ViewProps {
   bool poiClickEnabled{false};
   RNMapsMapViewInitialCameraStruct initialCamera{};
   RNMapsMapViewInitialRegionStruct initialRegion{};
-  std::string kmlSrc{};
+  std::vector<std::string> kmlSrc{};
   RNMapsMapViewLegalLabelInsetsStruct legalLabelInsets{};
   bool liteMode{false};
   std::string googleMapId{};
@@ -918,6 +918,7 @@ class RNMapsMapViewProps final : public ViewProps {
   SharedColor tintColor{};
   bool toolbarEnabled{true};
   RNMapsMapViewUserInterfaceStyle userInterfaceStyle{RNMapsMapViewUserInterfaceStyle::System};
+  std::string customMapStyleString{};
   std::string userLocationAnnotationTitle{};
   bool userLocationCalloutEnabled{false};
   int userLocationFastestInterval{5000};
@@ -1093,12 +1094,12 @@ class RNMapsMarkerProps final : public ViewProps {
   bool useLegacyPinView{false};
 };
 
-struct RNMapsOverlayBoundsStruct {
+struct RNMapsOverlayBoundsNorthEastStruct {
   double latitude{0.0};
   double longitude{0.0};
 };
 
-static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsStruct &result) {
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsNorthEastStruct &result) {
   auto map = (std::unordered_map<std::string, RawValue>)value;
 
   auto tmp_latitude = map.find("latitude");
@@ -1111,19 +1112,53 @@ static inline void fromRawValue(const PropsParserContext& context, const RawValu
   }
 }
 
-static inline std::string toString(const RNMapsOverlayBoundsStruct &value) {
-  return "[Object RNMapsOverlayBoundsStruct]";
+static inline std::string toString(const RNMapsOverlayBoundsNorthEastStruct &value) {
+  return "[Object RNMapsOverlayBoundsNorthEastStruct]";
 }
 
-static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, std::vector<RNMapsOverlayBoundsStruct> &result) {
-  auto items = (std::vector<RawValue>)value;
-  for (const auto &item : items) {
-    RNMapsOverlayBoundsStruct newItem;
-    fromRawValue(context, item, newItem);
-    result.emplace_back(newItem);
+struct RNMapsOverlayBoundsSouthWestStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsSouthWestStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
   }
 }
 
+static inline std::string toString(const RNMapsOverlayBoundsSouthWestStruct &value) {
+  return "[Object RNMapsOverlayBoundsSouthWestStruct]";
+}
+
+struct RNMapsOverlayBoundsStruct {
+  RNMapsOverlayBoundsNorthEastStruct northEast{};
+  RNMapsOverlayBoundsSouthWestStruct southWest{};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsOverlayBoundsStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_northEast = map.find("northEast");
+  if (tmp_northEast != map.end()) {
+    fromRawValue(context, tmp_northEast->second, result.northEast);
+  }
+  auto tmp_southWest = map.find("southWest");
+  if (tmp_southWest != map.end()) {
+    fromRawValue(context, tmp_southWest->second, result.southWest);
+  }
+}
+
+static inline std::string toString(const RNMapsOverlayBoundsStruct &value) {
+  return "[Object RNMapsOverlayBoundsStruct]";
+}
 class RNMapsOverlayProps final : public ViewProps {
  public:
   RNMapsOverlayProps() = default;
@@ -1132,7 +1167,7 @@ class RNMapsOverlayProps final : public ViewProps {
 #pragma mark - Props
 
   Float bearing{0.0};
-  std::vector<RNMapsOverlayBoundsStruct> bounds{};
+  RNMapsOverlayBoundsStruct bounds{};
   ImageSource image{};
   Float opacity{1.0};
   bool tappable{false};
@@ -1219,6 +1254,44 @@ class RNMapsPolylineProps final : public ViewProps {
   std::vector<SharedColor> strokeColors{};
   Float strokeWidth{0.0};
   bool tappable{false};
+};
+
+class RNMapsUrlTileProps final : public ViewProps {
+ public:
+  RNMapsUrlTileProps() = default;
+  RNMapsUrlTileProps(const PropsParserContext& context, const RNMapsUrlTileProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  bool doubleTileSize{false};
+  bool flipY{false};
+  int maximumNativeZ{100};
+  int maximumZ{100};
+  int minimumZ{0};
+  bool offlineMode{false};
+  bool shouldReplaceMapContent{false};
+  int tileCacheMaxAge{0};
+  std::string tileCachePath{};
+  int tileSize{256};
+  std::string urlTemplate{};
+};
+
+class RNMapsWMSTileProps final : public ViewProps {
+ public:
+  RNMapsWMSTileProps() = default;
+  RNMapsWMSTileProps(const PropsParserContext& context, const RNMapsWMSTileProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  int maximumNativeZ{100};
+  int maximumZ{100};
+  int minimumZ{0};
+  bool offlineMode{false};
+  bool shouldReplaceMapContent{false};
+  int tileCacheMaxAge{0};
+  std::string tileCachePath{};
+  int tileSize{256};
+  std::string urlTemplate{};
 };
 
 } // namespace facebook::react
