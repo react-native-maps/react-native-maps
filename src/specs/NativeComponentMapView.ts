@@ -454,7 +454,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  kmlSrc?: string;
+  kmlSrc?: Array<string>;
 
   /**
    * If set, changes the position of the "Legal" label link in Apple Maps.
