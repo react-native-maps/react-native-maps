@@ -368,7 +368,7 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   RNMapsGoogleMapViewCameraStruct camera{};
   RNMapsGoogleMapViewInitialCameraStruct initialCamera{};
   RNMapsGoogleMapViewInitialRegionStruct initialRegion{};
-  std::string kmlSrc{};
+  std::vector<std::string> kmlSrc{};
   std::string googleMapId{};
   SharedColor loadingBackgroundColor{};
   RNMapsGoogleMapViewMapPaddingStruct mapPadding{};
@@ -886,7 +886,7 @@ class RNMapsMapViewProps final : public ViewProps {
   bool poiClickEnabled{false};
   RNMapsMapViewInitialCameraStruct initialCamera{};
   RNMapsMapViewInitialRegionStruct initialRegion{};
-  std::string kmlSrc{};
+  std::vector<std::string> kmlSrc{};
   RNMapsMapViewLegalLabelInsetsStruct legalLabelInsets{};
   bool liteMode{false};
   std::string googleMapId{};
