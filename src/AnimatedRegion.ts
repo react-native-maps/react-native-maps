@@ -1,5 +1,5 @@
 import {Animated} from 'react-native';
-import {Region} from './sharedTypes';
+import type {Region} from './sharedTypes';
 
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 if (__DEV__) {

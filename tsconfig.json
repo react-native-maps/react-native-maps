@@ -10,8 +10,9 @@
     "declarationMap": false,
     "outDir": "dist",
     "rootDir": ".",
-    "composite": true
     // required for project references (optional if not used)
+    "composite": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["src", "plugin"],
   "exclude": ["**/Pods/**", "dist"]

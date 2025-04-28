@@ -7,8 +7,10 @@ import type {
   EdgePadding,
   SnapshotOptions,
 } from './MapView.types';
-import NativeAirMapsModule, {MapBoundaries} from './specs/NativeAirMapsModule';
-import {MapFabricNativeProps} from './specs/NativeComponentMapView';
+import NativeAirMapsModule, {
+  type MapBoundaries,
+} from './specs/NativeAirMapsModule';
+import type {MapFabricNativeProps} from './specs/NativeComponentMapView';
 
 export type FabricMapViewProps = MapFabricNativeProps;
 

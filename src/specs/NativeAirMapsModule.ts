@@ -2,7 +2,7 @@ import type {TurboModule} from 'react-native';
 import {TurboModuleRegistry} from 'react-native';
 import type {Double} from 'react-native/Libraries/Types/CodegenTypes';
 import type {Camera} from './NativeComponentMapView';
-import {Address} from '../MapView.types';
+import type {Address} from '../MapView.types';
 
 type LatLng = {
   latitude: Double;
