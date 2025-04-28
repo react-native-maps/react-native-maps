@@ -2,7 +2,6 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "strictNullChecks": false,
     "paths": {
       "react-native-maps": ["./src/index"]
     },
