@@ -52,7 +52,6 @@
 @property (nonatomic, strong) NSMutableArray *heatmaps;
 @property (nonatomic, strong) NSMutableArray *tiles;
 @property (nonatomic, strong) NSMutableArray *overlays;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, GMUGeometryRenderer *> *kmlLayers;
 @property (nonatomic, strong) NSMutableArray<NSString *> *kmlSrc;
 
 @property (nonatomic, assign) BOOL showsBuildings;
