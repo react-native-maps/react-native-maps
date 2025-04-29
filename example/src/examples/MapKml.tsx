@@ -8,21 +8,34 @@ const LATITUDE = 46.2276;
 const LONGITUDE = 2.2137;
 const LATITUDE_DELTA = 10;
 
-const kmlFiles = [
-  'https://pastebin.com/raw/5XcSeT0b',
-  'https://pastebin.com/raw/jAzGpq1F',
-  'https://pastebin.com/raw/qwZn8dRU',
-];
+type KmlEntry = {
+  label: string;
+  file: string;
+};
+
+
+const kmlFiles = [{
+  label: "Remote kmz",
+  file: 'https://www.google.com/maps/d/u/0/kml?mid=12u1KMaAe02f5iDEMEYeIcXGaUJd_54Y&cid=mp&cv=czMHwAlgGtA.fr.',
+},
+{
+  label: "Remote kml",
+  file: 'https://pastebin.com/raw/5XcSeT0b',
+},
+{
+  label: "Remote kml 2",
+  file: 'https://pastebin.com/raw/qwZn8dRU',
+}] satisfies Array<KmlEntry>;
 
 type MapKmlProps = Pick<MapViewProps, 'provider'>
 
 const MapKml = ({ provider }: MapKmlProps) => {
   const mapRef = useRef<MapView>(null);
 
-  const [selectedKmls, setSelectedKmls] = useState(new Set<string>());
+  const [selectedKmls, setSelectedKmls] = useState(new Set<KmlEntry>());
 
   const selectedKmlStr = useMemo<Array<string>>(()=> {
-    return [...selectedKmls.values()];
+    return [...selectedKmls.values()].map(entry => entry.file);
   }, [selectedKmls]);
 
   const [region] = useState({
@@ -32,7 +45,7 @@ const MapKml = ({ provider }: MapKmlProps) => {
     longitudeDelta: LATITUDE_DELTA,
   });
 
-  const handleKmlSelection = (kmlFile: string) => {
+  const handleKmlSelection = (kmlFile: KmlEntry) => {
     setSelectedKmls(oldSet => {
       if (oldSet.has(kmlFile)) {
         oldSet.delete(kmlFile);
@@ -59,21 +72,18 @@ const MapKml = ({ provider }: MapKmlProps) => {
         provider={provider}
         style={styles.map}
         kmlSrc={selectedKmlStr}
-        onKmlReady={handleOnKmlReady}
-      >
-        <Marker
-          coordinate={region}
-          title="Test"
-          description="Test"
-        />
+        onKmlReady={handleOnKmlReady}>
+        <Marker coordinate={region} title="Test" description="Test" />
       </MapView>
       <View style={styles.simpleKmlSelectionSheet}>
         <ScrollView>
-          {kmlFiles.map((kmlFile, index) => (
+          {kmlFiles.map((kmlEntry) => (
             <Button
-              key={kmlFile}
-              title={`file ${index} ${selectedKmls.has(kmlFile) ? '(selected)' : ''}`}
-              onPress={() => handleKmlSelection(kmlFile)}
+              key={kmlEntry.label}
+              title={`${kmlEntry.label} ${
+                selectedKmls.has(kmlEntry) ? '(selected)' : ''
+              }`}
+              onPress={() => handleKmlSelection(kmlEntry)}
             />
           ))}
         </ScrollView>

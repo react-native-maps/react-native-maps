@@ -1271,6 +1271,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
+    - SSZipArchive
     - Yoga
   - react-native-maps (0.0.0):
     - DoubleConversion
@@ -1583,6 +1584,7 @@ PODS:
     - React-perflogger (= 0.76.8)
     - React-utils (= 0.76.8)
   - SocketRocket (0.7.1)
+  - SSZipArchive (2.4.3)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1660,6 +1662,7 @@ SPEC REPOS:
     - Google-Maps-iOS-Utils
     - GoogleMaps
     - SocketRocket
+    - SSZipArchive
 
 EXTERNAL SOURCES:
   boost:
@@ -1834,7 +1837,7 @@ SPEC CHECKSUMS:
   React-logger: 9e6d970dbbf242e9f9c92b06ce67c94b31021b70
   React-Mapbuffer: c964a46d47ef2cae1612b97c77f25da800ff88d2
   React-microtasksnativemodule: be748a621a92013c22d7e80536eaf4833b9bcff5
-  react-native-google-maps: 4d5baa700a8983dcd80f54bf5e1dac2eeefab668
+  react-native-google-maps: d7036a16648c7addaf285c8b59679aaaab30558f
   react-native-maps: cfd78eca07b44d482615537b19cef475529a4613
   react-native-maps-generated: 5a97fe164371cf68d65e1ebd7dca95e36c57acf1
   React-nativeconfig: a0ee536f9c1b8f2ba80fdf95aa4f2d6eb9b79510
@@ -1865,6 +1868,7 @@ SPEC CHECKSUMS:
   ReactCodegen: cb798eece8fb8b4c98689302d76608cdca62b563
   ReactCommon: 90c3783fe9735fc5aeaf3064eca54aac277bb976
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Yoga: a78f2e4fdc1bf5885ae1855bf495dfde0dad8946
 
 PODFILE CHECKSUM: 0bcaaea27ef184c7e5ec875ca66d2b4f5c00b45d
