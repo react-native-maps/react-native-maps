@@ -97,10 +97,12 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
   // Check if it's a local file
   NSURL *url = [NSURL URLWithString:kmlSrc];
   if (url.isFileURL) {
-    [self renderLocalKmlDocument:url sourceKey:kmlSrc];
+    dispatch_group_enter(group);
+    [self renderLocalKmlDocument:url sourceKey:kmlSrc completion:^(void){
+      dispatch_group_leave(group);
+    }];
     return;
   }
-
 
   __weak typeof(self) weakSelf = self;
 
@@ -112,7 +114,7 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
                                                    NSError *err)
     {
     __strong typeof(weakSelf) self = weakSelf;
-    
+
     if (!self) { dispatch_group_leave(group); return; }
 
     if (err) {
@@ -129,12 +131,15 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
           return;
         }
 
-        [self renderKMZ:localZipURL sourceKey:kmlSrc];
-        dispatch_group_leave(group);
+        [self renderKMZ:localZipURL sourceKey:kmlSrc completion: ^(void){
+          dispatch_group_leave(group);
+        }];
+
       }];
     } else {
-      [self renderKml:data sourceKey:kmlSrc];
-      dispatch_group_leave(group);
+      [self renderKml:data sourceKey:kmlSrc completion:^(void){
+        dispatch_group_leave(group);
+      }];
     }
   }] resume];
 }
@@ -146,7 +151,9 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
  * - If the URL points to a plain .kml file, it parses and renders it directly.
  * - If the URL points to a compressed .kmz archive, it delegates to `renderKMZ:sourceKey:group:`.
  */
-- (void)renderLocalKmlDocument:(NSURL *)url sourceKey:(NSString *)key {
+- (void)renderLocalKmlDocument:(NSURL *)url
+                     sourceKey:(NSString *)key
+                    completion:(void (^)(void))completion{
 
   NSError *error = nil;
   NSData *data = [NSData dataWithContentsOfURL:url options:0 error:&error];
@@ -156,9 +163,9 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
   }
 
   if ([self isZipData:data]) {
-    [self renderKMZ:url sourceKey:key];
+    [self renderKMZ:url sourceKey:key completion:completion];
   } else {
-    [self renderKml:data sourceKey:key];
+    [self renderKml:data sourceKey:key completion:completion];
   }
 }
 
@@ -169,13 +176,15 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
  * @param key   A unique source key used to track the rendered KML layer.
  */
 - (void)renderKml:(NSData *)data
-        sourceKey:(NSString *)key {
+        sourceKey:(NSString *)key
+       completion:(void (^)(void))completion {
 
   GMUKMLParser *parser = [[GMUKMLParser alloc] initWithData:data];
   [parser parse];
 
   dispatch_async(dispatch_get_main_queue(), ^{
     [self renderKmlFromParser:parser withStyles:parser.styles sourceKey:key];
+    if (completion) completion();
   });
 }
 
@@ -189,7 +198,8 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
  * - Updates any relative icon URLs to absolute file URLs pointing inside the temporary directory.
  */
 - (void)renderKMZ:(NSURL *)zipURL
-        sourceKey:(NSString *)key {
+        sourceKey:(NSString *)key
+       completion:(void (^)(void))completion{
 
   NSError  *err = nil;
   NSString *unzipDir = [self createTempDirectoryForKey:key error:&err];
@@ -220,6 +230,7 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
     [self renderKmlFromParser:parser
                    withStyles:fixedStyles
                     sourceKey:key];
+    if (completion) completion();
   });
 
 }
