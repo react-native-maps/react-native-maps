@@ -469,10 +469,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   id event = @{@"action": @"marker-press",
                @"id": airMarker.identifier ?: @"unknown",
                @"coordinate": @{
-                   @"latitude": @(airMarker.position.latitude),
-                   @"longitude": @(airMarker.position.longitude)
-                   }
-               };
+                 @"latitude": @(airMarker.position.latitude),
+                 @"longitude": @(airMarker.position.longitude)
+               }
+  };
 
   if (airMarker.onPress) airMarker.onPress(event);
   if (self.onMarkerPress) self.onMarkerPress(event);
