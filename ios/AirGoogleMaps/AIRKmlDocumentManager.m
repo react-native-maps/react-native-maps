@@ -101,14 +101,6 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
     return;
   }
 
-  // We have a remote url, we first check if it has already been downloaded
-  if ([self isKmlDocumentCached:kmlSrc]) {
-    NSString *generatedKmzPath =  [self getDeterministicPathForKey:kmlSrc extension:@"kmz"];
-    NSLog(@"Kmz file already downloaded at %@", generatedKmzPath);
-    [self renderKMZ:[NSURL fileURLWithPath: generatedKmzPath] sourceKey:kmlSrc];
-    return;
-  }
-
 
   __weak typeof(self) weakSelf = self;
 
@@ -409,12 +401,6 @@ static const uint8_t kZipMagic[4] = {0x50, 0x4B, 0x03, 0x04}; // â€œPK\003\004â€
   GMUGeometryRenderer *renderer = self.kmlLayers[kmlSrc];
   [renderer clear];
   [self.kmlLayers removeObjectForKey:kmlSrc];
-}
-
-
-- (BOOL)isKmlDocumentCached:(NSString*) sourceKey{
-  NSString *generatedKmzPath =  [self getDeterministicPathForKey:sourceKey extension:@"kmz"];
-  return [self.fileManager fileExistsAtPath:generatedKmzPath];
 }
 
 - (NSFileManager *)fileManager {
