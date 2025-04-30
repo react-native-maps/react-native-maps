@@ -17,8 +17,6 @@
 
 - (instancetype)initWithMapView:(GMSMapView *)mapView;
 - (void)setKmlSrc:(NSMutableArray<NSString *> *)kmlSrcList;
-- (void)addKmlSrc:(NSString *)kmlSrc withGroup:(dispatch_group_t)group;
-- (void)removeKmlSrc:(NSString *)kmlSrc;
 
 @end
 
