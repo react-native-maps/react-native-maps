@@ -46,6 +46,38 @@ function cleanupTempNpmrc() {
 }
 
 /**
+ * Recursively searches for and replaces workspace references in an object
+ * @param {Object} obj - The object to search in (part of package.json)
+ * @returns {boolean} - Whether any workspace references were found and replaced
+ */
+function replaceWorkspaceRefsInObject(obj) {
+  let hasWorkspaceDeps = false;
+
+  if (!obj || typeof obj !== 'object') return hasWorkspaceDeps;
+
+  // Process all properties of the object
+  Object.keys(obj).forEach(key => {
+    const value = obj[key];
+
+    // If this is a string and starts with 'workspace:' - replace it
+    if (typeof value === 'string' && value.startsWith('workspace:')) {
+      hasWorkspaceDeps = true;
+      obj[key] = '*';
+      console.log(`Replaced workspace reference: ${key}@${value} → ${key}@*`);
+    }
+    // If this is an object or array, recursively process it
+    else if (typeof value === 'object' && value !== null) {
+      const childHasWorkspaceDeps = replaceWorkspaceRefsInObject(value);
+      if (childHasWorkspaceDeps) {
+        hasWorkspaceDeps = true;
+      }
+    }
+  });
+
+  return hasWorkspaceDeps;
+}
+
+/**
  * Prepares the package.json for semantic-release by replacing workspace references
  */
 function prepareForRelease() {
@@ -96,10 +128,18 @@ function prepareForRelease() {
     });
   }
 
+  // Search for any 'workspace:' strings in the entire package.json
+  // This handles less common locations where workspace refs might be present
+  const deepSearchResult = replaceWorkspaceRefsInObject(packageJson);
+  if (deepSearchResult) {
+    hasWorkspaceDeps = true;
+  }
+
   // Remove workspace-related fields that might cause conflicts
   if (packageJson.workspaces) {
     console.log('Removing workspaces field from package.json');
     delete packageJson.workspaces;
+    hasWorkspaceDeps = true;
   }
 
   // Write the modified package.json
