@@ -17,25 +17,23 @@ jobs:
       HUSKY: 0
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
           cache: yarn
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
-        with:
-          working-directory: packages/lib
+        working-directory: packages/lib
 
       - name: Build
         run: yarn build
-        with:
-          working-directory: packages/lib
+        working-directory: packages/lib
       # Latest version of npm needed for provenance
       - name: Install latest npm
         run: npm install -g npm@latest
@@ -46,5 +44,4 @@ jobs:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_CONFIG_PROVENANCE: true
         run: yarn release
-        with:
-          working-directory: packages/lib
+        working-directory: packages/lib
