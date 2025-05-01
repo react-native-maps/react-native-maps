@@ -8,11 +8,17 @@
         "changelogTitle": "# Changelog"
       }
     ],
-    "@semantic-release/npm",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "pkgRoot": "packages/lib"
+      }
+    ],
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md"],
+        "assets": ["packages/lib/package.json", "CHANGELOG.md"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
