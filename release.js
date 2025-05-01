@@ -25,6 +25,7 @@ function createTempNpmrc() {
     console.log('NPM_TOKEN is available (value is masked for security)');
   }
 
+  // Create a minimal .npmrc that only contains what's needed
   const npmrcContent = `registry=https://registry.npmjs.org/
 //registry.npmjs.org/:_authToken=${process.env.NPM_TOKEN}
 provenance=${process.env.NPM_CONFIG_PROVENANCE || 'true'}
@@ -95,6 +96,12 @@ function prepareForRelease() {
     });
   }
 
+  // Remove workspace-related fields that might cause conflicts
+  if (packageJson.workspaces) {
+    console.log('Removing workspaces field from package.json');
+    delete packageJson.workspaces;
+  }
+
   // Write the modified package.json
   fs.writeFileSync(libPackageJsonPath, JSON.stringify(packageJson, null, 2));
 
@@ -123,6 +130,20 @@ function restorePackageJson(backupPath) {
     console.log('Original package.json restored');
   } else {
     console.warn('No backup file found, could not restore package.json');
+  }
+}
+
+/**
+ * Execute a command with proper error handling
+ */
+function safeExec(command, options) {
+  try {
+    return execSync(command, options);
+  } catch (error) {
+    console.error(`Command failed: ${command}`);
+    console.error(error.stdout ? error.stdout.toString() : 'No stdout');
+    console.error(error.stderr ? error.stderr.toString() : 'No stderr');
+    throw error;
   }
 }
 
@@ -165,30 +186,94 @@ async function main() {
       throw new Error('semantic-release binary not found');
     }
 
-    // Prepare environment for semantic-release
-    const envVars = {
-      ...process.env,
-      // Explicitly pass through critical environment variables
+    // Create a clean environment with only the variables we need
+    // This avoids conflicts with workspace-related flags
+    const cleanEnv = {
+      // System environment variables needed for proper operation
+      PATH: process.env.PATH,
+      HOME: process.env.HOME,
       GITHUB_TOKEN: process.env.GITHUB_TOKEN,
       NPM_TOKEN: process.env.NPM_TOKEN,
-      // Use our temporary npmrc file
+      // Point to our custom npmrc
       NPM_CONFIG_USERCONFIG: npmrcPath,
-      // Disable workspace features
-      NPM_CONFIG_WORKSPACES: 'false',
-      NPM_CONFIG_WORKSPACE: 'false',
-      // Prevent npm from trying to use Yarn's workspace protocol
-      NPM_CONFIG_ENGINE_STRICT: 'false',
-      // Ensure npm knows this is not a workspace command
-      npm_config_workspaces: 'false',
-      npm_config_workspace: 'false',
+      // Provenance setting
+      NPM_CONFIG_PROVENANCE: process.env.NPM_CONFIG_PROVENANCE || 'true',
+      // GitHub Actions environment variables
+      GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY,
+      GITHUB_SHA: process.env.GITHUB_SHA,
+      GITHUB_REF: process.env.GITHUB_REF,
+      GITHUB_EVENT_NAME: process.env.GITHUB_EVENT_NAME,
+      GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW,
+      GITHUB_ACTION: process.env.GITHUB_ACTION,
+      GITHUB_ACTOR: process.env.GITHUB_ACTOR,
+      GITHUB_HEAD_REF: process.env.GITHUB_HEAD_REF,
+      GITHUB_BASE_REF: process.env.GITHUB_BASE_REF,
+      RUNNER_OS: process.env.RUNNER_OS,
+      CI: process.env.CI,
     };
+
+    // Ensure no workspace flags are set in the environment
+    // Explicitly unset any workspace-related npm configs
+    const npmEnvVars = Object.keys(process.env).filter(
+      key =>
+        key.startsWith('npm_') ||
+        key.startsWith('NPM_') ||
+        key.includes('workspace') ||
+        key.includes('WORKSPACE'),
+    );
+
+    console.log(
+      'Filtering out potentially conflicting npm environment variables:',
+    );
+    npmEnvVars.forEach(key => {
+      if (
+        ![
+          'NPM_TOKEN',
+          'NPM_CONFIG_USERCONFIG',
+          'NPM_CONFIG_PROVENANCE',
+        ].includes(key)
+      ) {
+        console.log(`- Excluding: ${key}`);
+      } else {
+        console.log(`- Keeping: ${key}`);
+        // Keep these specific variables
+        cleanEnv[key] = process.env[key];
+      }
+    });
+
+    // Test the NPM_TOKEN with npm whoami
+    console.log('Testing NPM token with npm whoami...');
+    try {
+      const npmWhich = execSync('which npm', {encoding: 'utf8'}).trim();
+      console.log(`Using npm at: ${npmWhich}`);
+
+      const npmVersion = execSync('npm --version', {encoding: 'utf8'}).trim();
+      console.log(`npm version: ${npmVersion}`);
+
+      const result = execSync('npm whoami --userconfig=' + npmrcPath, {
+        encoding: 'utf8',
+        env: {
+          PATH: process.env.PATH,
+          HOME: process.env.HOME,
+          NPM_CONFIG_USERCONFIG: npmrcPath,
+        },
+      }).trim();
+      console.log(`Successfully authenticated as npm user: ${result}`);
+    } catch (error) {
+      console.error('NPM authentication test failed:');
+      console.error(error.stdout ? error.stdout.toString() : '');
+      console.error(error.stderr ? error.stderr.toString() : '');
+      console.warn(
+        'Continuing despite npm whoami failure - the token might still work for semantic-release',
+      );
+    }
 
     // Run semantic-release with carefully controlled environment
     console.log('Executing semantic-release...');
     execSync(semanticReleaseBin, {
       stdio: 'inherit',
       cwd: libDir, // Run from lib directory
-      env: envVars,
+      env: cleanEnv,
     });
 
     console.log('Semantic release completed successfully');
