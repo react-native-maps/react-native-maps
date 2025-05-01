@@ -33,28 +33,5 @@ target 'rnmshowcase' do
       :mac_catalyst_enabled => false,
     )
 
-    # Replace @import GoogleMaps; with #import <GoogleMaps/GoogleMaps.h> in specific files
-    specific_files = [
-      "#{Pod::Config.instance.installation_root}/Pods/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMSMarker+GMUClusteritem.h",
-      "#{Pod::Config.instance.installation_root}/Pods/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMUGeoJSONParser.h",
-      "#{Pod::Config.instance.installation_root}/Pods/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMUPolygon.h",
-      "#{Pod::Config.instance.installation_root}/Pods/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMUWeightedLatLng.h",
-      "#{Pod::Config.instance.installation_root}/Pods/GoogleMaps/Maps/Sources/GMSEmpty.h"
-    ]
-
-    specific_files.each do |file|
-      if File.exist?(file)
-        text = File.read(file)
-        if text.include?("@import GoogleMaps;")
-          new_text = text.gsub("@import GoogleMaps;", "#import <GoogleMaps/GoogleMaps.h>")
-          File.open(file, "w") { |f| f.write(new_text) }
-          puts "🔧 Patched @import in: #{file}"
-        else
-          puts "ℹ️ No @import GoogleMaps; found in: #{file}"
-        end
-      else
-        puts "⚠️ File not found: #{file}"
-      end
-    end
   end
 end

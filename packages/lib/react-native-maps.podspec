@@ -45,6 +45,60 @@ Pod::Spec.new do |s|
     ss.compiler_flags = folly_compiler_flags
     ss.dependency 'react-native-maps/Generated'
     install_modules_dependencies(ss)
+     # Add script phase to detect Google Maps
+    ss.script_phases = [
+       {
+         :name => 'react-native-maps patches',
+         :script => %(
+           set -x
+           echo "Running Google Maps detection script..."
+           DEFINES_DIR="${PODS_TARGET_SRCROOT}/ios/AirMaps"
+           DEFINES_FILE="${DEFINES_DIR}/RNMapsDefines.h"
+
+           mkdir -p "$DEFINES_DIR"
+
+           if [ -d "$PODS_ROOT/GoogleMaps" ] && [ -d "$PODS_ROOT/Google-Maps-iOS-Utils" ]; then
+             echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
+             echo "✅ Google Maps libraries detected. HAVE_GOOGLE_MAPS defined."
+           else
+             echo "#define HAVE_GOOGLE_MAPS 0" > "$DEFINES_FILE"
+             echo "❌ Google Maps libraries NOT detected. HAVE_GOOGLE_MAPS set to 0."
+           fi
+
+           if [ -f "$DEFINES_FILE" ]; then
+             echo "✅ Successfully wrote to $DEFINES_FILE"
+             cat "$DEFINES_FILE"
+           else
+             echo "❌ ERROR: Failed to write to $DEFINES_FILE"
+           fi
+
+             set -e
+                 echo "🔧 Patching @import GoogleMaps..."
+
+                 FILES=(
+                   "$PODS_ROOT/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMSMarker+GMUClusteritem.h"
+                   "$PODS_ROOT/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMUGeoJSONParser.h"
+                   "$PODS_ROOT/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMUPolygon.h"
+                   "$PODS_ROOT/Google-Maps-iOS-Utils/Sources/GoogleMapsUtilsObjC/include/GMUWeightedLatLng.h"
+                   "$PODS_ROOT/GoogleMaps/Maps/Sources/GMSEmpty.h"
+                 )
+
+                 for file in "${FILES[@]}"; do
+                   if [ -f "$file" ]; then
+                     if grep -q "@import GoogleMaps;" "$file"; then
+                       sed -i '' 's/@import GoogleMaps;/#import <GoogleMaps\\/GoogleMaps.h>/' "$file"
+                       echo "✅ Patched: $file"
+                     else
+                       echo "ℹ️ No @import in: $file"
+                     fi
+                   else
+                     echo "⚠️ Not found: $file"
+                   fi
+                 done
+         ),
+         :execution_position => :before_compile
+        }
+      ]
   end
 
   # Google Maps subspec
@@ -64,36 +118,5 @@ Pod::Spec.new do |s|
 
   # By default, use the Maps subspec
   s.default_subspec = 'Maps'
-
-  # Add script phase to detect Google Maps
-  s.script_phases = [
-   {
-     :name => 'Check Google Maps Availability',
-     :script => %(
-       set -x
-       echo "Running Google Maps detection script..."
-       DEFINES_DIR="${PODS_TARGET_SRCROOT}/ios/AirMaps"
-       DEFINES_FILE="${DEFINES_DIR}/RNMapsDefines.h"
-
-       mkdir -p "$DEFINES_DIR"
-
-       if [ -d "$PODS_ROOT/GoogleMaps" ] && [ -d "$PODS_ROOT/Google-Maps-iOS-Utils" ]; then
-         echo "#define HAVE_GOOGLE_MAPS 1" > "$DEFINES_FILE"
-         echo "✅ Google Maps libraries detected. HAVE_GOOGLE_MAPS defined."
-       else
-         echo "#define HAVE_GOOGLE_MAPS 0" > "$DEFINES_FILE"
-         echo "❌ Google Maps libraries NOT detected. HAVE_GOOGLE_MAPS set to 0."
-       fi
-
-       if [ -f "$DEFINES_FILE" ]; then
-         echo "✅ Successfully wrote to $DEFINES_FILE"
-         cat "$DEFINES_FILE"
-       else
-         echo "❌ ERROR: Failed to write to $DEFINES_FILE"
-       fi
-     ),
-     :execution_position => :before_compile
-    }
-  ]
 
 end
