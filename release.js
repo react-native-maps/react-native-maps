@@ -1,4 +1,3 @@
-// release.js
 const fs = require('fs');
 const path = require('path');
 const {execSync} = require('child_process');
@@ -46,130 +45,149 @@ function cleanupTempNpmrc() {
 }
 
 /**
- * Recursively searches for and replaces workspace references in an object
- * @param {Object} obj - The object to search in (part of package.json)
- * @returns {boolean} - Whether any workspace references were found and replaced
+ * Recursively searches for and replaces workspace references in an object or string
+ * Handles any pattern matching "workspace:" including those within JSON strings
+ * @param {any} item - The item to check (object, array, string, etc)
+ * @returns {any} - The modified item with workspace references replaced
  */
-function replaceWorkspaceRefsInObject(obj) {
-  let hasWorkspaceDeps = false;
+function removeWorkspaceRefs(item) {
+  // Base case for non-objects and non-strings
+  if (item === null || typeof item === 'undefined') {
+    return item;
+  }
 
-  if (!obj || typeof obj !== 'object') return hasWorkspaceDeps;
-
-  // Process all properties of the object
-  Object.keys(obj).forEach(key => {
-    const value = obj[key];
-
-    // If this is a string and starts with 'workspace:' - replace it
-    if (typeof value === 'string' && value.startsWith('workspace:')) {
-      hasWorkspaceDeps = true;
-      obj[key] = '*';
-      console.log(`Replaced workspace reference: ${key}@${value} → ${key}@*`);
+  // Handle string case - this catches both regular properties and stringified JSON
+  if (typeof item === 'string') {
+    // Replace any occurrence of workspace: protocol
+    if (item.includes('workspace:')) {
+      const newValue = item
+        .replace(/workspace:\*/g, '*')
+        .replace(/workspace:\^/g, '^')
+        .replace(/workspace:~/g, '~')
+        .replace(/workspace:/g, '');
+      console.log(
+        `Found and replaced workspace reference: "${item}" → "${newValue}"`,
+      );
+      return newValue;
     }
-    // If this is an object or array, recursively process it
-    else if (typeof value === 'object' && value !== null) {
-      const childHasWorkspaceDeps = replaceWorkspaceRefsInObject(value);
-      if (childHasWorkspaceDeps) {
-        hasWorkspaceDeps = true;
-      }
-    }
-  });
+    return item;
+  }
 
-  return hasWorkspaceDeps;
+  // Handle arrays
+  if (Array.isArray(item)) {
+    return item.map(el => removeWorkspaceRefs(el));
+  }
+
+  // Handle objects
+  if (typeof item === 'object') {
+    const result = {};
+    for (const [key, value] of Object.entries(item)) {
+      result[key] = removeWorkspaceRefs(value);
+    }
+    return result;
+  }
+
+  // Default case for other types (numbers, booleans, etc.)
+  return item;
 }
 
 /**
- * Prepares the package.json for semantic-release by replacing workspace references
+ * More thorough function to prepare package.json for release
+ * including stringified JSON contents that might contain workspace references
  */
 function prepareForRelease() {
   console.log('Preparing package.json for semantic-release...');
 
   // Read and backup the original package.json
-  const packageJson = JSON.parse(fs.readFileSync(libPackageJsonPath, 'utf8'));
+  const packageJsonPath = libPackageJsonPath;
+  let packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
   const backupPath = path.join(libDir, '.package.json.bak');
-  fs.writeFileSync(backupPath, JSON.stringify(packageJson, null, 2));
+  fs.writeFileSync(backupPath, packageJsonContent);
 
-  // Get all dependency types to check
-  const dependencyTypes = [
-    'dependencies',
-    'devDependencies',
-    'peerDependencies',
-    'optionalDependencies',
-  ];
-
-  // Process each dependency type
-  let hasWorkspaceDeps = false;
-  dependencyTypes.forEach(depType => {
-    if (!packageJson[depType]) return;
-
-    Object.keys(packageJson[depType]).forEach(dep => {
-      const version = packageJson[depType][dep];
-      if (typeof version === 'string' && version.startsWith('workspace:')) {
-        hasWorkspaceDeps = true;
-        // Replace workspace: with a concrete version or *
-        packageJson[depType][dep] = '*';
-        console.log(
-          `Replaced workspace dependency: ${dep}@${version} → ${dep}@*`,
-        );
-      }
-    });
-  });
-
-  // Check for workspace references in resolutions
-  if (packageJson.resolutions) {
-    Object.keys(packageJson.resolutions).forEach(dep => {
-      const version = packageJson.resolutions[dep];
-      if (typeof version === 'string' && version.startsWith('workspace:')) {
-        hasWorkspaceDeps = true;
-        packageJson.resolutions[dep] = '*';
-        console.log(
-          `Replaced workspace resolution: ${dep}@${version} → ${dep}@*`,
-        );
-      }
-    });
+  // First look for direct string patterns in the raw JSON content
+  if (packageJsonContent.includes('workspace:')) {
+    console.log('Found raw workspace: references in package.json content');
+    packageJsonContent = packageJsonContent.replace(
+      /["']workspace:[^"']*["']/g,
+      '"*"',
+    );
+    fs.writeFileSync(packageJsonPath, packageJsonContent);
   }
 
-  // Search for any 'workspace:' strings in the entire package.json
-  // This handles less common locations where workspace refs might be present
-  const deepSearchResult = replaceWorkspaceRefsInObject(packageJson);
-  if (deepSearchResult) {
-    hasWorkspaceDeps = true;
-  }
+  // Now parse and process the object
+  let packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+  // Process the entire package.json for workspace references
+  packageJson = removeWorkspaceRefs(packageJson);
 
   // Remove workspace-related fields that might cause conflicts
   if (packageJson.workspaces) {
     console.log('Removing workspaces field from package.json');
     delete packageJson.workspaces;
-    hasWorkspaceDeps = true;
   }
 
   // Write the modified package.json
-  fs.writeFileSync(libPackageJsonPath, JSON.stringify(packageJson, null, 2));
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  console.log('Package.json prepared for semantic-release');
 
-  if (hasWorkspaceDeps) {
-    console.log(
-      'Package.json prepared for semantic-release with workspace dependencies replaced',
-    );
-  } else {
-    console.log('No workspace dependencies found in package.json');
+  // Also check for package-lock.json and temporarily rename it
+  const packageLockPath = path.join(libDir, 'package-lock.json');
+  if (fs.existsSync(packageLockPath)) {
+    const backupLockPath = path.join(libDir, '.package-lock.json.bak');
+    fs.renameSync(packageLockPath, backupLockPath);
+    console.log(`Temporarily moved package-lock.json to ${backupLockPath}`);
   }
 
-  return backupPath;
+  // Check for yarn.lock and temporarily rename it
+  const yarnLockPath = path.join(libDir, 'yarn.lock');
+  if (fs.existsSync(yarnLockPath)) {
+    const backupYarnLockPath = path.join(libDir, '.yarn.lock.bak');
+    fs.renameSync(yarnLockPath, backupYarnLockPath);
+    console.log(`Temporarily moved yarn.lock to ${backupYarnLockPath}`);
+  }
+
+  return {
+    packageJsonBackup: backupPath,
+    packageLockBackup: fs.existsSync(
+      path.join(libDir, '.package-lock.json.bak'),
+    )
+      ? path.join(libDir, '.package-lock.json.bak')
+      : null,
+    yarnLockBackup: fs.existsSync(path.join(libDir, '.yarn.lock.bak'))
+      ? path.join(libDir, '.yarn.lock.bak')
+      : null,
+  };
 }
 
 /**
- * Restores the original package.json
+ * Restores all backed up files
  */
-function restorePackageJson(backupPath) {
-  console.log('Restoring original package.json...');
+function restoreFiles(backups) {
+  console.log('Restoring original files...');
 
-  if (fs.existsSync(backupPath)) {
-    // Restore the original package.json
-    const originalContent = fs.readFileSync(backupPath, 'utf8');
+  // Restore package.json
+  if (backups.packageJsonBackup && fs.existsSync(backups.packageJsonBackup)) {
+    const originalContent = fs.readFileSync(backups.packageJsonBackup, 'utf8');
     fs.writeFileSync(libPackageJsonPath, originalContent);
-    fs.unlinkSync(backupPath);
+    fs.unlinkSync(backups.packageJsonBackup);
     console.log('Original package.json restored');
   } else {
-    console.warn('No backup file found, could not restore package.json');
+    console.warn('No package.json backup found, could not restore');
+  }
+
+  // Restore package-lock.json if it existed
+  if (backups.packageLockBackup && fs.existsSync(backups.packageLockBackup)) {
+    fs.renameSync(
+      backups.packageLockBackup,
+      path.join(libDir, 'package-lock.json'),
+    );
+    console.log('Original package-lock.json restored');
+  }
+
+  // Restore yarn.lock if it existed
+  if (backups.yarnLockBackup && fs.existsSync(backups.yarnLockBackup)) {
+    fs.renameSync(backups.yarnLockBackup, path.join(libDir, 'yarn.lock'));
+    console.log('Original yarn.lock restored');
   }
 }
 
@@ -188,12 +206,12 @@ function safeExec(command, options) {
 }
 
 async function main() {
-  let backupPath = null;
+  let backups = null;
   let npmrcPath = null;
 
   try {
     // Setup steps
-    backupPath = prepareForRelease();
+    backups = prepareForRelease();
     npmrcPath = createTempNpmrc();
 
     console.log('Running semantic-release from lib directory...');
@@ -238,6 +256,8 @@ async function main() {
       NPM_CONFIG_USERCONFIG: npmrcPath,
       // Provenance setting
       NPM_CONFIG_PROVENANCE: process.env.NPM_CONFIG_PROVENANCE || 'true',
+      // Disable workspace behavior explicitly
+      NPM_CONFIG_WORKSPACES: 'false',
       // GitHub Actions environment variables
       GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY,
       GITHUB_SHA: process.env.GITHUB_SHA,
@@ -271,6 +291,7 @@ async function main() {
           'NPM_TOKEN',
           'NPM_CONFIG_USERCONFIG',
           'NPM_CONFIG_PROVENANCE',
+          'NPM_CONFIG_WORKSPACES',
         ].includes(key)
       ) {
         console.log(`- Excluding: ${key}`);
@@ -308,6 +329,14 @@ async function main() {
       );
     }
 
+    // First build the project - this ensures all dependencies are resolved properly
+    console.log('Building project before release...');
+    execSync('npm run build', {
+      stdio: 'inherit',
+      cwd: libDir,
+      env: cleanEnv,
+    });
+
     // Run semantic-release with carefully controlled environment
     console.log('Executing semantic-release...');
     execSync(semanticReleaseBin, {
@@ -322,8 +351,8 @@ async function main() {
     process.exitCode = 1;
   } finally {
     // Cleanup steps - always run these
-    if (backupPath) {
-      restorePackageJson(backupPath);
+    if (backups) {
+      restoreFiles(backups);
     }
 
     if (npmrcPath) {
