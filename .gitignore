@@ -44,6 +44,8 @@ secrets.properties
 # node.js
 #
 node_modules/
+packages/*/node_modules
+packages/*/vendor/bundle/
 npm-debug.log
 yarn-error.log
 
@@ -65,8 +67,6 @@ yarn-error.log
 # VSCode workspace settings
 .vscode
 
-# ts outDir
-lib/
 
 example/vendor/bundle/
 
