@@ -17,11 +17,20 @@ const tempNpmrcPath = path.join(
  * This helps ensure npm commands work correctly in Yarn workspaces
  */
 function createTempNpmrc() {
+  // Verify and log NPM_TOKEN availability (masked for security)
+  if (!process.env.NPM_TOKEN) {
+    console.error('ERROR: NPM_TOKEN environment variable is not set!');
+    throw new Error('NPM_TOKEN is required for publishing');
+  } else {
+    console.log('NPM_TOKEN is available (value is masked for security)');
+  }
+
   const npmrcContent = `registry=https://registry.npmjs.org/
 //registry.npmjs.org/:_authToken=${process.env.NPM_TOKEN}
 provenance=${process.env.NPM_CONFIG_PROVENANCE || 'true'}
 `;
   fs.writeFileSync(tempNpmrcPath, npmrcContent);
+  console.log(`Created temporary .npmrc at ${tempNpmrcPath}`);
   return tempNpmrcPath;
 }
 
@@ -31,6 +40,7 @@ provenance=${process.env.NPM_CONFIG_PROVENANCE || 'true'}
 function cleanupTempNpmrc() {
   if (fs.existsSync(tempNpmrcPath)) {
     fs.unlinkSync(tempNpmrcPath);
+    console.log(`Removed temporary .npmrc from ${tempNpmrcPath}`);
   }
 }
 
@@ -126,6 +136,16 @@ async function main() {
     npmrcPath = createTempNpmrc();
 
     console.log('Running semantic-release from lib directory...');
+    console.log('Environment variables available to script:');
+    console.log(
+      '- GITHUB_TOKEN:',
+      process.env.GITHUB_TOKEN ? 'Set (masked)' : 'Not set',
+    );
+    console.log(
+      '- NPM_TOKEN:',
+      process.env.NPM_TOKEN ? 'Set (masked)' : 'Not set',
+    );
+    console.log('- NPM_CONFIG_PROVENANCE:', process.env.NPM_CONFIG_PROVENANCE);
 
     // Path to semantic-release binary
     const semanticReleaseBin = path.join(
@@ -135,23 +155,40 @@ async function main() {
       'semantic-release',
     );
 
+    console.log(
+      `Checking if semantic-release exists at: ${semanticReleaseBin}`,
+    );
+    if (fs.existsSync(semanticReleaseBin)) {
+      console.log('semantic-release binary found');
+    } else {
+      console.error('semantic-release binary NOT found!');
+      throw new Error('semantic-release binary not found');
+    }
+
+    // Prepare environment for semantic-release
+    const envVars = {
+      ...process.env,
+      // Explicitly pass through critical environment variables
+      GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+      NPM_TOKEN: process.env.NPM_TOKEN,
+      // Use our temporary npmrc file
+      NPM_CONFIG_USERCONFIG: npmrcPath,
+      // Disable workspace features
+      NPM_CONFIG_WORKSPACES: 'false',
+      NPM_CONFIG_WORKSPACE: 'false',
+      // Prevent npm from trying to use Yarn's workspace protocol
+      NPM_CONFIG_ENGINE_STRICT: 'false',
+      // Ensure npm knows this is not a workspace command
+      npm_config_workspaces: 'false',
+      npm_config_workspace: 'false',
+    };
+
     // Run semantic-release with carefully controlled environment
+    console.log('Executing semantic-release...');
     execSync(semanticReleaseBin, {
       stdio: 'inherit',
       cwd: libDir, // Run from lib directory
-      env: {
-        ...process.env,
-        // Use our temporary npmrc file
-        NPM_CONFIG_USERCONFIG: npmrcPath,
-        // Disable workspace features
-        NPM_CONFIG_WORKSPACES: 'false',
-        NPM_CONFIG_WORKSPACE: 'false',
-        // Prevent npm from trying to use Yarn's workspace protocol
-        NPM_CONFIG_ENGINE_STRICT: 'false',
-        // Ensure npm knows this is not a workspace command
-        npm_config_workspaces: 'false',
-        npm_config_workspace: 'false',
-      },
+      env: envVars,
     });
 
     console.log('Semantic release completed successfully');
