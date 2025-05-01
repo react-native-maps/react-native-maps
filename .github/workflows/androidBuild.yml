@@ -22,7 +22,7 @@ jobs:
           build-tools-version: 33.0.2
 
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Clear Gradle Cache
         run: rm -rf $HOME/.gradle/caches/
