@@ -39,18 +39,8 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
-      - name: Configure .npmrc with auth token
-        run: |
-          echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
-          echo "package-lock=false" >> .npmrc
-        working-directory: packages/lib
-        env:
-          GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-          NPM_CONFIG_PROVENANCE: true
-
       - name: Release
-        run: npx semantic-release --ci --debug
+        run: yarn release
         working-directory: packages/lib
         env:
           GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
