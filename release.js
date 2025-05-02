@@ -28,6 +28,7 @@ function createTempNpmrc() {
   const npmrcContent = `registry=https://registry.npmjs.org/
 //registry.npmjs.org/:_authToken=${process.env.NPM_TOKEN}
 provenance=${process.env.NPM_CONFIG_PROVENANCE || 'true'}
+workspaces=false
 `;
   fs.writeFileSync(tempNpmrcPath, npmrcContent);
   console.log(`Created temporary .npmrc at ${tempNpmrcPath}`);
@@ -256,48 +257,26 @@ async function main() {
       NPM_CONFIG_USERCONFIG: npmrcPath,
       // Provenance setting
       NPM_CONFIG_PROVENANCE: process.env.NPM_CONFIG_PROVENANCE || 'true',
-      // Disable workspace behavior explicitly
-      NPM_CONFIG_WORKSPACES: 'false',
-      // GitHub Actions environment variables
-      GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY,
-      GITHUB_SHA: process.env.GITHUB_SHA,
-      GITHUB_REF: process.env.GITHUB_REF,
-      GITHUB_EVENT_NAME: process.env.GITHUB_EVENT_NAME,
-      GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW,
-      GITHUB_ACTION: process.env.GITHUB_ACTION,
-      GITHUB_ACTOR: process.env.GITHUB_ACTOR,
-      GITHUB_HEAD_REF: process.env.GITHUB_HEAD_REF,
-      GITHUB_BASE_REF: process.env.GITHUB_BASE_REF,
-      RUNNER_OS: process.env.RUNNER_OS,
-      CI: process.env.CI,
+      // Do not set NPM_CONFIG_WORKSPACES here - we handle it in npmrc
     };
 
-    // Ensure no workspace flags are set in the environment
-    // Explicitly unset any workspace-related npm configs
-    const npmEnvVars = Object.keys(process.env).filter(
-      key =>
-        key.startsWith('npm_') ||
-        key.startsWith('NPM_') ||
-        key.includes('workspace') ||
-        key.includes('WORKSPACE'),
-    );
+    // Add relevant GitHub Actions environment variables
+    const githubEnvVars = [
+      'GITHUB_REPOSITORY',
+      'GITHUB_SHA',
+      'GITHUB_REF',
+      'GITHUB_EVENT_NAME',
+      'GITHUB_WORKFLOW',
+      'GITHUB_ACTION',
+      'GITHUB_ACTOR',
+      'GITHUB_HEAD_REF',
+      'GITHUB_BASE_REF',
+      'RUNNER_OS',
+      'CI',
+    ];
 
-    console.log(
-      'Filtering out potentially conflicting npm environment variables:',
-    );
-    npmEnvVars.forEach(key => {
-      if (
-        ![
-          'NPM_TOKEN',
-          'NPM_CONFIG_USERCONFIG',
-          'NPM_CONFIG_PROVENANCE',
-          'NPM_CONFIG_WORKSPACES',
-        ].includes(key)
-      ) {
-        console.log(`- Excluding: ${key}`);
-      } else {
-        console.log(`- Keeping: ${key}`);
-        // Keep these specific variables
+    githubEnvVars.forEach(key => {
+      if (process.env[key]) {
         cleanEnv[key] = process.env[key];
       }
     });
@@ -329,19 +308,20 @@ async function main() {
       );
     }
 
-    // First build the project - this ensures all dependencies are resolved properly
+    // First build the project
     console.log('Building project before release...');
-    execSync('npm run build', {
+    // Use the custom build command explicitly without workspace flags
+    execSync('npm run build --no-workspaces', {
       stdio: 'inherit',
       cwd: libDir,
       env: cleanEnv,
     });
 
-    // Run semantic-release with carefully controlled environment
+    // Run semantic-release
     console.log('Executing semantic-release...');
     execSync(semanticReleaseBin, {
       stdio: 'inherit',
-      cwd: libDir, // Run from lib directory
+      cwd: libDir,
       env: cleanEnv,
     });
 
