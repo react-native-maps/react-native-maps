@@ -42,10 +42,9 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
-      - name: Setup .npmrc
-        working-directory: packages/lib
+      - name: Update npm config
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> /home/runner/work/_temp/.npmrc
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
 
