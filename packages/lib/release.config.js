@@ -15,8 +15,7 @@ module.exports = {
       {
         prepareCmd:
           'yarn workspace react-native-maps version ${nextRelease.version}',
-        publishCmd:
-          'NPM_TOKEN=${NPM_TOKEN} npm publish --access public --//registry.npmjs.org/:_authToken=${NPM_TOKEN}',
+        publishCmd: 'npm publish --access public',
       },
     ],
     '@semantic-release/github',
