@@ -38,6 +38,10 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
+      - name: Patch .npmrc to avoid workspace resolution
+        run: echo "package-lock=false" > .npmrc
+        working-directory: packages/lib
+
       - name: Release
         working-directory: packages/lib
         run: yarn release
