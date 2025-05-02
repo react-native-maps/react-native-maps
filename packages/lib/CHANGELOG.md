@@ -1,3 +1,11 @@
+# [1.24.0](https://github.com/react-native-maps/react-native-maps/compare/v1.23.0...v1.24.0) (2025-05-02)
+
+
+### Features
+
+* add support for release from yarn workspace ([9ce69f4](https://github.com/react-native-maps/react-native-maps/commit/9ce69f4956aa606fe7235d6f37ca39e4ea4c14f3))
+* add support for release from yarn workspace ([edc4b4b](https://github.com/react-native-maps/react-native-maps/commit/edc4b4b3833e7484470ebef102fd67ff43f733a4))
+
 # [1.23.0](https://github.com/react-native-maps/react-native-maps/compare/v1.22.6...v1.23.0) (2025-05-02)
 
 
