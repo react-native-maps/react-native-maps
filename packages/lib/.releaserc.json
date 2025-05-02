@@ -11,14 +11,13 @@
     [
       "@semantic-release/npm",
       {
-        "npmPublish": true,
-        "pkgRoot": "packages/lib"
+        "npmPublish": true
       }
     ],
     [
       "@semantic-release/git",
       {
-        "assets": ["packages/lib/package.json", "CHANGELOG.md"],
+        "assets": ["package.json", "../../CHANGELOG.md"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
