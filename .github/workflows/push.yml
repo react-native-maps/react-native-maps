@@ -42,6 +42,13 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
+      - name: Setup .npmrc
+        working-directory: packages/lib
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+
       - name: Release
         run: yarn release
         working-directory: packages/lib
