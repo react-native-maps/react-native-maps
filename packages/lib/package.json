@@ -69,7 +69,7 @@
     "react": "^18.3.1",
     "react-native": "^0.77.1",
     "react-test-renderer": "18.3.1",
-    "semantic-release": "24.2.0",
+    "semantic-release": "24.2.3",
     "typescript": "5.0.4"
   },
   "dependencies": {
