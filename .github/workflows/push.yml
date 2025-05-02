@@ -17,6 +17,7 @@ jobs:
       HUSKY: 0
       GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
       NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+      NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       NPM_CONFIG_PROVENANCE: true
     steps:
       - name: Check out repository code
@@ -41,12 +42,6 @@ jobs:
       # Latest version of npm needed for provenance
       - name: Install latest npm
         run: npm install -g npm@latest
-
-      - name: Update npm config
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> /home/runner/work/_temp/.npmrc
-        env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
 
       - name: Release
         run: yarn release
