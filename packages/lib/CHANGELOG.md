@@ -1,3 +1,10 @@
+# [1.25.0-alpha.2](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0-alpha.1...v1.25.0-alpha.2) (2025-05-02)
+
+
+### Bug Fixes
+
+* force new release ([afff010](https://github.com/react-native-maps/react-native-maps/commit/afff010a3a23f2e7c0770c6827e0c935272d3314))
+
 # [1.25.0-alpha.1](https://github.com/react-native-maps/react-native-maps/compare/v1.24.0...v1.25.0-alpha.1) (2025-05-02)
 
 
