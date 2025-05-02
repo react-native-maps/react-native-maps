@@ -3643,6 +3643,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@semantic-release/exec@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "@semantic-release/exec@npm:7.0.3"
+  dependencies:
+    "@semantic-release/error": "npm:^4.0.0"
+    aggregate-error: "npm:^3.0.0"
+    debug: "npm:^4.0.0"
+    execa: "npm:^9.0.0"
+    lodash-es: "npm:^4.17.21"
+    parse-json: "npm:^8.0.0"
+  peerDependencies:
+    semantic-release: ">=24.1.0"
+  checksum: 10c0/99d2dbed9b9b4427553f746c2b7fafc1f6fdd6cafb1e29a159d666a2b58879fb1cf1ce3d21ad14155ec36a7bdf65d2999ca496b7f1d6a15261e6b82fbc4b1da8
+  languageName: node
+  linkType: hard
+
 "@semantic-release/git@npm:10.0.1":
   version: 10.0.1
   resolution: "@semantic-release/git@npm:10.0.1"
@@ -11631,6 +11647,7 @@ __metadata:
     "@react-native/metro-config": "npm:0.76.8"
     "@react-native/typescript-config": "npm:0.76.8"
     "@semantic-release/changelog": "npm:6.0.3"
+    "@semantic-release/exec": "npm:^7.0.3"
     "@semantic-release/git": "npm:10.0.1"
     "@types/geojson": "npm:^7946.0.13"
     "@types/react": "npm:^18.2.6"
