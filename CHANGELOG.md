@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.2](https://github.com/react-native-maps/react-native-maps/compare/v1.23.1...v1.23.2) (2025-05-03)
+
+
+### Bug Fixes
+
+* **android:** onRegionChange not being dispatched ([#5474](https://github.com/react-native-maps/react-native-maps/issues/5474)) ([6492771](https://github.com/react-native-maps/react-native-maps/commit/649277195dd6e49c37ecc072717ce7b46a0145bc))
+
 ## [1.23.1](https://github.com/react-native-maps/react-native-maps/compare/v1.23.0...v1.23.1) (2025-05-03)
 
 
