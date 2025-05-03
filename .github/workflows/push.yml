@@ -45,9 +45,10 @@ jobs:
 
       - name: remove workspace ref from yarn.lock
         run: |
-          sed -i 's/"react-native-maps@workspace:packages\/lib"/"react-native-maps@npm:1.22.6"/g' yarn.lock
-          sed -i 's/"react-native-maps@workspace:\*"/"react-native-maps@npm:1.22.6"/g' yarn.lock
-          sed -i 's/"workspace:\*"/"*"/g' yarn.lock
+          sed -i 's/react-native-maps@workspace:packages\/lib/react-native-maps@npm:1.22.6/g' yarn.lock
+          sed -i 's/react-native-maps@workspace:\*/react-native-maps@npm:1.22.6/g' yarn.lock
+          sed -i 's/react-native-maps: "workspace:packages\/lib"/react-native-maps: "npm:1.22.6"/g' yarn.lock
+          sed -i 's/workspace:\*/*/' yarn.lock
 
       - name: Release
         run: yarn release
