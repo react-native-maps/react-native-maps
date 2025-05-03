@@ -55,20 +55,12 @@ jobs:
           echo "=== Modified yarn.lock (excerpt) ==="
           grep -A 5 "react-native-maps" yarn.lock || echo "No matching lines found"
 
-          # Replace workspace reference in example's package.json
-          sed -i 's/"react-native-maps": "workspace:packages/lib"/"react-native-maps": "1.22.6"/g' packages/example/package.json
+          # Delete the example directory
+          rm -rf packages/example
 
-          # Print the modified package.json for verification
-          echo "=== Modified packages/example/package.json (excerpt) ==="
-          grep -A 3 -B 3 "react-native-maps" packages/example/package.json || echo "No matching lines found"
-
-      - name: Show complete files for verification
-        run: |
-          echo "=== Complete yarn.lock ==="
-          cat yarn.lock
-
-          echo "=== Complete example/package.json ==="
-          cat packages/example/package.json
+          # Verify the directory was removed
+          echo "=== Checking if example directory still exists ==="
+          [ ! -d "packages/example" ] && echo "Successfully removed packages/example directory"
 
       - name: Release
         run: yarn release
