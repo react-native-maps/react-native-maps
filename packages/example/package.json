@@ -13,7 +13,7 @@
   "dependencies": {
     "react": "19.0.0",
     "react-native": "0.79.1",
-    "react-native-maps": "workspace:*"
+    "react-native-maps": "workspace:packages/lib"
   },
   "devDependencies": {
     "@babel/core": "7.26.10",

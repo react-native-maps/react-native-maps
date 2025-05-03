@@ -11608,7 +11608,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-maps@workspace:*, react-native-maps@workspace:packages/lib":
+"react-native-maps@workspace:packages/lib":
   version: 0.0.0-use.local
   resolution: "react-native-maps@workspace:packages/lib"
   dependencies:
@@ -12206,7 +12206,7 @@ __metadata:
     babel-plugin-module-resolver: "npm:5.0.2"
     react: "npm:19.0.0"
     react-native: "npm:0.79.1"
-    react-native-maps: "workspace:*"
+    react-native-maps: "workspace:packages/lib"
     typescript: "npm:5.0.4"
   languageName: unknown
   linkType: soft
