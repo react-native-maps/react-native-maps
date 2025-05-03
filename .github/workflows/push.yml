@@ -43,6 +43,9 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
+      - name: remove workspace ref from yarn.lock
+        run: sed -i 's/"workspace:\*"/"*"/g' yarn.lock
+
       - name: Release
         run: yarn release
         working-directory: packages/lib
