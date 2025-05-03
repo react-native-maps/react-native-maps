@@ -1,12 +1,12 @@
 # Add files here to ignore them from prettier formatting
 
 CHANGELOG.md
-packages/example/ios
-packages/example/android
+example/ios
+example/android
 android/build
-packages/example/vendor/bundle/
-packages/lib/android/build
-packages/lib/dist
-packages/lib/plugin/build
+example/vendor/bundle/
+android/build
+dist
+plugin/build
 .yarn
 ios/DerivedData

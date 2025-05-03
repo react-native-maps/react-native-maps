@@ -22,17 +22,17 @@ jobs:
         with:
           ruby-version: '3.2.2'
           bundler-cache: true
-          working-directory: packages/example
+          working-directory: example
 
       - name: Install dependencies
-        run: yarn --cwd packages/example --frozen-lockfile
+        run: yarn --cwd example --frozen-lockfile
 
       - name: Install pods
         run: RCT_NEW_ARCH_ENABLED=1 NO_FLIPPER=1 USE_FRAMEWORKS=static bundle exec pod install
-        working-directory: packages/example/ios
+        working-directory: example/ios
 
       - name: Write Secrets.xcconfig
-        run: echo MAPS_API_KEY=your_api_key_here >> packages/example/ios/Secrets.xcconfig
+        run: echo MAPS_API_KEY=your_api_key_here >> example/ios/Secrets.xcconfig
 
       - name: Build iOS
-        run: xcodebuild -workspace packages/example/ios/rnmshowcase.xcworkspace -scheme rnmshowcase -configuration Debug -sdk iphonesimulator
+        run: xcodebuild -workspace example/ios/rnmshowcase.xcworkspace -scheme rnmshowcase -configuration Debug -sdk iphonesimulator

@@ -15,10 +15,6 @@ jobs:
       id-token: write
     env:
       HUSKY: 0
-      GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
-      NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-      NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      NPM_CONFIG_PROVENANCE: true
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -29,27 +25,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          registry-url: 'https://registry.npmjs.org/'
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --immutable
+        run: yarn --frozen-lockfile
 
       - name: Build
         run: yarn build
-        working-directory: packages/lib
 
       # Latest version of npm needed for provenance
       - name: Install latest npm
         run: npm install -g npm@latest
 
-      - name: Remove examples from workspaces
-        run: |
-          # Create a temporary file with the updated workspace configuration
-          jq '.workspaces = ["packages/*", "!packages/example/**"]' package.json > temp.json
-          # Replace the original package.json with the updated one
-          mv temp.json package.json
-          echo "Excluded example packages from workspaces"
-
       - name: Release
-        run: npx multi-semantic-release
+        env:
+          GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_CONFIG_PROVENANCE: true
+        run: yarn release
