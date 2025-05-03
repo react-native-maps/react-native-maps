@@ -573,8 +573,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             cameraLastIdleBounds = null;
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, false, isGesture);
-            dispatchEvent(payload, OnRegionChangeStartEvent::new);
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, true, isGesture);
+            dispatchEvent(payload, OnRegionChangeEvent::new);
         });
 
         map.setOnCameraIdleListener(() -> {
