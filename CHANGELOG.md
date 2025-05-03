@@ -1,5 +1,28 @@
 # Changelog
 
+# [1.25.0-alpha.7](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0-alpha.6...v1.25.0-alpha.7) (2025-05-03)
+
+
+### Bug Fixes
+
+* force new release ([c309dfa](https://github.com/react-native-maps/react-native-maps/commit/c309dfab18569fe49c986d14351b24432ae14b53))
+* force new release ([3f56673](https://github.com/react-native-maps/react-native-maps/commit/3f56673092c3b5d960ce6f91c6053d5d43958ceb))
+* force new release ([7d16375](https://github.com/react-native-maps/react-native-maps/commit/7d163759b01b11431f12b9ead6b9944739795815))
+* force new release ([5bf2f24](https://github.com/react-native-maps/react-native-maps/commit/5bf2f2418d89dfbb060f9ee8277165d4d87bca69))
+* force new release ([2a1722a](https://github.com/react-native-maps/react-native-maps/commit/2a1722ad0f73a29a39b2d74f536f2f058b18c2f6))
+* force new release ([8eaecbb](https://github.com/react-native-maps/react-native-maps/commit/8eaecbbe6c45dc914441b6068625a4a03dc1589b))
+* force new release ([e095a63](https://github.com/react-native-maps/react-native-maps/commit/e095a636de22733f0e908375604b6a61c9b9cd90))
+* force new release ([bd6d242](https://github.com/react-native-maps/react-native-maps/commit/bd6d242692d168f42e4fb9fc6b1df0f25f01d346))
+* force new release ([14cc326](https://github.com/react-native-maps/react-native-maps/commit/14cc326ca82c2a83db7a82b9bef1819279b877b5))
+* force new release ([55a5e70](https://github.com/react-native-maps/react-native-maps/commit/55a5e708091a621394fd67e791980e2807184358))
+* force new release ([f949d2a](https://github.com/react-native-maps/react-native-maps/commit/f949d2abcc192ee658a978c6bf88d9f1a83c3f72))
+* force new release ([514cf78](https://github.com/react-native-maps/react-native-maps/commit/514cf78e6e59cd6c182d1d35cff5badb387f1b39))
+* force new release ([06e997b](https://github.com/react-native-maps/react-native-maps/commit/06e997bbb949e538ad64344582453950153b08ef))
+* force new release ([ea8e54c](https://github.com/react-native-maps/react-native-maps/commit/ea8e54c643910e1b5ffc1978823616112876b3e6))
+* force new release ([398be4c](https://github.com/react-native-maps/react-native-maps/commit/398be4ced909116737e982c3345693970f185faa))
+* force new release ([dfa2fa5](https://github.com/react-native-maps/react-native-maps/commit/dfa2fa5ed60bb5ec234ed572f18e23834b85f775))
+* revert from monorepo ([3fcd5b5](https://github.com/react-native-maps/react-native-maps/commit/3fcd5b573ab318723a48a73c1fd56e233702539d))
+
 ## [1.22.6](https://github.com/react-native-maps/react-native-maps/compare/v1.22.5...v1.22.6) (2025-04-21)
 
 
