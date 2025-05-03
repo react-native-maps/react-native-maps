@@ -43,6 +43,14 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
+      - name: Remove examples from workspaces
+        run: |
+          # Create a temporary file with the updated workspace configuration
+          jq '.workspaces = ["packages/*", "!packages/example/**"]' package.json > temp.json
+          # Replace the original package.json with the updated one
+          mv temp.json package.json
+          echo "Excluded example packages from workspaces"
+
       - name: Release
         run: yarn release
         working-directory: packages/lib
