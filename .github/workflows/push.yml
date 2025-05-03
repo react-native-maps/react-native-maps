@@ -45,22 +45,13 @@ jobs:
 
       - name: replace workspace refs in yarn.lock
         run: |
-          # Replace all workspace references in yarn.lock
-          sed -i 's/react-native-maps@workspace:packages\/lib/react-native-maps@npm:1.22.6/g' yarn.lock
-          sed -i 's/react-native-maps@workspace:\*/react-native-maps@npm:1.22.6/g' yarn.lock
-          sed -i 's/react-native-maps: "workspace:packages\/lib"/react-native-maps: "1.22.6"/g' yarn.lock
-          sed -i 's/workspace:\*/*/' yarn.lock
+          # Replace example package.json with the CI version
+          echo "=== Replacing example package.json with CI version ==="
+          cp .ci/package.json packages/example/package.json
 
-          # Print the modified yarn.lock for verification
-          echo "=== Modified yarn.lock (excerpt) ==="
-          grep -A 5 "react-native-maps" yarn.lock || echo "No matching lines found"
-
-          # Delete the example directory
-          rm -rf packages/example
-
-          # Verify the directory was removed
-          echo "=== Checking if example directory still exists ==="
-          [ ! -d "packages/example" ] && echo "Successfully removed packages/example directory"
+          # Replace root yarn.lock with the CI version
+          echo "=== Replacing yarn.lock with CI version ==="
+          cp .ci/yarn.lock ./yarn.lock
 
       - name: Release
         run: yarn release
