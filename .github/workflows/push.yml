@@ -43,12 +43,32 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
-      - name: remove workspace ref from yarn.lock
+      - name: replace workspace refs in yarn.lock
         run: |
+          # Replace all workspace references in yarn.lock
           sed -i 's/react-native-maps@workspace:packages\/lib/react-native-maps@npm:1.22.6/g' yarn.lock
           sed -i 's/react-native-maps@workspace:\*/react-native-maps@npm:1.22.6/g' yarn.lock
-          sed -i 's/react-native-maps: "workspace:packages\/lib"/react-native-maps: "npm:1.22.6"/g' yarn.lock
+          sed -i 's/react-native-maps: "workspace:packages\/lib"/react-native-maps: "1.22.6"/g' yarn.lock
           sed -i 's/workspace:\*/*/' yarn.lock
+
+          # Print the modified yarn.lock for verification
+          echo "=== Modified yarn.lock (excerpt) ==="
+          grep -A 5 "react-native-maps" yarn.lock || echo "No matching lines found"
+
+          # Replace workspace reference in example's package.json
+          sed -i 's/"react-native-maps": "workspace:packages/lib"/"react-native-maps": "1.22.6"/g' packages/example/package.json
+
+          # Print the modified package.json for verification
+          echo "=== Modified packages/example/package.json (excerpt) ==="
+          grep -A 3 -B 3 "react-native-maps" packages/example/package.json || echo "No matching lines found"
+
+      - name: Show complete files for verification
+        run: |
+          echo "=== Complete yarn.lock ==="
+          cat yarn.lock
+
+          echo "=== Complete example/package.json ==="
+          cat packages/example/package.json
 
       - name: Release
         run: yarn release
