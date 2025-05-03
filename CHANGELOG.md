@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.25.0-alpha.8](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0-alpha.7...v1.25.0-alpha.8) (2025-05-03)
+
+
+### Bug Fixes
+
+* minor version bump semantic-release ([166c008](https://github.com/react-native-maps/react-native-maps/commit/166c0086ab6551c82b4f64985c6adfadbbe004fb))
+
 # [1.25.0-alpha.7](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0-alpha.6...v1.25.0-alpha.7) (2025-05-03)
 
 
