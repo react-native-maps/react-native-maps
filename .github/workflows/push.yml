@@ -43,16 +43,6 @@ jobs:
       - name: Install latest npm
         run: npm install -g npm@latest
 
-      - name: replace workspace refs in yarn.lock
-        run: |
-          # Replace example package.json with the CI version
-          echo "=== Replacing example package.json with CI version ==="
-          cp .ci/package.json packages/example/package.json
-
-          # Replace root yarn.lock with the CI version
-          echo "=== Replacing yarn.lock with CI version ==="
-          cp .ci/yarn.lock ./yarn.lock
-
       - name: Release
         run: yarn release
         working-directory: packages/lib
