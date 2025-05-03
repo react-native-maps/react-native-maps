@@ -14305,6 +14305,7 @@ __metadata:
     "@types/react-native": "npm:^0.73.0"
     eslint: "npm:^8.19.0"
     husky: "npm:9.1.7"
+    multi-semantic-release: "npm:^3.0.2"
     prettier: "npm:2.8.8"
     typescript: "npm:5.0.4"
   languageName: unknown

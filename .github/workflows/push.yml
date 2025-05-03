@@ -52,4 +52,4 @@ jobs:
           echo "Excluded example packages from workspaces"
 
       - name: Release
-        run: yarn workspace react-native-maps release
+        run: npx multi-semantic-release

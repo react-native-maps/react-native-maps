@@ -21,6 +21,7 @@
     "@types/react-native": "^0.73.0",
     "eslint": "^8.19.0",
     "husky": "9.1.7",
+    "multi-semantic-release": "^3.0.2",
     "prettier": "2.8.8",
     "typescript": "5.0.4"
   },
