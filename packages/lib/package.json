@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json && tsc --project plugin/tsconfig.json",
     "test": "jest",
-    "release": "semantic-release",
+    "release": "multi-semantic-release",
     "tscheck": "tsc --noEmit"
   },
   "files": [
@@ -65,6 +65,7 @@
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.6.3",
     "jest": "^29.6.3",
+    "multi-semantic-release": "^3.0.2",
     "react": "^18.3.1",
     "react-native": "^0.77.1",
     "react-test-renderer": "18.3.1",

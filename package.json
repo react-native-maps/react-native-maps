@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "rn-maps",
   "scripts": {
     "lint": "eslint \"packages/**/*.{ts,tsx,js,jsx}\" --max-warnings 0",
     "tscheck": "tsc --noEmit",
