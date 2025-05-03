@@ -1,4 +1,4 @@
 yarn lint
 yarn tscheck
 yarn format-check
-yarn test
+yarn workspace react-native-maps test
