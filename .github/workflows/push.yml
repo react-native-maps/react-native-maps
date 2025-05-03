@@ -52,5 +52,4 @@ jobs:
           echo "Excluded example packages from workspaces"
 
       - name: Release
-        run: yarn release
-        working-directory: packages/lib
+        run: yarn workspace react-native-maps release
