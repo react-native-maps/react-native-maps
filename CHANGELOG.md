@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.1](https://github.com/react-native-maps/react-native-maps/compare/v1.23.0...v1.23.1) (2025-05-03)
+
+
+### Bug Fixes
+
+* remove unnecessary tsconfig.json from example ([#5473](https://github.com/react-native-maps/react-native-maps/issues/5473)) ([b1d3b5a](https://github.com/react-native-maps/react-native-maps/commit/b1d3b5a0f2317d30e025381e91cfeda0d2023869))
+
 # [1.23.0](https://github.com/react-native-maps/react-native-maps/compare/v1.22.6...v1.23.0) (2025-05-03)
 
 
