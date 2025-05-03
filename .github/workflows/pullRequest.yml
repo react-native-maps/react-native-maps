@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -22,7 +22,7 @@ jobs:
 
       - name: Install example dependencies
         run: yarn --frozen-lockfile
-        working-directory: packages/example
+        working-directory: example
 
       - name: Lint
         run: yarn lint
@@ -35,4 +35,3 @@ jobs:
 
       - name: Test
         run: yarn test
-        working-directory: packages/lib

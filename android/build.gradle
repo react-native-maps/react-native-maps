@@ -1,0 +1,109 @@
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+buildscript {
+    def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '2.0.21'
+    // The Android Gradle plugin is only required when opening the android folder stand-alone.
+    // This avoids unnecessary downloads and potential conflicts when the library is included as a
+    // module dependency in an application project.
+    if (project == rootProject) {
+        repositories {
+            google()
+            mavenCentral()
+        }
+        dependencies {
+            classpath("com.android.tools.build:gradle:8.7.2")
+            classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}")
+        }
+    }
+}
+
+def supportsNamespace() {
+    def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+    def major = parsed[0].toInteger()
+    def minor = parsed[1].toInteger()
+
+    // Namespace support was added in 7.3.0
+    if (major == 7 && minor >= 3) {
+        return true
+    }
+
+    return major >= 8
+}
+
+def isNewArchitectureEnabled() {
+    return project.hasProperty("newArchEnabled") && (project.newArchEnabled == "true" || project.newArchEnabled == true)
+}
+
+apply plugin: 'com.android.library'
+if (isNewArchitectureEnabled()) {
+    apply plugin: 'com.facebook.react'
+}
+apply plugin: 'kotlin-android'
+
+android {
+    if (supportsNamespace()) {
+        namespace "com.rnmaps.maps"
+    }
+
+    if (rootProject.hasProperty("ndkPath")) {
+        ndkPath rootProject.ext.ndkPath
+    }
+    if (rootProject.hasProperty("ndkVersion")) {
+        ndkVersion rootProject.ext.ndkVersion
+    }
+
+    compileSdk safeExtGet('compileSdkVersion', 35)
+
+    defaultConfig {
+        minSdkVersion safeExtGet('minSdkVersion', 21)
+        targetSdkVersion safeExtGet('targetSdkVersion', 34)
+
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+
+        ndk {
+            abiFilters(*reactNativeArchitectures())
+        }
+    }
+    packagingOptions {
+        excludes = [
+                "META-INF",
+                "META-INF/**",
+                "**/libreact_render*.so",
+        ]
+    }
+
+  buildFeatures {
+          buildConfig = true
+          prefab = true
+  }
+}
+
+def reactNativeArchitectures() {
+    def value = project.getProperties().get("reactNativeArchitectures")
+    return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url "$projectDir/../node_modules/react-native/android"
+    }
+    google()
+}
+
+dependencies {
+    implementation 'com.facebook.react:react-native:+'
+    implementation "com.google.android.gms:play-services-base:${safeExtGet('googlePlayServicesBaseVersion', '18.5.0')}"
+    implementation "com.google.android.gms:play-services-maps:${safeExtGet('googlePlayServicesMapsVersion', '19.1.0')}"
+    implementation "com.google.android.gms:play-services-location:${safeExtGet('googlePlayServicesLocationVersion', '21.3.0')}"
+    implementation 'com.google.maps.android:android-maps-utils:3.10.0'
+    implementation "androidx.work:work-runtime:2.9.1"
+}
+
+project.afterEvaluate {
+    println("\u001B[32m[react-native-maps] Thank you for using react-native-maps ❤️! \n[react-native-maps] to help keep it maintained, please consider sponsoring at https://github.com/sponsors/salah-ghanim\u001B[0m")
+}

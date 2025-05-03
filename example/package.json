@@ -1,0 +1,31 @@
+{
+  "name": "rnmshowcase",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "react": "19.0.0",
+    "react-native": "0.79.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.26.10",
+    "@babel/preset-env": "7.26.9",
+    "@babel/runtime": "7.27.0",
+    "@react-native-community/cli": "18.0.0",
+    "@react-native-community/cli-platform-android": "18.0.0",
+    "@react-native-community/cli-platform-ios": "18.0.0",
+    "@react-native/babel-preset": "0.79.1",
+    "@react-native/metro-config": "0.79.1",
+    "@react-native/typescript-config": "0.79.1",
+    "babel-plugin-module-resolver": "5.0.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

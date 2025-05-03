@@ -67,6 +67,8 @@ yarn-error.log
 # VSCode workspace settings
 .vscode
 
+# ts outDir
+lib/
 
 example/vendor/bundle/
 
