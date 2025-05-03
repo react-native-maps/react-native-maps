@@ -69,7 +69,6 @@
     "react-native": "^0.77.1",
     "react-test-renderer": "18.3.1",
     "semantic-release": "24.2.3",
-    "semantic-release-monorepo": "^8.0.2",
     "typescript": "5.0.4"
   },
   "dependencies": {
