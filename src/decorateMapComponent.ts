@@ -23,7 +23,7 @@ import {Commands} from './MapViewNativeComponent';
 import GooglePolygon from './specs/NativeComponentGooglePolygon';
 import FabricMarker from './specs/NativeComponentMarker';
 import FabricUrlTile from './specs/NativeComponentUrlTile';
-import FabricWMSTile from './specs/NativeComponentWMSTile.ts';
+import FabricWMSTile from './specs/NativeComponentWMSTile';
 import FabricCallout from './specs/NativeComponentCallout';
 import FabricPolyline from './specs/NativeComponentPolyline';
 import FabricCircle from './specs/NativeComponentCircle';
