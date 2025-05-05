@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.5](https://github.com/react-native-maps/react-native-maps/compare/v1.23.4...v1.23.5) (2025-05-05)
+
+
+### Bug Fixes
+
+* **ts:** more fixes for ts issues ([#5483](https://github.com/react-native-maps/react-native-maps/issues/5483)) ([7827e13](https://github.com/react-native-maps/react-native-maps/commit/7827e130eda0cf27d425891651540618b2e52b5f))
+
 ## [1.23.4](https://github.com/react-native-maps/react-native-maps/compare/v1.23.3...v1.23.4) (2025-05-05)
 
 
