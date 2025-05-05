@@ -41,6 +41,8 @@ public class MapPolyline extends MapFeature {
     private ReadableArray patternValues;
     private List<PatternItem> pattern;
 
+    private List<StyleSpan> spans;
+
     public MapPolyline(Context context) {
         super(context);
     }
@@ -76,8 +78,10 @@ public class MapPolyline extends MapFeature {
             }
             spans.add(new StyleSpan(stroke));
         }
-
+        this.spans = spans;
+        if (polyline != null){
         polyline.setSpans(spans);
+        }
     }
 
     public void setWidth(float width) {
@@ -178,6 +182,9 @@ public class MapPolyline extends MapFeature {
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
         polyline = polylineCollection.addPolyline(getPolylineOptions());
         polyline.setClickable(this.tappable);
+        if (spans != null){
+            polyline.setSpans(spans);
+        }
     }
 
     @Override
