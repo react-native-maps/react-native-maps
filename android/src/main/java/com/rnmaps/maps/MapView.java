@@ -1512,7 +1512,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        dispatchEvent(event, OnMarkerDragStartEvent::new, markerView.getId(), context);
+        markerView.dispatchEvent(event, OnDragStartEvent::new);
     }
 
     @Override
@@ -1522,7 +1522,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        dispatchEvent(event, OnMarkerDragEvent::new, markerView.getId(), context);
+        markerView.dispatchEvent(event, OnDragEvent::new);
     }
 
     @Override
@@ -1531,7 +1531,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         dispatchEvent(event, OnMarkerDragEndEvent::new);
         MapMarker markerView = getMarkerMap(marker);
         event = makeClickEventData(marker.getPosition());
-        dispatchEvent(event, OnMarkerDragEndEvent::new, markerView.getId(), context);
+        markerView.dispatchEvent(event, OnDragEndEvent::new);
     }
 
     @Override
