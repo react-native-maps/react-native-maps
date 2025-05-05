@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.23.7](https://github.com/react-native-maps/react-native-maps/compare/v1.23.6...v1.23.7) (2025-05-05)
+
+
+### Bug Fixes
+
+* **iOS:** appleMap module calls ([a0ba286](https://github.com/react-native-maps/react-native-maps/commit/a0ba2868c47936d6456ec97e5cfecdb1f6a6432d))
+* **iOS:** appleMap module calls ([771accb](https://github.com/react-native-maps/react-native-maps/commit/771accbe013b5b17f28eda68274b73880a589363))
+
 ## [1.23.6](https://github.com/react-native-maps/react-native-maps/compare/v1.23.5...v1.23.6) (2025-05-05)
 
 
