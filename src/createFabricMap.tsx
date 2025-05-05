@@ -41,213 +41,217 @@ export interface FabricMapHandle {
 }
 
 const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
-  return forwardRef<FabricMapHandle, FabricMapViewProps>((props, ref) => {
-    const fabricRef = useRef<React.ElementRef<typeof ViewComponent>>(null);
+  return forwardRef<FabricMapHandle | null, FabricMapViewProps>(
+    (props, ref) => {
+      const fabricRef = useRef<React.ElementRef<typeof ViewComponent>>(null);
 
-    useImperativeHandle(ref, () => ({
-      async getMarkersFrames(onlyVisible: boolean) {
-        if (fabricRef.current) {
-          return NativeAirMapsModule.getMarkersFrames(
-            findNodeHandle(fabricRef.current) ?? -1,
-            onlyVisible,
-          );
-        } else {
-          throw new Error(
-            'getMarkersFrames is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      async getCoordinateForPoint(point: Point) {
-        if (fabricRef.current) {
-          return NativeAirMapsModule.getCoordinateForPoint(
-            findNodeHandle(fabricRef.current) ?? -1,
-            point,
-          );
-        } else {
-          throw new Error(
-            'getCoordinateForPoint is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      async getPointForCoordinate(coordinate: LatLng) {
-        if (fabricRef.current) {
-          return NativeAirMapsModule.getPointForCoordinate(
-            findNodeHandle(fabricRef.current) ?? -1,
-            coordinate,
-          );
-        } else {
-          throw new Error(
-            'getPointForCoordinate is not supported on this platform.',
-          );
-        }
-      },
-      async getAddressFromCoordinates(coordinate: LatLng) {
-        if (fabricRef.current) {
-          return NativeAirMapsModule.getAddressFromCoordinates(
-            findNodeHandle(fabricRef.current) ?? -1,
-            coordinate,
-          );
-        } else {
-          throw new Error(
-            'getAddressFromCoordinates is not supported on this platform',
-          );
-        }
-      },
-      async takeSnapshot(config: SnapshotOptions) {
-        if (fabricRef.current) {
-          return NativeAirMapsModule.takeSnapshot(
-            findNodeHandle(fabricRef.current) ?? -1,
-            JSON.stringify(config),
-          );
-        } else {
-          throw new Error('takeSnapshot is only supported on iOS with Fabric.');
-        }
-      },
-      async getCamera() {
-        if (fabricRef.current) {
-          return NativeAirMapsModule.getCamera(
-            findNodeHandle(fabricRef.current) ?? -1,
-          );
-        } else {
-          throw new Error('getCamera is only supported on iOS with Fabric.');
-        }
-      },
-      async getMapBoundaries() {
-        if (fabricRef.current) {
-          return NativeAirMapsModule.getMapBoundaries(
-            findNodeHandle(fabricRef.current) ?? -1,
-          );
-        } else {
-          throw new Error(
-            'getMapBoundaries is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      animateToRegion(region: Region, duration: number) {
-        if (fabricRef.current) {
-          try {
-            Commands.animateToRegion(
-              fabricRef.current,
-              JSON.stringify(region),
-              duration,
+      useImperativeHandle(ref, () => ({
+        async getMarkersFrames(onlyVisible: boolean) {
+          if (fabricRef.current) {
+            return NativeAirMapsModule.getMarkersFrames(
+              findNodeHandle(fabricRef.current) ?? -1,
+              onlyVisible,
             );
-          } catch (error) {
-            throw new Error('Failed to animateToRegion');
-          }
-        } else {
-          throw new Error(
-            'animateToRegion is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      fitToElements(edgePadding: EdgePadding, animated: boolean) {
-        if (fabricRef.current) {
-          try {
-            Commands.fitToElements(
-              fabricRef.current,
-              JSON.stringify(edgePadding),
-              animated,
+          } else {
+            throw new Error(
+              'getMarkersFrames is only supported on iOS with Fabric.',
             );
-          } catch (error) {
-            throw new Error('Failed to fitToElements');
           }
-        } else {
-          throw new Error(
-            'fitToElements is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      fitToSuppliedMarkers(
-        markers: string[],
-        edgePadding: EdgePadding,
-        animated: boolean,
-      ) {
-        if (fabricRef.current) {
-          try {
-            Commands.fitToSuppliedMarkers(
-              fabricRef.current,
-              JSON.stringify(markers),
-              JSON.stringify(edgePadding),
-              animated,
+        },
+        async getCoordinateForPoint(point: Point) {
+          if (fabricRef.current) {
+            return NativeAirMapsModule.getCoordinateForPoint(
+              findNodeHandle(fabricRef.current) ?? -1,
+              point,
             );
-          } catch (error) {
-            throw new Error('Failed to fitToSuppliedMarkers');
-          }
-        } else {
-          throw new Error(
-            'fitToSuppliedMarkers is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      animateCamera(camera: Partial<Camera>, duration: number) {
-        if (fabricRef.current) {
-          try {
-            Commands.animateCamera(
-              fabricRef.current,
-              JSON.stringify(camera),
-              duration,
+          } else {
+            throw new Error(
+              'getCoordinateForPoint is only supported on iOS with Fabric.',
             );
-          } catch (error) {
-            throw new Error('Failed to animateCamera');
           }
-        } else {
-          throw new Error(
-            'animateCamera is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      fitToCoordinates(
-        coordinates: LatLng[],
-        edgePadding: EdgePadding,
-        animated: boolean,
-      ) {
-        if (fabricRef.current) {
-          try {
-            Commands.fitToCoordinates(
-              fabricRef.current,
-              JSON.stringify(coordinates),
-              JSON.stringify(edgePadding),
-              animated,
+        },
+        async getPointForCoordinate(coordinate: LatLng) {
+          if (fabricRef.current) {
+            return NativeAirMapsModule.getPointForCoordinate(
+              findNodeHandle(fabricRef.current) ?? -1,
+              coordinate,
             );
-          } catch (error) {
-            throw new Error('Failed to fitToCoordinates');
-          }
-        } else {
-          throw new Error(
-            'fitToCoordinates is only supported on iOS with Fabric.',
-          );
-        }
-      },
-      setIndoorActiveLevelIndex(activeLevelIndex: number) {
-        if (fabricRef.current) {
-          try {
-            Commands.setIndoorActiveLevelIndex(
-              fabricRef.current,
-              activeLevelIndex,
+          } else {
+            throw new Error(
+              'getPointForCoordinate is not supported on this platform.',
             );
-          } catch (error) {
-            console.error('Failed to set camera:', error);
           }
-        } else {
-          console.warn('setIndoorActiveLevelIndex is not supported.');
-        }
-      },
-      setCamera(camera: Partial<Camera>) {
-        if (fabricRef.current) {
-          try {
-            Commands.setCamera(fabricRef.current, JSON.stringify(camera));
-          } catch (error) {
-            console.error('Failed to set camera:', error);
+        },
+        async getAddressFromCoordinates(coordinate: LatLng) {
+          if (fabricRef.current) {
+            return NativeAirMapsModule.getAddressFromCoordinates(
+              findNodeHandle(fabricRef.current) ?? -1,
+              coordinate,
+            );
+          } else {
+            throw new Error(
+              'getAddressFromCoordinates is not supported on this platform',
+            );
           }
-        } else {
-          console.warn('setCamera is not supported');
-        }
-      },
-    }));
+        },
+        async takeSnapshot(config: SnapshotOptions) {
+          if (fabricRef.current) {
+            return NativeAirMapsModule.takeSnapshot(
+              findNodeHandle(fabricRef.current) ?? -1,
+              JSON.stringify(config),
+            );
+          } else {
+            throw new Error(
+              'takeSnapshot is only supported on iOS with Fabric.',
+            );
+          }
+        },
+        async getCamera() {
+          if (fabricRef.current) {
+            return NativeAirMapsModule.getCamera(
+              findNodeHandle(fabricRef.current) ?? -1,
+            );
+          } else {
+            throw new Error('getCamera is only supported on iOS with Fabric.');
+          }
+        },
+        async getMapBoundaries() {
+          if (fabricRef.current) {
+            return NativeAirMapsModule.getMapBoundaries(
+              findNodeHandle(fabricRef.current) ?? -1,
+            );
+          } else {
+            throw new Error(
+              'getMapBoundaries is only supported on iOS with Fabric.',
+            );
+          }
+        },
+        animateToRegion(region: Region, duration: number) {
+          if (fabricRef.current) {
+            try {
+              Commands.animateToRegion(
+                fabricRef.current,
+                JSON.stringify(region),
+                duration,
+              );
+            } catch (error) {
+              throw new Error('Failed to animateToRegion');
+            }
+          } else {
+            throw new Error(
+              'animateToRegion is only supported on iOS with Fabric.',
+            );
+          }
+        },
+        fitToElements(edgePadding: EdgePadding, animated: boolean) {
+          if (fabricRef.current) {
+            try {
+              Commands.fitToElements(
+                fabricRef.current,
+                JSON.stringify(edgePadding),
+                animated,
+              );
+            } catch (error) {
+              throw new Error('Failed to fitToElements');
+            }
+          } else {
+            throw new Error(
+              'fitToElements is only supported on iOS with Fabric.',
+            );
+          }
+        },
+        fitToSuppliedMarkers(
+          markers: string[],
+          edgePadding: EdgePadding,
+          animated: boolean,
+        ) {
+          if (fabricRef.current) {
+            try {
+              Commands.fitToSuppliedMarkers(
+                fabricRef.current,
+                JSON.stringify(markers),
+                JSON.stringify(edgePadding),
+                animated,
+              );
+            } catch (error) {
+              throw new Error('Failed to fitToSuppliedMarkers');
+            }
+          } else {
+            throw new Error(
+              'fitToSuppliedMarkers is only supported on iOS with Fabric.',
+            );
+          }
+        },
+        animateCamera(camera: Partial<Camera>, duration: number) {
+          if (fabricRef.current) {
+            try {
+              Commands.animateCamera(
+                fabricRef.current,
+                JSON.stringify(camera),
+                duration,
+              );
+            } catch (error) {
+              throw new Error('Failed to animateCamera');
+            }
+          } else {
+            throw new Error(
+              'animateCamera is only supported on iOS with Fabric.',
+            );
+          }
+        },
+        fitToCoordinates(
+          coordinates: LatLng[],
+          edgePadding: EdgePadding,
+          animated: boolean,
+        ) {
+          if (fabricRef.current) {
+            try {
+              Commands.fitToCoordinates(
+                fabricRef.current,
+                JSON.stringify(coordinates),
+                JSON.stringify(edgePadding),
+                animated,
+              );
+            } catch (error) {
+              throw new Error('Failed to fitToCoordinates');
+            }
+          } else {
+            throw new Error(
+              'fitToCoordinates is only supported on iOS with Fabric.',
+            );
+          }
+        },
+        setIndoorActiveLevelIndex(activeLevelIndex: number) {
+          if (fabricRef.current) {
+            try {
+              Commands.setIndoorActiveLevelIndex(
+                fabricRef.current,
+                activeLevelIndex,
+              );
+            } catch (error) {
+              console.error('Failed to set camera:', error);
+            }
+          } else {
+            console.warn('setIndoorActiveLevelIndex is not supported.');
+          }
+        },
+        setCamera(camera: Partial<Camera>) {
+          if (fabricRef.current) {
+            try {
+              Commands.setCamera(fabricRef.current, JSON.stringify(camera));
+            } catch (error) {
+              console.error('Failed to set camera:', error);
+            }
+          } else {
+            console.warn('setCamera is not supported');
+          }
+        },
+      }));
 
-    // @ts-ignore
-    return <ViewComponent {...props} ref={fabricRef} />;
-  });
+      // @ts-ignore
+      return <ViewComponent {...props} ref={fabricRef} />;
+    },
+  );
 };
 
 export default createFabricMap;
