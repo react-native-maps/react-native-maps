@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.6](https://github.com/react-native-maps/react-native-maps/compare/v1.23.5...v1.23.6) (2025-05-05)
+
+
+### Bug Fixes
+
+* Fabric Android fixes ([#5484](https://github.com/react-native-maps/react-native-maps/issues/5484)) ([f3b9b7d](https://github.com/react-native-maps/react-native-maps/commit/f3b9b7d7f905f40779c64e9310f7621239b9e073))
+
 ## [1.23.5](https://github.com/react-native-maps/react-native-maps/compare/v1.23.4...v1.23.5) (2025-05-05)
 
 
