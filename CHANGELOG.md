@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.4](https://github.com/react-native-maps/react-native-maps/compare/v1.23.3...v1.23.4) (2025-05-05)
+
+
+### Bug Fixes
+
+* **expo:** update plugin to use new podspec ([#5482](https://github.com/react-native-maps/react-native-maps/issues/5482)) ([7a6006a](https://github.com/react-native-maps/react-native-maps/commit/7a6006abee68f0ebfe9cdf58a7829b381bbbfd76))
+
 ## [1.23.3](https://github.com/react-native-maps/react-native-maps/compare/v1.23.2...v1.23.3) (2025-05-05)
 
 
