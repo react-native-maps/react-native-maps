@@ -1038,6 +1038,7 @@ class MapView extends React.Component<MapViewProps, State> {
     };
   }
 
+  // @ts-ignore
   private _getHandle() {
     return findNodeHandle(this.map.current);
   }
