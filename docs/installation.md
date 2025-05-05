@@ -21,6 +21,7 @@ When using Google Maps on iOS, you need also to obtain an [API key for the iOS S
 ## Expo
 
 If you're using Expo, you can add react-native-maps to your project by adding it to the plugins array in your `app.json` or `app.config.js`:
+
 > **Note:** This plugin is only compatible with react-native-maps version 1.22 and above, and requires Expo SDK version 53 or higher.
 
 ```json
