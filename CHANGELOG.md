@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.3](https://github.com/react-native-maps/react-native-maps/compare/v1.23.2...v1.23.3) (2025-05-05)
+
+
+### Bug Fixes
+
+* re-add support for strictNullChecks ([#5454](https://github.com/react-native-maps/react-native-maps/issues/5454)) ([b861468](https://github.com/react-native-maps/react-native-maps/commit/b861468e0b43c4d180138ac9ac2e7bbfb075854d))
+
 ## [1.23.2](https://github.com/react-native-maps/react-native-maps/compare/v1.23.1...v1.23.2) (2025-05-03)
 
 
