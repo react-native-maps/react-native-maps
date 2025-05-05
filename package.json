@@ -25,8 +25,6 @@
     "ios",
     "app.plugin.js",
     "plugin/build",
-    "react-native-maps-generated.podspec",
-    "react-native-google-maps.podspec",
     "react-native-maps.podspec",
     "react-native.config.js",
     "!android/build",

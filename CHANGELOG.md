@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.23.5](https://github.com/react-native-maps/react-native-maps/compare/v1.23.4...v1.23.5) (2025-05-05)
+
+
+### Bug Fixes
+
+* **ts:** more fixes for ts issues ([#5483](https://github.com/react-native-maps/react-native-maps/issues/5483)) ([7827e13](https://github.com/react-native-maps/react-native-maps/commit/7827e130eda0cf27d425891651540618b2e52b5f))
+
+## [1.23.4](https://github.com/react-native-maps/react-native-maps/compare/v1.23.3...v1.23.4) (2025-05-05)
+
+
+### Bug Fixes
+
+* **expo:** update plugin to use new podspec ([#5482](https://github.com/react-native-maps/react-native-maps/issues/5482)) ([7a6006a](https://github.com/react-native-maps/react-native-maps/commit/7a6006abee68f0ebfe9cdf58a7829b381bbbfd76))
+
+## [1.23.3](https://github.com/react-native-maps/react-native-maps/compare/v1.23.2...v1.23.3) (2025-05-05)
+
+
+### Bug Fixes
+
+* re-add support for strictNullChecks ([#5454](https://github.com/react-native-maps/react-native-maps/issues/5454)) ([b861468](https://github.com/react-native-maps/react-native-maps/commit/b861468e0b43c4d180138ac9ac2e7bbfb075854d))
+
 ## [1.23.2](https://github.com/react-native-maps/react-native-maps/compare/v1.23.1...v1.23.2) (2025-05-03)
 
 

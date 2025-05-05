@@ -89,6 +89,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     };
   }
 
+  // @ts-ignore
   private __attach() {
     this.latitude.__addChild(this);
     this.longitude.__addChild(this);
@@ -96,6 +97,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
     this.longitudeDelta.__addChild(this);
   }
 
+  // @ts-ignore
   private __detach() {
     this.latitude.__removeChild(this);
     this.longitude.__removeChild(this);
