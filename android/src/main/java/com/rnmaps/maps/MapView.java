@@ -494,7 +494,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 event = makeClickEventData(tapLocation);
                 event.putString("action", "polygon-press");
                 event.putString("id", String.valueOf(mapPolygon.getId()));
-                dispatchEvent(event, OnPressEvent::new);
+                dispatchEvent(event, OnPolygonPressEvent::new);
             }
         });
 
@@ -657,6 +657,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     //                 , ,
     public static Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
+        builder.put(OnPolygonPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPolygonPressEvent.EVENT_NAME));
         builder.put(OnMarkerPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerPressEvent.EVENT_NAME));
         builder.put(OnCalloutPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnCalloutPressEvent.EVENT_NAME));
         builder.put(OnMarkerDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEvent.EVENT_NAME));
