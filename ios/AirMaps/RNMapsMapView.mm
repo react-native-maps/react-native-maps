@@ -12,6 +12,7 @@
 #import "AIRMapManager.h"
 #import "RNMapsMarkerView.h"
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
+#import <ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>
 #import <ReactNativeMaps/generated/RNMapsSpecs.h>
 #import <ReactNativeMaps/generated/RNMapsHostVewDelegate.h>
 #import <ReactNativeMaps/generated/ComponentDescriptors.h>
@@ -19,6 +20,7 @@
 #import <ReactNativeMaps/generated/Props.h>
 #import <ReactNativeMaps/generated/RCTComponentViewHelpers.h>
 #else
+#import "../generated/RNMapsAirModuleDelegate.h"
 #import "../generated/RNMapsSpecs/RNMapsSpecs.h"
 #import "../generated/RNMapsSpecs/ComponentDescriptors.h"
 #import "../generated/RNMapsSpecs/EventEmitters.h"
@@ -41,7 +43,7 @@ using namespace facebook::react;
 
 
 - (id<RNMapsAirModuleDelegate>) mapView {
-    return nil;
+    return (id<RNMapsAirModuleDelegate>)_view;
 }
 
 - (void) prepareForRecycle
