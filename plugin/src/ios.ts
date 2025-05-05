@@ -38,7 +38,7 @@ export const withMapsIOS: ConfigPlugin<ConfigPluginProps> = (config, props) => {
 
   // Adds/Removes AppDelegate setup for Google Maps API on iOS
   config = withGoogleMapsAppDelegate(config, {
-    apiKey: props?.iosGoogleMapsApiKey,
+    apiKey: props?.iosGoogleMapsApiKey || null,
   });
 
   return config;
