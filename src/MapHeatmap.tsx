@@ -1,15 +1,20 @@
 import * as React from 'react';
-import {processColor, ProcessedColorValue, View, ViewProps} from 'react-native';
+import {
+  processColor,
+  View,
+  type ProcessedColorValue,
+  type ViewProps,
+} from 'react-native';
 import decorateMapComponent, {
-  MapManagerCommand,
-  NativeComponent,
   ProviderContext,
   SUPPORTED,
-  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
+  type MapManagerCommand,
+  type NativeComponent,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng} from './sharedTypes';
-import {Modify} from './sharedTypesInternal';
+import type {LatLng} from './sharedTypes';
+import type {Modify} from './sharedTypesInternal';
 
 export type MapHeatmapProps = ViewProps & {
   gradient?: {

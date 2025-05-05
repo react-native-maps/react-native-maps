@@ -3,18 +3,18 @@ import {
   Animated as RNAnimated,
   Animated,
   findNodeHandle,
-  HostComponent,
-  NativeSyntheticEvent,
   Platform,
   requireNativeComponent,
-  ViewProps,
+  type HostComponent,
+  type NativeSyntheticEvent,
+  type ViewProps,
 } from 'react-native';
 import {
   createNotSupportedComponent,
-  NativeComponent,
   ProviderContext,
+  type NativeComponent,
 } from './decorateMapComponent';
-import {
+import type {
   CalloutPressEvent,
   ClickEvent,
   Frame,
@@ -28,7 +28,7 @@ import {
   Provider,
   Region,
 } from './sharedTypes';
-import {
+import type {
   ActiveIndoorLevel,
   Address,
   BoundingBox,
@@ -50,17 +50,20 @@ import {
   SnapshotOptions,
   UserLocationChangeEvent,
 } from './MapView.types';
-import {Modify} from './sharedTypesInternal';
-import {Commands, MapViewNativeComponentType} from './MapViewNativeComponent';
+import type {Modify} from './sharedTypesInternal';
+import {
+  Commands,
+  type MapViewNativeComponentType,
+} from './MapViewNativeComponent';
 
 import FabricMapView, {
   Commands as FabricCommands,
-  MapFabricNativeProps,
+  type MapFabricNativeProps,
 } from './specs/NativeComponentMapView';
 import GoogleMapView, {
   Commands as GoogleCommands,
 } from './specs/NativeComponentGoogleMapView';
-import createFabricMap, {FabricMapHandle} from './createFabricMap';
+import createFabricMap, {type FabricMapHandle} from './createFabricMap';
 
 const FabricMap = createFabricMap(FabricMapView, FabricCommands);
 var FabricGoogleMap: any = null;

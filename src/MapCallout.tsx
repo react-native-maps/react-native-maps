@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {StyleSheet, ViewProps} from 'react-native';
+import {StyleSheet, type ViewProps} from 'react-native';
 import decorateMapComponent, {
-  MapManagerCommand,
-  NativeComponent,
   ProviderContext,
   SUPPORTED,
-  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
+  type MapManagerCommand,
+  type NativeComponent,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {CalloutPressEvent} from './sharedTypes';
+import type {CalloutPressEvent} from './sharedTypes';
 
 export type MapCalloutProps = ViewProps & {
   /**

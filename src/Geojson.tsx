@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {
+import type {
   Feature,
   FeatureCollection,
   Point,
@@ -10,12 +10,12 @@ import {
   Polygon,
   MultiPolygon,
 } from 'geojson';
-import Marker, {MapMarkerProps as MarkerProps} from './MapMarker';
-import {MapPolygonProps as PolygonProps} from './MapPolygon';
-import {MapPolylineProps as PolylineProps} from './MapPolyline';
+import Marker, {type MapMarkerProps as MarkerProps} from './MapMarker';
+import type {MapPolygonProps as PolygonProps} from './MapPolygon';
+import type {MapPolylineProps as PolylineProps} from './MapPolyline';
 import Polyline from './MapPolyline';
 import MapPolygon from './MapPolygon';
-import {LatLng} from './sharedTypes';
+import type {LatLng} from './sharedTypes';
 
 export type GeojsonProps = {
   /**

@@ -1,14 +1,18 @@
 import * as React from 'react';
-import {NativeSyntheticEvent, StyleSheet, ViewProps} from 'react-native';
+import {
+  StyleSheet,
+  type NativeSyntheticEvent,
+  type ViewProps,
+} from 'react-native';
 import decorateMapComponent, {
   SUPPORTED,
   NOT_SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {Frame, Point} from './sharedTypes';
+import type {Frame, Point} from './sharedTypes';
 
 export type MapCalloutSubviewProps = ViewProps & {
   /**

@@ -4,11 +4,11 @@ import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {ViewProps} from 'react-native';
+import type {ViewProps} from 'react-native';
 
 export type MapUrlTileProps = ViewProps & {
   /**

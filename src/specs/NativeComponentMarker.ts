@@ -1,4 +1,4 @@
-import {HostComponent} from 'react-native';
+import type {HostComponent} from 'react-native';
 import type {
   ViewProps,
   ColorValue,
@@ -7,7 +7,7 @@ import type {
 
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
-import {
+import type {
   Int32,
   Double,
   BubblingEventHandler,

@@ -1,7 +1,7 @@
 import MapView, {
   AnimatedMapView as Animated,
   MAP_TYPES,
-  MapViewProps,
+  type MapViewProps,
 } from './MapView';
 
 import Marker from './MapMarker';

@@ -2,7 +2,7 @@ import type {HostComponent, ViewProps, ColorValue} from 'react-native';
 
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
-import {
+import type {
   Double,
   Int32,
   WithDefault,

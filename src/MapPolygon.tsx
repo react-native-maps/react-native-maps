@@ -1,15 +1,15 @@
 import * as React from 'react';
-import {View, ViewProps} from 'react-native';
+import {View, type ViewProps} from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {PolygonPressEvent} from './MapPolygon.types';
-import {LatLng, LineCapType, LineJoinType} from './sharedTypes';
+import type {PolygonPressEvent} from './MapPolygon.types';
+import type {LatLng, LineCapType, LineJoinType} from './sharedTypes';
 
 export type MapPolygonProps = ViewProps & {
   /**

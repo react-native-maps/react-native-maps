@@ -2,23 +2,23 @@ import * as React from 'react';
 import {
   StyleSheet,
   Animated,
-  ViewProps,
-  ImageURISource,
-  ImageRequireSource,
-  NativeSyntheticEvent,
   Platform,
+  type ViewProps,
+  type ImageURISource,
+  type ImageRequireSource,
+  type NativeSyntheticEvent,
 } from 'react-native';
 
 import decorateMapComponent, {
-  MapManagerCommand,
-  NativeComponent,
   ProviderContext,
   SUPPORTED,
-  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
+  type MapManagerCommand,
+  type NativeComponent,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng, Point} from './sharedTypes';
-import {Modify} from './sharedTypesInternal';
+import type {LatLng, Point} from './sharedTypes';
+import type {Modify} from './sharedTypesInternal';
 import {fixImageProp} from './fixImageProp';
 
 export type MapOverlayProps = ViewProps & {

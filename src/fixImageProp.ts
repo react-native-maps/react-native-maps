@@ -1,4 +1,4 @@
-import {Image, ImageSourcePropType} from 'react-native';
+import {Image, type ImageSourcePropType} from 'react-native';
 
 export function fixImageProp(
   image: ImageSourcePropType,

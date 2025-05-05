@@ -1,4 +1,4 @@
-import {ConfigPlugin} from '@expo/config-plugins/build/Plugin.types';
+import type {ConfigPlugin} from '@expo/config-plugins/build/Plugin.types';
 import {
   withAppDelegate,
   withInfoPlist,
@@ -7,10 +7,10 @@ import {
 
 import {
   mergeContents,
-  MergeResults,
   removeContents,
+  type MergeResults,
 } from '@expo/config-plugins/build/utils/generateCode';
-import {ConfigPluginProps} from './types';
+import type {ConfigPluginProps} from './types';
 
 export const MATCH_INIT =
   /\bsuper\.application\(\w+?, didFinishLaunchingWithOptions: \w+?\)/g;
