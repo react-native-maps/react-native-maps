@@ -38,7 +38,7 @@ export const withMapsIOS: ConfigPlugin<ConfigPluginProps> = (config, props) => {
 
   // Adds/Removes AppDelegate setup for Google Maps API on iOS
   config = withGoogleMapsAppDelegate(config, {
-    apiKey: props?.iosGoogleMapsApiKey,
+    apiKey: props?.iosGoogleMapsApiKey || null,
   });
 
   return config;
@@ -93,6 +93,7 @@ export function removeGoogleMapsAppDelegateInit(src: string): MergeResults {
 
 /**
  * @param src The contents of the Podfile.
+ * @param useGoogleMaps if GoogleMaps for iOS is used
  * @returns Podfile with react-native-maps integration configured.
  */
 export function addMapsCocoapods(
@@ -103,10 +104,8 @@ export function addMapsCocoapods(
     '  rn_maps_path = File.dirname(`node --print "require.resolve(\'react-native-maps/package.json\')"`) \n';
 
   if (useGoogleMaps) {
-    newSrc += "  pod 'react-native-google-maps', :path => rn_maps_path \n";
+    newSrc += "  pod 'react-native-maps/Google', :path => rn_maps_path \n";
   }
-
-  newSrc += "  pod 'react-native-maps-generated', :path => rn_maps_path \n";
 
   return mergeContents({
     tag: 'react-native-maps',

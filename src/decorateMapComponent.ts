@@ -126,8 +126,12 @@ export default function decorateMapComponent<Type extends Component>(
         return components[key];
       }
 
-      // @ts-ignore
+      if (!provider) {
+        throw new Error('react-native-maps: provider is not set');
+      }
+
       const providerInfo = providers[provider];
+
       // quick fix. Previous code assumed android | ios
       if (Platform.OS !== 'android' && Platform.OS !== 'ios') {
         throw new Error(`react-native-maps doesn't support ${Platform.OS}`);
