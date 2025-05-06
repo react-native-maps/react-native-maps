@@ -4,6 +4,7 @@ CHANGELOG.md
 example/ios
 example/android
 android/build
+packages/example/android
 example/vendor/bundle/
 android/build
 dist

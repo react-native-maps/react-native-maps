@@ -861,43 +861,43 @@ export interface MapFabricNativeProps extends ViewProps {
 
 export interface NativeCommands {
   animateToRegion: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ComponentRef<React.ComponentType>,
     regionJSON: string,
     duration: Int32,
   ) => void;
 
   setCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ComponentRef<React.ComponentType>,
     cameraJSON: string,
   ) => void;
 
   animateCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ComponentRef<React.ComponentType>,
     cameraJSON: string,
     duration: Int32,
   ) => void;
 
   fitToElements: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ComponentRef<React.ComponentType>,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToSuppliedMarkers: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ComponentRef<React.ComponentType>,
     markersJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ComponentRef<React.ComponentType>,
     coordinatesJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
   setIndoorActiveLevelIndex: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ComponentRef<React.ComponentType>,
     activeLevelIndex: Int32,
   ) => void;
 }
