@@ -1,2 +1,2 @@
-packages/lib/dist
-packages/lib/plugin/build
+dist
+plugin/build

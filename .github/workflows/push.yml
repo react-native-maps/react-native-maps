@@ -29,11 +29,10 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
-        working-directory: packages/lib
 
       - name: Build
         run: yarn build
-        working-directory: packages/lib
+
       # Latest version of npm needed for provenance
       - name: Install latest npm
         run: npm install -g npm@latest
@@ -44,4 +43,3 @@ jobs:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_CONFIG_PROVENANCE: true
         run: yarn release
-        working-directory: packages/lib
