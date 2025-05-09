@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "react": "19.0.0",
-    "react-native": "0.79.1"
+    "react-native": "0.79.2"
   },
   "devDependencies": {
     "@babel/core": "7.26.10",
@@ -20,9 +20,9 @@
     "@react-native-community/cli": "18.0.0",
     "@react-native-community/cli-platform-android": "18.0.0",
     "@react-native-community/cli-platform-ios": "18.0.0",
-    "@react-native/babel-preset": "0.79.1",
-    "@react-native/metro-config": "0.79.1",
-    "@react-native/typescript-config": "0.79.1",
+    "@react-native/babel-preset": "0.79.2",
+    "@react-native/metro-config": "0.79.2",
+    "@react-native/typescript-config": "0.79.2",
     "babel-plugin-module-resolver": "5.0.2"
   },
   "engines": {

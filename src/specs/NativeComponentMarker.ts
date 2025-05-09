@@ -110,7 +110,7 @@ export interface MarkerFabricNativeProps extends ViewProps {
   /**
    * The offset (in points) at which to place the callout bubble.
    * When this property is set to (0, 0),
-   * the anchor point of the callout bubble is placed on the top-center point of the marker view’s frame.
+   * the anchor point of the callout bubble is placed on the top-center point of the marker view's frame.
    *
    * Specifying positive offset values moves the callout bubble down and to the right,
    * while specifying negative values moves it up and to the left
@@ -127,8 +127,8 @@ export interface MarkerFabricNativeProps extends ViewProps {
      @platform Android: Not supported
 
       Required: A constant indicating that the item is required.
-      High: A constant indicating that the item’s display priority is high.
-      Low: A constant indicating that the item’s display priority is Low.
+      High: A constant indicating that the item's display priority is high.
+      Low: A constant indicating that the item's display priority is Low.
      */
   displayPriority?: WithDefault<AppleMarkerPriority, 'required'>;
 
@@ -293,20 +293,16 @@ export interface MarkerFabricNativeProps extends ViewProps {
 }
 export interface NativeCommands {
   animateToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: any,
     latitude: Double,
     longitude: Double,
     duration: Int32,
   ) => void;
-  setCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
-    latitude: Double,
-    longitude: Double,
-  ) => void;
-  showCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
-  hideCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
-  redrawCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
-  redraw: (viewRef: React.ElementRef<React.ComponentType>) => void;
+  setCoordinates: (viewRef: any, latitude: Double, longitude: Double) => void;
+  showCallout: (viewRef: any) => void;
+  hideCallout: (viewRef: any) => void;
+  redrawCallout: (viewRef: any) => void;
+  redraw: (viewRef: any) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({

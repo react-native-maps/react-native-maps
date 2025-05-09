@@ -787,7 +787,7 @@ export interface MapFabricNativeProps extends ViewProps {
   >;
 
   /**
-   * If `false` the user won't be able to adjust the camera’s pitch angle.
+   * If `false` the user won't be able to adjust the camera's pitch angle.
    *
    * @default true
    * @platform iOS: Google Maps only
@@ -805,7 +805,7 @@ export interface MapFabricNativeProps extends ViewProps {
   region?: Region;
 
   /**
-   * If `false` the user won't be able to adjust the camera’s pitch angle.
+   * If `false` the user won't be able to adjust the camera's pitch angle.
    *
    * @default true
    * @platform iOS: Google Maps only
@@ -1039,47 +1039,33 @@ export interface MapFabricNativeProps extends ViewProps {
 }
 
 export interface NativeCommands {
-  animateToRegion: (
-    viewRef: React.ElementRef<React.ComponentType>,
-    regionJSON: string,
-    duration: Int32,
-  ) => void;
+  animateToRegion: (viewRef: any, regionJSON: string, duration: Int32) => void;
 
-  setCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
-    cameraJSON: string,
-  ) => void;
+  setCamera: (viewRef: any, cameraJSON: string) => void;
 
-  animateCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
-    cameraJSON: string,
-    duration: Int32,
-  ) => void;
+  animateCamera: (viewRef: any, cameraJSON: string, duration: Int32) => void;
 
   fitToElements: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: any,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToSuppliedMarkers: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: any,
     markersJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: any,
     coordinatesJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
-  setIndoorActiveLevelIndex: (
-    viewRef: React.ElementRef<React.ComponentType>,
-    activeLevelIndex: Int32,
-  ) => void;
+  setIndoorActiveLevelIndex: (viewRef: any, activeLevelIndex: Int32) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({

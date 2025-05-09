@@ -1,4 +1,5 @@
-import React, {forwardRef, useImperativeHandle, useRef} from 'react';
+import * as React from 'react';
+import {forwardRef, useImperativeHandle, useRef} from 'react';
 import {findNodeHandle} from 'react-native';
 import type {LatLng, Point, Region} from './sharedTypes';
 import type {
@@ -40,10 +41,15 @@ export interface FabricMapHandle {
   setIndoorActiveLevelIndex: (activeLevelIndex: number) => void;
 }
 
-const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
+const createFabricMap = (
+  ViewComponent: React.ComponentType<any> & {
+    __constructorTypeRef?: unknown;
+  },
+  Commands: any,
+) => {
   return forwardRef<FabricMapHandle | null, FabricMapViewProps>(
     (props, ref) => {
-      const fabricRef = useRef<React.ElementRef<typeof ViewComponent>>(null);
+      const fabricRef = useRef<any>(null);
 
       useImperativeHandle(ref, () => ({
         async getMarkersFrames(onlyVisible: boolean) {

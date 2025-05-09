@@ -9,7 +9,8 @@
     "declarationMap": false,
     "outDir": "dist",
     "rootDir": ".",
-    "composite": true
+    "composite": true,
+    "esModuleInterop": true
     // required for project references (optional if not used)
   },
   "include": ["src", "plugin"],
