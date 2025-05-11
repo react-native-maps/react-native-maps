@@ -15,15 +15,15 @@ type KmlEntry = {
 
 
 const kmlFiles = [{
-  label: "Remote kmz",
+  label: 'Remote kmz',
   file: 'https://www.google.com/maps/d/u/0/kml?mid=12u1KMaAe02f5iDEMEYeIcXGaUJd_54Y&cid=mp&cv=czMHwAlgGtA.fr.',
 },
 {
-  label: "Remote kml",
+  label: 'Remote kml',
   file: 'https://pastebin.com/raw/5XcSeT0b',
 },
 {
-  label: "Remote kml 2",
+  label: 'Remote kml 2',
   file: 'https://pastebin.com/raw/qwZn8dRU',
 }] satisfies Array<KmlEntry>;
 
@@ -57,7 +57,7 @@ const MapKml = ({ provider }: MapKmlProps) => {
   };
 
   const handleOnKmlReady = () => {
-    console.log("onKmlReady called");
+    console.log('onKmlReady called');
     mapRef.current?.animateToRegion({
       latitude: LATITUDE,
       longitude: LONGITUDE,
