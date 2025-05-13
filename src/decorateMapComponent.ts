@@ -4,10 +4,10 @@ import {
   NativeModules,
   Platform,
   UIManager,
-  HostComponent,
+  type HostComponent,
 } from 'react-native';
 import {PROVIDER_DEFAULT, PROVIDER_GOOGLE} from './ProviderConstants';
-import {Provider} from './sharedTypes';
+import type {Provider} from './sharedTypes';
 import {MapCallout} from './MapCallout';
 import {MapOverlay} from './MapOverlay';
 import {MapCalloutSubview} from './MapCalloutSubview';

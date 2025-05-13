@@ -1,5 +1,5 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
+import type {
   Double,
   Float,
   BubblingEventHandler,

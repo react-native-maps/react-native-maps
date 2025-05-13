@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {NativeSyntheticEvent, View, ViewProps} from 'react-native';
+import {View, type NativeSyntheticEvent, type ViewProps} from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
+import type {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
 
 export type MapPolylineProps = ViewProps & {
   /**
