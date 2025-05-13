@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.8](https://github.com/react-native-maps/react-native-maps/compare/v1.23.7...v1.23.8) (2025-05-13)
+
+
+### Bug Fixes
+
+* re-add support for verbatimModuleSyntax ([#5453](https://github.com/react-native-maps/react-native-maps/issues/5453)) ([c12b2b5](https://github.com/react-native-maps/react-native-maps/commit/c12b2b5148657ee1d471981ef711526715a73fc2))
+
 ## [1.23.7](https://github.com/react-native-maps/react-native-maps/compare/v1.23.6...v1.23.7) (2025-05-05)
 
 
