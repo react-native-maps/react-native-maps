@@ -47,7 +47,7 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setInitialRegion(view, (ReadableMap) value);
         break;
       case "kmlSrc":
-        mViewManager.setKmlSrc(view, value == null ? null : (String) value);
+        mViewManager.setKmlSrc(view, (ReadableArray) value);
         break;
       case "legalLabelInsets":
         mViewManager.setLegalLabelInsets(view, (ReadableMap) value);

@@ -394,7 +394,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  kmlSrc?: string;
+  kmlSrc?: Array<string>;
 
   /**
    * https://developers.google.com/maps/documentation/get-map-id

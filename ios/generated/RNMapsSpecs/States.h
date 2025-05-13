@@ -110,4 +110,28 @@ public:
 #endif
 };
 
+class RNMapsUrlTileState {
+public:
+  RNMapsUrlTileState() = default;
+
+#ifdef ANDROID
+  RNMapsUrlTileState(RNMapsUrlTileState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+#endif
+};
+
+class RNMapsWMSTileState {
+public:
+  RNMapsWMSTileState() = default;
+
+#ifdef ANDROID
+  RNMapsWMSTileState(RNMapsWMSTileState const &previousState, folly::dynamic data){};
+  folly::dynamic getDynamic() const {
+    return {};
+  };
+#endif
+};
+
 } // namespace facebook::react

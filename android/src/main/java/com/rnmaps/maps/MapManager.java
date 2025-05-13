@@ -28,7 +28,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MapManager extends ViewGroupManager<MapView> {
 
@@ -329,9 +331,17 @@ public class MapManager extends ViewGroupManager<MapView> {
     }
 
     @ReactProp(name = "kmlSrc")
-    public void setKmlSrc(MapView view, String kmlUrl) {
-        if (kmlUrl != null) {
-            view.setKmlSrc(kmlUrl);
+    public void setKmlSrc(MapView view, @Nullable ReadableArray kmlUrls) {
+        if (kmlUrls != null && kmlUrls.size() > 0) {
+            ArrayList<String> kmlUrlList = kmlUrls.toArrayList()
+                    .stream()
+                    .filter(obj -> obj instanceof String)
+                    .map(obj -> (String) obj)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            view.setKmlSrcList(kmlUrlList);
+        } else {
+            view.clearKmlLayers();
         }
     }
 
