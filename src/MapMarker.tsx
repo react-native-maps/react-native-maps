@@ -2,29 +2,29 @@ import * as React from 'react';
 import {
   StyleSheet,
   Animated,
-  ViewProps,
-  ImageURISource,
-  ImageRequireSource,
   Platform,
+  type ViewProps,
+  type ImageURISource,
+  type ImageRequireSource,
 } from 'react-native';
 
 import decorateMapComponent, {
-  MapManagerCommand,
-  NativeComponent,
   ProviderContext,
   SUPPORTED,
-  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
+  type MapManagerCommand,
+  type NativeComponent,
+  type UIManagerCommand,
 } from './decorateMapComponent';
 import {
   Commands,
-  MapMarkerNativeComponentType,
+  type MapMarkerNativeComponentType,
 } from './MapMarkerNativeComponent';
 
 import {Commands as FabricCommands} from './specs/NativeComponentMarker';
 import type {AppleMarkerPriority} from './specs/NativeComponentMarker';
 
-import {
+import type {
   CalloutPressEvent,
   LatLng,
   MarkerDeselectEvent,
@@ -34,7 +34,7 @@ import {
   MarkerSelectEvent,
   Point,
 } from './sharedTypes';
-import {Modify} from './sharedTypesInternal';
+import type {Modify} from './sharedTypesInternal';
 
 import {PROVIDER_GOOGLE} from './ProviderConstants';
 import {fixImageProp} from './fixImageProp';
