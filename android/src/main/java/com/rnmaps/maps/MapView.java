@@ -691,7 +691,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         Activity activity = context.getCurrentActivity();
         if (activity instanceof LifecycleOwner) {
-            ((LifecycleOwner) activity).getLifecycle().removeObserver(this);
+            ((LifecycleOwner) activity).getLifecycle().Observer(this);
         }
         if (!paused) {
             onPause();
@@ -1159,14 +1159,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return features.get(index);
     }
 
-    public void removeFeatureAt(int index) {
-        // Guard against stale / out of range remove instructions which can be emitted when
-        // views are deleted while touch events are still active or due to concurrent diffing
-        // in the Fabric renderer.
-        if (index < 0 || index >= features.size()) {
-            return;
-        }
-        
+    public void removeFeatureAt(int index) {        
         MapFeature feature = features.remove(index);
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
