@@ -88,7 +88,7 @@ import java.util.concurrent.ExecutionException;
 import com.rnmaps.fabric.event.*;
 
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
-        GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener, DefaultLifecycleObserver {
+        GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener, DefaultLifecycle {
     public GoogleMap map;
     private MarkerManager markerManager;
     private MarkerManager.Collection markerCollection;
@@ -691,7 +691,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         Activity activity = context.getCurrentActivity();
         if (activity instanceof LifecycleOwner) {
-            ((LifecycleOwner) activity).getLifecycle().Observer(this);
+            ((LifecycleOwner) activity).getLifecycle().removeObserver(this);
         }
         if (!paused) {
             onPause();
@@ -1159,7 +1159,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return features.get(index);
     }
 
-    public void removeFeatureAt(int index) {        
+    public void removeFeatureAt(int index) {
         MapFeature feature = features.remove(index);
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
