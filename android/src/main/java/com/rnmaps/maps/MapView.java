@@ -459,7 +459,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 MapMarker airMapMarker = getMarkerMap(marker);
 
                 WritableMap eventData = makeClickEventData(marker.getPosition());
-                eventData.putString("action", "press");
+                eventData.putString("action", "marker-press");
                 eventData.putString("id", airMapMarker.getIdentifier());
                 airMapMarker.dispatchEvent(eventData, OnPressEvent::new);
 
