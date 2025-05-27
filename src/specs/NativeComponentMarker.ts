@@ -293,20 +293,20 @@ export interface MarkerFabricNativeProps extends ViewProps {
 }
 export interface NativeCommands {
   animateToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.RefObject<React.ComponentType>,
     latitude: Double,
     longitude: Double,
     duration: Int32,
   ) => void;
   setCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.RefObject<React.ComponentType>,
     latitude: Double,
     longitude: Double,
   ) => void;
-  showCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
-  hideCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
-  redrawCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
-  redraw: (viewRef: React.ElementRef<React.ComponentType>) => void;
+  showCallout: (viewRef: React.RefObject<React.ComponentType>) => void;
+  hideCallout: (viewRef: React.RefObject<React.ComponentType>) => void;
+  redrawCallout: (viewRef: React.RefObject<React.ComponentType>) => void;
+  redraw: (viewRef: React.RefObject<React.ComponentType>) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
