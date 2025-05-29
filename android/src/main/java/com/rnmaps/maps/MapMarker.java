@@ -15,6 +15,8 @@ import android.util.Property;
 import android.animation.TypeEvaluator;
 
 import androidx.annotation.Nullable;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
@@ -317,6 +319,8 @@ public class MapMarker extends MapFeature {
             return false;
 
         updateMarkerIcon();
+
+        new Handler(Looper.getMainLooper()).post(() -> tracksViewChangesActive = false);
 
         return true;
     }
@@ -685,6 +689,13 @@ public class MapMarker extends MapFeature {
 
     private BitmapDescriptor getBitmapDescriptorByName(String name) {
         return BitmapDescriptorFactory.fromResource(getDrawableResourceByName(name));
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        this.height = b - t;
+        this.width = r - l;
     }
 
     public static Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
