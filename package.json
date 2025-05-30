@@ -1,8 +1,10 @@
 {
   "name": "react-native-maps",
   "description": "React Native Mapview component for iOS + Android",
+  "main": "dist/src/index.js",
+  "react-native": "src/index",
   "source": "src/index",
-  "main": "src/index.ts",
+  "types": "dist/src/index.d.ts",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
   "version": "0.0.0",
