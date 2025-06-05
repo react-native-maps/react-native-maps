@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "tscheck": "tsc --noEmit",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -23,6 +24,7 @@
     "@react-native/babel-preset": "0.79.1",
     "@react-native/metro-config": "0.79.1",
     "@react-native/typescript-config": "0.79.1",
+    "@types/react": "19.0.0",
     "babel-plugin-module-resolver": "5.0.2"
   },
   "engines": {
