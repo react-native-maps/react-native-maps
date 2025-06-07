@@ -1,10 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 import type {ViewProps} from 'react-native';
-import {useProviderComponent} from './hooks/useProviderComponent.ts';
-import {
-  SUPPORTED,
+
+import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
-} from './decorateMapComponent.ts';
+  SUPPORTED,
+  ProviderContext,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
+} from './decorateMapComponent';
 
 export type MapWMSTileProps = ViewProps & {
   /**
@@ -120,17 +124,25 @@ export type MapWMSTileProps = ViewProps & {
   zIndex?: number;
 };
 
-const PROVIDER_CONFIG = {
+type NativeProps = MapWMSTileProps;
+
+export class MapWMSTile extends React.Component<MapWMSTileProps> {
+  // declaration only, as they are set through decorateMap
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
+  getNativeComponent!: () => NativeComponent<NativeProps>;
+  getMapManagerCommand!: (name: string) => MapManagerCommand;
+  getUIManagerCommand!: (name: string) => UIManagerCommand;
+
+  render() {
+    const AIRMapWMSTile = this.getNativeComponent();
+    return <AIRMapWMSTile {...this.props} />;
+  }
+}
+
+export default decorateMapComponent(MapWMSTile, 'WMSTile', {
   google: {
     ios: SUPPORTED,
     android: USES_DEFAULT_IMPLEMENTATION,
   },
-};
-
-export function MapWMSTile(props: MapWMSTileProps) {
-  const AIRMapWMSTile = useProviderComponent('WMSTile', PROVIDER_CONFIG);
-
-  return <AIRMapWMSTile {...props} />;
-}
-
-export default MapWMSTile;
+});
