@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.10](https://github.com/react-native-maps/react-native-maps/compare/v1.23.9...v1.23.10) (2025-06-07)
+
+
+### Bug Fixes
+
+* correctly emit marker-press event for Android ([#5514](https://github.com/react-native-maps/react-native-maps/issues/5514)) ([d9d24bf](https://github.com/react-native-maps/react-native-maps/commit/d9d24bf1dd0e64616fbe623d0c94ca9943667555))
+
 ## [1.23.9](https://github.com/react-native-maps/react-native-maps/compare/v1.23.8...v1.23.9) (2025-06-07)
 
 
