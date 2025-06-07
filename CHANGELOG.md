@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.9](https://github.com/react-native-maps/react-native-maps/compare/v1.23.8...v1.23.9) (2025-06-07)
+
+
+### Bug Fixes
+
+* improve TypeScript compatibility and error reporting ([7d53f71](https://github.com/react-native-maps/react-native-maps/commit/7d53f7109da4b577a0fee7e9e76c3aa4bdebb74f))
+
 ## [1.23.8](https://github.com/react-native-maps/react-native-maps/compare/v1.23.7...v1.23.8) (2025-05-13)
 
 
