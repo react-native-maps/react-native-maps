@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {HostComponent, ViewProps, ColorValue} from 'react-native';
 
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';

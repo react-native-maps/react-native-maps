@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {HostComponent} from 'react-native';
 import type {
   ViewProps,

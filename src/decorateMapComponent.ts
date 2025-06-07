@@ -73,6 +73,7 @@ export default function decorateMapComponent<Type extends Component>(
   const getDefaultComponent = () =>
     requireNativeComponent(getNativeComponentName(undefined, componentName));
 
+  // @ts-ignore
   Component.contextType = ProviderContext;
 
   Component.prototype.getNativeComponent =
@@ -130,6 +131,7 @@ export default function decorateMapComponent<Type extends Component>(
         throw new Error('react-native-maps: provider is not set');
       }
 
+      // @ts-ignore
       const providerInfo = providers[provider];
 
       // quick fix. Previous code assumed android | ios
