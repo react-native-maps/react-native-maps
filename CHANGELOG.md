@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.24.0](https://github.com/react-native-maps/react-native-maps/compare/v1.23.12...v1.24.0) (2025-06-08)
+
+
+### Features
+
+* **AppleMaps:** add support for centerOffset for Marker ([#5548](https://github.com/react-native-maps/react-native-maps/issues/5548)) ([73ab17d](https://github.com/react-native-maps/react-native-maps/commit/73ab17dc73f60bd51423f8161843455c23827cc9))
+
 ## [1.23.12](https://github.com/react-native-maps/react-native-maps/compare/v1.23.11...v1.23.12) (2025-06-08)
 
 
