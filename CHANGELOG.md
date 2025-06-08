@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.1](https://github.com/react-native-maps/react-native-maps/compare/v1.24.0...v1.24.1) (2025-06-08)
+
+
+### Bug Fixes
+
+* **AppleMaps:** polygon strokeWidth ([#5549](https://github.com/react-native-maps/react-native-maps/issues/5549)) ([c2addb5](https://github.com/react-native-maps/react-native-maps/commit/c2addb5830a6097d8818a93cd865dbf549e83569))
+
 # [1.24.0](https://github.com/react-native-maps/react-native-maps/compare/v1.23.12...v1.24.0) (2025-06-08)
 
 
