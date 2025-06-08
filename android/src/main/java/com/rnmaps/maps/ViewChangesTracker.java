@@ -15,13 +15,13 @@ public class ViewChangesTracker {
   private final long fps = 40;
 
   private ViewChangesTracker() {
-    handler = new Handler(Looper.myLooper());
+    handler = new Handler(Looper.getMainLooper());
     updateRunnable = new Runnable() {
       @Override
       public void run() {        
         update();
 
-        if (markers.size() > 0) {
+        if (!markers.isEmpty()) {
           handler.postDelayed(updateRunnable, fps);
         } else {
           hasScheduledFrame = false;
@@ -67,7 +67,7 @@ public class ViewChangesTracker {
     }
 
     // Remove markers that are not active anymore
-    if (markersToRemove.size() > 0) {
+    if (!markersToRemove.isEmpty()) {
       markers.removeAll(markersToRemove);
       markersToRemove.clear();
     }
