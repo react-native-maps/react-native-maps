@@ -206,9 +206,9 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     if (newViewProps.strokeColor){
         _view.strokeColor = RCTUIColorFromSharedColor(newViewProps.strokeColor);
     }
-
-
-
+    if (newViewProps.strokeWidth != oldViewProps.strokeWidth){
+        _view.strokeWidth = newViewProps.strokeWidth;
+    }
 
   [super updateProps:props oldProps:oldProps];
 }

@@ -5,6 +5,7 @@ import type {
   Double,
   Float,
   BubblingEventHandler,
+  WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type LatLng = Readonly<{
@@ -77,7 +78,7 @@ export interface CircleFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  strokeWidth?: Float;
+  strokeWidth?: WithDefault<Float, 1.0>;
 
   /**
    * Boolean to allow a polygon to be tappable and use the onPress function.
