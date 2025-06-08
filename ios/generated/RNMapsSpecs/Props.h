@@ -61,7 +61,7 @@ class RNMapsCircleProps final : public ViewProps {
   SharedColor fillColor{};
   double radius{0.0};
   SharedColor strokeColor{};
-  Float strokeWidth{0.0};
+  Float strokeWidth{1.0};
   bool tappable{false};
 };
 
@@ -478,7 +478,7 @@ class RNMapsGooglePolygonProps final : public ViewProps {
   std::vector<RNMapsGooglePolygonCoordinatesStruct> coordinates{};
   SharedColor fillColor{};
   SharedColor strokeColor{};
-  Float strokeWidth{0.0};
+  Float strokeWidth{1.0};
   bool geodesic{false};
   std::vector<std::vector<RNMapsGooglePolygonHolesStruct>> holes{};
   bool tappable{false};
@@ -1276,7 +1276,7 @@ class RNMapsPolylineProps final : public ViewProps {
   RNMapsPolylineLineJoin lineJoin{RNMapsPolylineLineJoin::Miter};
   SharedColor strokeColor{};
   std::vector<SharedColor> strokeColors{};
-  Float strokeWidth{0.0};
+  Float strokeWidth{1.0};
   bool tappable{false};
 };
 

@@ -32,7 +32,7 @@ RNMapsCircleProps::RNMapsCircleProps(
     fillColor(convertRawProp(context, rawProps, "fillColor", sourceProps.fillColor, {})),
     radius(convertRawProp(context, rawProps, "radius", sourceProps.radius, {0.0})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
-    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
       {}
 RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
@@ -83,7 +83,7 @@ RNMapsGooglePolygonProps::RNMapsGooglePolygonProps(
     coordinates(convertRawProp(context, rawProps, "coordinates", sourceProps.coordinates, {})),
     fillColor(convertRawProp(context, rawProps, "fillColor", sourceProps.fillColor, {})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
-    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     geodesic(convertRawProp(context, rawProps, "geodesic", sourceProps.geodesic, {false})),
     holes(convertRawProp(context, rawProps, "holes", sourceProps.holes, {})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
@@ -190,7 +190,7 @@ RNMapsPolylineProps::RNMapsPolylineProps(
     lineJoin(convertRawProp(context, rawProps, "lineJoin", sourceProps.lineJoin, {RNMapsPolylineLineJoin::Miter})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
     strokeColors(convertRawProp(context, rawProps, "strokeColors", sourceProps.strokeColors, {})),
-    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
       {}
 RNMapsUrlTileProps::RNMapsUrlTileProps(

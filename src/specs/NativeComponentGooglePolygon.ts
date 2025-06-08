@@ -5,6 +5,7 @@ import type {
   Double,
   BubblingEventHandler,
   Float,
+  WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type LatLng = Readonly<{
@@ -61,7 +62,7 @@ export interface PolygonFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  strokeWidth?: Float;
+  strokeWidth?: WithDefault<Float, 1.0>;
 
   /**
    * Boolean to indicate whether to draw each segment of the line as a geodesic as opposed to straight lines on the Mercator projection.
