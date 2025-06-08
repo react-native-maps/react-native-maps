@@ -24,6 +24,8 @@ using RNMapsMapViewComponentDescriptor = ConcreteComponentDescriptor<RNMapsMapVi
 using RNMapsMarkerComponentDescriptor = ConcreteComponentDescriptor<RNMapsMarkerShadowNode>;
 using RNMapsOverlayComponentDescriptor = ConcreteComponentDescriptor<RNMapsOverlayShadowNode>;
 using RNMapsPolylineComponentDescriptor = ConcreteComponentDescriptor<RNMapsPolylineShadowNode>;
+using RNMapsUrlTileComponentDescriptor = ConcreteComponentDescriptor<RNMapsUrlTileShadowNode>;
+using RNMapsWMSTileComponentDescriptor = ConcreteComponentDescriptor<RNMapsWMSTileShadowNode>;
 
 void RNMapsSpecs_registerComponentDescriptorsFromCodegen(
   std::shared_ptr<const ComponentDescriptorProviderRegistry> registry);
