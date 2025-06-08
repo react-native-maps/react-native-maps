@@ -17,6 +17,7 @@ import DraggableMarkers from './examples/DraggableMarkers';
 import PolygonCreator from './examples/PolygonCreator';
 import PolylineCreator from './examples/PolylineCreator';
 import GradientPolylines from './examples/GradientPolylines';
+import GradientPolylinesFunctional from './examples/GradientPolylinesFunctional';
 import AnimatedViews from './examples/AnimatedViews';
 import AnimatedMarkers from './examples/AnimatedMarkers';
 import Callouts from './examples/Callouts';
@@ -35,7 +36,6 @@ import WMSTiles from './examples/WMSTiles';
 import ZIndexMarkers from './examples/ZIndexMarkers';
 import StaticMap from './examples/StaticMap';
 import ThemeMap from './examples/ThemeMap';
-import MapStyle from './examples/MapStyle';
 import LegalLabel from './examples/LegalLabel';
 import SetNativePropsOverlays from './examples/SetNativePropsOverlays';
 import CustomOverlay from './examples/CustomOverlay';
@@ -141,7 +141,7 @@ export default class App extends React.Component<any, any> {
         // [<component>, <component description>, <Google compatible>, <Google add'l description>]
         [StaticMap, 'StaticMap', true],
         [ThemeMap, 'ThemeMap', true],
-        [DisplayLatLng, 'Tracking Position', true, '(incomplete)'],
+        [DisplayLatLng, 'Tracking Position', true],
         [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
         [EventListener, 'Events', true, '(incomplete)'],
         [MarkerTypes, 'Image Based Markers', true],
@@ -149,6 +149,7 @@ export default class App extends React.Component<any, any> {
         [PolygonCreator, 'Polygon Creator', true],
         [PolylineCreator, 'Polyline Creator', true],
         [GradientPolylines, 'Gradient Polylines', true],
+        [GradientPolylinesFunctional, 'Gradient Polylines Functional', true],
         [AnimatedViews, 'Animating with MapViews'],
         [AnimatedMarkers, 'Animated Marker Position'],
         [Callouts, 'Custom Callouts', true],
@@ -157,7 +158,7 @@ export default class App extends React.Component<any, any> {
         [CustomMarkers, 'Custom Markers', true],
         [TakeSnapshot, 'Take Snapshot', true, '(incomplete)'],
         [CachedMap, 'Cached Map'],
-        [LoadingMap, 'Map with loading'],
+        [LoadingMap, 'Map with loading', true],
         [MapBoundaries, 'Get visible map boundaries', true],
         [FitToSuppliedMarkers, 'Focus Map On Markers', true],
         [FitToCoordinates, 'Fit Map To Coordinates', true],
@@ -165,7 +166,6 @@ export default class App extends React.Component<any, any> {
         [CustomTiles, 'Custom Tiles', true],
         [WMSTiles, 'WMS Tiles', true],
         [ZIndexMarkers, 'Position Markers with Z-index', true],
-        [MapStyle, 'Customize the style of the map', true],
         [LegalLabel, 'Reposition the legal label', true],
         [SetNativePropsOverlays, 'Update native props', true],
         [CustomOverlay, 'Custom Overlay Component', true],

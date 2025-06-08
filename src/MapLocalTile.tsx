@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {ViewProps} from 'react-native';
+import type {ViewProps} from 'react-native';
 
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
 
 export type MapLocalTileProps = ViewProps & {
@@ -40,7 +40,8 @@ type NativeProps = MapLocalTileProps;
 
 export class MapLocalTile extends React.Component<MapLocalTileProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;

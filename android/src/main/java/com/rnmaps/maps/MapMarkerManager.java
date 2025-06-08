@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.facebook.react.R;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
@@ -268,6 +269,11 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         view.setTracksViewChanges(tracksViewChanges);
     }
 
+    @ReactProp(name = "accessibilityLabel")
+    public void setAccessibilityLabel(MapMarker view, @Nullable String accessibilityLabel) {
+        view.setTag(R.id.accessibility_label, accessibilityLabel);
+    }
+
     @Override
     public void addView(MapMarker parent, View child, int index) {
         // if an <Callout /> component is a child, then it is a callout view, NOT part of the
@@ -324,11 +330,12 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     @Nullable
     public Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.<String, Map<String, String>>builder()
-                .put("onPress", MapBuilder.of("registrationName", "onPress"))
                 .put("onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"))
                 .put("onDragStart", MapBuilder.of("registrationName", "onDragStart"))
                 .put("onDrag", MapBuilder.of("registrationName", "onDrag"))
                 .put("onDragEnd", MapBuilder.of("registrationName", "onDragEnd"))
+                .put("onSelect", MapBuilder.of("registrationName", "onSelect"))
+                .put("onDeselect", MapBuilder.of("registrationName", "onDeselect"))
                 .build();
     }
 
@@ -336,8 +343,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     @Nullable
     public Map getExportedCustomBubblingEventTypeConstants() {
         return MapBuilder.<String, Map<String, Object>>builder()
-                .put("onSelect", MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onSelect")))
-                .put("onDeselect", MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onDeselect")))
+                .put("onPress", MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onPress")))
                 .build();
     }
 

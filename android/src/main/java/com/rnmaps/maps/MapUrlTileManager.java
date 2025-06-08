@@ -13,10 +13,6 @@ public class MapUrlTileManager extends ViewGroupManager<MapUrlTile> {
 
   public MapUrlTileManager(ReactApplicationContext reactContext) {
     super();
-    DisplayMetrics metrics = new DisplayMetrics();
-    ((WindowManager) reactContext.getSystemService(Context.WINDOW_SERVICE))
-        .getDefaultDisplay()
-        .getRealMetrics(metrics);
   }
 
   @Override
@@ -39,18 +35,18 @@ public class MapUrlTileManager extends ViewGroupManager<MapUrlTile> {
     view.setZIndex(zIndex);
   }
 
-  @ReactProp(name = "minimumZ", defaultFloat = 0.0f)
-  public void setMinimumZ(MapUrlTile view, float minimumZ) {
+  @ReactProp(name = "minimumZ", defaultInt = 0)
+  public void setMinimumZ(MapUrlTile view, int minimumZ) {
     view.setMinimumZ(minimumZ);
   }
 
-  @ReactProp(name = "maximumZ", defaultFloat = 100.0f)
-  public void setMaximumZ(MapUrlTile view, float maximumZ) {
+  @ReactProp(name = "maximumZ", defaultInt = 100)
+  public void setMaximumZ(MapUrlTile view, int maximumZ) {
     view.setMaximumZ(maximumZ);
   }
 
-  @ReactProp(name = "maximumNativeZ", defaultFloat = 100.0f)
-  public void setMaximumNativeZ(MapUrlTile view, float maximumNativeZ) {
+  @ReactProp(name = "maximumNativeZ", defaultInt = 100)
+  public void setMaximumNativeZ(MapUrlTile view, int maximumNativeZ) {
     view.setMaximumNativeZ(maximumNativeZ);
   }
 
@@ -59,8 +55,8 @@ public class MapUrlTileManager extends ViewGroupManager<MapUrlTile> {
     view.setFlipY(flipY);
   }
 
-  @ReactProp(name = "tileSize", defaultFloat = 256.0f)
-  public void setTileSize(MapUrlTile view, float tileSize) {
+  @ReactProp(name = "tileSize", defaultInt = 256)
+  public void setTileSize(MapUrlTile view, int tileSize) {
     view.setTileSize(tileSize);
   }
 
@@ -74,8 +70,8 @@ public class MapUrlTileManager extends ViewGroupManager<MapUrlTile> {
     view.setTileCachePath(tileCachePath);
   }
 
-  @ReactProp(name = "tileCacheMaxAge", defaultFloat = 0.0f)
-  public void setTileCacheMaxAge(MapUrlTile view, float tileCacheMaxAge) {
+  @ReactProp(name = "tileCacheMaxAge", defaultInt = 0)
+  public void setTileCacheMaxAge(MapUrlTile view, int tileCacheMaxAge) {
     view.setTileCacheMaxAge(tileCacheMaxAge);
   }
 

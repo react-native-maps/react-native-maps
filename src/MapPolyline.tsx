@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {NativeSyntheticEvent, View, ViewProps} from 'react-native';
+import {View, type NativeSyntheticEvent, type ViewProps} from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
+import type {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
 
 export type MapPolylineProps = ViewProps & {
   /**
@@ -23,7 +23,7 @@ export type MapPolylineProps = ViewProps & {
    * The fill color to use for the path.
    *
    * @default `#000`, `rgba(r,g,b,0.5)`
-   * @platform iOS: Supported
+   * @platform iOS: Apple Maps only
    * @platform Android: Not supported
    */
   fillColor?: string;
@@ -43,8 +43,8 @@ export type MapPolylineProps = ViewProps & {
    *
    * @default `round`
    * @platform iOS: Apple Maps only
-   * @platform Android: Supported
-   */
+   * @platform Android: supported
+   * */
   lineCap?: LineCapType;
 
   /**
@@ -54,8 +54,8 @@ export type MapPolylineProps = ViewProps & {
    * The values in the array alternate, starting with the first line segment length,
    * followed by the first gap length, followed by the second line segment length, and so on.
    *
-   * @platform iOS: Supported
-   * @platform Android: Supported
+   * @platform iOS: Apple Maps only
+   * @platform Android: supported
    */
   lineDashPattern?: number[];
 
@@ -74,7 +74,7 @@ export type MapPolylineProps = ViewProps & {
    * The line join style to apply to corners of the path.
    *
    * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
+   * @platform Android: supported
    */
   lineJoin?: LineJoinType;
 
@@ -146,11 +146,12 @@ export type MapPolylineProps = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = MapPolylineProps & {ref: React.RefObject<View>};
+type NativeProps = MapPolylineProps & {ref: React.RefObject<View | null>};
 
 export class MapPolyline extends React.Component<MapPolylineProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
@@ -194,7 +195,7 @@ export default decorateMapComponent(MapPolyline, 'Polyline', {
   },
 });
 
-type PolylinePressEvent = NativeSyntheticEvent<{
+export type PolylinePressEvent = NativeSyntheticEvent<{
   action: 'polyline-press';
 
   /**

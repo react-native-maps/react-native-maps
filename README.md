@@ -14,7 +14,24 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 ## Compatibility
 
-`react-native-maps` requires `react-native >= 0.64.3`.
+## React Native Compatibility
+
+### Important Notes:
+
+- **Fabric is now supported**:  
+  Fabric is now supported for the latest version of the library, if you don't have Fabric (New Arch) enabled, please use v1.21.0 or earlier
+
+### Version Requirements:
+
+#### Fabric Only
+
+- **Version `1.22.0` and below**: Requires **React Native `>= 0.76`**.
+
+#### Old Arch
+
+- **Version `1.21.0` and below**: Requires **React Native `>= 0.74`**.
+- **Version `1.14.0` and above**: Requires **React Native `>= 0.74`**.
+- **Versions below `1.14.0`**: Require **React Native `>= 0.64.3`**.
 
 ## Component API
 
@@ -129,7 +146,7 @@ Note: You can also pass the image binary data like `image={require('custom_pin.p
 
 ### Rendering a Marker with a custom view
 
-Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the head ache)
+Note: This has performance implications, if you wish for a simpler solution go with a custom image (save your self the headache)
 
 ```jsx
 <Marker coordinate={{latitude: latitude, longitude: longitude}}>
@@ -197,59 +214,6 @@ For Android: add the following line in your AndroidManifest.xml
 
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
 
-## React Native Configuration for Fabric / New Architecture
-
-This library works with Fabric using the [New Renderer Interop Layer](https://github.com/reactwg/react-native-new-architecture/discussions/135)
-
-There is a warning message that those steps are not necessary; but we couldn't get the example working without them so far.
-
-### Configuration Steps
-
-1. **Open your configuration file**: Locate the `react-native-config` file in your project directory.
-
-2. **Add the following configuration**: Include the `unstable_reactLegacyComponentNames` array for both Android and iOS platforms as shown below:
-
-```javascript
-module.exports = {
-  project: {
-    android: {
-      unstable_reactLegacyComponentNames: [
-        'AIRMap',
-        'AIRMapCallout',
-        'AIRMapCalloutSubview',
-        'AIRMapCircle',
-        'AIRMapHeatmap',
-        'AIRMapLocalTile',
-        'AIRMapMarker',
-        'AIRMapOverlay',
-        'AIRMapPolygon',
-        'AIRMapPolyline',
-        'AIRMapUrlTile',
-        'AIRMapWMSTile',
-      ],
-    },
-    ios: {
-      unstable_reactLegacyComponentNames: [
-        'AIRMap',
-        'AIRMapCallout',
-        'AIRMapCalloutSubview',
-        'AIRMapCircle',
-        'AIRMapHeatmap',
-        'AIRMapLocalTile',
-        'AIRMapMarker',
-        'AIRMapOverlay',
-        'AIRMapPolygon',
-        'AIRMapPolyline',
-        'AIRMapUrlTile',
-        'AIRMapWMSTile',
-      ],
-    },
-  },
-};
-```
-
-checkout the example project to see it in action.
-
 #### Tile Overlay using local tiles
 
 Tiles can be stored locally within device using xyz tiling scheme and displayed as tile overlay as well. This is usefull especially for offline map usage when tiles are available for selected map region within device storage.
@@ -299,43 +263,10 @@ render() {
 }
 ```
 
-### Customizing the map style
+### Customizing the map style (Google Maps Only)
 
-Create the json object, or download a generated one from the [google style generator](https://mapstyle.withgoogle.com/).
-
-```jsx
-// The generated json object
-mapStyle = [ ... ]
-
-render() {
-  return (
-    <MapView
-      region={this.state.region}
-      onRegionChange={this.onRegionChange}
-      customMapStyle={mapStyle}
-    />
-  );
-}
-```
-
-For iOS, in addition to providing the `mapStyle` you will need to do the following
-
-```jsx
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-
-// ...
-
-<MapView
-  provider={PROVIDER_GOOGLE}
-  customMapStyle={MapStyle}
->
-```
-
-Then add the AirGoogleMaps directory:
-
-https://github.com/react-native-maps/react-native-maps/blob/1e71a21f39e7b88554852951f773c731c94680c9/docs/installation.md#ios
-
-An unofficial step-by-step guide is also available at https://gist.github.com/heron2014/e60fa003e9b117ce80d56bb1d5bfe9e0
+The `<MapView provider="google" googleMapId="yourStyledMapId" />` Google Maps on iOS and Android supports styling via google cloud platform, the styled maps are published under a googleMapId, by simply setting the property googleMapId to the MapView you can use that styled map
+more info here: [google map id](https://developers.google.com/maps/documentation/get-map-id)
 
 ### MapView Events
 
@@ -482,7 +413,7 @@ render() {
 Markers can also accept an `AnimatedRegion` value as a coordinate.
 
 ```jsx
-import Mapview, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
+import MapView, { AnimatedRegion, MarkerAnimated } from 'react-native-maps';
 
 getInitialState() {
   return {

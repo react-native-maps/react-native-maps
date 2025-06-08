@@ -4,10 +4,10 @@ import {
   NativeModules,
   Platform,
   UIManager,
-  HostComponent,
+  type HostComponent,
 } from 'react-native';
 import {PROVIDER_DEFAULT, PROVIDER_GOOGLE} from './ProviderConstants';
-import {Provider} from './sharedTypes';
+import type {Provider} from './sharedTypes';
 import {MapCallout} from './MapCallout';
 import {MapOverlay} from './MapOverlay';
 import {MapCalloutSubview} from './MapCalloutSubview';
@@ -20,6 +20,14 @@ import {MapPolyline} from './MapPolyline';
 import {MapUrlTile} from './MapUrlTile';
 import {MapWMSTile} from './MapWMSTile';
 import {Commands} from './MapViewNativeComponent';
+import GooglePolygon from './specs/NativeComponentGooglePolygon';
+import FabricMarker from './specs/NativeComponentMarker';
+import FabricUrlTile from './specs/NativeComponentUrlTile';
+import FabricWMSTile from './specs/NativeComponentWMSTile';
+import FabricCallout from './specs/NativeComponentCallout';
+import FabricPolyline from './specs/NativeComponentPolyline';
+import FabricCircle from './specs/NativeComponentCircle';
+import FabricOverlay from './specs/NativeComponentOverlay';
 
 export const SUPPORTED: ImplementationStatus = 'SUPPORTED';
 export const USES_DEFAULT_IMPLEMENTATION: ImplementationStatus =
@@ -42,9 +50,11 @@ function getNativeComponentName(provider: Provider, component: ComponentName) {
   return `${getNativeMapName(provider)}${component}`;
 }
 
-export const createNotSupportedComponent = (message: string) => () => {
-  console.error(message);
-  return null;
+export const createNotSupportedComponent = (message: string): (() => null) => {
+  return () => {
+    console.error(message);
+    return null;
+  };
 };
 
 export const googleMapIsInstalled = !!UIManager.hasViewManagerConfig(
@@ -63,11 +73,50 @@ export default function decorateMapComponent<Type extends Component>(
   const getDefaultComponent = () =>
     requireNativeComponent(getNativeComponentName(undefined, componentName));
 
+  // @ts-ignore
   Component.contextType = ProviderContext;
 
   Component.prototype.getNativeComponent =
     function getNativeComponent(): NativeComponent {
       const provider = this.context;
+      if (
+        componentName === 'Marker' &&
+        (Platform.OS !== 'ios' || provider !== PROVIDER_GOOGLE)
+      ) {
+        // @ts-ignore
+        return FabricMarker;
+      }
+      if (
+        componentName === 'Polygon' &&
+        ((provider === PROVIDER_GOOGLE &&
+          Platform.OS === 'ios' &&
+          googleMapIsInstalled) ||
+          Platform.OS === 'android')
+      ) {
+        // @ts-ignore
+        return GooglePolygon;
+      }
+      if (Platform.OS === 'android') {
+        if (componentName === 'Callout') {
+          // @ts-ignore
+          return FabricCallout;
+        } else if (componentName === 'Polyline') {
+          // @ts-ignore
+          return FabricPolyline;
+        } else if (componentName === 'Circle') {
+          // @ts-ignore
+          return FabricCircle;
+        } else if (componentName === 'Overlay') {
+          // @ts-ignore
+          return FabricOverlay;
+        } else if (componentName === 'UrlTile') {
+          // @ts-ignore
+          return FabricUrlTile;
+        } else if (componentName === 'WMSTile') {
+          // @ts-ignore
+          return FabricWMSTile;
+        }
+      }
       const key = provider || 'default';
       if (components[key]) {
         return components[key];
@@ -78,11 +127,18 @@ export default function decorateMapComponent<Type extends Component>(
         return components[key];
       }
 
+      if (!provider) {
+        throw new Error('react-native-maps: provider is not set');
+      }
+
+      // @ts-ignore
       const providerInfo = providers[provider];
+
       // quick fix. Previous code assumed android | ios
       if (Platform.OS !== 'android' && Platform.OS !== 'ios') {
         throw new Error(`react-native-maps doesn't support ${Platform.OS}`);
       }
+
       const platformSupport = providerInfo[Platform.OS];
       const nativeComponentName = getNativeComponentName(
         provider,

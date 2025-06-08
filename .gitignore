@@ -5,6 +5,7 @@
 # Xcode
 #
 build/
+buildoutput.txt
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -36,10 +37,15 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
+.kotlin/
+local.properties
+secrets.properties
 
 # node.js
 #
 node_modules/
+packages/*/node_modules
+packages/*/vendor/bundle/
 npm-debug.log
 yarn-error.log
 
@@ -66,7 +72,8 @@ lib/
 
 example/vendor/bundle/
 
-example/ios/Config.xcconfig
+Config.xcconfig
+Secrets.xcconfig
 
 # Ruby / CocoaPods
 **/Pods/

@@ -18,6 +18,40 @@ When using Google Maps on iOS, you need also to obtain an [API key for the iOS S
 
 ---
 
+## Expo
+
+If you're using Expo, you can add react-native-maps to your project by adding it to the plugins array in your `app.json` or `app.config.js`:
+
+> **Note:** This plugin is only compatible with react-native-maps version 1.22 and above, and requires Expo SDK version 53 or higher.
+
+```json
+{
+  "expo": {
+    "plugins": ["react-native-maps"]
+  }
+}
+```
+
+If you're using Google as the map provider, also provide an API key for the respective platform:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "react-native-maps",
+        {
+          "iosGoogleMapsApiKey": "YOUR_KEY_HERE",
+          "androidGoogleMapsApiKey": "YOUR_KEY_HERE"
+        }
+      ]
+    ]
+  }
+}
+```
+
+## For bare workflow projects, you'll need to follow the iOS and Android setup instructions below.
+
 ## iOS
 
 After installing the npm package, we need to install the pod.
@@ -46,12 +80,12 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
-Google Maps SDK for iOS requires iOS 13, so make sure that your deployment target is >= 13.4 in your iOS project settings.
+Google Maps SDK for iOS requires iOS 14, so make sure that your deployment target is >= 4 in your iOS project settings.
 
-Also make sure that your Podfile deployment target is set to >= 13.4 at the top of your Podfile, eg:
+Also make sure that your Podfile deployment target is set to >= 14 at the top of your Podfile, eg:
 
 ```ruby
-platform :ios, '13.4'
+platform :ios, '14'
 ```
 
 Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
@@ -60,7 +94,7 @@ Add the following to your Podfile above the `use_native_modules!` function and r
 # React Native Maps dependencies
 
 rn_maps_path = '../node_modules/react-native-maps'
-pod 'react-native-google-maps', :path => rn_maps_path
+pod 'react-native-maps/Google', :path => rn_maps_path
 ```
 
 The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.
@@ -250,3 +284,5 @@ A list of the current dependencies can be found [here](https://developers.google
 - Make sure that your emulator has Google Play (Go to Android studio -> Virtual Devices -> Check that you have icon in "Play Store" column)
 - Click to bottom dots icon in the emulator
 - Go to Google Play Tab and click Update
+
+---

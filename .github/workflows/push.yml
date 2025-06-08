@@ -6,6 +6,7 @@ on:
     branches:
       - master
       - beta
+      - alpha
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -16,12 +17,12 @@ jobs:
       HUSKY: 0
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
           cache: yarn

@@ -40,18 +40,18 @@ class GradientPolylines extends React.Component<any, any> {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
+      coordinates: COORDINATES,
     };
   }
 
   render() {
     return (
       <MapView
-        googleRenderer={'LEGACY'}
         provider={this.props.provider}
         style={styles.container}
         initialRegion={this.state.region}>
         <Polyline
-          coordinates={COORDINATES}
+          coordinates={this.state.coordinates}
           strokeColor="#000"
           strokeColors={COLORS}
           strokeWidth={6}

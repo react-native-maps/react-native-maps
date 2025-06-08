@@ -11,7 +11,6 @@
 #import "AIRGoogleMapMarker.h"
 #import <MapKit/MapKit.h>
 #import <React/RCTUIManager.h>
-#import "RCTConvert+AirMap.h"
 
 @implementation AIRGoogleMapMarkerManager
 
@@ -87,7 +86,7 @@ RCT_EXPORT_METHOD(redrawCallout:(nonnull NSNumber *)reactTag)
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
             AIRGoogleMapMarker* marker = (AIRGoogleMapMarker *) view;
-            
+
             [NSTimer scheduledTimerWithTimeInterval:0.0
                                              target:[NSBlockOperation blockOperationWithBlock:^{
                 [marker hideCalloutView];

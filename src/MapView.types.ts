@@ -1,5 +1,5 @@
-import {ClickEvent, LatLng, Point, Region} from './sharedTypes';
-import {NativeSyntheticEvent} from 'react-native';
+import type {ClickEvent, LatLng, Point, Region} from './sharedTypes';
+import type {NativeSyntheticEvent} from 'react-native';
 
 // All types in this file are directly exported with the package for external
 // use.
@@ -66,7 +66,7 @@ export type ActiveIndoorLevel = {
 };
 
 export type IndoorLevelActivatedEvent = NativeSyntheticEvent<{
-  IndoorLevel: ActiveIndoorLevel;
+  indoorLevel: ActiveIndoorLevel;
 }>;
 
 export type IndoorBuilding = {

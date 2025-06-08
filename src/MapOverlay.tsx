@@ -1,24 +1,25 @@
 import * as React from 'react';
 import {
   StyleSheet,
-  Image,
   Animated,
-  ViewProps,
-  ImageURISource,
-  ImageRequireSource,
-  NativeSyntheticEvent,
+  Platform,
+  type ViewProps,
+  type ImageURISource,
+  type ImageRequireSource,
+  type NativeSyntheticEvent,
 } from 'react-native';
 
 import decorateMapComponent, {
-  MapManagerCommand,
-  NativeComponent,
   ProviderContext,
   SUPPORTED,
-  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
+  type MapManagerCommand,
+  type NativeComponent,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng, Point} from './sharedTypes';
-import {Modify} from './sharedTypesInternal';
+import type {LatLng, Point} from './sharedTypes';
+import type {Modify} from './sharedTypesInternal';
+import {fixImageProp} from './fixImageProp';
 
 export type MapOverlayProps = ViewProps & {
   /**
@@ -76,34 +77,57 @@ export type MapOverlayProps = ViewProps & {
 
 type NativeProps = Modify<MapOverlayProps, {image?: string}>;
 
+function normalizeBounds(bounds: [number, number][]): any {
+  return {
+    northEast: {latitude: bounds[0][0], longitude: bounds[0][1]},
+    southWest: {latitude: bounds[1][0], longitude: bounds[1][1]},
+  };
+}
+
 export class MapOverlay extends React.Component<MapOverlayProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
 
   static Animated: Animated.AnimatedComponent<typeof MapOverlay>;
 
+  private fabricOverlay?: Boolean = undefined;
+
   render() {
-    const {opacity = 1.0} = this.props;
-    let image: string | undefined;
-    if (
-      typeof this.props.image !== 'number' &&
-      this.props.image.uri?.startsWith('http')
-    ) {
-      image = this.props.image.uri;
-    } else {
-      const sourceAsset = Image.resolveAssetSource(this.props.image) || {};
-      image = sourceAsset.uri;
+    const {opacity = 1.0, bounds} = this.props;
+
+    if (this.fabricOverlay === undefined) {
+      this.fabricOverlay = Platform.OS === 'android';
     }
 
     const AIRMapOverlay = this.getNativeComponent();
+    let image: any = this.props.image;
 
+    let boundsParam: any = bounds;
+    if (this.fabricOverlay) {
+      if (this.props.image) {
+        image = fixImageProp(this.props.image);
+      }
+      if (bounds) {
+        boundsParam = normalizeBounds(bounds);
+      }
+    } else {
+      if (this.props.image) {
+        image = fixImageProp(this.props.image);
+        if (image.uri) {
+          image = image.uri;
+        }
+      }
+    }
     return (
       <AIRMapOverlay
-        {...this.props}
+        // @ts-ignore
+        bounds={boundsParam}
         opacity={opacity}
+        // @ts-ignore
         image={image}
         style={[styles.overlay, this.props.style]}
       />
@@ -121,7 +145,7 @@ type OverlayPressEvent = NativeSyntheticEvent<{
   action: 'overlay-press' | 'image-overlay-press';
 
   /**
-   * @platform iOS: Apple maps
+   * @platform iOS: Apple Maps
    */
   name?: string;
 
