@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.12](https://github.com/react-native-maps/react-native-maps/compare/v1.23.11...v1.23.12) (2025-06-08)
+
+
+### Bug Fixes
+
+* **android:** custom markers size always 100 ([#5103](https://github.com/react-native-maps/react-native-maps/issues/5103)) ([05a2293](https://github.com/react-native-maps/react-native-maps/commit/05a22938fdf2987b8e14bd872f7cb102cf1c261c))
+
 ## [1.23.11](https://github.com/react-native-maps/react-native-maps/compare/v1.23.10...v1.23.11) (2025-06-08)
 
 
