@@ -131,6 +131,34 @@ using namespace facebook::react;
     _view = (AIRMap *)[_legacyMapManager view];
 
     self.contentView = _view;
+    
+    _view.onLongPress = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+            // Extract values from the NSDictionary
+            NSDictionary* coordinateDict = dictionary[@"coordinate"];
+            NSDictionary* positionDict = dictionary[@"position"];
+
+            // Populate the OnMapPressCoordinate struct
+            facebook::react::RNMapsMapViewEventEmitter::OnLongPressCoordinate coordinate = {
+                .latitude = [coordinateDict[@"latitude"] doubleValue],
+                .longitude = [coordinateDict[@"longitude"] doubleValue],
+            };
+
+            // Populate the OnMapPressPosition struct
+            facebook::react::RNMapsMapViewEventEmitter::OnLongPressPosition position = {
+                .x = [positionDict[@"x"] doubleValue],
+                .y = [positionDict[@"y"] doubleValue],
+            };
+
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsMapViewEventEmitter::OnLongPress data = {
+                .action = std::string([@"long-press" UTF8String]),
+                .position = position,
+                .coordinate = coordinate
+            };
+            mapViewEventEmitter->onLongPress(data);
+        }
+    };
 
     _view.onPress = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
