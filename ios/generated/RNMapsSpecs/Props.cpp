@@ -83,6 +83,7 @@ RNMapsGooglePolygonProps::RNMapsGooglePolygonProps(
     coordinates(convertRawProp(context, rawProps, "coordinates", sourceProps.coordinates, {})),
     fillColor(convertRawProp(context, rawProps, "fillColor", sourceProps.fillColor, {})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
     geodesic(convertRawProp(context, rawProps, "geodesic", sourceProps.geodesic, {false})),
     holes(convertRawProp(context, rawProps, "holes", sourceProps.holes, {})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))

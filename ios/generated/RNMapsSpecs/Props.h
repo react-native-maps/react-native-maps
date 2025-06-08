@@ -478,6 +478,7 @@ class RNMapsGooglePolygonProps final : public ViewProps {
   std::vector<RNMapsGooglePolygonCoordinatesStruct> coordinates{};
   SharedColor fillColor{};
   SharedColor strokeColor{};
+  Float strokeWidth{0.0};
   bool geodesic{false};
   std::vector<std::vector<RNMapsGooglePolygonHolesStruct>> holes{};
   bool tappable{false};
