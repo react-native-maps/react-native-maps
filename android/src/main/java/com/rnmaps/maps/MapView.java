@@ -132,6 +132,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private int cameraMoveReason = 0;
     private MapMarker selectedMarker;
 
+    private LifecycleOwner currentLifecycleOwner;
+    private boolean isLifecycleObserverAttached = false;
+
     private static final String[] PERMISSIONS = new String[]{
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
@@ -250,10 +253,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                    GoogleMapOptions googleMapOptions) {
         super(context, googleMapOptions);
         this.context = context;
-        Activity activity = context.getCurrentActivity();
-        if (activity instanceof LifecycleOwner) {
-            ((LifecycleOwner) activity).getLifecycle().addObserver(this);
-        }
         super.getMapAsync(this);
 
         final MapView view = this;
@@ -307,6 +306,38 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                    GoogleMapOptions googleMapOptions) {
         this(null, googleMapOptions);
 
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        attachLifecycleObserver();
+    }
+
+    // Override onDetachedFromWindow to detach lifecycle observer
+    @Override
+    protected void onDetachedFromWindow() {
+        detachLifecycleObserver();
+        super.onDetachedFromWindow();
+    }
+
+    // Method to attach lifecycle observer
+    private void attachLifecycleObserver() {
+        Activity activity = context.getCurrentActivity();
+        if (activity instanceof LifecycleOwner && !isLifecycleObserverAttached) {
+            currentLifecycleOwner = (LifecycleOwner) activity;
+            currentLifecycleOwner.getLifecycle().addObserver(this);
+            isLifecycleObserverAttached = true;
+        }
+    }
+
+    // Method to detach lifecycle observer
+    private void detachLifecycleObserver() {
+        if (currentLifecycleOwner != null && isLifecycleObserverAttached) {
+            currentLifecycleOwner.getLifecycle().removeObserver(this);
+            isLifecycleObserverAttached = false;
+            currentLifecycleOwner = null;
+        }
     }
 
     public double[][] getMarkersFrames(boolean onlyVisible) {
@@ -689,10 +720,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         destroyed = true;
 
-        Activity activity = context.getCurrentActivity();
-        if (activity instanceof LifecycleOwner) {
-            ((LifecycleOwner) activity).getLifecycle().removeObserver(this);
-        }
+        // Detach lifecycle observer before destroying
+        detachLifecycleObserver();
+
         if (!paused) {
             onPause();
             paused = true;
