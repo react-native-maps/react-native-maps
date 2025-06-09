@@ -593,7 +593,15 @@ using namespace facebook::react;
     REMAP_MAPVIEW_PROP(zoomTapEnabled)
     REMAP_MAPVIEW_PROP(scrollEnabled)
 
-    REMAP_MAPVIEW_STRING_PROP(kmlSrc)
+    if (oldViewProps.kmlSrc != newViewProps.kmlSrc) {
+        NSMutableArray<NSString *> *kmlArray = [NSMutableArray array];
+        for (const auto &src : newViewProps.kmlSrc) {
+            [kmlArray addObject:[NSString stringWithUTF8String:src.c_str()]];
+        }
+        _view.kmlSrc = kmlArray;
+    }
+    
+    
     REMAP_MAPVIEW_STRING_PROP(customMapStyleString)
 
 

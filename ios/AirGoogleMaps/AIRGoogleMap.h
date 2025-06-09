@@ -13,6 +13,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
+#import "GMUGeometryRenderer.h"
 
 #import "AIRGoogleMapCoordinate.h"
 
@@ -51,6 +52,7 @@
 @property (nonatomic, strong) NSMutableArray *heatmaps;
 @property (nonatomic, strong) NSMutableArray *tiles;
 @property (nonatomic, strong) NSMutableArray *overlays;
+@property (nonatomic, strong) NSMutableArray<NSString *> *kmlSrc;
 
 @property (nonatomic, assign) BOOL showsBuildings;
 @property (nonatomic, assign) BOOL showsTraffic;
@@ -65,7 +67,6 @@
 @property (nonatomic, assign) BOOL showsMyLocationButton;
 @property (nonatomic, assign) BOOL showsIndoors;
 @property (nonatomic, assign) BOOL showsIndoorLevelPicker;
-@property (nonatomic, assign) NSString *kmlSrc;
 
 - (BOOL) isReady;
 - (void)didPrepareMap;

@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 public interface RNMapsMapViewManagerInterface<T extends View> {
@@ -21,7 +22,7 @@ public interface RNMapsMapViewManagerInterface<T extends View> {
   void setPoiClickEnabled(T view, boolean value);
   void setInitialCamera(T view, @Nullable ReadableMap value);
   void setInitialRegion(T view, @Nullable ReadableMap value);
-  void setKmlSrc(T view, @Nullable String value);
+  void setKmlSrc(T view, @Nullable ReadableArray value);
   void setLegalLabelInsets(T view, @Nullable ReadableMap value);
   void setLiteMode(T view, boolean value);
   void setGoogleMapId(T view, @Nullable String value);
