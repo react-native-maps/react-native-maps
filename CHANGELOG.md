@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.3](https://github.com/react-native-maps/react-native-maps/compare/v1.24.2...v1.24.3) (2025-06-09)
+
+
+### Bug Fixes
+
+* **android:** fix NPE crash on pause ([#5555](https://github.com/react-native-maps/react-native-maps/issues/5555)) ([ae8d38c](https://github.com/react-native-maps/react-native-maps/commit/ae8d38c672e1671ea53f28336b11fbbb139e861f))
+
 ## [1.24.2](https://github.com/react-native-maps/react-native-maps/compare/v1.24.1...v1.24.2) (2025-06-09)
 
 
