@@ -19,7 +19,7 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 ### Important Notes:
 
 - **Fabric is now supported**:  
-  Fabric is now supported for the latest version of the library, if you don't have Fabric (New Arch) enabled, please use v1.21.0 or earlier
+  Fabric is now supported for the latest version of the library, **latest version is strongly recommended** because many regressions appeared after the release of v1.22.0 if you don't have Fabric (New Arch) enabled, please use v1.21.0 or earlier
 
 ### Version Requirements:
 
