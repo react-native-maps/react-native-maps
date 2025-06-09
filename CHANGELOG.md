@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.2](https://github.com/react-native-maps/react-native-maps/compare/v1.24.1...v1.24.2) (2025-06-09)
+
+
+### Bug Fixes
+
+* **ios:** googleMaps marker images not visible ([#5554](https://github.com/react-native-maps/react-native-maps/issues/5554)) ([1924954](https://github.com/react-native-maps/react-native-maps/commit/19249543e9da1cbfdf2035964e232a458c562e64))
+
 ## [1.24.1](https://github.com/react-native-maps/react-native-maps/compare/v1.24.0...v1.24.1) (2025-06-08)
 
 
