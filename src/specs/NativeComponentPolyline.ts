@@ -107,7 +107,7 @@ export interface PolylineFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  strokeWidth?: Float;
+  strokeWidth?: WithDefault<Float, 1.0>;
 
   /**
    * Boolean to allow a polygon to be tappable and use the onPress function.

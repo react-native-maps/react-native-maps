@@ -19,7 +19,7 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 ### Important Notes:
 
 - **Fabric is now supported**:  
-  Fabric is now supported for the latest version of the library, if you don't have Fabric (New Arch) enabled, please use v1.21.0 or earlier
+  Fabric is now supported for the latest version of the library, **latest version is strongly recommended** because many regressions appeared after the release of v1.22.0 if you don't have Fabric (New Arch) enabled, please use v1.21.0 or earlier
 
 ### Version Requirements:
 
@@ -213,57 +213,6 @@ For Android: add the following line in your AndroidManifest.xml
 ```
 
 For IOS: configure [App Transport Security](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) in your app
-
-## React Native Configuration for Fabric / New Architecture
-
-This library doesn't support the new arch yet due to issues with inserting subviews / interoplayer. we're working on it.
-
-### Configuration Steps
-
-1. **Open your configuration file**: Locate the `react-native-config` file in your project directory.
-
-2. **Add the following configuration**: Include the `unstable_reactLegacyComponentNames` array for both Android and iOS platforms as shown below:
-
-```javascript
-module.exports = {
-  project: {
-    android: {
-      unstable_reactLegacyComponentNames: [
-        'AIRMap',
-        'AIRMapCallout',
-        'AIRMapCalloutSubview',
-        'AIRMapCircle',
-        'AIRMapHeatmap',
-        'AIRMapLocalTile',
-        'AIRMapMarker',
-        'AIRMapOverlay',
-        'AIRMapPolygon',
-        'AIRMapPolyline',
-        'AIRMapUrlTile',
-        'AIRMapWMSTile',
-      ],
-    },
-    ios: {
-      unstable_reactLegacyComponentNames: [
-        'AIRMap',
-        'AIRMapCallout',
-        'AIRMapCalloutSubview',
-        'AIRMapCircle',
-        'AIRMapHeatmap',
-        'AIRMapLocalTile',
-        'AIRMapMarker',
-        'AIRMapOverlay',
-        'AIRMapPolygon',
-        'AIRMapPolyline',
-        'AIRMapUrlTile',
-        'AIRMapWMSTile',
-      ],
-    },
-  },
-};
-```
-
-checkout the example project to see it in action.
 
 #### Tile Overlay using local tiles
 

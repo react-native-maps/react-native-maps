@@ -5,13 +5,14 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "tscheck": "tsc --noEmit",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "react": "19.0.0",
-    "react-native": "0.79.1"
+    "react-native": "0.79.3"
   },
   "devDependencies": {
     "@babel/core": "7.26.10",
@@ -20,9 +21,10 @@
     "@react-native-community/cli": "18.0.0",
     "@react-native-community/cli-platform-android": "18.0.0",
     "@react-native-community/cli-platform-ios": "18.0.0",
-    "@react-native/babel-preset": "0.79.1",
-    "@react-native/metro-config": "0.79.1",
-    "@react-native/typescript-config": "0.79.1",
+    "@react-native/babel-preset": "0.79.3",
+    "@react-native/metro-config": "0.79.3",
+    "@react-native/typescript-config": "0.79.3",
+    "@types/react": "19.0.0",
     "babel-plugin-module-resolver": "5.0.2"
   },
   "engines": {

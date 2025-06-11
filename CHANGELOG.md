@@ -1,5 +1,61 @@
 # Changelog
 
+## [1.24.3](https://github.com/react-native-maps/react-native-maps/compare/v1.24.2...v1.24.3) (2025-06-09)
+
+
+### Bug Fixes
+
+* **android:** fix NPE crash on pause ([#5555](https://github.com/react-native-maps/react-native-maps/issues/5555)) ([ae8d38c](https://github.com/react-native-maps/react-native-maps/commit/ae8d38c672e1671ea53f28336b11fbbb139e861f))
+
+## [1.24.2](https://github.com/react-native-maps/react-native-maps/compare/v1.24.1...v1.24.2) (2025-06-09)
+
+
+### Bug Fixes
+
+* **ios:** googleMaps marker images not visible ([#5554](https://github.com/react-native-maps/react-native-maps/issues/5554)) ([1924954](https://github.com/react-native-maps/react-native-maps/commit/19249543e9da1cbfdf2035964e232a458c562e64))
+
+## [1.24.1](https://github.com/react-native-maps/react-native-maps/compare/v1.24.0...v1.24.1) (2025-06-08)
+
+
+### Bug Fixes
+
+* **AppleMaps:** polygon strokeWidth ([#5549](https://github.com/react-native-maps/react-native-maps/issues/5549)) ([c2addb5](https://github.com/react-native-maps/react-native-maps/commit/c2addb5830a6097d8818a93cd865dbf549e83569))
+
+# [1.24.0](https://github.com/react-native-maps/react-native-maps/compare/v1.23.12...v1.24.0) (2025-06-08)
+
+
+### Features
+
+* **AppleMaps:** add support for centerOffset for Marker ([#5548](https://github.com/react-native-maps/react-native-maps/issues/5548)) ([73ab17d](https://github.com/react-native-maps/react-native-maps/commit/73ab17dc73f60bd51423f8161843455c23827cc9))
+
+## [1.23.12](https://github.com/react-native-maps/react-native-maps/compare/v1.23.11...v1.23.12) (2025-06-08)
+
+
+### Bug Fixes
+
+* **android:** custom markers size always 100 ([#5103](https://github.com/react-native-maps/react-native-maps/issues/5103)) ([05a2293](https://github.com/react-native-maps/react-native-maps/commit/05a22938fdf2987b8e14bd872f7cb102cf1c261c))
+
+## [1.23.11](https://github.com/react-native-maps/react-native-maps/compare/v1.23.10...v1.23.11) (2025-06-08)
+
+
+### Bug Fixes
+
+* **android:** Marker re-render performance improvements  ([#5545](https://github.com/react-native-maps/react-native-maps/issues/5545)) ([9ec75e2](https://github.com/react-native-maps/react-native-maps/commit/9ec75e2872c194d9c1c86a19e9bc88b0cc6ee3cd))
+
+## [1.23.10](https://github.com/react-native-maps/react-native-maps/compare/v1.23.9...v1.23.10) (2025-06-07)
+
+
+### Bug Fixes
+
+* correctly emit marker-press event for Android ([#5514](https://github.com/react-native-maps/react-native-maps/issues/5514)) ([d9d24bf](https://github.com/react-native-maps/react-native-maps/commit/d9d24bf1dd0e64616fbe623d0c94ca9943667555))
+
+## [1.23.9](https://github.com/react-native-maps/react-native-maps/compare/v1.23.8...v1.23.9) (2025-06-07)
+
+
+### Bug Fixes
+
+* improve TypeScript compatibility and error reporting ([7d53f71](https://github.com/react-native-maps/react-native-maps/commit/7d53f7109da4b577a0fee7e9e76c3aa4bdebb74f))
+
 ## [1.23.8](https://github.com/react-native-maps/react-native-maps/compare/v1.23.7...v1.23.8) (2025-05-13)
 
 

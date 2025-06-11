@@ -32,7 +32,7 @@ export type MapOverlayProps = ViewProps & {
   bearing?: number;
 
   /**
-   * The coordinates for the image (left-top corner, right-bottom corner). ie.```[[lat, long], [lat, long]]```
+   * The coordinates for the image (right-top corner, left-bottom corner). ie.```[[lat, long], [lat, long]]```
    *
    * @platform iOS: Supported
    * @platform Android: Supported

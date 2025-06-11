@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {HostComponent} from 'react-native';
 import type {
   ViewProps,
@@ -131,6 +132,19 @@ export interface MarkerFabricNativeProps extends ViewProps {
       Low: A constant indicating that the item’s display priority is Low.
      */
   displayPriority?: WithDefault<AppleMarkerPriority, 'required'>;
+
+  /**
+   * The offset (in points) at which to display the annotation view.
+   *
+   * By default, the center point of an annotation view is placed at the coordinate point of the associated annotation.
+   *
+   * Positive offset values move the annotation view down and to the right, while negative values move it up and to the left.
+   *
+   * @default {x: 0.0, y: 0.0}
+   * @platform iOS: Apple Maps only. For Google Maps, see the `anchor` prop
+   * @platform Android: Not supported. see the `anchor` prop
+   */
+  centerOffset?: Point;
 
   /**
    * The coordinate for the marker.
