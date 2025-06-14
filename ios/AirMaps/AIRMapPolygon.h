@@ -11,14 +11,10 @@
 #import <React/RCTComponent.h>
 #import <React/RCTView.h>
 #import "AIRMapCoordinate.h"
-#import "AIRMap.h"
+#import "AIRMapOverlayBase.h"
 #import "RCTConvert+AirMap.h"
 
-
-
-@interface AIRMapPolygon: MKAnnotationView <MKOverlay>
-
-@property (nonatomic, weak) AIRMap *map;
+@interface AIRMapPolygon : AIRMapOverlayBase <MKOverlay>
 
 @property (nonatomic, strong) MKPolygon *polygon;
 @property (nonatomic, strong) MKPolygonRenderer *renderer;
@@ -42,5 +38,8 @@
 @property(nonatomic, readonly) MKMapRect boundingMapRect;
 - (BOOL)intersectsMapRect:(MKMapRect)mapRect;
 - (BOOL)canReplaceMapContent;
+
+// CAShapeLayer region change notification
+- (void)mapViewRegionDidChange;
 
 @end
