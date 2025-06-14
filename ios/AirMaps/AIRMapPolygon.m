@@ -6,9 +6,9 @@
 #import "AIRMapPolygon.h"
 #import <React/UIView+React.h>
 
-
 @implementation AIRMapPolygon {
-
+    NSArray<AIRMapCoordinate *> *_pendingCoordinates;
+    NSArray<NSArray<AIRMapCoordinate *> *> *_pendingHoles;
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
@@ -51,35 +51,54 @@
     [self update];
 }
 
+// PERFORMANCE OPTIMIZATION: Use base class batch update for coordinates
 - (void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates {
-    _coordinates = coordinates;
-    CLLocationCoordinate2D coords[coordinates.count];
-    for(int i = 0; i < coordinates.count; i++)
-    {
-        coords[i] = coordinates[i].coordinate;
-    }
-    self.polygon = [MKPolygon polygonWithCoordinates:coords count:coordinates.count interiorPolygons:_interiorPolygons];
-    // TODO: we could lazy-initialize the polygon, since we don't need it until the
-    // polygon is in view.
-    self.renderer = [[MKPolygonRenderer alloc] initWithPolygon:self.polygon];
-    [self update];
+    _pendingCoordinates = coordinates;
+    [self scheduleBatchedUpdate];
 }
 
 - (void)setHoles:(NSArray<NSArray<AIRMapCoordinate *> *> *)holes {
-    _holes = holes;
-    if (holes.count)
-    {
-        NSMutableArray<MKPolygon *> *polygons = [NSMutableArray array];
-        for(int h = 0; h < holes.count; h++)
-        {
-            CLLocationCoordinate2D coords[holes[h].count];
-            for(int i = 0; i < holes[h].count; i++)
-            {
-                coords[i] = holes[h][i].coordinate;
+    _pendingHoles = holes;
+    [self scheduleBatchedUpdate];
+}
+
+- (void)performBatchedUpdate {
+    BOOL coordinatesChanged = (_pendingCoordinates != nil);
+    BOOL holesChanged = (_pendingHoles != nil);
+    
+    if (coordinatesChanged) {
+        _coordinates = _pendingCoordinates;
+        _pendingCoordinates = nil;
+    }
+    
+    if (holesChanged) {
+        _holes = _pendingHoles;
+        _pendingHoles = nil;
+        
+        if (_holes.count) {
+            NSMutableArray<MKPolygon *> *polygons = [NSMutableArray array];
+            for(int h = 0; h < _holes.count; h++) {
+                CLLocationCoordinate2D coords[_holes[h].count];
+                for(int i = 0; i < _holes[h].count; i++) {
+                    coords[i] = _holes[h][i].coordinate;
+                }
+                [polygons addObject:[MKPolygon polygonWithCoordinates:coords count:_holes[h].count]];
             }
-            [polygons addObject:[MKPolygon polygonWithCoordinates:coords count:holes[h].count]];
+            _interiorPolygons = polygons;
         }
-        _interiorPolygons = polygons;
+    }
+    
+    if (coordinatesChanged && _coordinates) {
+        CLLocationCoordinate2D coords[_coordinates.count];
+        for(int i = 0; i < _coordinates.count; i++) {
+            coords[i] = _coordinates[i].coordinate;
+        }
+        self.polygon = [MKPolygon polygonWithCoordinates:coords count:_coordinates.count interiorPolygons:_interiorPolygons];
+        self.renderer = [[MKPolygonRenderer alloc] initWithPolygon:self.polygon];
+    }
+    
+    if (coordinatesChanged || holesChanged) {
+        [self update];
     }
 }
 
@@ -95,9 +114,7 @@
     _renderer.lineDashPhase = _lineDashPhase;
     _renderer.lineDashPattern = _lineDashPattern;
 
-    if (_map == nil) return;
-    [_map removeOverlay:self];
-    [_map addOverlay:self];
+    [self refreshOverlayOnMap];
 }
 
 #pragma mark MKOverlay implementation

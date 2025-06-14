@@ -6,10 +6,15 @@
 #import "AIRMapCircle.h"
 #import <React/UIView+React.h>
 
-
 @implementation AIRMapCircle {
     BOOL _radiusSet;
     BOOL _centerSet;
+    
+    // PERFORMANCE OPTIMIZATION: Batch updates
+    CLLocationCoordinate2D _pendingCenterCoordinate;
+    CLLocationDistance _pendingRadius;
+    BOOL _hasPendingCenter;
+    BOOL _hasPendingRadius;
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
@@ -52,18 +57,41 @@
     [self update];
 }
 
+// PERFORMANCE OPTIMIZATION: Use base class batch update for radius
 - (void)setRadius:(CLLocationDistance)radius {
-    _radius = radius;
-    _radiusSet = YES;
-    [self createCircleAndRendererIfPossible];
-    [self update];
+    _pendingRadius = radius;
+    _hasPendingRadius = YES;
+    [self scheduleBatchedUpdate];
 }
 
+// PERFORMANCE OPTIMIZATION: Use base class batch update for center coordinate
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate{
-    _centerCoordinate = centerCoordinate;
-    _centerSet = YES;
-    [self createCircleAndRendererIfPossible];
-    [self update];
+    _pendingCenterCoordinate = centerCoordinate;
+    _hasPendingCenter = YES;
+    [self scheduleBatchedUpdate];
+}
+
+- (void)performBatchedUpdate {
+    BOOL needsUpdate = NO;
+    
+    if (_hasPendingRadius) {
+        _radius = _pendingRadius;
+        _radiusSet = YES;
+        _hasPendingRadius = NO;
+        needsUpdate = YES;
+    }
+    
+    if (_hasPendingCenter) {
+        _centerCoordinate = _pendingCenterCoordinate;
+        _centerSet = YES;
+        _hasPendingCenter = NO;
+        needsUpdate = YES;
+    }
+    
+    if (needsUpdate) {
+        [self createCircleAndRendererIfPossible];
+        [self update];
+    }
 }
 
 - (void) createCircleAndRendererIfPossible
@@ -85,11 +113,8 @@
     _renderer.lineDashPhase = _lineDashPhase;
     _renderer.lineDashPattern = _lineDashPattern;
 
-    if (_map == nil) return;
-    [_map removeOverlay:self];
-    [_map addOverlay:self];
+    [self refreshOverlayOnMap];
 }
-
 
 #pragma mark MKOverlay implementation
 

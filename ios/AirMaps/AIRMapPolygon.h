@@ -11,14 +11,10 @@
 #import <React/RCTComponent.h>
 #import <React/RCTView.h>
 #import "AIRMapCoordinate.h"
-#import "AIRMap.h"
+#import "AIRMapOverlayBase.h"
 #import "RCTConvert+AirMap.h"
 
-
-
-@interface AIRMapPolygon: MKAnnotationView <MKOverlay>
-
-@property (nonatomic, weak) AIRMap *map;
+@interface AIRMapPolygon: AIRMapOverlayBase
 
 @property (nonatomic, strong) MKPolygon *polygon;
 @property (nonatomic, strong) MKPolygonRenderer *renderer;
