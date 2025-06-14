@@ -7,9 +7,8 @@
 #import "AIRMapPolylineRenderer.h"
 #import <React/UIView+React.h>
 
-
 @implementation AIRMapPolyline {
-    
+    NSArray<AIRMapCoordinate *> *_pendingCoordinates;
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
@@ -68,31 +67,40 @@
     }
 }
 
+// PERFORMANCE OPTIMIZATION: Use base class batch update for coordinates
 - (void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates {
-    _coordinates = coordinates;
-    CLLocationCoordinate2D *coords = calloc(coordinates.count, sizeof(CLLocationCoordinate2D));
-    for(int i = 0; i < coordinates.count; i++)
+    _pendingCoordinates = coordinates;
+    [self scheduleBatchedUpdate];
+}
+
+- (void)performBatchedUpdate {
+    if (!_pendingCoordinates) return;
+    
+    // Apply the batched coordinate update
+    _coordinates = _pendingCoordinates;
+    _pendingCoordinates = nil;
+    
+    CLLocationCoordinate2D *coords = calloc(_coordinates.count, sizeof(CLLocationCoordinate2D));
+    for(int i = 0; i < _coordinates.count; i++)
     {
-        coords[i] = coordinates[i].coordinate;
+        coords[i] = _coordinates[i].coordinate;
     }
     if(_geodesic){
-        self.polyline = [MKGeodesicPolyline polylineWithCoordinates:coords count:coordinates.count];
+        self.polyline = [MKGeodesicPolyline polylineWithCoordinates:coords count:_coordinates.count];
     } else {
-        self.polyline = [MKPolyline polylineWithCoordinates:coords count:coordinates.count];
+        self.polyline = [MKPolyline polylineWithCoordinates:coords count:_coordinates.count];
     }
     free(coords);
     
+    // Always recreate renderer when coordinates change to ensure it gets the new polyline
     self.renderer = [self createRenderer];
+    
     [self update];
 }
 
 - (MKOverlayPathRenderer*)createRenderer {
     if (self.polyline == nil) return nil;
     if (self.strokeColors == nil) {
-        // Use the default renderer when no array of stroke-colors is defined.
-        // This behaviour may be changed in the future if we permanently want to 
-        // use the custom renderer, because it can add funtionality that is not
-        // supported by the default renderer.
         return [[MKPolylineRenderer alloc] initWithPolyline:self.polyline];
     }
     else {
@@ -105,9 +113,7 @@
     if (!_renderer) return;
     [self updateRenderer:_renderer];
     
-    if (_map == nil) return;
-    [_map removeOverlay:self];
-    [_map addOverlay:self];
+    [self refreshOverlayOnMap];
 }
 
 - (void) updateRenderer:(MKOverlayPathRenderer*)renderer {
@@ -147,7 +153,6 @@
 {
     return NO;
 }
-
 
 #pragma mark AIRMapSnapshot implementation
 

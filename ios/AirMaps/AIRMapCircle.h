@@ -12,12 +12,10 @@
 #import <React/RCTView.h>
 
 #import "AIRMapCoordinate.h"
-#import "AIRMap.h"
+#import "AIRMapOverlayBase.h"
 #import "RCTConvert+AirMap.h"
 
-@interface AIRMapCircle: MKAnnotationView <MKOverlay>
-
-@property (nonatomic, weak) AIRMap *map;
+@interface AIRMapCircle: AIRMapOverlayBase
 
 @property (nonatomic, strong) MKCircle *circle;
 @property (nonatomic, strong) MKCircleRenderer *renderer;
@@ -33,6 +31,7 @@
 @property (nonatomic, assign) CGLineJoin lineJoin;
 @property (nonatomic, assign) CGFloat lineDashPhase;
 @property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
 #pragma mark MKOverlay protocol
 
