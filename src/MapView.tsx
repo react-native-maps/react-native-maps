@@ -597,7 +597,7 @@ export type MapViewProps = ViewProps & {
   showsScale?: boolean;
 
   /**
-   * A Boolean value indicating whether the map displays traffic information. 
+   * A Boolean value indicating whether the map displays traffic information.
    *
    * @default false
    * @platform iOS: Supported
