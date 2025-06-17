@@ -597,6 +597,15 @@ export type MapViewProps = ViewProps & {
   showsScale?: boolean;
 
   /**
+   * A Boolean value indicating whether the map displays traffic information. 
+   *
+   * @default false
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  showsTraffic?: boolean;
+
+  /**
    * If `true` the users location will be displayed on the map.
    *
    * This will cause iOS to ask for location permissions.
