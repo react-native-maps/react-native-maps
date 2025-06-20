@@ -23,4 +23,5 @@ public interface RNMapsPolylineManagerInterface<T extends View> {
   void setStrokeColors(T view, @Nullable ReadableArray value);
   void setStrokeWidth(T view, float value);
   void setTappable(T view, boolean value);
+  void setStrokeWidth(T view, float value);
 }
