@@ -450,8 +450,7 @@ const getColor = (
     }
 
     return color;
-  }
-  else if (prop) {
+  } else if (prop) {
     return prop;
   }
 
