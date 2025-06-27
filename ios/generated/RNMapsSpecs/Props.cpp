@@ -127,6 +127,7 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     showsIndoorLevelPicker(convertRawProp(context, rawProps, "showsIndoorLevelPicker", sourceProps.showsIndoorLevelPicker, {false})),
     showsIndoors(convertRawProp(context, rawProps, "showsIndoors", sourceProps.showsIndoors, {true})),
     showsMyLocationButton(convertRawProp(context, rawProps, "showsMyLocationButton", sourceProps.showsMyLocationButton, {true})),
+    showsPointsOfInterest(convertRawProp(context, rawProps, "showsPointsOfInterest", sourceProps.showsPointsOfInterest, {true})),
     showsScale(convertRawProp(context, rawProps, "showsScale", sourceProps.showsScale, {false})),
     showsUserLocation(convertRawProp(context, rawProps, "showsUserLocation", sourceProps.showsUserLocation, {false})),
     tintColor(convertRawProp(context, rawProps, "tintColor", sourceProps.tintColor, {})),

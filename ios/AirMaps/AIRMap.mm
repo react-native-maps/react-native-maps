@@ -58,6 +58,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     BOOL _initialCameraSet;
     BOOL _initialized;
     BOOL _loadingStarted;
+    BOOL _showsPointsOfInterest;
 
     // Array to manually track RN subviews
     //
@@ -75,6 +76,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 {
     if ((self = [super init])) {
         _hasStartedRendering = NO;
+        _showsPointsOfInterest = YES;
         _reactSubviews = [NSMutableArray new];
 
         // Find Apple link label
@@ -96,14 +98,18 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.maxZoom = AIRMapMaxZoomLevel;
         self.compassOffset = CGPointMake(0, 0);
         self.legacyZoomConstraintsEnabled = YES;
+        
         _initialized = YES;
+        
+        [self setShowsPointsOfInterest:_showsPointsOfInterest];
+        
         [self listenToMemoryWarnings];
     }
     return self;
 }
 
--(void)addSubview:(UIView *)view {
-    if([view isKindOfClass:[AIRMapMarker class]]) {
+- (void)addSubview:(UIView *)view {
+    if ([view isKindOfClass:[AIRMapMarker class]]) {
         [self addAnnotation:(id <MKAnnotation>)view];
     } else {
         [super addSubview:view];
@@ -129,7 +135,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else if ([subview isKindOfClass:[AIRMapUrlTile class]]) {
         ((AIRMapUrlTile *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
-    }else if ([subview isKindOfClass:[AIRMapWMSTile class]]) {
+    } else if ([subview isKindOfClass:[AIRMapWMSTile class]]) {
         ((AIRMapWMSTile *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
     } else if ([subview isKindOfClass:[AIRMapLocalTile class]]) {
@@ -209,9 +215,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     return marker;
 }
 // Create Polyline with coordinates
--(void) fitToCoordinates:(NSArray<AIRMapCoordinate*>*) coordinates edgePadding:(UIEdgeInsets) edgeInsets animated:(Boolean) animated {
+- (void) fitToCoordinates:(NSArray<AIRMapCoordinate*>*) coordinates edgePadding:(UIEdgeInsets) edgeInsets animated:(Boolean) animated {
     CLLocationCoordinate2D coords[coordinates.count];
-    for(int i = 0; i < coordinates.count; i++)
+    for (int i = 0; i < coordinates.count; i++)
     {
         coords[i] = coordinates[i].coordinate;
     }
@@ -407,8 +413,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     NSNumber *width = config[@"width"];
     NSNumber *height = config[@"height"];
     NSNumber *quality = config[@"quality"];
-    NSString*format =config[@"format"];
-    NSString*result =config[@"result"];
+    NSString *format = config[@"format"];
+    NSString *result = config[@"result"];
     if (config[@"region"]){
         MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:config[@"region"]];
         options.region =  region;
@@ -493,7 +499,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
             if ([format isEqualToString:@"png"]) {
                 data = UIImagePNGRepresentation(compositeImage);
             }
-            else if([format isEqualToString:@"jpg"]) {
+            else if ([format isEqualToString:@"jpg"]) {
                 data = UIImageJPEGRepresentation(compositeImage, quality);
             }
 
@@ -520,9 +526,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
 - (void)setUserInterfaceStyle:(NSString*)userInterfaceStyle
 {
-        if([userInterfaceStyle isEqualToString:@"light"]) {
+        if ([userInterfaceStyle isEqualToString:@"light"]) {
             self.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
-        } else if([userInterfaceStyle isEqualToString:@"dark"]) {
+        } else if ([userInterfaceStyle isEqualToString:@"dark"]) {
             self.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
         } else {
             self.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
@@ -542,6 +548,43 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 - (void)setUserLocationCalloutEnabled:(BOOL)calloutEnabled
 {
     _userLocationCalloutEnabled = calloutEnabled;
+}
+
+- (void)setShowsPointsOfInterest:(BOOL)showsPointsOfInterest
+{
+    _showsPointsOfInterest = showsPointsOfInterest;
+    
+    // Only apply configuration if the map view is properly initialized
+    if (!_initialized) {
+        return;
+    }
+    
+    // Use modern MapKit configuration API for iOS 13+
+    if (@available(iOS 13.0, *)) {
+        MKStandardMapConfiguration *config = [[MKStandardMapConfiguration alloc] init];
+        
+        // Copy current configuration properties if they exist
+        if ([self.preferredConfiguration isKindOfClass:[MKStandardMapConfiguration class]]) {
+            MKStandardMapConfiguration *currentConfig = (MKStandardMapConfiguration *)self.preferredConfiguration;
+            config.emphasisStyle = currentConfig.emphasisStyle;
+            config.showsTraffic = currentConfig.showsTraffic;
+        }
+        
+        // Set the point of interest filter
+        if (showsPointsOfInterest) {
+            config.pointOfInterestFilter = [MKPointOfInterestFilter filterIncludingAllCategories];
+        } else {
+            config.pointOfInterestFilter = [MKPointOfInterestFilter filterExcludingAllCategories];
+        }
+        
+        self.preferredConfiguration = config;
+    } else {
+        // Fallback for older iOS versions (though this shouldn't be reached with iOS 15.1+ requirement)
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        super.showsPointsOfInterest = showsPointsOfInterest;
+        #pragma clang diagnostic pop
+    }
 }
 
 - (void)setHandlePanDrag:(BOOL)handlePanDrag {

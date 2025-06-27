@@ -597,6 +597,15 @@ export type MapViewProps = ViewProps & {
   showsScale?: boolean;
 
   /**
+   * If `false` points of interest won't be displayed on the map.
+   *
+   * @default true
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  showsPointsOfInterest?: boolean;
+
+  /**
    * If `true` the users location will be displayed on the map.
    *
    * This will cause iOS to ask for location permissions.

@@ -53,6 +53,7 @@ import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
 import GeojsonMap from './examples/Geojson';
 import CacheURLTiles from './examples/CacheURLTiles';
 import CacheWMSTiles from './examples/CacheWMSTiles';
+import PointsOfInterestToggle from './examples/PointsOfInterestToggle';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -177,6 +178,7 @@ export default class App extends React.Component<any, any> {
         [ImageOverlayWithBearing, 'Image Overlay with Bearing', true],
         [AnimatedNavigation, 'Animated Map Navigation', true],
         [OnPoiClick, 'On Poi Click', true],
+        [PointsOfInterestToggle, 'Points of Interest Toggle', true],
         [IndoorMap, 'Indoor Map', true],
         [CameraControl, 'CameraControl', true],
         [MassiveCustomMarkers, 'MassiveCustomMarkers', true],
