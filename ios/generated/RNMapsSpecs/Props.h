@@ -914,6 +914,7 @@ class RNMapsMapViewProps final : public ViewProps {
   bool showsIndoorLevelPicker{false};
   bool showsIndoors{true};
   bool showsMyLocationButton{true};
+  bool showsPointsOfInterest{true};
   bool showsScale{false};
   bool showsUserLocation{false};
   SharedColor tintColor{};

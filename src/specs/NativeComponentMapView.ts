@@ -878,6 +878,15 @@ export interface MapFabricNativeProps extends ViewProps {
   showsMyLocationButton?: WithDefault<boolean, true>;
 
   /**
+   * If `false` points of interest won't be displayed on the map.
+   *
+   * @default true
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  showsPointsOfInterest?: WithDefault<boolean, true>;
+
+  /**
    * A Boolean indicating whether the map shows scale information.
    *
    * @default false

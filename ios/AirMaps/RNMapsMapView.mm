@@ -543,6 +543,7 @@ newViewProps.name.right);           \
     REMAP_MAPVIEW_PROP(minZoom)
 
     REMAP_MAPVIEW_PROP(showsCompass)
+    REMAP_MAPVIEW_PROP(showsPointsOfInterest)
     REMAP_MAPVIEW_PROP(showsScale)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
