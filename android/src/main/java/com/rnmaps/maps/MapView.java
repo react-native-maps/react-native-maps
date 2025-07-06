@@ -255,6 +255,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         this.context = context;
         super.getMapAsync(this);
 
+        attachLifecycleObserver();
+
         final MapView view = this;
 
         fusedLocationSource = new FusedLocationSource(context);
@@ -288,7 +290,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         });
 
-
         // Set up a parent view for triggering visibility in subviews that depend on it.
         // Mainly ReactImageView depends on Fresco which depends on onVisibilityChanged() event
         attacherGroup = new ViewAttacherGroup(context);
@@ -306,19 +307,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                    GoogleMapOptions googleMapOptions) {
         this(null, googleMapOptions);
 
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        attachLifecycleObserver();
-    }
-
-    // Override onDetachedFromWindow to detach lifecycle observer
-    @Override
-    protected void onDetachedFromWindow() {
-        detachLifecycleObserver();
-        super.onDetachedFromWindow();
     }
 
     // Method to attach lifecycle observer
