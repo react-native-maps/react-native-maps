@@ -80,7 +80,7 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
-Google Maps SDK for iOS requires iOS 14, so make sure that your deployment target is >= 4 in your iOS project settings.
+Google Maps SDK for iOS requires iOS 14, so make sure that your deployment target is >= 14 in your iOS project settings.
 
 Also make sure that your Podfile deployment target is set to >= 14 at the top of your Podfile, eg:
 
