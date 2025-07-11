@@ -17,9 +17,9 @@
 {
   return @{
 		@"RNMapsGoogleMapView": NSClassFromString(@"RNMapsGoogleMapView"), // react-native-maps
-		@"RNMapsGooglePolygon": NSClassFromString(@"RNMapsGooglePolygonView"), // react-native-maps
 		@"RNMapsMapView": NSClassFromString(@"RNMapsMapView"), // react-native-maps
-		@"RNMapsMarker": NSClassFromString(@"RNMapsMarkerView"), // react-native-maps
+		@"RNMapsMarkerView": NSClassFromString(@"RNMapsMarkerView"), // react-native-maps
+		@"RNMapsGooglePolygonView": NSClassFromString(@"RNMapsGooglePolygonView"), // react-native-maps
   };
 }
 
