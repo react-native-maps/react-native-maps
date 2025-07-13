@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.24.5](https://github.com/react-native-maps/react-native-maps/compare/v1.24.4...v1.24.5) (2025-07-13)
+
+
+### Bug Fixes
+
+* **ios:** view modules not found ([#5612](https://github.com/react-native-maps/react-native-maps/issues/5612)) ([9b8b568](https://github.com/react-native-maps/react-native-maps/commit/9b8b5687ee6f1a16acdf15f2cc028fe18898eefc))
+
+## [1.24.4](https://github.com/react-native-maps/react-native-maps/compare/v1.24.3...v1.24.4) (2025-07-13)
+
+
+### Bug Fixes
+
+* **ios:** polyline fillColor not implemented ([#5614](https://github.com/react-native-maps/react-native-maps/issues/5614)) ([5a2ab35](https://github.com/react-native-maps/react-native-maps/commit/5a2ab355e249369591c85d16fd46eb578901fd12))
+
 ## [1.24.3](https://github.com/react-native-maps/react-native-maps/compare/v1.24.2...v1.24.3) (2025-06-09)
 
 

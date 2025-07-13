@@ -29,7 +29,7 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 #### Old Arch
 
-- **Version `1.21.0` and below**: Requires **React Native `>= 0.74`**.
+- **Version `1.21.1` and below**: Requires **React Native `>= 0.74`**.
 - **Version `1.14.0` and above**: Requires **React Native `>= 0.74`**.
 - **Versions below `1.14.0`**: Require **React Native `>= 0.64.3`**.
 
