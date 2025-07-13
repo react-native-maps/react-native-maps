@@ -10,7 +10,7 @@
 #if HAVE_GOOGLE_MAPS == 0
 
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
-#import <ReactNativeMaps/generated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMaps/generated/RNMapsHostViewDelegate.h>
 #import <ReactNativeMaps/generated/ComponentDescriptors.h>
 #import <ReactNativeMaps/generated/EventEmitters.h>
 #import <ReactNativeMaps/generated/Props.h>

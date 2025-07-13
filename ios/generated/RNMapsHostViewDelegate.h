@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RNMapsAirModuleDelegate.h"
 
-@protocol RNMapsHostVewDelegate <NSObject>
+@protocol RNMapsHostViewDelegate <NSObject>
 @required
 
 - (id<RNMapsAirModuleDelegate>) mapView;

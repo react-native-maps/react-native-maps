@@ -113,9 +113,9 @@
     "ios": {
       "componentProvider": {
         "RNMapsGoogleMapView": "RNMapsGoogleMapView",
+        "RNMapsGooglePolygon": "RNMapsGooglePolygonView",
         "RNMapsMapView": "RNMapsMapView",
-        "RNMapsMarkerView": "RNMapsMarkerView",
-        "RNMapsGooglePolygonView": "RNMapsGooglePolygonView"
+        "RNMapsMarker": "RNMapsMarkerView"
       }
     }
   },
