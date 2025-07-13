@@ -1,6 +1,6 @@
 framework module ReactNativeMapsGenerated {
     header "RNMapsAirModuleDelegate.h"
-    header "RNMapsHostVewDelegate.h"
+    header "RNMapsHostViewDelegate.h"
 
     explicit module RNMapsSpecs {
         header "ComponentDescriptors.h"
