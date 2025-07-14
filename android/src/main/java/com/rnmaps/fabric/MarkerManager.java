@@ -159,6 +159,10 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     }
 
     @Override
+    public void setCenterOffset(MapMarker view, @Nullable ReadableMap value) {
+    }
+
+    @Override
     public void setCoordinate(MapMarker view, @Nullable ReadableMap value) {
         view.setCoordinate(value);
         view.setUpdated(true);
