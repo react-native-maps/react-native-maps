@@ -358,8 +358,6 @@ using namespace facebook::react;
         }
     };
 
-
-
       _view.onRegionChangeStart = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
