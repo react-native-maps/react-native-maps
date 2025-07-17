@@ -524,10 +524,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture{
-  id event = @{@"continuous": @YES,
-               @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
-               @"isGesture": [NSNumber numberWithBool:isGesture],
-               };
+  id event = @{@"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+                              @"isGesture": [NSNumber numberWithBool:isGesture],
+                              };
 
   if (self.onRegionChange) self.onRegionChange(event);
 }
@@ -547,10 +546,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position  isGesture:(BOOL)isGesture{
-  id event = @{@"continuous": @NO,
-               @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
-               @"isGesture": [NSNumber numberWithBool:isGesture],
-               };
+  id event = @{@"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+                              @"isGesture": [NSNumber numberWithBool:isGesture],
+                              };
     if (self.onRegionChangeComplete) self.onRegionChangeComplete(event);  // complete
     _isAnimating = NO;
 }

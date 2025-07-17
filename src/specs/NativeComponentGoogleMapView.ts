@@ -306,7 +306,7 @@ export type RegionChangeEvent = Readonly<{
     latitudeDelta: Double; // Non-nullable Double for latitudeDelta
     longitudeDelta: Double; // Non-nullable Double for longitudeDelta
   }; // The region object
-  continuous?: boolean;
+  isGesture?: boolean;
 }>;
 
 export type RegionChangeEventHandler = BubblingEventHandler<RegionChangeEvent>;
