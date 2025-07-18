@@ -245,7 +245,7 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
 
   struct OnRegionChangeStart {
       OnRegionChangeStartRegion region;
-    bool continuous;
+    bool isGesture;
     };
 
   struct OnRegionChangeRegion {
@@ -257,7 +257,7 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
 
   struct OnRegionChange {
       OnRegionChangeRegion region;
-    bool continuous;
+    bool isGesture;
     };
 
   struct OnRegionChangeCompleteRegion {
@@ -269,7 +269,7 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
 
   struct OnRegionChangeComplete {
       OnRegionChangeCompleteRegion region;
-    bool continuous;
+    bool isGesture;
     };
 
   struct OnUserLocationChangeCoordinate {
@@ -593,7 +593,7 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
 
   struct OnRegionChangeStart {
       OnRegionChangeStartRegion region;
-    bool continuous;
+    bool isGesture;
     };
 
   struct OnRegionChangeRegion {
@@ -605,7 +605,7 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
 
   struct OnRegionChange {
       OnRegionChangeRegion region;
-    bool continuous;
+    bool isGesture;
     };
 
   struct OnRegionChangeCompleteRegion {
@@ -617,7 +617,7 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
 
   struct OnRegionChangeComplete {
       OnRegionChangeCompleteRegion region;
-    bool continuous;
+    bool isGesture;
     };
 
   struct OnUserLocationChangeCoordinate {

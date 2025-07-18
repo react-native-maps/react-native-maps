@@ -33,8 +33,8 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDragEnd, RCTDirectEventBlock)
 
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeStart, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTDirectEventBlock)
 
 

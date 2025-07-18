@@ -112,8 +112,9 @@ RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
 RCT_EXPORT_VIEW_PROPERTY(cameraZoomRange, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeStart, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
@@ -949,12 +950,24 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-    if (mapView.onRegionChangeStart) mapView.onRegionChangeStart(@{});
+    MKCoordinateRegion region = mapView.region;
+    if (!CLLocationCoordinate2DIsValid(region.center)) {
+        return;
+    }
+#define FLUSH_NAN(value) (isnan(value) ? 0 : value)
+    if (mapView.onRegionChangeStart) mapView.onRegionChangeStart(@{
+        @"region": @{
+            @"latitude": @(FLUSH_NAN(region.center.latitude)),
+            @"longitude": @(FLUSH_NAN(region.center.longitude)),
+            @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
+            @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
+        }
+    });
 }
 
 - (void)mapViewDidChangeVisibleRegion:(AIRMap *)mapView
 {
-    [self _regionChanged:mapView];
+    [self _regionChanged:mapView continuous:YES];
 }
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
@@ -963,9 +976,6 @@ static int kDragCenterContext;
     // started rendering, as these won't represent the final location
     if (animated && mapView.ignoreRegionChanges){
         mapView.ignoreRegionChanges = false;
-    }
-    if(mapView.hasStartedRendering){
-        [self _regionChanged:mapView];
     }
 
     if (mapView.legacyZoomConstraintsEnabled == YES) {
@@ -1001,7 +1011,7 @@ static int kDragCenterContext;
 
 #pragma mark Private
 
-- (void)_regionChanged:(AIRMap *)mapView
+- (void)_regionChanged:(AIRMap *)mapView continuous:(BOOL)continuous
 {
     BOOL needZoom = NO;
     CGFloat newLongitudeDelta = 0.0f;
@@ -1027,7 +1037,7 @@ static int kDragCenterContext;
     }
 
     // Continuously observe region changes
-    [self _emitRegionChangeEvent:mapView continuous:YES];
+    [self _emitRegionChangeEvent:mapView continuous:continuous];
 }
 
 - (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous
@@ -1037,17 +1047,23 @@ static int kDragCenterContext;
         if (!CLLocationCoordinate2DIsValid(region.center)) {
             return;
         }
-
+        
 #define FLUSH_NAN(value) (isnan(value) ? 0 : value)
-        mapView.onRegionChange(@{
-                @"continuous": @(continuous),
-                @"region": @{
-                        @"latitude": @(FLUSH_NAN(region.center.latitude)),
-                        @"longitude": @(FLUSH_NAN(region.center.longitude)),
-                        @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
-                        @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
-                }
-        });
+        NSDictionary *payload = @{
+            @"region": @{
+                @"latitude": @(FLUSH_NAN(region.center.latitude)),
+                @"longitude": @(FLUSH_NAN(region.center.longitude)),
+                @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
+                @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
+            }
+        };
+        
+
+        if (continuous && mapView.onRegionChange) {
+            mapView.onRegionChange(payload);
+        } else if (mapView.onRegionChangeComplete) {
+            mapView.onRegionChangeComplete(payload);
+        }
     }
 }
 
