@@ -86,4 +86,9 @@ public class PolygonManager extends ViewGroupManager<MapPolygon> implements RNMa
     public void setTappable(MapPolygon view, boolean value) {
             view.setTappable(value);
     }
+
+    @Override
+    public void setStrokeWidth(MapPolygon view, float value) {
+        view.setStrokeWidth(value);
+    }
 }

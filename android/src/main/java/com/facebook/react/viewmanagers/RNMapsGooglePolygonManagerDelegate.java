@@ -42,6 +42,9 @@ public class RNMapsGooglePolygonManagerDelegate<T extends View, U extends BaseVi
       case "tappable":
         mViewManager.setTappable(view, value == null ? false : (boolean) value);
         break;
+      case "strokeWidth":
+        mViewManager.setStrokeWidth(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
       default:
         super.setProperty(view, propName, value);
     }
