@@ -42,16 +42,29 @@ export interface FabricMapHandle {
   setIndoorActiveLevelIndex: (activeLevelIndex: number) => void;
 }
 
+// Helper to safely get a node handle for supported types
+function getNodeHandle(ref: unknown): null | number {
+  if (
+    ref === null ||
+    typeof ref === 'number' ||
+    (typeof ref === 'object' && ref !== null && '_reactInternals' in ref)
+  ) {
+    // @ts-expect-error: safe for findNodeHandle
+    return findNodeHandle(ref);
+  }
+  return null;
+}
+
 const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
   return forwardRef<FabricMapHandle | null, FabricMapViewProps>(
     (props, ref) => {
-      const fabricRef = useRef<React.ElementRef<typeof ViewComponent>>(null);
+      const fabricRef = useRef<React.ComponentRef<typeof ViewComponent>>(null);
 
       useImperativeHandle(ref, () => ({
         async getMarkersFrames(onlyVisible: boolean) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getMarkersFrames(
-              findNodeHandle(fabricRef.current) ?? -1,
+              getNodeHandle(fabricRef.current) ?? -1,
               onlyVisible,
             );
           } else {
@@ -63,7 +76,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getCoordinateForPoint(point: Point) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getCoordinateForPoint(
-              findNodeHandle(fabricRef.current) ?? -1,
+              getNodeHandle(fabricRef.current) ?? -1,
               point,
             );
           } else {
@@ -75,7 +88,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getPointForCoordinate(coordinate: LatLng) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getPointForCoordinate(
-              findNodeHandle(fabricRef.current) ?? -1,
+              getNodeHandle(fabricRef.current) ?? -1,
               coordinate,
             );
           } else {
@@ -87,7 +100,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getAddressFromCoordinates(coordinate: LatLng) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getAddressFromCoordinates(
-              findNodeHandle(fabricRef.current) ?? -1,
+              getNodeHandle(fabricRef.current) ?? -1,
               coordinate,
             );
           } else {
@@ -99,7 +112,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async takeSnapshot(config: SnapshotOptions) {
           if (fabricRef.current) {
             return NativeAirMapsModule.takeSnapshot(
-              findNodeHandle(fabricRef.current) ?? -1,
+              getNodeHandle(fabricRef.current) ?? -1,
               JSON.stringify(config),
             );
           } else {
@@ -111,7 +124,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getCamera() {
           if (fabricRef.current) {
             return NativeAirMapsModule.getCamera(
-              findNodeHandle(fabricRef.current) ?? -1,
+              getNodeHandle(fabricRef.current) ?? -1,
             );
           } else {
             throw new Error('getCamera is only supported on iOS with Fabric.');
@@ -120,7 +133,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getMapBoundaries() {
           if (fabricRef.current) {
             return NativeAirMapsModule.getMapBoundaries(
-              findNodeHandle(fabricRef.current) ?? -1,
+              getNodeHandle(fabricRef.current) ?? -1,
             );
           } else {
             throw new Error(
