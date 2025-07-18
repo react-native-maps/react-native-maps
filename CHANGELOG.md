@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.7](https://github.com/react-native-maps/react-native-maps/compare/v1.24.6...v1.24.7) (2025-07-18)
+
+
+### Bug Fixes
+
+* **createFabricMap:** replace ElementRef with ComponentRef for strict TypeScript compatibility ([#5620](https://github.com/react-native-maps/react-native-maps/issues/5620)) ([f50b7f5](https://github.com/react-native-maps/react-native-maps/commit/f50b7f514d285a38dde4afbd0cdb8ff3bee54894))
+
 ## [1.24.6](https://github.com/react-native-maps/react-native-maps/compare/v1.24.5...v1.24.6) (2025-07-18)
 
 
