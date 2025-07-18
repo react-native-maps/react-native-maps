@@ -519,17 +519,19 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)willMove:(BOOL)gesture {
     _isAnimating = YES;
-  id event = @{@"isGesture": [NSNumber numberWithBool:gesture]};
-  if (self.onRegionChangeStart) self.onRegionChangeStart(event);
+    GMSCameraPosition *position = self.camera;
+    id event = @{@"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+                 @"isGesture": [NSNumber numberWithBool:gesture],
+    };
+    if (self.onRegionChangeStart) self.onRegionChangeStart(event);
 }
 
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture{
-  id event = @{@"continuous": @YES,
-               @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
-               @"isGesture": [NSNumber numberWithBool:isGesture],
-               };
-
-  if (self.onRegionChange) self.onRegionChange(event);
+    id event = @{@"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+                 @"isGesture": [NSNumber numberWithBool:isGesture],
+    };
+    
+    if (self.onRegionChange) self.onRegionChange(event);
 }
 
 - (void)didTapPOIWithPlaceID:(NSString *)placeID
@@ -547,10 +549,9 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position  isGesture:(BOOL)isGesture{
-  id event = @{@"continuous": @NO,
-               @"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
-               @"isGesture": [NSNumber numberWithBool:isGesture],
-               };
+  id event = @{@"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
+                              @"isGesture": [NSNumber numberWithBool:isGesture],
+                              };
     if (self.onRegionChangeComplete) self.onRegionChangeComplete(event);  // complete
     _isAnimating = NO;
 }
