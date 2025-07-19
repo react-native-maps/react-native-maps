@@ -37,23 +37,25 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && (project.newArchEnabled == "true" || project.newArchEnabled == true)
 }
 
+if (project == rootProject) {
+    apply plugin: 'com.diffplug.spotless'
+    spotless {
+        java {
+            target 'src/**/*.java'
+            googleJavaFormat()
+        }
+        kotlin {
+            ktlint()
+            target 'src/**/*.kt'
+        }
+    }
+}
+
 apply plugin: 'com.android.library'
 if (isNewArchitectureEnabled()) {
     apply plugin: 'com.facebook.react'
 }
 apply plugin: 'kotlin-android'
-apply plugin: 'com.diffplug.spotless'
-
-spotless {
-    java {
-        googleJavaFormat()
-        target 'src/**/*.java'
-    }
-    kotlin {
-        ktlint()
-        target 'src/**/*.kt'
-    }
-}
 
 android {
     if (supportsNamespace()) {
