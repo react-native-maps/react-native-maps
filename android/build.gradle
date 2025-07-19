@@ -15,6 +15,7 @@ buildscript {
         dependencies {
             classpath("com.android.tools.build:gradle:8.7.2")
             classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}")
+            classpath("com.diffplug.spotless:spotless-plugin-gradle:6.25.0")
         }
     }
 }
@@ -41,6 +42,18 @@ if (isNewArchitectureEnabled()) {
     apply plugin: 'com.facebook.react'
 }
 apply plugin: 'kotlin-android'
+apply plugin: 'com.diffplug.spotless'
+
+spotless {
+    java {
+        googleJavaFormat()
+        target 'src/**/*.java'
+    }
+    kotlin {
+        ktlint()
+        target 'src/**/*.kt'
+    }
+}
 
 android {
     if (supportsNamespace()) {
