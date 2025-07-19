@@ -11,6 +11,7 @@ import type {
   DirectEventHandler,
   BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
+import FabricMapView from './specs/NativeComponentMapView';
 
 export type EdgePadding = Readonly<{
   top: Double; // Non-nullable Double for top
@@ -1041,44 +1042,44 @@ export interface MapFabricNativeProps extends ViewProps {
 
 export interface NativeCommands {
   animateToRegion: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     regionJSON: string,
     duration: Int32,
   ) => void;
 
   setCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     cameraJSON: string,
   ) => void;
 
   animateCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     cameraJSON: string,
     duration: Int32,
   ) => void;
 
   fitToElements: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToSuppliedMarkers: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     markersJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     coordinatesJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   setIndoorActiveLevelIndex: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     activeLevelIndex: Int32,
   ) => void;
 }
