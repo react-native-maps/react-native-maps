@@ -2,7 +2,7 @@ package com.rnmaps.fabric;
 
 
 import androidx.annotation.Nullable;
-
+import android.util.DisplayMetrics;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.module.annotations.ReactModule;
@@ -70,6 +70,13 @@ public class PolygonManager extends ViewGroupManager<MapPolygon> implements RNMa
     @Override
     public void setStrokeColor(MapPolygon view, @Nullable Integer value) {
         view.setStrokeColor(value);
+    }
+
+    @Override
+    public void setStrokeWidth(MapPolygon view, float value) {
+        DisplayMetrics metrics = view.getContext().getResources().getDisplayMetrics();
+        float widthInScreenPx = metrics.density * value; // done for parity with iOS
+        view.setStrokeWidth(widthInScreenPx);
     }
 
     @Override

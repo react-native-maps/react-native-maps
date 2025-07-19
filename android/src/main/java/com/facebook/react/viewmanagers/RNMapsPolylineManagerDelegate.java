@@ -46,7 +46,7 @@ public class RNMapsPolylineManagerDelegate<T extends View, U extends BaseViewMan
         mViewManager.setStrokeColors(view, (ReadableArray) value);
         break;
       case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? 0f : ((Double) value).floatValue());
+        mViewManager.setStrokeWidth(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "tappable":
         mViewManager.setTappable(view, value == null ? false : (boolean) value);

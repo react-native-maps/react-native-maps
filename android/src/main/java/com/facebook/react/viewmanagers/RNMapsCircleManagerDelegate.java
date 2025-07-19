@@ -37,7 +37,7 @@ public class RNMapsCircleManagerDelegate<T extends View, U extends BaseViewManag
         mViewManager.setStrokeColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
       case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? 0f : ((Double) value).floatValue());
+        mViewManager.setStrokeWidth(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "tappable":
         mViewManager.setTappable(view, value == null ? false : (boolean) value);

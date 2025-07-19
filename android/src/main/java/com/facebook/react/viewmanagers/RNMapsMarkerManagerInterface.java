@@ -19,6 +19,7 @@ public interface RNMapsMarkerManagerInterface<T extends View> {
   void setImage(T view, @Nullable ReadableMap value);
   void setCalloutOffset(T view, @Nullable ReadableMap value);
   void setDisplayPriority(T view, @Nullable String value);
+  void setCenterOffset(T view, @Nullable ReadableMap value);
   void setCoordinate(T view, @Nullable ReadableMap value);
   void setDescription(T view, @Nullable String value);
   void setDraggable(T view, boolean value);
