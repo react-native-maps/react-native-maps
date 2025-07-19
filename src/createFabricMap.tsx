@@ -10,8 +10,12 @@ import type {
 import NativeAirMapsModule, {
   type MapBoundaries,
 } from './specs/NativeAirMapsModule';
-import type {MapFabricNativeProps} from './specs/NativeComponentMapView';
-
+import type {
+  MapFabricNativeProps,
+  NativeCommands,
+} from './specs/NativeComponentMapView';
+import GoogleMapView from './specs/NativeComponentGoogleMapView';
+import FabricMapView from './specs/NativeComponentMapView';
 export type FabricMapViewProps = MapFabricNativeProps;
 
 export interface FabricMapHandle {
@@ -42,29 +46,22 @@ export interface FabricMapHandle {
   setIndoorActiveLevelIndex: (activeLevelIndex: number) => void;
 }
 
-// Helper to safely get a node handle for supported types
-function getNodeHandle(ref: unknown): null | number {
-  if (
-    ref === null ||
-    typeof ref === 'number' ||
-    (typeof ref === 'object' && ref !== null && '_reactInternals' in ref)
-  ) {
-    // @ts-expect-error: safe for findNodeHandle
-    return findNodeHandle(ref);
-  }
-  return null;
-}
-
-const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
+const createFabricMap = (
+  ViewComponent: typeof GoogleMapView | typeof FabricMapView,
+  Commands: NativeCommands,
+) => {
   return forwardRef<FabricMapHandle | null, FabricMapViewProps>(
     (props, ref) => {
-      const fabricRef = useRef<React.ComponentRef<typeof ViewComponent>>(null);
+      const fabricRef =
+        useRef<React.ElementRef<typeof GoogleMapView | typeof FabricMapView>>(
+          null,
+        );
 
       useImperativeHandle(ref, () => ({
         async getMarkersFrames(onlyVisible: boolean) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getMarkersFrames(
-              getNodeHandle(fabricRef.current) ?? -1,
+              findNodeHandle(fabricRef.current) ?? -1,
               onlyVisible,
             );
           } else {
@@ -76,7 +73,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getCoordinateForPoint(point: Point) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getCoordinateForPoint(
-              getNodeHandle(fabricRef.current) ?? -1,
+              findNodeHandle(fabricRef.current) ?? -1,
               point,
             );
           } else {
@@ -88,7 +85,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getPointForCoordinate(coordinate: LatLng) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getPointForCoordinate(
-              getNodeHandle(fabricRef.current) ?? -1,
+              findNodeHandle(fabricRef.current) ?? -1,
               coordinate,
             );
           } else {
@@ -100,7 +97,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getAddressFromCoordinates(coordinate: LatLng) {
           if (fabricRef.current) {
             return NativeAirMapsModule.getAddressFromCoordinates(
-              getNodeHandle(fabricRef.current) ?? -1,
+              findNodeHandle(fabricRef.current) ?? -1,
               coordinate,
             );
           } else {
@@ -112,7 +109,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async takeSnapshot(config: SnapshotOptions) {
           if (fabricRef.current) {
             return NativeAirMapsModule.takeSnapshot(
-              getNodeHandle(fabricRef.current) ?? -1,
+              findNodeHandle(fabricRef.current) ?? -1,
               JSON.stringify(config),
             );
           } else {
@@ -124,7 +121,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getCamera() {
           if (fabricRef.current) {
             return NativeAirMapsModule.getCamera(
-              getNodeHandle(fabricRef.current) ?? -1,
+              findNodeHandle(fabricRef.current) ?? -1,
             );
           } else {
             throw new Error('getCamera is only supported on iOS with Fabric.');
@@ -133,7 +130,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
         async getMapBoundaries() {
           if (fabricRef.current) {
             return NativeAirMapsModule.getMapBoundaries(
-              getNodeHandle(fabricRef.current) ?? -1,
+              findNodeHandle(fabricRef.current) ?? -1,
             );
           } else {
             throw new Error(
