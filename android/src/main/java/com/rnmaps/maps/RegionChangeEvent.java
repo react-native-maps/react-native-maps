@@ -9,13 +9,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 public class RegionChangeEvent extends Event<RegionChangeEvent> {
   private final LatLngBounds bounds;
-  private final boolean continuous;
   private final boolean isGesture;
 
-  public RegionChangeEvent(int id, LatLngBounds bounds, boolean continuous, boolean isGesture) {
+  public RegionChangeEvent(int id, LatLngBounds bounds, boolean isGesture) {
     super(id);
     this.bounds = bounds;
-    this.continuous = continuous;
     this.isGesture = isGesture;
   }
 
@@ -32,7 +30,6 @@ public class RegionChangeEvent extends Event<RegionChangeEvent> {
   @Override
   public void dispatch(RCTEventEmitter rctEventEmitter) {
     WritableMap event = new WritableNativeMap();
-    event.putBoolean("continuous", continuous);
 
     WritableMap region = new WritableNativeMap();
     LatLng center = bounds.getCenter();
