@@ -57,14 +57,12 @@ const createFabricMap = (
       useRef<React.ElementRef<typeof GoogleMapView | typeof FabricMapView>>(
         null,
       );
+    const node = findNodeHandle(fabricRef.current) ?? -1;
 
     useImperativeHandle(ref, () => ({
       async getMarkersFrames(onlyVisible: boolean) {
         if (fabricRef.current) {
-          return NativeAirMapsModule.getMarkersFrames(
-            findNodeHandle(fabricRef.current) ?? -1,
-            onlyVisible,
-          );
+          return NativeAirMapsModule.getMarkersFrames(node, onlyVisible);
         } else {
           throw new Error(
             'getMarkersFrames is only supported on iOS with Fabric.',
@@ -73,10 +71,7 @@ const createFabricMap = (
       },
       async getCoordinateForPoint(point: Point) {
         if (fabricRef.current) {
-          return NativeAirMapsModule.getCoordinateForPoint(
-            findNodeHandle(fabricRef.current) ?? -1,
-            point,
-          );
+          return NativeAirMapsModule.getCoordinateForPoint(node, point);
         } else {
           throw new Error(
             'getCoordinateForPoint is only supported on iOS with Fabric.',
@@ -85,10 +80,7 @@ const createFabricMap = (
       },
       async getPointForCoordinate(coordinate: LatLng) {
         if (fabricRef.current) {
-          return NativeAirMapsModule.getPointForCoordinate(
-            findNodeHandle(fabricRef.current) ?? -1,
-            coordinate,
-          );
+          return NativeAirMapsModule.getPointForCoordinate(node, coordinate);
         } else {
           throw new Error(
             'getPointForCoordinate is not supported on this platform.',
@@ -98,7 +90,7 @@ const createFabricMap = (
       async getAddressFromCoordinates(coordinate: LatLng) {
         if (fabricRef.current) {
           return NativeAirMapsModule.getAddressFromCoordinates(
-            findNodeHandle(fabricRef.current) ?? -1,
+            node,
             coordinate,
           );
         } else {
@@ -109,28 +101,21 @@ const createFabricMap = (
       },
       async takeSnapshot(config: SnapshotOptions) {
         if (fabricRef.current) {
-          return NativeAirMapsModule.takeSnapshot(
-            findNodeHandle(fabricRef.current) ?? -1,
-            JSON.stringify(config),
-          );
+          return NativeAirMapsModule.takeSnapshot(node, JSON.stringify(config));
         } else {
           throw new Error('takeSnapshot is only supported on iOS with Fabric.');
         }
       },
       async getCamera() {
         if (fabricRef.current) {
-          return NativeAirMapsModule.getCamera(
-            findNodeHandle(fabricRef.current) ?? -1,
-          );
+          return NativeAirMapsModule.getCamera(node);
         } else {
           throw new Error('getCamera is only supported on iOS with Fabric.');
         }
       },
       async getMapBoundaries() {
         if (fabricRef.current) {
-          return NativeAirMapsModule.getMapBoundaries(
-            findNodeHandle(fabricRef.current) ?? -1,
-          );
+          return NativeAirMapsModule.getMapBoundaries(node);
         } else {
           throw new Error(
             'getMapBoundaries is only supported on iOS with Fabric.',
