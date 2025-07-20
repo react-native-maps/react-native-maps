@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.8](https://github.com/react-native-maps/react-native-maps/compare/v1.24.7...v1.24.8) (2025-07-20)
+
+
+### Bug Fixes
+
+* **ios:** map props ([#5633](https://github.com/react-native-maps/react-native-maps/issues/5633)) ([581200a](https://github.com/react-native-maps/react-native-maps/commit/581200a4de584d39a45e285f316faf88d2e9f775))
+
 ## [1.24.7](https://github.com/react-native-maps/react-native-maps/compare/v1.24.6...v1.24.7) (2025-07-18)
 
 
