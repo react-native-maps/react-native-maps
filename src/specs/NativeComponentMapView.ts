@@ -11,7 +11,7 @@ import type {
   DirectEventHandler,
   BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
-import FabricMapView from './specs/NativeComponentMapView';
+import FabricMapView from './NativeComponentMapView';
 
 export type EdgePadding = Readonly<{
   top: Double; // Non-nullable Double for top
@@ -1040,7 +1040,7 @@ export interface MapFabricNativeProps extends ViewProps {
   cameraZoomRange?: CameraZoomRange;
 }
 
-export interface NativeCommands {
+interface NativeCommands {
   animateToRegion: (
     viewRef: React.ElementRef<typeof FabricMapView>,
     regionJSON: string,

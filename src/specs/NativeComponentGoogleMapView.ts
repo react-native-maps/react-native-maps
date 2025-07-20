@@ -11,7 +11,7 @@ import type {
   DirectEventHandler,
   BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
-import GoogleMapView from './specs/NativeComponentGoogleMapView';
+import GoogleMapView from './NativeComponentGoogleMapView';
 
 export type EdgePadding = Readonly<{
   top: Double; // Non-nullable Double for top
@@ -861,7 +861,7 @@ export interface MapFabricNativeProps extends ViewProps {
   zoomTapEnabled?: WithDefault<boolean, true>;
 }
 
-export interface NativeCommands {
+interface NativeCommands {
   animateToRegion: (
     viewRef: React.ElementRef<typeof GoogleMapView>,
     regionJSON: string,
