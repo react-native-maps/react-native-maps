@@ -544,26 +544,25 @@ newViewProps.name.right);           \
 
 #define REMAP_MAPVIEW_MAPTYPE(rnMapType) MKMapType##rnMapType
 
-
     REMAP_MAPVIEW_PROP(cacheEnabled)
-
     REMAP_MAPVIEW_PROP(followsUserLocation)
     REMAP_MAPVIEW_PROP(loadingEnabled)
-
     REMAP_MAPVIEW_PROP(scrollEnabled)
     REMAP_MAPVIEW_PROP(handlePanDrag)
-
     REMAP_MAPVIEW_PROP(maxDelta)
     REMAP_MAPVIEW_PROP(maxZoom)
     REMAP_MAPVIEW_PROP(minDelta)
     REMAP_MAPVIEW_PROP(minZoom)
-
     REMAP_MAPVIEW_PROP(showsCompass)
     REMAP_MAPVIEW_PROP(showsScale)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
     REMAP_MAPVIEW_PROP(zoomEnabled)
-
+    REMAP_MAPVIEW_PROP(loadingEnabled)
+    REMAP_MAPVIEW_PROP(showsTraffic)
+    REMAP_MAPVIEW_PROP(pitchEnabled)
+    REMAP_MAPVIEW_PROP(showsBuildings)
+    REMAP_MAPVIEW_PROP(rotateEnabled)
 
     REMAP_MAPVIEW_POINT_PROP(compassOffset)
 
