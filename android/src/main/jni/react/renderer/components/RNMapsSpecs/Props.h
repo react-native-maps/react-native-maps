@@ -1085,6 +1085,7 @@ class RNMapsMarkerProps final : public ViewProps {
   std::string description{};
   bool draggable{false};
   std::string title{};
+  bool tracksViewChanges{true};
   std::string identifier{};
   bool isPreselected{false};
   double opacity{1.0};
