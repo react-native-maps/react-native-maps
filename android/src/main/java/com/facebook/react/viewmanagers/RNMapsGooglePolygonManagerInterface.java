@@ -17,6 +17,7 @@ public interface RNMapsGooglePolygonManagerInterface<T extends View> {
   void setCoordinates(T view, @Nullable ReadableArray value);
   void setFillColor(T view, @Nullable Integer value);
   void setStrokeColor(T view, @Nullable Integer value);
+  void setStrokeWidth(T view, float value);
   void setGeodesic(T view, boolean value);
   void setHoles(T view, @Nullable ReadableArray value);
   void setTappable(T view, boolean value);

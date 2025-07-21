@@ -61,7 +61,7 @@ class RNMapsCircleProps final : public ViewProps {
   SharedColor fillColor{};
   double radius{0.0};
   SharedColor strokeColor{};
-  Float strokeWidth{0.0};
+  Float strokeWidth{1.0};
   bool tappable{false};
 };
 
@@ -478,6 +478,7 @@ class RNMapsGooglePolygonProps final : public ViewProps {
   std::vector<RNMapsGooglePolygonCoordinatesStruct> coordinates{};
   SharedColor fillColor{};
   SharedColor strokeColor{};
+  Float strokeWidth{1.0};
   bool geodesic{false};
   std::vector<std::vector<RNMapsGooglePolygonHolesStruct>> holes{};
   bool tappable{false};
@@ -1048,6 +1049,28 @@ static inline std::string toString(const RNMapsMarkerCalloutOffsetStruct &value)
   return "[Object RNMapsMarkerCalloutOffsetStruct]";
 }
 
+struct RNMapsMarkerCenterOffsetStruct {
+  double x{0.0};
+  double y{0.0};
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsMarkerCenterOffsetStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_x = map.find("x");
+  if (tmp_x != map.end()) {
+    fromRawValue(context, tmp_x->second, result.x);
+  }
+  auto tmp_y = map.find("y");
+  if (tmp_y != map.end()) {
+    fromRawValue(context, tmp_y->second, result.y);
+  }
+}
+
+static inline std::string toString(const RNMapsMarkerCenterOffsetStruct &value) {
+  return "[Object RNMapsMarkerCenterOffsetStruct]";
+}
+
 struct RNMapsMarkerCoordinateStruct {
   double latitude{0.0};
   double longitude{0.0};
@@ -1081,6 +1104,7 @@ class RNMapsMarkerProps final : public ViewProps {
   ImageSource image{};
   RNMapsMarkerCalloutOffsetStruct calloutOffset{};
   RNMapsMarkerDisplayPriority displayPriority{RNMapsMarkerDisplayPriority::Required};
+  RNMapsMarkerCenterOffsetStruct centerOffset{};
   RNMapsMarkerCoordinateStruct coordinate{};
   std::string description{};
   bool draggable{false};
@@ -1253,7 +1277,7 @@ class RNMapsPolylineProps final : public ViewProps {
   RNMapsPolylineLineJoin lineJoin{RNMapsPolylineLineJoin::Miter};
   SharedColor strokeColor{};
   std::vector<SharedColor> strokeColors{};
-  Float strokeWidth{0.0};
+  Float strokeWidth{1.0};
   bool tappable{false};
 };
 
