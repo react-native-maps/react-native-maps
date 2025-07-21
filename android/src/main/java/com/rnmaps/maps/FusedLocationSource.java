@@ -3,7 +3,11 @@ package com.rnmaps.maps;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.os.Build;
 import android.os.Looper;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -14,37 +18,63 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.lang.SecurityException;
-
 public class FusedLocationSource implements LocationSource {
 
-    private final FusedLocationProviderClient fusedLocationClientProviderClient;
-    private final LocationRequest locationRequest;
-    private LocationCallback locationCallback;
+    private final @NonNull FusedLocationProviderClient fusedLocationClientProviderClient;
+    private @Nullable OnLocationChangedListener listener;
+    private @NonNull LocationRequest locationRequest;
+    private @Nullable LocationCallback locationCallback;
+    private int priority = Priority.PRIORITY_HIGH_ACCURACY;
+    private long interval = 5000;
+    private long minUpdateInterval = 5000;
 
-    public FusedLocationSource(Context context){
+    public FusedLocationSource(Context context) {
         fusedLocationClientProviderClient =
                 LocationServices.getFusedLocationProviderClient(context);
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
+        buildLocationRequest();
     }
 
-    public void setPriority(int priority){
-        locationRequest.setPriority(priority);
+    @SuppressWarnings("deprecation")
+    private void buildLocationRequest() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            locationRequest = new LocationRequest.Builder(priority, interval)
+                    .setMinUpdateIntervalMillis(minUpdateInterval)
+                    .build();
+        } else {
+            locationRequest = LocationRequest.create()
+                    .setPriority(priority)
+                    .setInterval(interval)
+                    .setFastestInterval(minUpdateInterval);
+        }
+        restartLocationUpdates();
     }
 
-    public void setInterval(int interval){
-        locationRequest.setInterval(interval);
+    public void setPriority(int priority) {
+        this.priority = priority;
+        buildLocationRequest();
     }
 
-    public void setFastestInterval(int fastestInterval){
-        locationRequest.setFastestInterval(fastestInterval);
+    public void setInterval(int interval) {
+        this.interval = interval;
+        buildLocationRequest();
+    }
+
+    public void setFastestInterval(int fastestInterval) {
+        this.minUpdateInterval = fastestInterval;
+        buildLocationRequest();
+    }
+
+    private void restartLocationUpdates() {
+        deactivate();
+        if (listener != null) {
+            activate(listener);
+        }
     }
 
     @SuppressLint("MissingPermission")
     @Override
-    public void activate(final OnLocationChangedListener onLocationChangedListener) {
+    public void activate(@NonNull final OnLocationChangedListener onLocationChangedListener) {
+        this.listener = onLocationChangedListener;
         try {
             fusedLocationClientProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
@@ -56,7 +86,7 @@ public class FusedLocationSource implements LocationSource {
             });
             locationCallback = new LocationCallback() {
                 @Override
-                public void onLocationResult(LocationResult locationResult) {
+                public void onLocationResult(@NonNull LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
                         onLocationChangedListener.onLocationChanged(location);
                     }
@@ -68,8 +98,12 @@ public class FusedLocationSource implements LocationSource {
         }
     }
 
+
     @Override
     public void deactivate() {
-        fusedLocationClientProviderClient.removeLocationUpdates(locationCallback);
+        if (locationCallback != null) {
+            fusedLocationClientProviderClient.removeLocationUpdates(locationCallback);
+            locationCallback = null;
+        }
     }
 }
