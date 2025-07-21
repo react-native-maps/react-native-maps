@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.10](https://github.com/react-native-maps/react-native-maps/compare/v1.24.9...v1.24.10) (2025-07-21)
+
+
+### Bug Fixes
+
+* **android:** polygon stroke width ([#5617](https://github.com/react-native-maps/react-native-maps/issues/5617)) ([0a76e12](https://github.com/react-native-maps/react-native-maps/commit/0a76e128d3e9968d23bc9f60f7f6f35fe3235291))
+
 ## [1.24.9](https://github.com/react-native-maps/react-native-maps/compare/v1.24.8...v1.24.9) (2025-07-21)
 
 
