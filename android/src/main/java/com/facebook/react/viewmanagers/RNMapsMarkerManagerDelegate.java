@@ -40,6 +40,9 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
       case "displayPriority":
         mViewManager.setDisplayPriority(view, (String) value);
         break;
+      case "centerOffset":
+        mViewManager.setCenterOffset(view, (ReadableMap) value);
+        break;
       case "coordinate":
         mViewManager.setCoordinate(view, (ReadableMap) value);
         break;
@@ -51,6 +54,9 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
         break;
       case "title":
         mViewManager.setTitle(view, value == null ? null : (String) value);
+        break;
+      case "tracksViewChanges":
+        mViewManager.setTracksViewChanges(view, value == null ? true : (boolean) value);
         break;
       case "identifier":
         mViewManager.setIdentifier(view, value == null ? null : (String) value);
