@@ -35,6 +35,7 @@
     "react-native-maps.podspec",
     "react-native.config.js",
     "!android/build",
+    "!scripts",
     "!ios/build",
     "!**/__tests__",
     "!**/__fixtures__",
