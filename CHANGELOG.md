@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.9](https://github.com/react-native-maps/react-native-maps/compare/v1.24.8...v1.24.9) (2025-07-21)
+
+
+### Bug Fixes
+
+* **android:** tracksViewChanges ([#5626](https://github.com/react-native-maps/react-native-maps/issues/5626)) ([478f935](https://github.com/react-native-maps/react-native-maps/commit/478f93554ac21d7081e9865b492971d3efe54fb7))
+
 ## [1.24.8](https://github.com/react-native-maps/react-native-maps/compare/v1.24.7...v1.24.8) (2025-07-20)
 
 

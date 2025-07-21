@@ -55,6 +55,9 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
       case "title":
         mViewManager.setTitle(view, value == null ? null : (String) value);
         break;
+      case "tracksViewChanges":
+        mViewManager.setTracksViewChanges(view, value == null ? true : (boolean) value);
+        break;
       case "identifier":
         mViewManager.setIdentifier(view, value == null ? null : (String) value);
         break;

@@ -187,6 +187,11 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     }
 
     @Override
+    public void setTracksViewChanges(MapMarker view, boolean value) {
+        view.setTracksViewChanges(value);
+    }
+
+    @Override
     public void setIdentifier(MapMarker view, @Nullable String value) {
         view.setIdentifier(value);
         view.setUpdated(true);
