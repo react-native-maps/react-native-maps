@@ -593,6 +593,8 @@ using namespace facebook::react;
 
     REMAP_MAPVIEW_STRING_PROP(kmlSrc)
     REMAP_MAPVIEW_STRING_PROP(customMapStyleString)
+    REMAP_MAPVIEW_PROP(showsBuildings)
+    REMAP_MAPVIEW_PROP(rotateEnabled)
 
 
     if (newViewProps.minZoom != oldViewProps.minZoom || newViewProps.maxZoom != oldViewProps.maxZoom){
