@@ -570,10 +570,10 @@ public class MapMarker extends MapFeature {
 
     public void redraw() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-        @Override
-        public void run() {
-            update(true);
-        }
+            @Override
+            public void run() {
+                updateMarkerIcon();
+            }
         });
     }
 
