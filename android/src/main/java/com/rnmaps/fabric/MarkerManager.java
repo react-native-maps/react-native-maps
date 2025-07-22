@@ -262,7 +262,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void redraw(MapMarker view) {
-        view.setUpdated(true);
+        view.update(true);
     }
     @Override
     public void addView(MapMarker parent, View child, int index) {
