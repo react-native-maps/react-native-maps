@@ -14,6 +14,9 @@ import android.animation.ObjectAnimator;
 import android.util.Property;
 import android.animation.TypeEvaluator;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.annotation.Nullable;
 
 import com.facebook.common.references.CloseableReference;
@@ -563,6 +566,15 @@ public class MapMarker extends MapFeature {
         updateTracksViewChanges();
         clearDrawableCache();
         update(true);
+    }
+
+    public void redraw() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        @Override
+        public void run() {
+            update(true);
+        }
+        });
     }
 
     private Bitmap mLastBitmapCreated = null;

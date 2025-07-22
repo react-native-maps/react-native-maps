@@ -262,8 +262,9 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void redraw(MapMarker view) {
-        view.update(true);
+        view.redraw();
     }
+    
     @Override
     public void addView(MapMarker parent, View child, int index) {
         // if an <Callout /> component is a child, then it is a callout view, NOT part of the
