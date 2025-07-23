@@ -1,4 +1,4 @@
-import {NativeSyntheticEvent} from 'react-native';
+import type {NativeSyntheticEvent} from 'react-native';
 
 export type Provider = 'google' | undefined;
 

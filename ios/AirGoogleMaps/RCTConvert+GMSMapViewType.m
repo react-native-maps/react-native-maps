@@ -10,6 +10,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTConvert.h>
 #import <React/RCTConvert+CoreLocation.h>
+#import "AIRGoogleMapCoordinate.h"
 
 @implementation RCTConvert (GMSMapViewType)
   RCT_ENUM_CONVERTER(GMSMapViewType,
@@ -29,6 +30,23 @@
     json = [self NSDictionary:json];
     return [RCTConvert GMSCameraPositionWithDefaults:json existingCamera:nil];
 }
+
++ (AIRGoogleMapCoordinate *)AIRGoogleMapCoordinate:(id)json
+{
+    // empty coordinates
+    if ([json isKindOfClass:[NSArray class]] && [json count] == 0) return nil;
+    AIRGoogleMapCoordinate *coord = [AIRGoogleMapCoordinate new];
+    coord.coordinate = [self CLLocationCoordinate2D:json];
+    return coord;
+}
+
+RCT_ARRAY_CONVERTER(AIRGoogleMapCoordinate)
+
++ (NSArray<NSArray<AIRGoogleMapCoordinate *> *> *)AIRGoogleMapCoordinateArrayArray:(id)json
+{
+    return RCTConvertArrayValue(@selector(AIRGoogleMapCoordinate:), json);
+}
+
 
 + (GMSCameraPosition*)GMSCameraPositionWithDefaults:(id)json existingCamera:(GMSCameraPosition*)existingCamera
 {

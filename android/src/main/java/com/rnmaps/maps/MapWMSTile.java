@@ -107,9 +107,9 @@ public class MapWMSTile extends MapUrlTile {
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
     options.transparency(1 - this.opacity);
-    AIRMapGSUrlTileProvider tileProvider = new AIRMapGSUrlTileProvider((int) this.tileSize, this.urlTemplate,
-      (int) this.maximumZ, (int) this.maximumNativeZ, (int) this.minimumZ, this.tileCachePath,
-      (int) this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded, this.urlCdn, this.urlCdnSuffix);
+    AIRMapGSUrlTileProvider tileProvider = new AIRMapGSUrlTileProvider(this.tileSize, this.urlTemplate,
+      this.maximumZ, this.maximumNativeZ, this.minimumZ, this.tileCachePath,
+      this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded, this.urlCdn, this.urlCdnSuffix);
     options.tileProvider(tileProvider);
     return options;
   }

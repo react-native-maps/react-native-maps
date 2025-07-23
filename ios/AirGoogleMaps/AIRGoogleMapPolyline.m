@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import "AIRGoogleMapPolyline.h"
 #import "AIRGMSPolyline.h"
-#import "AIRMapCoordinate.h"
 #import "AIRGoogleMapMarker.h"
 #import "AIRGoogleMapMarkerManager.h"
 #import <GoogleMaps/GoogleMaps.h>
@@ -20,19 +19,18 @@
 {
   if (self = [super init]) {
     _polyline = [[AIRGMSPolyline alloc] init];
-    _polyline.spans = @[[GMSStyleSpan spanWithColor:_strokeColor]];
     _polyline.strokeColor = _strokeColor;
   }
   return self;
 }
 
--(void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates
+-(void)setCoordinates:(NSArray<AIRGoogleMapCoordinate *> *)coordinates
 {
   _coordinates = coordinates;
 
   GMSMutablePath *path = [GMSMutablePath path];
 
-  if (!coordinates || coordinates.count == 0) 
+  if (!coordinates || coordinates.count == 0)
   {
     [path removeAllCoordinates];
     return;
@@ -80,10 +78,8 @@
   _polyline.strokeWidth = strokeWidth;
 }
 
--(void)setFillColor:(UIColor *)fillColor
-{
-  _fillColor = fillColor;
-  _polyline.spans = @[[GMSStyleSpan spanWithColor:fillColor]];
+- (void)setFillColor:(UIColor *)fillColor {
+  // fillColor not support
 }
 
 - (void)setLineDashPattern:(NSArray<NSNumber *> *)lineDashPattern {

@@ -27,11 +27,29 @@
   };
 }
 
+
 + (MKMapCamera*)MKMapCamera:(id)json
 {
     json = [self NSDictionary:json];
     return [RCTConvert MKMapCameraWithDefaults:json existingCamera:nil];
 }
+
++ (NSDictionary*) dictonaryFromString:(NSString *) str {
+    NSError *jsonError;
+    NSData *objectData = [str dataUsingEncoding:NSUTF8StringEncoding];
+    return [NSJSONSerialization JSONObjectWithData:objectData
+                                              options:NSJSONReadingMutableContainers
+                                                error:&jsonError];
+}
+
++ (NSArray*) arrayFromString:(NSString *) str {
+    NSError *jsonError;
+    NSData *objectData = [str dataUsingEncoding:NSUTF8StringEncoding];
+    return [NSJSONSerialization JSONObjectWithData:objectData
+                                              options:NSJSONReadingMutableContainers
+                                                error:&jsonError];
+}
+
 
 + (MKMapCamera*)MKMapCameraWithDefaults:(id)json existingCamera:(MKMapCamera*)camera
 {

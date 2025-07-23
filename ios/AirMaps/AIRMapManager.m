@@ -113,13 +113,14 @@ RCT_EXPORT_VIEW_PROPERTY(legalLabelInsets, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapPadding, UIEdgeInsets)
 RCT_EXPORT_VIEW_PROPERTY(mapType, MKMapType)
 RCT_EXPORT_VIEW_PROPERTY(cameraZoomRange, NSDictionary)
-RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMapReady, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChangeStart, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRegionChangeComplete, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPanDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onDoublePress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onDoublePress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerPress, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerSelect, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDeselect, RCTDirectEventBlock)
@@ -127,7 +128,7 @@ RCT_EXPORT_VIEW_PROPERTY(onMarkerDragStart, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDrag, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerDragEnd, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onCalloutPress, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTDirectEventBlock)
 RCT_CUSTOM_VIEW_PROPERTY(initialRegion, MKCoordinateRegion, AIRMap)
 {
     if (json == nil) return;
@@ -184,18 +185,7 @@ RCT_EXPORT_METHOD(getMapBoundaries:(nonnull NSNumber *)reactTag
         if (![view isKindOfClass:[AIRMap class]]) {
             RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
         } else {
-            NSArray *boundingBox = [view getMapBoundaries];
-
-            resolve(@{
-                @"northEast" : @{
-                    @"longitude" : boundingBox[0][0],
-                    @"latitude" : boundingBox[0][1]
-                },
-                @"southWest" : @{
-                    @"longitude" : boundingBox[1][0],
-                    @"latitude" : boundingBox[1][1]
-                }
-            });
+            resolve([view getMapBoundaries]);
         }
     }];
 }
@@ -538,10 +528,9 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
                 coords[i] = coordinates[i].coordinate;
             }
             MKGeodesicPolyline *polyline = [MKGeodesicPolyline polylineWithCoordinates:coords count:coordinates.count];
-            UIEdgeInsets insets = [self edgeInsetsFrom:edgePadding];
 
-            [mapView setVisibleMapRect:[polyline boundingMapRect] edgePadding:insets animated:animated];
-
+            UIEdgeInsets edgeInsets = [RCTConvert UIEdgeInsets:edgePadding];
+            [mapView fitToCoordinates: coordinates edgePadding:edgeInsets animated:animated];
         }
     }];
 }
@@ -1103,20 +1092,32 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-    if (mapView.onRegionChangeStart) mapView.onRegionChangeStart(@{});
+    MKCoordinateRegion region = mapView.region;
+    if (!CLLocationCoordinate2DIsValid(region.center)) {
+        return;
+    }
+#define FLUSH_NAN(value) (isnan(value) ? 0 : value)
+    if (mapView.onRegionChangeStart) mapView.onRegionChangeStart(@{
+        @"region": @{
+            @"latitude": @(FLUSH_NAN(region.center.latitude)),
+            @"longitude": @(FLUSH_NAN(region.center.longitude)),
+            @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
+            @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
+        }
+    });
 }
 
 - (void)mapViewDidChangeVisibleRegion:(AIRMap *)mapView
 {
-    [self _regionChanged:mapView];
+    [self _regionChanged:mapView continuous:YES];
 }
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
-    if(mapView.hasStartedRendering){
-        [self _regionChanged:mapView];
+    if (animated && mapView.ignoreRegionChanges){
+        mapView.ignoreRegionChanges = false;
     }
 
     if (mapView.legacyZoomConstraintsEnabled == YES) {
@@ -1131,6 +1132,8 @@ static int kDragCenterContext;
 
     mapView.pendingCenter = mapView.region.center;
     mapView.pendingSpan = mapView.region.span;
+    // reset original state (checkout setCamera / region animated)
+    mapView.ignoreRegionChanges = NO;
 }
 
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView
@@ -1145,11 +1148,12 @@ static int kDragCenterContext;
 - (void)mapViewDidFinishRenderingMap:(AIRMap *)mapView fullyRendered:(BOOL)fullyRendered
 {
     [mapView finishLoading];
+    mapView.ignoreRegionChanges = NO;
 }
 
 #pragma mark Private
 
-- (void)_regionChanged:(AIRMap *)mapView
+- (void)_regionChanged:(AIRMap *)mapView continuous:(BOOL)continuous
 {
     BOOL needZoom = NO;
     CGFloat newLongitudeDelta = 0.0f;
@@ -1175,27 +1179,33 @@ static int kDragCenterContext;
     }
 
     // Continuously observe region changes
-    [self _emitRegionChangeEvent:mapView continuous:YES];
+    [self _emitRegionChangeEvent:mapView continuous:continuous];
 }
 
 - (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous
 {
-    if (!mapView.ignoreRegionChanges && mapView.onChange) {
+    if (!mapView.ignoreRegionChanges && mapView.onRegionChange) {
         MKCoordinateRegion region = mapView.region;
         if (!CLLocationCoordinate2DIsValid(region.center)) {
             return;
         }
 
 #define FLUSH_NAN(value) (isnan(value) ? 0 : value)
-        mapView.onChange(@{
-                @"continuous": @(continuous),
-                @"region": @{
-                        @"latitude": @(FLUSH_NAN(region.center.latitude)),
-                        @"longitude": @(FLUSH_NAN(region.center.longitude)),
-                        @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
-                        @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
-                }
-        });
+        NSDictionary *payload = @{
+            @"region": @{
+                @"latitude": @(FLUSH_NAN(region.center.latitude)),
+                @"longitude": @(FLUSH_NAN(region.center.longitude)),
+                @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
+                @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
+            }
+        };
+
+
+        if (continuous && mapView.onRegionChange) {
+            mapView.onRegionChange(payload);
+        } else if (mapView.onRegionChangeComplete) {
+            mapView.onRegionChangeComplete(payload);
+        }
     }
 }
 
@@ -1356,11 +1366,11 @@ static int kDragCenterContext;
 
     CGFloat zoomLevel = [mapView getZoomLevel];
 
-    if (zoomLevel < mapView.minZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoomLevel animated:TRUE mapView:mapView];
+    if (zoomLevel < mapView.minZoom) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.minZoom animated:TRUE mapView:mapView];
     }
-    else if (zoomLevel > mapView.maxZoomLevel) {
-      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoomLevel animated:TRUE mapView:mapView];
+    else if (zoomLevel > mapView.maxZoom) {
+      [self setCenterCoordinate:[mapView centerCoordinate] zoomLevel:mapView.maxZoom animated:TRUE mapView:mapView];
     }
 }
 

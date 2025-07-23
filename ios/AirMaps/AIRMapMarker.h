@@ -59,6 +59,7 @@
 - (void)hideCalloutView;
 - (void)addTapGestureRecognizer;
 - (void)setUseLegacyPinView:(BOOL)value;
+- (void)animateToCoordinate:(CLLocationCoordinate2D)newCoordinate duration:(NSTimeInterval)duration;
 
 @end
 

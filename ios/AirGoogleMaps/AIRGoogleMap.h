@@ -13,7 +13,9 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <MapKit/MapKit.h>
 #import "AIRGMSMarker.h"
-#import "RCTConvert+AirMap.h"
+
+#import "AIRGoogleMapCoordinate.h"
+
 
 @interface AIRGoogleMap : GMSMapView
 
@@ -26,18 +28,17 @@
 @property (nonatomic, assign) NSString *customMapStyleString;
 @property (nonatomic, assign) UIEdgeInsets mapPadding;
 @property (nonatomic, assign) NSString *paddingAdjustmentBehaviorString;
-@property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
-@property (nonatomic, copy) RCTBubblingEventBlock onMapLoaded;
-@property (nonatomic, copy) RCTBubblingEventBlock onKmlReady;
+@property (nonatomic, copy) RCTDirectEventBlock onMapReady;
+@property (nonatomic, copy) RCTDirectEventBlock onMapLoaded;
+@property (nonatomic, copy) RCTDirectEventBlock onKmlReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
-@property (nonatomic, copy) RCTBubblingEventBlock onPanDrag;
-@property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
-@property (nonatomic, copy) RCTBubblingEventBlock onMarkerPress;
-@property (nonatomic, copy) RCTBubblingEventBlock onMarkerSelect;
-@property (nonatomic, copy) RCTBubblingEventBlock onMarkerDeselect;
-@property (nonatomic, copy) RCTBubblingEventBlock onChange;
-@property (nonatomic, copy) RCTBubblingEventBlock onPoiClick;
+@property (nonatomic, copy) RCTDirectEventBlock onPanDrag;
+@property (nonatomic, copy) RCTDirectEventBlock onUserLocationChange;
+@property (nonatomic, copy) RCTDirectEventBlock onMarkerPress;
+@property (nonatomic, copy) RCTDirectEventBlock onMarkerSelect;
+@property (nonatomic, copy) RCTDirectEventBlock onMarkerDeselect;
+@property (nonatomic, copy) RCTDirectEventBlock onPoiClick;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
@@ -66,6 +67,7 @@
 @property (nonatomic, assign) BOOL showsIndoorLevelPicker;
 @property (nonatomic, assign) NSString *kmlSrc;
 
+- (BOOL) isReady;
 - (void)didPrepareMap;
 - (void)mapViewDidFinishTileRendering;
 - (BOOL)didTapMarker:(GMSMarker *)marker;
@@ -77,13 +79,17 @@
 - (void)didChangeCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position isGesture:(BOOL)isGesture;
 - (void)didTapPOIWithPlaceID:(NSString *)placeID name:(NSString *) name location:(CLLocationCoordinate2D) location;
-- (NSArray *)getMapBoundaries;
+- (NSDictionary *)getMapBoundaries;
 
 + (MKCoordinateRegion)makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position;
 + (GMSCameraPosition*)makeGMSCameraPositionFromMap:(GMSMapView *)map andMKCoordinateRegion:(MKCoordinateRegion)region;
 
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
 - (instancetype)initWithMapId:(NSString *)mapId initialCamera:(GMSCameraPosition*) camera backgroundColor:(UIColor *) backgroundColor andZoomTapEnabled:(BOOL)zoomTapEnabled;
+-(void) fitToSuppliedMarkers:(NSArray*) markers withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated;
+-(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated;
+-(void) fitToElementsWithEdgePadding:(nonnull NSDictionary *)edgePadding
+             animated:(BOOL)animated;
 @end
 
 #endif

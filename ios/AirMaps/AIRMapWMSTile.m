@@ -10,7 +10,7 @@
 #import <React/UIView+React.h>
 
 @implementation AIRMapWMSTile
- 
+
 - (void)createTileOverlayAndRendererIfPossible
 {
     if (!_urlTemplateSet) return;
@@ -52,7 +52,7 @@
 
 @implementation AIRMapWMSTileOverlay
 
-- (id)initWithURLTemplate:(NSString *)URLTemplate 
+- (id)initWithURLTemplate:(NSString *)URLTemplate
 {
     self = [super initWithURLTemplate:URLTemplate];
     return self;
@@ -68,7 +68,7 @@
 
 @implementation AIRMapWMSTileCachedOverlay
 
-- (id)initWithURLTemplate:(NSString *)URLTemplate 
+- (id)initWithURLTemplate:(NSString *)URLTemplate
 {
     self = [super initWithURLTemplate:URLTemplate];
     return self;
@@ -82,7 +82,7 @@
 @end
 
 
-@implementation AIRMapWMSTileHelper 
+@implementation AIRMapWMSTileHelper
 + (NSURL *)URLForTilePath:(MKTileOverlayPath)path withURLTemplate:(NSString *)URLTemplate withTileSize:(NSInteger)tileSize
 {
     NSArray *bb = [self getBoundBox:path.x yAxis:path.y zoom:path.z];
@@ -102,15 +102,15 @@
     double MapY = 20037508.34789244;
     double FULL = 20037508.34789244 * 2;
     double tile = FULL / pow(2.0, (double)zoom);
-    
+
     NSArray *result  =[[NSArray alloc] initWithObjects:
                        [NSNumber numberWithDouble:MapX + (double)x * tile],
                        [NSNumber numberWithDouble:MapY - (double)(y + 1) * tile],
                        [NSNumber numberWithDouble:MapX + (double)(x + 1) * tile],
                        [NSNumber numberWithDouble:MapY - (double)y * tile],
                        nil];
-    
-    return result;   
+
+    return result;
 }
 
 @end

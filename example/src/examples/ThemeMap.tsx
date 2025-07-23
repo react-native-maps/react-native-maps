@@ -28,7 +28,6 @@ class ThemeMap extends React.Component<any, any> {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollview}>
-          <Text>MAPKIT ONLY{'\n'}</Text>
           <Text>System</Text>
           <MapView
             provider={this.props.provider}

@@ -15,6 +15,8 @@
 #import "RCTConvert+AirMap.h"
 #import "AIRMapCalloutSubview.h"
 
+
+@class AIRMapCoordinate;
 @class AIRMapMarker;
 
 extern const NSTimeInterval AIRMapRegionChangeObserveInterval;
@@ -28,11 +30,12 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, strong) UIView *loadingView;
 
 @property (nonatomic, copy) NSString *userLocationAnnotationTitle;
-@property (nonatomic, assign) BOOL followUserLocation;
+@property (nonatomic, assign) BOOL followsUserLocation;
 @property (nonatomic, assign) BOOL userLocationCalloutEnabled;
 @property (nonatomic, assign) BOOL hasStartedRendering;
 @property (nonatomic, assign) BOOL cacheEnabled;
 @property (nonatomic, assign) BOOL loadingEnabled;
+@property (nonatomic, assign) BOOL handlePanDrag;
 @property (nonatomic, assign) BOOL legacyZoomConstraintsEnabled;
 @property (nonatomic, strong) UIColor *loadingBackgroundColor;
 @property (nonatomic, strong) UIColor *loadingIndicatorColor;
@@ -41,9 +44,9 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) CGFloat maxDelta;
 @property (nonatomic, assign) UIEdgeInsets legalLabelInsets;
 @property (nonatomic, assign) MKCoordinateRegion initialRegion;
-@property (nonatomic, assign) MKMapCamera *initialCamera;
-@property (nonatomic, assign) CGFloat minZoomLevel;
-@property (nonatomic, assign) CGFloat maxZoomLevel;
+@property (nonatomic, retain) MKMapCamera *initialCamera;
+@property (nonatomic, assign) CGFloat minZoom;
+@property (nonatomic, assign) CGFloat maxZoom;
 @property (nonatomic, assign) CGPoint compassOffset;
 @property (nonatomic, assign) UIEdgeInsets mapPadding;
 
@@ -53,12 +56,14 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
 
-@property (nonatomic, copy) RCTBubblingEventBlock onMapReady;
-@property (nonatomic, copy) RCTBubblingEventBlock onChange;
+@property (nonatomic, copy) RCTDirectEventBlock onMapReady;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
-@property (nonatomic, copy) RCTBubblingEventBlock onPanDrag;
-@property (nonatomic, copy) RCTBubblingEventBlock onDoublePress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
+@property (nonatomic, copy) RCTDirectEventBlock onPanDrag;
+@property (nonatomic, copy) RCTDirectEventBlock onDoublePress;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerPress;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerSelect;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDeselect;
@@ -67,17 +72,16 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
 
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
-@property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;
-@property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
-@property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
+@property (nonatomic, copy) RCTDirectEventBlock onUserLocationChange;
 
 - (void)cacheViewIfNeeded;
 - (void)beginLoading;
 - (void)finishLoading;
 - (double)getZoomLevel;
-- (NSArray *)getMapBoundaries;
+- (NSDictionary *)getMapBoundaries;
 
 - (AIRMapMarker*) markerAtPoint:(CGPoint)point;
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
-
+- (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex;
+-(void) fitToCoordinates:(NSArray<AIRMapCoordinate*>*) coordinates edgePadding:(UIEdgeInsets) edgeInsets animated:(Boolean) animated;
 @end

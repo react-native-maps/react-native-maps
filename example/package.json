@@ -5,28 +5,29 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "tscheck": "tsc --noEmit",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "react": "18.3.1",
-    "react-native": "0.76.1"
+    "react": "19.1.0",
+    "react-native": "0.80.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "15.0.0",
-    "@react-native-community/cli-platform-android": "15.0.0",
-    "@react-native-community/cli-platform-ios": "15.0.0",
-    "@react-native/babel-preset": "0.76.1",
-    "@react-native/eslint-config": "0.76.1",
-    "@react-native/metro-config": "0.76.1",
-    "@react-native/typescript-config": "0.76.1",
-    "@types/react": "^18.2.6",
-    "@types/react-test-renderer": "^18.0.0",
-    "babel-plugin-module-resolver": "5.0.0",
-    "react-test-renderer": "18.3.1"
+    "@babel/core": "7.28.0",
+    "@babel/preset-env": "7.28.0",
+    "@babel/runtime": "7.27.6",
+    "@react-native-community/cli": "19.1.0",
+    "@react-native-community/cli-platform-android": "18.0.0",
+    "@react-native-community/cli-platform-ios": "18.0.0",
+    "@react-native/babel-preset": "0.80.1",
+    "@react-native/metro-config": "0.80.1",
+    "@react-native/typescript-config": "0.80.1",
+    "@types/react": "19.1.8",
+    "babel-plugin-module-resolver": "5.0.2"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

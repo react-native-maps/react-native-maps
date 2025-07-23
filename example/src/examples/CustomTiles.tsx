@@ -11,8 +11,8 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class CustomTiles extends React.Component<any, any> {
-  constructor(props: any, context: any) {
-    super(props, context);
+  constructor(props: any) {
+    super(props);
 
     this.state = {
       region: {
@@ -41,7 +41,7 @@ class CustomTiles extends React.Component<any, any> {
           style={styles.map}
           initialRegion={region}>
           <UrlTile
-            urlTemplate="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
+            urlTemplate="https://a.tile.openstreetmap.de/{z}/{x}/{y}.png"
             zIndex={-1}
           />
         </MapView>

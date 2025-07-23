@@ -331,26 +331,27 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
     }
   }
 
-  @Override
-  @Nullable
-  public Map getExportedCustomDirectEventTypeConstants() {
-      return MapBuilder.<String, Map<String, String>>builder()
-              .put("onPress", MapBuilder.of("registrationName", "onPress"))
-              .put("onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"))
-              .put("onDragStart", MapBuilder.of("registrationName", "onDragStart"))
-              .put("onDrag", MapBuilder.of("registrationName", "onDrag"))
-              .put("onDragEnd", MapBuilder.of("registrationName", "onDragEnd"))
-              .build();
-  }
+    @Override
+    @Nullable
+    public Map getExportedCustomDirectEventTypeConstants() {
+        return MapBuilder.<String, Map<String, String>>builder()
+                .put("onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress"))
+                .put("onDragStart", MapBuilder.of("registrationName", "onDragStart"))
+                .put("onDrag", MapBuilder.of("registrationName", "onDrag"))
+                .put("onDragEnd", MapBuilder.of("registrationName", "onDragEnd"))
+                .put("onSelect", MapBuilder.of("registrationName", "onSelect"))
+                .put("onDeselect", MapBuilder.of("registrationName", "onDeselect"))
+                .build();
+    }
 
-  @Override
-  @Nullable
-  public Map getExportedCustomBubblingEventTypeConstants() {
-      return MapBuilder.<String, Map<String, Object>>builder()
-              .put("onSelect", MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onSelect")))
-              .put("onDeselect", MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onDeselect")))
-              .build();
-  }
+    @Override
+    @Nullable
+    public Map getExportedCustomBubblingEventTypeConstants() {
+        return MapBuilder.<String, Map<String, Object>>builder()
+                .put("onPress", MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onPress")))
+                .build();
+    }
+
 
   @Override
   public LayoutShadowNode createShadowNodeInstance() {

@@ -22,7 +22,7 @@ jobs:
           build-tools-version: 33.0.2
 
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Clear Gradle Cache
         run: rm -rf $HOME/.gradle/caches/
@@ -36,8 +36,8 @@ jobs:
       - name: Install dependencies
         run: yarn --cwd example --frozen-lockfile
 
-      - name: Write local.properties
-        run: echo MAPS_API_KEY=your_api_key_here >> example/android/local.properties
+      - name: Write secrets.properties
+        run: echo MAPS_API_KEY=your_api_key_here >> example/android/secrets.properties
 
       - name: Build Android
         run: cd example/android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug

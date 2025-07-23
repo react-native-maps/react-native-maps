@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
 import MapView, {Marker, Callout, CalloutSubview} from 'react-native-maps';
 import CustomCallout from './CustomCallout';
@@ -110,15 +111,17 @@ class Callouts extends React.Component<any, any> {
               style={styles.customView}>
               <CustomCallout>
                 <Text>{`This is a custom callout bubble view ${this.state.cnt}`}</Text>
-                <CalloutSubview
-                  onPress={() => {
-                    this.setState({cnt: this.state.cnt + 1}, () => {
-                      this.marker2.redrawCallout();
-                    });
-                  }}
-                  style={[styles.calloutButton]}>
-                  <Text>Click me</Text>
-                </CalloutSubview>
+                {Platform.OS === 'ios' && (
+                  <CalloutSubview
+                    onPress={() => {
+                      this.setState({cnt: this.state.cnt + 1}, () => {
+                        this.marker2.redrawCallout();
+                      });
+                    }}
+                    style={[styles.calloutButton]}>
+                    <Text>Click me</Text>
+                  </CalloutSubview>
+                )}
               </CustomCallout>
             </Callout>
           </Marker>
@@ -156,7 +159,7 @@ class Callouts extends React.Component<any, any> {
 const styles = StyleSheet.create({
   customView: {
     width: 140,
-    height: 140,
+    height: Platform.select({android: 100, default: 140}),
   },
   plainView: {
     width: 60,

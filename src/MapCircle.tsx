@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {View, ViewProps} from 'react-native';
+import {View, type ViewProps} from 'react-native';
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng, LineCapType, LineJoinType} from './sharedTypes';
+import type {LatLng, LineCapType, LineJoinType} from './sharedTypes';
 
 export type MapCircleProps = ViewProps & {
   /**
@@ -119,11 +119,12 @@ export type MapCircleProps = ViewProps & {
   zIndex?: number;
 };
 
-type NativeProps = MapCircleProps & {ref: React.RefObject<View>};
+type NativeProps = MapCircleProps & {ref: React.RefObject<View | null>};
 
 export class MapCircle extends React.Component<MapCircleProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;

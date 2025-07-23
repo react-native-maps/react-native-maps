@@ -31,22 +31,25 @@ class MarkerTypes extends React.Component<any, any> {
   }
 
   takeSnapshot() {
-    this.map.takeSnapshot(
-      300,
-      300,
-      {
-        latitude: LATITUDE - SPACE,
-        longitude: LONGITUDE - SPACE,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01 * ASPECT_RATIO,
-      },
-      (err: any, data: any) => {
-        if (err) {
-          console.log(err);
-        }
-        this.setState({mapSnapshot: data});
-      },
-    );
+    this.map
+      .takeSnapshot({
+        width: 300,
+        height: 300,
+        region: {
+          latitude: LATITUDE - SPACE,
+          longitude: LONGITUDE - SPACE,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01 * ASPECT_RATIO,
+        },
+      })
+      .then((result: string) => {
+        console.log('Success:', result);
+        // Handle successful resolution
+        this.setState({mapSnapshot: result});
+      })
+      .catch((error: any) => {
+        console.log('Failure:', error); // Handle rejection
+      });
   }
 
   render() {
@@ -96,7 +99,7 @@ class MarkerTypes extends React.Component<any, any> {
             style={[styles.container, styles.overlay]}
             onPress={() => this.setState({mapSnapshot: null})}>
             <Image
-              source={{uri: this.state.mapSnapshot.uri}}
+              source={{uri: this.state.mapSnapshot}}
               style={styles.mapSnapshot}
             />
           </TouchableOpacity>

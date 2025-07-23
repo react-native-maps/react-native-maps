@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {ViewProps} from 'react-native';
+import type {ViewProps} from 'react-native';
 
 import decorateMapComponent, {
   USES_DEFAULT_IMPLEMENTATION,
   SUPPORTED,
   ProviderContext,
-  NativeComponent,
-  MapManagerCommand,
-  UIManagerCommand,
+  type NativeComponent,
+  type MapManagerCommand,
+  type UIManagerCommand,
 } from './decorateMapComponent';
 
 export type MapWMSTileProps = ViewProps & {
@@ -38,7 +38,7 @@ export type MapWMSTileProps = ViewProps & {
 
   /**
    * In offline-mode tiles are not fetched from the tile servers, rather only tiles stored in the cache directory are used.
-   * Furthermore automated tile scaling is activated: if tile at a desired zoom level is not found from the cache directory,
+   * Furthermore, automated tile scaling is activated: if tile at a desired zoom level is not found from the cache directory,
    * then lower zoom level tile is used (up to 4 levels lower) and scaled.
    *
    * @default false
@@ -128,7 +128,8 @@ type NativeProps = MapWMSTileProps;
 
 export class MapWMSTile extends React.Component<MapWMSTileProps> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;

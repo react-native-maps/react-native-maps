@@ -1,15 +1,20 @@
 import * as React from 'react';
-import {processColor, ProcessedColorValue, View, ViewProps} from 'react-native';
+import {
+  processColor,
+  View,
+  type ProcessedColorValue,
+  type ViewProps,
+} from 'react-native';
 import decorateMapComponent, {
-  MapManagerCommand,
-  NativeComponent,
   ProviderContext,
   SUPPORTED,
-  UIManagerCommand,
   USES_DEFAULT_IMPLEMENTATION,
+  type MapManagerCommand,
+  type NativeComponent,
+  type UIManagerCommand,
 } from './decorateMapComponent';
-import {LatLng} from './sharedTypes';
-import {Modify} from './sharedTypesInternal';
+import type {LatLng} from './sharedTypes';
+import type {Modify} from './sharedTypesInternal';
 
 export type MapHeatmapProps = ViewProps & {
   gradient?: {
@@ -77,12 +82,13 @@ type NativeProps = Modify<
     >;
   }
 > & {
-  ref: React.RefObject<View>;
+  ref: React.RefObject<View | null>;
 };
 
-export class MapHeatmap extends React.Component<MapHeatmapProps> {
+export class MapHeatmap extends React.Component<MapHeatmapProps | null> {
   // declaration only, as they are set through decorateMap
-  declare context: React.ContextType<typeof ProviderContext>;
+  /// @ts-ignore
+  context!: React.ContextType<typeof ProviderContext>;
   getNativeComponent!: () => NativeComponent<NativeProps>;
   getMapManagerCommand!: (name: string) => MapManagerCommand;
   getUIManagerCommand!: (name: string) => UIManagerCommand;
@@ -100,7 +106,7 @@ export class MapHeatmap extends React.Component<MapHeatmapProps> {
 
   render() {
     const AIRMapHeatmap = this.getNativeComponent();
-    const propGradient = this.props.gradient;
+    const propGradient = this.props?.gradient;
     let gradient: NativeProps['gradient'];
     if (propGradient) {
       const colors = propGradient.colors.map(c => processColor(c));

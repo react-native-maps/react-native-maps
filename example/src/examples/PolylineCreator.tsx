@@ -43,6 +43,7 @@ class PolylineCreator extends React.Component<any, any> {
   }
 
   onPanDrag(e: any) {
+    console.log('onPanDrag: ' + JSON.stringify(e.nativeEvent));
     const {editing} = this.state;
     if (!editing) {
       this.setState({

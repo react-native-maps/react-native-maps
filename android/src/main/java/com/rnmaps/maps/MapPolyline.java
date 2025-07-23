@@ -8,16 +8,22 @@ import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.google.android.gms.maps.model.SquareCap;
+import com.google.android.gms.maps.model.StrokeStyle;
+import com.google.android.gms.maps.model.StyleSpan;
 import com.google.maps.android.collections.PolylineManager;
+import com.rnmaps.fabric.event.OnPressEvent;
 
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MapPolyline extends MapFeature {
 
@@ -36,9 +42,9 @@ public class MapPolyline extends MapFeature {
   private float zIndex;
   private String type;
 
-  public MapPolyline(Context context) {
-    super(context);
-  }
+    public MapPolyline(Context context) {
+        super(context);
+    }
 
   public void setType(String type) {
     this.type = type;
@@ -69,20 +75,39 @@ public class MapPolyline extends MapFeature {
   }
 
   public void setColor(int color) {
-    this.color = color;
+         this.color = color;
+        if (polyline != null) {
+            polyline.setColor(color);
+        }
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+        if (polyline != null) {
+            polyline.setWidth(width);
+        }
+    }
+
+    public void setZIndex(float zIndex) {
+        this.zIndex = zIndex;
+        if (polyline != null) {
+            polyline.setZIndex(zIndex);
+        }
+    }
+
+  public void setTappable(boolean tapabble) {
+    this.tappable = tapabble;
+    if (polyline != null) {
+      polyline.setClickable(tappable);
+    }
   }
 
-  public void setWidth(float width) {
-    this.width = width;
-  }
-
-  public void setZIndex(float zIndex) {
-    this.zIndex = zIndex;
-  }
-
-  public void setGeodesic(boolean geodesic) {
-    this.geodesic = geodesic;
-  }
+    public void setGeodesic(boolean geodesic) {
+        this.geodesic = geodesic;
+        if (polyline != null) {
+            polyline.setGeodesic(geodesic);
+        }
+    }
 
   public void setLineDashPattern(ReadableArray lineDashPattern) {
     if(lineDashPattern != null && lineDashPattern.size() > 0){
@@ -124,10 +149,10 @@ public class MapPolyline extends MapFeature {
     }
   }
 
-  @Override
-  public Object getFeature() {
-    return polyline;
-  }
+    @Override
+    public Object getFeature() {
+        return polyline;
+    }
 
   @Override
   public void addToMap(Object collection) {
