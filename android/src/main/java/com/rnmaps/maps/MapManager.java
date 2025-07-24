@@ -146,8 +146,8 @@ public class MapManager extends ViewGroupManager<MapView> {
     }
 
     @ReactProp(name = "camera")
-    public void setCamera(MapView view, ReadableMap camera) {
-        view.setCamera(camera);
+    public void setCamera(MapView view, @Nullable ReadableMap camera, @Nullable ReadableMap edgePadding) {
+        view.setCamera(camera, edgePadding);
     }
 
     @ReactProp(name = "initialCamera")
@@ -235,27 +235,32 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "showsTraffic", defaultBoolean = false)
     public void setShowTraffic(MapView view, boolean showTraffic) {
-        view.map.setTrafficEnabled(showTraffic);
+        // ANSY: do nothing
+        // view.map.setTrafficEnabled(showTraffic);
     }
 
     @ReactProp(name = "showsBuildings", defaultBoolean = false)
     public void setShowBuildings(MapView view, boolean showBuildings) {
-        view.setShowBuildings(showBuildings);
+        // ANSY: do nothing
+        // view.setShowBuildings(showBuildings);
     }
 
     @ReactProp(name = "showsIndoors", defaultBoolean = false)
     public void setShowIndoors(MapView view, boolean showIndoors) {
-        view.setShowIndoors(showIndoors);
+        // ANSY: do nothing
+        // view.setShowIndoors(showIndoors);
     }
 
     @ReactProp(name = "showsIndoorLevelPicker", defaultBoolean = false)
     public void setShowsIndoorLevelPicker(MapView view, boolean showsIndoorLevelPicker) {
-        view.setShowsIndoorLevelPicker(showsIndoorLevelPicker);
+        // ANSY: do nothing
+        // view.setShowsIndoorLevelPicker(showsIndoorLevelPicker);
     }
 
     @ReactProp(name = "showsCompass", defaultBoolean = false)
     public void setShowsCompass(MapView view, boolean showsCompass) {
-        view.setShowsCompass(showsCompass);
+        // ANSY: do nothing
+        // view.setShowsCompass(showsCompass);
     }
 
     @ReactProp(name = "scrollEnabled", defaultBoolean = false)
@@ -270,7 +275,8 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "zoomControlEnabled", defaultBoolean = true)
     public void setZoomControlEnabled(MapView view, boolean zoomControlEnabled) {
-        view.setZoomControlEnabled(zoomControlEnabled);
+        // ANSY: do nothing
+        // view.setZoomControlEnabled(zoomControlEnabled);
     }
 
     @ReactProp(name = "rotateEnabled", defaultBoolean = false)
@@ -372,6 +378,7 @@ public class MapManager extends ViewGroupManager<MapView> {
                 }
                 region = args.getMap(0);
                 duration = args.getInt(1);
+                edgePadding = args.getMap(2);
                 lng = region.getDouble("longitude");
                 lat = region.getDouble("latitude");
                 lngDelta = region.getDouble("longitudeDelta");
@@ -380,7 +387,7 @@ public class MapManager extends ViewGroupManager<MapView> {
                         new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
                         new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
                 );
-                view.animateToRegion(bounds, duration, args.getMap(2));
+                view.animateToRegion(bounds, duration, edgePadding);
                 break;
 
             case "fitToElements":
@@ -433,17 +440,21 @@ public class MapManager extends ViewGroupManager<MapView> {
 
         map.putAll(MapBuilder.of(
                 "onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),
-                "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
-                "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
-                "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
+                // ANSY: do nothing
+                // "onMarkerDragStart", MapBuilder.of("registrationName", "onMarkerDragStart"),
+                // "onMarkerDrag", MapBuilder.of("registrationName", "onMarkerDrag"),
+                // "onMarkerDragEnd", MapBuilder.of("registrationName", "onMarkerDragEnd"),
                 "onPanDrag", MapBuilder.of("registrationName", "onPanDrag"),
-                "onKmlReady", MapBuilder.of("registrationName", "onKmlReady"),
-                "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
+                "onKmlReady", MapBuilder.of("registrationName", "onKmlReady")
+                // ANSY: do nothing
+                // ,
+                // "onPoiClick", MapBuilder.of("registrationName", "onPoiClick")
         ));
 
         map.putAll(MapBuilder.of(
-                "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
-                "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
+                // ANSY: do nothing
+                // "onIndoorLevelActivated", MapBuilder.of("registrationName", "onIndoorLevelActivated"),
+                // "onIndoorBuildingFocused", MapBuilder.of("registrationName", "onIndoorBuildingFocused"),
                 "onDoublePress", MapBuilder.of("registrationName", "onDoublePress"),
                 "onMapLoaded", MapBuilder.of("registrationName", "onMapLoaded"),
                 "onMarkerSelect", MapBuilder.of("registrationName", "onMarkerSelect"),

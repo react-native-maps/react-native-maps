@@ -363,10 +363,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setShowsTraffic(boolean value) {
-        showsTraffic = value;
-        if (map != null) {
-            map.setTrafficEnabled(value);
-        }
+        // ANSY: do nothing
+        // showsTraffic = value;
+        // if (map != null) {
+        //     map.setTrafficEnabled(value);
+        // }
     }
 
 
@@ -622,9 +623,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             MapView.this.cacheView();
         });
 
-
-        map.setTrafficEnabled(showsTraffic);
-
+        // ANSY: do nothing
+        // map.setTrafficEnabled(showsTraffic);
 
         isMapReady = true;
         if (kmlSrc != null) {
@@ -685,10 +685,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
         builder.put(OnMarkerPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerPressEvent.EVENT_NAME));
         builder.put(OnCalloutPressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnCalloutPressEvent.EVENT_NAME));
-        builder.put(OnMarkerDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEvent.EVENT_NAME));
-        builder.put(OnMarkerDragStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragStartEvent.EVENT_NAME));
-        builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
-        builder.put(OnPoiClickEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPoiClickEvent.EVENT_NAME));
+        // ANSY: do nothing
+        // builder.put(OnMarkerDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEvent.EVENT_NAME));
+        // builder.put(OnMarkerDragStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragStartEvent.EVENT_NAME));
+        // builder.put(OnMarkerDragEndEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerDragEndEvent.EVENT_NAME));
+        // builder.put(OnPoiClickEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPoiClickEvent.EVENT_NAME));
         builder.put(OnDoublePressEvent.EVENT_NAME, MapBuilder.of("registrationName", OnDoublePressEvent.EVENT_NAME));
         builder.put(OnPanDragEvent.EVENT_NAME, MapBuilder.of("registrationName", OnPanDragEvent.EVENT_NAME));
         builder.put(OnMarkerSelectEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMarkerSelectEvent.EVENT_NAME));
@@ -699,8 +700,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         builder.put(OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME));
         builder.put(OnRegionChangeStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
         builder.put(OnRegionChangeCompleteEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeCompleteEvent.EVENT_NAME));
-        builder.put(OnIndoorBuildingFocusedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorBuildingFocusedEvent.EVENT_NAME));
-        builder.put(OnIndoorLevelActivatedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorLevelActivatedEvent.EVENT_NAME));
+        // ANSY: do nothing
+        // builder.put(OnIndoorBuildingFocusedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorBuildingFocusedEvent.EVENT_NAME));
+        // builder.put(OnIndoorLevelActivatedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnIndoorLevelActivatedEvent.EVENT_NAME));
         builder.put(OnKmlReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnKmlReadyEvent.EVENT_NAME));
         return builder.build();
     }
@@ -817,7 +819,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
           }
 
     }
-    public void setCamera(ReadableMap camera, ReadableMap edgePadding) {
+    public void setCamera(ReadableMap camera, @Nullable ReadableMap edgePadding) {
       this.camera = camera;
 
       if (edgePadding != null) {
@@ -1276,6 +1278,21 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
+    public void animateToCamera(CameraPosition position, int duration, ReadableMap edgePadding) {
+        if (map == null) return;
+
+        if (edgePadding != null) {
+        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+            edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        animateToCamera(position, duration);
+
+        if (edgePadding != null) {
+            map.setPadding(0, 0, 0, 0);
+        }
+    }
+
     public void animateToCamera(ReadableMap camera, int duration, ReadableMap edgePadding) {
         if (map == null) return;
         CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
@@ -1293,19 +1310,19 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
         }
 
-    if (edgePadding != null) {
-      map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        if (edgePadding != null) {
+        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+            edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        animateToCamera(builder.build(), duration);
+
+        if (edgePadding != null) {
+            map.setPadding(0, 0, 0, 0);
+        }
     }
 
-    animateToCamera(builder.build(), duration);
-
-    if (edgePadding != null) {
-      map.setPadding(0, 0, 0, 0);
-    }
-  }
-
-  public void animateToRegion(LatLngBounds bounds, int duration, ReadableMap edgePadding) {
+  public void animateToRegion(LatLngBounds bounds, int duration, @Nullable ReadableMap edgePadding) {
     if (map == null) return;
 
     if (edgePadding != null) {

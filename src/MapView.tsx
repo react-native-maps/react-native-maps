@@ -20,8 +20,8 @@ import type {
   Frame,
   LatLng,
   MarkerDeselectEvent,
-  MarkerDragEvent,
-  MarkerDragStartEndEvent,
+  // MarkerDragEvent,
+  // MarkerDragStartEndEvent,
   MarkerPressEvent,
   MarkerSelectEvent,
   Point,
@@ -30,7 +30,7 @@ import type {
 } from './sharedTypes';
 import type {
   ActiveIndoorLevel,
-  Address,
+  // Address,
   BoundingBox,
   Camera,
   CameraZoomRange,
@@ -369,7 +369,8 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Apple Maps only
    * @platform Android: Supported
    */
-  onMarkerDrag?: (event: MarkerDragEvent) => void;
+  // ANSY: do nothing
+  // onMarkerDrag?: (event: MarkerDragEvent) => void;
 
   /**
    * Callback that is called when a drag on a marker finishes.
@@ -378,7 +379,8 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Apple Maps only
    * @platform Android: Supported
    */
-  onMarkerDragEnd?: (event: MarkerDragStartEndEvent) => void;
+  // ANSY: do nothing
+  // onMarkerDragEnd?: (event: MarkerDragStartEndEvent) => void;
 
   /**
    * Callback that is called when the user initiates a drag on a marker (if it is draggable)
@@ -386,7 +388,8 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Apple Maps only
    * @platform Android: Supported
    */
-  onMarkerDragStart?: (event: MarkerDragStartEndEvent) => void;
+  // ANSY: do nothing
+  // onMarkerDragStart?: (event: MarkerDragStartEndEvent) => void;
 
   /**
    * Callback that is called when a marker on the map is tapped by the user.
@@ -779,9 +782,7 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setCamera(camera: Partial<Camera>, options: FitToOptions = {}) {
-    const {
-        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-      } = options;
+    const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}} = options;
 
     if (this.fabricMap.current) {
       this.fabricMap.current.setCamera(camera, edgePadding);
@@ -797,25 +798,18 @@ class MapView extends React.Component<MapViewProps, State> {
     } = options;
 
     if (this.fabricMap.current) {
-      this.fabricMap.current.animateCamera(
-        camera,
-        duration,
-        edgePadding
-      );
+      this.fabricMap.current.animateCamera(camera, duration, edgePadding);
     } else if (this.map.current) {
-      Commands.animateCamera(
-        this.map.current,
-        camera,
-        duration,
-        edgePadding
-      );
+      Commands.animateCamera(this.map.current, camera, duration, edgePadding);
     }
   }
 
-  animateToRegion(region: Region, duration: number = 500, options: FitToOptions = {}) {
-    const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-    } = options;
+  animateToRegion(
+    region: Region,
+    duration: number = 500,
+    options: FitToOptions = {},
+  ) {
+    const {edgePadding = {top: 0, right: 0, bottom: 0, left: 0}} = options;
 
     if (this.fabricMap.current) {
       this.fabricMap.current.animateToRegion(region, duration, edgePadding);
@@ -904,12 +898,13 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
-  setIndoorActiveLevelIndex(activeLevelIndex: number) {
-    if (this.fabricMap.current) {
-      return this.fabricMap.current.setIndoorActiveLevelIndex(activeLevelIndex);
-    }
-    return Promise.reject('getMapBoundaries not supported on this platform');
-  }
+  // ANSY: do nothing
+  // setIndoorActiveLevelIndex(activeLevelIndex: number) {
+  //   if (this.fabricMap.current) {
+  //     return this.fabricMap.current.setIndoorActiveLevelIndex(activeLevelIndex);
+  //   }
+  //   return Promise.reject('getMapBoundaries not supported on this platform');
+  // }
 
   /**
    * Takes a snapshot of the map and saves it to a picture
@@ -958,12 +953,13 @@ class MapView extends React.Component<MapViewProps, State> {
    *
    * @return Promise with return type Address
    */
-  addressForCoordinate(coordinate: LatLng): Promise<Address> {
-    if (this.fabricMap.current) {
-      return this.fabricMap.current.getAddressFromCoordinates(coordinate);
-    }
-    return Promise.reject('getAddress not supported on this platform');
-  }
+  // ANSY: do nothing
+  // addressForCoordinate(coordinate: LatLng): Promise<Address> {
+  //   if (this.fabricMap.current) {
+  //     return this.fabricMap.current.getAddressFromCoordinates(coordinate);
+  //   }
+  //   return Promise.reject('getAddress not supported on this platform');
+  // }
 
   /**
    * Convert a map coordinate to user-space point

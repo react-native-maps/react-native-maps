@@ -13,6 +13,10 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.google.android.gms.maps.model.ButtCap;
+import com.google.android.gms.maps.model.Cap;
+import com.google.android.gms.maps.model.RoundCap;
+import com.google.android.gms.maps.model.SquareCap;
 
 import java.util.Map;
 
@@ -37,15 +41,24 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
     return new MapPolyline(context);
   }
 
+  @ReactProp(name = "coordinates")
+  public void setCoordinate(MapPolyline view, ReadableArray coordinates) {
+    view.setCoordinates(coordinates);
+  }
+
+  /// ANSY >>>
   @ReactProp(name = "type")
   public void setType(MapPolyline view, String type) {
     view.setType(type);
   }
+  /// <<<
 
-  @ReactProp(name = "syncedCoordsColors")
-  public void setSyncedCoordsColors(MapPolyline view, ReadableArray syncedCoordsColors) {
-    view.setSyncedCoordsColors(syncedCoordsColors);
-  }
+  /// ANSY >>>
+  // @ReactProp(name = "syncedCoordsColors")
+  // public void setSyncedCoordsColors(MapPolyline view, ReadableArray syncedCoordsColors) {
+  //   view.setSyncedCoordsColors(syncedCoordsColors);
+  // }
+  /// <<<
 
   @ReactProp(name = "strokeWidth", defaultFloat = 1f)
   public void setStrokeWidth(MapPolyline view, float widthInPoints) {
@@ -58,6 +71,18 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
     view.setColor(color);
   }
 
+  /// ANSY >>>
+  @ReactProp(name = "strokeColors")
+  public void setStrokeColors(MapPolyline view, ReadableArray colors) {
+    view.setStrokeColors(colors);
+  }
+  /// <<<
+
+  @ReactProp(name = "tappable", defaultBoolean = false)
+  public void setTappable(MapPolyline view, boolean tapabble) {
+    view.setTappable(tapabble);
+  }
+
   @ReactProp(name = "geodesic", defaultBoolean = false)
   public void setGeodesic(MapPolyline view, boolean geodesic) {
     view.setGeodesic(geodesic);
@@ -68,9 +93,14 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
     view.setZIndex(zIndex);
   }
 
+  @ReactProp(name = "lineCap")
+  public void setlineCap(MapPolyline view, String lineCap) {
+      view.setLineCap(lineCap);
+  }
+
   @ReactProp(name = "lineDashPattern")
-  public void setLineDashPattern(MapPolyline view, ReadableArray lineDashPattern) {
-      view.setLineDashPattern(lineDashPattern);
+  public void setLineDashPattern(MapPolyline view, ReadableArray patternValues) {
+      view.setLineDashPattern(patternValues);
   }
 
   @Override

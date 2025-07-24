@@ -209,6 +209,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         view.setCamera(value);
     }
 
+    public void setCamera(MapView view, @Nullable ReadableMap value, @Nullable ReadableMap edgePadding) {
+        view.setCamera(value, edgePadding);
+    }
+
+
     @Override
     public void setCompassOffset(MapView view, @Nullable ReadableMap value) {
         // not supported
@@ -221,7 +226,8 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setPoiClickEnabled(MapView view, boolean value) {
-        view.setPoiClickEnabled(value);
+        // ANSY: do nothing
+        // view.setPoiClickEnabled(value);
     }
 
     @Override
@@ -412,27 +418,32 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setShowsBuildings(MapView view, boolean value) {
-        view.setShowBuildings(value);
+        // ANSY: do nothing
+        // view.setShowBuildings(value);
     }
 
     @Override
     public void setShowsCompass(MapView view, boolean value) {
-        view.setShowsCompass(value);
+        // ANSY: do nothing
+        // view.setShowsCompass(value);
     }
 
     @Override
     public void setShowsIndoorLevelPicker(MapView view, boolean value) {
-        view.setShowsIndoorLevelPicker(value);
+        // ANSY: do nothing
+        // view.setShowsIndoorLevelPicker(value);
     }
 
     @Override
     public void setShowsIndoors(MapView view, boolean value) {
-        view.setShowIndoors(value);
+        // ANSY: do nothing
+        // view.setShowIndoors(value);
     }
 
     @Override
     public void setShowsMyLocationButton(MapView view, boolean value) {
-        view.setShowsMyLocationButton(value);
+        // ANSY: do nothing
+        // view.setShowsMyLocationButton(value);
     }
 
     @Override
@@ -502,7 +513,8 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setShowsTraffic(MapView view, boolean value) {
-        view.setShowsTraffic(value);
+        // ANSY: do nothing
+        // view.setShowsTraffic(value);
     }
 
     @Override
@@ -527,11 +539,32 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
                     new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
                     new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
             );
-            view.animateToRegion(bounds, duration);
+            view.animateToRegion(bounds, duration, null);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public void animateToRegion(MapView view, String regionJSON, int duration, String edgePaddingJSON) {
+        try {
+            JSONObject region = new JSONObject(regionJSON);
+            double lng = region.getDouble("longitude");
+            double lat = region.getDouble("latitude");
+            double lngDelta = region.getDouble("longitudeDelta");
+            double latDelta = region.getDouble("latitudeDelta");
+            LatLngBounds bounds = new LatLngBounds(
+                    new LatLng(lat - latDelta / 2, lng - lngDelta / 2), // southwest
+                    new LatLng(lat + latDelta / 2, lng + lngDelta / 2)  // northeast
+            );
+            WritableMap edgePadding = null;
+            if (edgePaddingJSON != null) {
+                JSONObject jsonObject = new JSONObject(edgePaddingJSON);
+                edgePadding = JSONUtil.convertJsonToWritable(jsonObject);
+            }
+            view.animateToRegion(bounds, duration, edgePadding);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -556,6 +589,21 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         }
     }
 
+    public void animateCamera(MapView view, String cameraJSON, int duration, String edgePaddingJSON) {
+        try {
+            JSONObject camera = new JSONObject(cameraJSON);
+            CameraPosition position = view.cameraPositionFromJSON(camera);
+            WritableMap edgePadding = null;
+            if (edgePaddingJSON != null) {
+                JSONObject jsonObject = new JSONObject(edgePaddingJSON);
+                edgePadding = JSONUtil.convertJsonToWritable(jsonObject);
+            }
+            view.animateToCamera(position, duration, edgePadding);
+        } catch (JSONException e) {
+            Log.e("MapViewManager", "parse camera exception " + e);
+        }
+    }
+
     @Override
     public void fitToElements(MapView view, String edgePaddingJSON, boolean animated) {
         try {
@@ -564,11 +612,23 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
                 JSONObject jsonObject = new JSONObject(edgePaddingJSON);
                 map = JSONUtil.convertJsonToWritable(jsonObject);
             }
-            view.fitToElements(map, animated);
+            view.fitToElements(map, animated, 0);
         } catch (JSONException e){
             Log.e("MapViewManager", "parse edgePaddingJSON exception " + e);
         }
+    }
 
+    public void fitToElements(MapView view, String edgePaddingJSON, boolean animated, int duration) {
+        try {
+            WritableMap map = null;
+            if (edgePaddingJSON != null) {
+                JSONObject jsonObject = new JSONObject(edgePaddingJSON);
+                map = JSONUtil.convertJsonToWritable(jsonObject);
+            }
+            view.fitToElements(map, animated, duration);
+        } catch (JSONException e){
+            Log.e("MapViewManager", "parse edgePaddingJSON exception " + e);
+        }
     }
 
     @Override
@@ -612,7 +672,8 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setIndoorActiveLevelIndex(MapView view, int activeLevelIndex) {
-        view.setIndoorActiveLevelIndex(activeLevelIndex);
+        // ANSY: do nothing
+        // view.setIndoorActiveLevelIndex(activeLevelIndex);
     }
 
     @Override

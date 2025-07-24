@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
-  "version": "1.20.1",
+  "version": "1.24.10",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -121,5 +121,6 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

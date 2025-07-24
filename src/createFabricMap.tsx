@@ -1,12 +1,7 @@
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {findNodeHandle} from 'react-native';
 import type {LatLng, Point, Region} from './sharedTypes';
-import type {
-  Address,
-  Camera,
-  EdgePadding,
-  SnapshotOptions,
-} from './MapView.types';
+import type {Camera, EdgePadding, SnapshotOptions} from './MapView.types';
 import NativeAirMapsModule, {
   type MapBoundaries,
 } from './specs/NativeAirMapsModule';
@@ -16,11 +11,23 @@ export type FabricMapViewProps = MapFabricNativeProps;
 
 export interface FabricMapHandle {
   getCamera: () => Promise<Camera>;
-  setCamera: (camera: Partial<Camera>) => void;
-  animateToRegion: (region: Region, duration: number) => void;
-  animateCamera: (camera: Partial<Camera>, duration: number) => void;
+  setCamera: (camera: Partial<Camera>, edgePadding?: EdgePadding) => void;
+  animateToRegion: (
+    region: Region,
+    duration: number,
+    edgePadding?: EdgePadding,
+  ) => void;
+  animateCamera: (
+    camera: Partial<Camera>,
+    duration: number,
+    edgePadding?: EdgePadding,
+  ) => void;
   getMarkersFrames: (onlyVisible: boolean) => Promise<unknown>;
-  fitToElements: (edgePadding: EdgePadding, animated: boolean) => void;
+  fitToElements: (
+    edgePadding: EdgePadding,
+    animated: boolean,
+    duration: number,
+  ) => void;
 
   fitToSuppliedMarkers: (
     markers: string[],
@@ -36,10 +43,12 @@ export interface FabricMapHandle {
 
   getMapBoundaries: () => Promise<MapBoundaries>;
   takeSnapshot: (config: SnapshotOptions) => Promise<string>;
-  getAddressFromCoordinates: (coordinate: LatLng) => Promise<Address>;
+  // ANSY: do nothing
+  // getAddressFromCoordinates: (coordinate: LatLng) => Promise<Address>;
   getPointForCoordinate: (coordinate: LatLng) => Promise<Point>;
   getCoordinateForPoint: (point: Point) => Promise<LatLng>;
-  setIndoorActiveLevelIndex: (activeLevelIndex: number) => void;
+  // ANSY: do nothing
+  // setIndoorActiveLevelIndex: (activeLevelIndex: number) => void;
 }
 
 // Helper to safely get a node handle for supported types
@@ -97,18 +106,19 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             );
           }
         },
-        async getAddressFromCoordinates(coordinate: LatLng) {
-          if (fabricRef.current) {
-            return NativeAirMapsModule.getAddressFromCoordinates(
-              getNodeHandle(fabricRef.current) ?? -1,
-              coordinate,
-            );
-          } else {
-            throw new Error(
-              'getAddressFromCoordinates is not supported on this platform',
-            );
-          }
-        },
+        // ANSY: do nothing
+        // async getAddressFromCoordinates(coordinate: LatLng) {
+        // if (fabricRef.current) {
+        //   return NativeAirMapsModule.getAddressFromCoordinates(
+        //     getNodeHandle(fabricRef.current) ?? -1,
+        //     coordinate,
+        //   );
+        // } else {
+        //   throw new Error(
+        //     'getAddressFromCoordinates is not supported on this platform',
+        //   );
+        // }
+        // },
         async takeSnapshot(config: SnapshotOptions) {
           if (fabricRef.current) {
             return NativeAirMapsModule.takeSnapshot(
@@ -141,13 +151,18 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             );
           }
         },
-        animateToRegion(region: Region, duration: number) {
+        animateToRegion(
+          region: Region,
+          duration: number,
+          edgePadding?: EdgePadding,
+        ) {
           if (fabricRef.current) {
             try {
               Commands.animateToRegion(
                 fabricRef.current,
                 JSON.stringify(region),
                 duration,
+                edgePadding ? JSON.stringify(edgePadding) : undefined,
               );
             } catch (error) {
               throw new Error('Failed to animateToRegion');
@@ -158,13 +173,18 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             );
           }
         },
-        fitToElements(edgePadding: EdgePadding, animated: boolean) {
+        fitToElements(
+          edgePadding: EdgePadding,
+          animated: boolean,
+          duration: number,
+        ) {
           if (fabricRef.current) {
             try {
               Commands.fitToElements(
                 fabricRef.current,
                 JSON.stringify(edgePadding),
                 animated,
+                duration,
               );
             } catch (error) {
               throw new Error('Failed to fitToElements');
@@ -197,13 +217,18 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             );
           }
         },
-        animateCamera(camera: Partial<Camera>, duration: number) {
+        animateCamera(
+          camera: Partial<Camera>,
+          duration: number,
+          edgePadding?: EdgePadding,
+        ) {
           if (fabricRef.current) {
             try {
               Commands.animateCamera(
                 fabricRef.current,
                 JSON.stringify(camera),
                 duration,
+                edgePadding ? JSON.stringify(edgePadding) : undefined,
               );
             } catch (error) {
               throw new Error('Failed to animateCamera');
@@ -236,24 +261,29 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
             );
           }
         },
-        setIndoorActiveLevelIndex(activeLevelIndex: number) {
+        // ANSY: do nothing
+        // setIndoorActiveLevelIndex(activeLevelIndex: number) {
+        //   if (fabricRef.current) {
+        //     try {
+        //       Commands.setIndoorActiveLevelIndex(
+        //         fabricRef.current,
+        //         activeLevelIndex,
+        //       );
+        //     } catch (error) {
+        //       console.error('Failed to set camera:', error);
+        //     }
+        //   } else {
+        //     console.warn('setIndoorActiveLevelIndex is not supported.');
+        //   }
+        // },
+        setCamera(camera: Partial<Camera>, edgePadding?: EdgePadding) {
           if (fabricRef.current) {
             try {
-              Commands.setIndoorActiveLevelIndex(
+              Commands.setCamera(
                 fabricRef.current,
-                activeLevelIndex,
+                JSON.stringify(camera),
+                edgePadding ? JSON.stringify(edgePadding) : undefined,
               );
-            } catch (error) {
-              console.error('Failed to set camera:', error);
-            }
-          } else {
-            console.warn('setIndoorActiveLevelIndex is not supported.');
-          }
-        },
-        setCamera(camera: Partial<Camera>) {
-          if (fabricRef.current) {
-            try {
-              Commands.setCamera(fabricRef.current, JSON.stringify(camera));
             } catch (error) {
               console.error('Failed to set camera:', error);
             }

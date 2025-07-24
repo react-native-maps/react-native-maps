@@ -82,6 +82,18 @@ public class PolylineManager extends ViewGroupManager<MapPolyline> implements RN
         view.setStrokeColors(value);
     }
 
+    /// ANSY >>>
+    // public void setSyncedCoordsColors(MapPolyline view, @Nullable ReadableArray value) {
+    //     view.setSyncedCoordsColors(value);
+    // }
+    /// <<<
+
+    /// ANSY >>>
+    public void setType(MapPolyline view, String value) {
+        view.setType(value);
+    }
+    /// <<<
+
     @Override
     public void setStrokeWidth(MapPolyline view, float value) {
         float widthInScreenPx = metrics.density * value; // done for parity with iOS

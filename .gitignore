@@ -66,11 +66,9 @@ yarn-error.log
 
 # VSCode workspace settings
 .vscode
-.history
 
 # ts outDir
-### lib/
-### ## lib is required on node_modules of the user project, don't know why it was gitignored
+lib/
 
 example/vendor/bundle/
 
@@ -80,9 +78,6 @@ Secrets.xcconfig
 # Ruby / CocoaPods
 **/Pods/
 /vendor/bundle/
-
-package-lock.json
-yarn.lock
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
@@ -97,3 +92,9 @@ yarn.lock
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+### ANSY
+.history
+package-lock.json
+yarn.lock
+dist
