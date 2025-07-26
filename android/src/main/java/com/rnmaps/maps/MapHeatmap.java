@@ -61,7 +61,7 @@ public class MapHeatmap extends MapFeature {
     public void setRadius(int radius) {
         this.radius = radius;
         if (heatmapTileProvider != null) {
-            heatmapTileProvider.setRadius(radius);
+            heatmapTileProvider.setRadius(Math.max(10, Math.min(50, radius)));
         }
         if (heatmap != null) {
             heatmap.clearTileCache();
@@ -81,7 +81,7 @@ public class MapHeatmap extends MapFeature {
             HeatmapTileProvider.Builder builder =
                 new HeatmapTileProvider.Builder().weightedData(this.points);
             if (radius != null) {
-                builder.radius(radius);
+                builder.radius(Math.max(10, Math.min(50, radius)));
             }
             if (opacity != null) {
                 builder.opacity(opacity);
