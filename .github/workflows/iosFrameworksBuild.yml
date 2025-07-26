@@ -25,7 +25,7 @@ jobs:
           working-directory: example
 
       - name: Install dependencies
-        run: yarn --cwd example --frozen-lockfile
+        run: yarn && yarn --cwd example --frozen-lockfile
 
       - name: Install pods
         run: RCT_NEW_ARCH_ENABLED=1 NO_FLIPPER=1 USE_FRAMEWORKS=static bundle exec pod install
