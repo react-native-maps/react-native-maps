@@ -128,8 +128,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private String customMapStyleString;
     private boolean initialRegionSet = false;
     private boolean initialCameraSet = false;
-    private LatLngBounds cameraLastIdleBounds;
-    private int cameraMoveReason = 0;
+    private int cameraMoveReason = -1;
     private MapMarker selectedMarker;
 
     private LifecycleOwner currentLifecycleOwner;
@@ -601,24 +600,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         });
 
         map.setOnCameraMoveListener(() -> {
-            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            cameraLastIdleBounds = null;
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
             dispatchEvent(payload, OnRegionChangeEvent::new);
         });
 
         map.setOnCameraIdleListener(() -> {
+            boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+            cameraMoveReason = -1;
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            if ((cameraMoveReason != 0) &&
-                    ((cameraLastIdleBounds == null) ||
-                            LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
-
-                cameraLastIdleBounds = bounds;
-                boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-                WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
-                dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
-            }
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
+            dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
         });
 
         map.setOnMapLoadedCallback(() -> {
