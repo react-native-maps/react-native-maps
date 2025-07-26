@@ -24,8 +24,6 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.PermissionChecker;
-import androidx.core.view.GestureDetectorCompat;
-import androidx.core.view.MotionEventCompat;
 
 import com.facebook.react.common.MapBuilder;
 
@@ -128,8 +126,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private String customMapStyleString;
     private boolean initialRegionSet = false;
     private boolean initialCameraSet = false;
-    private LatLngBounds cameraLastIdleBounds;
-    private int cameraMoveReason = 0;
+    private int cameraMoveReason = -1;
     private MapMarker selectedMarker;
 
     private LifecycleOwner currentLifecycleOwner;
@@ -145,7 +142,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private final Map<GroundOverlay, MapOverlay> overlayMap = new HashMap<>();
     private final Map<TileOverlay, MapHeatmap> heatmapMap = new HashMap<>();
     private final Map<TileOverlay, MapGradientPolyline> gradientPolylineMap = new HashMap<>();
-    private final GestureDetectorCompat gestureDetector;
+    private final GestureDetector gestureDetector;
     private boolean paused = false;
     private boolean destroyed = false;
     private final ThemedReactContext context;
@@ -260,7 +257,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         fusedLocationSource = new FusedLocationSource(context);
 
         gestureDetector =
-                new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
+                new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
                     @Override
                     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
@@ -594,31 +591,25 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         map.setOnCameraMoveStartedListener(reason -> {
             cameraMoveReason = reason;
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
-            WritableMap event = new WritableNativeMap();
-            event.putBoolean("isGesture", isGesture);
-            dispatchEvent(event, OnRegionChangeStartEvent::new);
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
+            dispatchEvent(payload, OnRegionChangeStartEvent::new);
         });
 
         map.setOnCameraMoveListener(() -> {
-            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            cameraLastIdleBounds = null;
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, true, isGesture);
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
             dispatchEvent(payload, OnRegionChangeEvent::new);
         });
 
         map.setOnCameraIdleListener(() -> {
+            boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+            cameraMoveReason = -1;
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            if ((cameraMoveReason != 0) &&
-                    ((cameraLastIdleBounds == null) ||
-                            LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
-
-                cameraLastIdleBounds = bounds;
-                boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-                WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, false, isGesture);
-                dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
-            }
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
+            dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
         });
 
         map.setOnMapLoadedCallback(() -> {
@@ -1519,7 +1510,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             tapLocation = map.getProjection().fromScreenLocation(new Point(X, Y));
         }
 
-        int action = MotionEventCompat.getActionMasked(ev);
+        int action = ev.getActionMasked();
 
         switch (action) {
             case (MotionEvent.ACTION_DOWN):

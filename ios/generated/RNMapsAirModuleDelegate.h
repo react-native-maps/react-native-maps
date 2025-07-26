@@ -17,7 +17,7 @@
                       success:(RCTPromiseResolveBlock) success error:(RCTPromiseRejectBlock) error;
 
 - (NSDictionary *) getCameraDic;
-- (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
+- (NSDictionary *) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
 - (NSDictionary *) getMapBoundaries;
 - (NSDictionary *) getPointForCoordinates:(CLLocationCoordinate2D) location;
 - (NSDictionary *) getCoordinatesForPoint:(CGPoint) point;

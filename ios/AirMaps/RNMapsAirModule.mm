@@ -19,10 +19,10 @@
 
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
 #import <ReactNativeMaps/generated/RNMapsSpecs.h>
-#import <ReactNativeMaps/generated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMaps/generated/RNMapsHostViewDelegate.h>
 #else
 #import "RNMapsSpecs.h"
-#import "RNMapsHostVewDelegate.h"
+#import "RNMapsHostViewDelegate.h"
 #endif
 @interface RNMapsAirModule()<NativeAirMapsModuleSpec>
 @end
@@ -36,7 +36,7 @@
                    reject:(RCTPromiseRejectBlock)reject {
     dispatch_async(dispatch_get_main_queue(), ^{
         id view = [_viewRegistry_DEPRECATED viewForReactTag:[NSNumber numberWithDouble:tag]];
-        if ([view conformsToProtocol:@protocol(RNMapsHostVewDelegate)]) {
+        if ([view conformsToProtocol:@protocol(RNMapsHostViewDelegate)]) {
             id<RNMapsAirModuleDelegate> mapViewDelegate = [view mapView];
             success(mapViewDelegate);
         } else {

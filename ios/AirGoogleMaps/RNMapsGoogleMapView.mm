@@ -13,7 +13,7 @@
 #import "AIRGoogleMapManager.h"
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
 #import <ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>
-#import <ReactNativeMaps/generated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMaps/generated/RNMapsHostViewDelegate.h>
 #import <ReactNativeMaps/generated/ComponentDescriptors.h>
 #import <ReactNativeMaps/generated/EventEmitters.h>
 #import <ReactNativeMaps/generated/Props.h>
@@ -265,7 +265,7 @@ using namespace facebook::react;
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                  .continuous = [dictionary[@"continuous"] boolValue],
+                  .isGesture = [dictionary[@"isGesture"] boolValue],
                  };
               mapViewEventEmitter->onRegionChange(data);
           }
@@ -358,8 +358,6 @@ using namespace facebook::react;
         }
     };
 
-
-
       _view.onRegionChangeStart = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
@@ -370,7 +368,7 @@ using namespace facebook::react;
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                  .continuous = [dictionary[@"continuous"] boolValue],
+                  .isGesture = [dictionary[@"isGesture"] boolValue],
                  };
               mapViewEventEmitter->onRegionChangeStart(data);
           }
@@ -386,7 +384,7 @@ using namespace facebook::react;
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                  .continuous = [dictionary[@"continuous"] boolValue],
+                  .isGesture = [dictionary[@"isGesture"] boolValue],
                  };
               mapViewEventEmitter->onRegionChangeComplete(data);
           }
@@ -595,6 +593,8 @@ using namespace facebook::react;
 
     REMAP_MAPVIEW_STRING_PROP(kmlSrc)
     REMAP_MAPVIEW_STRING_PROP(customMapStyleString)
+    REMAP_MAPVIEW_PROP(showsBuildings)
+    REMAP_MAPVIEW_PROP(rotateEnabled)
 
 
     if (newViewProps.minZoom != oldViewProps.minZoom || newViewProps.maxZoom != oldViewProps.maxZoom){

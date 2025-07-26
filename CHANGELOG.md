@@ -1,5 +1,68 @@
 # Changelog
 
+## [1.24.12](https://github.com/react-native-maps/react-native-maps/compare/v1.24.11...v1.24.12) (2025-07-26)
+
+
+### Bug Fixes
+
+* fixed nullpointer due null react view tag ([#5630](https://github.com/react-native-maps/react-native-maps/issues/5630)) ([8c8c3ba](https://github.com/react-native-maps/react-native-maps/commit/8c8c3bab7582e16a5add8e59e86911501e412c26))
+
+## [1.24.11](https://github.com/react-native-maps/react-native-maps/compare/v1.24.10...v1.24.11) (2025-07-26)
+
+
+### Bug Fixes
+
+* **android:** onRegionChangeComplete on initial map loaded ([#5648](https://github.com/react-native-maps/react-native-maps/issues/5648)) ([13648e9](https://github.com/react-native-maps/react-native-maps/commit/13648e9325b02abe1628aa4fbed44b975c05206e))
+
+## [1.24.10](https://github.com/react-native-maps/react-native-maps/compare/v1.24.9...v1.24.10) (2025-07-21)
+
+
+### Bug Fixes
+
+* **android:** polygon stroke width ([#5617](https://github.com/react-native-maps/react-native-maps/issues/5617)) ([0a76e12](https://github.com/react-native-maps/react-native-maps/commit/0a76e128d3e9968d23bc9f60f7f6f35fe3235291))
+
+## [1.24.9](https://github.com/react-native-maps/react-native-maps/compare/v1.24.8...v1.24.9) (2025-07-21)
+
+
+### Bug Fixes
+
+* **android:** tracksViewChanges ([#5626](https://github.com/react-native-maps/react-native-maps/issues/5626)) ([478f935](https://github.com/react-native-maps/react-native-maps/commit/478f93554ac21d7081e9865b492971d3efe54fb7))
+
+## [1.24.8](https://github.com/react-native-maps/react-native-maps/compare/v1.24.7...v1.24.8) (2025-07-20)
+
+
+### Bug Fixes
+
+* **ios:** map props ([#5633](https://github.com/react-native-maps/react-native-maps/issues/5633)) ([581200a](https://github.com/react-native-maps/react-native-maps/commit/581200a4de584d39a45e285f316faf88d2e9f775))
+
+## [1.24.7](https://github.com/react-native-maps/react-native-maps/compare/v1.24.6...v1.24.7) (2025-07-18)
+
+
+### Bug Fixes
+
+* **createFabricMap:** replace ElementRef with ComponentRef for strict TypeScript compatibility ([#5620](https://github.com/react-native-maps/react-native-maps/issues/5620)) ([f50b7f5](https://github.com/react-native-maps/react-native-maps/commit/f50b7f514d285a38dde4afbd0cdb8ff3bee54894))
+
+## [1.24.6](https://github.com/react-native-maps/react-native-maps/compare/v1.24.5...v1.24.6) (2025-07-18)
+
+
+### Bug Fixes
+
+* region update events ([#5622](https://github.com/react-native-maps/react-native-maps/issues/5622)) ([08ae3bc](https://github.com/react-native-maps/react-native-maps/commit/08ae3bcf3f9d73fc3c88c1f38c140090b50b20cf))
+
+## [1.24.5](https://github.com/react-native-maps/react-native-maps/compare/v1.24.4...v1.24.5) (2025-07-13)
+
+
+### Bug Fixes
+
+* **ios:** view modules not found ([#5612](https://github.com/react-native-maps/react-native-maps/issues/5612)) ([9b8b568](https://github.com/react-native-maps/react-native-maps/commit/9b8b5687ee6f1a16acdf15f2cc028fe18898eefc))
+
+## [1.24.4](https://github.com/react-native-maps/react-native-maps/compare/v1.24.3...v1.24.4) (2025-07-13)
+
+
+### Bug Fixes
+
+* **ios:** polyline fillColor not implemented ([#5614](https://github.com/react-native-maps/react-native-maps/issues/5614)) ([5a2ab35](https://github.com/react-native-maps/react-native-maps/commit/5a2ab355e249369591c85d16fd46eb578901fd12))
+
 ## [1.24.3](https://github.com/react-native-maps/react-native-maps/compare/v1.24.2...v1.24.3) (2025-06-09)
 
 

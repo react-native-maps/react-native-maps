@@ -18,10 +18,9 @@ public class OnRegionChangeEvent extends Event<OnRegionChangeEvent> {
     super(surfaceId, viewId);
     this.payload = payload;
   }
-  public static WritableMap payLoadFor(LatLngBounds bounds, boolean continuous, boolean isGesture){
+  public static WritableMap payLoadFor(LatLngBounds bounds, boolean isGesture) {
 
     WritableMap event = new WritableNativeMap();
-    event.putBoolean("continuous", continuous);
     WritableMap region = new WritableNativeMap();
     LatLng center = bounds.getCenter();
     region.putDouble("latitude", center.latitude);

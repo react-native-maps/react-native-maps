@@ -148,7 +148,6 @@ export type UserLocationChangeEvent = NativeSyntheticEvent<{
 }>;
 
 export type ChangeEvent = NativeSyntheticEvent<{
-  continuous: boolean;
   region: Region;
   isGesture?: boolean;
 }>;
