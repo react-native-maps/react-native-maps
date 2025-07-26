@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.11](https://github.com/react-native-maps/react-native-maps/compare/v1.24.10...v1.24.11) (2025-07-26)
+
+
+### Bug Fixes
+
+* **android:** onRegionChangeComplete on initial map loaded ([#5648](https://github.com/react-native-maps/react-native-maps/issues/5648)) ([13648e9](https://github.com/react-native-maps/react-native-maps/commit/13648e9325b02abe1628aa4fbed44b975c05206e))
+
 ## [1.24.10](https://github.com/react-native-maps/react-native-maps/compare/v1.24.9...v1.24.10) (2025-07-21)
 
 
