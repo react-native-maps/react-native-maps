@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.13](https://github.com/react-native-maps/react-native-maps/compare/v1.24.12...v1.24.13) (2025-07-26)
+
+
+### Bug Fixes
+
+* Add typescript type info for showsTraffic property in MapView.tsx ([#5576](https://github.com/react-native-maps/react-native-maps/issues/5576)) ([4f0abe3](https://github.com/react-native-maps/react-native-maps/commit/4f0abe33fc56b517e3cc9e0147c5f7f0003e4028))
+
 ## [1.24.12](https://github.com/react-native-maps/react-native-maps/compare/v1.24.11...v1.24.12) (2025-07-26)
 
 
