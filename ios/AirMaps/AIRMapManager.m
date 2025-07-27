@@ -914,6 +914,7 @@ static int kDragCenterContext;
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(BOOL)animated
 {
     MKCoordinateRegion region = mapView.region;
+    MKMapCamera *camera = mapView.camera;
     if (!CLLocationCoordinate2DIsValid(region.center)) {
         return;
     }
@@ -924,6 +925,15 @@ static int kDragCenterContext;
             @"longitude": @(FLUSH_NAN(region.center.longitude)),
             @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
             @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
+        },
+        @"camera":@{
+            @"center": @{
+                @"latitude": @(camera.centerCoordinate.latitude),
+                @"longitude": @(camera.centerCoordinate.longitude),
+            },
+            @"pitch": @(camera.pitch),
+            @"heading": @(camera.heading),
+            @"altitude": @(camera.altitude),
         }
     });
 }
@@ -1011,6 +1021,8 @@ static int kDragCenterContext;
             return;
         }
         
+        MKMapCamera *camera = mapView.camera;
+
 #define FLUSH_NAN(value) (isnan(value) ? 0 : value)
         NSDictionary *payload = @{
             @"region": @{
@@ -1018,6 +1030,15 @@ static int kDragCenterContext;
                 @"longitude": @(FLUSH_NAN(region.center.longitude)),
                 @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
                 @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
+            },
+            @"camera":@{
+                @"center": @{
+                    @"latitude": @(camera.centerCoordinate.latitude),
+                    @"longitude": @(camera.centerCoordinate.longitude),
+                },
+                @"pitch": @(camera.pitch),
+                @"heading": @(camera.heading),
+                @"altitude": @(camera.altitude),
             }
         };
         

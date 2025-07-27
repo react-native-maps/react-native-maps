@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.events.Event;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -18,7 +19,7 @@ public class OnRegionChangeEvent extends Event<OnRegionChangeEvent> {
     super(surfaceId, viewId);
     this.payload = payload;
   }
-  public static WritableMap payLoadFor(LatLngBounds bounds, boolean isGesture) {
+  public static WritableMap payLoadFor(LatLngBounds bounds, boolean isGesture, CameraPosition cameraPosition) {
 
     WritableMap event = new WritableNativeMap();
     WritableMap region = new WritableNativeMap();
@@ -29,6 +30,17 @@ public class OnRegionChangeEvent extends Event<OnRegionChangeEvent> {
     region.putDouble("longitudeDelta", bounds.northeast.longitude - bounds.southwest.longitude);
     event.putMap("region", region);
     event.putBoolean("isGesture", isGesture);
+    WritableMap cameraCenter = new WritableNativeMap();
+    cameraCenter.putDouble("latitude", cameraPosition.target.latitude);
+    cameraCenter.putDouble("longitude", cameraPosition.target.longitude);
+
+    WritableMap camera = new WritableNativeMap();
+    camera.putMap("center", cameraCenter);
+    camera.putDouble("heading", (double)cameraPosition.bearing);
+    camera.putDouble("zoom", (double)cameraPosition.zoom);
+    camera.putDouble("pitch", (double)cameraPosition.tilt);
+    event.putMap("camera", camera);
+
     return event;
   }
 

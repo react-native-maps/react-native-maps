@@ -318,6 +318,20 @@ void RNMapsGoogleMapViewEventEmitter::onRegionChangeStart(OnRegionChangeStart $e
   region.setProperty(runtime, "longitudeDelta", $event.region.longitudeDelta);
   $payload.setProperty(runtime, "region", region);
 }
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
+}
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
     return $payload;
   });
@@ -335,6 +349,20 @@ void RNMapsGoogleMapViewEventEmitter::onRegionChange(OnRegionChange $event) cons
   region.setProperty(runtime, "longitudeDelta", $event.region.longitudeDelta);
   $payload.setProperty(runtime, "region", region);
 }
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
+}
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
     return $payload;
   });
@@ -351,6 +379,20 @@ void RNMapsGoogleMapViewEventEmitter::onRegionChangeComplete(OnRegionChangeCompl
   region.setProperty(runtime, "latitudeDelta", $event.region.latitudeDelta);
   region.setProperty(runtime, "longitudeDelta", $event.region.longitudeDelta);
   $payload.setProperty(runtime, "region", region);
+}
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
 }
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
     return $payload;
@@ -730,6 +772,20 @@ void RNMapsMapViewEventEmitter::onRegionChangeStart(OnRegionChangeStart $event) 
   region.setProperty(runtime, "longitudeDelta", $event.region.longitudeDelta);
   $payload.setProperty(runtime, "region", region);
 }
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
+}
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
     return $payload;
   });
@@ -747,6 +803,20 @@ void RNMapsMapViewEventEmitter::onRegionChange(OnRegionChange $event) const {
   region.setProperty(runtime, "longitudeDelta", $event.region.longitudeDelta);
   $payload.setProperty(runtime, "region", region);
 }
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
+}
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
     return $payload;
   });
@@ -763,6 +833,20 @@ void RNMapsMapViewEventEmitter::onRegionChangeComplete(OnRegionChangeComplete $e
   region.setProperty(runtime, "latitudeDelta", $event.region.latitudeDelta);
   region.setProperty(runtime, "longitudeDelta", $event.region.longitudeDelta);
   $payload.setProperty(runtime, "region", region);
+}
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
 }
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
     return $payload;

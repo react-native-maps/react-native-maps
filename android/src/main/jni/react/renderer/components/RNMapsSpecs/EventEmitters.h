@@ -591,9 +591,23 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
     double longitudeDelta;
     };
 
+  struct OnRegionChangeStartCameraCenter {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnRegionChangeStartCamera {
+      double altitude;
+    OnRegionChangeStartCameraCenter center;
+    double heading;
+    double pitch;
+    Float zoom;
+    };
+
   struct OnRegionChangeStart {
       OnRegionChangeStartRegion region;
     bool isGesture;
+    OnRegionChangeStartCamera camera;
     };
 
   struct OnRegionChangeRegion {
@@ -603,9 +617,23 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
     double longitudeDelta;
     };
 
+  struct OnRegionChangeCameraCenter {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnRegionChangeCamera {
+      double altitude;
+    OnRegionChangeCameraCenter center;
+    double heading;
+    double pitch;
+    Float zoom;
+    };
+
   struct OnRegionChange {
       OnRegionChangeRegion region;
     bool isGesture;
+    OnRegionChangeCamera camera;
     };
 
   struct OnRegionChangeCompleteRegion {
@@ -615,9 +643,23 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
     double longitudeDelta;
     };
 
+  struct OnRegionChangeCompleteCameraCenter {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnRegionChangeCompleteCamera {
+      double altitude;
+    OnRegionChangeCompleteCameraCenter center;
+    double heading;
+    double pitch;
+    Float zoom;
+    };
+
   struct OnRegionChangeComplete {
       OnRegionChangeCompleteRegion region;
     bool isGesture;
+    OnRegionChangeCompleteCamera camera;
     };
 
   struct OnUserLocationChangeCoordinate {

@@ -259,12 +259,21 @@ using namespace facebook::react;
           if (_eventEmitter) {
 
               NSDictionary* regionDict = dictionary[@"region"];
+              NSDictionary* cameraDict = dictionary[@"camera"];
+              NSDictionary* cameraCenterDict = cameraDict[@"center"];
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChange data = {
                   .region.latitude = [regionDict[@"latitude"] doubleValue],
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                  .camera.center.latitude = [cameraCenterDict[@"latitude"] doubleValue],
+                  .camera.center.longitude = [cameraCenterDict[@"longitude"] doubleValue],
+                  .camera.pitch = [cameraDict[@"pitch"] doubleValue],
+                  .camera.heading = [cameraDict[@"heading"] doubleValue],
+                  .camera.altitude = [cameraDict[@"altitude"] doubleValue],
+                  .camera.zoom = [cameraDict[@"zoom"] doubleValue],
                   .isGesture = [dictionary[@"isGesture"] boolValue],
                  };
               mapViewEventEmitter->onRegionChange(data);
@@ -362,12 +371,21 @@ using namespace facebook::react;
           if (_eventEmitter) {
 
               NSDictionary* regionDict = dictionary[@"region"];
+              NSDictionary* cameraDict = dictionary[@"camera"];
+              NSDictionary* cameraCenterDict = cameraDict[@"center"];
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChangeStart data = {
                   .region.latitude = [regionDict[@"latitude"] doubleValue],
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                  .camera.center.latitude = [cameraCenterDict[@"latitude"] doubleValue],
+                  .camera.center.longitude = [cameraCenterDict[@"longitude"] doubleValue],
+                  .camera.pitch = [cameraDict[@"pitch"] doubleValue],
+                  .camera.heading = [cameraDict[@"heading"] doubleValue],
+                  .camera.altitude = [cameraDict[@"altitude"] doubleValue],
+                  .camera.zoom = [cameraDict[@"zoom"] doubleValue],
                   .isGesture = [dictionary[@"isGesture"] boolValue],
                  };
               mapViewEventEmitter->onRegionChangeStart(data);
@@ -378,12 +396,21 @@ using namespace facebook::react;
           if (_eventEmitter) {
 
               NSDictionary* regionDict = dictionary[@"region"];
+              NSDictionary* cameraDict = dictionary[@"camera"];
+              NSDictionary* cameraCenterDict = cameraDict[@"center"];
+
               auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
               facebook::react::RNMapsGoogleMapViewEventEmitter::OnRegionChangeComplete data = {
                   .region.latitude = [regionDict[@"latitude"] doubleValue],
                   .region.longitude = [regionDict[@"longitude"] doubleValue],
                   .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                   .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                  .camera.center.latitude = [cameraCenterDict[@"latitude"] doubleValue],
+                  .camera.center.longitude = [cameraCenterDict[@"longitude"] doubleValue],
+                  .camera.pitch = [cameraDict[@"pitch"] doubleValue],
+                  .camera.heading = [cameraDict[@"heading"] doubleValue],
+                  .camera.altitude = [cameraDict[@"altitude"] doubleValue],
+                  .camera.zoom = [cameraDict[@"zoom"] doubleValue],
                   .isGesture = [dictionary[@"isGesture"] boolValue],
                  };
               mapViewEventEmitter->onRegionChangeComplete(data);

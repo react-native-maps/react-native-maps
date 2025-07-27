@@ -593,14 +593,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             cameraMoveReason = reason;
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
-            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture, map.getCameraPosition());
             dispatchEvent(payload, OnRegionChangeStartEvent::new);
         });
 
         map.setOnCameraMoveListener(() -> {
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture, map.getCameraPosition());
             dispatchEvent(payload, OnRegionChangeEvent::new);
         });
 
@@ -608,7 +608,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
             cameraMoveReason = -1;
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture, map.getCameraPosition());
             dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
         });
 
