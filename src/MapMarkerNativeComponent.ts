@@ -47,5 +47,6 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'hideCallout',
     'animateMarkerToCoordinate',
     'setCoordinates',
+    'redraw',
   ],
 });
