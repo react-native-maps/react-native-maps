@@ -255,8 +255,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
     if (marker.selected) {
         CGPoint touchPoint = [recognizer locationInView:marker.map.calloutView];
-        if ([marker.map.calloutView hitTest:touchPoint withEvent:nil]) {
-CGRect bubbleFrame = [self.calloutView convertRect:marker.map.calloutView.bounds toView:marker.map];
+        CGRect bubbleFrame = [self.calloutView convertRect:marker.map.calloutView.bounds toView:marker.map];
         CGPoint touchPointReal = [recognizer locationInView:self.calloutView];
 
         UIView *calloutView = [marker.map.calloutView hitTest:touchPoint withEvent:nil];
