@@ -144,7 +144,11 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void setImage(MapMarker view, @Nullable ReadableMap value) {
-        view.setImage(value.getString("uri"));
+        if (value != null && value.hasKey("uri")) {
+            view.setImage(value.getString("uri"));
+        } else {
+            view.setImage(null);
+        }
         view.setUpdated(true);
     }
 
