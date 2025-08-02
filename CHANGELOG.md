@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.15](https://github.com/react-native-maps/react-native-maps/compare/v1.24.14...v1.24.15) (2025-08-02)
+
+
+### Bug Fixes
+
+* **android:** crash android react 19 parallel features ([#5662](https://github.com/react-native-maps/react-native-maps/issues/5662)) ([5abb073](https://github.com/react-native-maps/react-native-maps/commit/5abb0739fe08c56fc3b513566ee8b41581bcb1c4))
+
 ## [1.24.14](https://github.com/react-native-maps/react-native-maps/compare/v1.24.13...v1.24.14) (2025-08-02)
 
 
