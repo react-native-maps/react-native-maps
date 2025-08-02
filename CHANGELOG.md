@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.14](https://github.com/react-native-maps/react-native-maps/compare/v1.24.13...v1.24.14) (2025-08-02)
+
+
+### Reverts
+
+* Revert "Bug/react 19 parallel features" ([#5661](https://github.com/react-native-maps/react-native-maps/issues/5661)) ([e086144](https://github.com/react-native-maps/react-native-maps/commit/e0861445d9958d78194f2c8e506dbde3a9ab1f25)), closes [#5660](https://github.com/react-native-maps/react-native-maps/issues/5660)
+
 ## [1.24.13](https://github.com/react-native-maps/react-native-maps/compare/v1.24.12...v1.24.13) (2025-07-26)
 
 
