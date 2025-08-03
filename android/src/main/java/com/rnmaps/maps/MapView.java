@@ -13,6 +13,7 @@ import android.location.Location;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
+import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -88,6 +89,9 @@ import com.rnmaps.fabric.event.*;
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
         GoogleMap.OnMarkerDragListener, OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnIndoorStateChangeListener, DefaultLifecycleObserver {
     public GoogleMap map;
+    private Bundle savedMapState;
+    private Map<Integer, MapFeature> savedFeatures = new HashMap<>();
+
     private MarkerManager markerManager;
     private MarkerManager.Collection markerCollection;
     private PolylineManager polylineManager;
@@ -148,7 +152,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private final ThemedReactContext context;
     private final FusedLocationSource fusedLocationSource;
 
-    private final ViewAttacherGroup attacherGroup;
+    private ViewAttacherGroup attacherGroup;
     private LatLng tapLocation;
     private Float maxZoomLevel;
     private Float minZoomLevel;
@@ -288,6 +292,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         // Set up a parent view for triggering visibility in subviews that depend on it.
         // Mainly ReactImageView depends on Fresco which depends on onVisibilityChanged() event
+       prepareAttacherView();
+    }
+
+    private void prepareAttacherView(){
         attacherGroup = new ViewAttacherGroup(context);
         LayoutParams attacherLayoutParams = new LayoutParams(0, 0);
         attacherLayoutParams.width = 0;
@@ -309,11 +317,33 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         attachLifecycleObserver();
+        if (savedMapState != null) {
+            super.onCreate(savedMapState);
+            super.onStart();
+            super.onResume();
+            prepareAttacherView();
+            getMapAsync((map)->{
+                onMapReady(map);
+                savedFeatures.forEach((index, feature) -> {
+                    addFeature(feature, index);
+                });
+            });
+        }
     }
 
     // Override onDetachedFromWindow to detach lifecycle observer
     @Override
     protected void onDetachedFromWindow() {
+        if (savedMapState == null) {
+            savedMapState = new Bundle();
+        }
+        super.onSaveInstanceState(savedMapState);
+        super.onPause();
+        super.onStop();
+        savedFeatures = new HashMap<>(features);
+        savedFeatures.keySet().forEach(this::removeFeatureAt);
+        removeView(attacherGroup);
+        attacherGroup = null;
         detachLifecycleObserver();
         super.onDetachedFromWindow();
     }
@@ -713,6 +743,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         // Detach lifecycle observer before destroying
         detachLifecycleObserver();
+        savedMapState = null;
+        savedFeatures = null;
 
         if (!paused) {
             onPause();
