@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.16](https://github.com/react-native-maps/react-native-maps/compare/v1.24.15...v1.24.16) (2025-08-03)
+
+
+### Bug Fixes
+
+* **android:** fix NPE crash on destroy ([#5664](https://github.com/react-native-maps/react-native-maps/issues/5664)) ([14adf87](https://github.com/react-native-maps/react-native-maps/commit/14adf877ba296d84147583f8c08ae62c9ff4c7b8))
+
 ## [1.24.15](https://github.com/react-native-maps/react-native-maps/compare/v1.24.14...v1.24.15) (2025-08-02)
 
 
