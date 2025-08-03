@@ -200,12 +200,20 @@ using namespace facebook::react;
     _view.onRegionChange = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             NSDictionary* regionDict = dictionary[@"region"];
+            NSDictionary* cameraDict = dictionary[@"camera"];
+            NSDictionary* cameraCenterDict = cameraDict[@"center"];
+        
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
             facebook::react::RNMapsMapViewEventEmitter::OnRegionChange data = {
                 .region.latitude = [regionDict[@"latitude"] doubleValue],
                 .region.longitude = [regionDict[@"longitude"] doubleValue],
                 .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                 .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                .camera.center.latitude = [cameraCenterDict[@"latitude"] doubleValue],
+                .camera.center.longitude = [cameraCenterDict[@"longitude"] doubleValue],
+                .camera.pitch = [cameraDict[@"pitch"] doubleValue],
+                .camera.heading = [cameraDict[@"heading"] doubleValue],
+                .camera.altitude = [cameraDict[@"altitude"] doubleValue],
                 .isGesture = [dictionary[@"isGesture"] boolValue],
             };
             mapViewEventEmitter->onRegionChange(data);
@@ -333,12 +341,20 @@ using namespace facebook::react;
         if (_eventEmitter) {
 
             NSDictionary* regionDict = dictionary[@"region"];
+            NSDictionary* cameraDict = dictionary[@"camera"];
+            NSDictionary* cameraCenterDict = cameraDict[@"center"];
+            
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
             facebook::react::RNMapsMapViewEventEmitter::OnRegionChangeStart data = {
                 .region.latitude = [regionDict[@"latitude"] doubleValue],
                 .region.longitude = [regionDict[@"longitude"] doubleValue],
                 .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                 .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                .camera.center.latitude = [cameraCenterDict[@"latitude"] doubleValue],
+                .camera.center.longitude = [cameraCenterDict[@"longitude"] doubleValue],
+                .camera.pitch = [cameraDict[@"pitch"] doubleValue],
+                .camera.heading = [cameraDict[@"heading"] doubleValue],
+                .camera.altitude = [cameraDict[@"altitude"] doubleValue],
                 .isGesture = [dictionary[@"isGesture"] boolValue],
             };
             mapViewEventEmitter->onRegionChangeStart(data);
@@ -349,12 +365,20 @@ using namespace facebook::react;
         if (_eventEmitter) {
 
             NSDictionary* regionDict = dictionary[@"region"];
+            NSDictionary* cameraDict = dictionary[@"camera"];
+            NSDictionary* cameraCenterDict = cameraDict[@"center"];
+            
             auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
             facebook::react::RNMapsMapViewEventEmitter::OnRegionChangeComplete data = {
                 .region.latitude = [regionDict[@"latitude"] doubleValue],
                 .region.longitude = [regionDict[@"longitude"] doubleValue],
                 .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                 .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                .camera.center.latitude = [cameraCenterDict[@"latitude"] doubleValue],
+                .camera.center.longitude = [cameraCenterDict[@"longitude"] doubleValue],
+                .camera.pitch = [cameraDict[@"pitch"] doubleValue],
+                .camera.heading = [cameraDict[@"heading"] doubleValue],
+                .camera.altitude = [cameraDict[@"altitude"] doubleValue],
                 .isGesture = [dictionary[@"isGesture"] boolValue],
             };
             mapViewEventEmitter->onRegionChangeComplete(data);
