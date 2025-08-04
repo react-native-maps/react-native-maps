@@ -3617,6 +3617,11 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-1.4.3.tgz#0f79731eb8cfe1ec72acd4066efac9d61991b00d"
   integrity sha512-9z8TZaGM1pfswYeXrUpzPrkx8UnWYdhJclsiYMm6x/w5+nN+8Tf/LnAgfLGQCm59qAOxU8WwHEq2vNwF6i4j+Q==
 
+clang-format-node@^1.3.5:
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/clang-format-node/-/clang-format-node-1.3.5.tgz#b053250cc0f41e90aee2741a89806c9540457934"
+  integrity sha512-28zkpZj7bzVvGne9C0eufo8k425VZFRwiXm90HloDjbId/2Ojyx1Hf4FQQUlGcxhyw2F+460SZ0DzPO3UJ4CMQ==
+
 clean-stack@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/clean-stack/-/clean-stack-2.2.0.tgz#ee8472dbb129e727b31e8a10a427dee9dfe4008b"
