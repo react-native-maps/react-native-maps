@@ -1111,6 +1111,15 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void addFeature(View child, int index) {
+        // Clamp index to safe bounds to avoid IndexOutOfBoundsException that can occur when
+        // React Native (Fabric) issues mount instructions with an index that is greater than
+        // the current feature count due to concurrent updates/preallocation.
+        if (index < 0) {
+            index = 0;
+        } else if (index > features.size()) {
+            index = features.size();
+        }
+            
         // Our desired API is to pass up annotations/overlays as children to the mapview component.
         // This is where we intercept them and do the appropriate underlying mapview action.
         if (child instanceof MapMarker) {
