@@ -92,6 +92,8 @@ public class MapMarker extends MapFeature {
     private float calloutAnchorY;
     private boolean calloutAnchorIsSet;
 
+    private int updated = 0;
+
     private boolean tracksViewChanges = true;
     private boolean tracksViewChangesActive = false;
 
@@ -316,11 +318,15 @@ public class MapMarker extends MapFeature {
     }
 
     public boolean updateCustomForTracking() {
-        if (!tracksViewChangesActive)
+        if (!tracksViewChangesActive || updated == 0) {
+            tracksViewChangesActive = false;
             return false;
+        }
 
         updateMarkerIcon();
-
+        if (updated > 0){
+            updated--;
+        }
         return true;
     }
 
@@ -458,6 +464,14 @@ public class MapMarker extends MapFeature {
                 updateTracksViewChanges();
                 update(true);
             }
+        } else {
+            // custom subview
+            if (!(getChildAt(0) instanceof MapCallout)) {
+                if (updated == 0) {
+                    updated = 1;
+                    updateTracksViewChanges();
+                }
+            }
         }
     }
 
@@ -542,12 +556,15 @@ public class MapMarker extends MapFeature {
         } else {
             marker.setInfoWindowAnchor(0.5f, 0);
         }
+        updated +=1;
     }
 
     public void update(int width, int height) {
         this.width = width;
         this.height = height;
-
+        updated +=1;
+        updateTracksViewChanges();
+        clearDrawableCache();
         update(true);
     }
 
@@ -673,6 +690,14 @@ public class MapMarker extends MapFeature {
 
     public void setImageLoadedListener(ImageManager.OnImageLoadedListener imageLoadedListener) {
         this.imageLoadedListener = imageLoadedListener;
+    }
+
+    public void setUpdated(boolean updated) {
+        if (updated) {
+            this.updated += 1;
+        } else {
+            this.updated = 0;
+        }
     }
 
     @FunctionalInterface
