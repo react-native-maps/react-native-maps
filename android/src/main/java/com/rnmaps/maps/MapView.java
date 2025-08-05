@@ -183,6 +183,22 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private String kmlSrc = null;
 
     @Override
+    public void onCreate(@NonNull LifecycleOwner owner) {
+        if (destroyed) {
+            return;
+        }
+        MapView.this.onCreate((Bundle) null);
+    }
+
+    @Override
+    public void onStart(@NonNull LifecycleOwner owner) {
+        if (destroyed) {
+            return;
+        }
+        MapView.this.onStart();
+    }
+
+    @Override
     public void onResume(@NonNull LifecycleOwner owner) {
         synchronized (MapView.this) {
             if (!destroyed) {
@@ -223,7 +239,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         super(context, googleMapOptions);
         this.context = context;
         attachLifecycleObserver();
-        MapView.this.onCreate((Bundle) null);
         MapView.this.getMapAsync(this);
 
         fusedLocationSource = new FusedLocationSource(context);
