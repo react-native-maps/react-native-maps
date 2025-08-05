@@ -120,6 +120,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private RelativeLayout mapLoadingLayout;
     private ImageView cacheImageView;
     private Boolean isMapLoaded = false;
+    private Boolean isMapViewCreated = false;
 
     private Boolean isMapReady = false;
 
@@ -184,10 +185,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     @Override
     public void onCreate(@NonNull LifecycleOwner owner) {
-        if (destroyed) {
+        if (isMapViewCreated || destroyed) {
             return;
         }
         MapView.this.onCreate((Bundle) null);
+        isMapViewCreated = true;
     }
 
     @Override
