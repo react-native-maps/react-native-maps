@@ -334,16 +334,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     // Override onDetachedFromWindow to detach lifecycle observer
     @Override
     protected void onDetachedFromWindow() {
-        if (savedMapState == null) {
-            savedMapState = new Bundle();
-        }
-        super.onSaveInstanceState(savedMapState);
-        super.onPause();
-        super.onStop();
         savedFeatures = new HashMap<>(features);
         savedFeatures.keySet().forEach(this::removeFeatureAt);
-        removeView(attacherGroup);
-        attacherGroup = null;
+        if (attacherGroup != null) {
+          removeView(attacherGroup);
+          attacherGroup = null;
+        }
         detachLifecycleObserver();
         super.onDetachedFromWindow();
     }
