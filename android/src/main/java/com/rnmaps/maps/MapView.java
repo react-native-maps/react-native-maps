@@ -18,6 +18,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -1639,14 +1640,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     private void removeCacheImageView() {
         if (this.cacheImageView != null) {
-            ((ViewGroup) this.cacheImageView.getParent()).removeView(this.cacheImageView);
+            ViewParent parent = this.cacheImageView.getParent();
+            if (parent instanceof ViewGroup) {
+              ((ViewGroup) parent).removeView(this.cacheImageView);
+            }
             this.cacheImageView = null;
         }
     }
 
     private void removeMapLoadingProgressBar() {
         if (this.mapLoadingProgressBar != null) {
-            ((ViewGroup) this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
+            ViewParent parent = this.mapLoadingProgressBar.getParent();
+            if (parent instanceof ViewGroup) {
+              ((ViewGroup) parent).removeView(this.mapLoadingProgressBar);
+            }
             this.mapLoadingProgressBar = null;
         }
     }
@@ -1654,7 +1661,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private void removeMapLoadingLayoutView() {
         this.removeMapLoadingProgressBar();
         if (this.mapLoadingLayout != null) {
-            ((ViewGroup) this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
+            ViewParent parent = this.mapLoadingLayout.getParent();
+            if (parent instanceof ViewGroup) {
+              ((ViewGroup) parent).removeView(this.mapLoadingLayout);
+            }
             this.mapLoadingLayout = null;
         }
     }
