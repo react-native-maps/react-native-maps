@@ -1098,6 +1098,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     public void addFeature(View child, int index) {
         // Our desired API is to pass up annotations/overlays as children to the mapview component.
         // This is where we intercept them and do the appropriate underlying mapview action.
+
+        // RN's Fabric can sometimes get the index wrong when batching a large number of add/remove operations.
+        // We guard against an IndexOutOfBoundsException by clamping the index to the bounds of the features list.
+        if (index > features.size()) {
+            index = features.size();
+        }
+
         if (child instanceof MapMarker) {
             MapMarker annotation = (MapMarker) child;
             annotation.addToMap(markerCollection);
