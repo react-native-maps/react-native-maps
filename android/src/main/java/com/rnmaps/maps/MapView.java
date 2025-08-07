@@ -1624,7 +1624,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return true;
     }
 
-    @Override
+    // @Override
     public void onMarkerDragStart(Marker marker) {
         // ANSY: do nothing
         // WritableMap event = makeClickEventData(marker.getPosition());
@@ -1635,7 +1635,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         // markerView.dispatchEvent(event, OnDragStartEvent::new);
     }
 
-    @Override
+    // @Override
     public void onMarkerDrag(Marker marker) {
         // ANSY: do nothing
         // WritableMap event = makeClickEventData(marker.getPosition());
@@ -1646,7 +1646,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         // markerView.dispatchEvent(event, OnDragEvent::new);
     }
 
-    @Override
+    // @Override
     public void onMarkerDragEnd(Marker marker) {
         // ANSY: do nothing
         // WritableMap event = makeClickEventData(marker.getPosition());
@@ -1656,7 +1656,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         // markerView.dispatchEvent(event, OnDragEndEvent::new);
     }
 
-    @Override
+    // @Override
     public void onPoiClick(PointOfInterest poi) {
         // ANSY: do nothing
         // WritableMap event = makeClickEventData(poi.latLng);
@@ -1870,7 +1870,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
-    @Override
+    // @Override
     public void onIndoorBuildingFocused() {
         // ANSY: do nothing
         // IndoorBuilding building = this.map.getFocusedBuilding();
@@ -1903,7 +1903,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         // }
     }
 
-    @Override
+    // @Override
     public void onIndoorLevelActivated(IndoorBuilding building) {
         // ANSY: do nothing
         // if (building == null) {

@@ -31,6 +31,8 @@ import java.util.Map;
 public class MapPolyline extends MapFeature {
 
     /// ANSY props >>>
+    private Integer lineDashPatternDash;
+    private Integer lineDashPatternGap;
     private List<String> strokeColors;
     private String type;
     private PolylineManager.Collection polylineCollection;
@@ -38,7 +40,7 @@ public class MapPolyline extends MapFeature {
     private List<PolylineOptions> polylineOptions;
     /// <<<
 
-    private PolylineOptions polylineOptions;
+    // private PolylineOptions polylineOptions;
     private Polyline polyline;
 
     private List<LatLng> coordinates;
@@ -238,10 +240,11 @@ public class MapPolyline extends MapFeature {
         options.width(width);
         options.geodesic(geodesic);
         options.zIndex(zIndex);
-        options.startCap(lineCap);
-        options.endCap(lineCap);
-        options.pattern(this.pattern);
-        return options;
+
+        if(lineDashPatternDash != null){
+            List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(this.lineDashPatternDash), new Gap(this.lineDashPatternGap));
+            options.pattern(pattern);
+        }
 
         this.polylineOptions.add(i, options);
         }
