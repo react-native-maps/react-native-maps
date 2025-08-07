@@ -83,9 +83,9 @@ public class PolylineManager extends ViewGroupManager<MapPolyline> implements RN
     }
 
     /// ANSY >>>
-    // public void setSyncedCoordsColors(MapPolyline view, @Nullable ReadableArray value) {
-    //     view.setSyncedCoordsColors(value);
-    // }
+    public void setSyncedCoordsColors(MapPolyline view, @Nullable ReadableArray value) {
+        view.setSyncedCoordsColors(value);
+    }
     /// <<<
 
     /// ANSY >>>

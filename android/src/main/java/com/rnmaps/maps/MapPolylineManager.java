@@ -54,10 +54,10 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
   /// <<<
 
   /// ANSY >>>
-  // @ReactProp(name = "syncedCoordsColors")
-  // public void setSyncedCoordsColors(MapPolyline view, ReadableArray syncedCoordsColors) {
-  //   view.setSyncedCoordsColors(syncedCoordsColors);
-  // }
+  @ReactProp(name = "syncedCoordsColors")
+  public void setSyncedCoordsColors(MapPolyline view, ReadableArray syncedCoordsColors) {
+    view.setSyncedCoordsColors(syncedCoordsColors);
+  }
   /// <<<
 
   @ReactProp(name = "strokeWidth", defaultFloat = 1f)
