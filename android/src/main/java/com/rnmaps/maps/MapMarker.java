@@ -439,22 +439,22 @@ public class MapMarker extends MapFeature {
         return markerOptions;
     }
 
-  @Override
-  public void addView(View child, int index) {
-    super.addView(child, index);
-    // if children are added, it means we are rendering a custom marker
-    if (!(child instanceof MapCallout)) {
-      hasCustomMarkerView = true;
-      updateTracksViewChanges();
+    @Override
+    public void addView(View child, int index) {
+        super.addView(child, index);
+        // if children are added, it means we are rendering a custom marker
+        if (!(child instanceof MapCallout)) {
+        hasCustomMarkerView = true;
+        updateTracksViewChanges();
+        }
+        update(true);
     }
-    update(true);
-  }
 
-  @Override
-  public void removeView(View child) {
-    super.removeView(child);
-    detachViewFromParent(child);
-  }
+    @Override
+    public void removeView(View child) {
+        super.removeView(child);
+        detachViewFromParent(child);
+    }
 
     @Override
     public void requestLayout() {
@@ -490,20 +490,16 @@ public class MapMarker extends MapFeature {
         updateTracksViewChanges();
     }
 
-  @Override
-  public void removeFromMap(Object collection) {
-    if (marker == null) {
-      return;
+    @Override
+    public void removeFromMap(Object collection) {
+        if (marker == null) {
+            return;
+        }
+        MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
+        markerCollection.remove(marker);
+        marker = null;
+        updateTracksViewChanges();
     }
-    MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
-    markerCollection.remove(marker);
-    if (MapMarker.this.markerManager != null && MapMarker.this.imageUri != null) {
-      MapMarker.this.markerManager.getSharedIcon(MapMarker.this.imageUri)
-          .removeMarker(MapMarker.this);
-    }
-    marker = null;
-    updateTracksViewChanges();
-  }
 
     private BitmapDescriptor getIcon() {
         if (hasCustomMarkerView) {

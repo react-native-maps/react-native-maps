@@ -205,7 +205,7 @@ public class MapUrlTile extends MapFeature {
     TileOverlayOptions options = new TileOverlayOptions();
     options.zIndex(zIndex);
     options.transparency(1 - this.opacity);
-    this.tileProvider = new MapTileProvider(this.tileSize, this.doubleTileSize, this.urlTemplate,
+    this.tileProvider = new MapTileProvider((int)this.tileSize, this.doubleTileSize, this.urlTemplate,
       this.maximumZ, this.maximumNativeZ, this.minimumZ, this.flipY, this.tileCachePath,
       this.tileCacheMaxAge, this.offlineMode, this.context, this.customTileProviderNeeded, this.urlCdn, this.urlCdnSuffix);
     options.tileProvider(this.tileProvider);

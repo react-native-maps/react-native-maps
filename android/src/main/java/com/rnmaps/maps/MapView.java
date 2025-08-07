@@ -87,32 +87,40 @@ import java.util.concurrent.ExecutionException;
 
 import com.rnmaps.fabric.event.*;
 
-public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, DefaultLifecycleObserver {
-  public GoogleMap map;
-  private MarkerManager markerManager;
-  private MarkerManager.Collection markerCollection;
-  private PolylineManager polylineManager;
-  private PolylineManager.Collection polylineCollection;
-  private PolygonManager polygonManager;
-  private PolygonManager.Collection polygonCollection;
-  private CircleManager.Collection circleCollection;
-  private GroundOverlayManager groundOverlayManager;
-  private GroundOverlayManager.Collection groundOverlayCollection;
-  private ProgressBar mapLoadingProgressBar;
-  private RelativeLayout mapLoadingLayout;
-  private ImageView cacheImageView;
-  private Boolean isMapLoaded = false;
-  private Boolean isMapReady = false;
-  private Integer loadingBackgroundColor = null;
-  private Integer loadingIndicatorColor = null;
+public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
+        OnMapReadyCallback, DefaultLifecycleObserver {
+    public GoogleMap map;
+    private MarkerManager markerManager;
+    private MarkerManager.Collection markerCollection;
+    private PolylineManager polylineManager;
+    private PolylineManager.Collection polylineCollection;
+    private PolygonManager polygonManager;
+    private PolygonManager.Collection polygonCollection;
+    private CircleManager.Collection circleCollection;
+    private GroundOverlayManager groundOverlayManager;
+    private GroundOverlayManager.Collection groundOverlayCollection;
+    private ProgressBar mapLoadingProgressBar;
+    private RelativeLayout mapLoadingLayout;
+    private ImageView cacheImageView;
+    private Boolean isMapLoaded = false;
 
-  private LatLngBounds boundsToMove;
-  private CameraUpdate cameraToSet;
-  private boolean setPaddingDeferred = false;
-  private boolean showUserLocation = false;
-  private boolean handlePanDrag = false;
-  private boolean moveOnMarkerPress = true;
-  private boolean cacheEnabled = false;
+    private Boolean isMapReady = false;
+
+    private Integer loadingBackgroundColor = null;
+    private Integer loadingIndicatorColor = null;
+
+    private LatLngBounds boundsToMove;
+    private CameraUpdate cameraToSet;
+    private boolean setPaddingDeferred = false;
+    private boolean showUserLocation = false;
+
+    // ANSY: do nothing
+    // private boolean showsTraffic = false;
+
+    private boolean handlePanDrag = false;
+    private boolean moveOnMarkerPress = true;
+    private boolean cacheEnabled = false;
+    private boolean poiClickEnabled = true;
 
     private ReadableMap initialRegion;
     private ReadableMap region;
@@ -449,7 +457,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         groundOverlayManager = new GroundOverlayManager(map);
         groundOverlayCollection = groundOverlayManager.newCollection();
 
-    markerCollection.setInfoWindowAdapter(this);
+        markerCollection.setInfoWindowAdapter(this);
+        // ANSY: do nothing
+        // markerCollection.setOnMarkerDragListener(this);
+        // this.map.setOnIndoorStateChangeListener(this);
 
         applyBridgedProps();
         dispatchEvent(new WritableNativeMap(), OnMapReadyEvent::new);
@@ -633,12 +644,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
-  private synchronized void handleMarkerSelection(MapMarker target) {
-    if (selectedMarker == target) {
-      return;
-    }
+    private synchronized void handleMarkerSelection(MapMarker target) {
+        if (selectedMarker == target) {
+        return;
+        }
 
-    WritableMap event;
+        WritableMap event;
 
         if (selectedMarker != null) {
             event = makeClickEventData(selectedMarker.getPosition());
@@ -764,11 +775,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (customMapStyleString != null) {
             map.setMapStyle(new MapStyleOptions(customMapStyleString));
         }
-            if (setPaddingDeferred &&
-                (baseLeftMapPadding != 0 ||
-                        baseTopMapPadding != 0 ||
-                        baseRightMapPadding != 0 ||
-                        baseBottomMapPadding != 0)) {
+        // ANSY: do nothing
+        // this.setPoiClickEnabled(poiClickEnabled);
+        if (setPaddingDeferred &&
+            (baseLeftMapPadding != 0 ||
+                    baseTopMapPadding != 0 ||
+                    baseRightMapPadding != 0 ||
+                    baseBottomMapPadding != 0)) {
             applyBaseMapPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
         }
     }
@@ -838,7 +851,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
 
     public static CameraPosition cameraPositionFromMap(ReadableMap camera) {
-            if (camera == null) return null;
+        if (camera == null) return null;
 
         CameraPosition.Builder builder = new CameraPosition.Builder();
 
@@ -964,6 +977,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     public void setCacheEnabled(boolean cacheEnabled) {
       this.cacheEnabled = cacheEnabled;
       this.cacheView();
+    }
+
+    public void setPoiClickEnabled(boolean poiClickEnabled) {
+        // ANSY: do nothing
+        // this.poiClickEnabled = poiClickEnabled;
+        // if (map != null) {
+        //     map.setOnPoiClickListener(poiClickEnabled ? this : null);
+        // }
     }
 
     public void setLoadingEnabled(boolean loadingEnabled) {
@@ -1099,6 +1120,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         // Our desired API is to pass up annotations/overlays as children to the mapview component.
         // This is where we intercept them and do the appropriate underlying mapview action.
 
+        // ANSY
         // RN's Fabric can sometimes get the index wrong when batching a large number of add/remove operations.
         // We guard against an IndexOutOfBoundsException by clamping the index to the bounds of the features list.
         if (index > features.size()) {
@@ -1285,6 +1307,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
+    // ANSY
     public void animateToCamera(CameraPosition position, int duration, ReadableMap edgePadding) {
         if (map == null) return;
 
@@ -1317,6 +1340,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
         }
 
+        // ANSY
         if (edgePadding != null) {
         map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
             edgePadding.getInt("right"), edgePadding.getInt("bottom"));
@@ -1324,35 +1348,38 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         animateToCamera(builder.build(), duration);
 
+        // ANSY
         if (edgePadding != null) {
             map.setPadding(0, 0, 0, 0);
         }
     }
 
-  public void animateToRegion(LatLngBounds bounds, int duration, @Nullable ReadableMap edgePadding) {
-    if (map == null) return;
 
-    if (edgePadding != null) {
-      map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-      edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+    // ANSY
+    public void animateToRegion(LatLngBounds bounds, int duration, @Nullable ReadableMap edgePadding) {
+        if (map == null) return;
+
+        if (edgePadding != null) {
+        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+        edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
+
+        if(duration <= 0) {
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+        } else {
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+        }
+
+        map.setPadding(0, 0, 0, 0);
     }
 
-    if(duration <= 0) {
-      map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-    } else {
-      map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
-    }
+    public void fitToElements(ReadableMap edgePadding, boolean animated, int duration) {
+        if (map == null) return;
 
-    map.setPadding(0, 0, 0, 0);
-  }
-
-  public void fitToElements(ReadableMap edgePadding, boolean animated, int duration) {
-    if (map == null) return;
-
-    if (edgePadding != null) {
-      map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-          edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-    }
+        if (edgePadding != null) {
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
@@ -1376,21 +1403,23 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                         edgePadding.getInt("right"), edgePadding.getInt("bottom"));
             }
 
-      if (animated) {
-          if (duration != 0) {
-            map.animateCamera(cu, duration, null);
-          } else {
-            map.animateCamera(cu);
-          }
-      } else {
-        map.moveCamera(cu);
-      }
-      // Move the google logo to the default base padding value.
-      map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
-    }
+            if (animated) {
+                // ANSY
+                if (duration != 0) {
+                    map.animateCamera(cu, duration, null);
+                } else {
+                    map.animateCamera(cu);
+                }
+            } else {
+                map.moveCamera(cu);
+            }
+            // Move the google logo to the default base padding value.
+            map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+        }
 
-    map.setPadding(0, 0, 0, 0);
-  }
+        // ANSY
+        map.setPadding(0, 0, 0, 0);
+    }
 
     public void fitToSuppliedMarkers(ReadableArray markerIDsArray, ReadableMap edgePadding, boolean animated) {
         if (map == null) return;
@@ -1568,32 +1597,74 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return markerView.getInfoContents();
     }
 
-  @Override
-  public boolean dispatchTouchEvent(MotionEvent ev) {
-    if (map == null) return false;
-    gestureDetector.onTouchEvent(ev);
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (map == null) return false;
+        gestureDetector.onTouchEvent(ev);
 
-    int X = (int)ev.getX();
-    int Y = (int)ev.getY();
-    if(map != null) {
-      tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
-    }
+        int X = (int)ev.getX();
+        int Y = (int)ev.getY();
+        if(map != null) {
+           tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
+        }
 
         int action = MotionEventCompat.getActionMasked(ev);
 
-    switch (action) {
-      case (MotionEvent.ACTION_DOWN):
-        this.getParent().requestDisallowInterceptTouchEvent(
-            map != null && map.getUiSettings().isScrollGesturesEnabled());
-        break;
-      case (MotionEvent.ACTION_UP):
-        // Clear this regardless, since isScrollGesturesEnabled() may have been updated
-        this.getParent().requestDisallowInterceptTouchEvent(false);
-        break;
+        switch (action) {
+        case (MotionEvent.ACTION_DOWN):
+            this.getParent().requestDisallowInterceptTouchEvent(
+                map != null && map.getUiSettings().isScrollGesturesEnabled());
+            break;
+        case (MotionEvent.ACTION_UP):
+            // Clear this regardless, since isScrollGesturesEnabled() may have been updated
+            this.getParent().requestDisallowInterceptTouchEvent(false);
+            break;
+        }
+        super.dispatchTouchEvent(ev);
+        return true;
     }
-    super.dispatchTouchEvent(ev);
-    return true;
-  }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+        // ANSY: do nothing
+        // WritableMap event = makeClickEventData(marker.getPosition());
+        // dispatchEvent(event, OnMarkerDragStartEvent::new);
+
+        // MapMarker markerView = getMarkerMap(marker);
+        // event = makeClickEventData(marker.getPosition());
+        // markerView.dispatchEvent(event, OnDragStartEvent::new);
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        // ANSY: do nothing
+        // WritableMap event = makeClickEventData(marker.getPosition());
+        // dispatchEvent(event, OnMarkerDragEvent::new);
+
+        // MapMarker markerView = getMarkerMap(marker);
+        // event = makeClickEventData(marker.getPosition());
+        // markerView.dispatchEvent(event, OnDragEvent::new);
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        // ANSY: do nothing
+        // WritableMap event = makeClickEventData(marker.getPosition());
+        // dispatchEvent(event, OnMarkerDragEndEvent::new);
+        // MapMarker markerView = getMarkerMap(marker);
+        // event = makeClickEventData(marker.getPosition());
+        // markerView.dispatchEvent(event, OnDragEndEvent::new);
+    }
+
+    @Override
+    public void onPoiClick(PointOfInterest poi) {
+        // ANSY: do nothing
+        // WritableMap event = makeClickEventData(poi.latLng);
+
+        // event.putString("placeId", poi.placeId);
+        // event.putString("name", poi.name);
+        // dispatchEvent(event, OnPoiClickEvent::new);
+    }
 
     private ProgressBar getMapLoadingProgressBar() {
         if (this.mapLoadingProgressBar == null) {
@@ -1683,6 +1754,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void onPanDrag(MotionEvent ev) {
+      // ANSY
       if(this.map != null) {
             Point point = new Point((int) ev.getX(), (int) ev.getY());
             LatLng coords = this.map.getProjection().fromScreenLocation(point);
@@ -1789,25 +1861,80 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 pointers.putArray("markers", markers);
                 dispatchEvent(new WritableNativeMap(), OnKmlReadyEvent::new);
 
-      } catch (XmlPullParserException | IOException | InterruptedException |
+            } catch (XmlPullParserException | IOException | InterruptedException |
                      ExecutionException e) {
                 e.printStackTrace();
             }
         } else {
             this.kmlSrc = kmlSrc;
         }
-  }
+    }
+
+    @Override
+    public void onIndoorBuildingFocused() {
+        // ANSY: do nothing
+        // IndoorBuilding building = this.map.getFocusedBuilding();
+        // if (building != null) {
+        //     List<IndoorLevel> levels = building.getLevels();
+        //     int index = 0;
+        //     WritableArray levelsArray = Arguments.createArray();
+        //     for (IndoorLevel level : levels) {
+        //         WritableMap levelMap = Arguments.createMap();
+        //         levelMap.putInt("index", index);
+        //         levelMap.putString("name", level.getName());
+        //         levelMap.putString("shortName", level.getShortName());
+        //         levelsArray.pushMap(levelMap);
+        //         index++;
+        //     }
+        //     WritableMap indoorBuilding = Arguments.createMap();
+        //     indoorBuilding.putArray("levels", levelsArray);
+        //     indoorBuilding.putInt("activeLevelIndex", building.getActiveLevelIndex());
+        //     indoorBuilding.putBoolean("underground", building.isUnderground());
+
+        //     dispatchEvent(indoorBuilding, OnIndoorBuildingFocusedEvent::new);
+        // } else {
+        //     WritableArray levelsArray = Arguments.createArray();
+        //     WritableMap indoorBuilding = Arguments.createMap();
+        //     indoorBuilding.putArray("levels", levelsArray);
+        //     indoorBuilding.putInt("activeLevelIndex", 0);
+        //     indoorBuilding.putBoolean("underground", false);
+
+        //     dispatchEvent(indoorBuilding, OnIndoorBuildingFocusedEvent::new);
+        // }
+    }
+
+    @Override
+    public void onIndoorLevelActivated(IndoorBuilding building) {
+        // ANSY: do nothing
+        // if (building == null) {
+        //     return;
+        // }
+        // int activeLevelIndex = building.getActiveLevelIndex();
+        // if (activeLevelIndex < 0 || activeLevelIndex >= building.getLevels().size()) {
+        //     return;
+        // }
+        // IndoorLevel level = building.getLevels().get(activeLevelIndex);
+
+        // WritableMap indoorlevel = Arguments.createMap();
+
+        // indoorlevel.putInt("activeLevelIndex", activeLevelIndex);
+        // indoorlevel.putString("name", level.getName());
+        // indoorlevel.putString("shortName", level.getShortName());
+
+        // dispatchEvent(indoorlevel, OnIndoorLevelActivatedEvent::new);
+    }
 
     public void setIndoorActiveLevelIndex(int activeLevelIndex) {
-        IndoorBuilding building = this.map.getFocusedBuilding();
-        if (building != null) {
-            if (activeLevelIndex >= 0 && activeLevelIndex < building.getLevels().size()) {
-                IndoorLevel level = building.getLevels().get(activeLevelIndex);
-                if (level != null) {
-                    level.activate();
-                }
-            }
-        }
+        // ANSY: do nothing
+        // IndoorBuilding building = this.map.getFocusedBuilding();
+        // if (building != null) {
+        //     if (activeLevelIndex >= 0 && activeLevelIndex < building.getLevels().size()) {
+        //         IndoorLevel level = building.getLevels().get(activeLevelIndex);
+        //         if (level != null) {
+        //             level.activate();
+        //         }
+        //     }
+        // }
     }
 
     private MapMarker getMarkerMap(Marker marker) {
