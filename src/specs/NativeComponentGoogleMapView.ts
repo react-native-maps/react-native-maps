@@ -11,6 +11,7 @@ import type {
   DirectEventHandler,
   BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
+import GoogleMapView from './NativeComponentGoogleMapView';
 
 export type EdgePadding = Readonly<{
   top: Double; // Non-nullable Double for top
@@ -306,7 +307,7 @@ export type RegionChangeEvent = Readonly<{
     latitudeDelta: Double; // Non-nullable Double for latitudeDelta
     longitudeDelta: Double; // Non-nullable Double for longitudeDelta
   }; // The region object
-  continuous?: boolean;
+  isGesture?: boolean;
 }>;
 
 export type RegionChangeEventHandler = BubblingEventHandler<RegionChangeEvent>;
@@ -860,45 +861,45 @@ export interface MapFabricNativeProps extends ViewProps {
   zoomTapEnabled?: WithDefault<boolean, true>;
 }
 
-export interface NativeCommands {
+interface NativeCommands {
   animateToRegion: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof GoogleMapView>,
     regionJSON: string,
     duration: Int32,
   ) => void;
 
   setCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof GoogleMapView>,
     cameraJSON: string,
   ) => void;
 
   animateCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof GoogleMapView>,
     cameraJSON: string,
     duration: Int32,
   ) => void;
 
   fitToElements: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof GoogleMapView>,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToSuppliedMarkers: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof GoogleMapView>,
     markersJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof GoogleMapView>,
     coordinatesJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
   setIndoorActiveLevelIndex: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof GoogleMapView>,
     activeLevelIndex: Int32,
   ) => void;
 }

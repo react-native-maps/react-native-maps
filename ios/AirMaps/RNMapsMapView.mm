@@ -14,7 +14,7 @@
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
 #import <ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>
 #import <ReactNativeMaps/generated/RNMapsSpecs.h>
-#import <ReactNativeMaps/generated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMaps/generated/RNMapsHostViewDelegate.h>
 #import <ReactNativeMaps/generated/ComponentDescriptors.h>
 #import <ReactNativeMaps/generated/EventEmitters.h>
 #import <ReactNativeMaps/generated/Props.h>
@@ -206,7 +206,7 @@ using namespace facebook::react;
                 .region.longitude = [regionDict[@"longitude"] doubleValue],
                 .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                 .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                .continuous = [dictionary[@"continuous"] boolValue],
+                .isGesture = [dictionary[@"isGesture"] boolValue],
             };
             mapViewEventEmitter->onRegionChange(data);
         }
@@ -339,9 +339,25 @@ using namespace facebook::react;
                 .region.longitude = [regionDict[@"longitude"] doubleValue],
                 .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                 .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                .continuous = [dictionary[@"continuous"] boolValue],
+                .isGesture = [dictionary[@"isGesture"] boolValue],
             };
             mapViewEventEmitter->onRegionChangeStart(data);
+        }
+    };
+
+    _view.onRegionChangeComplete = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+
+            NSDictionary* regionDict = dictionary[@"region"];
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsMapViewEventEmitter::OnRegionChangeComplete data = {
+                .region.latitude = [regionDict[@"latitude"] doubleValue],
+                .region.longitude = [regionDict[@"longitude"] doubleValue],
+                .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
+                .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                .isGesture = [dictionary[@"isGesture"] boolValue],
+            };
+            mapViewEventEmitter->onRegionChangeComplete(data);
         }
     };
 
@@ -528,26 +544,25 @@ newViewProps.name.right);           \
 
 #define REMAP_MAPVIEW_MAPTYPE(rnMapType) MKMapType##rnMapType
 
-
     REMAP_MAPVIEW_PROP(cacheEnabled)
-
     REMAP_MAPVIEW_PROP(followsUserLocation)
     REMAP_MAPVIEW_PROP(loadingEnabled)
-
     REMAP_MAPVIEW_PROP(scrollEnabled)
     REMAP_MAPVIEW_PROP(handlePanDrag)
-
     REMAP_MAPVIEW_PROP(maxDelta)
     REMAP_MAPVIEW_PROP(maxZoom)
     REMAP_MAPVIEW_PROP(minDelta)
     REMAP_MAPVIEW_PROP(minZoom)
-
     REMAP_MAPVIEW_PROP(showsCompass)
     REMAP_MAPVIEW_PROP(showsScale)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
     REMAP_MAPVIEW_PROP(zoomEnabled)
-
+    REMAP_MAPVIEW_PROP(loadingEnabled)
+    REMAP_MAPVIEW_PROP(showsTraffic)
+    REMAP_MAPVIEW_PROP(pitchEnabled)
+    REMAP_MAPVIEW_PROP(showsBuildings)
+    REMAP_MAPVIEW_PROP(rotateEnabled)
 
     REMAP_MAPVIEW_POINT_PROP(compassOffset)
 
