@@ -102,21 +102,33 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
     public void getMapBoundaries(double tag, Promise promise) {
         UIManager uiManager = UIManagerHelper.getUIManagerForReactTag(getReactApplicationContext(), (int) tag);
         getReactApplicationContext().runOnUiQueueThread(() -> {
-            MapView view = (MapView) uiManager.resolveView((int) tag);
-            double[][] boundaries = view.getMapBoundaries();
-            WritableMap coordinates = new WritableNativeMap();
-            WritableMap northEastHash = new WritableNativeMap();
-            WritableMap southWestHash = new WritableNativeMap();
+            try {
+                MapView view = (MapView) uiManager.resolveView((int) tag);
+                if (view == null) {
+                    promise.reject("E_MAP_NOT_FOUND", "Map with id " + (int)tag + " was not found");
+                    return;
+                }
+                if (view.map == null) {
+                    promise.reject("E_MAP_NOT_READY", "Map is not ready yet for id " + (int)tag);
+                    return;
+                }
+                double[][] boundaries = view.getMapBoundaries();
+                WritableMap coordinates = new WritableNativeMap();
+                WritableMap northEastHash = new WritableNativeMap();
+                WritableMap southWestHash = new WritableNativeMap();
 
-            northEastHash.putDouble("longitude", boundaries[0][0]);
-            northEastHash.putDouble("latitude", boundaries[0][1]);
-            southWestHash.putDouble("longitude", boundaries[1][0]);
-            southWestHash.putDouble("latitude", boundaries[1][1]);
+                northEastHash.putDouble("longitude", boundaries[0][0]);
+                northEastHash.putDouble("latitude", boundaries[0][1]);
+                southWestHash.putDouble("longitude", boundaries[1][0]);
+                southWestHash.putDouble("latitude", boundaries[1][1]);
 
-            coordinates.putMap("northEast", northEastHash);
-            coordinates.putMap("southWest", southWestHash);
+                coordinates.putMap("northEast", northEastHash);
+                coordinates.putMap("southWest", southWestHash);
 
-            promise.resolve(coordinates);
+                promise.resolve(coordinates);
+            } catch (Exception e) {
+                promise.reject("E_GET_BOUNDARIES_FAILED", e);
+            }
         });
     }
 
