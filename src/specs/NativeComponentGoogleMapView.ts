@@ -699,7 +699,7 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  showsCompass?: WithDefault<boolean, true>;
+  showsCompass?: boolean;
 
   /**
    * A Boolean indicating whether indoor level picker should be enabled.
@@ -720,13 +720,13 @@ export interface MapFabricNativeProps extends ViewProps {
   showsIndoors?: WithDefault<boolean, true>;
 
   /**
-   * If `false` hide the button to move map to the current user's location.
+   * If `false` hide the button to move the map to the current user's location.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  showsMyLocationButton?: WithDefault<boolean, true>;
+  showsMyLocationButton?: boolean;
 
   /**
    * If `false` points of interest won't be displayed on the map.
