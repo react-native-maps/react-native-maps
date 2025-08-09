@@ -382,10 +382,10 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   bool scrollDuringRotateOrZoomEnabled{true};
   bool scrollEnabled{true};
   bool showsBuildings{true};
-  bool showsCompass{true};
+  bool showsCompass{false};
   bool showsIndoorLevelPicker{false};
   bool showsIndoors{true};
-  bool showsMyLocationButton{true};
+  bool showsMyLocationButton{false};
   bool showsPointsOfInterest{false};
   bool showsScale{false};
   bool showsTraffic{false};
@@ -913,7 +913,7 @@ class RNMapsMapViewProps final : public ViewProps {
   bool showsCompass{true};
   bool showsIndoorLevelPicker{false};
   bool showsIndoors{true};
-  bool showsMyLocationButton{true};
+  bool showsMyLocationButton{false};
   bool showsScale{false};
   bool showsUserLocation{false};
   SharedColor tintColor{};

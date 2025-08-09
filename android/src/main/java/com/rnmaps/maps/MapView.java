@@ -470,6 +470,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (scrollDuringRotateOrZoomEnabled != null) {
             setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
         }
+        if (hasPermissions()) {
+            //noinspection MissingPermission
+            map.setMyLocationEnabled(showUserLocation);
+            map.setLocationSource(fusedLocationSource);
+        }
 
         markerManager = new MarkerManager(map);
         markerCollection = markerManager.newCollection();

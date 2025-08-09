@@ -872,11 +872,11 @@ export interface MapFabricNativeProps extends ViewProps {
   /**
    * If `false` hide the button to move map to the current user's location.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  showsMyLocationButton?: WithDefault<boolean, true>;
+  showsMyLocationButton?: boolean;
 
   /**
    * A Boolean indicating whether the map shows scale information.

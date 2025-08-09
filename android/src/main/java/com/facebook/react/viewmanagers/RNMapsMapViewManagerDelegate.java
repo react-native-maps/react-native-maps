@@ -125,7 +125,7 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setShowsIndoors(view, value == null ? true : (boolean) value);
         break;
       case "showsMyLocationButton":
-        mViewManager.setShowsMyLocationButton(view, value == null ? true : (boolean) value);
+        mViewManager.setShowsMyLocationButton(view, value == null ? false : (boolean) value);
         break;
       case "showsScale":
         mViewManager.setShowsScale(view, value == null ? false : (boolean) value);
