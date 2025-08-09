@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.3](https://github.com/react-native-maps/react-native-maps/compare/v1.25.2...v1.25.3) (2025-08-09)
+
+
+### Bug Fixes
+
+* **android:** showsMyLocationButton not working ([#5687](https://github.com/react-native-maps/react-native-maps/issues/5687)) ([009c7e6](https://github.com/react-native-maps/react-native-maps/commit/009c7e60c27d7d67ed853bd6da170730af769ef2))
+
 ## [1.25.2](https://github.com/react-native-maps/react-native-maps/compare/v1.25.1...v1.25.2) (2025-08-09)
 
 
