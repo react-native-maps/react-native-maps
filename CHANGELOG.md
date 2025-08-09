@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.25.0](https://github.com/react-native-maps/react-native-maps/compare/v1.24.16...v1.25.0) (2025-08-03)
+
+
+### Features
+
+* **android:** support saving view state ([#5665](https://github.com/react-native-maps/react-native-maps/issues/5665)) ([2369b64](https://github.com/react-native-maps/react-native-maps/commit/2369b64722bcb27f3f2b5e4def6156f6c0743d7e))
+
 ## [1.24.16](https://github.com/react-native-maps/react-native-maps/compare/v1.24.15...v1.24.16) (2025-08-03)
 
 
