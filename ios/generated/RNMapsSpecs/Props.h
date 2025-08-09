@@ -382,10 +382,10 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   bool scrollDuringRotateOrZoomEnabled{true};
   bool scrollEnabled{true};
   bool showsBuildings{true};
-  bool showsCompass{true};
+  bool showsCompass{false};
   bool showsIndoorLevelPicker{false};
   bool showsIndoors{true};
-  bool showsMyLocationButton{true};
+  bool showsMyLocationButton{false};
   bool showsPointsOfInterest{false};
   bool showsScale{false};
   bool showsTraffic{false};
@@ -1109,6 +1109,7 @@ class RNMapsMarkerProps final : public ViewProps {
   std::string description{};
   bool draggable{false};
   std::string title{};
+  bool tracksViewChanges{true};
   std::string identifier{};
   bool isPreselected{false};
   double opacity{1.0};
