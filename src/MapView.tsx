@@ -552,10 +552,10 @@ export type MapViewProps = ViewProps & {
   showsBuildings?: boolean;
 
   /**
-   * If `false` compass won't be displayed on the map.
+   * If `false` compass is not displayed on the map.
    *
    * @default true
-   * @platform iOS: Supported (adaptive on Apple Maps, visible only if map is not pointing north)
+   * @platform iOS: Supported (adaptive, visible only if the map is not pointing north)
    * @platform Android: Supported
    */
   showsCompass?: boolean;
@@ -581,7 +581,7 @@ export type MapViewProps = ViewProps & {
   /**
    * If `false` hide the button to move map to the current user's location.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
