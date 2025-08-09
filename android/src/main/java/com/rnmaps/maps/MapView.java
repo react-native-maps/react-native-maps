@@ -106,8 +106,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private ImageView cacheImageView;
     private Boolean isMapLoaded = false;
 
-    private Boolean isMapReady = false;
-
     private Integer loadingBackgroundColor = null;
     private Integer loadingIndicatorColor = null;
 
@@ -115,6 +113,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private CameraUpdate cameraToSet;
     private boolean setPaddingDeferred = false;
     private boolean showUserLocation = false;
+    private boolean showsMyLocationButton = false;
 
     private boolean showsTraffic = false;
 
@@ -434,43 +433,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             return;
         }
         this.map = map;
-        if (maxZoomLevel != null) {
-            setMaxZoomLevel(maxZoomLevel);
-        }
-        if (minZoomLevel != null) {
-            setMinZoomLevel(minZoomLevel);
-        }
-        if (pitchEnabled != null) {
-            setPitchEnabled(pitchEnabled);
-        }
-        if (showsCompass != null) {
-            setShowsCompass(showsCompass);
-        }
-        if (rotateEnabled != null) {
-            setRotateEnabled(rotateEnabled);
-        }
-        if (zoomEnabled != null) {
-            setZoomEnabled(zoomEnabled);
-        }
-        if (zoomControlEnabled != null) {
-            setZoomControlEnabled(zoomControlEnabled);
-        }
-        if (setShowBuildings != null) {
-            setShowBuildings(setShowBuildings);
-        }
-        if (showsIndoorLevelPicker != null) {
-            setShowsIndoorLevelPicker(showsIndoorLevelPicker);
-        }
-        if (showIndoors != null) {
-            setShowIndoors(showIndoors);
-        }
-        if (scrollEnabled != null) {
-            setScrollEnabled(scrollEnabled);
-        }
-        if (scrollDuringRotateOrZoomEnabled != null) {
-            setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
-        }
-
         markerManager = new MarkerManager(map);
         markerCollection = markerManager.newCollection();
         polylineManager = new PolylineManager(map);
@@ -647,16 +609,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             dispatchEvent(new WritableNativeMap(), OnMapLoadedEvent::new);
             MapView.this.cacheView();
         });
-
-
-        map.setTrafficEnabled(showsTraffic);
-
-
-        isMapReady = true;
-        if (kmlSrc != null) {
-            setKmlSrc(kmlSrc);
-            kmlSrc = null;
-        }
     }
 
     private synchronized void handleMarkerSelection(MapMarker target) {
@@ -788,9 +740,56 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             moveToCamera(camera);
         }
         if (customMapStyleString != null) {
-            map.setMapStyle(new MapStyleOptions(customMapStyleString));
+            this.setMapStyle(customMapStyleString);
         }
-        this.setPoiClickEnabled(poiClickEnabled);
+
+        setPoiClickEnabled(poiClickEnabled);
+        setShowsUserLocation(showUserLocation);
+        setShowsMyLocationButton(showsMyLocationButton);
+        setShowsTraffic(showsTraffic);
+
+        if (maxZoomLevel != null) {
+            setMaxZoomLevel(maxZoomLevel);
+        }
+        if (minZoomLevel != null) {
+            setMinZoomLevel(minZoomLevel);
+        }
+        if (pitchEnabled != null) {
+            setPitchEnabled(pitchEnabled);
+        }
+        if (showsCompass != null) {
+            setShowsCompass(showsCompass);
+        }
+        if (rotateEnabled != null) {
+            setRotateEnabled(rotateEnabled);
+        }
+        if (zoomEnabled != null) {
+            setZoomEnabled(zoomEnabled);
+        }
+        if (zoomControlEnabled != null) {
+            setZoomControlEnabled(zoomControlEnabled);
+        }
+        if (setShowBuildings != null) {
+            setShowBuildings(setShowBuildings);
+        }
+        if (showsIndoorLevelPicker != null) {
+            setShowsIndoorLevelPicker(showsIndoorLevelPicker);
+        }
+        if (showIndoors != null) {
+            setShowIndoors(showIndoors);
+        }
+        if (scrollEnabled != null) {
+            setScrollEnabled(scrollEnabled);
+        }
+        if (scrollDuringRotateOrZoomEnabled != null) {
+            setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
+        }
+
+        if (kmlSrc != null) {
+            setKmlSrc(kmlSrc);
+            kmlSrc = null;
+        }
+
         if (setPaddingDeferred &&
                 (baseLeftMapPadding != 0 ||
                         baseTopMapPadding != 0 ||
@@ -948,6 +947,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setShowsMyLocationButton(boolean showMyLocationButton) {
+    this.showsMyLocationButton = showMyLocationButton;
         if (map != null) {
             if (hasPermissions() || !showMyLocationButton) {
                 map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
@@ -1700,7 +1700,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setKmlSrc(String kmlSrc) {
-        if (isMapReady) {
+        if (map != null) {
             try {
                 InputStream kmlStream = new FileUtil(context).execute(kmlSrc).get();
 
