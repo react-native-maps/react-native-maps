@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.1](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0...v1.25.1) (2025-08-09)
+
+
+### Reverts
+
+* Revert "Fix/googlemaps mylocation compass" ([#5685](https://github.com/react-native-maps/react-native-maps/issues/5685)) ([0126fbe](https://github.com/react-native-maps/react-native-maps/commit/0126fbe03cb838a8a370314e1c96404e31a312bc)), closes [#5684](https://github.com/react-native-maps/react-native-maps/issues/5684)
+
 # [1.25.0](https://github.com/react-native-maps/react-native-maps/compare/v1.24.16...v1.25.0) (2025-08-03)
 
 
