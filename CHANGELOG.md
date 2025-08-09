@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.2](https://github.com/react-native-maps/react-native-maps/compare/v1.25.1...v1.25.2) (2025-08-09)
+
+
+### Bug Fixes
+
+* **ios:** googlemaps mylocation compass ([#5686](https://github.com/react-native-maps/react-native-maps/issues/5686)) ([e43862d](https://github.com/react-native-maps/react-native-maps/commit/e43862dc19f0a2904202365516250701284b19d0))
+
 ## [1.25.1](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0...v1.25.1) (2025-08-09)
 
 
