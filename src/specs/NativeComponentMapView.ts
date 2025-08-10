@@ -11,6 +11,7 @@ import type {
   DirectEventHandler,
   BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
+import FabricMapView from './NativeComponentMapView';
 
 export type EdgePadding = Readonly<{
   top: Double; // Non-nullable Double for top
@@ -300,7 +301,7 @@ export type RegionChangeEvent = Readonly<{
     latitudeDelta: Double; // Non-nullable Double for latitudeDelta
     longitudeDelta: Double; // Non-nullable Double for longitudeDelta
   }; // The region object
-  continuous?: boolean;
+  isGesture?: boolean;
 }>;
 export type UserLocationChangeEvent = Readonly<{
   coordinate?: {
@@ -871,11 +872,11 @@ export interface MapFabricNativeProps extends ViewProps {
   /**
    * If `false` hide the button to move map to the current user's location.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  showsMyLocationButton?: WithDefault<boolean, true>;
+  showsMyLocationButton?: boolean;
 
   /**
    * A Boolean indicating whether the map shows scale information.
@@ -1039,46 +1040,46 @@ export interface MapFabricNativeProps extends ViewProps {
   cameraZoomRange?: CameraZoomRange;
 }
 
-export interface NativeCommands {
+interface NativeCommands {
   animateToRegion: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     regionJSON: string,
     duration: Int32,
   ) => void;
 
   setCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     cameraJSON: string,
   ) => void;
 
   animateCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     cameraJSON: string,
     duration: Int32,
   ) => void;
 
   fitToElements: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToSuppliedMarkers: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     markersJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     coordinatesJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   setIndoorActiveLevelIndex: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     activeLevelIndex: Int32,
   ) => void;
 }

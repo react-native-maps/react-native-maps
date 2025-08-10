@@ -32,7 +32,7 @@ RNMapsCircleProps::RNMapsCircleProps(
     fillColor(convertRawProp(context, rawProps, "fillColor", sourceProps.fillColor, {})),
     radius(convertRawProp(context, rawProps, "radius", sourceProps.radius, {0.0})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
-    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
       {}
 RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
@@ -57,10 +57,10 @@ RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     scrollDuringRotateOrZoomEnabled(convertRawProp(context, rawProps, "scrollDuringRotateOrZoomEnabled", sourceProps.scrollDuringRotateOrZoomEnabled, {true})),
     scrollEnabled(convertRawProp(context, rawProps, "scrollEnabled", sourceProps.scrollEnabled, {true})),
     showsBuildings(convertRawProp(context, rawProps, "showsBuildings", sourceProps.showsBuildings, {true})),
-    showsCompass(convertRawProp(context, rawProps, "showsCompass", sourceProps.showsCompass, {true})),
+    showsCompass(convertRawProp(context, rawProps, "showsCompass", sourceProps.showsCompass, {false})),
     showsIndoorLevelPicker(convertRawProp(context, rawProps, "showsIndoorLevelPicker", sourceProps.showsIndoorLevelPicker, {false})),
     showsIndoors(convertRawProp(context, rawProps, "showsIndoors", sourceProps.showsIndoors, {true})),
-    showsMyLocationButton(convertRawProp(context, rawProps, "showsMyLocationButton", sourceProps.showsMyLocationButton, {true})),
+    showsMyLocationButton(convertRawProp(context, rawProps, "showsMyLocationButton", sourceProps.showsMyLocationButton, {false})),
     showsPointsOfInterest(convertRawProp(context, rawProps, "showsPointsOfInterest", sourceProps.showsPointsOfInterest, {false})),
     showsScale(convertRawProp(context, rawProps, "showsScale", sourceProps.showsScale, {false})),
     showsTraffic(convertRawProp(context, rawProps, "showsTraffic", sourceProps.showsTraffic, {false})),
@@ -83,6 +83,7 @@ RNMapsGooglePolygonProps::RNMapsGooglePolygonProps(
     coordinates(convertRawProp(context, rawProps, "coordinates", sourceProps.coordinates, {})),
     fillColor(convertRawProp(context, rawProps, "fillColor", sourceProps.fillColor, {})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     geodesic(convertRawProp(context, rawProps, "geodesic", sourceProps.geodesic, {false})),
     holes(convertRawProp(context, rawProps, "holes", sourceProps.holes, {})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
@@ -125,7 +126,7 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     showsCompass(convertRawProp(context, rawProps, "showsCompass", sourceProps.showsCompass, {true})),
     showsIndoorLevelPicker(convertRawProp(context, rawProps, "showsIndoorLevelPicker", sourceProps.showsIndoorLevelPicker, {false})),
     showsIndoors(convertRawProp(context, rawProps, "showsIndoors", sourceProps.showsIndoors, {true})),
-    showsMyLocationButton(convertRawProp(context, rawProps, "showsMyLocationButton", sourceProps.showsMyLocationButton, {true})),
+    showsMyLocationButton(convertRawProp(context, rawProps, "showsMyLocationButton", sourceProps.showsMyLocationButton, {false})),
     showsScale(convertRawProp(context, rawProps, "showsScale", sourceProps.showsScale, {false})),
     showsUserLocation(convertRawProp(context, rawProps, "showsUserLocation", sourceProps.showsUserLocation, {false})),
     tintColor(convertRawProp(context, rawProps, "tintColor", sourceProps.tintColor, {})),
@@ -153,10 +154,12 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     image(convertRawProp(context, rawProps, "image", sourceProps.image, {})),
     calloutOffset(convertRawProp(context, rawProps, "calloutOffset", sourceProps.calloutOffset, {})),
     displayPriority(convertRawProp(context, rawProps, "displayPriority", sourceProps.displayPriority, {RNMapsMarkerDisplayPriority::Required})),
+    centerOffset(convertRawProp(context, rawProps, "centerOffset", sourceProps.centerOffset, {})),
     coordinate(convertRawProp(context, rawProps, "coordinate", sourceProps.coordinate, {})),
     description(convertRawProp(context, rawProps, "description", sourceProps.description, {})),
     draggable(convertRawProp(context, rawProps, "draggable", sourceProps.draggable, {false})),
     title(convertRawProp(context, rawProps, "title", sourceProps.title, {})),
+    tracksViewChanges(convertRawProp(context, rawProps, "tracksViewChanges", sourceProps.tracksViewChanges, {true})),
     identifier(convertRawProp(context, rawProps, "identifier", sourceProps.identifier, {})),
     isPreselected(convertRawProp(context, rawProps, "isPreselected", sourceProps.isPreselected, {false})),
     opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
@@ -188,7 +191,7 @@ RNMapsPolylineProps::RNMapsPolylineProps(
     lineJoin(convertRawProp(context, rawProps, "lineJoin", sourceProps.lineJoin, {RNMapsPolylineLineJoin::Miter})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
     strokeColors(convertRawProp(context, rawProps, "strokeColors", sourceProps.strokeColors, {})),
-    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
       {}
 RNMapsUrlTileProps::RNMapsUrlTileProps(

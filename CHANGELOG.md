@@ -1,5 +1,110 @@
 # Changelog
 
+## [1.25.3](https://github.com/react-native-maps/react-native-maps/compare/v1.25.2...v1.25.3) (2025-08-09)
+
+
+### Bug Fixes
+
+* **android:** showsMyLocationButton not working ([#5687](https://github.com/react-native-maps/react-native-maps/issues/5687)) ([009c7e6](https://github.com/react-native-maps/react-native-maps/commit/009c7e60c27d7d67ed853bd6da170730af769ef2))
+
+## [1.25.2](https://github.com/react-native-maps/react-native-maps/compare/v1.25.1...v1.25.2) (2025-08-09)
+
+
+### Bug Fixes
+
+* **ios:** googlemaps mylocation compass ([#5686](https://github.com/react-native-maps/react-native-maps/issues/5686)) ([e43862d](https://github.com/react-native-maps/react-native-maps/commit/e43862dc19f0a2904202365516250701284b19d0))
+
+## [1.25.1](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0...v1.25.1) (2025-08-09)
+
+
+### Reverts
+
+* Revert "Fix/googlemaps mylocation compass" ([#5685](https://github.com/react-native-maps/react-native-maps/issues/5685)) ([0126fbe](https://github.com/react-native-maps/react-native-maps/commit/0126fbe03cb838a8a370314e1c96404e31a312bc)), closes [#5684](https://github.com/react-native-maps/react-native-maps/issues/5684)
+
+# [1.25.0](https://github.com/react-native-maps/react-native-maps/compare/v1.24.16...v1.25.0) (2025-08-03)
+
+
+### Features
+
+* **android:** support saving view state ([#5665](https://github.com/react-native-maps/react-native-maps/issues/5665)) ([2369b64](https://github.com/react-native-maps/react-native-maps/commit/2369b64722bcb27f3f2b5e4def6156f6c0743d7e))
+
+## [1.24.16](https://github.com/react-native-maps/react-native-maps/compare/v1.24.15...v1.24.16) (2025-08-03)
+
+
+### Bug Fixes
+
+* **android:** fix NPE crash on destroy ([#5664](https://github.com/react-native-maps/react-native-maps/issues/5664)) ([14adf87](https://github.com/react-native-maps/react-native-maps/commit/14adf877ba296d84147583f8c08ae62c9ff4c7b8))
+
+## [1.24.15](https://github.com/react-native-maps/react-native-maps/compare/v1.24.14...v1.24.15) (2025-08-02)
+
+
+### Bug Fixes
+
+* **android:** crash android react 19 parallel features ([#5662](https://github.com/react-native-maps/react-native-maps/issues/5662)) ([5abb073](https://github.com/react-native-maps/react-native-maps/commit/5abb0739fe08c56fc3b513566ee8b41581bcb1c4))
+
+## [1.24.14](https://github.com/react-native-maps/react-native-maps/compare/v1.24.13...v1.24.14) (2025-08-02)
+
+
+### Reverts
+
+* Revert "Bug/react 19 parallel features" ([#5661](https://github.com/react-native-maps/react-native-maps/issues/5661)) ([e086144](https://github.com/react-native-maps/react-native-maps/commit/e0861445d9958d78194f2c8e506dbde3a9ab1f25)), closes [#5660](https://github.com/react-native-maps/react-native-maps/issues/5660)
+
+## [1.24.13](https://github.com/react-native-maps/react-native-maps/compare/v1.24.12...v1.24.13) (2025-07-26)
+
+
+### Bug Fixes
+
+* Add typescript type info for showsTraffic property in MapView.tsx ([#5576](https://github.com/react-native-maps/react-native-maps/issues/5576)) ([4f0abe3](https://github.com/react-native-maps/react-native-maps/commit/4f0abe33fc56b517e3cc9e0147c5f7f0003e4028))
+
+## [1.24.12](https://github.com/react-native-maps/react-native-maps/compare/v1.24.11...v1.24.12) (2025-07-26)
+
+
+### Bug Fixes
+
+* fixed nullpointer due null react view tag ([#5630](https://github.com/react-native-maps/react-native-maps/issues/5630)) ([8c8c3ba](https://github.com/react-native-maps/react-native-maps/commit/8c8c3bab7582e16a5add8e59e86911501e412c26))
+
+## [1.24.11](https://github.com/react-native-maps/react-native-maps/compare/v1.24.10...v1.24.11) (2025-07-26)
+
+
+### Bug Fixes
+
+* **android:** onRegionChangeComplete on initial map loaded ([#5648](https://github.com/react-native-maps/react-native-maps/issues/5648)) ([13648e9](https://github.com/react-native-maps/react-native-maps/commit/13648e9325b02abe1628aa4fbed44b975c05206e))
+
+## [1.24.10](https://github.com/react-native-maps/react-native-maps/compare/v1.24.9...v1.24.10) (2025-07-21)
+
+
+### Bug Fixes
+
+* **android:** polygon stroke width ([#5617](https://github.com/react-native-maps/react-native-maps/issues/5617)) ([0a76e12](https://github.com/react-native-maps/react-native-maps/commit/0a76e128d3e9968d23bc9f60f7f6f35fe3235291))
+
+## [1.24.9](https://github.com/react-native-maps/react-native-maps/compare/v1.24.8...v1.24.9) (2025-07-21)
+
+
+### Bug Fixes
+
+* **android:** tracksViewChanges ([#5626](https://github.com/react-native-maps/react-native-maps/issues/5626)) ([478f935](https://github.com/react-native-maps/react-native-maps/commit/478f93554ac21d7081e9865b492971d3efe54fb7))
+
+## [1.24.8](https://github.com/react-native-maps/react-native-maps/compare/v1.24.7...v1.24.8) (2025-07-20)
+
+
+### Bug Fixes
+
+* **ios:** map props ([#5633](https://github.com/react-native-maps/react-native-maps/issues/5633)) ([581200a](https://github.com/react-native-maps/react-native-maps/commit/581200a4de584d39a45e285f316faf88d2e9f775))
+
+## [1.24.7](https://github.com/react-native-maps/react-native-maps/compare/v1.24.6...v1.24.7) (2025-07-18)
+
+
+### Bug Fixes
+
+* **createFabricMap:** replace ElementRef with ComponentRef for strict TypeScript compatibility ([#5620](https://github.com/react-native-maps/react-native-maps/issues/5620)) ([f50b7f5](https://github.com/react-native-maps/react-native-maps/commit/f50b7f514d285a38dde4afbd0cdb8ff3bee54894))
+
+## [1.24.6](https://github.com/react-native-maps/react-native-maps/compare/v1.24.5...v1.24.6) (2025-07-18)
+
+
+### Bug Fixes
+
+* region update events ([#5622](https://github.com/react-native-maps/react-native-maps/issues/5622)) ([08ae3bc](https://github.com/react-native-maps/react-native-maps/commit/08ae3bcf3f9d73fc3c88c1f38c140090b50b20cf))
+
 ## [1.24.5](https://github.com/react-native-maps/react-native-maps/compare/v1.24.4...v1.24.5) (2025-07-13)
 
 

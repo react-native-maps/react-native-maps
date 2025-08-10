@@ -4,7 +4,6 @@ package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 folly_config = get_folly_config()
 folly_compiler_flags = folly_config[:compiler_flags]
 
-Pod::UI.puts "\e[32m[react-native-maps] Thank you for using react-native-maps ❤️! \n[react-native-maps] to help keep it maintained, please consider sponsoring at https://github.com/sponsors/salah-ghanim\e[0m"
 
 Pod::Spec.new do |s|
   s.name = "react-native-maps"
