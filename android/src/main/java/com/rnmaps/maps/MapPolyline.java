@@ -30,17 +30,7 @@ import java.util.Map;
 
 public class MapPolyline extends MapFeature {
 
-    /// ANSY props >>>
-    private Integer lineDashPatternDash;
-    private Integer lineDashPatternGap;
-    private List<String> strokeColors;
-    private String type;
-    private PolylineManager.Collection polylineCollection;
-    private List<Polyline> polylineArray;
-    private List<PolylineOptions> polylineOptions;
-    /// <<<
-
-    // private PolylineOptions polylineOptions;
+    private PolylineOptions polylineOptions;
     private Polyline polyline;
 
     private List<LatLng> coordinates;
@@ -59,12 +49,6 @@ public class MapPolyline extends MapFeature {
         super(context);
     }
 
-    /// ANSY >>>
-    public void setType(String type) {
-        this.type = type;
-    }
-    /// <<<
-
     public void setCoordinates(ReadableArray coordinates) {
         this.coordinates = new ArrayList<>(coordinates.size());
         for (int i = 0; i < coordinates.size(); i++) {
@@ -77,32 +61,6 @@ public class MapPolyline extends MapFeature {
         }
     }
 
-    /// ANSY >>>
-    public void setSyncedCoordsColors(ReadableArray syncedCoordsColors) {
-        this.coordinates = new ArrayList<>(syncedCoordsColors.getArray(0).size());
-        for (int i = 0; i < syncedCoordsColors.getArray(0).size(); i++) {
-        ReadableMap coordinate = syncedCoordsColors.getArray(0).getMap(i);
-        this.coordinates.add(i,
-            new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
-        }
-
-        if(syncedCoordsColors.getArray(1) != null){
-            this.strokeColors = new ArrayList<>(syncedCoordsColors.getArray(1).size());
-            for (int i = 0; i < syncedCoordsColors.getArray(1).size(); i++) {
-            String strokeColor = syncedCoordsColors.getArray(1).getString(i);
-            this.strokeColors.add(i, strokeColor);
-            }
-        }
-
-        if (polyline != null && (type.equals("fake") || type.equals("single"))) {
-        polyline.setPoints(this.coordinates);
-        } else if (polyline != null && type.equals("actual")){
-        removeFromMap(this.polylineCollection);
-        addToMap(this.polylineCollection);
-        }
-    }
-    /// <<<
-
     public void setColor(int color) {
         this.color = color;
         if (polyline != null) {
@@ -111,20 +69,36 @@ public class MapPolyline extends MapFeature {
     }
 
     public void setStrokeColors(ReadableArray strokeColors) {
+        /// ANSY >>>
+        if (strokeColors == null || strokeColors.size() == 0) {
+            this.spans = null;
+            if (polyline != null) {
+                polyline.setSpans(new ArrayList<>());
+            }
+            return;
+        }
+        /// ANSY <<<
         List<StyleSpan> spans = new ArrayList<>();
         for (int i = 0; i < strokeColors.size(); i++) {
             StrokeStyle stroke;
+            /// ANSY >>>
+            // This is the original library's gradient logic.
+            // We keep Color.parseColor because the library expects color integers,
+            // but React Native sends color strings. This is a necessary fix.
+            int currentColor = Color.parseColor(strokeColors.getString(i));
+            /// ANSY <<<
 
             if (i == 0) {
-                stroke = StrokeStyle.colorBuilder(strokeColors.getInt(i)).build();
+                stroke = StrokeStyle.colorBuilder(currentColor).build();
             } else {
-                stroke = StrokeStyle.gradientBuilder(strokeColors.getInt(i - 1), strokeColors.getInt(i)).build();
+                int prevColor = Color.parseColor(strokeColors.getString(i - 1));
+                stroke = StrokeStyle.gradientBuilder(prevColor, currentColor).build();
             }
             spans.add(new StyleSpan(stroke));
         }
         this.spans = spans;
         if (polyline != null){
-        polyline.setSpans(spans);
+            polyline.setSpans(spans);
         }
     }
 
@@ -196,107 +170,46 @@ public class MapPolyline extends MapFeature {
         }
     }
 
-    // public PolylineOptions getPolylineOptions() {
-    //     if (polylineOptions == null) {
-    //         polylineOptions = createPolylineOptions();
-    //     }
-    //     return polylineOptions;
-    // }
-
-    // private PolylineOptions createPolylineOptions() {
-    //     PolylineOptions options = new PolylineOptions();
-    //     options.addAll(coordinates);
-    //     options.color(color);
-    //     options.width(width);
-    //     options.geodesic(geodesic);
-    //     options.zIndex(zIndex);
-    //     options.startCap(lineCap);
-    //     options.endCap(lineCap);
-    //     options.pattern(this.pattern);
-    //     return options;
-    // }
-
-    /// ANSY >>>
-    private void createPolyline() {
-        this.polylineOptions = new ArrayList<>(coordinates.size());
-        for (int i = 0; i < coordinates.size()-1; i++) {
-        PolylineOptions options = new PolylineOptions();
-
-        LatLng coordinate = coordinates.get(i);
-        options.add(coordinate);
-
-        LatLng coordinate2 = coordinates.get(i+1);
-        options.add(coordinate2);
-
-        Integer colorToUse;
-
-        if((strokeColors != null) && (strokeColors.size() > 0) && (strokeColors.size() == coordinates.size()) && (!"undefined".equals(strokeColors.get(i))) && (strokeColors.get(i) != null)){
-            colorToUse = Color.parseColor(strokeColors.get(i));
-        } else {
-            colorToUse = color;
+    public PolylineOptions getPolylineOptions() {
+        if (polylineOptions == null) {
+            polylineOptions = createPolylineOptions();
         }
+        return polylineOptions;
+    }
 
-        options.color(colorToUse);
+    private PolylineOptions createPolylineOptions() {
+        PolylineOptions options = new PolylineOptions();
+        options.addAll(coordinates);
+        options.color(color);
         options.width(width);
         options.geodesic(geodesic);
         options.zIndex(zIndex);
-
-        if(lineDashPatternDash != null){
-            List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(this.lineDashPatternDash), new Gap(this.lineDashPatternGap));
-            options.pattern(pattern);
-        }
-
-        this.polylineOptions.add(i, options);
-        }
+        options.startCap(lineCap);
+        options.endCap(lineCap);
+        options.pattern(this.pattern);
+        return options;
     }
-    /// <<<
 
     @Override
     public Object getFeature() {
         return polyline;
     }
 
-    // @Override
-    // public void addToMap(Object collection) {
-    //     PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
-    //     polyline = polylineCollection.addPolyline(getPolylineOptions());
-    //     polyline.setClickable(this.tappable);
-    //     if (spans != null){
-    //         polyline.setSpans(spans);
-    //     }
-    // }
-    /// ANSY >>>
     @Override
     public void addToMap(Object collection) {
-        this.polylineCollection = (PolylineManager.Collection) collection;
-        createPolyline();
-        this.polylineArray = new ArrayList<>(this.polylineOptions.size());
-        for (int i = 0; i < this.polylineOptions.size(); i++) {
-            Polyline segment = this.polylineCollection.addPolyline(this.polylineOptions.get(i));
-            polyline = segment;
-            this.polylineArray.add(i, segment);
+        PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+        polyline = polylineCollection.addPolyline(getPolylineOptions());
+        polyline.setClickable(this.tappable);
+        if (spans != null){
+            polyline.setSpans(spans);
         }
     }
-    /// <<<
 
-    // @Override
-    // public void removeFromMap(Object collection) {
-    //     PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
-    //     polylineCollection.remove(polyline);
-    // }
-    /// ANSY >>>
     @Override
     public void removeFromMap(Object collection) {
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
-        for (int i = 0; i < this.polylineArray.size(); i++) {
-            Polyline segment = this.polylineArray.get(i);
-            segment.remove();
-            polylineCollection.remove(segment);
-        }
-        this.polylineArray.clear();
-        this.polylineOptions.clear();
+        polylineCollection.remove(polyline);
     }
-    /// <<<
 
     public void setLineCap(String lineCap) {
         Cap cap;

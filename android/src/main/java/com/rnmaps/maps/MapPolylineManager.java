@@ -46,20 +46,6 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
     view.setCoordinates(coordinates);
   }
 
-  /// ANSY >>>
-  @ReactProp(name = "type")
-  public void setType(MapPolyline view, String type) {
-    view.setType(type);
-  }
-  /// <<<
-
-  /// ANSY >>>
-  @ReactProp(name = "syncedCoordsColors")
-  public void setSyncedCoordsColors(MapPolyline view, ReadableArray syncedCoordsColors) {
-    view.setSyncedCoordsColors(syncedCoordsColors);
-  }
-  /// <<<
-
   @ReactProp(name = "strokeWidth", defaultFloat = 1f)
   public void setStrokeWidth(MapPolyline view, float widthInPoints) {
     float widthInScreenPx = metrics.density * widthInPoints; // done for parity with iOS
@@ -71,12 +57,10 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
     view.setColor(color);
   }
 
-  /// ANSY >>>
   @ReactProp(name = "strokeColors")
   public void setStrokeColors(MapPolyline view, ReadableArray colors) {
     view.setStrokeColors(colors);
   }
-  /// <<<
 
   @ReactProp(name = "tappable", defaultBoolean = false)
   public void setTappable(MapPolyline view, boolean tapabble) {
