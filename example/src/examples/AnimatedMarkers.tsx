@@ -53,9 +53,9 @@ class AnimatedMarkers extends React.Component<any, any> {
     const {supported} = this.state;
     if (!supported) {
       return (
-        <Text style={styles.error}>
-          Animation is Not Available for Fabric Map yet
-        </Text>
+        <View style={styles.error}>
+          <Text>Animation is Not Available for Fabric Map yet</Text>
+        </View>
       );
     }
     return (
@@ -90,9 +90,9 @@ class AnimatedMarkers extends React.Component<any, any> {
 
 const styles = StyleSheet.create({
   error: {
-    position: 'absolute',
-    top: '50%',
-    left: '25%',
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     ...StyleSheet.absoluteFillObject,
