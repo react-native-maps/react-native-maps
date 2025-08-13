@@ -342,7 +342,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         super.onStop();
         savedFeatures = new HashMap<>(features);
         savedFeatures.keySet().forEach(this::removeFeatureAt);
-        removeView(attacherGroup);
+        if (attacherGroup != null) {
+            removeView(attacherGroup);
+        }
         attacherGroup = null;
         detachLifecycleObserver();
         super.onDetachedFromWindow();
@@ -1129,13 +1131,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
             // Remove from a view group if already present, prevent "specified child
             // already had a parent" error.
-            ViewGroup annotationParent = (ViewGroup) annotation.getParent();
-            if (annotationParent != null) {
-                annotationParent.removeView(annotation);
-            }
+            safeRemoveFromParent(annotation);
 
-            // Add to the parent group
-            attacherGroup.addView(annotation);
+            // Add to the parent group safely
+            if (attacherGroup != null) {
+                attacherGroup.addView(annotation);
+            }
 
             // Trigger visibility event if necessary.
             // With some testing, seems like it is not always
@@ -1213,7 +1214,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
             feature.removeFromMap(markerCollection);
-            attacherGroup.removeView(feature);
+            safeRemoveFeatureFromAttacherGroup(feature);
         } else if (feature instanceof MapHeatmap) {
             heatmapMap.remove(feature.getFeature());
             feature.removeFromMap(map);
@@ -1551,12 +1552,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         switch (action) {
             case (MotionEvent.ACTION_DOWN):
-                this.getParent().requestDisallowInterceptTouchEvent(
+                safeRequestDisallowInterceptTouchEvent(
                         map != null && map.getUiSettings().isScrollGesturesEnabled());
                 break;
             case (MotionEvent.ACTION_UP):
                 // Clear this regardless, since isScrollGesturesEnabled() may have been updated
-                this.getParent().requestDisallowInterceptTouchEvent(false);
+                safeRequestDisallowInterceptTouchEvent(false);
                 break;
         }
         super.dispatchTouchEvent(ev);
@@ -1644,14 +1645,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     private void removeCacheImageView() {
         if (this.cacheImageView != null) {
-            ((ViewGroup) this.cacheImageView.getParent()).removeView(this.cacheImageView);
+            safeRemoveFromParent(this.cacheImageView);
             this.cacheImageView = null;
         }
     }
 
     private void removeMapLoadingProgressBar() {
         if (this.mapLoadingProgressBar != null) {
-            ((ViewGroup) this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
+            safeRemoveFromParent(this.mapLoadingProgressBar);
             this.mapLoadingProgressBar = null;
         }
     }
@@ -1659,7 +1660,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private void removeMapLoadingLayoutView() {
         this.removeMapLoadingProgressBar();
         if (this.mapLoadingLayout != null) {
-            ((ViewGroup) this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
+            safeRemoveFromParent(this.mapLoadingLayout);
             this.mapLoadingLayout = null;
         }
     }
@@ -1899,4 +1900,52 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     };
 
+    /**
+     * Safely removes a view from its parent ViewGroup.
+     * Prevents NullPointerException during component lifecycle operations.
+     * 
+     * @param view The view to remove from its parent
+     * @return true if the view was successfully removed, false otherwise
+     */
+    private boolean safeRemoveFromParent(View view) {
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeView(view);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Safely requests touch event handling from parent ViewGroup.
+     * Prevents NullPointerException during touch event dispatching.
+     * 
+     * @param disallowIntercept Whether to disallow parent touch interception
+     * @return true if the request was successfully made, false otherwise
+     */
+    private boolean safeRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        ViewGroup parent = (ViewGroup) this.getParent();
+        if (parent != null) {
+            parent.requestDisallowInterceptTouchEvent(disallowIntercept);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Safely removes a MapFeature from the attacherGroup.
+     * Prevents NullPointerException during feature removal operations.
+     * 
+     * @param feature The MapFeature to remove from attacherGroup
+     * @return true if the feature was successfully removed, false otherwise
+     */
+    private boolean safeRemoveFeatureFromAttacherGroup(MapFeature feature) {
+        if (attacherGroup != null && feature != null) {
+            attacherGroup.removeView(feature);
+            return true;
+        }
+        return false;
+    }
 }
