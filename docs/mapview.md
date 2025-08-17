@@ -254,6 +254,8 @@ type CameraZoomRange = {
 };
 ```
 
+More: https://developer.apple.com/documentation/mapkit/mkpointofinterestcategory
+
 ```
 type MKPointOfInterestCategoryType =
   // Food and drink

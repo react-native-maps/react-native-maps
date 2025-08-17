@@ -103,6 +103,7 @@ export type MarkerPressEvent = NativeSyntheticEvent<{
 /**
  * Represents the available categories for points of interest on the Apple Maps.
  * Use an array of these strings for the `pointsOfInterestFilter` prop.
+ * More: https://developer.apple.com/documentation/mapkit/mkpointofinterestcategory
  */
 export type MKPointOfInterestCategoryType =
   // Arts and culture
