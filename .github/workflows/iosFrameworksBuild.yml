@@ -35,4 +35,11 @@ jobs:
         run: echo MAPS_API_KEY=your_api_key_here >> example/ios/Secrets.xcconfig
 
       - name: Build iOS
-        run: xcodebuild -workspace example/ios/rnmshowcase.xcworkspace -scheme rnmshowcase -configuration Debug -sdk iphonesimulator
+        run: |
+          xcodebuild \
+            -workspace example/ios/rnmshowcase.xcworkspace \
+            -scheme rnmshowcase \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+            build
