@@ -717,110 +717,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
 }
 
-- (NSArray<MKPointOfInterestCategory> *)getCategoriesFromStrings:(NSArray<NSString *> *)stringArray {
-    // Use a static dictionary so it's only created once for efficiency.
-    static NSDictionary<NSString *, MKPointOfInterestCategory> *categoryMap = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSMutableDictionary<NSString *, MKPointOfInterestCategory> *map = [NSMutableDictionary dictionary];
-
-        // --- Categories available since iOS 13.0 ---
-        if (@available(iOS 13.0, *)) {
-            map[@"MKPointOfInterestCategoryAirport"] = MKPointOfInterestCategoryAirport;
-            map[@"MKPointOfInterestCategoryAmusementPark"] = MKPointOfInterestCategoryAmusementPark;
-            map[@"MKPointOfInterestCategoryAquarium"] = MKPointOfInterestCategoryAquarium;
-            map[@"MKPointOfInterestCategoryATM"] = MKPointOfInterestCategoryATM;
-            map[@"MKPointOfInterestCategoryBakery"] = MKPointOfInterestCategoryBakery;
-            map[@"MKPointOfInterestCategoryBank"] = MKPointOfInterestCategoryBank;
-            map[@"MKPointOfInterestCategoryBeach"] = MKPointOfInterestCategoryBeach;
-            map[@"MKPointOfInterestCategoryBrewery"] = MKPointOfInterestCategoryBrewery;
-            map[@"MKPointOfInterestCategoryCafe"] = MKPointOfInterestCategoryCafe;
-            map[@"MKPointOfInterestCategoryCampground"] = MKPointOfInterestCategoryCampground;
-            map[@"MKPointOfInterestCategoryCarRental"] = MKPointOfInterestCategoryCarRental;
-            map[@"MKPointOfInterestCategoryEVCharger"] = MKPointOfInterestCategoryEVCharger;
-            map[@"MKPointOfInterestCategoryFireStation"] = MKPointOfInterestCategoryFireStation;
-            map[@"MKPointOfInterestCategoryFitnessCenter"] = MKPointOfInterestCategoryFitnessCenter;
-            map[@"MKPointOfInterestCategoryFoodMarket"] = MKPointOfInterestCategoryFoodMarket;
-            map[@"MKPointOfInterestCategoryGasStation"] = MKPointOfInterestCategoryGasStation;
-            map[@"MKPointOfInterestCategoryHospital"] = MKPointOfInterestCategoryHospital;
-            map[@"MKPointOfInterestCategoryHotel"] = MKPointOfInterestCategoryHotel;
-            map[@"MKPointOfInterestCategoryLaundry"] = MKPointOfInterestCategoryLaundry;
-            map[@"MKPointOfInterestCategoryLibrary"] = MKPointOfInterestCategoryLibrary;
-            map[@"MKPointOfInterestCategoryMarina"] = MKPointOfInterestCategoryMarina;
-            map[@"MKPointOfInterestCategoryMovieTheater"] = MKPointOfInterestCategoryMovieTheater;
-            map[@"MKPointOfInterestCategoryMuseum"] = MKPointOfInterestCategoryMuseum;
-            map[@"MKPointOfInterestCategoryNationalPark"] = MKPointOfInterestCategoryNationalPark;
-            map[@"MKPointOfInterestCategoryNightlife"] = MKPointOfInterestCategoryNightlife;
-            map[@"MKPointOfInterestCategoryPark"] = MKPointOfInterestCategoryPark;
-            map[@"MKPointOfInterestCategoryParking"] = MKPointOfInterestCategoryParking;
-            map[@"MKPointOfInterestCategoryPharmacy"] = MKPointOfInterestCategoryPharmacy;
-            map[@"MKPointOfInterestCategoryPolice"] = MKPointOfInterestCategoryPolice;
-            map[@"MKPointOfInterestCategoryPostOffice"] = MKPointOfInterestCategoryPostOffice;
-            map[@"MKPointOfInterestCategoryPublicTransport"] = MKPointOfInterestCategoryPublicTransport;
-            map[@"MKPointOfInterestCategoryRestaurant"] = MKPointOfInterestCategoryRestaurant;
-            map[@"MKPointOfInterestCategoryRestroom"] = MKPointOfInterestCategoryRestroom;
-            map[@"MKPointOfInterestCategorySchool"] = MKPointOfInterestCategorySchool;
-            map[@"MKPointOfInterestCategoryStadium"] = MKPointOfInterestCategoryStadium;
-            map[@"MKPointOfInterestCategoryStore"] = MKPointOfInterestCategoryStore;
-            map[@"MKPointOfInterestCategoryTheater"] = MKPointOfInterestCategoryTheater;
-            map[@"MKPointOfInterestCategoryUniversity"] = MKPointOfInterestCategoryUniversity;
-            map[@"MKPointOfInterestCategoryWinery"] = MKPointOfInterestCategoryWinery;
-            map[@"MKPointOfInterestCategoryZoo"] = MKPointOfInterestCategoryZoo;
-        }
-
-        // --- Categories available since iOS 18.0 ---
-        if (@available(iOS 18.0, *)) {
-            map[@"MKPointOfInterestCategoryAnimalService"] = MKPointOfInterestCategoryAnimalService;
-            map[@"MKPointOfInterestCategoryAutomotiveRepair"] = MKPointOfInterestCategoryAutomotiveRepair;
-            map[@"MKPointOfInterestCategoryBaseball"] = MKPointOfInterestCategoryBaseball;
-            map[@"MKPointOfInterestCategoryBasketball"] = MKPointOfInterestCategoryBasketball;
-            map[@"MKPointOfInterestCategoryBeauty"] = MKPointOfInterestCategoryBeauty;
-            map[@"MKPointOfInterestCategoryBowling"] = MKPointOfInterestCategoryBowling;
-            map[@"MKPointOfInterestCategoryCastle"] = MKPointOfInterestCategoryCastle;
-            map[@"MKPointOfInterestCategoryConventionCenter"] = MKPointOfInterestCategoryConventionCenter;
-            map[@"MKPointOfInterestCategoryDistillery"] = MKPointOfInterestCategoryDistillery;
-            map[@"MKPointOfInterestCategoryFairground"] = MKPointOfInterestCategoryFairground;
-            map[@"MKPointOfInterestCategoryFishing"] = MKPointOfInterestCategoryFishing;
-            map[@"MKPointOfInterestCategoryFortress"] = MKPointOfInterestCategoryFortress;
-            map[@"MKPointOfInterestCategoryGolf"] = MKPointOfInterestCategoryGolf;
-            map[@"MKPointOfInterestCategoryGoKart"] = MKPointOfInterestCategoryGoKart;
-            map[@"MKPointOfInterestCategoryHiking"] = MKPointOfInterestCategoryHiking;
-            map[@"MKPointOfInterestCategoryKayaking"] = MKPointOfInterestCategoryKayaking;
-            map[@"MKPointOfInterestCategoryLandmark"] = MKPointOfInterestCategoryLandmark;
-            map[@"MKPointOfInterestCategoryMailbox"] = MKPointOfInterestCategoryMailbox;
-            map[@"MKPointOfInterestCategoryMiniGolf"] = MKPointOfInterestCategoryMiniGolf;
-            map[@"MKPointOfInterestCategoryMusicVenue"] = MKPointOfInterestCategoryMusicVenue;
-            map[@"MKPointOfInterestCategoryNationalMonument"] = MKPointOfInterestCategoryNationalMonument;
-            map[@"MKPointOfInterestCategoryPlanetarium"] = MKPointOfInterestCategoryPlanetarium;
-            map[@"MKPointOfInterestCategoryRockClimbing"] = MKPointOfInterestCategoryRockClimbing;
-            map[@"MKPointOfInterestCategoryRVPark"] = MKPointOfInterestCategoryRVPark;
-            map[@"MKPointOfInterestCategorySkatePark"] = MKPointOfInterestCategorySkatePark;
-            map[@"MKPointOfInterestCategorySkating"] = MKPointOfInterestCategorySkating;
-            map[@"MKPointOfInterestCategorySkiing"] = MKPointOfInterestCategorySkiing;
-            map[@"MKPointOfInterestCategorySoccer"] = MKPointOfInterestCategorySoccer;
-            map[@"MKPointOfInterestCategorySpa"] = MKPointOfInterestCategorySpa;
-            map[@"MKPointOfInterestCategorySurfing"] = MKPointOfInterestCategorySurfing;
-            map[@"MKPointOfInterestCategorySwimming"] = MKPointOfInterestCategorySwimming;
-            map[@"MKPointOfInterestCategoryTennis"] = MKPointOfInterestCategoryTennis;
-            map[@"MKPointOfInterestCategoryVolleyball"] = MKPointOfInterestCategoryVolleyball;
-        }
-        
-        categoryMap = [map copy];
-    });
-
-    NSMutableArray<MKPointOfInterestCategory> *validCategories = [NSMutableArray array];
-    for (NSString *str in stringArray) {
-        // Since keys are now the exact constant names, we do a direct, case-sensitive lookup.
-        MKPointOfInterestCategory category = categoryMap[str];
-        if (category) {
-            [validCategories addObject:category];
-        } else {
-            NSLog(@"[MapView] Warning: Unknown or unavailable point of interest category string '%@'", str);
-        }
-    }
-    return validCategories;
-}
-
 - (UIColor *)loadingBackgroundColor {
     return self.loadingView.backgroundColor;
 }
@@ -1083,6 +979,113 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     int normalizingFactor = 512;
 
     return log2(360 * ((width / normalizingFactor) / spanStraight));
+}
+
+// Helpers
+
+- (NSArray<MKPointOfInterestCategory> *)getCategoriesFromStrings:(NSArray<NSString *> *)stringArray {
+    // Use a static dictionary so it's only created once for efficiency.
+    static NSDictionary<NSString *, MKPointOfInterestCategory> *categoryMap = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSMutableDictionary<NSString *, MKPointOfInterestCategory> *map = [NSMutableDictionary dictionary];
+
+        // --- Categories available since iOS 13.0 ---
+        if (@available(iOS 13.0, *)) {
+            map[@"airport"] = MKPointOfInterestCategoryAirport;
+            map[@"amusementPark"] = MKPointOfInterestCategoryAmusementPark;
+            map[@"aquarium"] = MKPointOfInterestCategoryAquarium;
+            map[@"atm"] = MKPointOfInterestCategoryATM;
+            map[@"bakery"] = MKPointOfInterestCategoryBakery;
+            map[@"bank"] = MKPointOfInterestCategoryBank;
+            map[@"beach"] = MKPointOfInterestCategoryBeach;
+            map[@"brewery"] = MKPointOfInterestCategoryBrewery;
+            map[@"cafe"] = MKPointOfInterestCategoryCafe;
+            map[@"campground"] = MKPointOfInterestCategoryCampground;
+            map[@"carRental"] = MKPointOfInterestCategoryCarRental;
+            map[@"evCharger"] = MKPointOfInterestCategoryEVCharger;
+            map[@"fireStation"] = MKPointOfInterestCategoryFireStation;
+            map[@"fitnessCenter"] = MKPointOfInterestCategoryFitnessCenter;
+            map[@"foodMarket"] = MKPointOfInterestCategoryFoodMarket;
+            map[@"gasStation"] = MKPointOfInterestCategoryGasStation;
+            map[@"hospital"] = MKPointOfInterestCategoryHospital;
+            map[@"hotel"] = MKPointOfInterestCategoryHotel;
+            map[@"laundry"] = MKPointOfInterestCategoryLaundry;
+            map[@"library"] = MKPointOfInterestCategoryLibrary;
+            map[@"marina"] = MKPointOfInterestCategoryMarina;
+            map[@"movieTheater"] = MKPointOfInterestCategoryMovieTheater;
+            map[@"museum"] = MKPointOfInterestCategoryMuseum;
+            map[@"nationalPark"] = MKPointOfInterestCategoryNationalPark;
+            map[@"nightlife"] = MKPointOfInterestCategoryNightlife;
+            map[@"park"] = MKPointOfInterestCategoryPark;
+            map[@"parking"] = MKPointOfInterestCategoryParking;
+            map[@"pharmacy"] = MKPointOfInterestCategoryPharmacy;
+            map[@"police"] = MKPointOfInterestCategoryPolice;
+            map[@"postOffice"] = MKPointOfInterestCategoryPostOffice;
+            map[@"publicTransport"] = MKPointOfInterestCategoryPublicTransport;
+            map[@"restaurant"] = MKPointOfInterestCategoryRestaurant;
+            map[@"restroom"] = MKPointOfInterestCategoryRestroom;
+            map[@"school"] = MKPointOfInterestCategorySchool;
+            map[@"stadium"] = MKPointOfInterestCategoryStadium;
+            map[@"store"] = MKPointOfInterestCategoryStore;
+            map[@"theater"] = MKPointOfInterestCategoryTheater;
+            map[@"university"] = MKPointOfInterestCategoryUniversity;
+            map[@"winery"] = MKPointOfInterestCategoryWinery;
+            map[@"zoo"] = MKPointOfInterestCategoryZoo;
+        }
+
+        // --- Categories available since iOS 18.0 ---
+        if (@available(iOS 18.0, *)) {
+            map[@"animalService"] = MKPointOfInterestCategoryAnimalService;
+            map[@"automotiveRepair"] = MKPointOfInterestCategoryAutomotiveRepair;
+            map[@"baseball"] = MKPointOfInterestCategoryBaseball;
+            map[@"basketball"] = MKPointOfInterestCategoryBasketball;
+            map[@"beauty"] = MKPointOfInterestCategoryBeauty;
+            map[@"bowling"] = MKPointOfInterestCategoryBowling;
+            map[@"castle"] = MKPointOfInterestCategoryCastle;
+            map[@"conventionCenter"] = MKPointOfInterestCategoryConventionCenter;
+            map[@"distillery"] = MKPointOfInterestCategoryDistillery;
+            map[@"fairground"] = MKPointOfInterestCategoryFairground;
+            map[@"fishing"] = MKPointOfInterestCategoryFishing;
+
+            map[@"fortress"] = MKPointOfInterestCategoryFortress;
+            map[@"golf"] = MKPointOfInterestCategoryGolf;
+            map[@"goKart"] = MKPointOfInterestCategoryGoKart;
+            map[@"hiking"] = MKPointOfInterestCategoryHiking;
+            map[@"kayaking"] = MKPointOfInterestCategoryKayaking;
+            map[@"landmark"] = MKPointOfInterestCategoryLandmark;
+            map[@"mailbox"] = MKPointOfInterestCategoryMailbox;
+            map[@"miniGolf"] = MKPointOfInterestCategoryMiniGolf;
+            map[@"musicVenue"] = MKPointOfInterestCategoryMusicVenue;
+            map[@"nationalMonument"] = MKPointOfInterestCategoryNationalMonument;
+            map[@"planetarium"] = MKPointOfInterestCategoryPlanetarium;
+            map[@"rockClimbing"] = MKPointOfInterestCategoryRockClimbing;
+            map[@"rvPark"] = MKPointOfInterestCategoryRVPark;
+            map[@"skatePark"] = MKPointOfInterestCategorySkatePark;
+            map[@"skating"] = MKPointOfInterestCategorySkating;
+            map[@"skiing"] = MKPointOfInterestCategorySkiing;
+            map[@"soccer"] = MKPointOfInterestCategorySoccer;
+            map[@"spa"] = MKPointOfInterestCategorySpa;
+            map[@"surfing"] = MKPointOfInterestCategorySurfing;
+            map[@"swimming"] = MKPointOfInterestCategorySwimming;
+            map[@"tennis"] = MKPointOfInterestCategoryTennis;
+            map[@"volleyball"] = MKPointOfInterestCategoryVolleyball;
+        }
+        
+        categoryMap = [map copy];
+    });
+
+    NSMutableArray<MKPointOfInterestCategory> *validCategories = [NSMutableArray array];
+    for (NSString *str in stringArray) {
+        // Direct, case-sensitive lookup for camelCase keys
+        MKPointOfInterestCategory category = categoryMap[str];
+        if (category) {
+            [validCategories addObject:category];
+        } else {
+            NSLog(@"[MapView] Warning: Unknown or unavailable point of interest category string '%@'", str);
+        }
+    }
+    return validCategories;
 }
 
 @end

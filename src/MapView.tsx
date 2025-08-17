@@ -27,6 +27,7 @@ import type {
   Point,
   Provider,
   Region,
+  MKPointOfInterestCategoryType,
 } from './sharedTypes';
 import type {
   ActiveIndoorLevel,
@@ -599,7 +600,7 @@ export type MapViewProps = ViewProps & {
    * If this is set, it takes precedence over `showsPointsOfInterests`.
    * @see showsPointsOfInterests
    */
-  pointsOfInterestFilter?: string[];
+  pointsOfInterestFilter?: MKPointOfInterestCategoryType[];
 
   /**
    * A Boolean indicating whether the map shows scale information.
