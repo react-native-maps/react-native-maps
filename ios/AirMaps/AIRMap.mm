@@ -1025,6 +1025,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         map[@"winery"] = MKPointOfInterestCategoryWinery;
         map[@"zoo"] = MKPointOfInterestCategoryZoo;
 
+// Only include if building with iOS 18.0+ SDK (Xcode 16+)
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 180000
         // --- Categories available since iOS 18.0 ---
         if (@available(iOS 18.0, *)) {
             map[@"animalService"] = MKPointOfInterestCategoryAnimalService;
@@ -1062,6 +1064,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
             map[@"tennis"] = MKPointOfInterestCategoryTennis;
             map[@"volleyball"] = MKPointOfInterestCategoryVolleyball;
         }
+#endif
         
         categoryMap = [map copy];
     });
