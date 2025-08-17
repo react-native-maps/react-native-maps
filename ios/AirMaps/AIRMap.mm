@@ -58,6 +58,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     BOOL _initialCameraSet;
     BOOL _initialized;
     BOOL _loadingStarted;
+    BOOL _showsPointsOfInterests;
+    NSArray<NSString *> *_pointsOfInterestFilter;
 
     // Array to manually track RN subviews
     //
@@ -97,6 +99,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         self.compassOffset = CGPointMake(0, 0);
         self.legacyZoomConstraintsEnabled = YES;
         _initialized = YES;
+        _showsPointsOfInterests = YES;
+        _pointsOfInterestFilter = @[];
         [self listenToMemoryWarnings];
     }
     return self;
@@ -635,6 +639,186 @@ const NSInteger AIRMapMaxZoomLevel = 20;
             self.loadingView.hidden = YES;
         }
     }
+}
+
+- (void)setShowsPointsOfInterests:(BOOL)showsPointsOfInterests {
+    _showsPointsOfInterests = showsPointsOfInterests;
+
+    if (!_initialized) {
+        return;
+    }
+
+    if (_pointsOfInterestFilter && _pointsOfInterestFilter.count > 0) {
+        return; // specific filter takes precedence
+    }
+
+    if (@available(iOS 16.0, *)) {
+        // iOS 16+ → use MKMapConfiguration
+        MKMapConfiguration *newConfig = [self.preferredConfiguration copy] ?: [[MKStandardMapConfiguration alloc] init];
+        MKPointOfInterestFilter *filter = showsPointsOfInterests
+            ? [MKPointOfInterestFilter filterIncludingAllCategories]
+            : [MKPointOfInterestFilter filterExcludingAllCategories];
+
+        if ([newConfig isKindOfClass:[MKStandardMapConfiguration class]]) {
+            ((MKStandardMapConfiguration *)newConfig).pointOfInterestFilter = filter;
+        } else if ([newConfig isKindOfClass:[MKHybridMapConfiguration class]]) {
+            ((MKHybridMapConfiguration *)newConfig).pointOfInterestFilter = filter;
+        }
+
+        self.preferredConfiguration = newConfig;
+    } else {
+        // iOS 15 fallback → use legacy property
+        self.showsPointsOfInterest = showsPointsOfInterests;
+    }
+}
+
+- (void)setPointsOfInterestFilter:(NSArray<NSString *> *)pointsOfInterestFilter {
+    _pointsOfInterestFilter = pointsOfInterestFilter;
+
+    if (!_initialized) {
+        return;
+    }
+
+    // If the filter is nil or empty, fall back to the boolean prop's behavior.
+    if (!pointsOfInterestFilter || pointsOfInterestFilter.count == 0) {
+        [self setShowsPointsOfInterests:_showsPointsOfInterests];
+        return;
+    }
+
+    // --- Convert input strings into valid MKPointOfInterestCategory constants ---
+    NSArray<MKPointOfInterestCategory> *validCategories = [self getCategoriesFromStrings:pointsOfInterestFilter];
+
+    // If no valid categories were found from the input strings, do nothing.
+    if (validCategories.count == 0) {
+        return;
+    }
+
+    MKPointOfInterestFilter *filter =
+        [[MKPointOfInterestFilter alloc] initIncludingCategories:validCategories];
+
+    if (@available(iOS 16.0, *)) {
+        // --- MODERN API (iOS 16.0+) ---
+        // Uses MKMapConfiguration to avoid destroying other map settings.
+        MKMapConfiguration *newConfig =
+            [self.preferredConfiguration copy] ?: [[MKStandardMapConfiguration alloc] init];
+
+        if ([newConfig isKindOfClass:[MKStandardMapConfiguration class]]) {
+            ((MKStandardMapConfiguration *)newConfig).pointOfInterestFilter = filter;
+        } else if ([newConfig isKindOfClass:[MKHybridMapConfiguration class]]) {
+            ((MKHybridMapConfiguration *)newConfig).pointOfInterestFilter = filter;
+        }
+
+        self.preferredConfiguration = newConfig; // Apply the updated configuration
+    } else {
+        // --- LEGACY API (iOS 13.0 - 15.x) ---
+        // On older systems, set the filter directly on the map view instance.
+        // This assumes 'self' is the MKMapView. If not, use your mapView property.
+        self.pointOfInterestFilter = filter;
+    }
+}
+
+- (NSArray<MKPointOfInterestCategory> *)getCategoriesFromStrings:(NSArray<NSString *> *)stringArray {
+    // Use a static dictionary so it's only created once for efficiency.
+    static NSDictionary<NSString *, MKPointOfInterestCategory> *categoryMap = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSMutableDictionary<NSString *, MKPointOfInterestCategory> *map = [NSMutableDictionary dictionary];
+
+        // --- Categories available since iOS 13.0 ---
+        if (@available(iOS 13.0, *)) {
+            map[@"MKPointOfInterestCategoryAirport"] = MKPointOfInterestCategoryAirport;
+            map[@"MKPointOfInterestCategoryAmusementPark"] = MKPointOfInterestCategoryAmusementPark;
+            map[@"MKPointOfInterestCategoryAquarium"] = MKPointOfInterestCategoryAquarium;
+            map[@"MKPointOfInterestCategoryATM"] = MKPointOfInterestCategoryATM;
+            map[@"MKPointOfInterestCategoryBakery"] = MKPointOfInterestCategoryBakery;
+            map[@"MKPointOfInterestCategoryBank"] = MKPointOfInterestCategoryBank;
+            map[@"MKPointOfInterestCategoryBeach"] = MKPointOfInterestCategoryBeach;
+            map[@"MKPointOfInterestCategoryBrewery"] = MKPointOfInterestCategoryBrewery;
+            map[@"MKPointOfInterestCategoryCafe"] = MKPointOfInterestCategoryCafe;
+            map[@"MKPointOfInterestCategoryCampground"] = MKPointOfInterestCategoryCampground;
+            map[@"MKPointOfInterestCategoryCarRental"] = MKPointOfInterestCategoryCarRental;
+            map[@"MKPointOfInterestCategoryEVCharger"] = MKPointOfInterestCategoryEVCharger;
+            map[@"MKPointOfInterestCategoryFireStation"] = MKPointOfInterestCategoryFireStation;
+            map[@"MKPointOfInterestCategoryFitnessCenter"] = MKPointOfInterestCategoryFitnessCenter;
+            map[@"MKPointOfInterestCategoryFoodMarket"] = MKPointOfInterestCategoryFoodMarket;
+            map[@"MKPointOfInterestCategoryGasStation"] = MKPointOfInterestCategoryGasStation;
+            map[@"MKPointOfInterestCategoryHospital"] = MKPointOfInterestCategoryHospital;
+            map[@"MKPointOfInterestCategoryHotel"] = MKPointOfInterestCategoryHotel;
+            map[@"MKPointOfInterestCategoryLaundry"] = MKPointOfInterestCategoryLaundry;
+            map[@"MKPointOfInterestCategoryLibrary"] = MKPointOfInterestCategoryLibrary;
+            map[@"MKPointOfInterestCategoryMarina"] = MKPointOfInterestCategoryMarina;
+            map[@"MKPointOfInterestCategoryMovieTheater"] = MKPointOfInterestCategoryMovieTheater;
+            map[@"MKPointOfInterestCategoryMuseum"] = MKPointOfInterestCategoryMuseum;
+            map[@"MKPointOfInterestCategoryNationalPark"] = MKPointOfInterestCategoryNationalPark;
+            map[@"MKPointOfInterestCategoryNightlife"] = MKPointOfInterestCategoryNightlife;
+            map[@"MKPointOfInterestCategoryPark"] = MKPointOfInterestCategoryPark;
+            map[@"MKPointOfInterestCategoryParking"] = MKPointOfInterestCategoryParking;
+            map[@"MKPointOfInterestCategoryPharmacy"] = MKPointOfInterestCategoryPharmacy;
+            map[@"MKPointOfInterestCategoryPolice"] = MKPointOfInterestCategoryPolice;
+            map[@"MKPointOfInterestCategoryPostOffice"] = MKPointOfInterestCategoryPostOffice;
+            map[@"MKPointOfInterestCategoryPublicTransport"] = MKPointOfInterestCategoryPublicTransport;
+            map[@"MKPointOfInterestCategoryRestaurant"] = MKPointOfInterestCategoryRestaurant;
+            map[@"MKPointOfInterestCategoryRestroom"] = MKPointOfInterestCategoryRestroom;
+            map[@"MKPointOfInterestCategorySchool"] = MKPointOfInterestCategorySchool;
+            map[@"MKPointOfInterestCategoryStadium"] = MKPointOfInterestCategoryStadium;
+            map[@"MKPointOfInterestCategoryStore"] = MKPointOfInterestCategoryStore;
+            map[@"MKPointOfInterestCategoryTheater"] = MKPointOfInterestCategoryTheater;
+            map[@"MKPointOfInterestCategoryUniversity"] = MKPointOfInterestCategoryUniversity;
+            map[@"MKPointOfInterestCategoryWinery"] = MKPointOfInterestCategoryWinery;
+            map[@"MKPointOfInterestCategoryZoo"] = MKPointOfInterestCategoryZoo;
+        }
+
+        // --- Categories available since iOS 18.0 ---
+        if (@available(iOS 18.0, *)) {
+            map[@"MKPointOfInterestCategoryAnimalService"] = MKPointOfInterestCategoryAnimalService;
+            map[@"MKPointOfInterestCategoryAutomotiveRepair"] = MKPointOfInterestCategoryAutomotiveRepair;
+            map[@"MKPointOfInterestCategoryBaseball"] = MKPointOfInterestCategoryBaseball;
+            map[@"MKPointOfInterestCategoryBasketball"] = MKPointOfInterestCategoryBasketball;
+            map[@"MKPointOfInterestCategoryBeauty"] = MKPointOfInterestCategoryBeauty;
+            map[@"MKPointOfInterestCategoryBowling"] = MKPointOfInterestCategoryBowling;
+            map[@"MKPointOfInterestCategoryCastle"] = MKPointOfInterestCategoryCastle;
+            map[@"MKPointOfInterestCategoryConventionCenter"] = MKPointOfInterestCategoryConventionCenter;
+            map[@"MKPointOfInterestCategoryDistillery"] = MKPointOfInterestCategoryDistillery;
+            map[@"MKPointOfInterestCategoryFairground"] = MKPointOfInterestCategoryFairground;
+            map[@"MKPointOfInterestCategoryFishing"] = MKPointOfInterestCategoryFishing;
+            map[@"MKPointOfInterestCategoryFortress"] = MKPointOfInterestCategoryFortress;
+            map[@"MKPointOfInterestCategoryGolf"] = MKPointOfInterestCategoryGolf;
+            map[@"MKPointOfInterestCategoryGoKart"] = MKPointOfInterestCategoryGoKart;
+            map[@"MKPointOfInterestCategoryHiking"] = MKPointOfInterestCategoryHiking;
+            map[@"MKPointOfInterestCategoryKayaking"] = MKPointOfInterestCategoryKayaking;
+            map[@"MKPointOfInterestCategoryLandmark"] = MKPointOfInterestCategoryLandmark;
+            map[@"MKPointOfInterestCategoryMailbox"] = MKPointOfInterestCategoryMailbox;
+            map[@"MKPointOfInterestCategoryMiniGolf"] = MKPointOfInterestCategoryMiniGolf;
+            map[@"MKPointOfInterestCategoryMusicVenue"] = MKPointOfInterestCategoryMusicVenue;
+            map[@"MKPointOfInterestCategoryNationalMonument"] = MKPointOfInterestCategoryNationalMonument;
+            map[@"MKPointOfInterestCategoryPlanetarium"] = MKPointOfInterestCategoryPlanetarium;
+            map[@"MKPointOfInterestCategoryRockClimbing"] = MKPointOfInterestCategoryRockClimbing;
+            map[@"MKPointOfInterestCategoryRVPark"] = MKPointOfInterestCategoryRVPark;
+            map[@"MKPointOfInterestCategorySkatePark"] = MKPointOfInterestCategorySkatePark;
+            map[@"MKPointOfInterestCategorySkating"] = MKPointOfInterestCategorySkating;
+            map[@"MKPointOfInterestCategorySkiing"] = MKPointOfInterestCategorySkiing;
+            map[@"MKPointOfInterestCategorySoccer"] = MKPointOfInterestCategorySoccer;
+            map[@"MKPointOfInterestCategorySpa"] = MKPointOfInterestCategorySpa;
+            map[@"MKPointOfInterestCategorySurfing"] = MKPointOfInterestCategorySurfing;
+            map[@"MKPointOfInterestCategorySwimming"] = MKPointOfInterestCategorySwimming;
+            map[@"MKPointOfInterestCategoryTennis"] = MKPointOfInterestCategoryTennis;
+            map[@"MKPointOfInterestCategoryVolleyball"] = MKPointOfInterestCategoryVolleyball;
+        }
+        
+        categoryMap = [map copy];
+    });
+
+    NSMutableArray<MKPointOfInterestCategory> *validCategories = [NSMutableArray array];
+    for (NSString *str in stringArray) {
+        // Since keys are now the exact constant names, we do a direct, case-sensitive lookup.
+        MKPointOfInterestCategory category = categoryMap[str];
+        if (category) {
+            [validCategories addObject:category];
+        } else {
+            NSLog(@"[MapView] Warning: Unknown or unavailable point of interest category string '%@'", str);
+        }
+    }
+    return validCategories;
 }
 
 - (UIColor *)loadingBackgroundColor {
