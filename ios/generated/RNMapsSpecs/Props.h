@@ -913,7 +913,7 @@ class RNMapsMapViewProps final : public ViewProps {
   bool showsCompass{true};
   bool showsIndoorLevelPicker{false};
   bool showsIndoors{true};
-  bool showsMyLocationButton{true};
+  bool showsMyLocationButton{false};
   bool showsScale{false};
   bool showsUserLocation{false};
   SharedColor tintColor{};
@@ -1112,6 +1112,8 @@ class RNMapsMarkerProps final : public ViewProps {
   bool tracksViewChanges{true};
   std::string identifier{};
   bool isPreselected{false};
+  bool useSnapshot{false};
+  std::string snapshotCacheKey{};
   double opacity{1.0};
   SharedColor pinColor{};
   RNMapsMarkerTitleVisibility titleVisibility{RNMapsMarkerTitleVisibility::Visible};

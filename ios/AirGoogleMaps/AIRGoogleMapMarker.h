@@ -39,6 +39,8 @@
 @property (nonatomic, assign) BOOL tappable;
 @property (nonatomic, assign) BOOL tracksViewChanges;
 @property (nonatomic, assign) BOOL tracksInfoWindowChanges;
+@property (nonatomic, assign) BOOL useSnapshot;
+@property (nonatomic, strong) NSString *snapshotCacheKey;
 
 - (void)showCalloutView;
 - (void)hideCalloutView;

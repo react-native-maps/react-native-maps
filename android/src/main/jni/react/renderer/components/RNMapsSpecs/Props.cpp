@@ -162,6 +162,8 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     tracksViewChanges(convertRawProp(context, rawProps, "tracksViewChanges", sourceProps.tracksViewChanges, {true})),
     identifier(convertRawProp(context, rawProps, "identifier", sourceProps.identifier, {})),
     isPreselected(convertRawProp(context, rawProps, "isPreselected", sourceProps.isPreselected, {false})),
+    useSnapshot(convertRawProp(context, rawProps, "useSnapshot", sourceProps.useSnapshot, {false})),
+    snapshotCacheKey(convertRawProp(context, rawProps, "snapshotCacheKey", sourceProps.snapshotCacheKey, {})),
     opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
     pinColor(convertRawProp(context, rawProps, "pinColor", sourceProps.pinColor, {})),
     titleVisibility(convertRawProp(context, rawProps, "titleVisibility", sourceProps.titleVisibility, {RNMapsMarkerTitleVisibility::Visible})),
