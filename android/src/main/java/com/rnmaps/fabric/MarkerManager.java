@@ -265,6 +265,16 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     }
 
     @Override
+    public void setUseSnapshot(MapMarker view, boolean value) {
+        // not supported
+    }
+
+    @Override
+    public void setSnapshotCacheKey(MapMarker view, @Nullable String value) {
+        // not supported
+    }
+
+    @Override
     public void redraw(MapMarker view) {
         view.redraw();
     }
