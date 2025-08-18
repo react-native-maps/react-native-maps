@@ -120,8 +120,9 @@ CGRect unionRect(CGRect a, CGRect b) {
     if (hasCacheKey) {
         UIImage *cachedImage = [[[self class] sharedMarkerSnapshotCache] objectForKey:_snapshotCacheKey];
         if (cachedImage) {
-            _realMarker.icon = cachedImage; // Use cached image
+            _realMarker.icon = cachedImage;
             _realMarker.iconView = nil;
+            _realMarker.tracksViewChanges = YES;
             _realMarker.tracksViewChanges = NO;
             _isSnapshotDirty = NO;
             return;
