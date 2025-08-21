@@ -319,9 +319,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         attachLifecycleObserver();
         if (savedMapState != null) {
             super.onCreate(savedMapState);
-            super.onStart();
-            super.onResume();
-            prepareAttacherView();
             getMapAsync((map)->{
                 onMapReady(map);
                 savedFeatures.forEach((index, feature) -> {
@@ -329,6 +326,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 });
             });
         }
+
+        super.onStart();
+        super.onResume();
+        prepareAttacherView();
     }
 
     // Override onDetachedFromWindow to detach lifecycle observer
