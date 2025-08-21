@@ -1,7 +1,6 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
-import android.graphics.Color;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -23,7 +22,6 @@ import com.google.android.gms.maps.model.StyleSpan;
 import com.google.maps.android.collections.PolylineManager;
 import com.rnmaps.fabric.event.OnPressEvent;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,36 +67,20 @@ public class MapPolyline extends MapFeature {
     }
 
     public void setStrokeColors(ReadableArray strokeColors) {
-        /// ANSY >>>
-        if (strokeColors == null || strokeColors.size() == 0) {
-            this.spans = null;
-            if (polyline != null) {
-                polyline.setSpans(new ArrayList<>());
-            }
-            return;
-        }
-        /// ANSY <<<
         List<StyleSpan> spans = new ArrayList<>();
         for (int i = 0; i < strokeColors.size(); i++) {
             StrokeStyle stroke;
-            /// ANSY >>>
-            // This is the original library's gradient logic.
-            // We keep Color.parseColor because the library expects color integers,
-            // but React Native sends color strings. This is a necessary fix.
-            int currentColor = Color.parseColor(strokeColors.getString(i));
-            /// ANSY <<<
 
             if (i == 0) {
-                stroke = StrokeStyle.colorBuilder(currentColor).build();
+                stroke = StrokeStyle.colorBuilder(strokeColors.getInt(i)).build();
             } else {
-                int prevColor = Color.parseColor(strokeColors.getString(i - 1));
-                stroke = StrokeStyle.gradientBuilder(prevColor, currentColor).build();
+                stroke = StrokeStyle.gradientBuilder(strokeColors.getInt(i - 1), strokeColors.getInt(i)).build();
             }
             spans.add(new StyleSpan(stroke));
         }
         this.spans = spans;
         if (polyline != null){
-            polyline.setSpans(spans);
+        polyline.setSpans(spans);
         }
     }
 
