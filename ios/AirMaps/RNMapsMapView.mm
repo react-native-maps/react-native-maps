@@ -563,6 +563,7 @@ newViewProps.name.right);           \
     REMAP_MAPVIEW_PROP(pitchEnabled)
     REMAP_MAPVIEW_PROP(showsBuildings)
     REMAP_MAPVIEW_PROP(rotateEnabled)
+    REMAP_MAPVIEW_PROP(showsPointsOfInterests)
 
     REMAP_MAPVIEW_POINT_PROP(compassOffset)
 
@@ -610,6 +611,13 @@ newViewProps.name.right);           \
         [_view setCameraZoomRange:zoomRange animated:newViewProps.cameraZoomRange.animated];
     }
 
+    if (oldViewProps.pointsOfInterestFilter != newViewProps.pointsOfInterestFilter) {
+        NSMutableArray<NSString *> *filterArray = [NSMutableArray new];
+        for (const auto& str : newViewProps.pointsOfInterestFilter) {
+            [filterArray addObject:RCTNSStringFromString(str)];
+        }
+        _view.pointsOfInterestFilter = filterArray;
+    }
 
     [super updateProps:props oldProps:oldProps];
 }
