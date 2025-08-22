@@ -1134,6 +1134,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 annotationParent.removeView(annotation);
             }
 
+            // Ensure attacherGroup is not null before using it
+            if (attacherGroup == null) {
+                prepareAttacherView();
+            }
             // Add to the parent group
             attacherGroup.addView(annotation);
 
