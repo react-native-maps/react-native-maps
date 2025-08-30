@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-ios-frameworks:
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
       - name: Check out repository code
