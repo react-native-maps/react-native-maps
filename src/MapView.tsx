@@ -519,7 +519,7 @@ export type MapViewProps = ViewProps & {
    * If `false` the user won't be able to adjust the camera’s pitch angle.
    *
    * @default true
-   * @platform iOS: Google Maps only
+   * @platform iOS: Supported
    * @platform Android: Supported
    */
   rotateEnabled?: boolean;

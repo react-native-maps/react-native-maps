@@ -43,9 +43,11 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, assign) NSNumber *shouldZoomEnabled;
 @property (nonatomic, assign) NSNumber *shouldScrollEnabled;
+@property (nonatomic, assign) NSNumber *shouldRotateEnabled;
 
 - (void)updateScrollEnabled;
 - (void)updateZoomEnabled;
+- (void)updateRotateEnabled;
 
 @end
 
@@ -715,6 +717,20 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
 }
 
+- (void)setRotateEnabled:(BOOL)rotateEnabled {
+    self.shouldRotateEnabled = [NSNumber numberWithBool:rotateEnabled];
+    [self updateRotateEnabled];
+}
+
+- (void)updateRotateEnabled {
+    if (self.cacheEnabled) {
+        [super setRotateEnabled: NO];
+    }
+    else if (self.shouldRotateEnabled != nil) {
+        [super setRotateEnabled:[self.shouldRotateEnabled boolValue]];
+    }
+}
+
 - (void)cacheViewIfNeeded {
     // https://github.com/react-native-maps/react-native-maps/issues/3100
     // Do nothing if app is not active
@@ -747,6 +763,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
         [self updateScrollEnabled];
         [self updateZoomEnabled];
+        [self updateRotateEnabled];
         [self updateLegalLabelInsets];
     }
 }
