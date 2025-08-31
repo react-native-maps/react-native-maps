@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.4](https://github.com/react-native-maps/react-native-maps/compare/v1.25.3...v1.25.4) (2025-08-31)
+
+
+### Bug Fixes
+
+* **ios:** attempt to fix ci by pinning the macOS version ([#5713](https://github.com/react-native-maps/react-native-maps/issues/5713)) ([c3a9c95](https://github.com/react-native-maps/react-native-maps/commit/c3a9c95c52d135e242d18a25c556096d3efb46ca))
+
 ## [1.25.3](https://github.com/react-native-maps/react-native-maps/compare/v1.25.2...v1.25.3) (2025-08-09)
 
 
