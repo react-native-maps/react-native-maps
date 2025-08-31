@@ -124,12 +124,6 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
       case "showsIndoors":
         mViewManager.setShowsIndoors(view, value == null ? true : (boolean) value);
         break;
-      case "showsPointsOfInterests":
-        mViewManager.setShowsPointsOfInterests(view, value == null ? true : (boolean) value);
-        break;
-      case "pointsOfInterestFilter":
-        mViewManager.setPointsOfInterestFilter(view, (ReadableArray) value);
-        break;
       case "showsMyLocationButton":
         mViewManager.setShowsMyLocationButton(view, value == null ? false : (boolean) value);
         break;

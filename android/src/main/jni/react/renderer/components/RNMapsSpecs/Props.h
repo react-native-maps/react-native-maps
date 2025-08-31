@@ -386,6 +386,7 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   bool showsIndoorLevelPicker{false};
   bool showsIndoors{true};
   bool showsMyLocationButton{false};
+  bool showsPointsOfInterest{false};
   bool showsScale{false};
   bool showsTraffic{false};
   bool showsUserLocation{false};
@@ -912,8 +913,6 @@ class RNMapsMapViewProps final : public ViewProps {
   bool showsCompass{true};
   bool showsIndoorLevelPicker{false};
   bool showsIndoors{true};
-  bool showsPointsOfInterests{true};
-  std::vector<std::string> pointsOfInterestFilter{};
   bool showsMyLocationButton{false};
   bool showsScale{false};
   bool showsUserLocation{false};

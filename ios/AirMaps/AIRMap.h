@@ -49,8 +49,6 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) CGFloat maxZoom;
 @property (nonatomic, assign) CGPoint compassOffset;
 @property (nonatomic, assign) UIEdgeInsets mapPadding;
-@property (nonatomic, assign) BOOL showsPointsOfInterests;
-@property (nonatomic, copy) NSArray<NSString *> *pointsOfInterestFilter;
 
 @property (nonatomic, assign) CLLocationCoordinate2D pendingCenter;
 @property (nonatomic, assign) MKCoordinateSpan pendingSpan;
