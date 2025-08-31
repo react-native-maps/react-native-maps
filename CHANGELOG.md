@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.6](https://github.com/react-native-maps/react-native-maps/compare/v1.25.5...v1.25.6) (2025-08-31)
+
+
+### Reverts
+
+* Revert "[iOS] [Apple Maps] Add / restore `showsPointsOfInterests` and add `pointsOfInterestFilter`" ([#5716](https://github.com/react-native-maps/react-native-maps/issues/5716)) ([441fe30](https://github.com/react-native-maps/react-native-maps/commit/441fe30700a2ae6d940ba3b570b4327bdf9e48d4))
+
 ## [1.25.5](https://github.com/react-native-maps/react-native-maps/compare/v1.25.4...v1.25.5) (2025-08-31)
 
 
