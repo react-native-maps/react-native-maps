@@ -588,6 +588,20 @@ export type MapViewProps = ViewProps & {
   showsMyLocationButton?: boolean;
 
   /**
+   * A Boolean indicating whether points of interest should be displayed.
+   * Use `pointsOfInterestFilter` for more granular control.
+   * @see pointsOfInterestFilter
+   */
+  showsPointsOfInterests?: boolean;
+
+  /**
+   * An array of category strings to show on the map.
+   * If this is set, it takes precedence over `showsPointsOfInterests`.
+   * @see showsPointsOfInterests
+   */
+  pointsOfInterestFilter?: string[];
+
+  /**
    * A Boolean indicating whether the map shows scale information.
    *
    * @default false
@@ -1166,6 +1180,8 @@ class MapView extends React.Component<MapViewProps, State> {
       // @ts-ignore
       onIndoorLevelActivated: this.handleIndoorLevelActivated,
       onLongPress: this.handleLongPress,
+      showsPointsOfInterests: this.props.showsPointsOfInterests,
+      pointsOfInterestFilter: this.props.pointsOfInterestFilter,
       ...restProps,
     };
     if (this.props.region) {
