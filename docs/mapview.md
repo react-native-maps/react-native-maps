@@ -252,3 +252,27 @@ type CameraZoomRange = {
   animated?: boolean;
 };
 ```
+
+More: https://developer.apple.com/documentation/mapkit/mkpointofinterestcategory
+
+```
+type MKPointOfInterestCategoryType =
+  // Food and drink
+  | 'restaurant' | 'cafe' | 'bakery' | 'brewery' | 'winery' | 'distillery' | 'foodMarket'
+  // Travel and transportation
+  | 'airport' | 'gasStation' | 'hotel' | 'parking' | 'publicTransport' | 'carRental'
+  // Health and safety
+  | 'hospital' | 'pharmacy' | 'fireStation' | 'police'
+  // Education and culture
+  | 'school' | 'university' | 'library' | 'museum' | 'theater' | 'musicVenue' | 'planetarium'
+  // Entertainment and recreation
+  | 'movieTheater' | 'nightlife' | 'amusementPark' | 'aquarium' | 'zoo' | 'park' | 'nationalPark'
+  | 'beach' | 'campground' | 'marina' | 'rvPark'
+  // Sports
+  | 'stadium' | 'fitnessCenter' | 'golf' | 'miniGolf' | 'tennis' | 'baseball' | 'basketball'
+  | 'bowling' | 'hiking' | 'skiing' | 'skating' | 'skatePark' | 'swimming' | 'fishing'
+  // Services
+  | 'bank' | 'atm' | 'postOffice' | 'store' | 'beauty' | 'spa' | 'laundry' | 'restroom'
+  | 'automotiveRepair' | 'evCharger' | 'animalService'
+  // And many more categories...
+```
