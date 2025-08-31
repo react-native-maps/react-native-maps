@@ -1,5 +1,5 @@
 import type {HostComponent} from 'react-native';
-import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
+import {codegenNativeCommands} from 'react-native';
 import type {NativeProps} from './MapView';
 import type {Camera, EdgePadding} from './MapView.types';
 import type {LatLng, Region} from './sharedTypes';

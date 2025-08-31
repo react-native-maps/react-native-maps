@@ -15,12 +15,19 @@
 
 + (NSDictionary<NSString *, Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
 {
-  return @{
+  static NSDictionary<NSString *, Class<RCTComponentViewProtocol>> *thirdPartyComponents = nil;
+  static dispatch_once_t nativeComponentsToken;
+
+  dispatch_once(&nativeComponentsToken, ^{
+    thirdPartyComponents = @{
 		@"RNMapsGoogleMapView": NSClassFromString(@"RNMapsGoogleMapView"), // react-native-maps
 		@"RNMapsGooglePolygon": NSClassFromString(@"RNMapsGooglePolygonView"), // react-native-maps
 		@"RNMapsMapView": NSClassFromString(@"RNMapsMapView"), // react-native-maps
 		@"RNMapsMarker": NSClassFromString(@"RNMapsMarkerView"), // react-native-maps
-  };
+    };
+  });
+
+  return thirdPartyComponents;
 }
 
 @end

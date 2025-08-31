@@ -181,7 +181,7 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
   }
 
   @Override
-  public void receiveCommand(T view, String commandName, @Nullable ReadableArray args) {
+  public void receiveCommand(T view, String commandName, ReadableArray args) {
     switch (commandName) {
       case "animateToRegion":
         mViewManager.animateToRegion(view, args.getString(0), args.getInt(1));
