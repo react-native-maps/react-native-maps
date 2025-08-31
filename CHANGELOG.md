@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.5](https://github.com/react-native-maps/react-native-maps/compare/v1.25.4...v1.25.5) (2025-08-31)
+
+
+### Bug Fixes
+
+* **ios:** Update Google Maps SDK to 9.4.0 ([#5697](https://github.com/react-native-maps/react-native-maps/issues/5697)) ([f7f5fdc](https://github.com/react-native-maps/react-native-maps/commit/f7f5fdcf27231a92ed32a82172befb46ff078ac3))
+
 ## [1.25.4](https://github.com/react-native-maps/react-native-maps/compare/v1.25.3...v1.25.4) (2025-08-31)
 
 
