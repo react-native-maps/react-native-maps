@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.26.0](https://github.com/react-native-maps/react-native-maps/compare/v1.25.6...v1.26.0) (2025-09-01)
+
+
+### Features
+
+* **ios:** restore showspointsofinterests and add pointsofinterestfilter on apple maps ([#5717](https://github.com/react-native-maps/react-native-maps/issues/5717)) ([775fb82](https://github.com/react-native-maps/react-native-maps/commit/775fb8215074c69cac7eeeaa8753e5c79d5c18ad))
+
 ## [1.25.6](https://github.com/react-native-maps/react-native-maps/compare/v1.25.5...v1.25.6) (2025-08-31)
 
 
