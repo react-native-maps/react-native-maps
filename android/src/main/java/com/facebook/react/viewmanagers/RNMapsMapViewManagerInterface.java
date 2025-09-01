@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 public interface RNMapsMapViewManagerInterface<T extends View> {
@@ -47,6 +48,8 @@ public interface RNMapsMapViewManagerInterface<T extends View> {
   void setShowsCompass(T view, boolean value);
   void setShowsIndoorLevelPicker(T view, boolean value);
   void setShowsIndoors(T view, boolean value);
+  void setShowsPointsOfInterests(T view, boolean value);
+  void setPointsOfInterestFilter(T view, @Nullable ReadableArray value);
   void setShowsMyLocationButton(T view, boolean value);
   void setShowsScale(T view, boolean value);
   void setShowsUserLocation(T view, boolean value);
