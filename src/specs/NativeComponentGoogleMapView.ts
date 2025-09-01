@@ -307,6 +307,23 @@ export type RegionChangeEvent = Readonly<{
     latitudeDelta: Double; // Non-nullable Double for latitudeDelta
     longitudeDelta: Double; // Non-nullable Double for longitudeDelta
   }; // The region object
+  camera: {
+    /**
+     * Apple Maps
+     */
+    altitude?: Double; // Nullable Double for altitude
+    center: {
+      latitude: Double; // Non-nullable Double for latitude
+      longitude: Double; // Non-nullable Double for longitude
+    }; // Non-nullable center
+    heading: Double; // Non-nullable Double for heading
+    pitch: Double; // Non-nullable Double for pitch
+
+    /**
+     * Google Maps
+     */
+    zoom?: Float; // Nullable Double for zoom
+  };
   isGesture?: boolean;
 }>;
 

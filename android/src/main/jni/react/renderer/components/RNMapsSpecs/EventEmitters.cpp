@@ -731,6 +731,20 @@ void RNMapsMapViewEventEmitter::onRegionChangeStart(OnRegionChangeStart $event) 
   $payload.setProperty(runtime, "region", region);
 }
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
+}
     return $payload;
   });
 }
@@ -748,6 +762,20 @@ void RNMapsMapViewEventEmitter::onRegionChange(OnRegionChange $event) const {
   $payload.setProperty(runtime, "region", region);
 }
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
+}
     return $payload;
   });
 }
@@ -765,6 +793,20 @@ void RNMapsMapViewEventEmitter::onRegionChangeComplete(OnRegionChangeComplete $e
   $payload.setProperty(runtime, "region", region);
 }
 $payload.setProperty(runtime, "isGesture", $event.isGesture);
+{
+  auto camera = jsi::Object(runtime);
+  camera.setProperty(runtime, "altitude", $event.camera.altitude);
+  {
+    auto center = jsi::Object(runtime);
+    center.setProperty(runtime, "latitude", $event.camera.center.latitude);
+    center.setProperty(runtime, "longitude", $event.camera.center.longitude);
+    camera.setProperty(runtime, "center", center);
+  }
+  camera.setProperty(runtime, "heading", $event.camera.heading);
+  camera.setProperty(runtime, "pitch", $event.camera.pitch);
+  camera.setProperty(runtime, "zoom", $event.camera.zoom);
+  $payload.setProperty(runtime, "camera", camera);
+}
     return $payload;
   });
 }

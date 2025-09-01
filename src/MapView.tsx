@@ -449,7 +449,11 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onRegionChangeStart?: (region: Region, details: Details) => void;
+  onRegionChangeStart?: (
+    region: Region,
+    details: Details,
+    camera: Camera,
+  ) => void;
 
   /**
    * Callback that is called continuously when the region changes, such as when a user is dragging the map.
@@ -459,7 +463,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onRegionChange?: (region: Region, details: Details) => void;
+  onRegionChange?: (region: Region, details: Details, camera: Camera) => void;
 
   /**
    * Callback that is called once when the region changes, such as when the user is done moving the map.
@@ -469,7 +473,11 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onRegionChangeComplete?: (region: Region, details: Details) => void;
+  onRegionChangeComplete?: (
+    region: Region,
+    details: Details,
+    camera: Camera,
+  ) => void;
 
   /**
    * Callback that is called when the underlying map figures our users current location
@@ -1087,16 +1095,24 @@ class MapView extends React.Component<MapViewProps, State> {
   };
   private handleRegionChange = (event: NativeSyntheticEvent<any>) => {
     if (this.props.onRegionChange) {
-      this.props.onRegionChange(event.nativeEvent.region, {
-        isGesture: event.nativeEvent.isGesture,
-      });
+      this.props.onRegionChange(
+        event.nativeEvent.region,
+        {
+          isGesture: event.nativeEvent.isGesture,
+        },
+        event.nativeEvent.camera,
+      );
     }
   };
   private handleRegionChangeStarted = (event: NativeSyntheticEvent<any>) => {
     if (this.props.onRegionChangeStart) {
-      this.props.onRegionChangeStart(event.nativeEvent.region, {
-        isGesture: event.nativeEvent.isGesture,
-      });
+      this.props.onRegionChangeStart(
+        event.nativeEvent.region,
+        {
+          isGesture: event.nativeEvent.isGesture,
+        },
+        event.nativeEvent.camera,
+      );
     }
   };
 
@@ -1117,9 +1133,13 @@ class MapView extends React.Component<MapViewProps, State> {
 
   private handleRegionChangeComplete = (event: NativeSyntheticEvent<any>) => {
     if (this.props.onRegionChangeComplete) {
-      this.props.onRegionChangeComplete(event.nativeEvent.region, {
-        isGesture: event.nativeEvent.isGesture,
-      });
+      this.props.onRegionChangeComplete(
+        event.nativeEvent.region,
+        {
+          isGesture: event.nativeEvent.isGesture,
+        },
+        event.nativeEvent.camera,
+      );
     }
   };
 
