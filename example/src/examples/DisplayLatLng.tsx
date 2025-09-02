@@ -5,7 +5,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 
 import MapView, {MAP_TYPES} from 'react-native-maps';
@@ -83,7 +82,7 @@ class DisplayLatLng extends React.Component<any, any> {
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <MapView
           provider={this.props.provider}
           rotateEnabled={false}
@@ -130,7 +129,7 @@ class DisplayLatLng extends React.Component<any, any> {
             <Text style={styles.buttonText}>Animate (View Angle)</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 }
