@@ -242,10 +242,6 @@ folly::dynamic RNMapsGoogleMapViewProps::getDiffProps(
     result["showsMyLocationButton"] = showsMyLocationButton;
   }
     
-  if (showsPointsOfInterest != oldProps->showsPointsOfInterest) {
-    result["showsPointsOfInterest"] = showsPointsOfInterest;
-  }
-    
   if (showsScale != oldProps->showsScale) {
     result["showsScale"] = showsScale;
   }
@@ -559,6 +555,14 @@ folly::dynamic RNMapsMapViewProps::getDiffProps(
     
   if (showsIndoors != oldProps->showsIndoors) {
     result["showsIndoors"] = showsIndoors;
+  }
+    
+  if (showsPointsOfInterests != oldProps->showsPointsOfInterests) {
+    result["showsPointsOfInterests"] = showsPointsOfInterests;
+  }
+    
+  if (pointsOfInterestFilter != oldProps->pointsOfInterestFilter) {
+    result["pointsOfInterestFilter"] = toDynamic(pointsOfInterestFilter);
   }
     
   if (showsMyLocationButton != oldProps->showsMyLocationButton) {
