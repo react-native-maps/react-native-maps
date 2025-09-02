@@ -9,10 +9,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -25,8 +21,8 @@ import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
-import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
 import com.facebook.react.viewmanagers.RNMapsMapViewManagerDelegate;
+import com.facebook.react.viewmanagers.RNMapsMapViewManagerInterface;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapsInitializer;
@@ -35,9 +31,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapColorScheme;
 import com.rnmaps.maps.MapMarker;
-import com.rnmaps.maps.MapOverlay;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -89,7 +88,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         // override parent to block recycling / allow reliable GoogleMapsOptions passing
     }
 
-    private GoogleMapOptions optionsForInitialProps(ReactStylesDiffMap initialProps){
+    private GoogleMapOptions optionsForInitialProps(ReactStylesDiffMap initialProps) {
         GoogleMapOptions options = new GoogleMapOptions();
         if (initialProps != null) {
             setGoogleRenderer(null, initialProps.getString("googleRenderer"));
@@ -122,13 +121,13 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
                     options.maxZoomPreference(initialProps.getInt("maxZoom", 0));
                 }
             }
-            if (initialProps.hasKey("userInterfaceStyle") && !initialProps.hasKey("liteMode")){
+            if (initialProps.hasKey("userInterfaceStyle") && !initialProps.hasKey("liteMode")) {
                 String style = initialProps.getString("userInterfaceStyle");
                 if ("system".equals(style)) {
                     options.mapColorScheme(MapColorScheme.FOLLOW_SYSTEM);
-                } else if ("light".equals(style)){
+                } else if ("light".equals(style)) {
                     options.mapColorScheme(MapColorScheme.LIGHT);
-                } else if ("dark".equals(style)){
+                } else if ("dark".equals(style)) {
                     options.mapColorScheme(MapColorScheme.DARK);
                 }
             }
@@ -159,6 +158,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
         }
         return options;
     }
+
     @Override
     protected MapView createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext, @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
         MapView view = null;
@@ -318,7 +318,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void addView(MapView parent, View child, int index) {
-        if (child instanceof MapMarker && ((MapMarker) child).isLoadingImage()){
+        if (child instanceof MapMarker && ((MapMarker) child).isLoadingImage()) {
             ((MapMarker) child).setImageLoadedListener((uri, drawable, b) -> {
                 parent.addFeature(child, parent.getFeatureCount());
             });
@@ -576,7 +576,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
                 map = JSONUtil.convertJsonToWritable(jsonObject);
             }
             view.fitToElements(map, animated);
-        } catch (JSONException e){
+        } catch (JSONException e) {
             Log.e("MapViewManager", "parse edgePaddingJSON exception " + e);
         }
 
@@ -628,7 +628,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void onDropViewInstance(MapView view) {
-        super.onDropViewInstance(view);
         view.doDestroy();
+        super.onDropViewInstance(view);
     }
 }
