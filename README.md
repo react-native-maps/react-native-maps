@@ -24,8 +24,8 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 | Version          | React Native Requirement |
 | ---------------- | ------------------------ |
-| 1.25.7+          | >= 0.81.1                |
-| 1.25.4 and below | >= 0.76                  |
+| 1.26.1+          | >= 0.81.1                |
+| 1.26.0 and below | >= 0.76                  |
 
 ### Old Architecture
 
