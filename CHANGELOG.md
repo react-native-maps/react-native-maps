@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.1](https://github.com/react-native-maps/react-native-maps/compare/v1.26.0...v1.26.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* **android:** crash on launch for react-native 0.81.1 ([#5715](https://github.com/react-native-maps/react-native-maps/issues/5715)) ([c587f30](https://github.com/react-native-maps/react-native-maps/commit/c587f30b8499b79a2266687c641bfed10b3ecc2c)), closes [#5697](https://github.com/react-native-maps/react-native-maps/issues/5697)
+
 # [1.26.0](https://github.com/react-native-maps/react-native-maps/compare/v1.25.6...v1.26.0) (2025-09-01)
 
 
