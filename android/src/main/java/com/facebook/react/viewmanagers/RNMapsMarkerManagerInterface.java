@@ -28,6 +28,8 @@ public interface RNMapsMarkerManagerInterface<T extends View> extends ViewManage
   void setTracksViewChanges(T view, boolean value);
   void setIdentifier(T view, @Nullable String value);
   void setIsPreselected(T view, boolean value);
+  void setUseSnapshot(T view, boolean value);
+  void setSnapshotCacheKey(T view, @Nullable String value);
   void setOpacity(T view, double value);
   void setPinColor(T view, @Nullable Integer value);
   void setTitleVisibility(T view, @Nullable String value);
