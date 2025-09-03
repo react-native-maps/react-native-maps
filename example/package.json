@@ -12,22 +12,23 @@
   },
   "dependencies": {
     "react": "19.1.0",
-    "react-native": "0.80.1"
+    "react-native": "0.81.0"
   },
   "devDependencies": {
     "@babel/core": "7.28.0",
     "@babel/preset-env": "7.28.0",
+    "@babel/preset-typescript": "^7.27.1",
     "@babel/runtime": "7.27.6",
-    "@react-native-community/cli": "19.1.0",
-    "@react-native-community/cli-platform-android": "18.0.0",
-    "@react-native-community/cli-platform-ios": "18.0.0",
-    "@react-native/babel-preset": "0.80.1",
-    "@react-native/metro-config": "0.80.1",
-    "@react-native/typescript-config": "0.80.1",
+    "@react-native-community/cli": "20.0.0",
+    "@react-native-community/cli-platform-android": "20.0.0",
+    "@react-native-community/cli-platform-ios": "20.0.0",
+    "@react-native/babel-preset": "0.81.0",
+    "@react-native/metro-config": "0.81.0",
+    "@react-native/typescript-config": "0.81.0",
     "@types/react": "19.1.8",
     "babel-plugin-module-resolver": "5.0.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">= 20.19.4"
   }
 }
