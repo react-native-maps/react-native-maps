@@ -91,7 +91,7 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
   }
 
   @Override
-  public void receiveCommand(T view, String commandName, @Nullable ReadableArray args) {
+  public void receiveCommand(T view, String commandName, ReadableArray args) {
     switch (commandName) {
       case "animateToCoordinates":
         mViewManager.animateToCoordinates(view, args.getDouble(0), args.getDouble(1), args.getInt(2));

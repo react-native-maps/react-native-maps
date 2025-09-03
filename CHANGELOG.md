@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.26.1](https://github.com/react-native-maps/react-native-maps/compare/v1.26.0...v1.26.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* **android:** crash on launch for react-native 0.81.1 ([#5715](https://github.com/react-native-maps/react-native-maps/issues/5715)) ([c587f30](https://github.com/react-native-maps/react-native-maps/commit/c587f30b8499b79a2266687c641bfed10b3ecc2c)), closes [#5697](https://github.com/react-native-maps/react-native-maps/issues/5697)
+
+# [1.26.0](https://github.com/react-native-maps/react-native-maps/compare/v1.25.6...v1.26.0) (2025-09-01)
+
+
+### Features
+
+* **ios:** restore showspointsofinterests and add pointsofinterestfilter on apple maps ([#5717](https://github.com/react-native-maps/react-native-maps/issues/5717)) ([775fb82](https://github.com/react-native-maps/react-native-maps/commit/775fb8215074c69cac7eeeaa8753e5c79d5c18ad))
+
+## [1.25.6](https://github.com/react-native-maps/react-native-maps/compare/v1.25.5...v1.25.6) (2025-08-31)
+
+
+### Reverts
+
+* Revert "[iOS] [Apple Maps] Add / restore `showsPointsOfInterests` and add `pointsOfInterestFilter`" ([#5716](https://github.com/react-native-maps/react-native-maps/issues/5716)) ([441fe30](https://github.com/react-native-maps/react-native-maps/commit/441fe30700a2ae6d940ba3b570b4327bdf9e48d4))
+
+## [1.25.5](https://github.com/react-native-maps/react-native-maps/compare/v1.25.4...v1.25.5) (2025-08-31)
+
+
+### Bug Fixes
+
+* **ios:** Update Google Maps SDK to 9.4.0 ([#5697](https://github.com/react-native-maps/react-native-maps/issues/5697)) ([f7f5fdc](https://github.com/react-native-maps/react-native-maps/commit/f7f5fdcf27231a92ed32a82172befb46ff078ac3))
+
 ## [1.25.4](https://github.com/react-native-maps/react-native-maps/compare/v1.25.3...v1.25.4) (2025-08-31)
 
 

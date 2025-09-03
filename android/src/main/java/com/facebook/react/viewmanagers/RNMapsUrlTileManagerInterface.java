@@ -11,8 +11,9 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsUrlTileManagerInterface<T extends View> {
+public interface RNMapsUrlTileManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setDoubleTileSize(T view, boolean value);
   void setFlipY(T view, boolean value);
   void setMaximumNativeZ(T view, int value);

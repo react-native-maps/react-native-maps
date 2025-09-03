@@ -21,8 +21,34 @@ RNMapsCalloutProps::RNMapsCalloutProps(
     const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
 
     alphaHitTest(convertRawProp(context, rawProps, "alphaHitTest", sourceProps.alphaHitTest, {false})),
-    tooltip(convertRawProp(context, rawProps, "tooltip", sourceProps.tooltip, {false}))
-      {}
+    tooltip(convertRawProp(context, rawProps, "tooltip", sourceProps.tooltip, {false})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsCalloutProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsCallout";
+}
+
+folly::dynamic RNMapsCalloutProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsCalloutProps();
+  const RNMapsCalloutProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsCalloutProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (alphaHitTest != oldProps->alphaHitTest) {
+    result["alphaHitTest"] = alphaHitTest;
+  }
+    
+  if (tooltip != oldProps->tooltip) {
+    result["tooltip"] = tooltip;
+  }
+  return result;
+}
+#endif
 RNMapsCircleProps::RNMapsCircleProps(
     const PropsParserContext &context,
     const RNMapsCircleProps &sourceProps,
@@ -33,8 +59,50 @@ RNMapsCircleProps::RNMapsCircleProps(
     radius(convertRawProp(context, rawProps, "radius", sourceProps.radius, {0.0})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
     strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
-    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
-      {}
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsCircleProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsCircle";
+}
+
+folly::dynamic RNMapsCircleProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsCircleProps();
+  const RNMapsCircleProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsCircleProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (center != oldProps->center) {
+    result["center"] = toDynamic(center);
+  }
+    
+  if (fillColor != oldProps->fillColor) {
+    result["fillColor"] = *fillColor;
+  }
+    
+  if ((radius != oldProps->radius) && !(std::isnan(radius) && std::isnan(oldProps->radius))) {
+    result["radius"] = radius;
+  }
+    
+  if (strokeColor != oldProps->strokeColor) {
+    result["strokeColor"] = *strokeColor;
+  }
+    
+  if ((strokeWidth != oldProps->strokeWidth) && !(std::isnan(strokeWidth) && std::isnan(oldProps->strokeWidth))) {
+    result["strokeWidth"] = strokeWidth;
+  }
+    
+  if (tappable != oldProps->tappable) {
+    result["tappable"] = tappable;
+  }
+  return result;
+}
+#endif
 RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     const PropsParserContext &context,
     const RNMapsGoogleMapViewProps &sourceProps,
@@ -61,7 +129,6 @@ RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     showsIndoorLevelPicker(convertRawProp(context, rawProps, "showsIndoorLevelPicker", sourceProps.showsIndoorLevelPicker, {false})),
     showsIndoors(convertRawProp(context, rawProps, "showsIndoors", sourceProps.showsIndoors, {true})),
     showsMyLocationButton(convertRawProp(context, rawProps, "showsMyLocationButton", sourceProps.showsMyLocationButton, {false})),
-    showsPointsOfInterest(convertRawProp(context, rawProps, "showsPointsOfInterest", sourceProps.showsPointsOfInterest, {false})),
     showsScale(convertRawProp(context, rawProps, "showsScale", sourceProps.showsScale, {false})),
     showsTraffic(convertRawProp(context, rawProps, "showsTraffic", sourceProps.showsTraffic, {false})),
     showsUserLocation(convertRawProp(context, rawProps, "showsUserLocation", sourceProps.showsUserLocation, {false})),
@@ -73,8 +140,158 @@ RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     userLocationUpdateInterval(convertRawProp(context, rawProps, "userLocationUpdateInterval", sourceProps.userLocationUpdateInterval, {0})),
     zoomControlEnabled(convertRawProp(context, rawProps, "zoomControlEnabled", sourceProps.zoomControlEnabled, {false})),
     zoomEnabled(convertRawProp(context, rawProps, "zoomEnabled", sourceProps.zoomEnabled, {true})),
-    zoomTapEnabled(convertRawProp(context, rawProps, "zoomTapEnabled", sourceProps.zoomTapEnabled, {true}))
-      {}
+    zoomTapEnabled(convertRawProp(context, rawProps, "zoomTapEnabled", sourceProps.zoomTapEnabled, {true})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsGoogleMapViewProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsGoogleMapView";
+}
+
+folly::dynamic RNMapsGoogleMapViewProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsGoogleMapViewProps();
+  const RNMapsGoogleMapViewProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsGoogleMapViewProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (camera != oldProps->camera) {
+    result["camera"] = toDynamic(camera);
+  }
+    
+  if (initialCamera != oldProps->initialCamera) {
+    result["initialCamera"] = toDynamic(initialCamera);
+  }
+    
+  if (initialRegion != oldProps->initialRegion) {
+    result["initialRegion"] = toDynamic(initialRegion);
+  }
+    
+  if (kmlSrc != oldProps->kmlSrc) {
+    result["kmlSrc"] = kmlSrc;
+  }
+    
+  if (googleMapId != oldProps->googleMapId) {
+    result["googleMapId"] = googleMapId;
+  }
+    
+  if (loadingBackgroundColor != oldProps->loadingBackgroundColor) {
+    result["loadingBackgroundColor"] = *loadingBackgroundColor;
+  }
+    
+  if (mapPadding != oldProps->mapPadding) {
+    result["mapPadding"] = toDynamic(mapPadding);
+  }
+    
+  if (mapType != oldProps->mapType) {
+    result["mapType"] = toDynamic(mapType);
+  }
+    
+  if ((maxZoom != oldProps->maxZoom) && !(std::isnan(maxZoom) && std::isnan(oldProps->maxZoom))) {
+    result["maxZoom"] = maxZoom;
+  }
+    
+  if ((minZoom != oldProps->minZoom) && !(std::isnan(minZoom) && std::isnan(oldProps->minZoom))) {
+    result["minZoom"] = minZoom;
+  }
+    
+  if (paddingAdjustmentBehavior != oldProps->paddingAdjustmentBehavior) {
+    result["paddingAdjustmentBehavior"] = toDynamic(paddingAdjustmentBehavior);
+  }
+    
+  if (pitchEnabled != oldProps->pitchEnabled) {
+    result["pitchEnabled"] = pitchEnabled;
+  }
+    
+  if (region != oldProps->region) {
+    result["region"] = toDynamic(region);
+  }
+    
+  if (rotateEnabled != oldProps->rotateEnabled) {
+    result["rotateEnabled"] = rotateEnabled;
+  }
+    
+  if (scrollDuringRotateOrZoomEnabled != oldProps->scrollDuringRotateOrZoomEnabled) {
+    result["scrollDuringRotateOrZoomEnabled"] = scrollDuringRotateOrZoomEnabled;
+  }
+    
+  if (scrollEnabled != oldProps->scrollEnabled) {
+    result["scrollEnabled"] = scrollEnabled;
+  }
+    
+  if (showsBuildings != oldProps->showsBuildings) {
+    result["showsBuildings"] = showsBuildings;
+  }
+    
+  if (showsCompass != oldProps->showsCompass) {
+    result["showsCompass"] = showsCompass;
+  }
+    
+  if (showsIndoorLevelPicker != oldProps->showsIndoorLevelPicker) {
+    result["showsIndoorLevelPicker"] = showsIndoorLevelPicker;
+  }
+    
+  if (showsIndoors != oldProps->showsIndoors) {
+    result["showsIndoors"] = showsIndoors;
+  }
+    
+  if (showsMyLocationButton != oldProps->showsMyLocationButton) {
+    result["showsMyLocationButton"] = showsMyLocationButton;
+  }
+    
+  if (showsScale != oldProps->showsScale) {
+    result["showsScale"] = showsScale;
+  }
+    
+  if (showsTraffic != oldProps->showsTraffic) {
+    result["showsTraffic"] = showsTraffic;
+  }
+    
+  if (showsUserLocation != oldProps->showsUserLocation) {
+    result["showsUserLocation"] = showsUserLocation;
+  }
+    
+  if (userInterfaceStyle != oldProps->userInterfaceStyle) {
+    result["userInterfaceStyle"] = toDynamic(userInterfaceStyle);
+  }
+    
+  if (customMapStyleString != oldProps->customMapStyleString) {
+    result["customMapStyleString"] = customMapStyleString;
+  }
+    
+  if (userLocationCalloutEnabled != oldProps->userLocationCalloutEnabled) {
+    result["userLocationCalloutEnabled"] = userLocationCalloutEnabled;
+  }
+    
+  if (userLocationFastestInterval != oldProps->userLocationFastestInterval) {
+    result["userLocationFastestInterval"] = userLocationFastestInterval;
+  }
+    
+  if (userLocationPriority != oldProps->userLocationPriority) {
+    result["userLocationPriority"] = toDynamic(userLocationPriority);
+  }
+    
+  if (userLocationUpdateInterval != oldProps->userLocationUpdateInterval) {
+    result["userLocationUpdateInterval"] = userLocationUpdateInterval;
+  }
+    
+  if (zoomControlEnabled != oldProps->zoomControlEnabled) {
+    result["zoomControlEnabled"] = zoomControlEnabled;
+  }
+    
+  if (zoomEnabled != oldProps->zoomEnabled) {
+    result["zoomEnabled"] = zoomEnabled;
+  }
+    
+  if (zoomTapEnabled != oldProps->zoomTapEnabled) {
+    result["zoomTapEnabled"] = zoomTapEnabled;
+  }
+  return result;
+}
+#endif
 RNMapsGooglePolygonProps::RNMapsGooglePolygonProps(
     const PropsParserContext &context,
     const RNMapsGooglePolygonProps &sourceProps,
@@ -86,8 +303,54 @@ RNMapsGooglePolygonProps::RNMapsGooglePolygonProps(
     strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     geodesic(convertRawProp(context, rawProps, "geodesic", sourceProps.geodesic, {false})),
     holes(convertRawProp(context, rawProps, "holes", sourceProps.holes, {})),
-    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
-      {}
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsGooglePolygonProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsGooglePolygon";
+}
+
+folly::dynamic RNMapsGooglePolygonProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsGooglePolygonProps();
+  const RNMapsGooglePolygonProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsGooglePolygonProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (coordinates != oldProps->coordinates) {
+    result["coordinates"] = toDynamic(coordinates);
+  }
+    
+  if (fillColor != oldProps->fillColor) {
+    result["fillColor"] = *fillColor;
+  }
+    
+  if (strokeColor != oldProps->strokeColor) {
+    result["strokeColor"] = *strokeColor;
+  }
+    
+  if ((strokeWidth != oldProps->strokeWidth) && !(std::isnan(strokeWidth) && std::isnan(oldProps->strokeWidth))) {
+    result["strokeWidth"] = strokeWidth;
+  }
+    
+  if (geodesic != oldProps->geodesic) {
+    result["geodesic"] = geodesic;
+  }
+    
+  if (holes != oldProps->holes) {
+    result["holes"] = toDynamic(holes);
+  }
+    
+  if (tappable != oldProps->tappable) {
+    result["tappable"] = tappable;
+  }
+  return result;
+}
+#endif
 RNMapsMapViewProps::RNMapsMapViewProps(
     const PropsParserContext &context,
     const RNMapsMapViewProps &sourceProps,
@@ -126,6 +389,8 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     showsCompass(convertRawProp(context, rawProps, "showsCompass", sourceProps.showsCompass, {true})),
     showsIndoorLevelPicker(convertRawProp(context, rawProps, "showsIndoorLevelPicker", sourceProps.showsIndoorLevelPicker, {false})),
     showsIndoors(convertRawProp(context, rawProps, "showsIndoors", sourceProps.showsIndoors, {true})),
+    showsPointsOfInterests(convertRawProp(context, rawProps, "showsPointsOfInterests", sourceProps.showsPointsOfInterests, {true})),
+    pointsOfInterestFilter(convertRawProp(context, rawProps, "pointsOfInterestFilter", sourceProps.pointsOfInterestFilter, {})),
     showsMyLocationButton(convertRawProp(context, rawProps, "showsMyLocationButton", sourceProps.showsMyLocationButton, {false})),
     showsScale(convertRawProp(context, rawProps, "showsScale", sourceProps.showsScale, {false})),
     showsUserLocation(convertRawProp(context, rawProps, "showsUserLocation", sourceProps.showsUserLocation, {false})),
@@ -142,8 +407,234 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     zoomEnabled(convertRawProp(context, rawProps, "zoomEnabled", sourceProps.zoomEnabled, {true})),
     showsTraffic(convertRawProp(context, rawProps, "showsTraffic", sourceProps.showsTraffic, {false})),
     zoomTapEnabled(convertRawProp(context, rawProps, "zoomTapEnabled", sourceProps.zoomTapEnabled, {true})),
-    cameraZoomRange(convertRawProp(context, rawProps, "cameraZoomRange", sourceProps.cameraZoomRange, {}))
-      {}
+    cameraZoomRange(convertRawProp(context, rawProps, "cameraZoomRange", sourceProps.cameraZoomRange, {})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsMapViewProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsMapView";
+}
+
+folly::dynamic RNMapsMapViewProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsMapViewProps();
+  const RNMapsMapViewProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsMapViewProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (cacheEnabled != oldProps->cacheEnabled) {
+    result["cacheEnabled"] = cacheEnabled;
+  }
+    
+  if (camera != oldProps->camera) {
+    result["camera"] = toDynamic(camera);
+  }
+    
+  if (compassOffset != oldProps->compassOffset) {
+    result["compassOffset"] = toDynamic(compassOffset);
+  }
+    
+  if (followsUserLocation != oldProps->followsUserLocation) {
+    result["followsUserLocation"] = followsUserLocation;
+  }
+    
+  if (poiClickEnabled != oldProps->poiClickEnabled) {
+    result["poiClickEnabled"] = poiClickEnabled;
+  }
+    
+  if (initialCamera != oldProps->initialCamera) {
+    result["initialCamera"] = toDynamic(initialCamera);
+  }
+    
+  if (initialRegion != oldProps->initialRegion) {
+    result["initialRegion"] = toDynamic(initialRegion);
+  }
+    
+  if (kmlSrc != oldProps->kmlSrc) {
+    result["kmlSrc"] = kmlSrc;
+  }
+    
+  if (legalLabelInsets != oldProps->legalLabelInsets) {
+    result["legalLabelInsets"] = toDynamic(legalLabelInsets);
+  }
+    
+  if (liteMode != oldProps->liteMode) {
+    result["liteMode"] = liteMode;
+  }
+    
+  if (googleMapId != oldProps->googleMapId) {
+    result["googleMapId"] = googleMapId;
+  }
+    
+  if (googleRenderer != oldProps->googleRenderer) {
+    result["googleRenderer"] = toDynamic(googleRenderer);
+  }
+    
+  if (loadingBackgroundColor != oldProps->loadingBackgroundColor) {
+    result["loadingBackgroundColor"] = *loadingBackgroundColor;
+  }
+    
+  if (loadingEnabled != oldProps->loadingEnabled) {
+    result["loadingEnabled"] = loadingEnabled;
+  }
+    
+  if (loadingIndicatorColor != oldProps->loadingIndicatorColor) {
+    result["loadingIndicatorColor"] = *loadingIndicatorColor;
+  }
+    
+  if (mapPadding != oldProps->mapPadding) {
+    result["mapPadding"] = toDynamic(mapPadding);
+  }
+    
+  if (mapType != oldProps->mapType) {
+    result["mapType"] = toDynamic(mapType);
+  }
+    
+  if ((maxDelta != oldProps->maxDelta) && !(std::isnan(maxDelta) && std::isnan(oldProps->maxDelta))) {
+    result["maxDelta"] = maxDelta;
+  }
+    
+  if ((maxZoom != oldProps->maxZoom) && !(std::isnan(maxZoom) && std::isnan(oldProps->maxZoom))) {
+    result["maxZoom"] = maxZoom;
+  }
+    
+  if ((minDelta != oldProps->minDelta) && !(std::isnan(minDelta) && std::isnan(oldProps->minDelta))) {
+    result["minDelta"] = minDelta;
+  }
+    
+  if ((minZoom != oldProps->minZoom) && !(std::isnan(minZoom) && std::isnan(oldProps->minZoom))) {
+    result["minZoom"] = minZoom;
+  }
+    
+  if (moveOnMarkerPress != oldProps->moveOnMarkerPress) {
+    result["moveOnMarkerPress"] = moveOnMarkerPress;
+  }
+    
+  if (handlePanDrag != oldProps->handlePanDrag) {
+    result["handlePanDrag"] = handlePanDrag;
+  }
+    
+  if (paddingAdjustmentBehavior != oldProps->paddingAdjustmentBehavior) {
+    result["paddingAdjustmentBehavior"] = toDynamic(paddingAdjustmentBehavior);
+  }
+    
+  if (pitchEnabled != oldProps->pitchEnabled) {
+    result["pitchEnabled"] = pitchEnabled;
+  }
+    
+  if (region != oldProps->region) {
+    result["region"] = toDynamic(region);
+  }
+    
+  if (rotateEnabled != oldProps->rotateEnabled) {
+    result["rotateEnabled"] = rotateEnabled;
+  }
+    
+  if (scrollDuringRotateOrZoomEnabled != oldProps->scrollDuringRotateOrZoomEnabled) {
+    result["scrollDuringRotateOrZoomEnabled"] = scrollDuringRotateOrZoomEnabled;
+  }
+    
+  if (scrollEnabled != oldProps->scrollEnabled) {
+    result["scrollEnabled"] = scrollEnabled;
+  }
+    
+  if (showsBuildings != oldProps->showsBuildings) {
+    result["showsBuildings"] = showsBuildings;
+  }
+    
+  if (showsCompass != oldProps->showsCompass) {
+    result["showsCompass"] = showsCompass;
+  }
+    
+  if (showsIndoorLevelPicker != oldProps->showsIndoorLevelPicker) {
+    result["showsIndoorLevelPicker"] = showsIndoorLevelPicker;
+  }
+    
+  if (showsIndoors != oldProps->showsIndoors) {
+    result["showsIndoors"] = showsIndoors;
+  }
+    
+  if (showsPointsOfInterests != oldProps->showsPointsOfInterests) {
+    result["showsPointsOfInterests"] = showsPointsOfInterests;
+  }
+    
+  if (pointsOfInterestFilter != oldProps->pointsOfInterestFilter) {
+    result["pointsOfInterestFilter"] = toDynamic(pointsOfInterestFilter);
+  }
+    
+  if (showsMyLocationButton != oldProps->showsMyLocationButton) {
+    result["showsMyLocationButton"] = showsMyLocationButton;
+  }
+    
+  if (showsScale != oldProps->showsScale) {
+    result["showsScale"] = showsScale;
+  }
+    
+  if (showsUserLocation != oldProps->showsUserLocation) {
+    result["showsUserLocation"] = showsUserLocation;
+  }
+    
+  if (tintColor != oldProps->tintColor) {
+    result["tintColor"] = *tintColor;
+  }
+    
+  if (toolbarEnabled != oldProps->toolbarEnabled) {
+    result["toolbarEnabled"] = toolbarEnabled;
+  }
+    
+  if (userInterfaceStyle != oldProps->userInterfaceStyle) {
+    result["userInterfaceStyle"] = toDynamic(userInterfaceStyle);
+  }
+    
+  if (customMapStyleString != oldProps->customMapStyleString) {
+    result["customMapStyleString"] = customMapStyleString;
+  }
+    
+  if (userLocationAnnotationTitle != oldProps->userLocationAnnotationTitle) {
+    result["userLocationAnnotationTitle"] = userLocationAnnotationTitle;
+  }
+    
+  if (userLocationCalloutEnabled != oldProps->userLocationCalloutEnabled) {
+    result["userLocationCalloutEnabled"] = userLocationCalloutEnabled;
+  }
+    
+  if (userLocationFastestInterval != oldProps->userLocationFastestInterval) {
+    result["userLocationFastestInterval"] = userLocationFastestInterval;
+  }
+    
+  if (userLocationPriority != oldProps->userLocationPriority) {
+    result["userLocationPriority"] = toDynamic(userLocationPriority);
+  }
+    
+  if (userLocationUpdateInterval != oldProps->userLocationUpdateInterval) {
+    result["userLocationUpdateInterval"] = userLocationUpdateInterval;
+  }
+    
+  if (zoomControlEnabled != oldProps->zoomControlEnabled) {
+    result["zoomControlEnabled"] = zoomControlEnabled;
+  }
+    
+  if (zoomEnabled != oldProps->zoomEnabled) {
+    result["zoomEnabled"] = zoomEnabled;
+  }
+    
+  if (showsTraffic != oldProps->showsTraffic) {
+    result["showsTraffic"] = showsTraffic;
+  }
+    
+  if (zoomTapEnabled != oldProps->zoomTapEnabled) {
+    result["zoomTapEnabled"] = zoomTapEnabled;
+  }
+    
+  if (cameraZoomRange != oldProps->cameraZoomRange) {
+    result["cameraZoomRange"] = toDynamic(cameraZoomRange);
+  }
+  return result;
+}
+#endif
 RNMapsMarkerProps::RNMapsMarkerProps(
     const PropsParserContext &context,
     const RNMapsMarkerProps &sourceProps,
@@ -168,8 +659,106 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     pinColor(convertRawProp(context, rawProps, "pinColor", sourceProps.pinColor, {})),
     titleVisibility(convertRawProp(context, rawProps, "titleVisibility", sourceProps.titleVisibility, {RNMapsMarkerTitleVisibility::Visible})),
     subtitleVisibility(convertRawProp(context, rawProps, "subtitleVisibility", sourceProps.subtitleVisibility, {RNMapsMarkerSubtitleVisibility::Adaptive})),
-    useLegacyPinView(convertRawProp(context, rawProps, "useLegacyPinView", sourceProps.useLegacyPinView, {false}))
-      {}
+    useLegacyPinView(convertRawProp(context, rawProps, "useLegacyPinView", sourceProps.useLegacyPinView, {false})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsMarkerProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsMarker";
+}
+
+folly::dynamic RNMapsMarkerProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsMarkerProps();
+  const RNMapsMarkerProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsMarkerProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (anchor != oldProps->anchor) {
+    result["anchor"] = toDynamic(anchor);
+  }
+    
+  if (calloutAnchor != oldProps->calloutAnchor) {
+    result["calloutAnchor"] = toDynamic(calloutAnchor);
+  }
+    
+  if (image != oldProps->image) {
+    result["image"] = toDynamic(image);
+  }
+    
+  if (calloutOffset != oldProps->calloutOffset) {
+    result["calloutOffset"] = toDynamic(calloutOffset);
+  }
+    
+  if (displayPriority != oldProps->displayPriority) {
+    result["displayPriority"] = toDynamic(displayPriority);
+  }
+    
+  if (centerOffset != oldProps->centerOffset) {
+    result["centerOffset"] = toDynamic(centerOffset);
+  }
+    
+  if (coordinate != oldProps->coordinate) {
+    result["coordinate"] = toDynamic(coordinate);
+  }
+    
+  if (description != oldProps->description) {
+    result["description"] = description;
+  }
+    
+  if (draggable != oldProps->draggable) {
+    result["draggable"] = draggable;
+  }
+    
+  if (title != oldProps->title) {
+    result["title"] = title;
+  }
+    
+  if (tracksViewChanges != oldProps->tracksViewChanges) {
+    result["tracksViewChanges"] = tracksViewChanges;
+  }
+    
+  if (identifier != oldProps->identifier) {
+    result["identifier"] = identifier;
+  }
+    
+  if (isPreselected != oldProps->isPreselected) {
+    result["isPreselected"] = isPreselected;
+  }
+    
+  if (useSnapshot != oldProps->useSnapshot) {
+    result["useSnapshot"] = useSnapshot;
+  }
+    
+  if (snapshotCacheKey != oldProps->snapshotCacheKey) {
+    result["snapshotCacheKey"] = snapshotCacheKey;
+  }
+    
+  if ((opacity != oldProps->opacity) && !(std::isnan(opacity) && std::isnan(oldProps->opacity))) {
+    result["opacity"] = opacity;
+  }
+    
+  if (pinColor != oldProps->pinColor) {
+    result["pinColor"] = *pinColor;
+  }
+    
+  if (titleVisibility != oldProps->titleVisibility) {
+    result["titleVisibility"] = toDynamic(titleVisibility);
+  }
+    
+  if (subtitleVisibility != oldProps->subtitleVisibility) {
+    result["subtitleVisibility"] = toDynamic(subtitleVisibility);
+  }
+    
+  if (useLegacyPinView != oldProps->useLegacyPinView) {
+    result["useLegacyPinView"] = useLegacyPinView;
+  }
+  return result;
+}
+#endif
 RNMapsOverlayProps::RNMapsOverlayProps(
     const PropsParserContext &context,
     const RNMapsOverlayProps &sourceProps,
@@ -179,8 +768,46 @@ RNMapsOverlayProps::RNMapsOverlayProps(
     bounds(convertRawProp(context, rawProps, "bounds", sourceProps.bounds, {})),
     image(convertRawProp(context, rawProps, "image", sourceProps.image, {})),
     opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
-    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
-      {}
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsOverlayProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsOverlay";
+}
+
+folly::dynamic RNMapsOverlayProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsOverlayProps();
+  const RNMapsOverlayProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsOverlayProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if ((bearing != oldProps->bearing) && !(std::isnan(bearing) && std::isnan(oldProps->bearing))) {
+    result["bearing"] = bearing;
+  }
+    
+  if (bounds != oldProps->bounds) {
+    result["bounds"] = toDynamic(bounds);
+  }
+    
+  if (image != oldProps->image) {
+    result["image"] = toDynamic(image);
+  }
+    
+  if ((opacity != oldProps->opacity) && !(std::isnan(opacity) && std::isnan(oldProps->opacity))) {
+    result["opacity"] = opacity;
+  }
+    
+  if (tappable != oldProps->tappable) {
+    result["tappable"] = tappable;
+  }
+  return result;
+}
+#endif
 RNMapsPolylineProps::RNMapsPolylineProps(
     const PropsParserContext &context,
     const RNMapsPolylineProps &sourceProps,
@@ -194,8 +821,62 @@ RNMapsPolylineProps::RNMapsPolylineProps(
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
     strokeColors(convertRawProp(context, rawProps, "strokeColors", sourceProps.strokeColors, {})),
     strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
-    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
-      {}
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsPolylineProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsPolyline";
+}
+
+folly::dynamic RNMapsPolylineProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsPolylineProps();
+  const RNMapsPolylineProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsPolylineProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (coordinates != oldProps->coordinates) {
+    result["coordinates"] = toDynamic(coordinates);
+  }
+    
+  if (geodesic != oldProps->geodesic) {
+    result["geodesic"] = geodesic;
+  }
+    
+  if (lineCap != oldProps->lineCap) {
+    result["lineCap"] = toDynamic(lineCap);
+  }
+    
+  if (lineDashPattern != oldProps->lineDashPattern) {
+    result["lineDashPattern"] = toDynamic(lineDashPattern);
+  }
+    
+  if (lineJoin != oldProps->lineJoin) {
+    result["lineJoin"] = toDynamic(lineJoin);
+  }
+    
+  if (strokeColor != oldProps->strokeColor) {
+    result["strokeColor"] = *strokeColor;
+  }
+    
+  if (strokeColors != oldProps->strokeColors) {
+    result["strokeColors"] = toDynamic(strokeColors);
+  }
+    
+  if ((strokeWidth != oldProps->strokeWidth) && !(std::isnan(strokeWidth) && std::isnan(oldProps->strokeWidth))) {
+    result["strokeWidth"] = strokeWidth;
+  }
+    
+  if (tappable != oldProps->tappable) {
+    result["tappable"] = tappable;
+  }
+  return result;
+}
+#endif
 RNMapsUrlTileProps::RNMapsUrlTileProps(
     const PropsParserContext &context,
     const RNMapsUrlTileProps &sourceProps,
@@ -211,8 +892,70 @@ RNMapsUrlTileProps::RNMapsUrlTileProps(
     tileCacheMaxAge(convertRawProp(context, rawProps, "tileCacheMaxAge", sourceProps.tileCacheMaxAge, {0})),
     tileCachePath(convertRawProp(context, rawProps, "tileCachePath", sourceProps.tileCachePath, {})),
     tileSize(convertRawProp(context, rawProps, "tileSize", sourceProps.tileSize, {256})),
-    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {}))
-      {}
+    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsUrlTileProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsUrlTile";
+}
+
+folly::dynamic RNMapsUrlTileProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsUrlTileProps();
+  const RNMapsUrlTileProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsUrlTileProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (doubleTileSize != oldProps->doubleTileSize) {
+    result["doubleTileSize"] = doubleTileSize;
+  }
+    
+  if (flipY != oldProps->flipY) {
+    result["flipY"] = flipY;
+  }
+    
+  if (maximumNativeZ != oldProps->maximumNativeZ) {
+    result["maximumNativeZ"] = maximumNativeZ;
+  }
+    
+  if (maximumZ != oldProps->maximumZ) {
+    result["maximumZ"] = maximumZ;
+  }
+    
+  if (minimumZ != oldProps->minimumZ) {
+    result["minimumZ"] = minimumZ;
+  }
+    
+  if (offlineMode != oldProps->offlineMode) {
+    result["offlineMode"] = offlineMode;
+  }
+    
+  if (shouldReplaceMapContent != oldProps->shouldReplaceMapContent) {
+    result["shouldReplaceMapContent"] = shouldReplaceMapContent;
+  }
+    
+  if (tileCacheMaxAge != oldProps->tileCacheMaxAge) {
+    result["tileCacheMaxAge"] = tileCacheMaxAge;
+  }
+    
+  if (tileCachePath != oldProps->tileCachePath) {
+    result["tileCachePath"] = tileCachePath;
+  }
+    
+  if (tileSize != oldProps->tileSize) {
+    result["tileSize"] = tileSize;
+  }
+    
+  if (urlTemplate != oldProps->urlTemplate) {
+    result["urlTemplate"] = urlTemplate;
+  }
+  return result;
+}
+#endif
 RNMapsWMSTileProps::RNMapsWMSTileProps(
     const PropsParserContext &context,
     const RNMapsWMSTileProps &sourceProps,
@@ -226,7 +969,61 @@ RNMapsWMSTileProps::RNMapsWMSTileProps(
     tileCacheMaxAge(convertRawProp(context, rawProps, "tileCacheMaxAge", sourceProps.tileCacheMaxAge, {0})),
     tileCachePath(convertRawProp(context, rawProps, "tileCachePath", sourceProps.tileCachePath, {})),
     tileSize(convertRawProp(context, rawProps, "tileSize", sourceProps.tileSize, {256})),
-    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {}))
-      {}
+    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsWMSTileProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsWMSTile";
+}
+
+folly::dynamic RNMapsWMSTileProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsWMSTileProps();
+  const RNMapsWMSTileProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsWMSTileProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (maximumNativeZ != oldProps->maximumNativeZ) {
+    result["maximumNativeZ"] = maximumNativeZ;
+  }
+    
+  if (maximumZ != oldProps->maximumZ) {
+    result["maximumZ"] = maximumZ;
+  }
+    
+  if (minimumZ != oldProps->minimumZ) {
+    result["minimumZ"] = minimumZ;
+  }
+    
+  if (offlineMode != oldProps->offlineMode) {
+    result["offlineMode"] = offlineMode;
+  }
+    
+  if (shouldReplaceMapContent != oldProps->shouldReplaceMapContent) {
+    result["shouldReplaceMapContent"] = shouldReplaceMapContent;
+  }
+    
+  if (tileCacheMaxAge != oldProps->tileCacheMaxAge) {
+    result["tileCacheMaxAge"] = tileCacheMaxAge;
+  }
+    
+  if (tileCachePath != oldProps->tileCachePath) {
+    result["tileCachePath"] = tileCachePath;
+  }
+    
+  if (tileSize != oldProps->tileSize) {
+    result["tileSize"] = tileSize;
+  }
+    
+  if (urlTemplate != oldProps->urlTemplate) {
+    result["urlTemplate"] = urlTemplate;
+  }
+  return result;
+}
+#endif
 
 } // namespace facebook::react
