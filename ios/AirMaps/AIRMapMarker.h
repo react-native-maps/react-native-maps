@@ -28,6 +28,7 @@
 
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, copy) NSString *imageSrc;
+@property (nonatomic, copy) NSString *systemImage;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
