@@ -22,6 +22,10 @@ Pod::Spec.new do |s|
   s.subspec 'Generated' do |ss|
     ss.source_files = "ios/generated/**/*.{h,m,mm,cpp,swift}"
     ss.exclude_files = [
+      "ios/generated/RCTModuleProviders.h",
+      "ios/generated/RCTModuleProviders.mm",
+      "ios/generated/RCTUnstableModulesRequiringMainQueueSetupProvider.h",
+      "ios/generated/RCTUnstableModulesRequiringMainQueueSetupProvider.mm",
       "ios/generated/RCTAppDependencyProvider.h",
       "ios/generated/RCTAppDependencyProvider.mm",
       "ios/generated/RCTThirdPartyComponentsProvider.h",
@@ -108,7 +112,7 @@ Pod::Spec.new do |s|
     }
     # Fixed compiler flags to avoid -Wno warnings
     ss.compiler_flags = folly_compiler_flags + ' -DHAVE_GOOGLE_MAPS=1 -DHAVE_GOOGLE_MAPS_UTILS=1'
-    ss.dependency 'GoogleMaps', '9.3.0'
+    ss.dependency 'GoogleMaps', '9.4.0'
     ss.dependency 'Google-Maps-iOS-Utils', '6.1.0'
     ss.dependency 'react-native-maps/Generated'
     ss.dependency 'react-native-maps/Maps'

@@ -12,8 +12,9 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsMarkerManagerInterface<T extends View> {
+public interface RNMapsMarkerManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setAnchor(T view, @Nullable ReadableMap value);
   void setCalloutAnchor(T view, @Nullable ReadableMap value);
   void setImage(T view, @Nullable ReadableMap value);

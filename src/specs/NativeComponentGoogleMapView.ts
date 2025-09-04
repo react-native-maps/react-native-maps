@@ -1,8 +1,7 @@
 // @ts-nocheck
 import type {HostComponent, ViewProps, ColorValue} from 'react-native';
 
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
+import {codegenNativeComponent, codegenNativeCommands} from 'react-native';
 import type {
   Double,
   Int32,
@@ -727,16 +726,6 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform Android: Supported
    */
   showsMyLocationButton?: boolean;
-
-  /**
-   * If `false` points of interest won't be displayed on the map.
-   * TODO: DEPRECATED? Doesn't seem to do anything
-   *
-   * @default true
-   * @platform iOS: Maybe Apple Maps?
-   * @platform Android: Not supported
-   */
-  showsPointsOfInterest?: boolean;
 
   /**
    * A Boolean indicating whether the map shows scale information.
