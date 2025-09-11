@@ -558,6 +558,16 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     _handlePanDrag = handlePanDrag;
 }
 
+static inline MKCoordinateSpan correctedSpan(MKCoordinateSpan span) {
+  CLLocationDegrees latitudeDelta  = fmin(fmax(0.0, span.latitudeDelta), 180.0);
+  CLLocationDegrees longitudeDelta = fmin(fmax(0.0, span.longitudeDelta), 360.0);
+  return MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
+}
+
+static inline MKCoordinateRegion regionWithCorrectedSpan(MKCoordinateRegion region) {
+  return MKCoordinateRegionMake(region.center, correctedSpan(region.span));
+}
+
 - (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated
 {
     // If location is invalid, abort
@@ -574,8 +584,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     }
 
     // Animate/move to new position
-    [super setRegion:region animated:animated];
+  [super setRegion:regionWithCorrectedSpan(region) animated:animated];
 }
+
 - (void) setRegion:(MKCoordinateRegion)region
 {
     if (!CLLocationCoordinate2DIsValid(region.center)) {
