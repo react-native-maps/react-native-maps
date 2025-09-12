@@ -31,7 +31,6 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 | Version          | React Native Requirement |
 | ---------------- | ------------------------ |
-| 1.20.1 and below | >= 0.74                  |
 | 1.14.0 - 1.20.1  | >= 0.74                  |
 | < 1.14.0         | >= 0.64.3                |
 
