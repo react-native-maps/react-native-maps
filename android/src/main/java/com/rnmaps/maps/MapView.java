@@ -91,6 +91,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     public GoogleMap map;
     private Bundle savedMapState;
     private Map<Integer, MapFeature> savedFeatures = new HashMap<>();
+    private boolean shouldRestorePadding = false;
 
     private MarkerManager markerManager;
     private MarkerManager.Collection markerCollection;
@@ -342,6 +343,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         super.onStop();
         savedFeatures = new HashMap<>(features);
         savedFeatures.keySet().forEach(this::removeFeatureAt);
+        shouldRestorePadding = true;
         removeView(attacherGroup);
         attacherGroup = null;
         detachLifecycleObserver();
@@ -781,12 +783,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     private void applyBridgedProps() {
-        if (initialRegion != null) {
+        if (initialRegion != null && !initialRegionSet) {
             moveToRegion(initialRegion);
             initialRegionSet = true;
         } else if (region != null) {
             moveToRegion(region);
-        } else if (initialCamera != null) {
+        } else if (initialCamera != null && !initialCameraSet) {
             moveToCamera(initialCamera);
             initialCameraSet = true;
         } else if (camera != null) {
@@ -796,12 +798,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             map.setMapStyle(new MapStyleOptions(customMapStyleString));
         }
         this.setPoiClickEnabled(poiClickEnabled);
-        if (setPaddingDeferred &&
-                (baseLeftMapPadding != 0 ||
-                        baseTopMapPadding != 0 ||
-                        baseRightMapPadding != 0 ||
-                        baseBottomMapPadding != 0)) {
-            applyBaseMapPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+        if (baseLeftMapPadding != 0 ||
+                baseTopMapPadding != 0 ||
+                baseRightMapPadding != 0 ||
+                baseBottomMapPadding != 0) {
+            if (setPaddingDeferred) {
+                applyBaseMapPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+            } else if (shouldRestorePadding) {
+                CameraUpdate cu = CameraUpdateFactory.newCameraPosition(map.getCameraPosition());
+                map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+                map.moveCamera(cu);
+                shouldRestorePadding = false;
+            }
         }
     }
 
