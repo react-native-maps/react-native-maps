@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.6](https://github.com/react-native-maps/react-native-maps/compare/v1.26.5...v1.26.6) (2025-09-14)
+
+
+### Bug Fixes
+
+* **ios:** missing user location update details ([#5735](https://github.com/react-native-maps/react-native-maps/issues/5735)) ([6361ea5](https://github.com/react-native-maps/react-native-maps/commit/6361ea56d800a02c01cd94538a453ab418cf3d0e))
+
 ## [1.26.5](https://github.com/react-native-maps/react-native-maps/compare/v1.26.4...v1.26.5) (2025-09-14)
 
 
