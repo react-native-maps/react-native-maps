@@ -35,6 +35,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>display of location on the example map</string>
+  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>display of location on the example map</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
