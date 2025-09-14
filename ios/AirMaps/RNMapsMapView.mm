@@ -131,7 +131,7 @@ using namespace facebook::react;
     _view = (AIRMap *)[_legacyMapManager view];
 
     self.contentView = _view;
-    
+
     _view.onLongPress = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -277,6 +277,13 @@ using namespace facebook::react;
             facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
                 .latitude = [coordinateDict[@"latitude"] doubleValue],
                 .longitude = [coordinateDict[@"longitude"] doubleValue],
+                .altitude =[coordinateDict[@"altitude"] doubleValue],
+                .timestamp =[coordinateDict[@"timestamp"] doubleValue],
+                .accuracy =[coordinateDict[@"accuracy"] floatValue],
+                .speed =[coordinateDict[@"speed"] floatValue],
+                .heading =[coordinateDict[@"heading"] floatValue],
+                .altitudeAccuracy =[coordinateDict[@"altitudeAccuracy"] floatValue],
+
             };
             NSString* str = @"";
             if (errorDict){
