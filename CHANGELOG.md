@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.3](https://github.com/react-native-maps/react-native-maps/compare/v1.26.2...v1.26.3) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** ensure attacherGroup is initialized before use ([#5704](https://github.com/react-native-maps/react-native-maps/issues/5704)) ([4fd4ea0](https://github.com/react-native-maps/react-native-maps/commit/4fd4ea00993013bf8177af86a781907b6aedcad4)), closes [#5656](https://github.com/react-native-maps/react-native-maps/issues/5656)
+
 ## [1.26.2](https://github.com/react-native-maps/react-native-maps/compare/v1.26.1...v1.26.2) (2025-09-14)
 
 
