@@ -124,8 +124,14 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
       case "showsIndoors":
         mViewManager.setShowsIndoors(view, value == null ? true : (boolean) value);
         break;
+      case "showsPointsOfInterests":
+        mViewManager.setShowsPointsOfInterests(view, value == null ? true : (boolean) value);
+        break;
+      case "pointsOfInterestFilter":
+        mViewManager.setPointsOfInterestFilter(view, (ReadableArray) value);
+        break;
       case "showsMyLocationButton":
-        mViewManager.setShowsMyLocationButton(view, value == null ? true : (boolean) value);
+        mViewManager.setShowsMyLocationButton(view, value == null ? false : (boolean) value);
         break;
       case "showsScale":
         mViewManager.setShowsScale(view, value == null ? false : (boolean) value);
@@ -181,7 +187,7 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
   }
 
   @Override
-  public void receiveCommand(T view, String commandName, @Nullable ReadableArray args) {
+  public void receiveCommand(T view, String commandName, ReadableArray args) {
     switch (commandName) {
       case "animateToRegion":
         mViewManager.animateToRegion(view, args.getString(0), args.getInt(1));
