@@ -1167,7 +1167,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             feature.removeFromMap(polygonCollection);
         } else if (feature instanceof MapPolyline) {
             feature.removeFromMap(polylineCollection);
-        } else {
+        } else if (feature != null) {
             feature.removeFromMap(map);
         }
     }
