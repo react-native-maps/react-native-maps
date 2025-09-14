@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.4](https://github.com/react-native-maps/react-native-maps/compare/v1.26.3...v1.26.4) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** removeFromMap on a null object reference ([#5674](https://github.com/react-native-maps/react-native-maps/issues/5674)) ([f528f9e](https://github.com/react-native-maps/react-native-maps/commit/f528f9eba3954486ef80a47d2ca18d37cfc56f79))
+
 ## [1.26.3](https://github.com/react-native-maps/react-native-maps/compare/v1.26.2...v1.26.3) (2025-09-14)
 
 
