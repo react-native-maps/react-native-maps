@@ -1,8 +1,8 @@
 // @ts-nocheck
 import type {HostComponent, ViewProps, ColorValue} from 'react-native';
 
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
+import {codegenNativeComponent} from 'react-native';
+import {codegenNativeCommands} from 'react-native';
 import type {
   Double,
   Int32,
