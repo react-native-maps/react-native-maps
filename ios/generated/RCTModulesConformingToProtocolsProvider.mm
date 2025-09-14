@@ -11,23 +11,44 @@
 
 +(NSArray<NSString *> *)imageURLLoaderClassNames
 {
-  return @[
-    
-  ];
+  static NSArray<NSString *> *classNames = nil;
+  static dispatch_once_t onceToken;
+  
+  dispatch_once(&onceToken, ^{
+    classNames = @[
+      
+    ];
+  });
+  
+  return classNames;
 }
 
 +(NSArray<NSString *> *)imageDataDecoderClassNames
 {
-  return @[
-    
-  ];
+  static NSArray<NSString *> *classNames = nil;
+  static dispatch_once_t onceToken;
+  
+  dispatch_once(&onceToken, ^{
+    classNames = @[
+      
+    ];
+  });
+  
+  return classNames;
 }
 
 +(NSArray<NSString *> *)URLRequestHandlerClassNames
 {
-  return @[
-    
-  ];
+  static NSArray<NSString *> *classNames = nil;
+  static dispatch_once_t onceToken;
+  
+  dispatch_once(&onceToken, ^{
+    classNames = @[
+      
+    ];
+  });
+  
+  return classNames;
 }
 
 @end

@@ -8,130 +8,31 @@
  */
 #pragma once
 
-#ifdef ANDROID
+#include <react/renderer/core/StateData.h>
+#ifdef RN_SERIALIZABLE_STATE
 #include <folly/dynamic.h>
 #endif
 
 namespace facebook::react {
 
-class RNMapsCalloutState {
-public:
-  RNMapsCalloutState() = default;
+using RNMapsCalloutState = StateData;
 
-#ifdef ANDROID
-  RNMapsCalloutState(RNMapsCalloutState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
+using RNMapsCircleState = StateData;
 
-class RNMapsCircleState {
-public:
-  RNMapsCircleState() = default;
+using RNMapsGoogleMapViewState = StateData;
 
-#ifdef ANDROID
-  RNMapsCircleState(RNMapsCircleState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
+using RNMapsGooglePolygonState = StateData;
 
-class RNMapsGoogleMapViewState {
-public:
-  RNMapsGoogleMapViewState() = default;
+using RNMapsMapViewState = StateData;
 
-#ifdef ANDROID
-  RNMapsGoogleMapViewState(RNMapsGoogleMapViewState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
+using RNMapsMarkerState = StateData;
 
-class RNMapsGooglePolygonState {
-public:
-  RNMapsGooglePolygonState() = default;
+using RNMapsOverlayState = StateData;
 
-#ifdef ANDROID
-  RNMapsGooglePolygonState(RNMapsGooglePolygonState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
+using RNMapsPolylineState = StateData;
 
-class RNMapsMapViewState {
-public:
-  RNMapsMapViewState() = default;
+using RNMapsUrlTileState = StateData;
 
-#ifdef ANDROID
-  RNMapsMapViewState(RNMapsMapViewState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
-
-class RNMapsMarkerState {
-public:
-  RNMapsMarkerState() = default;
-
-#ifdef ANDROID
-  RNMapsMarkerState(RNMapsMarkerState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
-
-class RNMapsOverlayState {
-public:
-  RNMapsOverlayState() = default;
-
-#ifdef ANDROID
-  RNMapsOverlayState(RNMapsOverlayState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
-
-class RNMapsPolylineState {
-public:
-  RNMapsPolylineState() = default;
-
-#ifdef ANDROID
-  RNMapsPolylineState(RNMapsPolylineState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
-
-class RNMapsUrlTileState {
-public:
-  RNMapsUrlTileState() = default;
-
-#ifdef ANDROID
-  RNMapsUrlTileState(RNMapsUrlTileState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
-
-class RNMapsWMSTileState {
-public:
-  RNMapsWMSTileState() = default;
-
-#ifdef ANDROID
-  RNMapsWMSTileState(RNMapsWMSTileState const &previousState, folly::dynamic data){};
-  folly::dynamic getDynamic() const {
-    return {};
-  };
-#endif
-};
+using RNMapsWMSTileState = StateData;
 
 } // namespace facebook::react

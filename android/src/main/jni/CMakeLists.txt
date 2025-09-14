@@ -25,12 +25,4 @@ target_link_libraries(
   reactnative
 )
 
-target_compile_options(
-  react_codegen_RNMapsSpecs
-  PRIVATE
-  -DLOG_TAG=\"ReactNative\"
-  -fexceptions
-  -frtti
-  -std=c++20
-  -Wall
-)
+target_compile_reactnative_options(react_codegen_RNMapsSpecs PRIVATE)

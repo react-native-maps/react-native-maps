@@ -1,5 +1,75 @@
 # Changelog
 
+## [1.26.3](https://github.com/react-native-maps/react-native-maps/compare/v1.26.2...v1.26.3) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** ensure attacherGroup is initialized before use ([#5704](https://github.com/react-native-maps/react-native-maps/issues/5704)) ([4fd4ea0](https://github.com/react-native-maps/react-native-maps/commit/4fd4ea00993013bf8177af86a781907b6aedcad4)), closes [#5656](https://github.com/react-native-maps/react-native-maps/issues/5656)
+
+## [1.26.2](https://github.com/react-native-maps/react-native-maps/compare/v1.26.1...v1.26.2) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** restore MapView state correctly ([#5727](https://github.com/react-native-maps/react-native-maps/issues/5727)) ([66189d5](https://github.com/react-native-maps/react-native-maps/commit/66189d5c081ae208a9a3daf78db82c59888d5df0))
+
+## [1.26.1](https://github.com/react-native-maps/react-native-maps/compare/v1.26.0...v1.26.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* **android:** crash on launch for react-native 0.81.1 ([#5715](https://github.com/react-native-maps/react-native-maps/issues/5715)) ([c587f30](https://github.com/react-native-maps/react-native-maps/commit/c587f30b8499b79a2266687c641bfed10b3ecc2c)), closes [#5697](https://github.com/react-native-maps/react-native-maps/issues/5697)
+
+# [1.26.0](https://github.com/react-native-maps/react-native-maps/compare/v1.25.6...v1.26.0) (2025-09-01)
+
+
+### Features
+
+* **ios:** restore showspointsofinterests and add pointsofinterestfilter on apple maps ([#5717](https://github.com/react-native-maps/react-native-maps/issues/5717)) ([775fb82](https://github.com/react-native-maps/react-native-maps/commit/775fb8215074c69cac7eeeaa8753e5c79d5c18ad))
+
+## [1.25.6](https://github.com/react-native-maps/react-native-maps/compare/v1.25.5...v1.25.6) (2025-08-31)
+
+
+### Reverts
+
+* Revert "[iOS] [Apple Maps] Add / restore `showsPointsOfInterests` and add `pointsOfInterestFilter`" ([#5716](https://github.com/react-native-maps/react-native-maps/issues/5716)) ([441fe30](https://github.com/react-native-maps/react-native-maps/commit/441fe30700a2ae6d940ba3b570b4327bdf9e48d4))
+
+## [1.25.5](https://github.com/react-native-maps/react-native-maps/compare/v1.25.4...v1.25.5) (2025-08-31)
+
+
+### Bug Fixes
+
+* **ios:** Update Google Maps SDK to 9.4.0 ([#5697](https://github.com/react-native-maps/react-native-maps/issues/5697)) ([f7f5fdc](https://github.com/react-native-maps/react-native-maps/commit/f7f5fdcf27231a92ed32a82172befb46ff078ac3))
+
+## [1.25.4](https://github.com/react-native-maps/react-native-maps/compare/v1.25.3...v1.25.4) (2025-08-31)
+
+
+### Bug Fixes
+
+* **ios:** attempt to fix ci by pinning the macOS version ([#5713](https://github.com/react-native-maps/react-native-maps/issues/5713)) ([c3a9c95](https://github.com/react-native-maps/react-native-maps/commit/c3a9c95c52d135e242d18a25c556096d3efb46ca))
+
+## [1.25.3](https://github.com/react-native-maps/react-native-maps/compare/v1.25.2...v1.25.3) (2025-08-09)
+
+
+### Bug Fixes
+
+* **android:** showsMyLocationButton not working ([#5687](https://github.com/react-native-maps/react-native-maps/issues/5687)) ([009c7e6](https://github.com/react-native-maps/react-native-maps/commit/009c7e60c27d7d67ed853bd6da170730af769ef2))
+
+## [1.25.2](https://github.com/react-native-maps/react-native-maps/compare/v1.25.1...v1.25.2) (2025-08-09)
+
+
+### Bug Fixes
+
+* **ios:** googlemaps mylocation compass ([#5686](https://github.com/react-native-maps/react-native-maps/issues/5686)) ([e43862d](https://github.com/react-native-maps/react-native-maps/commit/e43862dc19f0a2904202365516250701284b19d0))
+
+## [1.25.1](https://github.com/react-native-maps/react-native-maps/compare/v1.25.0...v1.25.1) (2025-08-09)
+
+
+### Reverts
+
+* Revert "Fix/googlemaps mylocation compass" ([#5685](https://github.com/react-native-maps/react-native-maps/issues/5685)) ([0126fbe](https://github.com/react-native-maps/react-native-maps/commit/0126fbe03cb838a8a370314e1c96404e31a312bc)), closes [#5684](https://github.com/react-native-maps/react-native-maps/issues/5684)
+
 # [1.25.0](https://github.com/react-native-maps/react-native-maps/compare/v1.24.16...v1.25.0) (2025-08-03)
 
 

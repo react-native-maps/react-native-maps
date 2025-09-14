@@ -11,8 +11,9 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsWMSTileManagerInterface<T extends View> {
+public interface RNMapsWMSTileManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setMaximumNativeZ(T view, int value);
   void setMaximumZ(T view, int value);
   void setMinimumZ(T view, int value);
