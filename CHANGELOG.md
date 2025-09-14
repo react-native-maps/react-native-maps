@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.2](https://github.com/react-native-maps/react-native-maps/compare/v1.26.1...v1.26.2) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** restore MapView state correctly ([#5727](https://github.com/react-native-maps/react-native-maps/issues/5727)) ([66189d5](https://github.com/react-native-maps/react-native-maps/commit/66189d5c081ae208a9a3daf78db82c59888d5df0))
+
 ## [1.26.1](https://github.com/react-native-maps/react-native-maps/compare/v1.26.0...v1.26.1) (2025-09-02)
 
 
