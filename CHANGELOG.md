@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.5](https://github.com/react-native-maps/react-native-maps/compare/v1.26.4...v1.26.5) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** marker pin color ([#5673](https://github.com/react-native-maps/react-native-maps/issues/5673)) ([3674c0a](https://github.com/react-native-maps/react-native-maps/commit/3674c0a8781285835fa41aea4e2b2ecd5ded2c68))
+
 ## [1.26.4](https://github.com/react-native-maps/react-native-maps/compare/v1.26.3...v1.26.4) (2025-09-14)
 
 
