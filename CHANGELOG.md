@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.26.6](https://github.com/react-native-maps/react-native-maps/compare/v1.26.5...v1.26.6) (2025-09-14)
+
+
+### Bug Fixes
+
+* **ios:** missing user location update details ([#5735](https://github.com/react-native-maps/react-native-maps/issues/5735)) ([6361ea5](https://github.com/react-native-maps/react-native-maps/commit/6361ea56d800a02c01cd94538a453ab418cf3d0e))
+
+## [1.26.5](https://github.com/react-native-maps/react-native-maps/compare/v1.26.4...v1.26.5) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** marker pin color ([#5673](https://github.com/react-native-maps/react-native-maps/issues/5673)) ([3674c0a](https://github.com/react-native-maps/react-native-maps/commit/3674c0a8781285835fa41aea4e2b2ecd5ded2c68))
+
+## [1.26.4](https://github.com/react-native-maps/react-native-maps/compare/v1.26.3...v1.26.4) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** removeFromMap on a null object reference ([#5674](https://github.com/react-native-maps/react-native-maps/issues/5674)) ([f528f9e](https://github.com/react-native-maps/react-native-maps/commit/f528f9eba3954486ef80a47d2ca18d37cfc56f79))
+
+## [1.26.3](https://github.com/react-native-maps/react-native-maps/compare/v1.26.2...v1.26.3) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** ensure attacherGroup is initialized before use ([#5704](https://github.com/react-native-maps/react-native-maps/issues/5704)) ([4fd4ea0](https://github.com/react-native-maps/react-native-maps/commit/4fd4ea00993013bf8177af86a781907b6aedcad4)), closes [#5656](https://github.com/react-native-maps/react-native-maps/issues/5656)
+
+## [1.26.2](https://github.com/react-native-maps/react-native-maps/compare/v1.26.1...v1.26.2) (2025-09-14)
+
+
+### Bug Fixes
+
+* **android:** restore MapView state correctly ([#5727](https://github.com/react-native-maps/react-native-maps/issues/5727)) ([66189d5](https://github.com/react-native-maps/react-native-maps/commit/66189d5c081ae208a9a3daf78db82c59888d5df0))
+
 ## [1.26.1](https://github.com/react-native-maps/react-native-maps/compare/v1.26.0...v1.26.1) (2025-09-02)
 
 
