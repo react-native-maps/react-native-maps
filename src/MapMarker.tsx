@@ -161,6 +161,14 @@ export type MapMarkerProps = ViewProps & {
   image?: ImageURISource | ImageRequireSource;
 
   /**
+   * A string that specifies the name of a system image to be used as the marker's icon.
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  systemImage?: string;
+
+  /**
    * When true, the marker will be pre-selected.
    * Setting this to true allows the user to drag the marker without needing to tap on it first to focus it.
    *
