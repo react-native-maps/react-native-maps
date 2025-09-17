@@ -150,6 +150,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private final GestureDetector gestureDetector;
     private boolean paused = false;
     private boolean destroyed = false;
+    // Lifecycle state tracking to prevent invalid operations
+    private boolean isCreated = false;
+    private boolean isStarted = false;
+    private boolean isResumed = false;
     private final ThemedReactContext context;
     private final FusedLocationSource fusedLocationSource;
 
@@ -202,12 +206,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     @Override
     public void onCreate(LifecycleOwner owner) {
-        super.onCreate(null);
+        if (!isCreated) {
+            // Use savedMapState if available, otherwise create new Bundle
+            Bundle bundle = savedMapState != null ? savedMapState : new Bundle();
+            super.onCreate(bundle);
+            isCreated = true;
+        }
     }
 
     @Override
     public void onStart(LifecycleOwner owner) {
-        super.onStart();
+        if (isCreated && !isStarted && !destroyed) {
+            super.onStart();
+            isStarted = true;
+        }
     }
 
     @Override
@@ -218,8 +230,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             map.setLocationSource(fusedLocationSource);
         }
         synchronized (MapView.this) {
-            if (!destroyed) {
+            if (!destroyed && isStarted && !isResumed) {
                 MapView.this.onResume();
+                isResumed = true;
             }
             paused = false;
         }
@@ -234,8 +247,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             map.setMyLocationEnabled(false);
         }
         synchronized (MapView.this) {
-            if (!destroyed) {
+            if (!destroyed && isResumed) {
                 MapView.this.onPause();
+                isResumed = false;
             }
             paused = true;
         }
@@ -243,12 +257,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     @Override
     public void onStop(LifecycleOwner owner) {
-        super.onStop();
+        if (isStarted && !destroyed) {
+            super.onStop();
+            isStarted = false;
+        }
     }
 
     @Override
     public void onDestroy(LifecycleOwner owner) {
         MapView.this.doDestroy();
+        isCreated = false;
+        isStarted = false;
+        isResumed = false;
     }
 
     public MapView(ThemedReactContext context,
@@ -318,10 +338,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         attachLifecycleObserver();
-        if (savedMapState != null) {
+        if (savedMapState != null && !isCreated) {
             super.onCreate(savedMapState);
             super.onStart();
             super.onResume();
+            paused = false;
             prepareAttacherView();
             getMapAsync((map)->{
                 onMapReady(map);
@@ -339,13 +360,23 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             savedMapState = new Bundle();
         }
         super.onSaveInstanceState(savedMapState);
-        super.onPause();
-        super.onStop();
+        // Ensure proper lifecycle ordering
+        if (isResumed) {
+            super.onPause();
+            paused = true;
+        }
+
+        if (isStarted) {
+            super.onStop();
+        }
+
         savedFeatures = new HashMap<>(features);
         savedFeatures.keySet().forEach(this::removeFeatureAt);
         shouldRestorePadding = true;
-        removeView(attacherGroup);
-        attacherGroup = null;
+        if (attacherGroup != null) {
+            removeView(attacherGroup);
+            attacherGroup = null;
+        }
         detachLifecycleObserver();
         super.onDetachedFromWindow();
     }
@@ -753,11 +784,19 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         savedMapState = null;
         savedFeatures = null;
 
-        if (!paused) {
+        // Ensure proper lifecycle state before destroying
+        if (isResumed && !paused) {
             onPause();
             paused = true;
         }
-        onDestroy();
+
+        if (isStarted) {
+            onStop();
+        }
+
+        if (isCreated) {
+            onDestroy();
+        }
     }
 
     public void setInitialCameraSet(boolean initialCameraSet) {
