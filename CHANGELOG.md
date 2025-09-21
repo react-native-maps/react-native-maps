@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.7](https://github.com/react-native-maps/react-native-maps/compare/v1.26.6...v1.26.7) (2025-09-21)
+
+
+### Bug Fixes
+
+* **android:** Update MapView lifecycle ([#5689](https://github.com/react-native-maps/react-native-maps/issues/5689)) ([ea61890](https://github.com/react-native-maps/react-native-maps/commit/ea6189001e05b5d2c2acfbeab4a48da2535d190a))
+
 ## [1.26.6](https://github.com/react-native-maps/react-native-maps/compare/v1.26.5...v1.26.6) (2025-09-14)
 
 
