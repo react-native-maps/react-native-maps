@@ -872,8 +872,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         builder.tilt((float) camera.getDouble("pitch"));
         builder.bearing((float) camera.getDouble("heading"));
-        builder.zoom((float) camera.getDouble("zoom"));
-
+        if (camera.hasKey("zoom")) {
+            builder.zoom((float) camera.getDouble("zoom"));
+        }
         return builder.build();
     }
 
@@ -1911,7 +1912,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     /**
      * Safely removes a view from its parent ViewGroup.
      * Prevents NullPointerException during component lifecycle operations.
-     * 
+     *
      * @param view The view to remove from its parent
      * @return true if the view was successfully removed, false otherwise
      */
@@ -1929,7 +1930,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     /**
      * Safely requests touch event handling from parent ViewGroup.
      * Prevents NullPointerException during touch event dispatching.
-     * 
+     *
      * @param disallowIntercept Whether to disallow parent touch interception
      * @return true if the request was successfully made, false otherwise
      */
@@ -1945,7 +1946,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     /**
      * Safely removes a MapFeature from the attacherGroup.
      * Prevents NullPointerException during feature removal operations.
-     * 
+     *
      * @param feature The MapFeature to remove from attacherGroup
      * @return true if the feature was successfully removed, false otherwise
      */
