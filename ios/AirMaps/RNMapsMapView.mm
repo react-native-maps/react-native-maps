@@ -525,6 +525,7 @@ if (!(newViewProps.name.latitude == 0 &&                                    \
 #define REMAP_MAPVIEW_CAMERA_PROP(name)                                    \
 if (newViewProps.name.center.latitude != oldViewProps.name.center.latitude || \
 newViewProps.name.center.longitude != oldViewProps.name.center.longitude || \
+newViewProps.name.altitude != oldViewProps.name.altitude ||       \
 newViewProps.name.heading != oldViewProps.name.heading ||         \
 newViewProps.name.pitch != oldViewProps.name.pitch) {             \
 CLLocationCoordinate2D center = CLLocationCoordinate2DMake(       \
