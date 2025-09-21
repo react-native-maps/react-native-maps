@@ -270,7 +270,9 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
                         int newWidth = right - left;
                         int newHeight = bottom - top;
                         MapMarker marker = (MapMarker) v.getParent();
-                        marker.update(newWidth, newHeight);
+                        if(marker != null){
+                            marker.update(newWidth, newHeight);
+                        }
                     }
                 });
             }
