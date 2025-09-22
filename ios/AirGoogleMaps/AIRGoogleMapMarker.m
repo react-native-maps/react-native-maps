@@ -15,6 +15,9 @@
 #import "AIRGoogleMapCallout.h"
 #import "AIRDummyView.h"
 
+// A shared cache for marker snapshots to reuse images and save memory
+static NSCache *markerSnapshotCache;
+
 CGRect unionRect(CGRect a, CGRect b) {
     return CGRectMake(
                       MIN(a.origin.x, b.origin.x),
@@ -45,7 +48,20 @@ CGRect unionRect(CGRect a, CGRect b) {
     NSString* _identifier;
     NSString* _title;
     NSString* _subtitle;
+    
+    BOOL _useSnapshot;
+    BOOL _isSnapshotDirty;
+    NSString* _snapshotCacheKey;
+}
 
+// Singleton accessor for the shared cache
++ (NSCache *)sharedMarkerSnapshotCache {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        markerSnapshotCache = [[NSCache alloc] init];
+        markerSnapshotCache.countLimit = 100;
+    });
+    return markerSnapshotCache;
 }
 
 - (instancetype)init
@@ -55,11 +71,16 @@ CGRect unionRect(CGRect a, CGRect b) {
         _tracksInfoWindowChanges = false;
         _tappable = true;
         _opacity = 1.0;
+        
+        _useSnapshot = false;
+        _isSnapshotDirty = false;
     }
     return self;
 }
 
 - (void)layoutSubviews {
+    [super layoutSubviews];
+    
     float width = 0;
     float height = 0;
 
@@ -72,20 +93,71 @@ CGRect unionRect(CGRect a, CGRect b) {
         height = MAX(fh, height);
     }
 
-    [_iconView setFrame:CGRectMake(0, 0, width, height)];
-}
+    CGRect newFrame = CGRectMake(0, 0, width, height);
+    
+    if (_iconView && !CGRectEqualToRect(_iconView.frame, newFrame)) {
+        [_iconView setFrame:newFrame];
+        _isSnapshotDirty = YES;
+    }
 
+    if (_useSnapshot && _isSnapshotDirty) {
+        [self generateSnapshot];
+    }
+}
 
 - (UIView *) iconView
 {
     return _iconView;
 }
 
+- (void)generateSnapshot {
+    if (!_useSnapshot || !_isSnapshotDirty || !_realMarker || !_iconView) return;
+    if (CGSizeEqualToSize(_iconView.bounds.size, CGSizeZero)) return;
+    
+    BOOL hasCacheKey = _snapshotCacheKey && _snapshotCacheKey.length > 0;
+
+    // Use the cache only if an explicit snapshotKey is provided.
+    if (hasCacheKey) {
+        UIImage *cachedImage = [[[self class] sharedMarkerSnapshotCache] objectForKey:_snapshotCacheKey];
+        if (cachedImage) {
+            _realMarker.icon = cachedImage;
+            _realMarker.iconView = nil;
+            _realMarker.tracksViewChanges = YES;
+            _realMarker.tracksViewChanges = NO;
+            _isSnapshotDirty = NO;
+            return;
+        }
+    }
+
+    UIGraphicsBeginImageContextWithOptions(_iconView.bounds.size, NO, 0.0);
+    [_iconView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    if (snapshotImage) {
+        if (hasCacheKey) {
+            [[[self class] sharedMarkerSnapshotCache] setObject:snapshotImage forKey:_snapshotCacheKey];
+        }
+
+        _realMarker.icon = snapshotImage;
+        _realMarker.iconView = nil;
+        _realMarker.tracksViewChanges = NO;
+    }
+
+    _isSnapshotDirty = NO;
+}
+
 - (void) didUpdateReactSubviews
 {
     [super didUpdateReactSubviews];
+    
     if (_iconView){
         [_iconView setFrame:self.frame];
+    }
+    
+    if (_useSnapshot) {
+        _isSnapshotDirty = YES;
+        [self setNeedsLayout];
     }
 }
 
@@ -93,11 +165,11 @@ CGRect unionRect(CGRect a, CGRect b) {
 {
     _realMarker = [AIRGMSMarker new];
     _realMarker.fakeMarker = self;
-    _realMarker.tracksViewChanges = _tracksViewChanges;
+    _realMarker.tracksViewChanges = _useSnapshot ? NO : _tracksViewChanges;
     _realMarker.tracksInfoWindowChanges = _tracksInfoWindowChanges;
 
     [_realMarker setPosition:_coordinates];
-    if (_iconView){
+    if (_iconView && !_useSnapshot){
         [_realMarker setIconView:_iconView];
     }
     if (_rotation != 0){
@@ -125,7 +197,7 @@ CGRect unionRect(CGRect a, CGRect b) {
         [_realMarker setDraggable:_draggable];
     }
     [_realMarker setTappable:_tappable];
-    if (_pinColor){
+    if (_pinColor && !_useSnapshot){
         _realMarker.icon = [GMSMarker markerImageWithColor:_pinColor];
     }
     if (_opacity != 1.0){
@@ -143,6 +215,10 @@ CGRect unionRect(CGRect a, CGRect b) {
     if (_zIndex){
         [_realMarker setZIndex:_zIndex];
     }
+    if (_useSnapshot) {
+        _isSnapshotDirty = YES;
+        [self generateSnapshot];
+    }
     [_realMarker setMap:map];
 }
 
@@ -150,10 +226,16 @@ CGRect unionRect(CGRect a, CGRect b) {
     if (!_iconView){
         _iconView = [[UIView alloc] init];
     }
-    if (!_realMarker.iconView) {
+    if (!_realMarker.iconView && !_useSnapshot) {
         _realMarker.iconView = _iconView;
     }
+    if (_useSnapshot) {
+        // prevent glitch with marker (cf. https://github.com/react-native-maps/react-native-maps/issues/3657)
+        UIImage *emptyImage = [[UIImage alloc] init];
+        _realMarker.icon = emptyImage;
+    }
     [_iconView insertSubview:subview atIndex:atIndex];
+    _isSnapshotDirty = YES;
 }
 
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
@@ -173,6 +255,7 @@ CGRect unionRect(CGRect a, CGRect b) {
         self.calloutView = nil;
     } else {
         [subview removeFromSuperview];
+        _isSnapshotDirty = YES;
     }
     [super removeReactSubview:(UIView*)dummySubview];
 }
@@ -186,6 +269,13 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)redraw {
+    if (_useSnapshot) {
+        _isSnapshotDirty = YES;
+        [self generateSnapshot];
+        
+        return;
+    }
+    
     if (!_realMarker.iconView) return;
 
     BOOL oldValue = _realMarker.tracksViewChanges;
@@ -469,7 +559,9 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (void)setPinColor:(UIColor *)pinColor {
     _pinColor = pinColor;
-    _realMarker.icon = [GMSMarker markerImageWithColor:pinColor];
+    if (!_iconView && !_useSnapshot) {
+        _realMarker.icon = [GMSMarker markerImageWithColor:pinColor];
+    }
 }
 
 - (void)setAnchor:(CGPoint)anchor {
@@ -517,7 +609,8 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)setTracksViewChanges:(BOOL)tracksViewChanges {
-    _realMarker.tracksViewChanges = tracksViewChanges;
+    _tracksViewChanges = tracksViewChanges;
+    _realMarker.tracksViewChanges = _useSnapshot ? NO : tracksViewChanges;
 }
 
 - (BOOL)tracksViewChanges {
@@ -532,6 +625,37 @@ CGRect unionRect(CGRect a, CGRect b) {
     return _realMarker.tracksInfoWindowChanges;
 }
 
+- (void)setUseSnapshot:(BOOL)useSnapshot {
+    if (_useSnapshot == useSnapshot) {
+        return;
+    }
+    
+    _useSnapshot = useSnapshot;
+    _isSnapshotDirty = YES;
+
+    if (_useSnapshot) {
+        [self generateSnapshot];
+    } else {
+        // Revert to non-snapshot mode
+        if (_iconView) {
+            _realMarker.icon = nil;
+            _realMarker.iconView = _iconView;
+            _realMarker.tracksViewChanges = _tracksViewChanges;
+        } else if (_pinColor) {
+            _realMarker.icon = [GMSMarker markerImageWithColor:_pinColor];
+            _realMarker.iconView = nil;
+        } else {
+            _realMarker.icon = nil;
+            _realMarker.iconView = nil;
+        }
+        
+        _realMarker.tracksViewChanges = _tracksViewChanges;
+    }
+}
+
+- (void)setSnapshotCacheKey:(NSString *)snapshotCacheKey {
+    _snapshotCacheKey = [snapshotCacheKey copy];
+}
 
 - (id)makeEventData:(NSString *)action {
     CLLocationCoordinate2D coordinate = self.realMarker.position;
