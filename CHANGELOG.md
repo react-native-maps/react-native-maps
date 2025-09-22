@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.26.9](https://github.com/react-native-maps/react-native-maps/compare/v1.26.8...v1.26.9) (2025-09-21)
+
+
+### Bug Fixes
+
+* set camera ([#5745](https://github.com/react-native-maps/react-native-maps/issues/5745)) ([e3a71e4](https://github.com/react-native-maps/react-native-maps/commit/e3a71e472d621d5b0ef0058ff7fb0012674216bc))
+
+## [1.26.8](https://github.com/react-native-maps/react-native-maps/compare/v1.26.7...v1.26.8) (2025-09-21)
+
+
+### Bug Fixes
+
+* android marker update NPE ([#5744](https://github.com/react-native-maps/react-native-maps/issues/5744)) ([f9c287b](https://github.com/react-native-maps/react-native-maps/commit/f9c287bc376690bb2306095f5d570b8285a45444))
+
+## [1.26.7](https://github.com/react-native-maps/react-native-maps/compare/v1.26.6...v1.26.7) (2025-09-21)
+
+
+### Bug Fixes
+
+* **android:** Update MapView lifecycle ([#5689](https://github.com/react-native-maps/react-native-maps/issues/5689)) ([ea61890](https://github.com/react-native-maps/react-native-maps/commit/ea6189001e05b5d2c2acfbeab4a48da2535d190a))
+
 ## [1.26.6](https://github.com/react-native-maps/react-native-maps/compare/v1.26.5...v1.26.6) (2025-09-14)
 
 
