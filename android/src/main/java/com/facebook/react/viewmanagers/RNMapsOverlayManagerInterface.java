@@ -12,8 +12,9 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsOverlayManagerInterface<T extends View> {
+public interface RNMapsOverlayManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setBearing(T view, float value);
   void setBounds(T view, @Nullable ReadableMap value);
   void setImage(T view, @Nullable ReadableMap value);

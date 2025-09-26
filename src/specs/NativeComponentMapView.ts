@@ -1,8 +1,7 @@
 // @ts-nocheck
 import type {HostComponent, ViewProps, ColorValue} from 'react-native';
 
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
+import {codegenNativeComponent, codegenNativeCommands} from 'react-native';
 import type {
   Double,
   Int32,
@@ -11,6 +10,7 @@ import type {
   DirectEventHandler,
   BubblingEventHandler,
 } from 'react-native/Libraries/Types/CodegenTypes';
+import FabricMapView from './NativeComponentMapView';
 
 export type EdgePadding = Readonly<{
   top: Double; // Non-nullable Double for top
@@ -869,13 +869,32 @@ export interface MapFabricNativeProps extends ViewProps {
   showsIndoors?: WithDefault<boolean, true>;
 
   /**
-   * If `false` hide the button to move map to the current user's location.
+   * A Boolean indicating whether points of interest should be displayed.
+   * Use `pointsOfInterestFilter` for more granular control.
    *
    * @default true
+   * @platform iOS: Apple Maps
+   * @platform Android: Not supported
+   */
+  showsPointsOfInterests?: WithDefault<boolean, true>;
+
+  /**
+   * An array of category strings to show on the map.
+   * If this is set, it takes precedence over `showsPointsOfInterests`.
+   *
+   * @platform iOS: Apple Maps
+   * @platform Android: Not supported
+   */
+  pointsOfInterestFilter?: ReadonlyArray<string>;
+
+  /**
+   * If `false` hide the button to move map to the current user's location.
+   *
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
-  showsMyLocationButton?: WithDefault<boolean, true>;
+  showsMyLocationButton?: boolean;
 
   /**
    * A Boolean indicating whether the map shows scale information.
@@ -1039,46 +1058,46 @@ export interface MapFabricNativeProps extends ViewProps {
   cameraZoomRange?: CameraZoomRange;
 }
 
-export interface NativeCommands {
+interface NativeCommands {
   animateToRegion: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     regionJSON: string,
     duration: Int32,
   ) => void;
 
   setCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     cameraJSON: string,
   ) => void;
 
   animateCamera: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     cameraJSON: string,
     duration: Int32,
   ) => void;
 
   fitToElements: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToSuppliedMarkers: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     markersJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   fitToCoordinates: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     coordinatesJSON: string,
     edgePaddingJSON: string,
     animated: boolean,
   ) => void;
 
   setIndoorActiveLevelIndex: (
-    viewRef: React.ElementRef<React.ComponentType>,
+    viewRef: React.ElementRef<typeof FabricMapView>,
     activeLevelIndex: Int32,
   ) => void;
 }

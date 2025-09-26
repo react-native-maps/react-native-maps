@@ -144,7 +144,11 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void setImage(MapMarker view, @Nullable ReadableMap value) {
-        view.setImage(value.getString("uri"));
+        if (value != null && value.hasKey("uri")) {
+            view.setImage(value.getString("uri"));
+        } else {
+            view.setImage(null);
+        }
         view.setUpdated(true);
     }
 
@@ -262,8 +266,9 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void redraw(MapMarker view) {
-        view.setUpdated(true);
+        view.redraw();
     }
+
     @Override
     public void addView(MapMarker parent, View child, int index) {
         // if an <Callout /> component is a child, then it is a callout view, NOT part of the
@@ -278,8 +283,9 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
                     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                         int newWidth = right - left;
                         int newHeight = bottom - top;
-                        if (parent != null) {
-                            parent.update(newWidth, newHeight);
+                        MapMarker marker = (MapMarker) v.getParent();
+                        if(marker != null){
+                            marker.update(newWidth, newHeight);
                         }
                     }
                 });

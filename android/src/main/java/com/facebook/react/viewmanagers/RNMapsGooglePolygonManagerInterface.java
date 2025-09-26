@@ -12,8 +12,9 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsGooglePolygonManagerInterface<T extends View> {
+public interface RNMapsGooglePolygonManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setCoordinates(T view, @Nullable ReadableArray value);
   void setFillColor(T view, @Nullable Integer value);
   void setStrokeColor(T view, @Nullable Integer value);

@@ -104,6 +104,3 @@ dependencies {
     implementation "androidx.work:work-runtime:2.9.1"
 }
 
-project.afterEvaluate {
-    println("\u001B[32m[react-native-maps] Thank you for using react-native-maps ❤️! \n[react-native-maps] to help keep it maintained, please consider sponsoring at https://github.com/sponsors/salah-ghanim\u001B[0m")
-}

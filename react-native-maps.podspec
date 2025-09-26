@@ -4,7 +4,6 @@ package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 folly_config = get_folly_config()
 folly_compiler_flags = folly_config[:compiler_flags]
 
-Pod::UI.puts "\e[32m[react-native-maps] Thank you for using react-native-maps ❤️! \n[react-native-maps] to help keep it maintained, please consider sponsoring at https://github.com/sponsors/salah-ghanim\e[0m"
 
 Pod::Spec.new do |s|
   s.name = "react-native-maps"
@@ -23,6 +22,10 @@ Pod::Spec.new do |s|
   s.subspec 'Generated' do |ss|
     ss.source_files = "ios/generated/**/*.{h,m,mm,cpp,swift}"
     ss.exclude_files = [
+      "ios/generated/RCTModuleProviders.h",
+      "ios/generated/RCTModuleProviders.mm",
+      "ios/generated/RCTUnstableModulesRequiringMainQueueSetupProvider.h",
+      "ios/generated/RCTUnstableModulesRequiringMainQueueSetupProvider.mm",
       "ios/generated/RCTAppDependencyProvider.h",
       "ios/generated/RCTAppDependencyProvider.mm",
       "ios/generated/RCTThirdPartyComponentsProvider.h",
@@ -109,7 +112,7 @@ Pod::Spec.new do |s|
     }
     # Fixed compiler flags to avoid -Wno warnings
     ss.compiler_flags = folly_compiler_flags + ' -DHAVE_GOOGLE_MAPS=1 -DHAVE_GOOGLE_MAPS_UTILS=1'
-    ss.dependency 'GoogleMaps', '9.3.0'
+    ss.dependency 'GoogleMaps', '9.4.0'
     ss.dependency 'Google-Maps-iOS-Utils', '6.1.0'
     ss.dependency 'react-native-maps/Generated'
     ss.dependency 'react-native-maps/Maps'

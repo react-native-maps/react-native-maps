@@ -468,7 +468,12 @@ export class MapMarker extends React.Component<MapMarkerProps> {
 
   redraw() {
     if (this.marker.current) {
-      Commands.redraw(this.marker.current);
+      if (this.fabricMarker) {
+        // @ts-ignore
+        FabricCommands.redraw(this.marker.current);
+      } else {
+        Commands.redraw(this.marker.current);
+      }
     }
   }
 

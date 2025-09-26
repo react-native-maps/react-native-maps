@@ -600,8 +600,8 @@ using namespace facebook::react;
     if (newViewProps.minZoom != oldViewProps.minZoom || newViewProps.maxZoom != oldViewProps.maxZoom){
         [_view setMinZoom:newViewProps.minZoom maxZoom:newViewProps.maxZoom];
     }
-
-    [_view setShowsCompass:newViewProps.showsCompass];
+    REMAP_MAPVIEW_PROP(showsCompass)
+    REMAP_MAPVIEW_PROP(showsMyLocationButton)
     REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(zoomEnabled)

@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
@@ -441,6 +442,16 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public void setShowsPointsOfInterests(MapView view, boolean value) {
+        // not supported
+    }
+
+    @Override
+    public void setPointsOfInterestFilter(MapView view, @Nullable ReadableArray value) {
+        // not supported
+    }
+
+    @Override
     public void setShowsMyLocationButton(MapView view, boolean value) {
         // ANSY: do nothing
         // view.setShowsMyLocationButton(value);
@@ -679,6 +690,6 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     @Override
     public void onDropViewInstance(MapView view) {
         super.onDropViewInstance(view);
-        view.onDestroy();
+        view.doDestroy();
     }
 }

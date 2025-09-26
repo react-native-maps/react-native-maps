@@ -12,8 +12,9 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsPolylineManagerInterface<T extends View> {
+public interface RNMapsPolylineManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setCoordinates(T view, @Nullable ReadableArray value);
   void setGeodesic(T view, boolean value);
   void setLineCap(T view, @Nullable String value);

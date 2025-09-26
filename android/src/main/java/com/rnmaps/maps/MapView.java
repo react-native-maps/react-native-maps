@@ -13,6 +13,7 @@ import android.location.Location;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
+import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,8 +25,6 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.PermissionChecker;
-import androidx.core.view.GestureDetectorCompat;
-import androidx.core.view.MotionEventCompat;
 
 import com.facebook.react.common.MapBuilder;
 
@@ -90,6 +89,10 @@ import com.rnmaps.fabric.event.*;
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
         OnMapReadyCallback, DefaultLifecycleObserver {
     public GoogleMap map;
+    private Bundle savedMapState;
+    private Map<Integer, MapFeature> savedFeatures = new HashMap<>();
+    private boolean shouldRestorePadding = false;
+
     private MarkerManager markerManager;
     private MarkerManager.Collection markerCollection;
     private PolylineManager polylineManager;
@@ -129,8 +132,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private String customMapStyleString;
     private boolean initialRegionSet = false;
     private boolean initialCameraSet = false;
-    private LatLngBounds cameraLastIdleBounds;
-    private int cameraMoveReason = 0;
+    private int cameraMoveReason = -1;
     private MapMarker selectedMarker;
 
     private LifecycleOwner currentLifecycleOwner;
@@ -139,20 +141,20 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private static final String[] PERMISSIONS = new String[]{
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
 
-    private final List<MapFeature> features = new ArrayList<>();
+    private final Map<Integer, MapFeature> features = new HashMap<>();
     private final Map<Marker, MapMarker> markerMap = new HashMap<>();
     private final Map<Polyline, MapPolyline> polylineMap = new HashMap<>();
     private final Map<Polygon, MapPolygon> polygonMap = new HashMap<>();
     private final Map<GroundOverlay, MapOverlay> overlayMap = new HashMap<>();
     private final Map<TileOverlay, MapHeatmap> heatmapMap = new HashMap<>();
     private final Map<TileOverlay, MapGradientPolyline> gradientPolylineMap = new HashMap<>();
-    private final GestureDetectorCompat gestureDetector;
+    private final GestureDetector gestureDetector;
     private boolean paused = false;
     private boolean destroyed = false;
     private final ThemedReactContext context;
     private final FusedLocationSource fusedLocationSource;
 
-    private final ViewAttacherGroup attacherGroup;
+    private ViewAttacherGroup attacherGroup;
     private LatLng tapLocation;
     private Float maxZoomLevel;
     private Float minZoomLevel;
@@ -261,7 +263,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         fusedLocationSource = new FusedLocationSource(context);
 
         gestureDetector =
-                new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
+                new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
                     @Override
                     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
@@ -292,6 +294,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         // Set up a parent view for triggering visibility in subviews that depend on it.
         // Mainly ReactImageView depends on Fresco which depends on onVisibilityChanged() event
+       prepareAttacherView();
+    }
+
+    private void prepareAttacherView(){
         attacherGroup = new ViewAttacherGroup(context);
         LayoutParams attacherLayoutParams = new LayoutParams(0, 0);
         attacherLayoutParams.width = 0;
@@ -313,11 +319,34 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         attachLifecycleObserver();
+        if (savedMapState != null) {
+            super.onCreate(savedMapState);
+            super.onStart();
+            super.onResume();
+            prepareAttacherView();
+            getMapAsync((map)->{
+                onMapReady(map);
+                savedFeatures.forEach((index, feature) -> {
+                    addFeature(feature, index);
+                });
+            });
+        }
     }
 
     // Override onDetachedFromWindow to detach lifecycle observer
     @Override
     protected void onDetachedFromWindow() {
+        if (savedMapState == null) {
+            savedMapState = new Bundle();
+        }
+        super.onSaveInstanceState(savedMapState);
+        super.onPause();
+        super.onStop();
+        savedFeatures = new HashMap<>(features);
+        savedFeatures.keySet().forEach(this::removeFeatureAt);
+        shouldRestorePadding = true;
+        removeView(attacherGroup);
+        attacherGroup = null;
         detachLifecycleObserver();
         super.onDetachedFromWindow();
     }
@@ -346,7 +375,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         boolean addedPosition = false;
         LatLngBounds mapBounds = map.getProjection().getVisibleRegion().latLngBounds;
-        for (MapFeature feature : features) {
+        for (MapFeature feature : features.values()) {
             if (feature instanceof MapMarker) {
                 Marker marker = (Marker) feature.getFeature();
                 if (!onlyVisible ||
@@ -444,6 +473,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         if (scrollDuringRotateOrZoomEnabled != null) {
             setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
+        }
+        if (hasPermissions()) {
+            //noinspection MissingPermission
+            map.setMyLocationEnabled(showUserLocation);
+            map.setLocationSource(fusedLocationSource);
         }
 
         markerManager = new MarkerManager(map);
@@ -608,24 +642,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         });
 
         map.setOnCameraMoveListener(() -> {
-            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            cameraLastIdleBounds = null;
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
             dispatchEvent(payload, OnRegionChangeEvent::new);
         });
 
         map.setOnCameraIdleListener(() -> {
+            boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
+            cameraMoveReason = -1;
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-            if ((cameraMoveReason != 0) &&
-                    ((cameraLastIdleBounds == null) ||
-                            LatLngBoundsUtils.BoundsAreDifferent(bounds, cameraLastIdleBounds))) {
-
-                cameraLastIdleBounds = bounds;
-                boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == cameraMoveReason;
-                WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
-                dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
-            }
+            WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
+            dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
         });
 
         map.setOnMapLoadedCallback(() -> {
@@ -730,6 +758,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         // Detach lifecycle observer before destroying
         detachLifecycleObserver();
+        savedMapState = null;
+        savedFeatures = null;
 
         if (!paused) {
             onPause();
@@ -761,12 +791,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     private void applyBridgedProps() {
-        if (initialRegion != null) {
+        if (initialRegion != null && !initialRegionSet) {
             moveToRegion(initialRegion);
             initialRegionSet = true;
         } else if (region != null) {
             moveToRegion(region);
-        } else if (initialCamera != null) {
+        } else if (initialCamera != null && !initialCameraSet) {
             moveToCamera(initialCamera);
             initialCameraSet = true;
         } else if (camera != null) {
@@ -775,14 +805,21 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (customMapStyleString != null) {
             map.setMapStyle(new MapStyleOptions(customMapStyleString));
         }
-        // ANSY: do nothing
-        // this.setPoiClickEnabled(poiClickEnabled);
-        if (setPaddingDeferred &&
-            (baseLeftMapPadding != 0 ||
-                    baseTopMapPadding != 0 ||
-                    baseRightMapPadding != 0 ||
-                    baseBottomMapPadding != 0)) {
-            applyBaseMapPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+        
+	// ANSY: do nothing
+	//this.setPoiClickEnabled(poiClickEnabled);
+        if (baseLeftMapPadding != 0 ||
+                baseTopMapPadding != 0 ||
+                baseRightMapPadding != 0 ||
+                baseBottomMapPadding != 0) {
+            if (setPaddingDeferred) {
+                applyBaseMapPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+            } else if (shouldRestorePadding) {
+                CameraUpdate cu = CameraUpdateFactory.newCameraPosition(map.getCameraPosition());
+                map.setPadding(baseLeftMapPadding, baseTopMapPadding, baseRightMapPadding, baseBottomMapPadding);
+                map.moveCamera(cu);
+                shouldRestorePadding = false;
+            }
         }
     }
 
@@ -864,8 +901,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         builder.tilt((float) camera.getDouble("pitch"));
         builder.bearing((float) camera.getDouble("heading"));
-        builder.zoom((float) camera.getDouble("zoom"));
-
+        if (camera.hasKey("zoom")) {
+            builder.zoom((float) camera.getDouble("zoom"));
+        }
         return builder.build();
     }
 
@@ -1130,7 +1168,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (child instanceof MapMarker) {
             MapMarker annotation = (MapMarker) child;
             annotation.addToMap(markerCollection);
-            features.add(index, annotation);
+            features.put(index, annotation);
 
             // Allow visibility event to be triggered later
             int visibility = annotation.getVisibility();
@@ -1138,11 +1176,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
             // Remove from a view group if already present, prevent "specified child
             // already had a parent" error.
-            ViewGroup annotationParent = (ViewGroup) annotation.getParent();
-            if (annotationParent != null) {
-                annotationParent.removeView(annotation);
-            }
+            safeRemoveFromParent(annotation);
 
+            // Ensure attacherGroup is not null before using it
+            if (attacherGroup == null) {
+                prepareAttacherView();
+            }
             // Add to the parent group
             attacherGroup.addView(annotation);
 
@@ -1156,47 +1195,47 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         } else if (child instanceof MapPolyline) {
             MapPolyline polylineView = (MapPolyline) child;
             polylineView.addToMap(polylineCollection);
-            features.add(index, polylineView);
+            features.put(index, polylineView);
             Polyline polyline = (Polyline) polylineView.getFeature();
             polylineMap.put(polyline, polylineView);
         } else if (child instanceof MapGradientPolyline) {
             MapGradientPolyline polylineView = (MapGradientPolyline) child;
             polylineView.addToMap(map);
-            features.add(index, polylineView);
+            features.put(index, polylineView);
             TileOverlay tileOverlay = (TileOverlay) polylineView.getFeature();
             gradientPolylineMap.put(tileOverlay, polylineView);
         } else if (child instanceof MapPolygon) {
             MapPolygon polygonView = (MapPolygon) child;
             polygonView.addToMap(polygonCollection);
-            features.add(index, polygonView);
+            features.put(index, polygonView);
             Polygon polygon = (Polygon) polygonView.getFeature();
             polygonMap.put(polygon, polygonView);
         } else if (child instanceof MapCircle) {
             MapCircle circleView = (MapCircle) child;
             circleView.addToMap(circleCollection);
-            features.add(index, circleView);
+            features.put(index, circleView);
         } else if (child instanceof MapUrlTile) {
             MapUrlTile urlTileView = (MapUrlTile) child;
             urlTileView.addToMap(map);
-            features.add(index, urlTileView);
+            features.put(index, urlTileView);
         } else if (child instanceof MapWMSTile) {
             MapWMSTile urlTileView = (MapWMSTile) child;
             urlTileView.addToMap(map);
-            features.add(index, urlTileView);
+            features.put(index, urlTileView);
         } else if (child instanceof MapLocalTile) {
             MapLocalTile localTileView = (MapLocalTile) child;
             localTileView.addToMap(map);
-            features.add(index, localTileView);
+            features.put(index, localTileView);
         } else if (child instanceof MapOverlay) {
             MapOverlay overlayView = (MapOverlay) child;
             overlayView.addToMap(groundOverlayCollection);
-            features.add(index, overlayView);
+            features.put(index, overlayView);
             GroundOverlay overlay = (GroundOverlay) overlayView.getFeature();
             overlayMap.put(overlay, overlayView);
         } else if (child instanceof MapHeatmap) {
             MapHeatmap heatmapView = (MapHeatmap) child;
             heatmapView.addToMap(map);
-            features.add(index, heatmapView);
+            features.put(index, heatmapView);
             TileOverlay heatmap = (TileOverlay) heatmapView.getFeature();
             heatmapMap.put(heatmap, heatmapView);
         } else if (child instanceof ViewGroup) {
@@ -1222,7 +1261,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
             feature.removeFromMap(markerCollection);
-            attacherGroup.removeView(feature);
+            safeRemoveFeatureFromAttacherGroup(feature);
         } else if (feature instanceof MapHeatmap) {
             heatmapMap.remove(feature.getFeature());
             feature.removeFromMap(map);
@@ -1234,7 +1273,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             feature.removeFromMap(polygonCollection);
         } else if (feature instanceof MapPolyline) {
             feature.removeFromMap(polylineCollection);
-        } else {
+        } else if (feature != null) {
             feature.removeFromMap(map);
         }
     }
@@ -1384,8 +1423,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         boolean addedPosition = false;
-        if (features.size() > 0) {
-            for (MapFeature feature : features) {
+        if (!features.isEmpty()) {
+            for (MapFeature feature : features.values()) {
                 if (feature instanceof MapMarker) {
                     Marker marker = (Marker) feature.getFeature();
                     builder.include(marker.getPosition());
@@ -1435,7 +1474,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         List<String> markerIDList = Arrays.asList(markerIDs);
 
-        for (MapFeature feature : features) {
+        for (MapFeature feature : features.values()) {
             if (feature instanceof MapMarker) {
                 String identifier = ((MapMarker) feature).getIdentifier();
                 Marker marker = (Marker) feature.getFeature();
@@ -1608,17 +1647,17 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
            tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
         }
 
-        int action = MotionEventCompat.getActionMasked(ev);
+        int action = ev.getActionMasked();
 
         switch (action) {
-        case (MotionEvent.ACTION_DOWN):
-            this.getParent().requestDisallowInterceptTouchEvent(
-                map != null && map.getUiSettings().isScrollGesturesEnabled());
-            break;
-        case (MotionEvent.ACTION_UP):
-            // Clear this regardless, since isScrollGesturesEnabled() may have been updated
-            this.getParent().requestDisallowInterceptTouchEvent(false);
-            break;
+            case (MotionEvent.ACTION_DOWN):
+                safeRequestDisallowInterceptTouchEvent(
+                        map != null && map.getUiSettings().isScrollGesturesEnabled());
+                break;
+            case (MotionEvent.ACTION_UP):
+                // Clear this regardless, since isScrollGesturesEnabled() may have been updated
+                safeRequestDisallowInterceptTouchEvent(false);
+                break;
         }
         super.dispatchTouchEvent(ev);
         return true;
@@ -1709,14 +1748,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     private void removeCacheImageView() {
         if (this.cacheImageView != null) {
-            ((ViewGroup) this.cacheImageView.getParent()).removeView(this.cacheImageView);
+            safeRemoveFromParent(this.cacheImageView);
             this.cacheImageView = null;
         }
     }
 
     private void removeMapLoadingProgressBar() {
         if (this.mapLoadingProgressBar != null) {
-            ((ViewGroup) this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
+            safeRemoveFromParent(this.mapLoadingProgressBar);
             this.mapLoadingProgressBar = null;
         }
     }
@@ -1724,7 +1763,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private void removeMapLoadingLayoutView() {
         this.removeMapLoadingProgressBar();
         if (this.mapLoadingLayout != null) {
-            ((ViewGroup) this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
+            safeRemoveFromParent(this.mapLoadingLayout);
             this.mapLoadingLayout = null;
         }
     }
@@ -1970,4 +2009,52 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     };
 
+    /**
+     * Safely removes a view from its parent ViewGroup.
+     * Prevents NullPointerException during component lifecycle operations.
+     *
+     * @param view The view to remove from its parent
+     * @return true if the view was successfully removed, false otherwise
+     */
+    private boolean safeRemoveFromParent(View view) {
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeView(view);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Safely requests touch event handling from parent ViewGroup.
+     * Prevents NullPointerException during touch event dispatching.
+     *
+     * @param disallowIntercept Whether to disallow parent touch interception
+     * @return true if the request was successfully made, false otherwise
+     */
+    private boolean safeRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        ViewGroup parent = (ViewGroup) this.getParent();
+        if (parent != null) {
+            parent.requestDisallowInterceptTouchEvent(disallowIntercept);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Safely removes a MapFeature from the attacherGroup.
+     * Prevents NullPointerException during feature removal operations.
+     *
+     * @param feature The MapFeature to remove from attacherGroup
+     * @return true if the feature was successfully removed, false otherwise
+     */
+    private boolean safeRemoveFeatureFromAttacherGroup(MapFeature feature) {
+        if (attacherGroup != null && feature != null) {
+            attacherGroup.removeView(feature);
+            return true;
+        }
+        return false;
+    }
 }
