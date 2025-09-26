@@ -25,6 +25,8 @@ public class MapCircle extends MapFeature {
   private float zIndex;
   private boolean tappable;
 
+  private CircleManager.Collection circleCollection;
+
   public MapCircle(Context context) {
     super(context);
   }
@@ -111,6 +113,11 @@ public class MapCircle extends MapFeature {
   public void addToMap(Object collection) {
     CircleManager.Collection circleCollection = (CircleManager.Collection) collection;
     circle = circleCollection.addCircle(getCircleOptions());
+    this.circleCollection = circleCollection;
+  }
+
+  public void doDestroy() {
+    this.removeFromMap(this.circleCollection);
   }
 
   @Override

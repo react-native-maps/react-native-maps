@@ -91,4 +91,10 @@ public class CircleManager extends ViewGroupManager<MapCircle> implements RNMaps
     public void setTappable(MapCircle view, boolean value) {
             view.setTappable(value);
     }
+
+    @Override
+    public void onDropViewInstance(MapCircle view) {
+        super.onDropViewInstance(view);
+        view.doDestroy();
+    }
 }

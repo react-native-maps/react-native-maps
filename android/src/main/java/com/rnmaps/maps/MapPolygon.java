@@ -40,6 +40,8 @@ public class MapPolygon extends MapFeature {
   private ReadableArray patternValues;
   private List<PatternItem> pattern;
 
+  private PolygonManager.Collection polygonCollection;
+
   public MapPolygon(Context context) {
     super(context);
     strokeWidth = 10;
@@ -214,6 +216,11 @@ public class MapPolygon extends MapFeature {
   public void addToMap(Object collection) {
     PolygonManager.Collection polygonCollection = (PolygonManager.Collection) collection;
     polygon = polygonCollection.addPolygon(getPolygonOptions());
+    this.polygonCollection = polygonCollection;
+  }
+
+  public void doDestroy() {
+      this.removeFromMap(this.polygonCollection);
   }
 
   @Override

@@ -43,6 +43,8 @@ public class MapPolyline extends MapFeature {
 
     private List<StyleSpan> spans;
 
+    private PolylineManager.Collection polylineCollection;
+
     public MapPolyline(Context context) {
         super(context);
     }
@@ -185,6 +187,11 @@ public class MapPolyline extends MapFeature {
         if (spans != null){
             polyline.setSpans(spans);
         }
+        this.polylineCollection = polylineCollection;
+    }
+
+    public void doDestroy() {
+        this.removeFromMap(this.polylineCollection);
     }
 
     @Override
