@@ -346,8 +346,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         shouldRestorePadding = true;
         removeView(attacherGroup);
         attacherGroup = null;
-        detachLifecycleObserver();
         super.onDetachedFromWindow();
+        detachLifecycleObserver();
     }
 
     // Method to attach lifecycle observer
@@ -747,9 +747,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             return;
         }
         destroyed = true;
-
-        // Detach lifecycle observer before destroying
-        detachLifecycleObserver();
         savedMapState = null;
         savedFeatures = null;
 
@@ -758,6 +755,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             paused = true;
         }
         onDestroy();
+        detachLifecycleObserver();
     }
 
     public void setInitialCameraSet(boolean initialCameraSet) {
