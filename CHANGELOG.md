@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.10](https://github.com/react-native-maps/react-native-maps/compare/v1.26.9...v1.26.10) (2025-09-29)
+
+
+### Bug Fixes
+
+* **android:** display Image inside marker correctly ([#5749](https://github.com/react-native-maps/react-native-maps/issues/5749)) ([a799911](https://github.com/react-native-maps/react-native-maps/commit/a799911e56a459e60a6dbdef406c39acba782046))
+
 ## [1.26.9](https://github.com/react-native-maps/react-native-maps/compare/v1.26.8...v1.26.9) (2025-09-21)
 
 
