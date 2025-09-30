@@ -60,6 +60,7 @@ import com.rnmaps.fabric.event.OnDragStartEvent;
 import com.rnmaps.fabric.event.OnPressEvent;
 import com.rnmaps.fabric.event.OnSelectEvent;
 
+import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -106,6 +107,10 @@ public class MapMarker extends MapFeature {
     private final MapMarkerManager markerManager;
     private String imageUri;
     private boolean loadingImage;
+
+    private SoftReference<MarkerManager.Collection> markerCollectionRef;
+
+
 
     private final DraweeHolder<?> logoHolder;
     private ImageManager.OnImageLoadedListener imageLoadedListener;
@@ -209,6 +214,16 @@ public class MapMarker extends MapFeature {
         update(false);
     }
 
+    public void doDestroy() {
+        MarkerManager.Collection collection = markerCollectionRef != null
+                ? markerCollectionRef.get()
+                : null;
+
+        if (collection != null) {
+            this.removeFromMap(collection);
+        }
+        markerCollectionRef = null;
+    }
     public String getIdentifier() {
         return this.identifier;
     }
@@ -547,6 +562,7 @@ public class MapMarker extends MapFeature {
     public void addToMap(Object collection) {
         MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
         marker = markerCollection.addMarker(getMarkerOptions());
+        this.markerCollectionRef = new SoftReference<>(markerCollection);
         updateTracksViewChanges();
     }
 
