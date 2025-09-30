@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.11](https://github.com/react-native-maps/react-native-maps/compare/v1.26.10...v1.26.11) (2025-09-30)
+
+
+### Bug Fixes
+
+* **android:** fix remove marker from map issues ([#5752](https://github.com/react-native-maps/react-native-maps/issues/5752)) ([02a6e52](https://github.com/react-native-maps/react-native-maps/commit/02a6e52bd95645ff7556c97c0e7d4cbb2ed0d2e3))
+
 ## [1.26.10](https://github.com/react-native-maps/react-native-maps/compare/v1.26.9...v1.26.10) (2025-09-29)
 
 
