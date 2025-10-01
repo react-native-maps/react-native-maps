@@ -453,8 +453,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setShowsMyLocationButton(MapView view, boolean value) {
-        // ANSY: do nothing
-        // view.setShowsMyLocationButton(value);
+        view.setShowsMyLocationButton(value);
     }
 
     @Override
@@ -689,7 +688,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void onDropViewInstance(MapView view) {
-        super.onDropViewInstance(view);
         view.doDestroy();
+        super.onDropViewInstance(view);
     }
 }

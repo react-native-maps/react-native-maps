@@ -296,7 +296,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public void onDropViewInstance(MapMarker view) {
-        super.onDropViewInstance(view);
         view.doDestroy();
+        super.onDropViewInstance(view);
     }
 }

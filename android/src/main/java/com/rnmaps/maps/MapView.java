@@ -89,8 +89,6 @@ import com.rnmaps.fabric.event.*;
 public class MapView extends com.google.android.gms.maps.MapView implements GoogleMap.InfoWindowAdapter,
         OnMapReadyCallback, DefaultLifecycleObserver {
     public GoogleMap map;
-    private Bundle savedMapState;
-    private Map<Integer, MapFeature> savedFeatures = new HashMap<>();
     private boolean shouldRestorePadding = false;
 
     private MarkerManager markerManager;
@@ -106,6 +104,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private RelativeLayout mapLoadingLayout;
     private ImageView cacheImageView;
     private Boolean isMapLoaded = false;
+    private Boolean isMapViewCreated = false;
 
     private Boolean isMapReady = false;
 
@@ -116,6 +115,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private CameraUpdate cameraToSet;
     private boolean setPaddingDeferred = false;
     private boolean showUserLocation = false;
+
+    private boolean showMyLocationButton = false;
 
     // ANSY: do nothing
     // private boolean showsTraffic = false;
@@ -136,7 +137,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private MapMarker selectedMarker;
 
     private LifecycleOwner currentLifecycleOwner;
-    private boolean isLifecycleObserverAttached = false;
 
     private static final String[] PERMISSIONS = new String[]{
             "android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
@@ -170,85 +170,59 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private Boolean scrollDuringRotateOrZoomEnabled;
     private String kmlSrc = null;
 
-    private static boolean contextHasBug(Context context) {
-        return context == null ||
-                context.getResources() == null ||
-                context.getResources().getConfiguration() == null;
-    }
-
-    // We do this to fix this bug:
-    // https://github.com/react-native-maps/react-native-maps/issues/271
-    //
-    // which conflicts with another bug regarding the passed in context:
-    // https://github.com/react-native-maps/react-native-maps/issues/1147
-    //
-    // Doing this allows us to avoid both bugs.
-    private static Context getNonBuggyContext(ThemedReactContext reactContext,
-                                              ReactApplicationContext appContext) {
-        Context superContext = reactContext;
-        if (!contextHasBug(appContext.getCurrentActivity())) {
-            superContext = appContext.getCurrentActivity();
-        } else if (contextHasBug(superContext)) {
-            // we have the bug! let's try to find a better context to use
-            if (!contextHasBug(reactContext.getCurrentActivity())) {
-                superContext = reactContext.getCurrentActivity();
-            } else if (!contextHasBug(reactContext.getApplicationContext())) {
-                superContext = reactContext.getApplicationContext();
-            }
-
+    @Override
+    public void onCreate(@NonNull LifecycleOwner owner) {
+        if (isMapViewCreated || destroyed) {
+            return;
         }
-        return superContext;
-    }
-
-
-    @Override
-    public void onCreate(LifecycleOwner owner) {
-        super.onCreate(null);
+        MapView.this.onCreate((Bundle) null);
+        isMapViewCreated = true;
     }
 
     @Override
-    public void onStart(LifecycleOwner owner) {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume(LifecycleOwner owner) {
-        if (hasPermissions() && map != null) {
-            //noinspection MissingPermission
-            map.setMyLocationEnabled(showUserLocation);
-            map.setLocationSource(fusedLocationSource);
+    public void onStart(@NonNull LifecycleOwner owner) {
+        if (destroyed) {
+            return;
         }
+        MapView.this.onStart();
+    }
+
+    @Override
+    public void onResume(@NonNull LifecycleOwner owner) {
         synchronized (MapView.this) {
             if (!destroyed) {
+                if (hasPermissions() && map != null) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(showUserLocation);
+                    map.setLocationSource(fusedLocationSource);
+                }
                 MapView.this.onResume();
+                paused = false;
             }
-            paused = false;
         }
     }
 
-
     @Override
-    public void onPause(LifecycleOwner owner) {
-        super.onPause();
-        if (hasPermissions() && map != null) {
-            //noinspection MissingPermission
-            map.setMyLocationEnabled(false);
-        }
+    public void onPause(@NonNull LifecycleOwner owner) {
         synchronized (MapView.this) {
             if (!destroyed) {
+                if (hasPermissions() && map != null) {
+                    //noinspection MissingPermission
+                    map.setMyLocationEnabled(false);
+                }
                 MapView.this.onPause();
+                paused = true;
             }
-            paused = true;
         }
     }
 
     @Override
-    public void onStop(LifecycleOwner owner) {
-        super.onStop();
+    public void onStop(@NonNull LifecycleOwner owner) {
+        MapView.this.onStop();
     }
 
     @Override
-    public void onDestroy(LifecycleOwner owner) {
+    public void onDestroy(@NonNull LifecycleOwner owner) {
         MapView.this.doDestroy();
     }
 
@@ -256,9 +230,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                    GoogleMapOptions googleMapOptions) {
         super(context, googleMapOptions);
         this.context = context;
-        super.getMapAsync(this);
 
-        final MapView view = this;
+        attachLifecycleObserver();
+        MapView.this.getMapAsync(this);
 
         fusedLocationSource = new FusedLocationSource(context);
 
@@ -294,7 +268,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         // Set up a parent view for triggering visibility in subviews that depend on it.
         // Mainly ReactImageView depends on Fresco which depends on onVisibilityChanged() event
-       prepareAttacherView();
+        prepareAttacherView();
     }
 
     private void prepareAttacherView(){
@@ -319,53 +293,34 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         attachLifecycleObserver();
-        if (savedMapState != null) {
-            super.onCreate(savedMapState);
-            super.onStart();
-            super.onResume();
-            prepareAttacherView();
-            getMapAsync((map)->{
-                onMapReady(map);
-                savedFeatures.forEach((index, feature) -> {
-                    addFeature(feature, index);
-                });
-            });
-        }
     }
 
     // Override onDetachedFromWindow to detach lifecycle observer
     @Override
     protected void onDetachedFromWindow() {
-        if (savedMapState == null) {
-            savedMapState = new Bundle();
-        }
-        super.onSaveInstanceState(savedMapState);
-        super.onPause();
-        super.onStop();
-        savedFeatures = new HashMap<>(features);
-        savedFeatures.keySet().forEach(this::removeFeatureAt);
-        shouldRestorePadding = true;
-        removeView(attacherGroup);
-        attacherGroup = null;
-        detachLifecycleObserver();
         super.onDetachedFromWindow();
+        detachLifecycleObserver();
     }
 
     // Method to attach lifecycle observer
     private void attachLifecycleObserver() {
         Activity activity = context.getCurrentActivity();
-        if (activity instanceof LifecycleOwner && !isLifecycleObserverAttached) {
-            currentLifecycleOwner = (LifecycleOwner) activity;
+        if (activity instanceof LifecycleOwner newOwner) {
+            if (currentLifecycleOwner == newOwner) {
+                return;
+            }
+            if (currentLifecycleOwner != null) {
+                currentLifecycleOwner.getLifecycle().removeObserver(this);
+            }
+            currentLifecycleOwner = newOwner;
             currentLifecycleOwner.getLifecycle().addObserver(this);
-            isLifecycleObserverAttached = true;
         }
     }
 
     // Method to detach lifecycle observer
     private void detachLifecycleObserver() {
-        if (currentLifecycleOwner != null && isLifecycleObserverAttached) {
+        if (currentLifecycleOwner != null) {
             currentLifecycleOwner.getLifecycle().removeObserver(this);
-            isLifecycleObserverAttached = false;
             currentLifecycleOwner = null;
         }
     }
@@ -478,6 +433,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             //noinspection MissingPermission
             map.setMyLocationEnabled(showUserLocation);
             map.setLocationSource(fusedLocationSource);
+            map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
         }
 
         markerManager = new MarkerManager(map);
@@ -674,7 +630,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     private synchronized void handleMarkerSelection(MapMarker target) {
         if (selectedMarker == target) {
-        return;
+            return;
         }
 
         WritableMap event;
@@ -746,7 +702,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return builder.build();
     }
 
-
     /*
     onDestroy is final method so I can't override it.
      */
@@ -756,16 +711,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         destroyed = true;
 
-        // Detach lifecycle observer before destroying
-        detachLifecycleObserver();
-        savedMapState = null;
-        savedFeatures = null;
-
         if (!paused) {
-            onPause();
+            MapView.this.onPause();
             paused = true;
         }
-        onDestroy();
+        MapView.this.onDestroy();
+
+        // Detach lifecycle observer after destroying
+        detachLifecycleObserver();
     }
 
     public void setInitialCameraSet(boolean initialCameraSet) {
@@ -805,9 +758,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (customMapStyleString != null) {
             map.setMapStyle(new MapStyleOptions(customMapStyleString));
         }
-        
-	// ANSY: do nothing
-	//this.setPoiClickEnabled(poiClickEnabled);
+
+        // ANSY: do nothing
+        //this.setPoiClickEnabled(poiClickEnabled);
         if (baseLeftMapPadding != 0 ||
                 baseTopMapPadding != 0 ||
                 baseRightMapPadding != 0 ||
@@ -864,26 +817,26 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     public void setCamera(ReadableMap camera) {
         this.camera = camera;
 
-      if (camera != null && map != null) {
-              moveToCamera(camera);
-          }
+        if (camera != null && map != null) {
+            moveToCamera(camera);
+        }
 
     }
     public void setCamera(ReadableMap camera, @Nullable ReadableMap edgePadding) {
-      this.camera = camera;
+        this.camera = camera;
 
-      if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-            edgePadding.getInt("right"), edgePadding.getInt("bottom"));
-      }
+        if (edgePadding != null) {
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+        }
 
-      if(camera != null && map != null) {
-        moveToCamera(camera);
-      }
+        if(camera != null && map != null) {
+            moveToCamera(camera);
+        }
 
-      if (edgePadding != null) {
-        map.setPadding(0, 0, 0, 0);
-      }
+        if (edgePadding != null) {
+            map.setPadding(0, 0, 0, 0);
+        }
     }
 
 
@@ -991,6 +944,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setShowsMyLocationButton(boolean showMyLocationButton) {
+        this.showMyLocationButton = showMyLocationButton;
         if (map != null) {
             if (hasPermissions() || !showMyLocationButton) {
                 map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
@@ -1013,8 +967,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setCacheEnabled(boolean cacheEnabled) {
-      this.cacheEnabled = cacheEnabled;
-      this.cacheView();
+        this.cacheEnabled = cacheEnabled;
+        this.cacheView();
     }
 
     public void setPoiClickEnabled(boolean poiClickEnabled) {
@@ -1218,10 +1172,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             MapUrlTile urlTileView = (MapUrlTile) child;
             urlTileView.addToMap(map);
             features.put(index, urlTileView);
+            TileOverlay tile = (TileOverlay) urlTileView.getFeature();
+            if (tile != null) tile.setZIndex(-1f);
         } else if (child instanceof MapWMSTile) {
             MapWMSTile urlTileView = (MapWMSTile) child;
             urlTileView.addToMap(map);
             features.put(index, urlTileView);
+            TileOverlay tile = (TileOverlay) urlTileView.getFeature();
+            if (tile != null) tile.setZIndex(-1f);
         } else if (child instanceof MapLocalTile) {
             MapLocalTile localTileView = (MapLocalTile) child;
             localTileView.addToMap(map);
@@ -1351,8 +1309,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (map == null) return;
 
         if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-            edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
         }
 
         animateToCamera(position, duration);
@@ -1381,8 +1339,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         // ANSY
         if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-            edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
         }
 
         animateToCamera(builder.build(), duration);
@@ -1399,14 +1357,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (map == null) return;
 
         if (edgePadding != null) {
-        map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-        edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+            map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
         }
 
         if(duration <= 0) {
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
         } else {
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
         }
 
         map.setPadding(0, 0, 0, 0);
@@ -1417,7 +1375,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         if (edgePadding != null) {
             map.setPadding(edgePadding.getInt("left"), edgePadding.getInt("top"),
-                edgePadding.getInt("right"), edgePadding.getInt("bottom"));
+                    edgePadding.getInt("right"), edgePadding.getInt("bottom"));
         }
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -1644,7 +1602,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         int X = (int)ev.getX();
         int Y = (int)ev.getY();
         if(map != null) {
-           tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
+            tapLocation = map.getProjection().fromScreenLocation(new Point(X,Y));
         }
 
         int action = ev.getActionMasked();
@@ -1793,13 +1751,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void onPanDrag(MotionEvent ev) {
-      // ANSY
-      if(this.map != null) {
+        // ANSY
+        if(this.map != null) {
             Point point = new Point((int) ev.getX(), (int) ev.getY());
             LatLng coords = this.map.getProjection().fromScreenLocation(point);
             WritableMap event = makeClickEventData(coords);
             dispatchEvent(event, OnPanDragEvent::new);
-      }
+        }
     }
 
     public void onDoublePress(MotionEvent ev) {
