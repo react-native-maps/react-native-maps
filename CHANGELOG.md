@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.12](https://github.com/react-native-maps/react-native-maps/compare/v1.26.11...v1.26.12) (2025-10-01)
+
+
+### Bug Fixes
+
+* avoid rn-maps typescript error leak when running tsc  ([#5539](https://github.com/react-native-maps/react-native-maps/issues/5539)) ([0fb0202](https://github.com/react-native-maps/react-native-maps/commit/0fb0202b561ae76b841e9f52ddef092a79a054af))
+
 ## [1.26.11](https://github.com/react-native-maps/react-native-maps/compare/v1.26.10...v1.26.11) (2025-09-30)
 
 
