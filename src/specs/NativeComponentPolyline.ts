@@ -28,6 +28,12 @@ export type PolylinePressEventHandler = BubblingEventHandler<
   }>
 >;
 
+type PolylineData = Readonly<{
+  type: string;
+  coordinates: ReadonlyArray<LatLng>;
+  colors: ReadonlyArray<string>;
+}>;
+
 export interface PolylineFabricNativeProps extends ViewProps {
   /**
    * An array of coordinates to describe the polygon
@@ -100,6 +106,15 @@ export interface PolylineFabricNativeProps extends ViewProps {
    * @platform Android: Supported
    */
   strokeColors?: ReadonlyArray<ColorValue>;
+
+  /**
+   * The syncedCoordsColors to use for the path.
+   * @default `{ type, coords, colors}`
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  syncedCoordsColors?: Readonly<PolylineData>;
+
   /**
    * The stroke width to use for the path.
    *

@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -62,6 +63,10 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
     view.setStrokeColors(colors);
   }
 
+  @ReactProp(name = "syncedCoordsColors")
+  public void setSyncedCoordsColors(MapPolyline view, ReadableMap colors) {
+    view.setSyncedCoordsColors(colors);
+  }
   @ReactProp(name = "tappable", defaultBoolean = false)
   public void setTappable(MapPolyline view, boolean tapabble) {
     view.setTappable(tapabble);

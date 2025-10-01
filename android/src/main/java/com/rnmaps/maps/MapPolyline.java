@@ -1,6 +1,8 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -17,21 +19,25 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.SquareCap;
-import com.google.android.gms.maps.model.StrokeStyle;
 import com.google.android.gms.maps.model.StyleSpan;
 import com.google.maps.android.collections.PolylineManager;
 import com.rnmaps.fabric.event.OnPressEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class MapPolyline extends MapFeature {
 
-    private PolylineOptions polylineOptions;
+    private List<Polyline> polylineArray;
+    private List<PolylineOptions> polylineOptions;
     private Polyline polyline;
+    private Integer lineDashPatternDash;
+    private Integer lineDashPatternGap;
 
     private List<LatLng> coordinates;
+    private List<String> strokeColors;
     private int color;
     private float width;
     private boolean tappable;
@@ -41,8 +47,6 @@ public class MapPolyline extends MapFeature {
     private ReadableArray patternValues;
     private List<PatternItem> pattern;
 
-    private List<StyleSpan> spans;
-
     private PolylineManager.Collection polylineCollection;
 
     public MapPolyline(Context context) {
@@ -50,6 +54,7 @@ public class MapPolyline extends MapFeature {
     }
 
     public void setCoordinates(ReadableArray coordinates) {
+        /*
         this.coordinates = new ArrayList<>(coordinates.size());
         for (int i = 0; i < coordinates.size(); i++) {
             ReadableMap coordinate = coordinates.getMap(i);
@@ -59,6 +64,7 @@ public class MapPolyline extends MapFeature {
         if (polyline != null) {
             polyline.setPoints(this.coordinates);
         }
+         */
     }
 
     public void setColor(int color) {
@@ -69,6 +75,7 @@ public class MapPolyline extends MapFeature {
     }
 
     public void setStrokeColors(ReadableArray strokeColors) {
+        /*
         List<StyleSpan> spans = new ArrayList<>();
         for (int i = 0; i < strokeColors.size(); i++) {
             StrokeStyle stroke;
@@ -82,7 +89,46 @@ public class MapPolyline extends MapFeature {
         }
         this.spans = spans;
         if (polyline != null){
-        polyline.setSpans(spans);
+            polyline.setSpans(spans);
+        }
+        */
+    }
+
+    public void setSyncedCoordsColors(ReadableMap polylineData) {
+        if (polylineData == null) {
+            return;
+        }
+
+        // Get data by key from the ReadableMap
+        String type = polylineData.getString("type");
+        ReadableArray coordinatesArray = polylineData.getArray("coordinates");
+        ReadableArray colorsArray = polylineData.getArray("colors");
+
+        this.coordinates = new ArrayList<>(coordinatesArray.size());
+        for (int i = 0; i < coordinatesArray.size(); i++) {
+            ReadableMap coordinate = coordinatesArray.getMap(i);
+            this.coordinates.add(i,
+                    new LatLng(coordinate.getDouble("latitude"), coordinate.getDouble("longitude")));
+        }
+
+        if(colorsArray != null){
+            this.strokeColors = new ArrayList<>(colorsArray.size());
+            for (int i = 0; i < colorsArray.size(); i++) {
+                String strokeColor;
+                if (colorsArray.getType(i) == com.facebook.react.bridge.ReadableType.String) {
+                    strokeColor = colorsArray.getString(i);
+                } else {
+                    strokeColor = "#000000";
+                }
+                this.strokeColors.add(i, strokeColor);
+            }
+        }
+
+        if (polyline != null && (type.equals("fake") || type.equals("single"))) {
+            polyline.setPoints(this.coordinates);
+        } else if (polyline != null && type.equals("actual")){
+            removeFromMap(this.polylineCollection);
+            addToMap(this.polylineCollection);
         }
     }
 
@@ -124,6 +170,10 @@ public class MapPolyline extends MapFeature {
     }
 
     public void setLineDashPattern(ReadableArray patternValues) {
+        if(patternValues != null && patternValues.size() > 0){
+            this.lineDashPatternDash = patternValues.getInt(0);
+            this.lineDashPatternGap = patternValues.getInt(1);
+        }
         this.patternValues = patternValues;
         this.applyPattern();
     }
@@ -154,24 +204,40 @@ public class MapPolyline extends MapFeature {
         }
     }
 
-    public PolylineOptions getPolylineOptions() {
-        if (polylineOptions == null) {
-            polylineOptions = createPolylineOptions();
+    private void createPolyline() {
+        if (coordinates == null) {
+            return;
         }
-        return polylineOptions;
-    }
+        this.polylineOptions = new ArrayList<>(coordinates.size());
+        for (int i = 0; i < coordinates.size()-1; i++) {
+            PolylineOptions options = new PolylineOptions();
 
-    private PolylineOptions createPolylineOptions() {
-        PolylineOptions options = new PolylineOptions();
-        options.addAll(coordinates);
-        options.color(color);
-        options.width(width);
-        options.geodesic(geodesic);
-        options.zIndex(zIndex);
-        options.startCap(lineCap);
-        options.endCap(lineCap);
-        options.pattern(this.pattern);
-        return options;
+            LatLng coordinate = coordinates.get(i);
+            options.add(coordinate);
+
+            LatLng coordinate2 = coordinates.get(i+1);
+            options.add(coordinate2);
+
+            Integer colorToUse;
+
+            if((strokeColors != null) && (strokeColors.size() > 0) && (strokeColors.size() == coordinates.size()) && (!"undefined".equals(strokeColors.get(i))) && (strokeColors.get(i) != null)){
+                colorToUse = Color.parseColor(strokeColors.get(i));
+            } else {
+                colorToUse = color;
+            }
+
+            options.color(colorToUse);
+            options.width(width);
+            options.geodesic(geodesic);
+            options.zIndex(zIndex);
+
+            if(lineDashPatternDash != null){
+                List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(this.lineDashPatternDash), new Gap(this.lineDashPatternGap));
+                options.pattern(pattern);
+            }
+
+            this.polylineOptions.add(i, options);
+        }
     }
 
     @Override
@@ -182,10 +248,16 @@ public class MapPolyline extends MapFeature {
     @Override
     public void addToMap(Object collection) {
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
-        polyline = polylineCollection.addPolyline(getPolylineOptions());
-        polyline.setClickable(this.tappable);
-        if (spans != null){
-            polyline.setSpans(spans);
+        createPolyline();
+        if(this.polylineOptions == null) {
+            return;
+        }
+        this.polylineArray = new ArrayList<>(this.polylineOptions.size());
+        for (int i = 0; i < this.polylineOptions.size(); i++) {
+            Polyline segment = polylineCollection.addPolyline(this.polylineOptions.get(i));
+            segment.setClickable(false);
+            polyline = segment;
+            this.polylineArray.add(i, segment);
         }
         this.polylineCollection = polylineCollection;
     }
@@ -197,7 +269,15 @@ public class MapPolyline extends MapFeature {
     @Override
     public void removeFromMap(Object collection) {
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
-        polylineCollection.remove(polyline);
+        if(this.polylineArray != null){
+            for (int i = 0; i < this.polylineArray.size(); i++) {
+                Polyline segment = this.polylineArray.get(i);
+                segment.remove();
+                polylineCollection.remove(segment);
+            }
+            this.polylineArray.clear();
+            this.polylineOptions.clear();
+        }
     }
 
     public void setLineCap(String lineCap) {

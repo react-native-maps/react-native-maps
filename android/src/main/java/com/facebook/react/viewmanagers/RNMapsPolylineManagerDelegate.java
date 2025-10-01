@@ -13,6 +13,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
@@ -44,6 +45,9 @@ public class RNMapsPolylineManagerDelegate<T extends View, U extends BaseViewMan
         break;
       case "strokeColors":
         mViewManager.setStrokeColors(view, (ReadableArray) value);
+        break;
+      case "syncedCoordsColors":
+        mViewManager.setSyncedCoordsColors(view, (ReadableMap) value);
         break;
       case "strokeWidth":
         mViewManager.setStrokeWidth(view, value == null ? 1f : ((Double) value).floatValue());

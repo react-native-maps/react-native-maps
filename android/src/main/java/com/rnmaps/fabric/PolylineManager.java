@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -80,6 +81,11 @@ public class PolylineManager extends ViewGroupManager<MapPolyline> implements RN
     @Override
     public void setStrokeColors(MapPolyline view, @Nullable ReadableArray value) {
         view.setStrokeColors(value);
+    }
+
+    @Override
+    public void setSyncedCoordsColors(MapPolyline view, @Nullable ReadableMap value) {
+        view.setSyncedCoordsColors(value);
     }
 
     @Override

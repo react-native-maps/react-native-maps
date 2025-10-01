@@ -10,6 +10,12 @@ import decorateMapComponent, {
 } from './decorateMapComponent';
 import type {LatLng, LineCapType, LineJoinType, Point} from './sharedTypes';
 
+type PolylineData = {
+  type: string;
+  coordinates: LatLng[];
+  colors: string[];
+};
+
 export type MapPolylineProps = ViewProps & {
   /**
    * An array of coordinates to describe the polyline
@@ -117,6 +123,16 @@ export type MapPolylineProps = ViewProps & {
    * @platform Android: Supported
    */
   strokeColors?: string[];
+
+  /**
+   * The syncedCoordsColors to use for the path.
+   *
+   * Must be the same length as `coordinates`
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  syncedCoordsColors?: PolylineData;
 
   /**
    * The stroke width to use for the path.

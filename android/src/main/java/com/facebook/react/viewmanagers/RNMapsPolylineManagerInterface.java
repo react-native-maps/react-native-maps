@@ -12,6 +12,7 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
 public interface RNMapsPolylineManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
@@ -22,6 +23,8 @@ public interface RNMapsPolylineManagerInterface<T extends View> extends ViewMana
   void setLineJoin(T view, @Nullable String value);
   void setStrokeColor(T view, @Nullable Integer value);
   void setStrokeColors(T view, @Nullable ReadableArray value);
+
+  void setSyncedCoordsColors(T view, @Nullable ReadableMap value);
   void setStrokeWidth(T view, float value);
   void setTappable(T view, boolean value);
 }
