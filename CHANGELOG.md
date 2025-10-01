@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.13](https://github.com/react-native-maps/react-native-maps/compare/v1.26.12...v1.26.13) (2025-10-01)
+
+
+### Bug Fixes
+
+* **android:** attempt to fix lifecycle issues on more time ([#5751](https://github.com/react-native-maps/react-native-maps/issues/5751)) ([d0d76a6](https://github.com/react-native-maps/react-native-maps/commit/d0d76a6946ce9600bba24d5f631447115c8cf7a4))
+
 ## [1.26.12](https://github.com/react-native-maps/react-native-maps/compare/v1.26.11...v1.26.12) (2025-10-01)
 
 
