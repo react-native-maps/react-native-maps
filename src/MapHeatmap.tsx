@@ -85,7 +85,7 @@ type NativeProps = Modify<
   ref: React.RefObject<View | null>;
 };
 
-export class MapHeatmap extends React.Component<MapHeatmapProps | null> {
+export class MapHeatmap extends React.Component<MapHeatmapProps> {
   // declaration only, as they are set through decorateMap
   /// @ts-ignore
   context!: React.ContextType<typeof ProviderContext>;

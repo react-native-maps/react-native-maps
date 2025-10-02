@@ -57,6 +57,10 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
             @Override
             public void run() {
                 MapView view = (MapView) uiManager.resolveView((int) tag);
+                if (view == null || view.map == null) {
+                    promise.reject("E_MAP_CAMERA", "Cannot get camera position because map view is null");
+                    return;
+                }
                 CameraPosition position = view.map.getCameraPosition();
                 WritableMap map = Arguments.createMap();
                 WritableMap center = Arguments.createMap();
@@ -77,6 +81,10 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
         UIManager uiManager = UIManagerHelper.getUIManagerForReactTag(getReactApplicationContext(), (int) tag);
         getReactApplicationContext().runOnUiQueueThread(() -> {
             MapView view = (MapView) uiManager.resolveView((int) tag);
+            if (view == null) {
+                promise.reject("E_MAP_MARKERS", "Cannot get markers frames because map view is null");
+                return;
+            }
             double[][] boundaries = view.getMarkersFrames(onlyVisible);
             if (boundaries != null) {
                 WritableMap coordinates = new WritableNativeMap();
@@ -103,7 +111,15 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
         UIManager uiManager = UIManagerHelper.getUIManagerForReactTag(getReactApplicationContext(), (int) tag);
         getReactApplicationContext().runOnUiQueueThread(() -> {
             MapView view = (MapView) uiManager.resolveView((int) tag);
+            if (view == null) {
+                promise.reject("E_MAP_BOUNDARIES", "Cannot get map boundaries because map view is null");
+                return;
+            }
             double[][] boundaries = view.getMapBoundaries();
+            if (boundaries == null) {
+                promise.reject("E_MAP_BOUNDARIES", "Map boundaries are null");
+                return;
+            }
             WritableMap coordinates = new WritableNativeMap();
             WritableMap northEastHash = new WritableNativeMap();
             WritableMap southWestHash = new WritableNativeMap();
@@ -147,6 +163,10 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
                     @Override
                     public void run() {
                         MapView view = (MapView) uiManager.resolveView((int) tag);
+                        if (view == null || view.map == null) {
+                            promise.reject("E_SNAPSHOT", "Cannot take snapshot because map view or map is null");
+                            return;
+                        }
                         view.map.snapshot(snapshot -> {
 
                             // Convert image to requested width/height if necessary

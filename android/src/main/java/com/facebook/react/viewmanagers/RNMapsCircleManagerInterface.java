@@ -12,8 +12,9 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsCircleManagerInterface<T extends View> {
+public interface RNMapsCircleManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setCenter(T view, @Nullable ReadableMap value);
   void setFillColor(T view, @Nullable Integer value);
   void setRadius(T view, double value);
