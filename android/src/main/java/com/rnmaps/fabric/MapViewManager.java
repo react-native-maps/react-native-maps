@@ -628,7 +628,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void onDropViewInstance(MapView view) {
-        super.onDropViewInstance(view);
         view.doDestroy();
+        super.onDropViewInstance(view);
     }
 }

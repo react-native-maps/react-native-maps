@@ -153,6 +153,12 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     }
 
     @Override
+    public void onDropViewInstance(MapMarker view) {
+        super.onDropViewInstance(view);
+        view.doDestroy();
+    }
+
+    @Override
     public void setCalloutOffset(MapMarker view, @Nullable ReadableMap value) {
 
     }
@@ -268,7 +274,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     public void redraw(MapMarker view) {
         view.redraw();
     }
-    
+
     @Override
     public void addView(MapMarker parent, View child, int index) {
         // if an <Callout /> component is a child, then it is a callout view, NOT part of the
@@ -284,7 +290,9 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
                         int newWidth = right - left;
                         int newHeight = bottom - top;
                         MapMarker marker = (MapMarker) v.getParent();
-                        marker.update(newWidth, newHeight);
+                        if(marker != null){
+                            marker.update(newWidth, newHeight);
+                        }
                     }
                 });
             }

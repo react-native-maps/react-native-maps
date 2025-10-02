@@ -53,6 +53,7 @@ import MassiveCustomMarkers from './examples/MassiveCustomMarkers';
 import GeojsonMap from './examples/Geojson';
 import CacheURLTiles from './examples/CacheURLTiles';
 import CacheWMSTiles from './examples/CacheWMSTiles';
+import HeatMap from './examples/HeatMap.tsx';
 
 const IOS = Platform.OS === 'ios';
 const ANDROID = Platform.OS === 'android';
@@ -183,6 +184,7 @@ export default class App extends React.Component<any, any> {
         [GeojsonMap, 'Geojson', true],
         [CacheURLTiles, 'CacheURLTiles', true],
         [CacheWMSTiles, 'CacheWMSTiles', true],
+        [HeatMap, 'HeatMap', true],
       ]
         // Filter out examples that are not yet supported for Google Maps on iOS.
         .filter(
