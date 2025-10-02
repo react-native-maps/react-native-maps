@@ -131,7 +131,7 @@ using namespace facebook::react;
     _view = (AIRMap *)[_legacyMapManager view];
 
     self.contentView = _view;
-    
+
     _view.onLongPress = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -277,6 +277,13 @@ using namespace facebook::react;
             facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
                 .latitude = [coordinateDict[@"latitude"] doubleValue],
                 .longitude = [coordinateDict[@"longitude"] doubleValue],
+                .altitude =[coordinateDict[@"altitude"] doubleValue],
+                .timestamp =[coordinateDict[@"timestamp"] doubleValue],
+                .accuracy =[coordinateDict[@"accuracy"] floatValue],
+                .speed =[coordinateDict[@"speed"] floatValue],
+                .heading =[coordinateDict[@"heading"] floatValue],
+                .altitudeAccuracy =[coordinateDict[@"altitudeAccuracy"] floatValue],
+
             };
             NSString* str = @"";
             if (errorDict){
@@ -518,6 +525,7 @@ if (!(newViewProps.name.latitude == 0 &&                                    \
 #define REMAP_MAPVIEW_CAMERA_PROP(name)                                    \
 if (newViewProps.name.center.latitude != oldViewProps.name.center.latitude || \
 newViewProps.name.center.longitude != oldViewProps.name.center.longitude || \
+newViewProps.name.altitude != oldViewProps.name.altitude ||       \
 newViewProps.name.heading != oldViewProps.name.heading ||         \
 newViewProps.name.pitch != oldViewProps.name.pitch) {             \
 CLLocationCoordinate2D center = CLLocationCoordinate2DMake(       \
@@ -563,6 +571,7 @@ newViewProps.name.right);           \
     REMAP_MAPVIEW_PROP(pitchEnabled)
     REMAP_MAPVIEW_PROP(showsBuildings)
     REMAP_MAPVIEW_PROP(rotateEnabled)
+    REMAP_MAPVIEW_PROP(showsPointsOfInterests)
 
     REMAP_MAPVIEW_POINT_PROP(compassOffset)
 
@@ -610,6 +619,13 @@ newViewProps.name.right);           \
         [_view setCameraZoomRange:zoomRange animated:newViewProps.cameraZoomRange.animated];
     }
 
+    if (oldViewProps.pointsOfInterestFilter != newViewProps.pointsOfInterestFilter) {
+        NSMutableArray<NSString *> *filterArray = [NSMutableArray new];
+        for (const auto& str : newViewProps.pointsOfInterestFilter) {
+            [filterArray addObject:RCTNSStringFromString(str)];
+        }
+        _view.pointsOfInterestFilter = filterArray;
+    }
 
     [super updateProps:props oldProps:oldProps];
 }
