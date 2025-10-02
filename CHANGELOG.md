@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.14](https://github.com/react-native-maps/react-native-maps/compare/v1.26.13...v1.26.14) (2025-10-02)
+
+
+### Bug Fixes
+
+* heatmap props ([#5629](https://github.com/react-native-maps/react-native-maps/issues/5629)) ([5bef3d2](https://github.com/react-native-maps/react-native-maps/commit/5bef3d2eae652b532e83c24b7be0d8d35990d439))
+
 ## [1.26.13](https://github.com/react-native-maps/react-native-maps/compare/v1.26.12...v1.26.13) (2025-10-01)
 
 
