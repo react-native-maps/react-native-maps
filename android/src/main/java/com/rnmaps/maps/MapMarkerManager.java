@@ -226,6 +226,12 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         view.setImage(source);
     }
 
+    // iOS-only prop parity: no-op on Android
+    @ReactProp(name = "systemImage")
+    public void setSystemImage(MapMarker view, @Nullable String symbol) {
+        // not supported on Android
+    }
+
     @ReactProp(name = "pinColor", defaultInt = Color.RED, customType = "Color")
     public void setPinColor(MapMarker view, int pinColor) {
         float[] hsv = new float[3];
