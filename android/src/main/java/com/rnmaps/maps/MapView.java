@@ -14,6 +14,7 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -228,16 +229,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     @Override
     public void onPause(LifecycleOwner owner) {
-        super.onPause();
         if (hasPermissions() && map != null) {
             //noinspection MissingPermission
             map.setMyLocationEnabled(false);
         }
         synchronized (MapView.this) {
-            if (!destroyed) {
+            if (!paused) {
+                super.onPause();
                 MapView.this.onPause();
+                paused = true;
             }
-            paused = true;
         }
     }
 
@@ -317,6 +318,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+
+        // Reset lifecycle flags when reattaching
+        synchronized (this) {
+            paused = false;
+        }
+
         attachLifecycleObserver();
         if (savedMapState != null) {
             super.onCreate(savedMapState);
@@ -338,12 +345,33 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     // Override onDetachedFromWindow to detach lifecycle observer
     @Override
     protected void onDetachedFromWindow() {
-        if (savedMapState == null) {
-            savedMapState = new Bundle();
+        synchronized (this) {
+            // Save instance state if not already saved and map is ready
+            if (map != null && isMapReady) {
+                try {
+                    if (savedMapState == null) {
+                        savedMapState = new Bundle();
+                    }
+                    super.onSaveInstanceState(savedMapState);
+                } catch (Exception e) {
+                    Log.e("MapView", "Error saving state in onDetachedFromWindow: " + e.getMessage());
+                    // Continue with cleanup even if state saving fails
+                }
+            }
+
+            // Pause safely if not already paused
+            if (!paused) {
+                onPause();
+            }
         }
-        super.onSaveInstanceState(savedMapState);
-        super.onPause();
-        super.onStop();
+
+        // These operations don't need synchronization
+        try {
+            onStop();
+        } catch (Exception e) {
+            Log.e("MapView", "Error during stop in onDetachedFromWindow: " + e.getMessage());
+        }
+
         savedFeatures = new ArrayList<>(features);
         features.clear();
         shouldRestorePadding = true;
