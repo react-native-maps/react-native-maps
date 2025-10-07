@@ -323,7 +323,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
                 parent.addFeature(child, parent.getFeatureCount());
             });
         } else {
-            parent.addFeature(child, index);
+            parent.addFeature(child, parent.getFeatureCount());
         }
     }
 
