@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.26.14](https://github.com/react-native-maps/react-native-maps/compare/v1.26.13...v1.26.14) (2025-10-02)
+
+
+### Bug Fixes
+
+* heatmap props ([#5629](https://github.com/react-native-maps/react-native-maps/issues/5629)) ([5bef3d2](https://github.com/react-native-maps/react-native-maps/commit/5bef3d2eae652b532e83c24b7be0d8d35990d439))
+
+## [1.26.13](https://github.com/react-native-maps/react-native-maps/compare/v1.26.12...v1.26.13) (2025-10-01)
+
+
+### Bug Fixes
+
+* **android:** attempt to fix lifecycle issues on more time ([#5751](https://github.com/react-native-maps/react-native-maps/issues/5751)) ([d0d76a6](https://github.com/react-native-maps/react-native-maps/commit/d0d76a6946ce9600bba24d5f631447115c8cf7a4))
+
+## [1.26.12](https://github.com/react-native-maps/react-native-maps/compare/v1.26.11...v1.26.12) (2025-10-01)
+
+
+### Bug Fixes
+
+* avoid rn-maps typescript error leak when running tsc  ([#5539](https://github.com/react-native-maps/react-native-maps/issues/5539)) ([0fb0202](https://github.com/react-native-maps/react-native-maps/commit/0fb0202b561ae76b841e9f52ddef092a79a054af))
+
+## [1.26.11](https://github.com/react-native-maps/react-native-maps/compare/v1.26.10...v1.26.11) (2025-09-30)
+
+
+### Bug Fixes
+
+* **android:** fix remove marker from map issues ([#5752](https://github.com/react-native-maps/react-native-maps/issues/5752)) ([02a6e52](https://github.com/react-native-maps/react-native-maps/commit/02a6e52bd95645ff7556c97c0e7d4cbb2ed0d2e3))
+
+## [1.26.10](https://github.com/react-native-maps/react-native-maps/compare/v1.26.9...v1.26.10) (2025-09-29)
+
+
+### Bug Fixes
+
+* **android:** display Image inside marker correctly ([#5749](https://github.com/react-native-maps/react-native-maps/issues/5749)) ([a799911](https://github.com/react-native-maps/react-native-maps/commit/a799911e56a459e60a6dbdef406c39acba782046))
+
 ## [1.26.9](https://github.com/react-native-maps/react-native-maps/compare/v1.26.8...v1.26.9) (2025-09-21)
 
 
