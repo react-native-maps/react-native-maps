@@ -25,4 +25,10 @@ target_link_libraries(
   reactnative
 )
 
-target_compile_reactnative_options(react_codegen_RNMapsSpecs PRIVATE)
+# Use standard CMake compile options
+target_compile_options(react_codegen_RNMapsSpecs PRIVATE
+  -Wall
+  -Wextra
+  -pedantic
+  -std=c++20
+)
