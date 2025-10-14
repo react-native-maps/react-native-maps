@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.16](https://github.com/react-native-maps/react-native-maps/compare/v1.26.15...v1.26.16) (2025-10-14)
+
+
+### Bug Fixes
+
+* **android:** fix saveinstancestate NPE ([cbdc8d1](https://github.com/react-native-maps/react-native-maps/commit/cbdc8d12d9a8305c13cb152bbc2578d2d9cbd485))
+
 ## [1.26.15](https://github.com/react-native-maps/react-native-maps/compare/v1.26.14...v1.26.15) (2025-10-14)
 
 
