@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.17](https://github.com/react-native-maps/react-native-maps/compare/v1.26.16...v1.26.17) (2025-10-14)
+
+
+### Bug Fixes
+
+* **android:** fix crash when getFeatureAt larger than index ([#5775](https://github.com/react-native-maps/react-native-maps/issues/5775)) ([5cbcf72](https://github.com/react-native-maps/react-native-maps/commit/5cbcf72a0990ff295a7fa8e09a88f602da37fc71))
+
 ## [1.26.16](https://github.com/react-native-maps/react-native-maps/compare/v1.26.15...v1.26.16) (2025-10-14)
 
 
