@@ -35,11 +35,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapColorScheme;
 import com.rnmaps.maps.MapMarker;
-import com.rnmaps.maps.MapOverlay;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
-import java.util.List;
 import java.util.Map;
 
 @ReactModule(name = MapViewManager.REACT_CLASS)

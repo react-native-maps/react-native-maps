@@ -1244,7 +1244,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public View getFeatureAt(int index) {
-        return features.get(index);
+        if (index < features.size()) {
+            return features.get(index);
+        }
+        return null;
     }
 
     public void removeFeatureAt(int index) {
