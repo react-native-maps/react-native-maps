@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.18](https://github.com/react-native-maps/react-native-maps/compare/v1.26.17...v1.26.18) (2025-10-22)
+
+
+### Bug Fixes
+
+* **android:** fix crash on some devices with doDestroy ([#5788](https://github.com/react-native-maps/react-native-maps/issues/5788)) ([3a89152](https://github.com/react-native-maps/react-native-maps/commit/3a89152c949c124647671f232fcb9e474568c93c))
+
 ## [1.26.17](https://github.com/react-native-maps/react-native-maps/compare/v1.26.16...v1.26.17) (2025-10-14)
 
 
