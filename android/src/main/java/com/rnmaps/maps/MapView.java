@@ -780,13 +780,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         destroyed = true;
         savedMapState = null;
         savedFeatures = null;
-
-        if (!paused) {
-            onPause();
-            paused = true;
+        try {
+            if (!paused) {
+                onPause();
+                paused = true;
+            }
+            onDestroy();
+            detachLifecycleObserver();
+        } catch (Exception exception){
+            Log.e("MapView", "exception with destroying", exception);
         }
-        onDestroy();
-        detachLifecycleObserver();
     }
 
     public void setInitialCameraSet(boolean initialCameraSet) {
