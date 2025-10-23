@@ -11,16 +11,10 @@
 #import <React/RCTComponent.h>
 #import <React/RCTView.h>
 #import "AIRMapCoordinate.h"
-#import "AIRMap.h"
+#import "AIRMapOverlayBase.h"
 #import "RCTConvert+AirMap.h"
 
-
-@interface AIRMapPolyline: MKAnnotationView <MKOverlay>
-
-@property (nonatomic, weak) AIRMap *map;
-
-@property (nonatomic, strong) MKPolyline *polyline;
-@property (nonatomic, strong) MKOverlayPathRenderer *renderer;
+@interface AIRMapPolyline: AIRMapOverlayBase
 
 @property (nonatomic, strong) NSArray<AIRMapCoordinate *> *coordinates;
 @property (nonatomic, strong) UIColor *fillColor;
@@ -34,6 +28,9 @@
 @property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
 @property (nonatomic, assign) BOOL geodesic;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
+
+// Method for handling map region changes
+- (void)mapViewRegionDidChange;
 
 #pragma mark MKOverlay protocol
 
