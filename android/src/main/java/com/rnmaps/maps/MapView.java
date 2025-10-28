@@ -508,9 +508,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             //noinspection MissingPermission
             map.setMyLocationEnabled(showUserLocation);
             map.setLocationSource(fusedLocationSource);
-
-            map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
         }
+
+        setShowsMyLocationButton(showMyLocationButton);
 
         markerManager = new MarkerManager(map);
         markerCollection = markerManager.newCollection();
