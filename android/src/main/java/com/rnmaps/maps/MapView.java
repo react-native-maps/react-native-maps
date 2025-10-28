@@ -117,6 +117,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private CameraUpdate cameraToSet;
     private boolean setPaddingDeferred = false;
     private boolean showUserLocation = false;
+    private boolean showMyLocationButton = true;
 
     private boolean showsTraffic = false;
 
@@ -508,6 +509,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             map.setMyLocationEnabled(showUserLocation);
             map.setLocationSource(fusedLocationSource);
         }
+
+        setShowsMyLocationButton(showMyLocationButton);
 
         markerManager = new MarkerManager(map);
         markerCollection = markerManager.newCollection();
@@ -994,6 +997,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setShowsMyLocationButton(boolean showMyLocationButton) {
+        this.showMyLocationButton = showMyLocationButton;
+
         if (map != null) {
             if (hasPermissions() || !showMyLocationButton) {
                 map.getUiSettings().setMyLocationButtonEnabled(showMyLocationButton);
