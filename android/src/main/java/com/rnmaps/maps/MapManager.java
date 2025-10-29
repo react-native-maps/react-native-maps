@@ -158,7 +158,9 @@ public class MapManager extends ViewGroupManager<MapView> {
     @ReactProp(name = "mapType")
     public void setMapType(MapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
-        view.map.setMapType(typeId);
+        if (view.map != null) {
+            view.map.setMapType(typeId);
+        }
     }
 
     @ReactProp(name = "customMapStyleString")
@@ -193,7 +195,9 @@ public class MapManager extends ViewGroupManager<MapView> {
         }
 
         view.applyBaseMapPadding(left, top, right, bottom);
-        view.map.setPadding(left, top, right, bottom);
+        if (view.map != null) {
+            view.map.setPadding(left, top, right, bottom);
+        }
     }
 
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)
@@ -235,7 +239,9 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "showsTraffic", defaultBoolean = false)
     public void setShowTraffic(MapView view, boolean showTraffic) {
-        view.map.setTrafficEnabled(showTraffic);
+        if (view.map != null) {
+            view.map.setTrafficEnabled(showTraffic);
+        }
     }
 
     @ReactProp(name = "showsBuildings", defaultBoolean = false)
