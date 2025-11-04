@@ -8,6 +8,10 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
@@ -19,6 +23,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,6 +36,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.json.JSONArray;
 
 @ReactModule(name = MapModule.NAME)
 public class MapModule extends ReactContextBaseJavaModule {
@@ -87,45 +94,63 @@ public class MapModule extends ReactContextBaseJavaModule {
         final String result = options.hasKey("result") ? options.getString("result") : "file";
 
         MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
-            view.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                public void onSnapshotReady(@Nullable Bitmap snapshot) {
-
-                    // Convert image to requested width/height if necessary
-                    if (snapshot == null) {
-                        promise.reject("Failed to generate bitmap, snapshot = null");
-                        return;
-                    }
-                    if ((width != 0) && (height != 0) &&
-                            (width != snapshot.getWidth() || height != snapshot.getHeight())) {
-                        snapshot = Bitmap.createScaledBitmap(snapshot, width, height, true);
-                    }
-
-                    // Save the snapshot to disk
-                    if (result.equals(SNAPSHOT_RESULT_FILE)) {
-                        File tempFile;
-                        FileOutputStream outputStream;
-                        try {
-                            tempFile =
-                                    File.createTempFile("AirMapSnapshot", "." + format, context.getCacheDir());
-                            outputStream = new FileOutputStream(tempFile);
-                        } catch (Exception e) {
-                            promise.reject(e);
+            if (view == null || view.map == null) {
+          promise.reject("MAP_NOT_AVAILABLE", "Map view is not available, possibly due to app being in background");
+          return null;
+        }
+        
+        try {
+          view.map.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                  public void onSnapshotReady(@Nullable Bitmap snapshot) {
+              try {
+                        // Convert image to requested width/height if necessary
+                        if (snapshot == null) {
+                            promise.reject("SNAPSHOT_FAILED", "Failed to generate bitmap, snapshot = null");
                             return;
                         }
-                        snapshot.compress(compressFormat, (int) (100.0 * quality), outputStream);
-                        closeQuietly(outputStream);
-                        String uri = Uri.fromFile(tempFile).toString();
-                        promise.resolve(uri);
-                    } else if (result.equals(SNAPSHOT_RESULT_BASE64)) {
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                        snapshot.compress(compressFormat, (int) (100.0 * quality), outputStream);
-                        closeQuietly(outputStream);
-                        byte[] bytes = outputStream.toByteArray();
-                        String data = Base64.encodeToString(bytes, Base64.NO_WRAP);
-                        promise.resolve(data);
-                    }
+                        if ((width != 0) && (height != 0) &&
+                                (width != snapshot.getWidth() || height != snapshot.getHeight())) {
+                            snapshot = Bitmap.createScaledBitmap(snapshot, width, height, true);
+                        }
+
+                // Save the snapshot to disk
+                if (result.equals(SNAPSHOT_RESULT_FILE)) {
+                  File tempFile;
+                  FileOutputStream outputStream;
+                  try {
+                    tempFile =
+                        File.createTempFile("AirMapSnapshot", "." + format, context.getCacheDir());
+                    outputStream = new FileOutputStream(tempFile);
+                  } catch (Exception e) {
+                    promise.reject("FILE_CREATION_ERROR", "Error creating snapshot file: " + e.getMessage(), e);
+                    return;
+                  }
+                  snapshot.compress(compressFormat, (int) (100.0 * quality), outputStream);
+                  closeQuietly(outputStream);
+                  String uri = Uri.fromFile(tempFile).toString();
+                  promise.resolve(uri);
+                } else if (result.equals(SNAPSHOT_RESULT_BASE64)) {
+                  ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                  snapshot.compress(compressFormat, (int) (100.0 * quality), outputStream);
+                  closeQuietly(outputStream);
+                  byte[] bytes = outputStream.toByteArray();
+                  String data = Base64.encodeToString(bytes, Base64.NO_WRAP);
+                  promise.resolve(data);
                 }
-            });
+              } catch (Exception e) {
+                promise.reject("SNAPSHOT_PROCESSING_ERROR", "Error processing snapshot: " + e.getMessage(), e);
+              }
+            }
+          });
+        } catch (IllegalStateException e) {
+          if (e.getMessage() != null && e.getMessage().contains("background")) {
+            promise.reject("SNAPSHOT_BACKGROUND_ERROR", "Cannot take snapshot while app is in background", e);
+          } else {
+            promise.reject("SNAPSHOT_STATE_ERROR", "Map is in invalid state for snapshot: " + e.getMessage(), e);
+          }
+        } catch (Exception e) {
+          promise.reject("SNAPSHOT_CALL_ERROR", "Error calling snapshot method: " + e.getMessage(), e);
+        }
 
             return null;
         });
@@ -215,6 +240,7 @@ public class MapModule extends ReactContextBaseJavaModule {
         );
 
         MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
+            if(view == null || view.map == null) return null;
             Point pt = view.map.getProjection().toScreenLocation(coord);
 
             WritableMap ptJson = new WritableNativeMap();
@@ -240,6 +266,7 @@ public class MapModule extends ReactContextBaseJavaModule {
         );
 
         MapUIBlock uiBlock = new MapUIBlock(tag, promise, context, view -> {
+            if(view == null || view.map == null) return null;
             LatLng coord = view.map.getProjection().fromScreenLocation(pt);
 
             WritableMap coordJson = new WritableNativeMap();
@@ -280,4 +307,44 @@ public class MapModule extends ReactContextBaseJavaModule {
 
         uiBlock.addToUIManager();
     }
+
+    @ReactMethod
+    public void updateNearbyMarkersNative(final int nativeTag, final String markersJson, final Promise promise) {
+    
+    final ReactApplicationContext context = getReactApplicationContext();
+
+
+    new Handler(Looper.getMainLooper()).post(() -> {
+        try {
+            // Get the React Native view manager
+            UIManagerModule uiManager = getReactApplicationContext()
+                .getNativeModule(com.facebook.react.uimanager.UIManagerModule.class);
+            
+            if (uiManager != null) {
+                // Get the view from the ref
+                View view = uiManager.resolveView(nativeTag);
+                if (view instanceof MapView) {
+                    MapView mapView = (MapView) view;
+                    
+                    // Parse processed markers JSON
+                    JSONArray markers = new JSONArray(markersJson);
+                    
+                    // Call the method to update markers directly on the MapView
+                    mapView.updateNearbyMarkersFromProcessedData(markers);
+                    
+                    promise.resolve(null);
+                    
+                } else {
+                    promise.reject("NO_MAPVIEW_FOUND", "Could not find MapView for nativeTag: " + nativeTag);
+                }
+            } else {
+                promise.reject("NO_UIMANAGER", "UIManagerModule not found");
+            }
+            
+        } catch (Exception e) {
+            Log.e("RNMaps_NearbyMarkers", "Error in updateNearbyMarkersNative: " + e.getMessage(), e);
+            promise.reject("NATIVE_MARKER_UPDATE_ERROR", e.getMessage(), e);
+        }
+    });
+  }
 }

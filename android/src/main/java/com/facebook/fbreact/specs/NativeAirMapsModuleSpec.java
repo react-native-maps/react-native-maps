@@ -60,4 +60,8 @@ public abstract class NativeAirMapsModuleSpec extends ReactContextBaseJavaModule
   @ReactMethod
   @DoNotStrip
   public abstract void getCoordinateForPoint(double tag, ReadableMap point, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void updateNearbyMarkersNative(double tag, String markersJson, Promise promise);
 }

@@ -113,10 +113,10 @@ const createFabricMap = (ViewComponent, Commands) => {
                     throw new Error('animateCamera is only supported on iOS with Fabric.');
                 }
             },
-            fitToCoordinates(coordinates, edgePadding, animated) {
+            fitToCoordinates(coordinates, edgePadding, animated, duration) {
                 if (fabricRef.current) {
                     try {
-                        Commands.fitToCoordinates(fabricRef.current, JSON.stringify(coordinates), JSON.stringify(edgePadding), animated);
+                        Commands.fitToCoordinates(fabricRef.current, JSON.stringify(coordinates), JSON.stringify(edgePadding), animated, duration);
                     }
                     catch (error) {
                         throw new Error('Failed to fitToCoordinates');

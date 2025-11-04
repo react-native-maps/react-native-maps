@@ -20,6 +20,7 @@ export * from './ProviderConstants';
 export * from './MapView.types';
 export * from './MapPolygon.types';
 export * from './sharedTypes';
+export { default as NativeAirMapsModule } from './specs/NativeAirMapsModule';
 export const MarkerAnimated = Marker.Animated;
 export const OverlayAnimated = Overlay.Animated;
 export default MapView;

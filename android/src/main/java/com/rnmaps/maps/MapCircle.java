@@ -110,7 +110,9 @@ public class MapCircle extends MapFeature {
   @Override
   public void addToMap(Object collection) {
     CircleManager.Collection circleCollection = (CircleManager.Collection) collection;
-    circle = circleCollection.addCircle(getCircleOptions());
+    if(circleCollection != null){
+      circle = circleCollection.addCircle(getCircleOptions());
+    }
   }
 
   @Override

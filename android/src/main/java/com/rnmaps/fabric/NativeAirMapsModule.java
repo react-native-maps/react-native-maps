@@ -13,6 +13,10 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -39,6 +43,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import org.json.JSONArray;
 
 public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
     public NativeAirMapsModule(ReactApplicationContext reactContext) {
@@ -280,5 +286,44 @@ public class NativeAirMapsModule extends NativeAirMapsModuleSpec {
         });
 
         uiBlock.addToUIManager();
+    }
+
+    @Override
+    public void updateNearbyMarkersNative(double tag, String markersJson, Promise promise) {
+
+        final ReactApplicationContext context = getReactApplicationContext();
+
+
+        new Handler(Looper.getMainLooper()).post(() -> {
+            try {
+                // Get the React Native view manager
+                UIManager uiManager = UIManagerHelper.getUIManagerForReactTag(getReactApplicationContext(), (int) tag);
+                
+                if (uiManager != null) {
+                    // Get the view from the ref
+                    View view = uiManager.resolveView((int) tag);
+                    if (view instanceof MapView) {
+                        MapView mapView = (MapView) view;
+                        
+                        // Parse processed markers JSON
+                        JSONArray markers = new JSONArray(markersJson);
+                        
+                        // Call the method to update markers directly on the MapView
+                        mapView.updateNearbyMarkersFromProcessedData(markers);
+                        
+                        promise.resolve(null);
+                        
+                    } else {
+                        promise.reject("NO_MAPVIEW_FOUND", "Could not find MapView for nativeTag: " + tag);
+                    }
+                } else {
+                    promise.reject("NO_UIMANAGER", "UIManagerModule not found");
+                }
+                
+            } catch (Exception e) {
+                Log.e("RNMaps_NearbyMarkers", "Error in updateNearbyMarkersNative: " + e.getMessage(), e);
+                promise.reject("NATIVE_MARKER_UPDATE_ERROR", e.getMessage(), e);
+            }
+        });
     }
 }

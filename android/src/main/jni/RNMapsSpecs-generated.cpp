@@ -47,6 +47,11 @@ static facebook::jsi::Value __hostFunction_NativeAirMapsModuleSpecJSI_getCoordin
   return static_cast<JavaTurboModule &>(turboModule).invokeJavaMethod(rt, PromiseKind, "getCoordinateForPoint", "(DLcom/facebook/react/bridge/ReadableMap;Lcom/facebook/react/bridge/Promise;)V", args, count, cachedMethodId);
 }
 
+static facebook::jsi::Value __hostFunction_NativeAirMapsModuleSpecJSI_updateNearbyMarkersNative(facebook::jsi::Runtime& rt, TurboModule &turboModule, const facebook::jsi::Value* args, size_t count) {
+  static jmethodID cachedMethodId = nullptr;
+  return static_cast<JavaTurboModule &>(turboModule).invokeJavaMethod(rt, PromiseKind, "updateNearbyMarkersNative", "(DLjava/lang/String;Lcom/facebook/react/bridge/Promise;)V", args, count, cachedMethodId);
+}
+
 NativeAirMapsModuleSpecJSI::NativeAirMapsModuleSpecJSI(const JavaTurboModule::InitParams &params)
   : JavaTurboModule(params) {
   methodMap_["getCamera"] = MethodMetadata {1, __hostFunction_NativeAirMapsModuleSpecJSI_getCamera};
@@ -56,6 +61,7 @@ NativeAirMapsModuleSpecJSI::NativeAirMapsModuleSpecJSI(const JavaTurboModule::In
   methodMap_["getAddressFromCoordinates"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleSpecJSI_getAddressFromCoordinates};
   methodMap_["getPointForCoordinate"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleSpecJSI_getPointForCoordinate};
   methodMap_["getCoordinateForPoint"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleSpecJSI_getCoordinateForPoint};
+  methodMap_["updateNearbyMarkersNative"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleSpecJSI_updateNearbyMarkersNative};
 }
 
 std::shared_ptr<TurboModule> RNMapsSpecs_ModuleProvider(const std::string &moduleName, const JavaTurboModule::InitParams &params) {

@@ -170,6 +170,7 @@ public:
   virtual jsi::Value getAddressFromCoordinates(jsi::Runtime &rt, double tag, jsi::Object coordinate) = 0;
   virtual jsi::Value getPointForCoordinate(jsi::Runtime &rt, double tag, jsi::Object coordinate) = 0;
   virtual jsi::Value getCoordinateForPoint(jsi::Runtime &rt, double tag, jsi::Object point) = 0;
+  virtual jsi::Value updateNearbyMarkersNative(jsi::Runtime &rt, double tag, jsi::String markersJson) = 0;
 
 };
 
@@ -255,6 +256,14 @@ private:
 
       return bridging::callFromJs<jsi::Value>(
           rt, &T::getCoordinateForPoint, jsInvoker_, instance_, std::move(tag), std::move(point));
+    }
+    jsi::Value updateNearbyMarkersNative(jsi::Runtime &rt, double tag, jsi::String markersJson) override {
+      static_assert(
+          bridging::getParameterCount(&T::updateNearbyMarkersNative) == 3,
+          "Expected updateNearbyMarkersNative(...) to have 3 parameters");
+
+      return bridging::callFromJs<jsi::Value>(
+          rt, &T::updateNearbyMarkersNative, jsInvoker_, instance_, std::move(tag), std::move(markersJson));
     }
 
   private:

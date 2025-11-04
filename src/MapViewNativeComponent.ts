@@ -3,6 +3,7 @@ import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativ
 import type {NativeProps} from './MapView';
 import type {Camera, EdgePadding} from './MapView.types';
 import type {LatLng, Region} from './sharedTypes';
+import type { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type MapViewNativeComponentType = HostComponent<NativeProps>;
 
@@ -54,6 +55,7 @@ interface NativeCommands {
     coordinates: LatLng[],
     edgePadding: EdgePadding,
     animated: boolean,
+    duration: Int32,
   ) => void;
 
   setMapBoundaries: (
@@ -70,6 +72,15 @@ interface NativeCommands {
     >,
     activeLevelIndex: number,
   ) => void;
+
+  scrollMap: (
+    viewRef: NonNullable<
+      React.RefObject<MapViewNativeComponentType>['current']
+    >,
+    xPixel: number,
+    YPixel: number,
+    animated: boolean,
+  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -82,5 +93,6 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'fitToCoordinates',
     'setMapBoundaries',
     'setIndoorActiveLevelIndex',
+    'scrollMap'
   ],
 });

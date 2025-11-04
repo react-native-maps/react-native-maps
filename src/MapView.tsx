@@ -50,7 +50,7 @@ import type {
   SnapshotOptions,
   UserLocationChangeEvent,
 } from './MapView.types';
-import type {Modify} from './sharedTypesInternal';
+import type { Modify } from './sharedTypesInternal';
 import {
   Commands,
   type MapViewNativeComponentType,
@@ -63,7 +63,7 @@ import FabricMapView, {
 import GoogleMapView, {
   Commands as GoogleCommands,
 } from './specs/NativeComponentGoogleMapView';
-import createFabricMap, {type FabricMapHandle} from './createFabricMap';
+import createFabricMap, { type FabricMapHandle } from './createFabricMap';
 
 const FabricMap = createFabricMap(FabricMapView, FabricCommands);
 var FabricGoogleMap: any = null;
@@ -755,6 +755,8 @@ class MapView extends React.Component<MapViewProps, State> {
   private map: NativeProps['ref'];
 
   private fabricMap = React.createRef<FabricMapHandle>();
+  private callMapReady: boolean;
+  private mapReadytimerId: ReturnType<typeof setTimeout>;
 
   constructor(props: MapViewProps) {
     super(props);
@@ -766,6 +768,16 @@ class MapView extends React.Component<MapViewProps, State> {
 
     this._onMapReady = this._onMapReady.bind(this);
     this._onChange = this._onChange.bind(this);
+    this.callMapReady = true;
+    this.mapReadytimerId = setTimeout(() => {
+      this.callMapReady = false;
+      const { onMapReady } = this.props;
+      this.setState({ isReady: true }, () => {
+        if (onMapReady) {
+          onMapReady();
+        }
+      });
+    }, 100);
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -774,17 +786,20 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   private _onMapReady() {
-    const {onMapReady} = this.props;
-    this.setState({isReady: true}, () => {
-      if (onMapReady) {
-        onMapReady();
-      }
-    });
+    if (this.callMapReady) {
+      clearTimeout(this.mapReadytimerId);
+      const { onMapReady } = this.props;
+      this.setState({ isReady: true }, () => {
+        if (onMapReady) {
+          onMapReady();
+        }
+      });
+    }
   }
 
-  private _onChange({nativeEvent}: ChangeEvent) {
+  private _onChange({ nativeEvent }: ChangeEvent) {
     const isGesture = nativeEvent.isGesture;
-    const details = {isGesture};
+    const details = { isGesture };
 
     if (nativeEvent.continuous) {
       if (this.props.onRegionChange) {
@@ -810,13 +825,15 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   }
 
-  animateCamera(camera: Partial<Camera>, opts?: {duration?: number}) {
+  animateCamera(camera: Partial<Camera>, opts?: { duration?: number }) {
     if (this.fabricMap.current) {
+      console.log('hello hey bye')
       this.fabricMap.current.animateCamera(
         camera,
         opts?.duration ? opts.duration : 500,
       );
     } else if (this.map.current) {
+      console.log('hello hey bye. 2')
       Commands.animateCamera(
         this.map.current,
         camera,
@@ -841,7 +858,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   fitToElements(options: FitToOptions = {}) {
     const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
       animated = true,
     } = options;
     if (this.fabricMap.current) {
@@ -853,7 +870,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
     const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
       animated = true,
     } = options;
     if (this.fabricMap.current) {
@@ -874,14 +891,16 @@ class MapView extends React.Component<MapViewProps, State> {
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
     const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+      edgePadding = { top: 0, right: 0, bottom: 0, left: 0 },
       animated = true,
+      duration = 400,
     } = options;
     if (this.fabricMap.current) {
       this.fabricMap.current.fitToCoordinates(
         coordinates,
         edgePadding,
         animated,
+        duration
       );
     } else if (this.map.current) {
       Commands.fitToCoordinates(
@@ -889,6 +908,7 @@ class MapView extends React.Component<MapViewProps, State> {
         coordinates,
         edgePadding,
         animated,
+        duration,
       );
     }
   }
@@ -1012,7 +1032,7 @@ class MapView extends React.Component<MapViewProps, State> {
    * @return Promise Promise with { <identifier>: { point: Point, frame: Frame } }
    */
   getMarkersFrames(onlyVisible: boolean = false): Promise<{
-    [key: string]: {point: Point; frame: Frame};
+    [key: string]: { point: Point; frame: Frame };
   }> {
     if (this.fabricMap.current) {
       // @ts-ignore
@@ -1077,7 +1097,7 @@ class MapView extends React.Component<MapViewProps, State> {
   };
   private handleRegionChange = (event: NativeSyntheticEvent<any>) => {
     const isGesture = event.nativeEvent.isGesture;
-    const details = {isGesture};
+    const details = { isGesture };
     if (event.nativeEvent.continuous) {
       if (this.props.onRegionChange) {
         this.props.onRegionChange(event.nativeEvent.region, details);
@@ -1109,7 +1129,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   private handleRegionChangeComplete = (event: NativeSyntheticEvent<any>) => {
     const isGesture = event.nativeEvent.isGesture;
-    const details = {isGesture};
+    const details = { isGesture };
     if (this.props.onRegionChangeComplete) {
       this.props.onRegionChangeComplete(event.nativeEvent.region, details);
     }

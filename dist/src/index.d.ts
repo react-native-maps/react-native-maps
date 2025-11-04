@@ -33,6 +33,7 @@ export * from './ProviderConstants';
 export * from './MapView.types';
 export * from './MapPolygon.types';
 export * from './sharedTypes';
+export { default as NativeAirMapsModule } from './specs/NativeAirMapsModule';
 export declare const MarkerAnimated: import("react-native/types").Animated.AnimatedComponent<typeof import("./MapMarker").MapMarker>;
 export declare const OverlayAnimated: import("react-native/types").Animated.AnimatedComponent<typeof import("./MapOverlay").MapOverlay>;
 export default MapView;

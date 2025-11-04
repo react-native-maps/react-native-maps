@@ -1,6 +1,7 @@
 package com.rnmaps.maps;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -19,17 +20,24 @@ import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.SquareCap;
 import com.google.android.gms.maps.model.StrokeStyle;
 import com.google.android.gms.maps.model.StyleSpan;
+import com.google.android.gms.maps.model.StrokeStyle;
+import com.google.android.gms.maps.model.StyleSpan;
 import com.google.maps.android.collections.PolylineManager;
 import com.rnmaps.fabric.event.OnPressEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import android.os.Handler;
+import android.os.Looper;
 
 public class MapPolyline extends MapFeature {
 
     private PolylineOptions polylineOptions;
     private Polyline polyline;
+    private Polyline animatedPolyline;
 
     private List<LatLng> coordinates;
     private int color;
@@ -40,12 +48,95 @@ public class MapPolyline extends MapFeature {
     private Cap lineCap = new RoundCap();
     private ReadableArray patternValues;
     private List<PatternItem> pattern;
-
+    private int animateColor = Color.parseColor("#FFFFFF");
+    private Timer animationTimer;
+    private TimerTask animationTask;
+    private float drawDone = 0;
     private List<StyleSpan> spans;
 
     public MapPolyline(Context context) {
         super(context);
     }
+
+  public void startPolylineAnimation(final int animateColor, final int animationDuration, final int delay) {
+    stopPolylineAnimation();
+    this.animateColor = animateColor;
+
+    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+      animationTimer = new Timer();
+      drawDone = 0;
+
+      animationTask = new TimerTask() {
+        @Override
+        public void run() {
+          if (drawDone <= 28) {
+            drawDone += 2;
+          } else if (drawDone <= 66) {
+            drawDone += 4;
+          } else if (drawDone <= 98) {
+            drawDone += 2;
+          } else if (drawDone <= 200) {
+            drawDone += 2;
+          } else {
+            drawDone = 0;
+          }
+
+          new Handler(Looper.getMainLooper()).post(() -> updatePolyline());
+        }
+      };
+
+      animationTimer.schedule(animationTask, 200, animationDuration);
+    }, delay);
+  }
+
+  public void stopPolylineAnimation() {
+    if (animationTimer != null) {
+      animationTimer.cancel();
+      animationTimer = null;
+    }
+    if (animationTask != null) {
+      animationTask.cancel();
+      animationTask = null;
+    }
+  }
+
+  private void updatePolyline() {
+    if (animatedPolyline == null || polyline == null || coordinates == null || coordinates.isEmpty()) return;
+
+    if (drawDone >= 0 && drawDone <= 100) {
+      int pointCount = coordinates.size();
+      int countToAdd = (int) (pointCount * (drawDone / 100.0f));
+
+      List<LatLng> updatedPoints = new ArrayList<>(coordinates.subList(0, countToAdd));
+
+      animatedPolyline.setPoints(updatedPoints);
+      animatedPolyline.setColor(animateColor);
+      animatedPolyline.setVisible(true);
+
+      polyline.setVisible(true);
+    }
+    else if (drawDone > 100 && drawDone <= 200) {
+      float alpha = (drawDone - 100.0f) / 100.0f;
+      int newColor = fadeColorToStatic(animateColor, color, alpha);
+      animatedPolyline.setColor(newColor);
+
+      if (drawDone == 200) {
+        polyline.setVisible(true);
+        animatedPolyline.setVisible(false);
+        drawDone = 0;
+      }
+    }
+  }
+
+  private int fadeColorToStatic(int animateColor, int staticColor, float fraction) {
+    fraction = Math.max(0, Math.min(fraction, 1));
+    int fromAlpha = (int) (255 * (1 - fraction));
+    int fadedAnimateColor = Color.argb(fromAlpha, Color.red(animateColor), Color.green(animateColor), Color.blue(animateColor));
+    if (fraction >= 1) {
+      return staticColor;
+    }
+    return fadedAnimateColor;
+  }
 
     public void setCoordinates(ReadableArray coordinates) {
         this.coordinates = new ArrayList<>(coordinates.size());
@@ -152,6 +243,7 @@ public class MapPolyline extends MapFeature {
         }
     }
 
+
     public PolylineOptions getPolylineOptions() {
         if (polylineOptions == null) {
             polylineOptions = createPolylineOptions();
@@ -180,7 +272,9 @@ public class MapPolyline extends MapFeature {
     @Override
     public void addToMap(Object collection) {
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+        if (polylineCollection == null) return;
         polyline = polylineCollection.addPolyline(getPolylineOptions());
+        animatedPolyline = polylineCollection.addPolyline(new PolylineOptions().color(animateColor).width(width));
         polyline.setClickable(this.tappable);
         if (spans != null){
             polyline.setSpans(spans);
@@ -190,6 +284,9 @@ public class MapPolyline extends MapFeature {
     @Override
     public void removeFromMap(Object collection) {
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+        if (polylineCollection == null) return;
+        stopPolylineAnimation();
+        polylineCollection.remove(animatedPolyline);
         polylineCollection.remove(polyline);
     }
 

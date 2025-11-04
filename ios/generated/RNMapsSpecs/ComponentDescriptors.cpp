@@ -24,6 +24,8 @@ registry->add(concreteComponentDescriptorProvider<RNMapsMapViewComponentDescript
 registry->add(concreteComponentDescriptorProvider<RNMapsMarkerComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsOverlayComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsPolylineComponentDescriptor>());
+registry->add(concreteComponentDescriptorProvider<RNMapsUrlTileComponentDescriptor>());
+registry->add(concreteComponentDescriptorProvider<RNMapsWMSTileComponentDescriptor>());
 }
 
 } // namespace facebook::react

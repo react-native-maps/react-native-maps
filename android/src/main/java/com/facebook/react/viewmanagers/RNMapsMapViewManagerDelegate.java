@@ -199,7 +199,7 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.fitToSuppliedMarkers(view, args.getString(0), args.getString(1), args.getBoolean(2));
         break;
       case "fitToCoordinates":
-        mViewManager.fitToCoordinates(view, args.getString(0), args.getString(1), args.getBoolean(2));
+        mViewManager.fitToCoordinates(view, args.getString(0), args.getString(1), args.getBoolean(2), args.getInt(3));
         break;
       case "setIndoorActiveLevelIndex":
         mViewManager.setIndoorActiveLevelIndex(view, args.getInt(0));

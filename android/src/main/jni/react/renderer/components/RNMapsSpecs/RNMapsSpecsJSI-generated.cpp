@@ -58,6 +58,13 @@ static jsi::Value __hostFunction_NativeAirMapsModuleCxxSpecJSI_getCoordinateForP
     count <= 1 ? throw jsi::JSError(rt, "Expected argument in position 1 to be passed") : args[1].asObject(rt)
   );
 }
+static jsi::Value __hostFunction_NativeAirMapsModuleCxxSpecJSI_updateNearbyMarkersNative(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+  return static_cast<NativeAirMapsModuleCxxSpecJSI *>(&turboModule)->updateNearbyMarkersNative(
+    rt,
+    count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber(),
+    count <= 1 ? throw jsi::JSError(rt, "Expected argument in position 1 to be passed") : args[1].asString(rt)
+  );
+}
 
 NativeAirMapsModuleCxxSpecJSI::NativeAirMapsModuleCxxSpecJSI(std::shared_ptr<CallInvoker> jsInvoker)
   : TurboModule("RNMapsAirModule", jsInvoker) {
@@ -68,6 +75,7 @@ NativeAirMapsModuleCxxSpecJSI::NativeAirMapsModuleCxxSpecJSI(std::shared_ptr<Cal
   methodMap_["getAddressFromCoordinates"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleCxxSpecJSI_getAddressFromCoordinates};
   methodMap_["getPointForCoordinate"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleCxxSpecJSI_getPointForCoordinate};
   methodMap_["getCoordinateForPoint"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleCxxSpecJSI_getCoordinateForPoint};
+  methodMap_["updateNearbyMarkersNative"] = MethodMetadata {2, __hostFunction_NativeAirMapsModuleCxxSpecJSI_updateNearbyMarkersNative};
 }
 
 

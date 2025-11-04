@@ -131,6 +131,7 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     tintColor(convertRawProp(context, rawProps, "tintColor", sourceProps.tintColor, {})),
     toolbarEnabled(convertRawProp(context, rawProps, "toolbarEnabled", sourceProps.toolbarEnabled, {true})),
     userInterfaceStyle(convertRawProp(context, rawProps, "userInterfaceStyle", sourceProps.userInterfaceStyle, {RNMapsMapViewUserInterfaceStyle::System})),
+    customMapStyleString(convertRawProp(context, rawProps, "customMapStyleString", sourceProps.customMapStyleString, {})),
     userLocationAnnotationTitle(convertRawProp(context, rawProps, "userLocationAnnotationTitle", sourceProps.userLocationAnnotationTitle, {})),
     userLocationCalloutEnabled(convertRawProp(context, rawProps, "userLocationCalloutEnabled", sourceProps.userLocationCalloutEnabled, {false})),
     userLocationFastestInterval(convertRawProp(context, rawProps, "userLocationFastestInterval", sourceProps.userLocationFastestInterval, {5000})),
@@ -189,6 +190,38 @@ RNMapsPolylineProps::RNMapsPolylineProps(
     strokeColors(convertRawProp(context, rawProps, "strokeColors", sourceProps.strokeColors, {})),
     strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {0.0})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false}))
+      {}
+RNMapsUrlTileProps::RNMapsUrlTileProps(
+    const PropsParserContext &context,
+    const RNMapsUrlTileProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    doubleTileSize(convertRawProp(context, rawProps, "doubleTileSize", sourceProps.doubleTileSize, {false})),
+    flipY(convertRawProp(context, rawProps, "flipY", sourceProps.flipY, {false})),
+    maximumNativeZ(convertRawProp(context, rawProps, "maximumNativeZ", sourceProps.maximumNativeZ, {100})),
+    maximumZ(convertRawProp(context, rawProps, "maximumZ", sourceProps.maximumZ, {100})),
+    minimumZ(convertRawProp(context, rawProps, "minimumZ", sourceProps.minimumZ, {0})),
+    offlineMode(convertRawProp(context, rawProps, "offlineMode", sourceProps.offlineMode, {false})),
+    shouldReplaceMapContent(convertRawProp(context, rawProps, "shouldReplaceMapContent", sourceProps.shouldReplaceMapContent, {false})),
+    tileCacheMaxAge(convertRawProp(context, rawProps, "tileCacheMaxAge", sourceProps.tileCacheMaxAge, {0})),
+    tileCachePath(convertRawProp(context, rawProps, "tileCachePath", sourceProps.tileCachePath, {})),
+    tileSize(convertRawProp(context, rawProps, "tileSize", sourceProps.tileSize, {256})),
+    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {}))
+      {}
+RNMapsWMSTileProps::RNMapsWMSTileProps(
+    const PropsParserContext &context,
+    const RNMapsWMSTileProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    maximumNativeZ(convertRawProp(context, rawProps, "maximumNativeZ", sourceProps.maximumNativeZ, {100})),
+    maximumZ(convertRawProp(context, rawProps, "maximumZ", sourceProps.maximumZ, {100})),
+    minimumZ(convertRawProp(context, rawProps, "minimumZ", sourceProps.minimumZ, {0})),
+    offlineMode(convertRawProp(context, rawProps, "offlineMode", sourceProps.offlineMode, {false})),
+    shouldReplaceMapContent(convertRawProp(context, rawProps, "shouldReplaceMapContent", sourceProps.shouldReplaceMapContent, {false})),
+    tileCacheMaxAge(convertRawProp(context, rawProps, "tileCacheMaxAge", sourceProps.tileCacheMaxAge, {0})),
+    tileCachePath(convertRawProp(context, rawProps, "tileCachePath", sourceProps.tileCachePath, {})),
+    tileSize(convertRawProp(context, rawProps, "tileSize", sourceProps.tileSize, {256})),
+    urlTemplate(convertRawProp(context, rawProps, "urlTemplate", sourceProps.urlTemplate, {}))
       {}
 
 } // namespace facebook::react

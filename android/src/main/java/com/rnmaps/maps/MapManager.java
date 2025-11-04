@@ -220,7 +220,7 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.setUserLocationFastestInterval(fastestInterval);
     }
 
-    @ReactProp(name = "showsMyLocationButton", defaultBoolean = true)
+    @ReactProp(name = "showsMyLocationButton", defaultBoolean = false)
     public void setShowsMyLocationButton(MapView view, boolean showMyLocationButton) {
         view.setShowsMyLocationButton(showMyLocationButton);
     }
@@ -246,47 +246,57 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "showsBuildings", defaultBoolean = false)
     public void setShowBuildings(MapView view, boolean showBuildings) {
-        view.setShowBuildings(showBuildings);
+        if (view.map != null)
+            view.setShowBuildings(showBuildings);
     }
 
     @ReactProp(name = "showsIndoors", defaultBoolean = false)
     public void setShowIndoors(MapView view, boolean showIndoors) {
-        view.setShowIndoors(showIndoors);
+        if (view.map != null)
+            view.setShowIndoors(showIndoors);
     }
 
     @ReactProp(name = "showsIndoorLevelPicker", defaultBoolean = false)
     public void setShowsIndoorLevelPicker(MapView view, boolean showsIndoorLevelPicker) {
-        view.setShowsIndoorLevelPicker(showsIndoorLevelPicker);
+        if (view.map != null)
+            view.setShowsIndoorLevelPicker(showsIndoorLevelPicker);
     }
 
     @ReactProp(name = "showsCompass", defaultBoolean = false)
     public void setShowsCompass(MapView view, boolean showsCompass) {
-        view.setShowsCompass(showsCompass);
+        if (view.map != null)
+            view.setShowsCompass(showsCompass);
     }
 
     @ReactProp(name = "scrollEnabled", defaultBoolean = false)
     public void setScrollEnabled(MapView view, boolean scrollEnabled) {
-        view.setScrollEnabled(scrollEnabled);
+        if (view.map != null)
+            view.setScrollEnabled(scrollEnabled);
     }
 
     @ReactProp(name = "zoomEnabled", defaultBoolean = false)
     public void setZoomEnabled(MapView view, boolean zoomEnabled) {
-        view.setZoomEnabled(zoomEnabled);
+        if (view.map != null)
+            view.setZoomEnabled(zoomEnabled);
     }
 
     @ReactProp(name = "zoomControlEnabled", defaultBoolean = true)
     public void setZoomControlEnabled(MapView view, boolean zoomControlEnabled) {
-        view.setZoomControlEnabled(zoomControlEnabled);
+        if (view.map != null)
+            view.setZoomControlEnabled(zoomControlEnabled);
     }
 
     @ReactProp(name = "rotateEnabled", defaultBoolean = false)
     public void setRotateEnabled(MapView view, boolean rotateEnabled) {
-        view.setRotateEnabled(rotateEnabled);
+        if (view.map != null)
+            view.setRotateEnabled(rotateEnabled);
     }
 
     @ReactProp(name = "scrollDuringRotateOrZoomEnabled", defaultBoolean = true)
     public void setScrollDuringRotateOrZoomEnabled(MapView view, boolean scrollDuringRotateOrZoomEnabled) {
-        view.setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
+        if(view.map != null) {
+            view.setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
+        }
     }
 
     @ReactProp(name = "cacheEnabled", defaultBoolean = false)
@@ -321,17 +331,20 @@ public class MapManager extends ViewGroupManager<MapView> {
 
     @ReactProp(name = "pitchEnabled", defaultBoolean = false)
     public void setPitchEnabled(MapView view, boolean pitchEnabled) {
-        view.setPitchEnabled(pitchEnabled);
+        if (view.map != null)
+            view.setPitchEnabled(pitchEnabled);
     }
 
     @ReactProp(name = "minZoomLevel")
     public void setMinZoomLevel(MapView view, float minZoomLevel) {
-        view.setMinZoomLevel(minZoomLevel);
+        if (view.map != null)
+            view.setMinZoomLevel(minZoomLevel);
     }
 
     @ReactProp(name = "maxZoomLevel")
     public void setMaxZoomLevel(MapView view, float maxZoomLevel) {
-        view.setMaxZoomLevel(maxZoomLevel);
+        if (view.map != null)
+            view.setMaxZoomLevel(maxZoomLevel);
     }
 
     @ReactProp(name = "kmlSrc")
@@ -409,7 +422,7 @@ public class MapManager extends ViewGroupManager<MapView> {
                 if (args == null) {
                     break;
                 }
-                view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2));
+                view.fitToCoordinates(args.getArray(0), args.getMap(1), args.getBoolean(2),args.getInt(3));
                 break;
 
             case "setMapBoundaries":

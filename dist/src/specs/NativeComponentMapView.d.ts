@@ -871,7 +871,7 @@ export interface NativeCommands {
     animateCamera: (viewRef: React.ElementRef<React.ComponentType>, cameraJSON: string, duration: Int32) => void;
     fitToElements: (viewRef: React.ElementRef<React.ComponentType>, edgePaddingJSON: string, animated: boolean) => void;
     fitToSuppliedMarkers: (viewRef: React.ElementRef<React.ComponentType>, markersJSON: string, edgePaddingJSON: string, animated: boolean) => void;
-    fitToCoordinates: (viewRef: React.ElementRef<React.ComponentType>, coordinatesJSON: string, edgePaddingJSON: string, animated: boolean) => void;
+    fitToCoordinates: (viewRef: React.ElementRef<React.ComponentType>, coordinatesJSON: string, edgePaddingJSON: string, animated: boolean, duration: Int32) => void;
     setIndoorActiveLevelIndex: (viewRef: React.ElementRef<React.ComponentType>, activeLevelIndex: Int32) => void;
 }
 export declare const Commands: NativeCommands;

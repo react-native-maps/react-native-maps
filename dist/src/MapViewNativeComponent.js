@@ -9,5 +9,6 @@ export const Commands = codegenNativeCommands({
         'fitToCoordinates',
         'setMapBoundaries',
         'setIndoorActiveLevelIndex',
+        'scrollMap'
     ],
 });

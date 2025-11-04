@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)animateCamera:(NSString *)cameraJSON duration:(NSInteger)duration;
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated;
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
-- (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
+- (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated duration:(NSInteger)duration;
 - (void)setIndoorActiveLevelIndex:(NSInteger)activeLevelIndex;
 @end
 
@@ -170,8 +170,8 @@ NSObject *arg2 = args[2];
 
 if ([commandName isEqualToString:@"fitToCoordinates"]) {
 #if RCT_DEBUG
-  if ([args count] != 3) {
-    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMapView", commandName, (int)[args count], 3);
+  if ([args count] != 4) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMapView", commandName, (int)[args count], 4);
     return;
   }
 #endif
@@ -200,7 +200,15 @@ NSObject *arg2 = args[2];
 #endif
   BOOL animated = [(NSNumber *)arg2 boolValue];
 
-  [componentView fitToCoordinates:coordinatesJSON edgePaddingJSON:edgePaddingJSON animated:animated];
+NSObject *arg3 = args[3];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg3, [NSNumber class], @"number", @"RNMapsGoogleMapView", commandName, @"4th")) {
+    return;
+  }
+#endif
+  NSInteger duration = [(NSNumber *)arg3 intValue];
+
+  [componentView fitToCoordinates:coordinatesJSON edgePaddingJSON:edgePaddingJSON animated:animated duration:duration];
   return;
 }
 
@@ -239,7 +247,7 @@ if ([commandName isEqualToString:@"setIndoorActiveLevelIndex"]) {
 - (void)animateCamera:(NSString *)cameraJSON duration:(NSInteger)duration;
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated;
 - (void)fitToSuppliedMarkers:(NSString *)markersJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
-- (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated;
+- (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated duration:(NSInteger)duration;
 - (void)setIndoorActiveLevelIndex:(NSInteger)activeLevelIndex;
 @end
 
@@ -390,8 +398,8 @@ NSObject *arg2 = args[2];
 
 if ([commandName isEqualToString:@"fitToCoordinates"]) {
 #if RCT_DEBUG
-  if ([args count] != 3) {
-    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsMapView", commandName, (int)[args count], 3);
+  if ([args count] != 4) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsMapView", commandName, (int)[args count], 4);
     return;
   }
 #endif
@@ -420,7 +428,15 @@ NSObject *arg2 = args[2];
 #endif
   BOOL animated = [(NSNumber *)arg2 boolValue];
 
-  [componentView fitToCoordinates:coordinatesJSON edgePaddingJSON:edgePaddingJSON animated:animated];
+NSObject *arg3 = args[3];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg3, [NSNumber class], @"number", @"RNMapsMapView", commandName, @"4th")) {
+    return;
+  }
+#endif
+  NSInteger duration = [(NSNumber *)arg3 intValue];
+
+  [componentView fitToCoordinates:coordinatesJSON edgePaddingJSON:edgePaddingJSON animated:animated duration:duration];
   return;
 }
 

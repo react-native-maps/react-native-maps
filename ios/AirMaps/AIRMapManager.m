@@ -283,6 +283,13 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(scrollMap:(nonnull NSNumber *)reactTag
+                  xPixel:(CGFloat)xPixel
+                  yPixel:(CGFloat)yPixel
+                  animated:(BOOL)animated)
+{
+}
+
 RCT_EXPORT_METHOD(fitToElements:(nonnull NSNumber *)reactTag
         edgePadding:(nonnull NSDictionary *)edgePadding
         animated:(BOOL)animated)
@@ -355,11 +362,26 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
         callback:(RCTResponseSenderBlock)callback)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[AIRMap class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting AIRMap, got: %@", view);
-        } else {
+        @try {
+            id view = viewRegistry[reactTag];
+            if (![view isKindOfClass:[AIRMap class]]) {
+                NSError *error = [NSError errorWithDomain:@"AirMapSnapshot" 
+                                                     code:1001 
+                                                 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid view returned from registry, expecting AIRMap, got: %@", view]}];
+                callback(@[error]);
+                return;
+            }
+            
             AIRMap *mapView = (AIRMap *)view;
+            
+            if (mapView == nil) {
+                NSError *error = [NSError errorWithDomain:@"AirMapSnapshot" 
+                                                     code:1002 
+                                                 userInfo:@{NSLocalizedDescriptionKey: @"Map view is not available, possibly due to app being in background"}];
+                callback(@[error]);
+                return;
+            }
+            
             MKMapSnapshotOptions *options = [[MKMapSnapshotOptions alloc] init];
 
             options.mapType = mapView.mapType;
@@ -378,6 +400,20 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber *)reactTag
                 quality:quality.floatValue
                 result:result
                 callback:callback];
+        }
+        @catch (NSException *exception) {
+            NSError *error;
+            if ([exception.name isEqualToString:NSInvalidArgumentException] && 
+                [exception.reason containsString:@"background"]) {
+                error = [NSError errorWithDomain:@"AirMapSnapshot" 
+                                            code:1004 
+                                        userInfo:@{NSLocalizedDescriptionKey: @"Cannot take snapshot while app is in background"}];
+            } else {
+                error = [NSError errorWithDomain:@"AirMapSnapshot" 
+                                            code:1003 
+                                        userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Exception in takeSnapshot: %@", exception.reason]}];
+            }
+            callback(@[error]);
         }
     }];
 }

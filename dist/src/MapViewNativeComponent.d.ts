@@ -2,6 +2,7 @@ import type { HostComponent } from 'react-native';
 import type { NativeProps } from './MapView';
 import type { Camera, EdgePadding } from './MapView.types';
 import type { LatLng, Region } from './sharedTypes';
+import type { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 export type MapViewNativeComponentType = HostComponent<NativeProps>;
 interface NativeCommands {
     animateToRegion: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, region: Region, duration: number) => void;
@@ -9,9 +10,10 @@ interface NativeCommands {
     animateCamera: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, camera: Partial<Camera>, duration: number) => void;
     fitToElements: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, edgePadding: EdgePadding, animated: boolean) => void;
     fitToSuppliedMarkers: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, markers: string[], edgePadding: EdgePadding, animated: boolean) => void;
-    fitToCoordinates: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, coordinates: LatLng[], edgePadding: EdgePadding, animated: boolean) => void;
+    fitToCoordinates: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, coordinates: LatLng[], edgePadding: EdgePadding, animated: boolean, duration: Int32) => void;
     setMapBoundaries: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, northEast: LatLng, southWest: LatLng) => void;
     setIndoorActiveLevelIndex: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, activeLevelIndex: number) => void;
+    scrollMap: (viewRef: NonNullable<React.RefObject<MapViewNativeComponentType>['current']>, xPixel: number, YPixel: number, animated: boolean) => void;
 }
 export declare const Commands: NativeCommands;
 export {};

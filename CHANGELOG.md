@@ -3,7 +3,7 @@
 ## [1.23.12](https://github.com/react-native-maps/react-native-maps/compare/v1.23.11...v1.23.12) (2025-06-08)
 
 
-### Bug Fixes
+### Features
 
 * **android:** custom markers size always 100 ([#5103](https://github.com/react-native-maps/react-native-maps/issues/5103)) ([05a2293](https://github.com/react-native-maps/react-native-maps/commit/05a22938fdf2987b8e14bd872f7cb102cf1c261c))
 
@@ -93,7 +93,7 @@
 * ts-import for decorateMapComponent ([#5472](https://github.com/react-native-maps/react-native-maps/issues/5472)) ([92ab5ea](https://github.com/react-native-maps/react-native-maps/commit/92ab5ea6787a07d02a0081a9334d51505d3882bc))
 
 
-### Features
+### Bug Fixes
 
 * monorepo to fix auto-linking for example and other issues ([4f70604](https://github.com/react-native-maps/react-native-maps/commit/4f7060414125c56d351876557fdd92bdb1589e74))
 * monorepo to fix auto-linking for example and other issues ([9f4ebc5](https://github.com/react-native-maps/react-native-maps/commit/9f4ebc58c740ca3db1d0e3db2c63a03eb0bfada8))
@@ -199,7 +199,7 @@
 # [1.22.0](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0...v1.22.0) (2025-04-15)
 
 
-### Features
+### Bug Fixes
 
 * add Expo config plugin ([#5409](https://github.com/react-native-maps/react-native-maps/issues/5409)) ([5a93956](https://github.com/react-native-maps/react-native-maps/commit/5a939565c23ffa5f40b963b19e1a3f9631958756))
 
@@ -262,7 +262,7 @@
 # [1.21.0-alpha.139](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.138...v1.21.0-alpha.139) (2025-04-05)
 
 
-### Features
+### Bug Fixes
 
 * **android:** fabric support ([43fddda](https://github.com/react-native-maps/react-native-maps/commit/43fddda4c64e383d14fa9c9e8f57d5b000398416))
 
@@ -304,7 +304,7 @@
 # [1.21.0-alpha.133](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.132...v1.21.0-alpha.133) (2025-04-01)
 
 
-### Bug Fixes
+### Features
 
 * onMapReady was blocking map rendering ([8cddc33](https://github.com/react-native-maps/react-native-maps/commit/8cddc33573cda1c530c2886642e61b92a8515aad))
 
@@ -448,6 +448,7 @@
 
 # [1.21.0-alpha.113](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.112...v1.21.0-alpha.113) (2025-03-23)
 
+### Reverts
 
 ### Features
 
@@ -455,6 +456,7 @@
 
 # [1.21.0-alpha.112](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.111...v1.21.0-alpha.112) (2025-03-21)
 
+### Features
 
 ### Features
 
@@ -462,6 +464,7 @@
 
 # [1.21.0-alpha.111](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.110...v1.21.0-alpha.111) (2025-03-21)
 
+### Features
 
 ### Features
 
@@ -469,6 +472,7 @@
 
 # [1.21.0-alpha.110](https://github.com/react-native-maps/react-native-maps/compare/v1.21.0-alpha.109...v1.21.0-alpha.110) (2025-03-16)
 
+### Features
 
 ### Features
 

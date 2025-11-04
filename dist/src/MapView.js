@@ -25,6 +25,8 @@ class MapView extends React.Component {
     static Animated;
     map;
     fabricMap = React.createRef();
+    callMapReady;
+    mapReadytimerId;
     constructor(props) {
         super(props);
         this.map = React.createRef();
@@ -33,18 +35,31 @@ class MapView extends React.Component {
         };
         this._onMapReady = this._onMapReady.bind(this);
         this._onChange = this._onChange.bind(this);
+        this.callMapReady = true;
+        this.mapReadytimerId = setTimeout(() => {
+            this.callMapReady = false;
+            const { onMapReady } = this.props;
+            this.setState({ isReady: true }, () => {
+                if (onMapReady) {
+                    onMapReady();
+                }
+            });
+        }, 100);
     }
     setNativeProps(props) {
         // @ts-ignore
         this.map.current?.setNativeProps(props);
     }
     _onMapReady() {
-        const { onMapReady } = this.props;
-        this.setState({ isReady: true }, () => {
-            if (onMapReady) {
-                onMapReady();
-            }
-        });
+        if (this.callMapReady) {
+            clearTimeout(this.mapReadytimerId);
+            const { onMapReady } = this.props;
+            this.setState({ isReady: true }, () => {
+                if (onMapReady) {
+                    onMapReady();
+                }
+            });
+        }
     }
     _onChange({ nativeEvent }) {
         const isGesture = nativeEvent.isGesture;
@@ -74,9 +89,11 @@ class MapView extends React.Component {
     }
     animateCamera(camera, opts) {
         if (this.fabricMap.current) {
+            console.log('hello hey bye');
             this.fabricMap.current.animateCamera(camera, opts?.duration ? opts.duration : 500);
         }
         else if (this.map.current) {
+            console.log('hello hey bye. 2');
             Commands.animateCamera(this.map.current, camera, opts?.duration ? opts.duration : 500);
         }
     }
@@ -113,12 +130,12 @@ class MapView extends React.Component {
         }
     }
     fitToCoordinates(coordinates = [], options = {}) {
-        const { edgePadding = { top: 0, right: 0, bottom: 0, left: 0 }, animated = true, } = options;
+        const { edgePadding = { top: 0, right: 0, bottom: 0, left: 0 }, animated = true, duration = 400, } = options;
         if (this.fabricMap.current) {
-            this.fabricMap.current.fitToCoordinates(coordinates, edgePadding, animated);
+            this.fabricMap.current.fitToCoordinates(coordinates, edgePadding, animated, duration);
         }
         else if (this.map.current) {
-            Commands.fitToCoordinates(this.map.current, coordinates, edgePadding, animated);
+            Commands.fitToCoordinates(this.map.current, coordinates, edgePadding, animated, duration);
         }
     }
     /**

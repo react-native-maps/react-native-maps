@@ -92,6 +92,10 @@ namespace JS {
                         point:(JS::NativeAirMapsModule::Point &)point
                       resolve:(RCTPromiseResolveBlock)resolve
                        reject:(RCTPromiseRejectBlock)reject;
+- (void)updateNearbyMarkersNative:(double)tag
+                      markersJson:(NSString *)markersJson
+                          resolve:(RCTPromiseResolveBlock)resolve
+                           reject:(RCTPromiseRejectBlock)reject;
 
 @end
 

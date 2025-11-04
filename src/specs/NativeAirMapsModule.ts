@@ -31,6 +31,7 @@ export interface Spec extends TurboModule {
   getAddressFromCoordinates(tag: Double, coordinate: LatLng): Promise<Address>;
   getPointForCoordinate(tag: Double, coordinate: LatLng): Promise<Point>;
   getCoordinateForPoint(tag: Double, point: Point): Promise<LatLng>;
+  updateNearbyMarkersNative(tag:Double,markersJson:string ): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMapsAirModule');

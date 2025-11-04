@@ -1,6 +1,6 @@
-import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-import {findNodeHandle} from 'react-native';
-import type {LatLng, Point, Region} from './sharedTypes';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { findNodeHandle } from 'react-native';
+import type { LatLng, Point, Region } from './sharedTypes';
 import type {
   Address,
   Camera,
@@ -10,7 +10,8 @@ import type {
 import NativeAirMapsModule, {
   type MapBoundaries,
 } from './specs/NativeAirMapsModule';
-import type {MapFabricNativeProps} from './specs/NativeComponentMapView';
+import type { MapFabricNativeProps } from './specs/NativeComponentMapView';
+import type { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type FabricMapViewProps = MapFabricNativeProps;
 
@@ -32,6 +33,7 @@ export interface FabricMapHandle {
     coordinates: LatLng[],
     edgePadding: EdgePadding,
     animated: boolean,
+    duration: Int32
   ) => void;
 
   getMapBoundaries: () => Promise<MapBoundaries>;
@@ -205,6 +207,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
           coordinates: LatLng[],
           edgePadding: EdgePadding,
           animated: boolean,
+          duration: Int32
         ) {
           if (fabricRef.current) {
             try {
@@ -213,6 +216,7 @@ const createFabricMap = (ViewComponent: React.ComponentType, Commands: any) => {
                 JSON.stringify(coordinates),
                 JSON.stringify(edgePadding),
                 animated,
+                duration
               );
             } catch (error) {
               throw new Error('Failed to fitToCoordinates');

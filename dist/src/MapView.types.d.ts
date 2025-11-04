@@ -1,3 +1,4 @@
+import type { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ClickEvent, LatLng, Point, Region } from './sharedTypes';
 import type { NativeSyntheticEvent } from 'react-native';
 export type Camera = {
@@ -122,6 +123,7 @@ export type ChangeEvent = NativeSyntheticEvent<{
 export type FitToOptions = {
     edgePadding?: EdgePadding;
     animated?: boolean;
+    duration?: Int32;
 };
 export type BoundingBox = {
     northEast: LatLng;
@@ -158,4 +160,4 @@ export type CameraZoomRange = {
     maxCenterCoordinateDistance?: number;
     animated?: boolean;
 };
-export type NativeCommandName = 'animateCamera' | 'animateToRegion' | 'coordinateForPoint' | 'fitToCoordinates' | 'fitToElements' | 'fitToSuppliedMarkers' | 'getAddressFromCoordinates' | 'getCamera' | 'getMapBoundaries' | 'getMarkersFrames' | 'pointForCoordinate' | 'setCamera' | 'setIndoorActiveLevelIndex' | 'setMapBoundaries' | 'takeSnapshot';
+export type NativeCommandName = 'animateCamera' | 'animateToRegion' | 'coordinateForPoint' | 'fitToCoordinates' | 'fitToElements' | 'fitToSuppliedMarkers' | 'getAddressFromCoordinates' | 'getCamera' | 'getMapBoundaries' | 'getMarkersFrames' | 'pointForCoordinate' | 'setCamera' | 'setIndoorActiveLevelIndex' | 'setMapBoundaries' | 'takeSnapshot' | 'scrollMap';
