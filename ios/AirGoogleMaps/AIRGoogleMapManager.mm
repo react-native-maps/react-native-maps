@@ -241,7 +241,8 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
                   coordinates:(nonnull NSArray<AIRGoogleMapCoordinate *> *)coordinates
                   edgePadding:(nonnull NSDictionary *)edgePadding
-                  animated:(BOOL)animated)
+                  animated:(BOOL)animated
+                  duration:(NSInteger)duration)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         id view = viewRegistry[reactTag];
@@ -249,7 +250,7 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
             RCTLogError(@"Invalid view returned from registry, expecting AIRGoogleMap, got: %@", view);
         } else {
             AIRGoogleMap *mapView = (AIRGoogleMap *)view;
-            [mapView fitToCoordinates:coordinates withEdgePadding:edgePadding animated:animated];
+            [mapView fitToCoordinates:coordinates withEdgePadding:edgePadding animated:animated duration:duration];
         }
     }];
 }

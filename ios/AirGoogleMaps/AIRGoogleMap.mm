@@ -156,7 +156,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     return _didPrepareMap;
 }
 
--(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated
+-(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated duration:(NSInteger)duration
 {
     CLLocationCoordinate2D myLocation = coordinates.firstObject.coordinate;
          GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:myLocation coordinate:myLocation];
@@ -173,7 +173,10 @@ id regionAsJSON(MKCoordinateRegion region) {
          GMSCameraUpdate *cameraUpdate = [GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsMake(top, left, bottom, right)];
 
          if (animated) {
+           [CATransaction begin];
+           [CATransaction setAnimationDuration:duration / 1000.0]; // Convert milliseconds to seconds
            [self animateWithCameraUpdate: cameraUpdate];
+           [CATransaction commit];
          } else {
            [self moveCamera: cameraUpdate];
          }

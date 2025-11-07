@@ -209,7 +209,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     return marker;
 }
 // Create Polyline with coordinates
--(void) fitToCoordinates:(NSArray<AIRMapCoordinate*>*) coordinates edgePadding:(UIEdgeInsets) edgeInsets animated:(Boolean) animated {
+-(void) fitToCoordinates:(NSArray<AIRMapCoordinate*>*) coordinates edgePadding:(UIEdgeInsets) edgeInsets animated:(Boolean) animated duration:(NSInteger)duration {
     CLLocationCoordinate2D coords[coordinates.count];
     for(int i = 0; i < coordinates.count; i++)
     {
@@ -219,7 +219,15 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
     // Set Map viewport
 
-    [self setVisibleMapRect:[polyline boundingMapRect] edgePadding:edgeInsets animated:animated];
+
+    if (animated) {
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:duration / 1000.0]; // Convert milliseconds to seconds
+        [self setVisibleMapRect:[polyline boundingMapRect] edgePadding:edgeInsets animated:animated];
+        [CATransaction commit];
+    } else {
+        [self setVisibleMapRect:[polyline boundingMapRect] edgePadding:edgeInsets animated:animated];
+    }
 }
 
 

@@ -87,7 +87,7 @@
 - (NSDictionary*) getMarkersFramesWithOnlyVisible:(BOOL)onlyVisible;
 - (instancetype)initWithMapId:(NSString *)mapId initialCamera:(GMSCameraPosition*) camera backgroundColor:(UIColor *) backgroundColor andZoomTapEnabled:(BOOL)zoomTapEnabled;
 -(void) fitToSuppliedMarkers:(NSArray*) markers withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated;
--(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated;
+-(void) fitToCoordinates:(NSArray<AIRGoogleMapCoordinate *> *) coordinates withEdgePadding:(NSDictionary*) edgePadding animated:(BOOL)animated duration:(NSInteger)duration;
 -(void) fitToElementsWithEdgePadding:(nonnull NSDictionary *)edgePadding
              animated:(BOOL)animated;
 @end

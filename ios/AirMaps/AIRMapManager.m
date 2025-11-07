@@ -338,7 +338,8 @@ RCT_EXPORT_METHOD(fitToSuppliedMarkers:(nonnull NSNumber *)reactTag
 RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
                   coordinates:(nonnull NSArray<AIRMapCoordinate *> *)coordinates
                   edgePadding:(nonnull NSDictionary *)edgePadding
-                  animated:(BOOL)animated)
+                  animated:(BOOL)animated
+                  duration:(NSInteger)duration)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         id view = viewRegistry[reactTag];
@@ -347,7 +348,7 @@ RCT_EXPORT_METHOD(fitToCoordinates:(nonnull NSNumber *)reactTag
         } else {
             AIRMap *mapView = (AIRMap *)view;
             UIEdgeInsets edgeInsets = [RCTConvert UIEdgeInsets:edgePadding];
-            [mapView fitToCoordinates: coordinates edgePadding:edgeInsets animated:animated];
+            [mapView fitToCoordinates: coordinates edgePadding:edgeInsets animated:animated duration:duration];
         }
     }];
 }
