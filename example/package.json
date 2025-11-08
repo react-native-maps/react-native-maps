@@ -11,23 +11,24 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "react": "19.0.0",
-    "react-native": "0.79.3"
+    "react": "19.1.0",
+    "react-native": "0.81.0"
   },
   "devDependencies": {
-    "@babel/core": "7.26.10",
-    "@babel/preset-env": "7.26.9",
-    "@babel/runtime": "7.27.0",
-    "@react-native-community/cli": "18.0.0",
-    "@react-native-community/cli-platform-android": "18.0.0",
-    "@react-native-community/cli-platform-ios": "18.0.0",
-    "@react-native/babel-preset": "0.79.3",
-    "@react-native/metro-config": "0.79.3",
-    "@react-native/typescript-config": "0.79.3",
-    "@types/react": "19.0.0",
+    "@babel/core": "7.28.0",
+    "@babel/preset-env": "7.28.0",
+    "@babel/preset-typescript": "^7.27.1",
+    "@babel/runtime": "7.27.6",
+    "@react-native-community/cli": "20.0.0",
+    "@react-native-community/cli-platform-android": "20.0.0",
+    "@react-native-community/cli-platform-ios": "20.0.0",
+    "@react-native/babel-preset": "0.81.0",
+    "@react-native/metro-config": "0.81.0",
+    "@react-native/typescript-config": "0.81.0",
+    "@types/react": "19.1.8",
     "babel-plugin-module-resolver": "5.0.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">= 20.19.4"
   }
 }

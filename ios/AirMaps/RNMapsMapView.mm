@@ -14,7 +14,7 @@
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
 #import <ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>
 #import <ReactNativeMaps/generated/RNMapsSpecs.h>
-#import <ReactNativeMaps/generated/RNMapsHostVewDelegate.h>
+#import <ReactNativeMaps/generated/RNMapsHostViewDelegate.h>
 #import <ReactNativeMaps/generated/ComponentDescriptors.h>
 #import <ReactNativeMaps/generated/EventEmitters.h>
 #import <ReactNativeMaps/generated/Props.h>
@@ -131,7 +131,7 @@ using namespace facebook::react;
     _view = (AIRMap *)[_legacyMapManager view];
 
     self.contentView = _view;
-    
+
     _view.onLongPress = [self](NSDictionary* dictionary) {
         if (_eventEmitter) {
             // Extract values from the NSDictionary
@@ -206,7 +206,7 @@ using namespace facebook::react;
                 .region.longitude = [regionDict[@"longitude"] doubleValue],
                 .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                 .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                .continuous = [dictionary[@"continuous"] boolValue],
+                .isGesture = [dictionary[@"isGesture"] boolValue],
             };
             mapViewEventEmitter->onRegionChange(data);
         }
@@ -277,6 +277,13 @@ using namespace facebook::react;
             facebook::react::RNMapsMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
                 .latitude = [coordinateDict[@"latitude"] doubleValue],
                 .longitude = [coordinateDict[@"longitude"] doubleValue],
+                .altitude =[coordinateDict[@"altitude"] doubleValue],
+                .timestamp =[coordinateDict[@"timestamp"] doubleValue],
+                .accuracy =[coordinateDict[@"accuracy"] floatValue],
+                .speed =[coordinateDict[@"speed"] floatValue],
+                .heading =[coordinateDict[@"heading"] floatValue],
+                .altitudeAccuracy =[coordinateDict[@"altitudeAccuracy"] floatValue],
+
             };
             NSString* str = @"";
             if (errorDict){
@@ -339,9 +346,25 @@ using namespace facebook::react;
                 .region.longitude = [regionDict[@"longitude"] doubleValue],
                 .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
                 .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
-                .continuous = [dictionary[@"continuous"] boolValue],
+                .isGesture = [dictionary[@"isGesture"] boolValue],
             };
             mapViewEventEmitter->onRegionChangeStart(data);
+        }
+    };
+
+    _view.onRegionChangeComplete = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+
+            NSDictionary* regionDict = dictionary[@"region"];
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsMapViewEventEmitter::OnRegionChangeComplete data = {
+                .region.latitude = [regionDict[@"latitude"] doubleValue],
+                .region.longitude = [regionDict[@"longitude"] doubleValue],
+                .region.latitudeDelta = [regionDict[@"latitudeDelta"] doubleValue],
+                .region.longitudeDelta = [regionDict[@"longitudeDelta"] doubleValue],
+                .isGesture = [dictionary[@"isGesture"] boolValue],
+            };
+            mapViewEventEmitter->onRegionChangeComplete(data);
         }
     };
 
@@ -502,6 +525,7 @@ if (!(newViewProps.name.latitude == 0 &&                                    \
 #define REMAP_MAPVIEW_CAMERA_PROP(name)                                    \
 if (newViewProps.name.center.latitude != oldViewProps.name.center.latitude || \
 newViewProps.name.center.longitude != oldViewProps.name.center.longitude || \
+newViewProps.name.altitude != oldViewProps.name.altitude ||       \
 newViewProps.name.heading != oldViewProps.name.heading ||         \
 newViewProps.name.pitch != oldViewProps.name.pitch) {             \
 CLLocationCoordinate2D center = CLLocationCoordinate2DMake(       \
@@ -528,26 +552,26 @@ newViewProps.name.right);           \
 
 #define REMAP_MAPVIEW_MAPTYPE(rnMapType) MKMapType##rnMapType
 
-
     REMAP_MAPVIEW_PROP(cacheEnabled)
-
     REMAP_MAPVIEW_PROP(followsUserLocation)
     REMAP_MAPVIEW_PROP(loadingEnabled)
-
     REMAP_MAPVIEW_PROP(scrollEnabled)
     REMAP_MAPVIEW_PROP(handlePanDrag)
-
     REMAP_MAPVIEW_PROP(maxDelta)
     REMAP_MAPVIEW_PROP(maxZoom)
     REMAP_MAPVIEW_PROP(minDelta)
     REMAP_MAPVIEW_PROP(minZoom)
-
     REMAP_MAPVIEW_PROP(showsCompass)
     REMAP_MAPVIEW_PROP(showsScale)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(userLocationCalloutEnabled)
     REMAP_MAPVIEW_PROP(zoomEnabled)
-
+    REMAP_MAPVIEW_PROP(loadingEnabled)
+    REMAP_MAPVIEW_PROP(showsTraffic)
+    REMAP_MAPVIEW_PROP(pitchEnabled)
+    REMAP_MAPVIEW_PROP(showsBuildings)
+    REMAP_MAPVIEW_PROP(rotateEnabled)
+    REMAP_MAPVIEW_PROP(showsPointsOfInterests)
 
     REMAP_MAPVIEW_POINT_PROP(compassOffset)
 
@@ -595,6 +619,13 @@ newViewProps.name.right);           \
         [_view setCameraZoomRange:zoomRange animated:newViewProps.cameraZoomRange.animated];
     }
 
+    if (oldViewProps.pointsOfInterestFilter != newViewProps.pointsOfInterestFilter) {
+        NSMutableArray<NSString *> *filterArray = [NSMutableArray new];
+        for (const auto& str : newViewProps.pointsOfInterestFilter) {
+            [filterArray addObject:RCTNSStringFromString(str)];
+        }
+        _view.pointsOfInterestFilter = filterArray;
+    }
 
     [super updateProps:props oldProps:oldProps];
 }

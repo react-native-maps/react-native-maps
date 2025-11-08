@@ -33,6 +33,9 @@ public class RNMapsGooglePolygonManagerDelegate<T extends View, U extends BaseVi
       case "strokeColor":
         mViewManager.setStrokeColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
+      case "strokeWidth":
+        mViewManager.setStrokeWidth(view, value == null ? 1f : ((Double) value).floatValue());
+        break;
       case "geodesic":
         mViewManager.setGeodesic(view, value == null ? false : (boolean) value);
         break;

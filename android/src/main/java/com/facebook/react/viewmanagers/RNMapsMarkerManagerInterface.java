@@ -12,17 +12,20 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMapsMarkerManagerInterface<T extends View> {
+public interface RNMapsMarkerManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setAnchor(T view, @Nullable ReadableMap value);
   void setCalloutAnchor(T view, @Nullable ReadableMap value);
   void setImage(T view, @Nullable ReadableMap value);
   void setCalloutOffset(T view, @Nullable ReadableMap value);
   void setDisplayPriority(T view, @Nullable String value);
+  void setCenterOffset(T view, @Nullable ReadableMap value);
   void setCoordinate(T view, @Nullable ReadableMap value);
   void setDescription(T view, @Nullable String value);
   void setDraggable(T view, boolean value);
   void setTitle(T view, @Nullable String value);
+  void setTracksViewChanges(T view, boolean value);
   void setIdentifier(T view, @Nullable String value);
   void setIsPreselected(T view, boolean value);
   void setOpacity(T view, double value);

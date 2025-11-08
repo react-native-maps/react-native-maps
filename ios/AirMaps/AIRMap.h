@@ -49,6 +49,8 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) CGFloat maxZoom;
 @property (nonatomic, assign) CGPoint compassOffset;
 @property (nonatomic, assign) UIEdgeInsets mapPadding;
+@property (nonatomic, assign) BOOL showsPointsOfInterests;
+@property (nonatomic, copy) NSArray<NSString *> *pointsOfInterestFilter;
 
 @property (nonatomic, assign) CLLocationCoordinate2D pendingCenter;
 @property (nonatomic, assign) MKCoordinateSpan pendingSpan;
@@ -57,7 +59,9 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
 
 @property (nonatomic, copy) RCTDirectEventBlock onMapReady;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionChangeComplete;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTDirectEventBlock onPanDrag;
@@ -70,7 +74,6 @@ extern const NSInteger AIRMapMaxZoomLevel;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDragEnd;
 
 @property (nonatomic, copy) RCTDirectEventBlock onCalloutPress;
-@property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;
 @property (nonatomic, copy) RCTDirectEventBlock onUserLocationChange;
 
 - (void)cacheViewIfNeeded;

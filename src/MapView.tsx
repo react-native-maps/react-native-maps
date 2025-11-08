@@ -27,6 +27,7 @@ import type {
   Point,
   Provider,
   Region,
+  MKPointOfInterestCategoryType,
 } from './sharedTypes';
 import type {
   ActiveIndoorLevel,
@@ -448,7 +449,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  onRegionChangeStart?: (event: NativeSyntheticEvent<Details>) => void;
+  onRegionChangeStart?: (region: Region, details: Details) => void;
 
   /**
    * Callback that is called continuously when the region changes, such as when a user is dragging the map.
@@ -552,10 +553,10 @@ export type MapViewProps = ViewProps & {
   showsBuildings?: boolean;
 
   /**
-   * If `false` compass won't be displayed on the map.
+   * If `false` compass is not displayed on the map.
    *
    * @default true
-   * @platform iOS: Supported (adaptive on Apple Maps, visible only if map is not pointing north)
+   * @platform iOS: Supported (adaptive, visible only if the map is not pointing north)
    * @platform Android: Supported
    */
   showsCompass?: boolean;
@@ -581,11 +582,25 @@ export type MapViewProps = ViewProps & {
   /**
    * If `false` hide the button to move map to the current user's location.
    *
-   * @default true
+   * @default false
    * @platform iOS: Google Maps only
    * @platform Android: Supported
    */
   showsMyLocationButton?: boolean;
+
+  /**
+   * A Boolean indicating whether points of interest should be displayed.
+   * Use `pointsOfInterestFilter` for more granular control.
+   * @see pointsOfInterestFilter
+   */
+  showsPointsOfInterests?: boolean;
+
+  /**
+   * An array of category strings to show on the map.
+   * If this is set, it takes precedence over `showsPointsOfInterests`.
+   * @see showsPointsOfInterests
+   */
+  pointsOfInterestFilter?: MKPointOfInterestCategoryType[];
 
   /**
    * A Boolean indicating whether the map shows scale information.
@@ -595,6 +610,15 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Not supported
    */
   showsScale?: boolean;
+
+  /**
+   * A Boolean value indicating whether the map displays traffic information.
+   *
+   * @default false
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  showsTraffic?: boolean;
 
   /**
    * If `true` the users location will be displayed on the map.
@@ -765,7 +789,6 @@ class MapView extends React.Component<MapViewProps, State> {
     };
 
     this._onMapReady = this._onMapReady.bind(this);
-    this._onChange = this._onChange.bind(this);
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -780,19 +803,6 @@ class MapView extends React.Component<MapViewProps, State> {
         onMapReady();
       }
     });
-  }
-
-  private _onChange({nativeEvent}: ChangeEvent) {
-    const isGesture = nativeEvent.isGesture;
-    const details = {isGesture};
-
-    if (nativeEvent.continuous) {
-      if (this.props.onRegionChange) {
-        this.props.onRegionChange(nativeEvent.region, details);
-      }
-    } else if (this.props.onRegionChangeComplete) {
-      this.props.onRegionChangeComplete(nativeEvent.region, details);
-    }
   }
 
   getCamera(): Promise<Camera> {
@@ -1076,19 +1086,17 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   };
   private handleRegionChange = (event: NativeSyntheticEvent<any>) => {
-    const isGesture = event.nativeEvent.isGesture;
-    const details = {isGesture};
-    if (event.nativeEvent.continuous) {
-      if (this.props.onRegionChange) {
-        this.props.onRegionChange(event.nativeEvent.region, details);
-      }
-    } else if (this.props.onRegionChangeComplete) {
-      this.props.onRegionChangeComplete(event.nativeEvent.region, details);
+    if (this.props.onRegionChange) {
+      this.props.onRegionChange(event.nativeEvent.region, {
+        isGesture: event.nativeEvent.isGesture,
+      });
     }
   };
   private handleRegionChangeStarted = (event: NativeSyntheticEvent<any>) => {
     if (this.props.onRegionChangeStart) {
-      this.props.onRegionChangeStart(event);
+      this.props.onRegionChangeStart(event.nativeEvent.region, {
+        isGesture: event.nativeEvent.isGesture,
+      });
     }
   };
 
@@ -1108,10 +1116,10 @@ class MapView extends React.Component<MapViewProps, State> {
   };
 
   private handleRegionChangeComplete = (event: NativeSyntheticEvent<any>) => {
-    const isGesture = event.nativeEvent.isGesture;
-    const details = {isGesture};
     if (this.props.onRegionChangeComplete) {
-      this.props.onRegionChangeComplete(event.nativeEvent.region, details);
+      this.props.onRegionChangeComplete(event.nativeEvent.region, {
+        isGesture: event.nativeEvent.isGesture,
+      });
     }
   };
 
@@ -1173,6 +1181,8 @@ class MapView extends React.Component<MapViewProps, State> {
       // @ts-ignore
       onIndoorLevelActivated: this.handleIndoorLevelActivated,
       onLongPress: this.handleLongPress,
+      showsPointsOfInterests: this.props.showsPointsOfInterests,
+      pointsOfInterestFilter: this.props.pointsOfInterestFilter,
       ...restProps,
     };
     if (this.props.region) {
