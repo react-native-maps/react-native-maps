@@ -827,13 +827,11 @@ class MapView extends React.Component<MapViewProps, State> {
 
   animateCamera(camera: Partial<Camera>, opts?: { duration?: number }) {
     if (this.fabricMap.current) {
-      console.log('hello hey bye')
       this.fabricMap.current.animateCamera(
         camera,
         opts?.duration ? opts.duration : 500,
       );
     } else if (this.map.current) {
-      console.log('hello hey bye. 2')
       Commands.animateCamera(
         this.map.current,
         camera,

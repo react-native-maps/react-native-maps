@@ -495,6 +495,8 @@ public class MapMarker extends MapFeature {
     @Override
     public void addToMap(Object collection) {
         MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
+        if (markerCollection == null)
+            return;
         marker = markerCollection.addMarker(getMarkerOptions());
         this.markerCollectionRef = new SoftReference<>(markerCollection);
         updateTracksViewChanges();
