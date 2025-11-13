@@ -334,7 +334,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 onMapReady(map);
                 if (savedFeatures != null && !savedFeatures.isEmpty()) {
                     for (int i = 0; i < savedFeatures.size(); i++) {
-                        addFeature(savedFeatures.get(i), i);
+                        MapFeature savedFeature = savedFeatures.get(i);
+                        if (savedFeature != null) {
+                            addFeature(savedFeature, i);
+                        }
                     }
                 }
                 savedFeatures = null;
@@ -1159,14 +1162,23 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     private void safeAddFeature(int index, MapFeature mapFeature){
         if(paused || features.size() < index){
-            if(savedFeatures.size() < index){
-                savedFeatures.set(index, mapFeature);
-            } else {
-                savedFeatures.add(index, mapFeature);
+            if (savedFeatures == null) {
+                savedFeatures = new ArrayList<>();
             }
+
+            // Ensure the list is large enough to set at the given index
+            while(savedFeatures.size() <= index){
+                savedFeatures.add(null);
+            }
+            savedFeatures.set(index, mapFeature);
             return;
         }
-        features.add(index, mapFeature);
+
+        // Ensure the list is large enough to set at the given index
+        while(features.size() <= index){
+            features.add(null);
+        }
+        features.set(index, mapFeature);
     }
 
     public void addFeature(View child, int index) {
