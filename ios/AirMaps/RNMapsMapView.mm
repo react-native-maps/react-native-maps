@@ -5,6 +5,7 @@
 //  Created by Salah Ghanim on 23.11.24.
 //  Copyright © 2024 react-native-maps. All rights reserved.
 //
+#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMapsMapView.h"
 #import "AIRMap.h"
@@ -636,3 +637,5 @@ Class<RCTComponentViewProtocol> RNMapsMapViewCls(void)
 {
     return RNMapsMapView.class;
 }
+
+#endif
