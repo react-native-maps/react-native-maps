@@ -335,7 +335,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 onMapReady(map);
                 if (savedFeatures != null && !savedFeatures.isEmpty()) {
                     for (int i = 0; i < savedFeatures.size(); i++) {
-                        addFeature(savedFeatures.get(i), i);
+                        MapFeature savedFeature = savedFeatures.get(i);
+                        if (savedFeature != null) {
+                            addFeature(savedFeature, i);
+                        }
                     }
                 }
                 savedFeatures = null;
@@ -363,6 +366,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             // Pause safely if not already paused
             if (!paused) {
                 onPause();
+                paused = true;
             }
         }
 
@@ -783,13 +787,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         destroyed = true;
         savedMapState = null;
         savedFeatures = null;
-
-        if (!paused) {
-            onPause();
-            paused = true;
+        try {
+            if (!paused) {
+                onPause();
+                paused = true;
+            }
+            onDestroy();
+            detachLifecycleObserver();
+        } catch (Exception exception){
+            Log.e("MapView", "exception with destroying", exception);
         }
-        onDestroy();
-        detachLifecycleObserver();
     }
 
     public void setInitialCameraSet(boolean initialCameraSet) {
@@ -1158,13 +1165,34 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         this.handlePanDrag = handlePanDrag;
     }
 
+    private void safeAddFeature(int index, MapFeature mapFeature){
+        if(paused || features.size() < index){
+            if (savedFeatures == null) {
+                savedFeatures = new ArrayList<>();
+            }
+
+            // Ensure the list is large enough to set at the given index
+            while(savedFeatures.size() <= index){
+                savedFeatures.add(null);
+            }
+            savedFeatures.set(index, mapFeature);
+            return;
+        }
+
+        // Ensure the list is large enough to set at the given index
+        while(features.size() <= index){
+            features.add(null);
+        }
+        features.set(index, mapFeature);
+    }
+
     public void addFeature(View child, int index) {
         // Our desired API is to pass up annotations/overlays as children to the mapview component.
         // This is where we intercept them and do the appropriate underlying mapview action.
         if (child instanceof MapMarker) {
             MapMarker annotation = (MapMarker) child;
             annotation.addToMap(markerCollection);
-            features.add(index, annotation);
+            safeAddFeature(index, annotation);
 
             // Allow visibility event to be triggered later
             int visibility = annotation.getVisibility();
@@ -1191,47 +1219,47 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         } else if (child instanceof MapPolyline) {
             MapPolyline polylineView = (MapPolyline) child;
             polylineView.addToMap(polylineCollection);
-            features.add(index, polylineView);
+            safeAddFeature(index, polylineView);
             Polyline polyline = (Polyline) polylineView.getFeature();
             polylineMap.put(polyline, polylineView);
         } else if (child instanceof MapGradientPolyline) {
             MapGradientPolyline polylineView = (MapGradientPolyline) child;
             polylineView.addToMap(map);
-            features.add(index, polylineView);
+            safeAddFeature(index, polylineView);
             TileOverlay tileOverlay = (TileOverlay) polylineView.getFeature();
             gradientPolylineMap.put(tileOverlay, polylineView);
         } else if (child instanceof MapPolygon) {
             MapPolygon polygonView = (MapPolygon) child;
             polygonView.addToMap(polygonCollection);
-            features.add(index, polygonView);
+            safeAddFeature(index, polygonView);
             Polygon polygon = (Polygon) polygonView.getFeature();
             polygonMap.put(polygon, polygonView);
         } else if (child instanceof MapCircle) {
             MapCircle circleView = (MapCircle) child;
             circleView.addToMap(circleCollection);
-            features.add(index, circleView);
+            safeAddFeature(index, circleView);
         } else if (child instanceof MapUrlTile) {
             MapUrlTile urlTileView = (MapUrlTile) child;
             urlTileView.addToMap(map);
-            features.add(index, urlTileView);
+            safeAddFeature(index, urlTileView);
         } else if (child instanceof MapWMSTile) {
             MapWMSTile urlTileView = (MapWMSTile) child;
             urlTileView.addToMap(map);
-            features.add(index, urlTileView);
+            safeAddFeature(index, urlTileView);
         } else if (child instanceof MapLocalTile) {
             MapLocalTile localTileView = (MapLocalTile) child;
             localTileView.addToMap(map);
-            features.add(index, localTileView);
+            safeAddFeature(index, localTileView);
         } else if (child instanceof MapOverlay) {
             MapOverlay overlayView = (MapOverlay) child;
             overlayView.addToMap(groundOverlayCollection);
-            features.add(index, overlayView);
+            safeAddFeature(index, overlayView);
             GroundOverlay overlay = (GroundOverlay) overlayView.getFeature();
             overlayMap.put(overlay, overlayView);
         } else if (child instanceof MapHeatmap) {
             MapHeatmap heatmapView = (MapHeatmap) child;
             heatmapView.addToMap(map);
-            features.add(index, heatmapView);
+            safeAddFeature(index, heatmapView);
             TileOverlay heatmap = (TileOverlay) heatmapView.getFeature();
             heatmapMap.put(heatmap, heatmapView);
         } else if (child instanceof ViewGroup) {
