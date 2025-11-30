@@ -747,24 +747,16 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 + (MKCoordinateRegion) makeGMSCameraPositionFromMap:(GMSMapView *)map andGMSCameraPosition:(GMSCameraPosition *)position {
-  // solution from here: http://stackoverflow.com/a/16587735/1102215
-  GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
-  GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithRegion: visibleRegion];
-  CLLocationCoordinate2D center;
-  CLLocationDegrees longitudeDelta;
-  CLLocationDegrees latitudeDelta = bounds.northEast.latitude - bounds.southWest.latitude;
+  CLLocationCoordinate2D center = map.camera.target;
 
-  if(bounds.northEast.longitude >= bounds.southWest.longitude) {
-    //Standard case
-    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
-                                        (bounds.southWest.longitude + bounds.northEast.longitude) / 2);
-    longitudeDelta = bounds.northEast.longitude - bounds.southWest.longitude;
-  } else {
-    //Region spans the international dateline
-    center = CLLocationCoordinate2DMake((bounds.southWest.latitude + bounds.northEast.latitude) / 2,
-                                        (bounds.southWest.longitude + bounds.northEast.longitude + 360) / 2);
-    longitudeDelta = bounds.northEast.longitude + 360 - bounds.southWest.longitude;
-  }
+  GMSVisibleRegion visibleRegion = map.projection.visibleRegion;
+  
+  CLLocationCoordinate2D ne = visibleRegion.farRight;   // North-East corner
+  CLLocationCoordinate2D sw = visibleRegion.nearLeft;   // South-West corner
+
+  CLLocationDegrees latitudeDelta = fabs(ne.latitude - sw.latitude);
+  CLLocationDegrees longitudeDelta = fabs(ne.longitude - sw.longitude);
+  
   MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
   return MKCoordinateRegionMake(center, span);
 }
