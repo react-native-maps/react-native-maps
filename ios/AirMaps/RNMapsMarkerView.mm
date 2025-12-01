@@ -370,6 +370,8 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
     REMAP_MAPVIEW_POINT_PROP(calloutOffset)
     REMAP_MAPVIEW_POINT_PROP(centerOffset)
 
+    REMAP_MAPVIEW_STRING_PROP(systemImage)
+
     if (newViewProps.coordinate.latitude != oldViewProps.coordinate.latitude ||
         newViewProps.coordinate.longitude != oldViewProps.coordinate.longitude) {
         CLLocationCoordinate2D coordinates = CLLocationCoordinate2DMake(
