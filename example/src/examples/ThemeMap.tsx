@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, View, Text, Dimensions, ScrollView} from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import {StyleSheet, View, Dimensions, ScrollView, Button} from 'react-native';
+import MapView, {Marker, type MapViewProps} from 'react-native-maps';
 
 const {width, height} = Dimensions.get('window');
 
@@ -21,6 +21,7 @@ class ThemeMap extends React.Component<any, any> {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
+      userInterfaceStyle: 'system' as MapViewProps['userInterfaceStyle'],
     };
   }
 
@@ -28,23 +29,21 @@ class ThemeMap extends React.Component<any, any> {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollview}>
-          <Text>System</Text>
-          <MapView
-            provider={this.props.provider}
-            style={styles.map}
-            scrollEnabled={false}
-            zoomEnabled={false}
-            pitchEnabled={false}
-            rotateEnabled={false}
-            initialRegion={this.state.region}>
-            <Marker
-              title="This is a title"
-              description="This is a description"
-              coordinate={this.state.region}
-            />
-          </MapView>
+          <View style={styles.buttonContainer}>
+            {(['system', 'light', 'dark'] as const).map(userInterfaceStyle => (
+              <Button
+                key={userInterfaceStyle + this.state.userInterfaceStyle}
+                title={userInterfaceStyle}
+                onPress={() => this.setState({userInterfaceStyle})}
+                color={
+                  this.state.userInterfaceStyle === userInterfaceStyle
+                    ? 'blue'
+                    : undefined
+                }
+              />
+            ))}
+          </View>
 
-          <Text>{'\n'}Light</Text>
           <MapView
             provider={this.props.provider}
             style={styles.map}
@@ -53,23 +52,7 @@ class ThemeMap extends React.Component<any, any> {
             pitchEnabled={false}
             rotateEnabled={false}
             initialRegion={this.state.region}
-            userInterfaceStyle="light">
-            <Marker
-              title="This is a title"
-              description="This is a description"
-              coordinate={this.state.region}
-            />
-          </MapView>
-          <Text>{'\n'}Dark</Text>
-          <MapView
-            provider={this.props.provider}
-            style={styles.map}
-            scrollEnabled={false}
-            zoomEnabled={false}
-            pitchEnabled={false}
-            rotateEnabled={false}
-            initialRegion={this.state.region}
-            userInterfaceStyle="dark">
+            userInterfaceStyle={this.state.userInterfaceStyle}>
             <Marker
               title="This is a title"
               description="This is a description"
@@ -93,8 +76,14 @@ const styles = StyleSheet.create({
     paddingVertical: 70,
   },
   map: {
-    width: 200,
-    height: 200,
+    width: width - 40,
+    height: width - 40,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 10,
+    gap: 10,
   },
 });
 
