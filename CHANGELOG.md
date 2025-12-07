@@ -1,5 +1,96 @@
 # Changelog
 
+## [1.26.19](https://github.com/react-native-maps/react-native-maps/compare/v1.26.18...v1.26.19) (2025-11-30)
+
+
+### Bug Fixes
+
+* re-order prop / feature color / stroke width selection ([#5800](https://github.com/react-native-maps/react-native-maps/issues/5800)) ([6d5c9a8](https://github.com/react-native-maps/react-native-maps/commit/6d5c9a842e43d221bc56026f6c280033d965d26f)), closes [#3385](https://github.com/react-native-maps/react-native-maps/issues/3385)
+
+## [1.26.18](https://github.com/react-native-maps/react-native-maps/compare/v1.26.17...v1.26.18) (2025-10-22)
+
+
+### Bug Fixes
+
+* **android:** fix crash on some devices with doDestroy ([#5788](https://github.com/react-native-maps/react-native-maps/issues/5788)) ([3a89152](https://github.com/react-native-maps/react-native-maps/commit/3a89152c949c124647671f232fcb9e474568c93c))
+
+## [1.26.17](https://github.com/react-native-maps/react-native-maps/compare/v1.26.16...v1.26.17) (2025-10-14)
+
+
+### Bug Fixes
+
+* **android:** fix crash when getFeatureAt larger than index ([#5775](https://github.com/react-native-maps/react-native-maps/issues/5775)) ([5cbcf72](https://github.com/react-native-maps/react-native-maps/commit/5cbcf72a0990ff295a7fa8e09a88f602da37fc71))
+
+## [1.26.16](https://github.com/react-native-maps/react-native-maps/compare/v1.26.15...v1.26.16) (2025-10-14)
+
+
+### Bug Fixes
+
+* **android:** fix saveinstancestate NPE ([cbdc8d1](https://github.com/react-native-maps/react-native-maps/commit/cbdc8d12d9a8305c13cb152bbc2578d2d9cbd485))
+
+## [1.26.15](https://github.com/react-native-maps/react-native-maps/compare/v1.26.14...v1.26.15) (2025-10-14)
+
+
+### Bug Fixes
+
+* **android:** correctly add and remove markers ([#5765](https://github.com/react-native-maps/react-native-maps/issues/5765)) ([d6827df](https://github.com/react-native-maps/react-native-maps/commit/d6827df1ec3dd637623376af7936f0c662b72c5f))
+
+## [1.26.14](https://github.com/react-native-maps/react-native-maps/compare/v1.26.13...v1.26.14) (2025-10-02)
+
+
+### Bug Fixes
+
+* heatmap props ([#5629](https://github.com/react-native-maps/react-native-maps/issues/5629)) ([5bef3d2](https://github.com/react-native-maps/react-native-maps/commit/5bef3d2eae652b532e83c24b7be0d8d35990d439))
+
+## [1.26.13](https://github.com/react-native-maps/react-native-maps/compare/v1.26.12...v1.26.13) (2025-10-01)
+
+
+### Bug Fixes
+
+* **android:** attempt to fix lifecycle issues on more time ([#5751](https://github.com/react-native-maps/react-native-maps/issues/5751)) ([d0d76a6](https://github.com/react-native-maps/react-native-maps/commit/d0d76a6946ce9600bba24d5f631447115c8cf7a4))
+
+## [1.26.12](https://github.com/react-native-maps/react-native-maps/compare/v1.26.11...v1.26.12) (2025-10-01)
+
+
+### Bug Fixes
+
+* avoid rn-maps typescript error leak when running tsc  ([#5539](https://github.com/react-native-maps/react-native-maps/issues/5539)) ([0fb0202](https://github.com/react-native-maps/react-native-maps/commit/0fb0202b561ae76b841e9f52ddef092a79a054af))
+
+## [1.26.11](https://github.com/react-native-maps/react-native-maps/compare/v1.26.10...v1.26.11) (2025-09-30)
+
+
+### Bug Fixes
+
+* **android:** fix remove marker from map issues ([#5752](https://github.com/react-native-maps/react-native-maps/issues/5752)) ([02a6e52](https://github.com/react-native-maps/react-native-maps/commit/02a6e52bd95645ff7556c97c0e7d4cbb2ed0d2e3))
+
+## [1.26.10](https://github.com/react-native-maps/react-native-maps/compare/v1.26.9...v1.26.10) (2025-09-29)
+
+
+### Bug Fixes
+
+* **android:** display Image inside marker correctly ([#5749](https://github.com/react-native-maps/react-native-maps/issues/5749)) ([a799911](https://github.com/react-native-maps/react-native-maps/commit/a799911e56a459e60a6dbdef406c39acba782046))
+
+## [1.26.9](https://github.com/react-native-maps/react-native-maps/compare/v1.26.8...v1.26.9) (2025-09-21)
+
+
+### Bug Fixes
+
+* set camera ([#5745](https://github.com/react-native-maps/react-native-maps/issues/5745)) ([e3a71e4](https://github.com/react-native-maps/react-native-maps/commit/e3a71e472d621d5b0ef0058ff7fb0012674216bc))
+
+## [1.26.8](https://github.com/react-native-maps/react-native-maps/compare/v1.26.7...v1.26.8) (2025-09-21)
+
+
+### Bug Fixes
+
+* android marker update NPE ([#5744](https://github.com/react-native-maps/react-native-maps/issues/5744)) ([f9c287b](https://github.com/react-native-maps/react-native-maps/commit/f9c287bc376690bb2306095f5d570b8285a45444))
+
+## [1.26.7](https://github.com/react-native-maps/react-native-maps/compare/v1.26.6...v1.26.7) (2025-09-21)
+
+
+### Bug Fixes
+
+* **android:** Update MapView lifecycle ([#5689](https://github.com/react-native-maps/react-native-maps/issues/5689)) ([ea61890](https://github.com/react-native-maps/react-native-maps/commit/ea6189001e05b5d2c2acfbeab4a48da2535d190a))
+
 ## [1.26.6](https://github.com/react-native-maps/react-native-maps/compare/v1.26.5...v1.26.6) (2025-09-14)
 
 
