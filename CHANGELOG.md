@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.20](https://github.com/react-native-maps/react-native-maps/compare/v1.26.19...v1.26.20) (2025-12-07)
+
+
+### Bug Fixes
+
+* **ios:** Prevent auto bottom inset adjustment during map initialization ([#5806](https://github.com/react-native-maps/react-native-maps/issues/5806)) ([d93aa63](https://github.com/react-native-maps/react-native-maps/commit/d93aa636eb6d941f529b2d788d60921daf7ffc91))
+
 ## [1.26.19](https://github.com/react-native-maps/react-native-maps/compare/v1.26.18...v1.26.19) (2025-11-30)
 
 
