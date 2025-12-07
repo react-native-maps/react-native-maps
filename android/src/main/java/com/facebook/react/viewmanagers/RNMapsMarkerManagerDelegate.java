@@ -34,6 +34,9 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
       case "image":
         mViewManager.setImage(view, (ReadableMap) value);
         break;
+      case "systemImage":
+        mViewManager.setSystemImage(view, value == null ? null : (String) value);
+        break;
       case "calloutOffset":
         mViewManager.setCalloutOffset(view, (ReadableMap) value);
         break;

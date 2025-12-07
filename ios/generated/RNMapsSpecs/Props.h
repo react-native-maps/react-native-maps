@@ -1657,6 +1657,7 @@ class RNMapsMarkerProps final : public ViewProps {
   RNMapsMarkerAnchorStruct anchor{};
   RNMapsMarkerCalloutAnchorStruct calloutAnchor{};
   ImageSource image{};
+  std::string systemImage{};
   RNMapsMarkerCalloutOffsetStruct calloutOffset{};
   RNMapsMarkerDisplayPriority displayPriority{RNMapsMarkerDisplayPriority::Required};
   RNMapsMarkerCenterOffsetStruct centerOffset{};
