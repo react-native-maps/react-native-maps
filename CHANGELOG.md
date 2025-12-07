@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.19](https://github.com/react-native-maps/react-native-maps/compare/v1.26.18...v1.26.19) (2025-11-30)
+
+
+### Bug Fixes
+
+* re-order prop / feature color / stroke width selection ([#5800](https://github.com/react-native-maps/react-native-maps/issues/5800)) ([6d5c9a8](https://github.com/react-native-maps/react-native-maps/commit/6d5c9a842e43d221bc56026f6c280033d965d26f)), closes [#3385](https://github.com/react-native-maps/react-native-maps/issues/3385)
+
 ## [1.26.18](https://github.com/react-native-maps/react-native-maps/compare/v1.26.17...v1.26.18) (2025-10-22)
 
 
