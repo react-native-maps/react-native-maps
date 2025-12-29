@@ -35,7 +35,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapColorScheme;
 import com.rnmaps.maps.MapMarker;
-import com.rnmaps.maps.MapOverlay;
 import com.rnmaps.maps.MapView;
 import com.rnmaps.maps.SizeReportingShadowNode;
 
@@ -318,12 +317,21 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void addView(MapView parent, View child, int index) {
+        parent.addFeature(child, index);
         if (child instanceof MapMarker && ((MapMarker) child).isLoadingImage()){
-            ((MapMarker) child).setImageLoadedListener((uri, drawable, b) -> {
-                parent.addFeature(child, parent.getFeatureCount());
+            MapMarker markerView = (MapMarker) child;
+            // Marker is already added as invisible, restore visibility when image loads
+            markerView.setImageLoadedListener((uri, drawable, b) -> {
+                com.google.android.gms.maps.model.Marker googleMarker =
+                    (com.google.android.gms.maps.model.Marker) markerView.getFeature();
+                if (googleMarker != null) {
+                    // Restore original visibility (marker was hidden temporarily during image load)
+                    if (View.VISIBLE == markerView.getVisibility()) {
+                        googleMarker.setVisible(true);
+                    }
+                }
+                markerView.update(true);
             });
-        } else {
-            parent.addFeature(child, index);
         }
     }
 
