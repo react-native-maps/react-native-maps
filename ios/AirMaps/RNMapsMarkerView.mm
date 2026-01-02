@@ -93,7 +93,11 @@ using namespace facebook::react;
     [_view setCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
 }
 
-
+// ANSY: custom method
+- (void) setRotation:(double)newRotationInDegrees
+{
+    [_view setRotation:newRotationInDegrees];
+}
 
 - (void) prepareMarkerView
 {
@@ -427,6 +431,13 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
         }
     }
 
+    // ANSY: custom props
+
+    if (newViewProps.rotation != oldViewProps.rotation) {
+        [_view setRotation:newViewProps.rotation];
+    }
+
+    REMAP_MAPVIEW_PROP(top)
 
     [super updateProps:props oldProps:oldProps];
 }

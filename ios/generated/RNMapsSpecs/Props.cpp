@@ -657,7 +657,9 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     pinColor(convertRawProp(context, rawProps, "pinColor", sourceProps.pinColor, {})),
     titleVisibility(convertRawProp(context, rawProps, "titleVisibility", sourceProps.titleVisibility, {RNMapsMarkerTitleVisibility::Visible})),
     subtitleVisibility(convertRawProp(context, rawProps, "subtitleVisibility", sourceProps.subtitleVisibility, {RNMapsMarkerSubtitleVisibility::Adaptive})),
-    useLegacyPinView(convertRawProp(context, rawProps, "useLegacyPinView", sourceProps.useLegacyPinView, {false})) {}
+    useLegacyPinView(convertRawProp(context, rawProps, "useLegacyPinView", sourceProps.useLegacyPinView, {false})),
+    rotation(convertRawProp(context, rawProps, "rotation", sourceProps.rotation, {0.0})),
+    top(convertRawProp(context, rawProps, "top", sourceProps.top, {false})) {}
     
 #ifdef RN_SERIALIZABLE_STATE
 ComponentName RNMapsMarkerProps::getDiffPropsImplementationTarget() const {
@@ -746,6 +748,14 @@ folly::dynamic RNMapsMarkerProps::getDiffProps(
   if (useLegacyPinView != oldProps->useLegacyPinView) {
     result["useLegacyPinView"] = useLegacyPinView;
   }
+    
+  if ((rotation != oldProps->rotation) && !(std::isnan(rotation) && std::isnan(oldProps->rotation))) {
+    result["rotation"] = rotation;
+  }
+    
+  if (top != oldProps->top) {
+    result["top"] = top;
+  }
   return result;
 }
 #endif
@@ -810,6 +820,7 @@ RNMapsPolylineProps::RNMapsPolylineProps(
     lineJoin(convertRawProp(context, rawProps, "lineJoin", sourceProps.lineJoin, {RNMapsPolylineLineJoin::Miter})),
     strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
     strokeColors(convertRawProp(context, rawProps, "strokeColors", sourceProps.strokeColors, {})),
+    syncedCoordsColors(convertRawProp(context, rawProps, "syncedCoordsColors", sourceProps.syncedCoordsColors, {})),
     strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
     tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {false})) {}
     
@@ -855,6 +866,10 @@ folly::dynamic RNMapsPolylineProps::getDiffProps(
     
   if (strokeColors != oldProps->strokeColors) {
     result["strokeColors"] = toDynamic(strokeColors);
+  }
+    
+  if (syncedCoordsColors != oldProps->syncedCoordsColors) {
+    result["syncedCoordsColors"] = toDynamic(syncedCoordsColors);
   }
     
   if ((strokeWidth != oldProps->strokeWidth) && !(std::isnan(strokeWidth) && std::isnan(oldProps->strokeWidth))) {

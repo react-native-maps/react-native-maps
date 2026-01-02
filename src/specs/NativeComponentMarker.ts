@@ -1,12 +1,12 @@
 // @ts-nocheck
-import type {HostComponent} from 'react-native';
+import type { HostComponent } from 'react-native';
 import type {
   ViewProps,
   ColorValue,
   ImageSourcePropType as ImageSource,
 } from 'react-native';
 
-import {codegenNativeComponent, codegenNativeCommands} from 'react-native';
+import { codegenNativeComponent, codegenNativeCommands } from 'react-native';
 import type {
   Int32,
   Double,
@@ -313,6 +313,10 @@ export interface MarkerFabricNativeProps extends ViewProps {
    * @platform Android: Not supported
    */
   useLegacyPinView?: boolean;
+
+  // ANSY: custom props
+  rotation?: WithDefault<Double, 0.0>;
+  top?: boolean;
 }
 export interface NativeCommands {
   animateToCoordinates: (
@@ -330,6 +334,12 @@ export interface NativeCommands {
   hideCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
   redrawCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
   redraw: (viewRef: React.ElementRef<React.ComponentType>) => void;
+
+  // ANSY: custom commands
+  setRotation: (
+    viewRef: React.ElementRef<React.ComponentType>,
+    newRotationInDegrees: Double,
+  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -340,6 +350,9 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'hideCallout',
     'redrawCallout',
     'redraw',
+
+    // ANSY: custom commands
+    'setRotation',
   ],
 });
 

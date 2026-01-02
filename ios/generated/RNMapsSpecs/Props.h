@@ -1672,6 +1672,8 @@ class RNMapsMarkerProps final : public ViewProps {
   RNMapsMarkerTitleVisibility titleVisibility{RNMapsMarkerTitleVisibility::Visible};
   RNMapsMarkerSubtitleVisibility subtitleVisibility{RNMapsMarkerSubtitleVisibility::Adaptive};
   bool useLegacyPinView{false};
+  double rotation{0.0};
+  bool top{false};
 
   #ifdef RN_SERIALIZABLE_STATE
   ComponentName getDiffPropsImplementationTarget() const override;
@@ -1910,6 +1912,100 @@ static inline void fromRawValue(const PropsParserContext& context, const RawValu
   }
 }
 
+
+struct RNMapsPolylineSyncedCoordsColorsCoordinatesStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsPolylineSyncedCoordsColorsCoordinatesStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["latitude"] = latitude;
+    result["longitude"] = longitude;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolylineSyncedCoordsColorsCoordinatesStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
+  }
+}
+
+static inline std::string toString(const RNMapsPolylineSyncedCoordsColorsCoordinatesStruct &value) {
+  return "[Object RNMapsPolylineSyncedCoordsColorsCoordinatesStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsPolylineSyncedCoordsColorsCoordinatesStruct &value) {
+  return value.toDynamic();
+}
+#endif
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, std::vector<RNMapsPolylineSyncedCoordsColorsCoordinatesStruct> &result) {
+  auto items = (std::vector<RawValue>)value;
+  for (const auto &item : items) {
+    RNMapsPolylineSyncedCoordsColorsCoordinatesStruct newItem;
+    fromRawValue(context, item, newItem);
+    result.emplace_back(newItem);
+  }
+}
+
+
+struct RNMapsPolylineSyncedCoordsColorsStruct {
+  std::string type{};
+  std::vector<RNMapsPolylineSyncedCoordsColorsCoordinatesStruct> coordinates{};
+  std::vector<std::string> colors{};
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsPolylineSyncedCoordsColorsStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["type"] = type;
+    result["coordinates"] = ::facebook::react::toDynamic(coordinates);
+    result["colors"] = ::facebook::react::toDynamic(colors);
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolylineSyncedCoordsColorsStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_type = map.find("type");
+  if (tmp_type != map.end()) {
+    fromRawValue(context, tmp_type->second, result.type);
+  }
+  auto tmp_coordinates = map.find("coordinates");
+  if (tmp_coordinates != map.end()) {
+    fromRawValue(context, tmp_coordinates->second, result.coordinates);
+  }
+  auto tmp_colors = map.find("colors");
+  if (tmp_colors != map.end()) {
+    fromRawValue(context, tmp_colors->second, result.colors);
+  }
+}
+
+static inline std::string toString(const RNMapsPolylineSyncedCoordsColorsStruct &value) {
+  return "[Object RNMapsPolylineSyncedCoordsColorsStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsPolylineSyncedCoordsColorsStruct &value) {
+  return value.toDynamic();
+}
+#endif
 class RNMapsPolylineProps final : public ViewProps {
  public:
   RNMapsPolylineProps() = default;
@@ -1924,6 +2020,7 @@ class RNMapsPolylineProps final : public ViewProps {
   RNMapsPolylineLineJoin lineJoin{RNMapsPolylineLineJoin::Miter};
   SharedColor strokeColor{};
   std::vector<SharedColor> strokeColors{};
+  RNMapsPolylineSyncedCoordsColorsStruct syncedCoordsColors{};
   Float strokeWidth{1.0};
   bool tappable{false};
 
