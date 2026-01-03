@@ -41,6 +41,7 @@ export interface FabricMapHandle {
   ) => void;
 
   getMapBoundaries: () => Promise<MapBoundaries>;
+  setMapBoundaries: (northEast: LatLng, southWest: LatLng) => void;
   takeSnapshot: (config: SnapshotOptions) => Promise<string>;
   getAddressFromCoordinates: (coordinate: LatLng) => Promise<Address>;
   getPointForCoordinate: (coordinate: LatLng) => Promise<Point>;
@@ -229,6 +230,21 @@ const createFabricMap = (
           }
         } else {
           console.warn('setIndoorActiveLevelIndex is not supported.');
+        }
+      },
+      setMapBoundaries(northEast: LatLng, southWest: LatLng) {
+        if (fabricRef.current) {
+          try {
+            (Commands as any).setMapBoundaries(
+              fabricRef.current,
+              JSON.stringify(northEast),
+              JSON.stringify(southWest),
+            );
+          } catch (error) {
+            console.error('Failed to setMapBoundaries:', error);
+          }
+        } else {
+          console.warn('setMapBoundaries is not supported.');
         }
       },
       setCamera(camera: Partial<Camera>) {

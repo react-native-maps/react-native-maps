@@ -916,7 +916,9 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setMapBoundaries(northEast: LatLng, southWest: LatLng) {
-    if (this.map.current) {
+    if (this.fabricMap.current) {
+      this.fabricMap.current.setMapBoundaries(northEast, southWest);
+    } else if (this.map.current) {
       Commands.setMapBoundaries(this.map.current, northEast, southWest);
     }
   }
