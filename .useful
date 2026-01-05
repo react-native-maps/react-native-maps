@@ -1,0 +1,36 @@
+# Before committing a new release version, build to update the lib directory
+- Change things
+- then from the root of the project ...
+
+## For RN New Arch
+- Note: these notes were taken for RNMaps v1.26.10 RN v0.81.1
+
+- Install stuff
+yarn
+
+- Build TypeScript (so the spec file is discoverable)
+yarn build
+
+- Run the codegen artifact generator
+npx react-native codegen
+
+-- iOS
+-- NOTE: there is some kind of a kink in configs or commands that makes the CLI
+-- codegen command fail and not place the files where they are suppose to be, it
+-- fails semi-silently with "[Codegen] Done." output, but it does throw an error
+-- "[Codegen] TypeError [ERR_INVALID_ARG_TYPE]: The "from" argument must be of type string. Received undefined"
+-- So run the following iOS specific command to generate codegen files
+-- ATTENTION: do NOT remove dir ios/generated
+node ./node_modules/react-native/scripts/generate-codegen-artifacts.js -p . -o ./ios/generated -t ios -s library -n RNMapsSpecs -c
+
+- Run
+yarn bootstrap
+
+---
+
+# Test the example app
+- After your changes and ran all the build, codegen and bootstrap commands, if
+- you wish to test the example app with your new changes:
+
+- Setup example app with Google MAPS_API_KEY for both iOS and Android
+file://./docs/examples-setup.md
