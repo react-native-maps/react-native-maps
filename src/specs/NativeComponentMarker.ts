@@ -334,12 +334,6 @@ export interface NativeCommands {
   hideCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
   redrawCallout: (viewRef: React.ElementRef<React.ComponentType>) => void;
   redraw: (viewRef: React.ElementRef<React.ComponentType>) => void;
-
-  // ANSY: custom commands
-  setRotation: (
-    viewRef: React.ElementRef<React.ComponentType>,
-    newRotationInDegrees: Double,
-  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -350,9 +344,6 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'hideCallout',
     'redrawCallout',
     'redraw',
-
-    // ANSY: custom commands
-    'setRotation',
   ],
 });
 

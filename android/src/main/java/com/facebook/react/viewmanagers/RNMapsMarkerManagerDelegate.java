@@ -111,9 +111,6 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
       case "redraw":
         mViewManager.redraw(view);
         break;
-      case "setRotation":
-        mViewManager.setRotation(view, args.getDouble(0));
-        break;
     }
   }
 }
