@@ -33,10 +33,13 @@ public interface RNMapsMarkerManagerInterface<T extends View> extends ViewManage
   void setTitleVisibility(T view, @Nullable String value);
   void setSubtitleVisibility(T view, @Nullable String value);
   void setUseLegacyPinView(T view, boolean value);
+  void setRotation(T view, double value);
+  void setTop(T view, boolean value);
   void animateToCoordinates(T view, double latitude, double longitude, int duration);
   void setCoordinates(T view, double latitude, double longitude);
   void showCallout(T view);
   void hideCallout(T view);
   void redrawCallout(T view);
   void redraw(T view);
+  void setRotation(T view, double newRotationInDegrees);
 }

@@ -79,6 +79,12 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
       case "useLegacyPinView":
         mViewManager.setUseLegacyPinView(view, value == null ? false : (boolean) value);
         break;
+      case "rotation":
+        mViewManager.setRotation(view, value == null ? 0f : ((Double) value).doubleValue());
+        break;
+      case "top":
+        mViewManager.setTop(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
@@ -104,6 +110,9 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
         break;
       case "redraw":
         mViewManager.redraw(view);
+        break;
+      case "setRotation":
+        mViewManager.setRotation(view, args.getDouble(0));
         break;
     }
   }
