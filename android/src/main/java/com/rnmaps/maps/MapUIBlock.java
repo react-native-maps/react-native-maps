@@ -3,6 +3,7 @@ package com.rnmaps.maps;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.UIManager;
+import com.facebook.react.common.annotations.UnstableReactNativeAPI;
 import com.facebook.react.fabric.FabricUIManager;
 import com.facebook.react.fabric.interop.UIBlockViewResolver;
 import com.facebook.react.uimanager.common.UIManagerType;
@@ -13,6 +14,7 @@ import com.facebook.react.uimanager.UIManagerModule;
 
 import java.util.function.Function;
 
+@UnstableReactNativeAPI
 public class MapUIBlock implements UIBlockInterface {
     private int tag;
     private Promise promise;
@@ -61,4 +63,5 @@ public class MapUIBlock implements UIBlockInterface {
     }
 }
 
+@UnstableReactNativeAPI
 interface UIBlockInterface extends UIBlock, com.facebook.react.fabric.interop.UIBlock  {}
