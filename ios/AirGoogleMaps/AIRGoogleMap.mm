@@ -95,6 +95,10 @@ id regionAsJSON(MKCoordinateRegion region) {
     self = [super initWithOptions:options];
 
     if (self) {
+    // Set paddingAdjustmentBehavior immediately to prevent Google Maps SDK default behavior
+    // from automatically adjusting padding based on safe area insets during initialization
+    self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorNever;
+    
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
     _polygons = [NSMutableArray array];

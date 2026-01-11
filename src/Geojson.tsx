@@ -439,18 +439,21 @@ const getColor = (
   overlay: Overlay,
   colorType: string,
 ) => {
-  if (prop) {
-    return prop;
-  }
   let color = overlay.feature.properties?.[colorType];
+
   if (color) {
     const opacityProperty = colorType + '-opacity';
     const alpha = overlay.feature.properties?.[opacityProperty];
+
     if (alpha && alpha !== '0' && color[0] === '#') {
       color = getRgbaFromHex(color, alpha);
     }
+
     return color;
+  } else if (prop) {
+    return prop;
   }
+
   return undefined;
 };
 
@@ -458,10 +461,7 @@ const getStrokeWidth = (
   prop: GeojsonProps['strokeWidth'],
   overlay: Overlay,
 ) => {
-  if (prop) {
-    return prop;
-  }
-  return overlay.feature.properties?.['stroke-width'];
+  return overlay.feature.properties?.['stroke-width'] ?? prop;
 };
 
 // GeoJSON.Feature type-guards
