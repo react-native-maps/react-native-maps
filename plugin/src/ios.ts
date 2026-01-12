@@ -101,7 +101,11 @@ export function addMapsCocoapods(
   useGoogleMaps: boolean,
 ): MergeResults {
   let newSrc =
-    '  rn_maps_path = File.dirname(`node --print "require.resolve(\'react-native-maps/package.json\')"`) \n';
+    [
+      "  require 'pathname'",
+      '  rn_maps_abs_path = File.dirname(`node --print "require.resolve(\'react-native-maps/package.json\')"`.strip)',
+      '  rn_maps_path = Pathname.new(rn_maps_abs_path).relative_path_from(Pathname.new(__dir__)).to_s',
+    ].join('\n') + '\n';
 
   if (useGoogleMaps) {
     newSrc += "  pod 'react-native-maps/Google', :path => rn_maps_path \n";
