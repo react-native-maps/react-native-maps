@@ -1,4 +1,4 @@
-import type {NativeSyntheticEvent} from 'react-native';
+import type { NativeSyntheticEvent } from 'react-native';
 
 export type Provider = 'google' | undefined;
 
@@ -17,7 +17,7 @@ export type Region = LatLng & {
   longitudeDelta: number;
 };
 
-export type Frame = Point & {height: number; width: number};
+export type Frame = Point & { height: number; width: number };
 
 export type CalloutPressEvent = NativeSyntheticEvent<{
   action: 'callout-press';
@@ -52,7 +52,7 @@ export type LineCapType = 'butt' | 'round' | 'square';
 export type LineJoinType = 'miter' | 'round' | 'bevel';
 
 export type ClickEvent<T = {}> = NativeSyntheticEvent<
-  {coordinate: LatLng; position: Point} & T
+  { coordinate: LatLng; position: Point } & T
 >;
 
 export type MarkerDeselectEvent = Omit<
@@ -64,7 +64,7 @@ export type MarkerDeselectEvent = Omit<
 >;
 
 export type MarkerSelectEvent = Omit<
-  ClickEvent<{id: string; action: 'marker-select'}>,
+  ClickEvent<{ id: string; action: 'marker-select' }>,
   'position'
 >;
 
@@ -92,6 +92,7 @@ export type MarkerDragStartEndEvent = NativeSyntheticEvent<{
 export type MarkerPressEvent = NativeSyntheticEvent<{
   id: string;
   action: 'marker-press';
+  actionType?: string;
   coordinate: LatLng;
 
   /**

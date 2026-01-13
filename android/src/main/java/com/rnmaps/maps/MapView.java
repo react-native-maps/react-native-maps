@@ -2,6 +2,9 @@ package com.rnmaps.maps;
 
 import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -10,6 +13,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
+
 
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -19,6 +27,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -168,6 +177,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private Boolean scrollDuringRotateOrZoomEnabled;
     private String kmlSrc = null;
     private final Map<String, Marker> nearbyMarkersCache = new HashMap<>();
+    private final Map<String, Marker> nearbyMarkersCalloutCache = new HashMap<>();    
+    private final Map<String, ValueAnimator> markerAnimators = new HashMap<>();
 
     private static boolean contextHasBug(Context context) {
         return context == null ||
@@ -464,29 +475,61 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             public boolean onMarkerClick(@NonNull Marker marker) {
                 MapMarker airMapMarker = getMarkerMap(marker);
 
-                WritableMap eventData = makeClickEventData(marker.getPosition());
-                eventData.putString("action", "marker-press");
-                eventData.putString("id", airMapMarker.getIdentifier());
-                airMapMarker.dispatchEvent(eventData, OnPressEvent::new);
+                if (airMapMarker != null) {
+                    WritableMap eventData = makeClickEventData(marker.getPosition());
+                    eventData.putString("action", "marker-press");
+                    eventData.putString("id", airMapMarker.getIdentifier());
+                    airMapMarker.dispatchEvent(eventData, OnPressEvent::new);
 
-                WritableMap mapEventData = makeClickEventData(marker.getPosition());
-                mapEventData.putString("action", "marker-press");
-                mapEventData.putString("id", airMapMarker.getIdentifier());
+                    WritableMap mapEventData = makeClickEventData(marker.getPosition());
+                    mapEventData.putString("action", "marker-press");
+                    mapEventData.putString("id", airMapMarker.getIdentifier());
 
-                dispatchEvent(mapEventData, OnMarkerPressEvent::new);
+                    dispatchEvent(mapEventData, OnMarkerPressEvent::new);
 
 
-                handleMarkerSelection(airMapMarker);
+                    handleMarkerSelection(airMapMarker);
 
-                // Return false to open the callout info window and center on the marker
-                // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
-                // .OnMarkerClickListener
-                if (view.moveOnMarkerPress) {
-                    return false;
+                    // Return false to open the callout info window and center on the marker
+                    // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
+                    // .OnMarkerClickListener
+                    if (view.moveOnMarkerPress) {
+                        return false;
+                    } else {
+                        marker.showInfoWindow();
+                        return true;
+                    }
                 } else {
-                    marker.showInfoWindow();
-                    return true;
+                    // Handle native markers added via updateNearbyMarkersFromProcessedData
+                    Object tag = marker.getTag();
+                    String id = null;
+                    String action = "marker-press";
+                    String actionType = null;
+
+                    if (tag instanceof java.util.Map) {
+                        java.util.Map tagMap = (java.util.Map) tag;
+                        id = (String) tagMap.get("id");
+                        Object actionObj = tagMap.get("action");
+                        if (actionObj instanceof String) {
+                             action = (String) actionObj;
+                        }
+                        Object actionTypeObj = tagMap.get("actionType");
+                        if (actionTypeObj instanceof String) {
+                             actionType = (String) actionTypeObj;
+                        }
+                    }
+
+                    if (id != null) {
+                        WritableMap mapEventData = makeClickEventData(marker.getPosition());
+                        mapEventData.putString("action", "marker-press");
+                        mapEventData.putString("actionType", actionType);
+                        mapEventData.putString("id", id);
+
+                        dispatchEvent(mapEventData, OnMarkerPressEvent::new);
+                        return true; // Consume the event
+                    }
                 }
+                return false;
             }
         });
 
@@ -1487,12 +1530,18 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     @Override
     public View getInfoWindow(Marker marker) {
         MapMarker markerView = getMarkerMap(marker);
+        if(markerView == null) {
+            return null;
+        }
         return markerView.getCallout();
     }
 
     @Override
     public View getInfoContents(Marker marker) {
         MapMarker markerView = getMarkerMap(marker);
+        if(markerView == null) {
+            return null;
+        }
         return markerView.getInfoContents();
     }
 
@@ -1661,7 +1710,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         LatLng coords = this.map.getProjection().fromScreenLocation(point);
         WritableMap event = makeClickEventData(coords);
         dispatchEvent(event, OnDoublePressEvent::new);
-
     }
 
     public void setKmlSrc(String kmlSrc) {
@@ -1907,6 +1955,49 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         return false;
     }
+private Bitmap createSimpleLabel(String title) {
+    // Text paint
+    Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    textPaint.setColor(Color.BLACK);
+    textPaint.setTextSize(36f);
+
+    // Measure text
+    Rect bounds = new Rect();
+    textPaint.getTextBounds(title, 0, title.length(), bounds);
+
+    int padding = 20;
+    int width = bounds.width() + padding * 2;
+    int height = bounds.height() + padding * 2;
+
+    // Create bitmap
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+
+    // Background paint
+    Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    bgPaint.setColor(Color.WHITE);
+
+    // Draw white background rectangle
+    canvas.drawRect(0, 0, width, height, bgPaint);
+
+    // --- BORDER ---
+    Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    borderPaint.setColor(Color.BLACK);      // border color
+    borderPaint.setStyle(Paint.Style.STROKE);
+    borderPaint.setStrokeWidth(1f);         // thickness (px)
+
+    canvas.drawRect(0, 0, width, height, borderPaint);
+    // --------------
+
+
+    // Draw black text
+    float x = padding;
+    float y = padding - bounds.top; // align text baseline
+    canvas.drawText(title, x, y, textPaint);
+
+    return bitmap;
+}
+
 
   // Native nearby markers management
   public void updateNearbyMarkersFromProcessedData(org.json.JSONArray processedMarkers) {
@@ -1916,7 +2007,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       }
 
       try {
-
           java.util.Set<String> seenDrivers = new java.util.HashSet<>();
 
           // Process each marker with its corresponding React view
@@ -1929,18 +2019,83 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
               double rotation = markerData.optDouble("rotation", -1);
               int zIndex = markerData.optInt("zIndex", 0);
               String vehicleVariant = markerData.optString("vehicleVariant", "auto");
-
+              int animationDuration = markerData.optInt("animationDuration", 2000);
+              boolean shouldAnimate = markerData.optBoolean("shouldAnimate", false);
+              boolean isCluster = markerData.optBoolean("isCluster", false);
+              int clusterCount = markerData.optInt("clusterCount", 0);
+              int size = markerData.optInt("size", 40);
+              String title = markerData.optString("title", "");
+              boolean rotationEnabled = markerData.optBoolean("rotationEnabled", false);
+              String routeCode = markerData.optString("routeCode", "");
+              String action = markerData.optString("action", "marker-press");
+              
+              
+              if (markerAnimators.containsKey(driverId)) {
+                  ValueAnimator animator = markerAnimators.get(driverId);
+                  if (animator != null) {
+                      animator.cancel();
+                  }
+                  markerAnimators.remove(driverId);
+              }
+              
               seenDrivers.add(driverId);
 
               Marker existingMarker = nearbyMarkersCache.get(driverId);
-
+              Marker existingCalloutMarker = nearbyMarkersCalloutCache.get(driverId);
+             
               if (existingMarker != null) {
+                  // Calculate bearing if rotation is missing and position changed
+                  
+                      LatLng start = existingMarker.getPosition();
+                      LatLng end = new LatLng(lat, lon);
+
+                    if(!isCluster){
+                      if (start.latitude != end.latitude || start.longitude != end.longitude) {
+                          Location locStart = new Location("start");
+                          locStart.setLatitude(start.latitude);
+                          locStart.setLongitude(start.longitude);
+
+                          Location locEnd = new Location("end");
+                          locEnd.setLatitude(end.latitude);
+                          locEnd.setLongitude(end.longitude);
+                            
+                          rotation = locStart.bearingTo(locEnd);
+                      } else {
+                          rotation = existingMarker.getRotation();
+                      }
+                }
+
                   // Update existing marker
-                  existingMarker.setPosition(new com.google.android.gms.maps.model.LatLng(lat, lon));
+                  if (shouldAnimate) {
+                      ValueAnimator animator = animateMarkers(existingMarker,existingCalloutMarker, new com.google.android.gms.maps.model.LatLng(lat, lon), animationDuration);
+                      markerAnimators.put(driverId, animator);
+                      animator.addListener(new AnimatorListenerAdapter() {
+                          @Override
+                          public void onAnimationEnd(Animator animation) {
+                              if (markerAnimators.get(driverId) == animation) {
+                                  markerAnimators.remove(driverId);
+                              }
+                          }
+                      });
+                  } else {
+                      existingMarker.setPosition(new com.google.android.gms.maps.model.LatLng(lat, lon));
+                      if(existingCalloutMarker != null) existingCalloutMarker.setPosition(new com.google.android.gms.maps.model.LatLng(lat, lon));
+                  }
                   existingMarker.setZIndex(zIndex);
+                  if(rotationEnabled) existingMarker.setRotation((float) rotation);
+                  else existingMarker.setIcon(getIconFromAssets(vehicleVariant, rotation, isCluster, clusterCount, size,rotationEnabled));
+
+
+                  if (!isCluster && !routeCode.isEmpty()) {
+                      java.util.Map<String, String> tagMap = new java.util.HashMap<>();
+                      tagMap.put("id", routeCode);
+                      tagMap.put("action", "marker-press");
+                      tagMap.put("actionType", action);
+                      existingMarker.setTag(tagMap);
+                  }
 
                   // Update icon if vehicle variant changed
-                  existingMarker.setIcon(getIconFromAssets(vehicleVariant, rotation));
+                  
 
               } else {
                   // Create new marker with custom view
@@ -1951,13 +2106,33 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                       .flat(true)
                       .visible(true);
 
-
+                
                   // Use custom marker icon based on vehicle variant and rotation
-                  markerOptions.icon(getIconFromAssets(vehicleVariant, rotation));
+                  markerOptions.icon(getIconFromAssets(vehicleVariant, rotation, isCluster, clusterCount, size,rotationEnabled));
 
-                  Marker newMarker = map.addMarker(markerOptions);
+                  Marker newMarker = markerCollection.addMarker(markerOptions);
+                 if(rotationEnabled && rotation != -1) newMarker.setRotation((float) rotation);
+
                   if (newMarker != null) {
-                      nearbyMarkersCache.put(driverId, newMarker);
+                      if(!isCluster && !routeCode.isEmpty()) {
+                          java.util.Map<String, String> tagMap = new java.util.HashMap<>();
+                          tagMap.put("id", routeCode);
+                          tagMap.put("action", action);
+                          newMarker.setTag(tagMap);
+                      }
+                      nearbyMarkersCache.put(driverId, newMarker); 
+                  }
+                  if(!title.isEmpty()) {
+                    Bitmap labelBitmap = createSimpleLabel(title);
+                    com.google.android.gms.maps.model.MarkerOptions calloutMarkerOptions = new com.google.android.gms.maps.model.MarkerOptions()
+                      .position(new com.google.android.gms.maps.model.LatLng(lat, lon))
+                      .icon(com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap(labelBitmap))
+                      .anchor(0.5f, 2.4f)
+                      .zIndex(600)
+                      .flat(true)
+                      .visible(true);
+                      Marker newCalloutMarker = markerCollection.addMarker(calloutMarkerOptions);
+                      if(newCalloutMarker != null) nearbyMarkersCalloutCache.put(driverId, newCalloutMarker);
                   }
               }
           }
@@ -1968,9 +2143,21 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
               java.util.Map.Entry<String, Marker> entry = iterator.next();
               String driverId = entry.getKey();
               if (!seenDrivers.contains(driverId)) {
+                  if (markerAnimators.containsKey(driverId)) {
+                      ValueAnimator animator = markerAnimators.get(driverId);
+                      if (animator != null) {
+                          animator.cancel();
+                      }
+                      markerAnimators.remove(driverId);
+                  }
                   Marker marker = entry.getValue();
-                  marker.remove();
+                  Marker calloutMarker = nearbyMarkersCalloutCache.get(driverId);
+                  markerCollection.remove(marker);
+                  if (calloutMarker != null) {
+                      markerCollection.remove(calloutMarker);
+                  }
                   iterator.remove();
+                  nearbyMarkersCalloutCache.remove(driverId);
               }
           }
 
@@ -1980,17 +2167,57 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
       }
   }
 
+  private ValueAnimator animateMarkers(
+        final Marker iconMarker,
+        final Marker calloutMarker,  // can be null
+        final LatLng toPosition,
+        int duration
+) {
+
+    final LatLng startPosition = iconMarker.getPosition();
+    //if (startPosition.equals(toPosition)) return;
+
+    ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    animator.setDuration(duration);
+    animator.setInterpolator(new LinearInterpolator());
+
+    animator.addUpdateListener(animation -> {
+        float v = (float) animation.getAnimatedFraction();
+
+        double lng = v * toPosition.longitude + (1 - v) * startPosition.longitude;
+        double lat = v * toPosition.latitude + (1 - v) * startPosition.latitude;
+        LatLng newPos = new LatLng(lat, lng);
+
+        iconMarker.setPosition(newPos);
+
+        if (calloutMarker != null) {
+            calloutMarker.setPosition(newPos);
+        }
+    });
+
+    animator.start();
+    return animator;
+}
+
+
   // Get icon from assets with size reduction
-  private com.google.android.gms.maps.model.BitmapDescriptor getIconFromAssets(String vehicleVariant, double rotation) {
+  private com.google.android.gms.maps.model.BitmapDescriptor getIconFromAssets(String vehicleVariant, double rotation, boolean isCluster, int clusterCount, int size, boolean rotationEnabled) {
       try {
           // Transform vehicle variant to lowercase
           String normalizedVariant = vehicleVariant.toLowerCase();
 
           // Get the nearest rotation angle
-          int nearestRotation = getNearestRotationAngle(rotation);
+          int nearestRotation;
+
+          if (rotationEnabled) {
+              nearestRotation = 90;
+          } else {
+              nearestRotation = getNearestRotationAngle(rotation);
+          }
 
           // Build asset name with lowercase variant (e.g., "mt_ic_auto_90", "mt_ic_bike_30")
           String assetName = "mt_ic_" + normalizedVariant + "_" + nearestRotation;
+
 
 
           // Get resource ID using getIdentifier
@@ -1998,7 +2225,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
           if (resourceId != 0) {
               // Resource found, create scaled bitmap
-              return createScaledBitmapDescriptor(resourceId);
+              return createScaledBitmapDescriptor(resourceId, isCluster, clusterCount, size);
           } else {
               // Resource not found, fallback to default
               return com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker(
@@ -2015,7 +2242,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
   }
 
   // Create scaled bitmap descriptor for smaller marker size
-  private com.google.android.gms.maps.model.BitmapDescriptor createScaledBitmapDescriptor(int resourceId) {
+  private com.google.android.gms.maps.model.BitmapDescriptor createScaledBitmapDescriptor(int resourceId, boolean isCluster, int clusterCount, int size) {
       try {
           // Load the original bitmap
           BitmapFactory.Options options = new BitmapFactory.Options();
@@ -2024,7 +2251,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
           if (originalBitmap != null) {
 
-            int targetWidthDp = 60; // only width in dp
+            int targetWidthDp = size; // only width in dp
             float density = getResources().getDisplayMetrics().density;
 
             int widthPx = (int) (targetWidthDp * density);
@@ -2035,6 +2262,39 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
               // Recycle original bitmap to free memory
               originalBitmap.recycle();
+
+              if (isCluster) {
+                  Bitmap mutableBitmap = scaledBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                  scaledBitmap.recycle();
+
+                  android.graphics.Canvas canvas = new android.graphics.Canvas(mutableBitmap);
+                  android.graphics.Paint paint = new android.graphics.Paint();
+                  paint.setAntiAlias(true);
+
+                  float cx = widthPx / 1.8f;
+                  float cy = heightPx * 0.64f;
+                  float radius = Math.min(widthPx, heightPx) / 2.4f;
+
+                  paint.setColor(Color.WHITE);
+                  canvas.drawCircle(cx, cy, radius, paint);
+
+                  paint.setColor(Color.parseColor("#007AFF"));
+                  canvas.drawCircle(cx, cy, radius * 0.85f, paint);
+
+                  paint.setColor(Color.WHITE);
+                  paint.setTextSize(radius);
+                  paint.setTypeface(android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD));
+                  paint.setTextAlign(android.graphics.Paint.Align.CENTER);
+
+                  String text = String.valueOf(clusterCount);
+                  android.graphics.Rect textBounds = new android.graphics.Rect();
+                  paint.getTextBounds(text, 0, text.length(), textBounds);
+                  float textY = cy - textBounds.exactCenterY();
+
+                  canvas.drawText(text, cx, textY, paint);
+
+                  return com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap(mutableBitmap);
+              }
 
               // Create bitmap descriptor from scaled bitmap
               return com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap(scaledBitmap);
@@ -2078,6 +2338,4 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
       return closestAngle;
   }
-
-
 }

@@ -73,6 +73,8 @@ export type MarkerDragStartEndEvent = NativeSyntheticEvent<{
 export type MarkerPressEvent = NativeSyntheticEvent<{
     id: string;
     action: 'marker-press';
+    actionType?: string;
+
     coordinate: LatLng;
     /**
      * @platform Android
