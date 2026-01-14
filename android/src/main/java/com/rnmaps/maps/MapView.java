@@ -1977,8 +1977,12 @@ private Bitmap createSimpleLabel(String title) {
     Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     bgPaint.setColor(Color.WHITE);
 
-    // Draw white background rectangle
-    canvas.drawRect(0, 0, width, height, bgPaint);
+    // Rounded rectangle bounds
+    android.graphics.RectF rectF = new android.graphics.RectF(0, 0, width, height);
+    float cornerRadius = 15f;
+
+    // Draw white background rounded rectangle
+    canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, bgPaint);
 
     // --- BORDER ---
     Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -1986,7 +1990,7 @@ private Bitmap createSimpleLabel(String title) {
     borderPaint.setStyle(Paint.Style.STROKE);
     borderPaint.setStrokeWidth(1f);         // thickness (px)
 
-    canvas.drawRect(0, 0, width, height, borderPaint);
+    canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, borderPaint);
     // --------------
 
 
@@ -2084,19 +2088,9 @@ private Bitmap createSimpleLabel(String title) {
                   existingMarker.setZIndex(zIndex);
                   if(rotationEnabled) existingMarker.setRotation((float) rotation);
                   else existingMarker.setIcon(getIconFromAssets(vehicleVariant, rotation, isCluster, clusterCount, size,rotationEnabled));
-
-
-                  if (!isCluster && !routeCode.isEmpty()) {
-                      java.util.Map<String, String> tagMap = new java.util.HashMap<>();
-                      tagMap.put("id", routeCode);
-                      tagMap.put("action", "marker-press");
-                      tagMap.put("actionType", action);
-                      existingMarker.setTag(tagMap);
-                  }
-
+ 
                   // Update icon if vehicle variant changed
                   
-
               } else {
                   // Create new marker with custom view
                   com.google.android.gms.maps.model.MarkerOptions markerOptions = new com.google.android.gms.maps.model.MarkerOptions()
@@ -2114,10 +2108,11 @@ private Bitmap createSimpleLabel(String title) {
                  if(rotationEnabled && rotation != -1) newMarker.setRotation((float) rotation);
 
                   if (newMarker != null) {
-                      if(!isCluster && !routeCode.isEmpty()) {
-                          java.util.Map<String, String> tagMap = new java.util.HashMap<>();
+                    if(!isCluster && !routeCode.isEmpty()) {
+                     java.util.Map<String, String> tagMap = new java.util.HashMap<>();
                           tagMap.put("id", routeCode);
-                          tagMap.put("action", action);
+                          tagMap.put("action", "marker-press");
+                          tagMap.put("actionType", action);
                           newMarker.setTag(tagMap);
                       }
                       nearbyMarkersCache.put(driverId, newMarker); 
