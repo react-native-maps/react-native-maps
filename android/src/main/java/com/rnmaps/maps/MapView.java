@@ -508,7 +508,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
                     if (tag instanceof java.util.Map) {
                         java.util.Map tagMap = (java.util.Map) tag;
-                        id = (String) tagMap.get("id");
+                        Object idObj = tagMap.get("id");
+                        if (idObj instanceof String) {
+                             id = (String) idObj;
+                        }
                         Object actionObj = tagMap.get("action");
                         if (actionObj instanceof String) {
                              action = (String) actionObj;
@@ -2027,7 +2030,7 @@ private Bitmap createSimpleLabel(String title) {
               boolean shouldAnimate = markerData.optBoolean("shouldAnimate", false);
               boolean isCluster = markerData.optBoolean("isCluster", false);
               int clusterCount = markerData.optInt("clusterCount", 0);
-              int size = markerData.optInt("size", 40);
+              int size = markerData.optInt("size", 60);
               String title = markerData.optString("title", "");
               boolean rotationEnabled = markerData.optBoolean("rotationEnabled", false);
               String routeCode = markerData.optString("routeCode", "");
@@ -2119,7 +2122,7 @@ private Bitmap createSimpleLabel(String title) {
                   }
                   if(!title.isEmpty()) {
                     Bitmap labelBitmap = createSimpleLabel(title);
-                    com.google.android.gms.maps.model.MarkerOptions calloutMarkerOptions = new com.google.android.gms.maps.model.MarkerOptions()
+                    MarkerOptions calloutMarkerOptions = new MarkerOptions()
                       .position(new com.google.android.gms.maps.model.LatLng(lat, lon))
                       .icon(com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap(labelBitmap))
                       .anchor(0.5f, 2.4f)
