@@ -7,7 +7,7 @@
   "types": "dist/src/index.d.ts",
   "author": "Leland Richardson <leland.m.richardson@gmail.com>",
   "homepage": "https://github.com/react-native-maps/react-native-maps#readme",
-  "version": "1.27.0",
+  "version": "1.27.1",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
