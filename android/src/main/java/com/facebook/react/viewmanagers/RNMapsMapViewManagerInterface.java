@@ -75,4 +75,5 @@ public interface RNMapsMapViewManagerInterface<T extends View> extends ViewManag
   void fitToSuppliedMarkers(T view, String markersJSON, String edgePaddingJSON, boolean animated);
   void fitToCoordinates(T view, String coordinatesJSON, String edgePaddingJSON, boolean animated);
   void setIndoorActiveLevelIndex(T view, int activeLevelIndex);
+  void setMapBoundaries(T view, String northEastJSON, String southWestJSON);
 }

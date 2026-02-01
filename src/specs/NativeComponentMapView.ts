@@ -1110,6 +1110,12 @@ interface NativeCommands {
     viewRef: React.ElementRef<typeof FabricMapView>,
     activeLevelIndex: Int32,
   ) => void;
+
+  setMapBoundaries: (
+    viewRef: React.ElementRef<typeof FabricMapView>,
+    northEastJSON: string,
+    southWestJSON: string,
+  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
@@ -1121,6 +1127,7 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
     'fitToSuppliedMarkers',
     'fitToCoordinates',
     'setIndoorActiveLevelIndex',
+    'setMapBoundaries',
   ],
 });
 
