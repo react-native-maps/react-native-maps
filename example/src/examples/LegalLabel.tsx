@@ -64,6 +64,10 @@ class LegalLabel extends React.Component<any, any> {
             bottom: this.state.legalLabelPositionY,
             right: 10,
           }}
+          appleLogoInsets={{
+            bottom: 50,
+            left: 10,
+          }}
           initialRegion={{
             ...latlng,
             latitudeDelta: LATITUDE_DELTA,

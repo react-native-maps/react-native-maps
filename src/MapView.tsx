@@ -187,6 +187,24 @@ export type MapViewProps = ViewProps & {
   legalLabelInsets?: EdgePadding;
 
   /**
+   * If set, changes the position of the Apple logo in Apple Maps.
+   * Use `left`/`top` to position from those edges, or `right`/`bottom`
+   * to position from opposite edges.
+   *
+   * @example
+   * // Position logo 10px from left, 50px from top
+   * appleLogoInsets={{ left: 10, top: 50 }}
+   *
+   * @example
+   * // Position logo 20px from right edge, 100px from bottom
+   * appleLogoInsets={{ right: 20, bottom: 100 }}
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  appleLogoInsets?: EdgePadding;
+
+  /**
    * Enables lite mode on Android
    *
    * @platform iOS: Not supported
