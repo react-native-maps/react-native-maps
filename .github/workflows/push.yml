@@ -11,7 +11,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
     env:
       HUSKY: 0
@@ -40,6 +40,5 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_CONFIG_PROVENANCE: true
         run: yarn release
