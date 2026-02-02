@@ -476,7 +476,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setUserInterfaceStyle(MapView view, @Nullable String value) {
-        // do nothing (initialProp)
+        view.setUserInterfaceStyle(value);
     }
 
     @Override
