@@ -309,6 +309,12 @@ using namespace facebook::react;
               facebook::react::RNMapsGoogleMapViewEventEmitter::OnUserLocationChangeCoordinate coordinate = {
                   .latitude = [coordinateDict[@"latitude"] doubleValue],
                   .longitude = [coordinateDict[@"longitude"] doubleValue],
+                  .altitude = [coordinateDict[@"altitude"] doubleValue],
+                  .timestamp = [coordinateDict[@"timestamp"] doubleValue],
+                  .accuracy = [coordinateDict[@"accuracy"] floatValue],
+                  .altitudeAccuracy = [coordinateDict[@"altitudeAccuracy"] floatValue],
+                  .speed = [coordinateDict[@"speed"] floatValue],
+                  .heading = [coordinateDict[@"heading"] floatValue],
               };
               NSString* str = @"";
               if (errorDict){
