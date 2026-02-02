@@ -648,6 +648,7 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     anchor(convertRawProp(context, rawProps, "anchor", sourceProps.anchor, {})),
     calloutAnchor(convertRawProp(context, rawProps, "calloutAnchor", sourceProps.calloutAnchor, {})),
     image(convertRawProp(context, rawProps, "image", sourceProps.image, {})),
+    systemImage(convertRawProp(context, rawProps, "systemImage", sourceProps.systemImage, {})),
     calloutOffset(convertRawProp(context, rawProps, "calloutOffset", sourceProps.calloutOffset, {})),
     displayPriority(convertRawProp(context, rawProps, "displayPriority", sourceProps.displayPriority, {RNMapsMarkerDisplayPriority::Required})),
     centerOffset(convertRawProp(context, rawProps, "centerOffset", sourceProps.centerOffset, {})),
@@ -690,6 +691,10 @@ folly::dynamic RNMapsMarkerProps::getDiffProps(
     
   if (image != oldProps->image) {
     result["image"] = toDynamic(image);
+  }
+    
+  if (systemImage != oldProps->systemImage) {
+    result["systemImage"] = systemImage;
   }
     
   if (calloutOffset != oldProps->calloutOffset) {

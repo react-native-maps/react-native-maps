@@ -108,6 +108,16 @@ export interface MarkerFabricNativeProps extends ViewProps {
   image?: ImageSource | null;
 
   /**
+   * Name of an SF Symbol to use for the marker.
+   * Applies only when using the default Apple Maps marker (no custom image or children).
+   * Ignored if a custom marker image is set or children are provided.
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  systemImage?: string | null;
+
+  /**
    * The offset (in points) at which to place the callout bubble.
    * When this property is set to (0, 0),
    * the anchor point of the callout bubble is placed on the top-center point of the marker view’s frame.
