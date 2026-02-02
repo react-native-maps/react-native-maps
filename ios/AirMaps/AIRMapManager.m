@@ -742,11 +742,14 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay{
     if ([overlay isKindOfClass:[AIRMapPolyline class]]) {
-        return ((AIRMapPolyline *)overlay).renderer;
+        // AIRMapPolyline uses CAShapeLayer instead of MKOverlayRenderer
+        return nil;
     } else if ([overlay isKindOfClass:[AIRMapPolygon class]]) {
-        return ((AIRMapPolygon *)overlay).renderer;
+        // AIRMapPolygon uses CAShapeLayer instead of MKOverlayRenderer
+        return nil;
     } else if ([overlay isKindOfClass:[AIRMapCircle class]]) {
-        return ((AIRMapCircle *)overlay).renderer;
+        // AIRMapCircle uses CAShapeLayer instead of MKOverlayRenderer
+        return nil;
     } else if ([overlay isKindOfClass:[AIRMapUrlTile class]]) {
         return ((AIRMapUrlTile *)overlay).renderer;
     } else if ([overlay isKindOfClass:[AIRMapWMSTile class]]) {
@@ -932,6 +935,10 @@ static int kDragCenterContext;
 - (void)mapViewDidChangeVisibleRegion:(AIRMap *)mapView
 {
     [self _regionChanged:mapView continuous:YES];
+    
+    // NOTIFY POLYLINES WITH CAShapeLayer TO UPDATE THEIR PATHS DURING GESTURES
+    [self notifyPolylinesOfRegionChange:mapView];
+    
 }
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
@@ -952,10 +959,29 @@ static int kDragCenterContext;
         [self _emitRegionChangeEvent:mapView continuous:NO];
     };
 
+    // NOTIFY POLYLINES WITH CAShapeLayer TO UPDATE THEIR PATHS
+    [self notifyPolylinesOfRegionChange:mapView];
+
     mapView.pendingCenter = mapView.region.center;
     mapView.pendingSpan = mapView.region.span;
     // reset original state (checkout setCamera / region animated)
     mapView.ignoreRegionChanges = NO;
+}
+
+// Notify all CAShapeLayer-based overlays to update their paths during pan/zoom
+- (void)notifyPolylinesOfRegionChange:(AIRMap *)mapView {
+    for (id overlay in mapView.overlays) {
+        if ([overlay isKindOfClass:[AIRMapPolyline class]]) {
+            AIRMapPolyline *polyline = (AIRMapPolyline *)overlay;
+            [polyline mapViewRegionDidChange];
+        } else if ([overlay isKindOfClass:[AIRMapPolygon class]]) {
+            AIRMapPolygon *polygon = (AIRMapPolygon *)overlay;
+            [polygon mapViewRegionDidChange];
+        } else if ([overlay isKindOfClass:[AIRMapCircle class]]) {
+            AIRMapCircle *circle = (AIRMapCircle *)overlay;
+            [circle mapViewRegionDidChange];
+        }
+    }
 }
 
 - (void)mapViewWillStartRenderingMap:(AIRMap *)mapView
@@ -1121,7 +1147,7 @@ static int kDragCenterContext;
     double zoomExponent = AIRMapMaxZoomLevel - zoomLevel;
     double zoomScale = pow(2, zoomExponent);
 
-    // scale the map’s size in pixel space
+    // scale the map's size in pixel space
     CGSize mapSizeInPixels = mapView.bounds.size;
     double scaledMapWidth = mapSizeInPixels.width * zoomScale;
     double scaledMapHeight = mapSizeInPixels.height * zoomScale;
@@ -1197,7 +1223,7 @@ static int kDragCenterContext;
 	double zoomExponent = AIRMapMaxZoomLevel - zoomLevel;
 	double zoomScale = pow(2, zoomExponent);
 
-	// scale the map’s size in pixel space
+	// scale the map's size in pixel space
 	CGSize mapSizeInPixels = mapView.bounds.size;
 	double scaledMapWidth = mapSizeInPixels.width * zoomScale;
 	double scaledMapHeight = mapSizeInPixels.height * zoomScale;
@@ -1210,8 +1236,8 @@ static int kDragCenterContext;
 	CLLocationDegrees maxLng = [AIRMapManager pixelSpaceXToLongitude:topLeftPixelX + scaledMapWidth];
 	CLLocationDegrees longitudeDelta = maxLng - minLng;
 
-	// if we’re at a pole then calculate the distance from the pole towards the equator
-	// as MKMapView doesn’t like drawing boxes over the poles
+	// if we're at a pole then calculate the distance from the pole towards the equator
+	// as MKMapView doesn't like drawing boxes over the poles
 	double topPixelY = centerPixelY - (scaledMapHeight / 2);
 	double bottomPixelY = centerPixelY + (scaledMapHeight / 2);
 	BOOL adjustedCenterPoint = NO;
@@ -1229,7 +1255,7 @@ static int kDragCenterContext;
 	// create and return the lat/lng span
 	MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
 	MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
-	// once again, MKMapView doesn’t like drawing boxes over the poles
+	// once again, MKMapView doesn't like drawing boxes over the poles
 	// so adjust the center coordinate to the center of the resulting region
 	if (adjustedCenterPoint) {
 		region.center.latitude = [AIRMapManager pixelSpaceYToLatitude:((bottomPixelY + topPixelY) / 2.0)];

@@ -12,27 +12,29 @@
 #import <React/RCTView.h>
 
 #import "AIRMapCoordinate.h"
-#import "AIRMap.h"
+#import "AIRMapOverlayBase.h"
 #import "RCTConvert+AirMap.h"
 
-@interface AIRMapCircle: MKAnnotationView <MKOverlay>
+@interface AIRMapCircle : AIRMapOverlayBase <MKOverlay>
 
-@property (nonatomic, weak) AIRMap *map;
+@property (nonatomic, assign) CLLocationCoordinate2D centerCoordinate;
+@property (nonatomic, assign) CLLocationDistance radius;
+@property (nonatomic, strong) UIColor *fillColor;
+@property (nonatomic, strong) UIColor *strokeColor;
+@property (nonatomic, assign) CGFloat strokeWidth;
+@property (nonatomic, assign) CGLineJoin lineJoin;
+@property (nonatomic, assign) CGLineCap lineCap;
+@property (nonatomic, assign) CGFloat miterLimit;
+@property (nonatomic, assign) CGFloat lineDashPhase;
+@property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
 
 @property (nonatomic, strong) MKCircle *circle;
 @property (nonatomic, strong) MKCircleRenderer *renderer;
 
-@property (nonatomic, assign) CLLocationCoordinate2D centerCoordinate;
-@property (nonatomic, assign) CLLocationDistance radius;
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
-@property (nonatomic, strong) UIColor *fillColor;
-@property (nonatomic, strong) UIColor *strokeColor;
-@property (nonatomic, assign) CGFloat strokeWidth;
-@property (nonatomic, assign) CGFloat miterLimit;
-@property (nonatomic, assign) CGLineCap lineCap;
-@property (nonatomic, assign) CGLineJoin lineJoin;
-@property (nonatomic, assign) CGFloat lineDashPhase;
-@property (nonatomic, strong) NSArray <NSNumber *> *lineDashPattern;
+// CAShapeLayer region change notification
+- (void)mapViewRegionDidChange;
 
 #pragma mark MKOverlay protocol
 
