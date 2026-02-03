@@ -349,6 +349,15 @@ public class MapMarker extends MapFeature {
     }
 
     public LatLng interpolate(float fraction, LatLng a, LatLng b) {
+        if (a == null && b == null) {
+            return new LatLng(0, 0);
+        }
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
+        }
         double lat = (b.latitude - a.latitude) * fraction + a.latitude;
         double lng = (b.longitude - a.longitude) * fraction + a.longitude;
         return new LatLng(lat, lng);
