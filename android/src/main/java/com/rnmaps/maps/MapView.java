@@ -1173,7 +1173,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             while (savedFeatures.size() <= index) {
                 savedFeatures.add(null);
             }
-            savedFeatures.set(index, mapFeature);
+            savedFeatures.add(index, mapFeature);
             return;
         }
 
@@ -1181,7 +1181,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         while (features.size() <= index) {
             features.add(null);
         }
-        features.set(index, mapFeature);
+        features.add(index, mapFeature);
     }
 
     public void addFeature(View child, int index) {
