@@ -364,6 +364,9 @@ public class MapMarker extends MapFeature {
     }
 
     public void animateToCoodinate(LatLng finalPosition, Integer duration) {
+        if (marker == null || finalPosition == null) {
+            return;
+        }
         TypeEvaluator<LatLng> typeEvaluator = new TypeEvaluator<LatLng>() {
             @Override
             public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
