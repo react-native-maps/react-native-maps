@@ -1166,13 +1166,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     private void safeAddFeature(int index, MapFeature mapFeature){
-        if(paused || features.size() < index){
+        if (paused) {
             if (savedFeatures == null) {
                 savedFeatures = new ArrayList<>();
             }
 
             // Ensure the list is large enough to set at the given index
-            while(savedFeatures.size() <= index){
+            while (savedFeatures.size() <= index) {
                 savedFeatures.add(null);
             }
             savedFeatures.set(index, mapFeature);
@@ -1180,7 +1180,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
 
         // Ensure the list is large enough to set at the given index
-        while(features.size() <= index){
+        while (features.size() <= index) {
             features.add(null);
         }
         features.set(index, mapFeature);
