@@ -366,7 +366,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             // Pause safely if not already paused
             if (!paused) {
                 onPause();
-                paused = true;
             }
         }
 
@@ -790,7 +789,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         try {
             if (!paused) {
                 onPause();
-                paused = true;
             }
             onDestroy();
             detachLifecycleObserver();
