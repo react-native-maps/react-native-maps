@@ -365,6 +365,7 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     initialRegion(convertRawProp(context, rawProps, "initialRegion", sourceProps.initialRegion, {})),
     kmlSrc(convertRawProp(context, rawProps, "kmlSrc", sourceProps.kmlSrc, {})),
     legalLabelInsets(convertRawProp(context, rawProps, "legalLabelInsets", sourceProps.legalLabelInsets, {})),
+    appleLogoInsets(convertRawProp(context, rawProps, "appleLogoInsets", sourceProps.appleLogoInsets, {})),
     liteMode(convertRawProp(context, rawProps, "liteMode", sourceProps.liteMode, {false})),
     googleMapId(convertRawProp(context, rawProps, "googleMapId", sourceProps.googleMapId, {})),
     googleRenderer(convertRawProp(context, rawProps, "googleRenderer", sourceProps.googleRenderer, {RNMapsMapViewGoogleRenderer::LATEST})),
@@ -459,6 +460,10 @@ folly::dynamic RNMapsMapViewProps::getDiffProps(
     
   if (legalLabelInsets != oldProps->legalLabelInsets) {
     result["legalLabelInsets"] = toDynamic(legalLabelInsets);
+  }
+    
+  if (appleLogoInsets != oldProps->appleLogoInsets) {
+    result["appleLogoInsets"] = toDynamic(appleLogoInsets);
   }
     
   if (liteMode != oldProps->liteMode) {
