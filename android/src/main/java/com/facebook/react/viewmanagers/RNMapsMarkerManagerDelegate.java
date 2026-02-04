@@ -64,6 +64,12 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
       case "isPreselected":
         mViewManager.setIsPreselected(view, value == null ? false : (boolean) value);
         break;
+      case "useSnapshot":
+        mViewManager.setUseSnapshot(view, value == null ? false : (boolean) value);
+        break;
+      case "snapshotCacheKey":
+        mViewManager.setSnapshotCacheKey(view, value == null ? null : (String) value);
+        break;
       case "opacity":
         mViewManager.setOpacity(view, value == null ? 1f : ((Double) value).doubleValue());
         break;

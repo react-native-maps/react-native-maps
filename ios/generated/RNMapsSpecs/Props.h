@@ -1719,6 +1719,8 @@ class RNMapsMarkerProps final : public ViewProps {
   bool tracksViewChanges{true};
   std::string identifier{};
   bool isPreselected{false};
+  bool useSnapshot{false};
+  std::string snapshotCacheKey{};
   double opacity{1.0};
   SharedColor pinColor{};
   RNMapsMarkerTitleVisibility titleVisibility{RNMapsMarkerTitleVisibility::Visible};

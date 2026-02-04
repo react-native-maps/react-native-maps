@@ -364,6 +364,9 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
     REMAP_MAPVIEW_PROP(opacity)
     REMAP_MAPVIEW_PROP(draggable)
     REMAP_MAPVIEW_PROP(isPreselected)
+    
+    REMAP_MAPVIEW_PROP(useSnapshot)
+    REMAP_MAPVIEW_STRING_PROP(snapshotCacheKey)
 
     REMAP_MAPVIEW_COLOR_PROP(pinColor)
 
