@@ -466,6 +466,16 @@ export interface MapFabricNativeProps extends ViewProps {
   legalLabelInsets?: EdgePadding;
 
   /**
+   * If set, changes the position of the Apple logo in Apple Maps.
+   * Use `left`/`top` to position from those edges, or `right`/`bottom`
+   * to position from opposite edges.
+   *
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  appleLogoInsets?: EdgePadding;
+
+  /**
    * Enables lite mode on Android
    *
    * @platform iOS: Not supported

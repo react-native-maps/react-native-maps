@@ -586,6 +586,7 @@ newViewProps.name.right);           \
     REMAP_MAPVIEW_CAMERA_PROP(camera)
 
     REMAP_MAPVIEW_EDGEINSETS_PROP(legalLabelInsets)
+    REMAP_MAPVIEW_EDGEINSETS_PROP(appleLogoInsets)
     REMAP_MAPVIEW_EDGEINSETS_PROP(mapPadding)
 
     REMAP_MAPVIEW_COLOR_PROP(loadingIndicatorColor)

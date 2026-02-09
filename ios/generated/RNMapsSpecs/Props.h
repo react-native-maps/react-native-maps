@@ -1171,6 +1171,57 @@ static inline folly::dynamic toDynamic(const RNMapsMapViewLegalLabelInsetsStruct
 }
 #endif
 
+struct RNMapsMapViewAppleLogoInsetsStruct {
+  double top{0.0};
+  double right{0.0};
+  double bottom{0.0};
+  double left{0.0};
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsMapViewAppleLogoInsetsStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["top"] = top;
+    result["right"] = right;
+    result["bottom"] = bottom;
+    result["left"] = left;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsMapViewAppleLogoInsetsStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_top = map.find("top");
+  if (tmp_top != map.end()) {
+    fromRawValue(context, tmp_top->second, result.top);
+  }
+  auto tmp_right = map.find("right");
+  if (tmp_right != map.end()) {
+    fromRawValue(context, tmp_right->second, result.right);
+  }
+  auto tmp_bottom = map.find("bottom");
+  if (tmp_bottom != map.end()) {
+    fromRawValue(context, tmp_bottom->second, result.bottom);
+  }
+  auto tmp_left = map.find("left");
+  if (tmp_left != map.end()) {
+    fromRawValue(context, tmp_left->second, result.left);
+  }
+}
+
+static inline std::string toString(const RNMapsMapViewAppleLogoInsetsStruct &value) {
+  return "[Object RNMapsMapViewAppleLogoInsetsStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsMapViewAppleLogoInsetsStruct &value) {
+  return value.toDynamic();
+}
+#endif
+
 struct RNMapsMapViewMapPaddingStruct {
   double top{0.0};
   double right{0.0};
@@ -1333,6 +1384,7 @@ class RNMapsMapViewProps final : public ViewProps {
   RNMapsMapViewInitialRegionStruct initialRegion{};
   std::string kmlSrc{};
   RNMapsMapViewLegalLabelInsetsStruct legalLabelInsets{};
+  RNMapsMapViewAppleLogoInsetsStruct appleLogoInsets{};
   bool liteMode{false};
   std::string googleMapId{};
   RNMapsMapViewGoogleRenderer googleRenderer{RNMapsMapViewGoogleRenderer::LATEST};
