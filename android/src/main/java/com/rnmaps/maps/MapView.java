@@ -196,6 +196,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                     map.setMyLocationEnabled(showUserLocation);
                     map.setLocationSource(fusedLocationSource);
                 }
+                if (map != null) {
+                    map.getUiSettings().setMyLocationButtonEnabled(hasPermissions() && showMyLocationButton);
+                }
                 MapView.this.onResume();
                 paused = false;
             }
