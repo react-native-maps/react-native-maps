@@ -227,9 +227,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
-
-    @Override
-    public void onPause(LifecycleOwner owner) {
+    public void pauseSafely() {
         if (hasPermissions() && map != null) {
             //noinspection MissingPermission
             map.setMyLocationEnabled(false);
@@ -241,6 +239,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 paused = true;
             }
         }
+    }
+
+    @Override
+    public void onPause(LifecycleOwner owner) {
+        pauseSafely();
     }
 
     @Override
@@ -365,8 +368,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
             // Pause safely if not already paused
             if (!paused) {
-                onPause();
-                paused = true;
+                pauseSafely();
             }
         }
 
@@ -789,8 +791,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         savedFeatures = null;
         try {
             if (!paused) {
-                onPause();
-                paused = true;
+                pauseSafely();
             }
             onDestroy();
             detachLifecycleObserver();
@@ -1165,25 +1166,25 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         this.handlePanDrag = handlePanDrag;
     }
 
-    private void safeAddFeature(int index, MapFeature mapFeature){
-        if(paused || features.size() < index){
+    private void safeAddFeature(int index, MapFeature mapFeature) {
+        if (paused) {
             if (savedFeatures == null) {
                 savedFeatures = new ArrayList<>();
             }
 
             // Ensure the list is large enough to set at the given index
-            while(savedFeatures.size() <= index){
+            while (savedFeatures.size() <= index) {
                 savedFeatures.add(null);
             }
-            savedFeatures.set(index, mapFeature);
+            savedFeatures.add(index, mapFeature);
             return;
         }
 
         // Ensure the list is large enough to set at the given index
-        while(features.size() <= index){
+        while (features.size() <= index) {
             features.add(null);
         }
-        features.set(index, mapFeature);
+        features.add(index, mapFeature);
     }
 
     public void addFeature(View child, int index) {
@@ -1273,18 +1274,40 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public int getFeatureCount() {
+        if (paused) {
+            if (savedFeatures == null) {
+                return 0;
+            }
+            return savedFeatures.size();
+        }
         return features.size();
     }
 
     public View getFeatureAt(int index) {
+        if (paused) {
+            if (savedFeatures == null || index >= savedFeatures.size()) {
+                return null;
+            }
+            return savedFeatures.get(index);
+        }
         if (index < features.size()) {
             return features.get(index);
         }
         return null;
     }
 
+    private MapFeature safeRemoveFeature(int index) {
+        if (paused) {
+            if (savedFeatures == null) {
+                return null;
+            }
+            return savedFeatures.remove(index);
+        }
+        return features.remove(index);
+    }
+
     public void removeFeatureAt(int index) {
-        MapFeature feature = features.remove(index);
+        MapFeature feature = safeRemoveFeature(index);
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
             feature.removeFromMap(markerCollection);
