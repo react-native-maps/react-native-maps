@@ -821,7 +821,16 @@ public class MapMarker extends MapFeature {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        this.height = b - t;
-        this.width = r - l;
+        int newWidth = r - l;
+        int newHeight = b - t;
+        if (newWidth > 0 && newHeight > 0 && (newWidth != this.width || newHeight != this.height)) {
+            this.width = newWidth;
+            this.height = newHeight;
+
+            clearDrawableCache();
+            if (marker != null) {
+                update(true);
+            }
+        }
     }
 }
