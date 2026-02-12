@@ -1274,18 +1274,40 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public int getFeatureCount() {
+        if (paused) {
+            if (savedFeatures == null) {
+                return 0;
+            }
+            return savedFeatures.size();
+        }
         return features.size();
     }
 
     public View getFeatureAt(int index) {
+        if (paused) {
+            if (savedFeatures == null || index >= savedFeatures.size()) {
+                return null;
+            }
+            return savedFeatures.get(index);
+        }
         if (index < features.size()) {
             return features.get(index);
         }
         return null;
     }
 
+    private MapFeature safeRemoveFeature(int index) {
+        if (paused) {
+            if (savedFeatures == null) {
+                return null;
+            }
+            return savedFeatures.remove(index);
+        }
+        return features.remove(index);
+    }
+
     public void removeFeatureAt(int index) {
-        MapFeature feature = features.remove(index);
+        MapFeature feature = safeRemoveFeature(index);
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
             feature.removeFromMap(markerCollection);
