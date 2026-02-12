@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.1](https://github.com/react-native-maps/react-native-maps/compare/v1.27.0...v1.27.1) (2026-02-01)
+
+
+### Bug Fixes
+
+* fix ci by adding the package's version to the git commit ([#5854](https://github.com/react-native-maps/react-native-maps/issues/5854)) ([7f4f34c](https://github.com/react-native-maps/react-native-maps/commit/7f4f34c5dd8dcb6cbf4e6e1d28c853c4f05d5104))
+
 # [1.27.0](https://github.com/react-native-maps/react-native-maps/compare/v1.26.20...v1.27.0) (2026-02-01)
 
 
