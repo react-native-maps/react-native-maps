@@ -30,6 +30,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     BOOL _calloutIsOpen;
     NSInteger _zIndexBeforeOpen;
     BOOL _useLegacyPinView;
+    BOOL _hasUsedCustomView;
 
     CADisplayLink *_displayLink;
     CLLocationCoordinate2D _startCoordinate;
@@ -350,7 +351,15 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
 - (BOOL)shouldUsePinView
 {
-    return self.reactSubviews.count == 0 && !self.imageSrc;
+    if (self.imageSrc || _hasUsedCustomView) {
+        return NO;
+    }
+
+    if (self.reactSubviews.count > 0) {
+        _hasUsedCustomView = YES;
+        return NO;
+    }
+    return YES;
 }
 
 - (void)setOpacity:(double)opacity
