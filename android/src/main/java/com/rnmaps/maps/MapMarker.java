@@ -539,8 +539,10 @@ public class MapMarker extends MapFeature {
             if (hasCustomMarkerView) {
                 hasCustomMarkerView = false;
                 clearDrawableCache();
-                updateTracksViewChanges();
-                update(true);
+                if (marker != null && getParent() != null) {
+                    updateTracksViewChanges();
+                    update(true);
+                }
             }
         } else {
             // custom subview
