@@ -177,6 +177,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 context.getResources().getConfiguration() == null;
     }
 
+    private boolean isMapOperationSafe() {
+        return !destroyed && !paused && map != null && isAttachedToWindow();
+    }
+
     // We do this to fix this bug:
     // https://github.com/react-native-maps/react-native-maps/issues/271
     //
@@ -200,7 +204,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         return superContext;
     }
-
 
     @Override
     public void onCreate(LifecycleOwner owner) {
@@ -1364,40 +1367,52 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void animateToCamera(CameraPosition position, int duration) {
-        if (map == null) return;
-        CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
-        if (duration <= 0) {
-            map.moveCamera(update);
-        } else {
-            map.animateCamera(update, duration, null);
+        if (!isMapOperationSafe()) return;
+        try {
+            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
+            if (duration <= 0) {
+                map.moveCamera(update);
+            } else {
+                map.animateCamera(update, duration, null);
+            }
+        } catch (IllegalStateException e) {
+            Log.w("MapView", "animateToCamera failed - map not in valid state: " + e.getMessage());
         }
     }
 
     public void animateToCamera(ReadableMap camera, int duration) {
-        if (map == null) return;
-        CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
-        if (camera.hasKey("zoom")) {
-            builder.zoom((float) camera.getDouble("zoom"));
+        if (!isMapOperationSafe()) return;
+        try {
+            CameraPosition.Builder builder = new CameraPosition.Builder(map.getCameraPosition());
+            if (camera.hasKey("zoom")) {
+                builder.zoom((float) camera.getDouble("zoom"));
+            }
+            if (camera.hasKey("heading")) {
+                builder.bearing((float) camera.getDouble("heading"));
+            }
+            if (camera.hasKey("pitch")) {
+                builder.tilt((float) camera.getDouble("pitch"));
+            }
+            if (camera.hasKey("center")) {
+                ReadableMap center = camera.getMap("center");
+                builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
+            }
+            animateToCamera(builder.build(), duration);
+        } catch (IllegalStateException e) {
+            Log.w("MapView", "animateToCamera failed - map not in valid state: " + e.getMessage());
         }
-        if (camera.hasKey("heading")) {
-            builder.bearing((float) camera.getDouble("heading"));
-        }
-        if (camera.hasKey("pitch")) {
-            builder.tilt((float) camera.getDouble("pitch"));
-        }
-        if (camera.hasKey("center")) {
-            ReadableMap center = camera.getMap("center");
-            builder.target(new LatLng(center.getDouble("latitude"), center.getDouble("longitude")));
-        }
-        animateToCamera(builder.build(), duration);
     }
 
     public void animateToRegion(LatLngBounds bounds, int duration) {
-        if (map == null) return;
-        if (duration <= 0) {
-            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-        } else {
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+        if (!isMapOperationSafe()) return;
+        try {
+            if (duration <= 0) {
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+            } else {
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+            }
+        } catch (IllegalStateException e) {
+            Log.w("MapView", "animateToRegion failed - map not in valid state: " + e.getMessage());
         }
     }
 
