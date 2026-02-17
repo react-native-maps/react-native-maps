@@ -236,8 +236,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         synchronized (MapView.this) {
             if (!paused) {
-                super.onPause();
-                MapView.this.onPause();
+                onPause();
                 paused = true;
             }
         }
@@ -250,13 +249,15 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     @Override
     public void onDestroy(LifecycleOwner owner) {
-        MapView.this.doDestroy();
+        detachLifecycleObserver();
+        onDestroy();
     }
 
     public MapView(ThemedReactContext context,
                    GoogleMapOptions googleMapOptions) {
         super(context, googleMapOptions);
         this.context = context;
+        attachLifecycleObserver();
         super.getMapAsync(this);
 
         final MapView view = this;
