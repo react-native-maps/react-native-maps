@@ -17,6 +17,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import androidx.core.content.ContextCompat;
 
 
 import androidx.lifecycle.DefaultLifecycleObserver;
@@ -25,6 +27,7 @@ import androidx.lifecycle.LifecycleOwner;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -505,6 +508,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                     String id = null;
                     String action = "marker-press";
                     String actionType = null;
+                    boolean isPressFeedbackEnabled = false;
 
                     if (tag instanceof java.util.Map) {
                         java.util.Map tagMap = (java.util.Map) tag;
@@ -520,9 +524,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                         if (actionTypeObj instanceof String) {
                              actionType = (String) actionTypeObj;
                         }
+                        Object isPressFeedbackEnabledObj = tagMap.get("isPressFeedbackEnabled");
+                        if (isPressFeedbackEnabledObj instanceof Boolean) {
+                             isPressFeedbackEnabled = (Boolean) isPressFeedbackEnabledObj;
+                        }
                     }
 
                     if (id != null) {
+                        if (isPressFeedbackEnabled) {
+                            performMarkerPressFeedback(marker);
+                        }
                         WritableMap mapEventData = makeClickEventData(marker.getPosition());
                         mapEventData.putString("action", "marker-press");
                         mapEventData.putString("actionType", actionType);
@@ -1958,52 +1969,166 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         return false;
     }
-private Bitmap createSimpleLabel(String title) {
-    // Text paint
+
+private Bitmap createSimpleLabel(
+        String title,
+        List<String> iconNames,
+        org.json.JSONObject calloutConfig
+) {
+
+    Context context = getContext();
+    float density = context.getResources().getDisplayMetrics().density;
+
+    // ---------- CONFIG ----------
+    int padding = (int) (8 * density);
+    int iconSize = (int) (14 * density);
+    int iconSpacing = (int) (4 * density);
+    float textSize = 13 * density;
+    float cornerRadius = 12 * density;
+    float borderWidth = 0.5f * density;
+
+    if (calloutConfig != null) {
+        padding = (int) (calloutConfig.optDouble("padding", 8) * density);
+        iconSize = (int) (calloutConfig.optDouble("iconSize", 14) * density);
+        iconSpacing = (int) (calloutConfig.optDouble("iconSpacing", 4) * density);
+        textSize = (float) (calloutConfig.optDouble("textSize", 13) * density);
+        cornerRadius = (float) (calloutConfig.optDouble("cornerRadius", 12) * density);
+        borderWidth = (float) (calloutConfig.optDouble("borderWidth", 0.5) * density);
+    }
+    // ----------------------------
+
     Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     textPaint.setColor(Color.BLACK);
-    textPaint.setTextSize(36f);
+    textPaint.setTextSize(textSize);
 
-    // Measure text
-    Rect bounds = new Rect();
-    textPaint.getTextBounds(title, 0, title.length(), bounds);
+    Paint.FontMetrics fm = textPaint.getFontMetrics();
+    float textHeight = fm.bottom - fm.top;
+    float textWidth = textPaint.measureText(title);
 
-    int padding = 20;
-    int width = bounds.width() + padding * 2;
-    int height = bounds.height() + padding * 2;
+    int iconCount = (iconNames != null) ? iconNames.size() : 0;
 
-    // Create bitmap
+    int totalIconsWidth = 0;
+    if (iconCount > 0) {
+        totalIconsWidth =
+                (iconSize * iconCount)
+                + (iconSpacing * (iconCount - 1));
+    }
+
+    int width = (int) (
+            padding * 2
+            + textWidth
+            + (iconCount > 0 ? padding : 0)
+            + totalIconsWidth
+    );
+
+    int height = (int) (
+            Math.max(iconSize, textHeight)
+            + padding * 2
+    );
+
     Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
     Canvas canvas = new Canvas(bitmap);
 
-    // Background paint
+    // Background
     Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     bgPaint.setColor(Color.WHITE);
 
-    // Rounded rectangle bounds
-    android.graphics.RectF rectF = new android.graphics.RectF(0, 0, width, height);
-    float cornerRadius = 15f;
-
-    // Draw white background rounded rectangle
+    RectF rectF = new RectF(0, 0, width, height);
     canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, bgPaint);
 
-    // --- BORDER ---
+    // Border
     Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    borderPaint.setColor(Color.BLACK);      // border color
+    borderPaint.setColor(Color.BLACK);
     borderPaint.setStyle(Paint.Style.STROKE);
-    borderPaint.setStrokeWidth(1f);         // thickness (px)
-
+    borderPaint.setStrokeWidth(borderWidth);
     canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, borderPaint);
-    // --------------
 
+    // Draw Text
+    float textX = padding;
+    float textY = height / 2f - (fm.ascent + fm.descent) / 2f;
+    canvas.drawText(title, textX, textY, textPaint);
 
-    // Draw black text
-    float x = padding;
-    float y = padding - bounds.top; // align text baseline
-    canvas.drawText(title, x, y, textPaint);
+    // Draw Icons (RIGHT)
+    if (iconCount > 0) {
+
+        int startX = (int) (padding + textWidth + padding);
+
+        for (int i = 0; i < iconCount; i++) {
+
+            String assetName = iconNames.get(i);
+
+            int resId = getResources().getIdentifier(
+                    assetName,
+                    "drawable",
+                    context.getPackageName()
+            );
+
+            if (resId != 0) {
+
+                Drawable drawable =
+                        ContextCompat.getDrawable(context, resId);
+
+                if (drawable != null) {
+
+                    int left = startX + i * (iconSize + iconSpacing);
+                    int top = (height - iconSize) / 2;
+                    int right = left + iconSize;
+                    int bottom = top + iconSize;
+
+                    drawable.setBounds(left, top, right, bottom);
+                    drawable.draw(canvas);
+                }
+            }
+        }
+    }
 
     return bitmap;
 }
+
+
+private void performMarkerPressFeedback(final Marker marker) {
+    this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+    marker.setAlpha(0.6f);
+
+    this.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            marker.setAlpha(1.0f);
+        }
+    }, 120);
+}
+
+private final Double POS_EPS_DEG = 0.00001;
+
+private boolean hasPositionChanged(LatLng p1, LatLng p2) {
+    return Math.abs(p1.latitude - p2.latitude) >= POS_EPS_DEG
+        && Math.abs(p1.longitude - p2.longitude) >= POS_EPS_DEG;
+}
+
+private float clamp(float value, float min, float max) {
+    return Math.max(min, Math.min(max, value));
+}
+
+
+private float getAdaptiveCalloutAnchorV(float rotationDegrees) {
+    float r = (rotationDegrees + 360f) % 360f;
+
+    final float BASE_ANCHOR = 2.4f;
+
+    final float EAST_WEST_ANCHOR = 1.9f;
+
+    if (r >= 50f && r <= 130f) {
+        return EAST_WEST_ANCHOR;
+    }
+
+    if (r >= 230f && r <= 310f) {
+        return EAST_WEST_ANCHOR;
+    }
+
+    return BASE_ANCHOR;
+}
+
 
 
   // Native nearby markers management
@@ -2035,7 +2160,27 @@ private Bitmap createSimpleLabel(String title) {
               boolean rotationEnabled = markerData.optBoolean("rotationEnabled", false);
               String routeCode = markerData.optString("routeCode", "");
               String action = markerData.optString("action", "marker-press");
+              boolean isVisible = markerData.optBoolean("isVisible", true);
+              boolean isPressFeedbackEnabled = markerData.optBoolean("isPressFeedbackEnabled", false);
+              org.json.JSONArray iconsArray = markerData.optJSONArray("icons");
+              org.json.JSONObject calloutConfig = markerData.optJSONObject("calloutConfig");
+
+              List<String> labelIcons = new ArrayList<>();
+
+             
+
+              if (iconsArray != null) {
+                 
+                  for (int j = 0; j < iconsArray.length(); j++) {
+                      
+                      labelIcons.add(iconsArray.getString(j));
+                  }
+              }
+
               
+              float calloutAnchorV = 2.4f;
+              float calloutAnchorU = 0.5f;
+
               
               if (markerAnimators.containsKey(driverId)) {
                   ValueAnimator animator = markerAnimators.get(driverId);
@@ -2044,20 +2189,23 @@ private Bitmap createSimpleLabel(String title) {
                   }
                   markerAnimators.remove(driverId);
               }
-              
+
               seenDrivers.add(driverId);
 
               Marker existingMarker = nearbyMarkersCache.get(driverId);
               Marker existingCalloutMarker = nearbyMarkersCalloutCache.get(driverId);
              
               if (existingMarker != null) {
-                  // Calculate bearing if rotation is missing and position changed
-                  
+                      existingMarker.setVisible(isVisible);
+                      if(existingCalloutMarker != null){
+                        existingCalloutMarker.setVisible(isVisible);
+                      }
                       LatLng start = existingMarker.getPosition();
                       LatLng end = new LatLng(lat, lon);
+                    
 
                     if(!isCluster){
-                      if (start.latitude != end.latitude || start.longitude != end.longitude) {
+                      if (hasPositionChanged(start, end)) {
                           Location locStart = new Location("start");
                           locStart.setLatitude(start.latitude);
                           locStart.setLongitude(start.longitude);
@@ -2065,15 +2213,28 @@ private Bitmap createSimpleLabel(String title) {
                           Location locEnd = new Location("end");
                           locEnd.setLatitude(end.latitude);
                           locEnd.setLongitude(end.longitude);
-                            
                           rotation = locStart.bearingTo(locEnd);
                       } else {
                           rotation = existingMarker.getRotation();
                       }
+                      
+                      
                 }
+
+                calloutAnchorV = getAdaptiveCalloutAnchorV((float) rotation);
+                if(existingCalloutMarker != null) {
+                  existingCalloutMarker.setAnchor(calloutAnchorU, calloutAnchorV);
+                }
+
+                 if(rotationEnabled){
+                    existingMarker.setRotation((float) rotation);
+                  } else {
+                    existingMarker.setIcon(getIconFromAssets(vehicleVariant, rotation, isCluster, clusterCount, size,rotationEnabled));
+                  }
 
                   // Update existing marker
                   if (shouldAnimate) {
+                    if(hasPositionChanged(start, end)){
                       ValueAnimator animator = animateMarkers(existingMarker,existingCalloutMarker, new com.google.android.gms.maps.model.LatLng(lat, lon), animationDuration);
                       markerAnimators.put(driverId, animator);
                       animator.addListener(new AnimatorListenerAdapter() {
@@ -2084,13 +2245,13 @@ private Bitmap createSimpleLabel(String title) {
                               }
                           }
                       });
+                    };
                   } else {
                       existingMarker.setPosition(new com.google.android.gms.maps.model.LatLng(lat, lon));
                       if(existingCalloutMarker != null) existingCalloutMarker.setPosition(new com.google.android.gms.maps.model.LatLng(lat, lon));
                   }
                   existingMarker.setZIndex(zIndex);
-                  if(rotationEnabled) existingMarker.setRotation((float) rotation);
-                  else existingMarker.setIcon(getIconFromAssets(vehicleVariant, rotation, isCluster, clusterCount, size,rotationEnabled));
+                 
  
                   // Update icon if vehicle variant changed
                   
@@ -2101,7 +2262,7 @@ private Bitmap createSimpleLabel(String title) {
                       .anchor(0.5f, 0.5f)
                       .zIndex(zIndex)
                       .flat(true)
-                      .visible(true);
+                      .visible(isVisible);
 
                 
                   // Use custom marker icon based on vehicle variant and rotation
@@ -2112,23 +2273,24 @@ private Bitmap createSimpleLabel(String title) {
 
                   if (newMarker != null) {
                     if(!isCluster && !routeCode.isEmpty()) {
-                     java.util.Map<String, String> tagMap = new java.util.HashMap<>();
+                     java.util.Map<String, Object> tagMap = new java.util.HashMap<>();
                           tagMap.put("id", routeCode);
                           tagMap.put("action", "marker-press");
                           tagMap.put("actionType", action);
+                          tagMap.put("isPressFeedbackEnabled", isPressFeedbackEnabled);
                           newMarker.setTag(tagMap);
                       }
                       nearbyMarkersCache.put(driverId, newMarker); 
                   }
                   if(!title.isEmpty()) {
-                    Bitmap labelBitmap = createSimpleLabel(title);
+                    Bitmap labelBitmap = createSimpleLabel(title, labelIcons, calloutConfig);
                     MarkerOptions calloutMarkerOptions = new MarkerOptions()
                       .position(new com.google.android.gms.maps.model.LatLng(lat, lon))
                       .icon(com.google.android.gms.maps.model.BitmapDescriptorFactory.fromBitmap(labelBitmap))
-                      .anchor(0.5f, 2.4f)
+                      .anchor(calloutAnchorU, calloutAnchorV)
                       .zIndex(600)
                       .flat(true)
-                      .visible(true);
+                      .visible(isVisible);
                       Marker newCalloutMarker = markerCollection.addMarker(calloutMarkerOptions);
                       if(newCalloutMarker != null) nearbyMarkersCalloutCache.put(driverId, newCalloutMarker);
                   }
