@@ -516,61 +516,63 @@ public class MapMarker extends MapFeature {
     private void hackToHandleGlideImageView(View view) {
         // Defer until the MapMarker is attached to a window (via attacherGroup in
         // MapView.addFeature), so Glide can properly manage the request lifecycle.
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            try {
-                Field sourceField = view.getClass().getDeclaredField("mSource");
-                sourceField.setAccessible(true);
-                Object source = sourceField.get(view);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> loadImageWithGlide(view), 200);
+    }
 
-                if (source instanceof ReadableMap) {
-                    ReadableMap sourceMap = (ReadableMap) source;
-                    String uri = sourceMap.hasKey("uri") ? sourceMap.getString("uri") : null;
+    private void loadImageWithGlide(View view) {
+        try {
+            Field sourceField = view.getClass().getDeclaredField("mSource");
+            sourceField.setAccessible(true);
+            Object source = sourceField.get(view);
 
-                    if (uri != null && !uri.isEmpty()) {
-                        Object requestManager = Class.forName("com.bumptech.glide.Glide")
-                            .getMethod("with", android.content.Context.class)
-                            .invoke(null, view.getContext());
+            if (source instanceof ReadableMap) {
+                ReadableMap sourceMap = (ReadableMap) source;
+                String uri = sourceMap.hasKey("uri") ? sourceMap.getString("uri") : null;
 
-                        Object requestBuilder = requestManager.getClass()
-                            .getMethod("load", String.class)
-                            .invoke(requestManager, uri);
+                if (uri != null && !uri.isEmpty()) {
+                    Object requestManager = Class.forName("com.bumptech.glide.Glide")
+                        .getMethod("with", android.content.Context.class)
+                        .invoke(null, view.getContext());
 
-                        // Create a Glide RequestListener via dynamic Proxy to trigger
-                        // marker icon re-capture when the image finishes loading.
-                        Class<?> listenerClass = Class.forName("com.bumptech.glide.request.RequestListener");
-                        Object listener = Proxy.newProxyInstance(
-                            listenerClass.getClassLoader(),
-                            new Class<?>[]{listenerClass},
-                            (proxy, method, args) -> {
-                                if ("onResourceReady".equals(method.getName())) {
-                                    new Handler(Looper.getMainLooper()).post(() -> {
-                                        clearDrawableCache();
-                                        update(true);
-                                    });
-                                }
-                                // Return false to let Glide deliver the resource to the ImageView
-                                if (method.getReturnType() == boolean.class) {
-                                    return false;
-                                }
-                                return null;
+                    Object requestBuilder = requestManager.getClass()
+                        .getMethod("load", String.class)
+                        .invoke(requestManager, uri);
+
+                    // Create a Glide RequestListener via dynamic Proxy to trigger
+                    // marker icon re-capture when the image finishes loading.
+                    Class<?> listenerClass = Class.forName("com.bumptech.glide.request.RequestListener");
+                    Object listener = Proxy.newProxyInstance(
+                        listenerClass.getClassLoader(),
+                        new Class<?>[]{listenerClass},
+                        (proxy, method, args) -> {
+                            if ("onResourceReady".equals(method.getName())) {
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    clearDrawableCache();
+                                    update(true);
+                                });
                             }
-                        );
+                            // Return false to let Glide deliver the resource to the ImageView
+                            if (method.getReturnType() == boolean.class) {
+                                return false;
+                            }
+                            return null;
+                        }
+                    );
 
-                        requestBuilder = requestBuilder.getClass()
-                            .getMethod("listener", listenerClass)
-                            .invoke(requestBuilder, listener);
+                    requestBuilder = requestBuilder.getClass()
+                        .getMethod("listener", listenerClass)
+                        .invoke(requestBuilder, listener);
 
-                        requestBuilder.getClass()
-                            .getMethod("into", android.widget.ImageView.class)
-                            .invoke(requestBuilder, (android.widget.ImageView) view);
-                    }
+                    requestBuilder.getClass()
+                        .getMethod("into", android.widget.ImageView.class)
+                        .invoke(requestBuilder, (android.widget.ImageView) view);
                 }
-            } catch (Exception e) {
-                // Silently fail — marker will render without the image (same as before this fix).
-                // This can happen if the image library doesn't use Glide, doesn't have an
-                // mSource field, or if the Glide API differs from the expected signature.
             }
-        }, 200);
+        } catch (Exception e) {
+            // Silently fail — marker will render without the image (same as before this fix).
+            // This can happen if the image library doesn't use Glide, doesn't have an
+            // mSource field, or if the Glide API differs from the expected signature.
+        }
     }
 
     private void hackToHandleDraweeLifecycle(View child){
