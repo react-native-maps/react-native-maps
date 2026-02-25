@@ -226,6 +226,8 @@ public class MapPolygon extends MapFeature {
   @Override
   public void removeFromMap(Object collection) {
     PolygonManager.Collection polygonCollection = (PolygonManager.Collection) collection;
-    polygonCollection.remove(polygon);
+    if (polygonCollection != null) {
+      polygonCollection.remove(polygon);
+    }
   }
 }
