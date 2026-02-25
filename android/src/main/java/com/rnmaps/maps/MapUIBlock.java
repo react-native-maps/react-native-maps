@@ -37,7 +37,14 @@ public class MapUIBlock implements UIBlockInterface {
     }
 
     private void executeImpl(NativeViewHierarchyManager nvhm, UIBlockViewResolver uiBlockViewResolver) {
-        MapView view = uiBlockViewResolver != null ? (MapView) uiBlockViewResolver.resolveView(tag) : (MapView) nvhm.resolveView(tag);
+        MapView view;
+        try {
+            view = uiBlockViewResolver != null ? (MapView) uiBlockViewResolver.resolveView(tag) : (MapView) nvhm.resolveView(tag);
+        } catch (com.facebook.react.uimanager.IllegalViewOperationException e) {
+            promise.reject("AirMapView not found");
+            return;
+        }
+
         if (view == null) {
             promise.reject("AirMapView not found");
             return;
