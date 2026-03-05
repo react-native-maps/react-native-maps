@@ -505,16 +505,17 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 } else {
                     // Handle native markers added via updateNearbyMarkersFromProcessedData
                     Object tag = marker.getTag();
-                    String id = null;
+                    String routeCode = null;
                     String action = "marker-press";
                     String actionType = null;
                     boolean isPressFeedbackEnabled = false;
+                    String id = null;
 
                     if (tag instanceof java.util.Map) {
                         java.util.Map tagMap = (java.util.Map) tag;
-                        Object idObj = tagMap.get("id");
-                        if (idObj instanceof String) {
-                             id = (String) idObj;
+                        Object routeCodeObj = tagMap.get("routeCode");
+                        if (routeCodeObj instanceof String) {
+                             routeCode = (String) routeCodeObj;
                         }
                         Object actionObj = tagMap.get("action");
                         if (actionObj instanceof String) {
@@ -528,6 +529,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                         if (isPressFeedbackEnabledObj instanceof Boolean) {
                              isPressFeedbackEnabled = (Boolean) isPressFeedbackEnabledObj;
                         }
+                        Object idObj = tagMap.get("id");
+                        if (idObj instanceof String) {
+                             id = (String) idObj;
+                        }
                     }
 
                     if (id != null) {
@@ -537,6 +542,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                         WritableMap mapEventData = makeClickEventData(marker.getPosition());
                         mapEventData.putString("action", "marker-press");
                         mapEventData.putString("actionType", actionType);
+                        mapEventData.putString("routeCode", routeCode);
                         mapEventData.putString("id", id);
 
                         dispatchEvent(mapEventData, OnMarkerPressEvent::new);
@@ -2274,10 +2280,11 @@ private float getAdaptiveCalloutAnchorV(float rotationDegrees) {
                   if (newMarker != null) {
                     if(!isCluster && !routeCode.isEmpty()) {
                      java.util.Map<String, Object> tagMap = new java.util.HashMap<>();
-                          tagMap.put("id", routeCode);
+                          tagMap.put("routeCode", routeCode);
                           tagMap.put("action", "marker-press");
                           tagMap.put("actionType", action);
                           tagMap.put("isPressFeedbackEnabled", isPressFeedbackEnabled);
+                          tagMap.put("id", driverId);
                           newMarker.setTag(tagMap);
                       }
                       nearbyMarkersCache.put(driverId, newMarker); 

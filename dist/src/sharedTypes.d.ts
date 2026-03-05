@@ -74,7 +74,7 @@ export type MarkerPressEvent = NativeSyntheticEvent<{
     id: string;
     action: 'marker-press';
     actionType?: string;
-
+    routeCode?: string;
     coordinate: LatLng;
     /**
      * @platform Android
