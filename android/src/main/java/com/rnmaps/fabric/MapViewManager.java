@@ -317,7 +317,7 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void addView(MapView parent, View child, int index) {
-        parent.addFeature(child, index);
+        parent.addFeature(child, parent.getFeatureCount());
         if (child instanceof MapMarker && ((MapMarker) child).isLoadingImage()){
             MapMarker markerView = (MapMarker) child;
             // Marker is already added as invisible, restore visibility when image loads
