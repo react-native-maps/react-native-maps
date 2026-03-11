@@ -118,4 +118,10 @@ public class PolylineManager extends ViewGroupManager<MapPolyline> implements RN
     public void setZIndex(MapPolyline view, float value) {
         view.setZIndex(value);
     }
+
+    @Override
+    public void onDropViewInstance(MapPolyline view) {
+        super.onDropViewInstance(view);
+        view.doDestroy();
+    }
 }

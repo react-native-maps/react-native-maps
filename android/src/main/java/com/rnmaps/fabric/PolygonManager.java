@@ -93,4 +93,10 @@ public class PolygonManager extends ViewGroupManager<MapPolygon> implements RNMa
     public void setTappable(MapPolygon view, boolean value) {
             view.setTappable(value);
     }
+
+    @Override
+    public void onDropViewInstance(MapPolygon view) {
+        super.onDropViewInstance(view);
+        view.doDestroy();
+    }
 }
