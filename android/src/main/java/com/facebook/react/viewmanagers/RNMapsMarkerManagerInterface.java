@@ -18,6 +18,7 @@ public interface RNMapsMarkerManagerInterface<T extends View> extends ViewManage
   void setAnchor(T view, @Nullable ReadableMap value);
   void setCalloutAnchor(T view, @Nullable ReadableMap value);
   void setImage(T view, @Nullable ReadableMap value);
+  void setSystemImage(T view, @Nullable String value);
   void setCalloutOffset(T view, @Nullable ReadableMap value);
   void setDisplayPriority(T view, @Nullable String value);
   void setCenterOffset(T view, @Nullable ReadableMap value);

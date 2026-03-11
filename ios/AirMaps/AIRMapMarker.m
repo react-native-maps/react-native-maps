@@ -118,6 +118,13 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             _pinView.displayPriority = self.displayPriority;
             _pinView.zPriority = self.zIndex;
             _pinView.centerOffset = self.centerOffset;
+            // Apply system image if provided
+            if (_systemImage && _systemImage.length > 0) {
+                UIImage *symbol = [UIImage systemImageNamed:_systemImage];
+                _pinView.image = symbol;
+            } else {
+                _pinView.image = nil;
+            }
             return _pinView;
         }
 
@@ -136,6 +143,13 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             _markerView.displayPriority = self.displayPriority;
             _markerView.zPriority = self.zIndex;
             _markerView.centerOffset = self.centerOffset;
+            // Apply system image if provided as a glyph
+            if (_systemImage && _systemImage.length > 0) {
+                UIImage *symbol = [UIImage systemImageNamed:_systemImage];
+                _markerView.glyphImage = symbol;
+            } else {
+                _markerView.glyphImage = nil;
+            }
 
         }
         return _markerView ?: _pinView;
@@ -356,6 +370,34 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 - (void)setOpacity:(double)opacity
 {
     [self setAlpha:opacity];
+}
+
+- (void)setSystemImage:(NSString *)systemImage
+{
+    if ([systemImage isEqualToString:@"(null)"]) {
+        systemImage = nil;
+    }
+    _systemImage = systemImage;
+
+    // Only apply when using default Apple Maps marker (no custom image or children)
+    if (![self shouldUsePinView]) {
+        // Clear any previously applied images on native views to avoid stale state
+        if (_markerView) { _markerView.glyphImage = nil; }
+        if (_pinView) { _pinView.image = nil; }
+        return;
+    }
+
+    UIImage *symbol = (systemImage.length > 0) ? [UIImage systemImageNamed:systemImage] : nil;
+
+    if (_useLegacyPinView) {
+        if (_pinView) {
+            _pinView.image = symbol;
+        }
+    } else {
+        if (_markerView) {
+            _markerView.glyphImage = symbol;
+        }
+    }
 }
 
 - (void)setImageSrc:(NSString *)imageSrc
