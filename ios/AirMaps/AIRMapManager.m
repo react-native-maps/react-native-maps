@@ -1241,7 +1241,8 @@ static int kDragCenterContext;
 #pragma mark MKMapViewDelegate - Tracking the User Location
 
 - (void)mapView:(AIRMap *)mapView didFailToLocateUserWithError:(NSError *)error {
-    id event = @{@"error": @{ @"message": error.localizedDescription }};
+    NSString *message = error.localizedDescription ?: @"Unknown error";
+    id event = @{@"error": @{ @"message": message }};
     if (mapView.onUserLocationChange) {
         mapView.onUserLocationChange(event);
     }
