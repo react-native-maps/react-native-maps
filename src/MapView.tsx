@@ -674,7 +674,7 @@ export type MapViewProps = ViewProps & {
    * @platform iOS: Supported
    * @platform Android: Supported
    */
-  userInterfaceStyle?: 'light' | 'dark';
+  userInterfaceStyle?: 'system' | 'light' | 'dark';
 
   /**
    * The title of the annotation for current user location.
