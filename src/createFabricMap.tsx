@@ -41,6 +41,7 @@ export interface FabricMapHandle {
   ) => void;
 
   getMapBoundaries: () => Promise<MapBoundaries>;
+  setMapBoundaries: (northEast: LatLng, southWest: LatLng) => void;
   takeSnapshot: (config: SnapshotOptions) => Promise<string>;
   getAddressFromCoordinates: (coordinate: LatLng) => Promise<Address>;
   getPointForCoordinate: (coordinate: LatLng) => Promise<Point>;
@@ -119,6 +120,23 @@ const createFabricMap = (
         } else {
           throw new Error(
             'getMapBoundaries is only supported on iOS with Fabric.',
+          );
+        }
+      },
+      setMapBoundaries(northEast: LatLng, southWest: LatLng) {
+        if (fabricRef.current) {
+          try {
+            (Commands as any).setMapBoundaries(
+              fabricRef.current,
+              JSON.stringify(northEast),
+              JSON.stringify(southWest),
+            );
+          } catch (error) {
+            throw new Error('Failed to setMapBoundaries');
+          }
+        } else {
+          throw new Error(
+            'setMapBoundaries is only supported on iOS with Fabric.',
           );
         }
       },

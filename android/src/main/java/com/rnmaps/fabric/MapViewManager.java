@@ -630,6 +630,25 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public void setMapBoundaries(MapView view, String northEastJSON, String southWestJSON) {
+        try {
+            WritableMap northEast = null;
+            if (northEastJSON != null) {
+                JSONObject object = new JSONObject(northEastJSON);
+                northEast = JSONUtil.convertJsonToWritable(object);
+            }
+            WritableMap southWest = null;
+            if (southWestJSON != null) {
+                JSONObject object = new JSONObject(southWestJSON);
+                southWest = JSONUtil.convertJsonToWritable(object);
+            }
+            view.setMapBoundaries(northEast, southWest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void setIndoorActiveLevelIndex(MapView view, int activeLevelIndex) {
         view.setIndoorActiveLevelIndex(activeLevelIndex);
     }
