@@ -1187,6 +1187,15 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void addFeature(View child, int index) {
+        // Clamp index to valid bounds. The Fabric renderer can issue mount instructions
+        // with stale indices that exceed the current feature count during rapid updates
+        // (e.g. clustering, panning, or toggling tile overlays on/off).
+        if (index < 0) {
+            index = 0;
+        } else if (index > features.size()) {
+            index = features.size();
+        }
+
         // Our desired API is to pass up annotations/overlays as children to the mapview component.
         // This is where we intercept them and do the appropriate underlying mapview action.
         if (child instanceof MapMarker) {
@@ -1277,13 +1286,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public View getFeatureAt(int index) {
-        if (index < features.size()) {
+        if (index >= 0 && index < features.size()) {
             return features.get(index);
         }
         return null;
     }
 
     public void removeFeatureAt(int index) {
+        if (index < 0 || index >= features.size()) {
+            return;
+        }
         MapFeature feature = features.remove(index);
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());

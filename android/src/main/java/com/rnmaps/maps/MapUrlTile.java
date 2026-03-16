@@ -202,6 +202,8 @@ public class MapUrlTile extends MapFeature {
 
   @Override
   public void removeFromMap(Object map) {
-    tileOverlay.remove();
+    if (tileOverlay != null) {
+      tileOverlay.remove();
+    }
   }
 }
