@@ -34,6 +34,7 @@ export const withMapsIOS: ConfigPlugin<ConfigPluginProps> = (config, props) => {
   // Technically adds react-native-maps (Apple maps) and google maps.
   config = withMapsCocoaPods(config, {
     useGoogleMaps: !!props?.iosGoogleMapsApiKey,
+    installMethod: props?.iosGoogleMapsInstallMethod ?? 'cocoapods',
   });
 
   // Adds/Removes AppDelegate setup for Google Maps API on iOS
@@ -94,17 +95,23 @@ export function removeGoogleMapsAppDelegateInit(src: string): MergeResults {
 /**
  * @param src The contents of the Podfile.
  * @param useGoogleMaps if GoogleMaps for iOS is used
+ * @param installMethod whether to use CocoaPods or Swift Package Manager for GoogleMaps
  * @returns Podfile with react-native-maps integration configured.
  */
 export function addMapsCocoapods(
   src: string,
   useGoogleMaps: boolean,
+  installMethod: 'cocoapods' | 'spm' = 'cocoapods',
 ): MergeResults {
   let newSrc =
     '  rn_maps_path = File.dirname(`node --print "require.resolve(\'react-native-maps/package.json\')"`) \n';
 
   if (useGoogleMaps) {
-    newSrc += "  pod 'react-native-maps/Google', :path => rn_maps_path \n";
+    if (installMethod === 'spm') {
+      newSrc += "  pod 'react-native-maps/GoogleSPM', :path => rn_maps_path \n";
+    } else {
+      newSrc += "  pod 'react-native-maps/Google', :path => rn_maps_path \n";
+    }
   }
 
   return mergeContents({
@@ -117,15 +124,19 @@ export function addMapsCocoapods(
   });
 }
 
-const withMapsCocoaPods: ConfigPlugin<{useGoogleMaps: boolean}> = (
-  config,
-  {useGoogleMaps},
-) => {
+const withMapsCocoaPods: ConfigPlugin<{
+  useGoogleMaps: boolean;
+  installMethod: 'cocoapods' | 'spm';
+}> = (config, {useGoogleMaps, installMethod}) => {
   return withPodfile(config, async conf => {
     let results: MergeResults;
 
     try {
-      results = addMapsCocoapods(conf.modResults.contents, useGoogleMaps);
+      results = addMapsCocoapods(
+        conf.modResults.contents,
+        useGoogleMaps,
+        installMethod,
+      );
     } catch (error: any) {
       if (error.code === 'ERR_NO_MATCH') {
         throw new Error(

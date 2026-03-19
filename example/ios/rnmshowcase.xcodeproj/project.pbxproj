@@ -7,13 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		019744DA5C008323EBC5F589 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		09623F4370FE740E5493A779 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		1C1DA0B32D71CB7800166A6D /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1C1DA0B12D71CB7800166A6D /* Debug.xcconfig */; };
 		1C1DA0B42D71CB7800166A6D /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1C1DA0B22D71CB7800166A6D /* Release.xcconfig */; };
+		1F2937A5E1F85579516C4983 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		28AB7EE266EA4BD63E002FE3 /* libPods-rnmshowcase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B14C2B86C39C60C96BF552F /* libPods-rnmshowcase.a */; };
+		61A94812D8A969054CBF4DAA /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		65DB3D59E4AA7D63B4B9EDF3 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = D6192B3E424706FC4A55AB90 /* GoogleMaps */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		C0D9B50913A74AD967864BF3 /* GoogleMapsUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 5459F047C4E1CB0C2EB2FF24 /* GoogleMapsUtils */; };
+		DB611791DF1BA7D4A31C1344 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +44,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				28AB7EE266EA4BD63E002FE3 /* libPods-rnmshowcase.a in Frameworks */,
+				61A94812D8A969054CBF4DAA /* BuildFile in Frameworks */,
+				65DB3D59E4AA7D63B4B9EDF3 /* GoogleMaps in Frameworks */,
+				DB611791DF1BA7D4A31C1344 /* BuildFile in Frameworks */,
+				019744DA5C008323EBC5F589 /* BuildFile in Frameworks */,
+				1F2937A5E1F85579516C4983 /* BuildFile in Frameworks */,
+				C0D9B50913A74AD967864BF3 /* GoogleMapsUtils in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +138,10 @@
 			dependencies = (
 			);
 			name = rnmshowcase;
+			packageProductDependencies = (
+				D6192B3E424706FC4A55AB90 /* GoogleMaps */,
+				5459F047C4E1CB0C2EB2FF24 /* GoogleMapsUtils */,
+			);
 			productName = rnmshowcase;
 			productReference = 13B07F961A680F5B00A75B9A /* rnmshowcase.app */;
 			productType = "com.apple.product-type.application";
@@ -152,6 +168,10 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				A1649EF1D98EC7E6C5F80DA8 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				EFDD4B94E7F9ECB582D4431C /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -390,7 +410,7 @@
 					"$(inherited)",
 					" ",
 				);
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				USE_HERMES = true;
@@ -462,7 +482,7 @@
 					"$(inherited)",
 					" ",
 				);
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
@@ -491,6 +511,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A1649EF1D98EC7E6C5F80DA8 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+		EFDD4B94E7F9ECB582D4431C /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/google-maps-ios-utils";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5459F047C4E1CB0C2EB2FF24 /* GoogleMapsUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFDD4B94E7F9ECB582D4431C /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */;
+			productName = GoogleMapsUtils;
+		};
+		D6192B3E424706FC4A55AB90 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1649EF1D98EC7E6C5F80DA8 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

@@ -50,6 +50,30 @@ If you're using Google as the map provider, also provide an API key for the resp
 }
 ```
 
+By default the plugin uses CocoaPods to install the Google Maps iOS SDK. To use Swift Package Manager instead (required for Google Maps SDK v11+), set `iosGoogleMapsInstallMethod` to `"spm"`:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "react-native-maps",
+        {
+          "iosGoogleMapsApiKey": "YOUR_KEY_HERE",
+          "androidGoogleMapsApiKey": "YOUR_KEY_HERE",
+          "iosGoogleMapsInstallMethod": "spm"
+        }
+      ]
+    ]
+  }
+}
+```
+
+> **Note:** When using `"spm"`, you must also manually add the GoogleMaps packages to your Xcode project via **File > Add Package Dependencies**:
+>
+> - `https://github.com/googlemaps/ios-maps-sdk`
+> - `https://github.com/googlemaps/google-maps-ios-utils`
+
 ## For bare workflow projects, you'll need to follow the iOS and Android setup instructions below.
 
 ## iOS
@@ -88,6 +112,10 @@ Also make sure that your Podfile deployment target is set to >= 14 at the top of
 platform :ios, '14'
 ```
 
+There are two ways to install the Google Maps iOS SDK: **CocoaPods** (default) or **Swift Package Manager** (recommended for Google Maps SDK v11+).
+
+#### Option A: CocoaPods (default)
+
 Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
 
 ```ruby
@@ -95,6 +123,24 @@ Add the following to your Podfile above the `use_native_modules!` function and r
 
 rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-maps/Google', :path => rn_maps_path
+```
+
+#### Option B: Swift Package Manager (recommended for v11+)
+
+> **Note:** Google will stop releasing new versions of the Google Maps iOS SDK via CocoaPods starting Q2 2026 (v11+). If you need to use v11 or later, or want to future-proof your project, use this method.
+
+1. In Xcode, go to **File > Add Package Dependencies** and add the following packages:
+
+   - `https://github.com/googlemaps/ios-maps-sdk` (GoogleMaps)
+   - `https://github.com/googlemaps/google-maps-ios-utils` (GoogleMapsUtils)
+
+2. Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
+
+```ruby
+# React Native Maps dependencies
+
+rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-maps/GoogleSPM', :path => rn_maps_path
 ```
 
 The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.

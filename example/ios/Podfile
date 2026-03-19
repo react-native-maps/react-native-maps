@@ -24,7 +24,7 @@ target 'rnmshowcase' do
 
   rn_maps_path = '../..'
 
-  pod 'react-native-maps/Google', :path => rn_maps_path
+  pod 'react-native-maps/GoogleSPM', :path => rn_maps_path
 
   post_install do |installer|
     react_native_post_install(
