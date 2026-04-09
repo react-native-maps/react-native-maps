@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.StyleSpan;
 import com.google.maps.android.collections.PolylineManager;
 import com.rnmaps.fabric.event.OnPressEvent;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ public class MapPolyline extends MapFeature {
     private List<PatternItem> pattern;
 
     private List<StyleSpan> spans;
+    private SoftReference<PolylineManager.Collection> polylineCollectionRef;
 
     public MapPolyline(Context context) {
         super(context);
@@ -185,12 +187,28 @@ public class MapPolyline extends MapFeature {
         if (spans != null){
             polyline.setSpans(spans);
         }
+        this.polylineCollectionRef = new SoftReference<>(polylineCollection);
     }
 
     @Override
     public void removeFromMap(Object collection) {
+        if (polyline == null) {
+            return;
+        }
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
         polylineCollection.remove(polyline);
+        polyline = null;
+    }
+
+    public void doDestroy() {
+        PolylineManager.Collection collection = polylineCollectionRef != null
+                ? polylineCollectionRef.get()
+                : null;
+
+        if (collection != null) {
+            this.removeFromMap(collection);
+        }
+        polylineCollectionRef = null;
     }
 
     public void setLineCap(String lineCap) {

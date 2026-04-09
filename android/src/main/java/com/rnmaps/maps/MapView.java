@@ -1297,8 +1297,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         } else if (feature instanceof MapOverlay) {
             feature.removeFromMap(groundOverlayCollection);
         } else if (feature instanceof MapPolygon) {
+            polygonMap.remove(feature.getFeature());
             feature.removeFromMap(polygonCollection);
         } else if (feature instanceof MapPolyline) {
+            polylineMap.remove(feature.getFeature());
             feature.removeFromMap(polylineCollection);
         } else if (feature != null) {
             feature.removeFromMap(map);

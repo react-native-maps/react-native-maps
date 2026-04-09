@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.collections.PolygonManager;
 import com.rnmaps.fabric.event.OnPressEvent;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class MapPolygon extends MapFeature {
   private float zIndex;
   private ReadableArray patternValues;
   private List<PatternItem> pattern;
+  private SoftReference<PolygonManager.Collection> polygonCollectionRef;
 
   public MapPolygon(Context context) {
     super(context);
@@ -214,11 +216,27 @@ public class MapPolygon extends MapFeature {
   public void addToMap(Object collection) {
     PolygonManager.Collection polygonCollection = (PolygonManager.Collection) collection;
     polygon = polygonCollection.addPolygon(getPolygonOptions());
+    this.polygonCollectionRef = new SoftReference<>(polygonCollection);
   }
 
   @Override
   public void removeFromMap(Object collection) {
+    if (polygon == null) {
+      return;
+    }
     PolygonManager.Collection polygonCollection = (PolygonManager.Collection) collection;
     polygonCollection.remove(polygon);
+    polygon = null;
+  }
+
+  public void doDestroy() {
+    PolygonManager.Collection collection = polygonCollectionRef != null
+            ? polygonCollectionRef.get()
+            : null;
+
+    if (collection != null) {
+      this.removeFromMap(collection);
+    }
+    polygonCollectionRef = null;
   }
 }

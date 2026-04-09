@@ -89,4 +89,10 @@ public class MapPolylineManager extends ViewGroupManager<MapPolyline> {
         "onPress", MapBuilder.of("registrationName", "onPress")
     );
   }
+
+  @Override
+  public void onDropViewInstance(MapPolyline view) {
+    super.onDropViewInstance(view);
+    view.doDestroy();
+  }
 }
