@@ -562,6 +562,20 @@ export type MapViewProps = ViewProps & {
   scrollEnabled?: boolean;
 
   /**
+   * If `false`, all gesture recognizers on the map view are removed. Use this when rendering
+   * a static (non-interactive) `PROVIDER_GOOGLE` map alongside an interactive one to prevent
+   * the static map's gesture recognizers from silently consuming touches and blocking the
+   * interactive map's gestures. Setting `scrollEnabled`, `zoomEnabled` etc. to `false` is
+   * not sufficient — `GMSMapView` gesture recognizers remain in the view hierarchy and
+   * intercept touches regardless.
+   *
+   * @default true
+   * @platform iOS: Google Maps only
+   * @platform Android: Not supported
+   */
+  gestureRecognizersEnabled?: boolean;
+
+  /**
    * A Boolean indicating whether the map displays extruded building information.
    *
    * @default true

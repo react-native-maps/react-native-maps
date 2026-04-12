@@ -57,6 +57,7 @@
 @property (nonatomic, assign) BOOL showsCompass;
 @property (nonatomic, assign) BOOL scrollEnabled;
 @property (nonatomic, assign) BOOL zoomEnabled;
+@property (nonatomic, assign) BOOL gestureRecognizersEnabled;
 @property (nonatomic, assign) BOOL rotateEnabled;
 @property (nonatomic, assign) BOOL scrollDuringRotateOrZoomEnabled;
 @property (nonatomic, assign) BOOL pitchEnabled;
