@@ -683,6 +683,17 @@ export interface MapFabricNativeProps extends ViewProps {
   scrollEnabled?: WithDefault<boolean, true>;
 
   /**
+   * If `false`, all gesture recognizers on the map view are removed. Use this when rendering
+   * a static (non-interactive) PROVIDER_GOOGLE map alongside an interactive one to prevent
+   * the static map's gesture recognizers from consuming touches.
+   *
+   * @default true
+   * @platform iOS: Google Maps only
+   * @platform Android: Not supported
+   */
+  gestureRecognizersEnabled?: WithDefault<boolean, true>;
+
+  /**
    * A Boolean indicating whether the map displays extruded building information.
    *
    * @default true

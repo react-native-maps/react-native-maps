@@ -75,6 +75,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   BOOL _didCallOnMapReady;
   BOOL _zoomTapEnabled;
   BOOL _isAnimating;
+  BOOL _gestureRecognizersEnabled;
   NSString* _googleMapId;
 }
 
@@ -116,6 +117,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     _didPrepareMap = false;
     _didCallOnMapReady = false;
     _zoomTapEnabled = zoomTapEnabled;
+    _gestureRecognizersEnabled = YES;
 
     // Listen to the myLocation property of GMSMapView.
     [self addObserver:self
@@ -606,6 +608,24 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (BOOL)scrollEnabled {
   return self.settings.scrollGestures;
+}
+
+- (void)setGestureRecognizersEnabled:(BOOL)gestureRecognizersEnabled {
+  _gestureRecognizersEnabled = gestureRecognizersEnabled;
+  if (!gestureRecognizersEnabled) {
+    // Remove all gesture recognizers so that touches pass through to views below
+    // in the hierarchy. This is needed when a static (non-interactive) MapView
+    // is rendered alongside an interactive one — GMSMapView gesture recognizers
+    // consume touches even when scrollGestures/zoomGestures are disabled.
+    NSArray *recognizers = [self.gestureRecognizers copy];
+    for (UIGestureRecognizer *gr in recognizers) {
+      [self removeGestureRecognizer:gr];
+    }
+  }
+}
+
+- (BOOL)gestureRecognizersEnabled {
+  return _gestureRecognizersEnabled;
 }
 
 - (void)setZoomEnabled:(BOOL)zoomEnabled {
