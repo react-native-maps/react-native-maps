@@ -378,6 +378,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
 
         savedFeatures = new ArrayList<>(features);
+        features.forEach(feature -> {
+            removeFeatureFromMap(feature);
+        });
         features.clear();
         shouldRestorePadding = true;
         removeView(attacherGroup);
@@ -1283,8 +1286,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         return null;
     }
 
-    public void removeFeatureAt(int index) {
-        MapFeature feature = features.remove(index);
+    private void removeFeatureFromMap(MapFeature feature) {
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
             feature.removeFromMap(markerCollection);
@@ -1303,6 +1305,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         } else if (feature != null) {
             feature.removeFromMap(map);
         }
+    }
+
+    public void removeFeatureAt(int index) {
+        MapFeature feature = features.remove(index);
+        removeFeatureFromMap(feature);
     }
 
     public WritableMap makeClickEventData(LatLng point) {

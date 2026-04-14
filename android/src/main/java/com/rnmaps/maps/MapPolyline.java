@@ -190,6 +190,7 @@ public class MapPolyline extends MapFeature {
     @Override
     public void removeFromMap(Object collection) {
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
+        polylineOptions = null;
         polylineCollection.remove(polyline);
     }
 
