@@ -347,6 +347,7 @@ public class MapMarker extends MapFeature {
         if (updated > 0) {
             updated--;
         }
+        new Handler(Looper.getMainLooper()).post(() -> tracksViewChangesActive = false);
         return true;
     }
 
