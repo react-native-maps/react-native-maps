@@ -21,6 +21,16 @@
     "pod-install": "cd example/ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
     "bootstrap": "yarn --cwd example && yarn && yarn bundle-install && yarn pod-install"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./expo": {
+      "types": "./plugin/build/expo.d.ts",
+      "default": "./plugin/build/expo.js"
+    }
+  },
   "files": [
     "src",
     "dist",
