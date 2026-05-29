@@ -11,7 +11,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
     env:
       HUSKY: 0
@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: yarn
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
@@ -40,6 +41,16 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-          NPM_CONFIG_PROVENANCE: true
         run: yarn release
+
+      - name: Publish to npm (if new version)
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          # Check if this version already exists on npm
+          if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version 2>/dev/null; then
+            echo "Version ${PACKAGE_VERSION} already published, skipping"
+          else
+            echo "Publishing ${PACKAGE_NAME}@${PACKAGE_VERSION}"
+            npm publish --provenance --access public
+          fi
