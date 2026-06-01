@@ -475,6 +475,16 @@ MKMapType mapRNTypeToMKMapType(RNMapsMapViewMapType rnMapType) {
     }
 }
 
+MKUserTrackingMode mapRNUserTrackingModeToMKUserTrackingMode(RNMapsMapViewUserTrackingMode userTrackingMode) {
+    switch (userTrackingMode) {
+        case RNMapsMapViewUserTrackingMode::Follow: return MKUserTrackingModeFollow;
+        case RNMapsMapViewUserTrackingMode::FollowWithHeading: return MKUserTrackingModeFollowWithHeading;
+        case RNMapsMapViewUserTrackingMode::None: return MKUserTrackingModeNone;
+    }
+
+    return MKUserTrackingModeNone;
+}
+
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
@@ -597,6 +607,9 @@ newViewProps.name.right);           \
 
     if (oldViewProps.mapType != newViewProps.mapType){
         _view.mapType = mapRNTypeToMKMapType(newViewProps.mapType);
+    }
+    if (oldViewProps.userTrackingMode != newViewProps.userTrackingMode){
+        [_view setUserTrackingMode:mapRNUserTrackingModeToMKUserTrackingMode(newViewProps.userTrackingMode) animated:YES];
     }
     if (oldViewProps.userInterfaceStyle != newViewProps.userInterfaceStyle){
         switch (newViewProps.userInterfaceStyle) {

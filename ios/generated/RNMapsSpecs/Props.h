@@ -713,6 +713,29 @@ class RNMapsGooglePolygonProps final : public ViewProps {
   #endif
 };
 
+enum class RNMapsMapViewUserTrackingMode { None, Follow, FollowWithHeading };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsMapViewUserTrackingMode &result) {
+  auto string = (std::string)value;
+  if (string == "none") { result = RNMapsMapViewUserTrackingMode::None; return; }
+  if (string == "follow") { result = RNMapsMapViewUserTrackingMode::Follow; return; }
+  if (string == "followWithHeading") { result = RNMapsMapViewUserTrackingMode::FollowWithHeading; return; }
+  abort();
+}
+
+static inline std::string toString(const RNMapsMapViewUserTrackingMode &value) {
+  switch (value) {
+    case RNMapsMapViewUserTrackingMode::None: return "none";
+    case RNMapsMapViewUserTrackingMode::Follow: return "follow";
+    case RNMapsMapViewUserTrackingMode::FollowWithHeading: return "followWithHeading";
+  }
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsMapViewUserTrackingMode &value) {
+  return toString(value);
+}
+#endif
 enum class RNMapsMapViewGoogleRenderer { LATEST, LEGACY };
 
 static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsMapViewGoogleRenderer &result) {
@@ -1379,6 +1402,7 @@ class RNMapsMapViewProps final : public ViewProps {
   RNMapsMapViewCameraStruct camera{};
   RNMapsMapViewCompassOffsetStruct compassOffset{};
   bool followsUserLocation{false};
+  RNMapsMapViewUserTrackingMode userTrackingMode{RNMapsMapViewUserTrackingMode::None};
   bool poiClickEnabled{false};
   RNMapsMapViewInitialCameraStruct initialCamera{};
   RNMapsMapViewInitialRegionStruct initialRegion{};

@@ -360,6 +360,7 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     camera(convertRawProp(context, rawProps, "camera", sourceProps.camera, {})),
     compassOffset(convertRawProp(context, rawProps, "compassOffset", sourceProps.compassOffset, {})),
     followsUserLocation(convertRawProp(context, rawProps, "followsUserLocation", sourceProps.followsUserLocation, {false})),
+    userTrackingMode(convertRawProp(context, rawProps, "userTrackingMode", sourceProps.userTrackingMode, {RNMapsMapViewUserTrackingMode::None})),
     poiClickEnabled(convertRawProp(context, rawProps, "poiClickEnabled", sourceProps.poiClickEnabled, {false})),
     initialCamera(convertRawProp(context, rawProps, "initialCamera", sourceProps.initialCamera, {})),
     initialRegion(convertRawProp(context, rawProps, "initialRegion", sourceProps.initialRegion, {})),
@@ -442,6 +443,10 @@ folly::dynamic RNMapsMapViewProps::getDiffProps(
     result["followsUserLocation"] = followsUserLocation;
   }
     
+  if (userTrackingMode != oldProps->userTrackingMode) {
+    result["userTrackingMode"] = toDynamic(userTrackingMode);
+  }
+
   if (poiClickEnabled != oldProps->poiClickEnabled) {
     result["poiClickEnabled"] = poiClickEnabled;
   }

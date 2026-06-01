@@ -50,6 +50,7 @@ import type {
   PoiClickEvent,
   SnapshotOptions,
   UserLocationChangeEvent,
+  UserTrackingMode,
 } from './MapView.types';
 import type {Modify} from './sharedTypesInternal';
 import {
@@ -125,11 +126,25 @@ export type MapViewProps = ViewProps & {
    * If `true` the map will focus on the user's location.
    * This only works if `showsUserLocation` is true and the user has shared their location.
    *
+   * For heading-based tracking on Apple Maps, use `userTrackingMode="followWithHeading"`.
+   *
    * @default false
    * @platform iOS: Apple Maps only
    * @platform Android: Not supported
    */
   followsUserLocation?: boolean;
+
+  /**
+   * The MapKit user tracking mode.
+   * This only works if `showsUserLocation` is true and the user has shared their location.
+   * Set to `followWithHeading` to follow the user's location and rotate the map
+   * as the device heading changes.
+   *
+   * @default 'none'
+   * @platform iOS: Apple Maps only
+   * @platform Android: Not supported
+   */
+  userTrackingMode?: UserTrackingMode;
 
   /**
    * If `false` the map will not capture PoI clicks

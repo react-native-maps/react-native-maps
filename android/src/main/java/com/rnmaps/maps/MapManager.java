@@ -201,6 +201,11 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.setShowsUserLocation(showUserLocation);
     }
 
+    @ReactProp(name = "userTrackingMode")
+    public void setUserTrackingMode(MapView view, @Nullable String userTrackingMode) {
+        // Not supported by Google Maps.
+    }
+
     @ReactProp(name = "userLocationPriority")
     public void setUserLocationPriority(MapView view, @Nullable String accuracy) {
         view.setUserLocationPriority(MY_LOCATION_PRIORITY.get(accuracy));

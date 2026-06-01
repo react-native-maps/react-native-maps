@@ -88,6 +88,19 @@ RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(userInterfaceStyle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(followsUserLocation, BOOL)
+RCT_CUSTOM_VIEW_PROPERTY(userTrackingMode, NSString, AIRMap)
+{
+    MKUserTrackingMode trackingMode = MKUserTrackingModeNone;
+    NSString *mode = [RCTConvert NSString:json];
+
+    if ([mode isEqualToString:@"follow"]) {
+        trackingMode = MKUserTrackingModeFollow;
+    } else if ([mode isEqualToString:@"followWithHeading"]) {
+        trackingMode = MKUserTrackingModeFollowWithHeading;
+    }
+
+    [view setUserTrackingMode:trackingMode animated:YES];
+}
 RCT_EXPORT_VIEW_PROPERTY(userLocationCalloutEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsPointsOfInterest, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
@@ -906,7 +919,7 @@ static int kDragCenterContext;
         mapView.onUserLocationChange(event);
     }
 
-    if (mapView.followsUserLocation) {
+    if (mapView.followsUserLocation && mapView.userTrackingMode == MKUserTrackingModeNone) {
         [mapView setCenterCoordinate:location.coordinate animated:YES];
     }
 
