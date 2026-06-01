@@ -220,6 +220,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public void setUserTrackingMode(MapView view, @Nullable String value) {
+        // not supported
+    }
+
+    @Override
     public void setPoiClickEnabled(MapView view, boolean value) {
         view.setPoiClickEnabled(value);
     }

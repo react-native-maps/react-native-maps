@@ -37,6 +37,9 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
       case "followsUserLocation":
         mViewManager.setFollowsUserLocation(view, value == null ? false : (boolean) value);
         break;
+      case "userTrackingMode":
+        mViewManager.setUserTrackingMode(view, (String) value);
+        break;
       case "poiClickEnabled":
         mViewManager.setPoiClickEnabled(view, value == null ? false : (boolean) value);
         break;

@@ -53,6 +53,8 @@ export type MapTypes = {
   HYBRID_FLYOVER: 'hybridFlyover';
 };
 
+export type UserTrackingMode = 'none' | 'follow' | 'followWithHeading';
+
 export type IndoorLevel = {
   index: number;
   name: string;

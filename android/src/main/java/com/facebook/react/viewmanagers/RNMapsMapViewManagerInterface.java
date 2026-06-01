@@ -20,6 +20,7 @@ public interface RNMapsMapViewManagerInterface<T extends View> extends ViewManag
   void setCamera(T view, @Nullable ReadableMap value);
   void setCompassOffset(T view, @Nullable ReadableMap value);
   void setFollowsUserLocation(T view, boolean value);
+  void setUserTrackingMode(T view, @Nullable String value);
   void setPoiClickEnabled(T view, boolean value);
   void setInitialCamera(T view, @Nullable ReadableMap value);
   void setInitialRegion(T view, @Nullable ReadableMap value);
