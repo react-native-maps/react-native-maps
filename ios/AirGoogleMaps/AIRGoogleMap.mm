@@ -485,6 +485,10 @@ id regionAsJSON(MKCoordinateRegion region) {
   if (airMarker.onPress) airMarker.onPress(event);
   if (self.onMarkerPress) self.onMarkerPress(event);
 
+  if (self.preventDefaultMarkerSelection) {
+    return YES;
+  }
+
   // TODO: not sure why this is necessary
   [self setSelectedMarker:marker];
 

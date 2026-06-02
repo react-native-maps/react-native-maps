@@ -181,6 +181,9 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
       case "cameraZoomRange":
         mViewManager.setCameraZoomRange(view, (ReadableMap) value);
         break;
+      case "preventDefaultMarkerSelection":
+        mViewManager.setPreventDefaultMarkerSelection(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

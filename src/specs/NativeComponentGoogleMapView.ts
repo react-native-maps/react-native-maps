@@ -848,6 +848,15 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform Android: Not supported
    */
   zoomTapEnabled?: WithDefault<boolean, true>;
+
+  /**
+   * If `true` the map will not perform its default marker selection behavior.
+   *
+   * @default false
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  preventDefaultMarkerSelection?: WithDefault<boolean, false>;
 }
 
 interface NativeCommands {

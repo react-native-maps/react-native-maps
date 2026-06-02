@@ -340,6 +340,11 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.setTag(R.id.accessibility_label, accessibilityLabel);
     }
 
+    @ReactProp(name = "preventDefaultMarkerSelection", defaultBoolean = false)
+    public void setPreventDefaultMarkerSelection(MapView view, boolean preventDefaultMarkerSelection) {
+        view.setPreventDefaultMarkerSelection(preventDefaultMarkerSelection);
+    }
+
     @Override
     public void receiveCommand(@NonNull MapView view, String commandId, @Nullable ReadableArray args) {
         int duration;
