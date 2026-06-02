@@ -65,6 +65,7 @@
 @property (nonatomic, assign) BOOL showsMyLocationButton;
 @property (nonatomic, assign) BOOL showsIndoors;
 @property (nonatomic, assign) BOOL showsIndoorLevelPicker;
+@property (nonatomic, assign) BOOL preventDefaultMarkerSelection;
 @property (nonatomic, assign) NSString *kmlSrc;
 
 - (BOOL) isReady;

@@ -540,6 +540,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public void setPreventDefaultMarkerSelection(MapView view, boolean value) {
+        view.setPreventDefaultMarkerSelection(value);
+    }
+
+    @Override
     public void animateToRegion(MapView view, String regionJSON, int duration) {
         try {
             JSONObject region = new JSONObject(regionJSON);

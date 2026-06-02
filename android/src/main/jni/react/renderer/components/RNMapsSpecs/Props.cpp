@@ -140,7 +140,8 @@ RNMapsGoogleMapViewProps::RNMapsGoogleMapViewProps(
     userLocationUpdateInterval(convertRawProp(context, rawProps, "userLocationUpdateInterval", sourceProps.userLocationUpdateInterval, {0})),
     zoomControlEnabled(convertRawProp(context, rawProps, "zoomControlEnabled", sourceProps.zoomControlEnabled, {false})),
     zoomEnabled(convertRawProp(context, rawProps, "zoomEnabled", sourceProps.zoomEnabled, {true})),
-    zoomTapEnabled(convertRawProp(context, rawProps, "zoomTapEnabled", sourceProps.zoomTapEnabled, {true})) {}
+    zoomTapEnabled(convertRawProp(context, rawProps, "zoomTapEnabled", sourceProps.zoomTapEnabled, {true})),
+    preventDefaultMarkerSelection(convertRawProp(context, rawProps, "preventDefaultMarkerSelection", sourceProps.preventDefaultMarkerSelection, {false})) {}
     
 #ifdef RN_SERIALIZABLE_STATE
 ComponentName RNMapsGoogleMapViewProps::getDiffPropsImplementationTarget() const {
@@ -288,6 +289,10 @@ folly::dynamic RNMapsGoogleMapViewProps::getDiffProps(
     
   if (zoomTapEnabled != oldProps->zoomTapEnabled) {
     result["zoomTapEnabled"] = zoomTapEnabled;
+  }
+    
+  if (preventDefaultMarkerSelection != oldProps->preventDefaultMarkerSelection) {
+    result["preventDefaultMarkerSelection"] = preventDefaultMarkerSelection;
   }
   return result;
 }
@@ -512,7 +517,8 @@ RNMapsMapViewProps::RNMapsMapViewProps(
     zoomEnabled(convertRawProp(context, rawProps, "zoomEnabled", sourceProps.zoomEnabled, {true})),
     showsTraffic(convertRawProp(context, rawProps, "showsTraffic", sourceProps.showsTraffic, {false})),
     zoomTapEnabled(convertRawProp(context, rawProps, "zoomTapEnabled", sourceProps.zoomTapEnabled, {true})),
-    cameraZoomRange(convertRawProp(context, rawProps, "cameraZoomRange", sourceProps.cameraZoomRange, {})) {}
+    cameraZoomRange(convertRawProp(context, rawProps, "cameraZoomRange", sourceProps.cameraZoomRange, {})),
+    preventDefaultMarkerSelection(convertRawProp(context, rawProps, "preventDefaultMarkerSelection", sourceProps.preventDefaultMarkerSelection, {false})) {}
     
 #ifdef RN_SERIALIZABLE_STATE
 ComponentName RNMapsMapViewProps::getDiffPropsImplementationTarget() const {
@@ -740,6 +746,10 @@ folly::dynamic RNMapsMapViewProps::getDiffProps(
     
   if (cameraZoomRange != oldProps->cameraZoomRange) {
     result["cameraZoomRange"] = toDynamic(cameraZoomRange);
+  }
+    
+  if (preventDefaultMarkerSelection != oldProps->preventDefaultMarkerSelection) {
+    result["preventDefaultMarkerSelection"] = preventDefaultMarkerSelection;
   }
   return result;
 }
