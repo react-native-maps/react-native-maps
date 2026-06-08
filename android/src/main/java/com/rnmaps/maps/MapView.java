@@ -685,10 +685,17 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             WritableMap payload = OnRegionChangeEvent.payLoadFor(bounds, isGesture);
             dispatchEvent(payload, OnRegionChangeCompleteEvent::new);
+            // New-Arch overlays stop painting during a camera move and won't repaint
+            // unchanged shapes until a property mutates — re-commit them once settled.
+            redrawAllOverlays();
         });
 
         map.setOnMapLoadedCallback(() -> {
             isMapLoaded = true;
+            // Overlays added before the surface finished loading (the common case on
+            // first open) are committed but not painted under the New Arch until a
+            // property mutates. Now that the map is loaded, re-commit them all.
+            redrawAllOverlays();
             dispatchEvent(new WritableNativeMap(), OnMapLoadedEvent::new);
             MapView.this.cacheView();
         });
@@ -1222,6 +1229,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             safeAddFeature(index, polylineView);
             Polyline polyline = (Polyline) polylineView.getFeature();
             polylineMap.put(polyline, polylineView);
+            // New-Arch overlays don't composite until a property mutates — nudge on
+            // the next frame, once this add is committed. See MapPolyline#forceRedraw.
+            post(polylineView::forceRedraw);
         } else if (child instanceof MapGradientPolyline) {
             MapGradientPolyline polylineView = (MapGradientPolyline) child;
             polylineView.addToMap(map);
@@ -1234,6 +1244,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             safeAddFeature(index, polygonView);
             Polygon polygon = (Polygon) polygonView.getFeature();
             polygonMap.put(polygon, polygonView);
+            // New-Arch overlays don't composite until a property mutates — nudge on
+            // the next frame, once this add is committed. See MapPolygon#forceRedraw.
+            post(polygonView::forceRedraw);
         } else if (child instanceof MapCircle) {
             MapCircle circleView = (MapCircle) child;
             circleView.addToMap(circleCollection);
@@ -1269,6 +1282,22 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         } else {
             addView(child, index);
+        }
+    }
+
+    /**
+     * Re-commit every polygon/polyline overlay so the GoogleMap surface paints it.
+     * Under the New Architecture overlays added before the surface is ready (or while
+     * the camera is moving) stay invisible until a property mutates (markers are
+     * unaffected). Called once the map loads and again whenever the camera settles.
+     */
+    public void redrawAllOverlays() {
+        for (MapFeature feature : features) {
+            if (feature instanceof MapPolygon) {
+                ((MapPolygon) feature).forceRedraw();
+            } else if (feature instanceof MapPolyline) {
+                ((MapPolyline) feature).forceRedraw();
+            }
         }
     }
 
