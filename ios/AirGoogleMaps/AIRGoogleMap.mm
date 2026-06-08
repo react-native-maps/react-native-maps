@@ -502,6 +502,12 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)didTapPolygon:(GMSOverlay *)polygon {
+    // Only AIRGMSPolygon overlays carry the AIR-specific identifier/onPress; any
+    // other GMSOverlay subclass reaching this handler crashes on the cast below
+    // ("unrecognized selector"). Bail out for anything that isn't an AIRGMSPolygon.
+    if (![polygon isKindOfClass:[AIRGMSPolygon class]]) {
+        return;
+    }
     AIRGMSPolygon *airPolygon = (AIRGMSPolygon *)polygon;
 
     id event = @{@"action": @"polygon-press",
