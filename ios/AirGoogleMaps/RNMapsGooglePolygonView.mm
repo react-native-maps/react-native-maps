@@ -61,6 +61,8 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
 @implementation RNMapsGooglePolygonView {
     AIRGMSPolygon *_view;
     __weak AIRGoogleMap *_pendingMap;
+    // YES while a GMS detach is queued for the next runloop tick (see didRemoveFromMap).
+    BOOL _detachScheduled;
 }
 
 
@@ -80,6 +82,10 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     // fewer than 3 points crashes Google Maps (null-deref in gmssdk::CoordsToPoints
     // during setMap:). Remember the target map and attach from attachIfReady — here
     // if the path is already valid, otherwise from updateProps once coordinates land.
+    // Cancel a detach queued by a just-fired didRemoveFromMap: an unmount immediately
+    // followed by this re-mount (same view, same transaction) is a Fabric reorder,
+    // not a removal, so the overlay must stay attached (no detach/reattach churn).
+    _detachScheduled = NO;
     _pendingMap = map;
     [self attachIfReady];
 }
@@ -96,9 +102,21 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
 
 -(void) didRemoveFromMap
 {
-    _pendingMap = nil;
-    _view.map = nil;
-    _view = nil;
+    // Defer the detach by one runloop tick instead of detaching now. Fabric expresses
+    // a zIndex reorder as unmount-then-remount of the SAME view within one synchronous
+    // transaction; didInsertInMap clears _detachScheduled before this block runs, so a
+    // reorder leaves the overlay attached with its props intact (no vanish, and no stale
+    // fillColor when two overlays reorder at once). Only a genuine removal (no matching
+    // re-mount) reaches the detach. Full teardown still happens in prepareForRecycle.
+    _detachScheduled = YES;
+    __weak RNMapsGooglePolygonView *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RNMapsGooglePolygonView *strongSelf = weakSelf;
+        if (strongSelf == nil || !strongSelf->_detachScheduled) return;
+        strongSelf->_detachScheduled = NO;
+        strongSelf->_pendingMap = nil;
+        strongSelf->_view.map = nil;
+    });
 }
 
 - (void) prepareContentView {
@@ -153,6 +171,9 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     [super prepareForRecycle];
     static const auto defaultProps = std::make_shared<const RNMapsGooglePolygonProps>();
     _props = defaultProps;
+    _detachScheduled = NO;
+    _pendingMap = nil;
+    _view.map = nil;
     _view = nil;
 }
 
