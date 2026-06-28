@@ -330,6 +330,141 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
 
   void onUserLocationChange(OnUserLocationChange value) const;
 };
+class RNMapsGoogleMarkerEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  struct OnCalloutPressFrame {
+      double x;
+    double y;
+    double width;
+    double height;
+    };
+
+  struct OnCalloutPressPoint {
+      double x;
+    double y;
+    };
+
+  struct OnCalloutPress {
+      std::string action;
+    std::string id;
+    OnCalloutPressFrame frame;
+    OnCalloutPressPoint point;
+    };
+
+  struct OnDragCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnDragPosition {
+      double x;
+    double y;
+    };
+
+  struct OnDrag {
+      std::string id;
+    OnDragCoordinate coordinate;
+    OnDragPosition position;
+    };
+
+  struct OnDragEndCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnDragEndPosition {
+      double x;
+    double y;
+    };
+
+  struct OnDragEnd {
+      std::string id;
+    OnDragEndCoordinate coordinate;
+    OnDragEndPosition position;
+    };
+
+  struct OnDragStartCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnDragStartPosition {
+      double x;
+    double y;
+    };
+
+  struct OnDragStart {
+      std::string id;
+    OnDragStartCoordinate coordinate;
+    OnDragStartPosition position;
+    };
+
+  struct OnPressCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnPressPosition {
+      double x;
+    double y;
+    };
+
+  struct OnPress {
+      std::string action;
+    std::string id;
+    OnPressCoordinate coordinate;
+    OnPressPosition position;
+    };
+
+  struct OnSelectCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnSelectPosition {
+      double x;
+    double y;
+    };
+
+  struct OnSelect {
+      std::string action;
+    std::string id;
+    OnSelectCoordinate coordinate;
+    OnSelectPosition position;
+    };
+
+  struct OnDeselectCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnDeselectPosition {
+      double x;
+    double y;
+    };
+
+  struct OnDeselect {
+      std::string action;
+    std::string id;
+    OnDeselectCoordinate coordinate;
+    OnDeselectPosition position;
+    };
+  void onCalloutPress(OnCalloutPress value) const;
+
+  void onDrag(OnDrag value) const;
+
+  void onDragEnd(OnDragEnd value) const;
+
+  void onDragStart(OnDragStart value) const;
+
+  void onPress(OnPress value) const;
+
+  void onSelect(OnSelect value) const;
+
+  void onDeselect(OnDeselect value) const;
+};
 class RNMapsGooglePolygonEventEmitter : public ViewEventEmitter {
  public:
   using ViewEventEmitter::ViewEventEmitter;
@@ -800,6 +935,28 @@ class RNMapsMarkerEventEmitter : public ViewEventEmitter {
   void onSelect(OnSelect value) const;
 };
 class RNMapsOverlayEventEmitter : public ViewEventEmitter {
+ public:
+  using ViewEventEmitter::ViewEventEmitter;
+
+  struct OnPressCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnPressPosition {
+      double x;
+    double y;
+    };
+
+  struct OnPress {
+      std::string action;
+    std::string id;
+    OnPressCoordinate coordinate;
+    OnPressPosition position;
+    };
+  void onPress(OnPress value) const;
+};
+class RNMapsPolygonEventEmitter : public ViewEventEmitter {
  public:
   using ViewEventEmitter::ViewEventEmitter;
 
