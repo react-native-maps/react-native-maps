@@ -159,6 +159,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private LatLng tapLocation;
     private Float maxZoomLevel;
     private Float minZoomLevel;
+    private Integer mapType;
     private Boolean pitchEnabled;
     private Boolean showsCompass;
     private Boolean rotateEnabled;
@@ -479,6 +480,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             return;
         }
         this.map = map;
+        if (mapType != null) {
+            setMapType(mapType);
+        }
         if (maxZoomLevel != null) {
             setMaxZoomLevel(maxZoomLevel);
         }
@@ -1025,6 +1029,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void setMapType(int mapType) {
+        this.mapType = mapType;
         if (map != null) {
             map.setMapType(mapType);
         }
