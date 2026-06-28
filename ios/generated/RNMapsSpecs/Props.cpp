@@ -292,6 +292,110 @@ folly::dynamic RNMapsGoogleMapViewProps::getDiffProps(
   return result;
 }
 #endif
+RNMapsGoogleMarkerProps::RNMapsGoogleMarkerProps(
+    const PropsParserContext &context,
+    const RNMapsGoogleMarkerProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    anchor(convertRawProp(context, rawProps, "anchor", sourceProps.anchor, {})),
+    calloutAnchor(convertRawProp(context, rawProps, "calloutAnchor", sourceProps.calloutAnchor, {})),
+    image(convertRawProp(context, rawProps, "image", sourceProps.image, {})),
+    icon(convertRawProp(context, rawProps, "icon", sourceProps.icon, {})),
+    coordinate(convertRawProp(context, rawProps, "coordinate", sourceProps.coordinate, {})),
+    description(convertRawProp(context, rawProps, "description", sourceProps.description, {})),
+    draggable(convertRawProp(context, rawProps, "draggable", sourceProps.draggable, {false})),
+    title(convertRawProp(context, rawProps, "title", sourceProps.title, {})),
+    tracksViewChanges(convertRawProp(context, rawProps, "tracksViewChanges", sourceProps.tracksViewChanges, {true})),
+    tracksInfoWindowChanges(convertRawProp(context, rawProps, "tracksInfoWindowChanges", sourceProps.tracksInfoWindowChanges, {false})),
+    flat(convertRawProp(context, rawProps, "flat", sourceProps.flat, {false})),
+    rotation(convertRawProp(context, rawProps, "rotation", sourceProps.rotation, {0.0})),
+    identifier(convertRawProp(context, rawProps, "identifier", sourceProps.identifier, {})),
+    tappable(convertRawProp(context, rawProps, "tappable", sourceProps.tappable, {true})),
+    opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
+    pinColor(convertRawProp(context, rawProps, "pinColor", sourceProps.pinColor, {})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsGoogleMarkerProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsGoogleMarker";
+}
+
+folly::dynamic RNMapsGoogleMarkerProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsGoogleMarkerProps();
+  const RNMapsGoogleMarkerProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsGoogleMarkerProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (anchor != oldProps->anchor) {
+    result["anchor"] = toDynamic(anchor);
+  }
+    
+  if (calloutAnchor != oldProps->calloutAnchor) {
+    result["calloutAnchor"] = toDynamic(calloutAnchor);
+  }
+    
+  if (image != oldProps->image) {
+    result["image"] = toDynamic(image);
+  }
+    
+  if (icon != oldProps->icon) {
+    result["icon"] = toDynamic(icon);
+  }
+    
+  if (coordinate != oldProps->coordinate) {
+    result["coordinate"] = toDynamic(coordinate);
+  }
+    
+  if (description != oldProps->description) {
+    result["description"] = description;
+  }
+    
+  if (draggable != oldProps->draggable) {
+    result["draggable"] = draggable;
+  }
+    
+  if (title != oldProps->title) {
+    result["title"] = title;
+  }
+    
+  if (tracksViewChanges != oldProps->tracksViewChanges) {
+    result["tracksViewChanges"] = tracksViewChanges;
+  }
+    
+  if (tracksInfoWindowChanges != oldProps->tracksInfoWindowChanges) {
+    result["tracksInfoWindowChanges"] = tracksInfoWindowChanges;
+  }
+    
+  if (flat != oldProps->flat) {
+    result["flat"] = flat;
+  }
+    
+  if ((rotation != oldProps->rotation) && !(std::isnan(rotation) && std::isnan(oldProps->rotation))) {
+    result["rotation"] = rotation;
+  }
+    
+  if (identifier != oldProps->identifier) {
+    result["identifier"] = identifier;
+  }
+    
+  if (tappable != oldProps->tappable) {
+    result["tappable"] = tappable;
+  }
+    
+  if ((opacity != oldProps->opacity) && !(std::isnan(opacity) && std::isnan(oldProps->opacity))) {
+    result["opacity"] = opacity;
+  }
+    
+  if (pinColor != oldProps->pinColor) {
+    result["pinColor"] = *pinColor;
+  }
+  return result;
+}
+#endif
 RNMapsGooglePolygonProps::RNMapsGooglePolygonProps(
     const PropsParserContext &context,
     const RNMapsGooglePolygonProps &sourceProps,
@@ -799,6 +903,80 @@ folly::dynamic RNMapsOverlayProps::getDiffProps(
     
   if (tappable != oldProps->tappable) {
     result["tappable"] = tappable;
+  }
+  return result;
+}
+#endif
+RNMapsPolygonProps::RNMapsPolygonProps(
+    const PropsParserContext &context,
+    const RNMapsPolygonProps &sourceProps,
+    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
+
+    coordinates(convertRawProp(context, rawProps, "coordinates", sourceProps.coordinates, {})),
+    fillColor(convertRawProp(context, rawProps, "fillColor", sourceProps.fillColor, {})),
+    strokeColor(convertRawProp(context, rawProps, "strokeColor", sourceProps.strokeColor, {})),
+    strokeWidth(convertRawProp(context, rawProps, "strokeWidth", sourceProps.strokeWidth, {1.0})),
+    holes(convertRawProp(context, rawProps, "holes", sourceProps.holes, {})),
+    lineCap(convertRawProp(context, rawProps, "lineCap", sourceProps.lineCap, {RNMapsPolygonLineCap::Round})),
+    lineJoin(convertRawProp(context, rawProps, "lineJoin", sourceProps.lineJoin, {RNMapsPolygonLineJoin::Round})),
+    miterLimit(convertRawProp(context, rawProps, "miterLimit", sourceProps.miterLimit, {10.0})),
+    lineDashPhase(convertRawProp(context, rawProps, "lineDashPhase", sourceProps.lineDashPhase, {0.0})),
+    lineDashPattern(convertRawProp(context, rawProps, "lineDashPattern", sourceProps.lineDashPattern, {})) {}
+    
+#ifdef RN_SERIALIZABLE_STATE
+ComponentName RNMapsPolygonProps::getDiffPropsImplementationTarget() const {
+  return "RNMapsPolygon";
+}
+
+folly::dynamic RNMapsPolygonProps::getDiffProps(
+    const Props* prevProps) const {
+  static const auto defaultProps = RNMapsPolygonProps();
+  const RNMapsPolygonProps* oldProps = prevProps == nullptr
+      ? &defaultProps
+      : static_cast<const RNMapsPolygonProps*>(prevProps);
+  if (this == oldProps) {
+    return folly::dynamic::object();
+  }
+  folly::dynamic result = HostPlatformViewProps::getDiffProps(prevProps);
+  
+  if (coordinates != oldProps->coordinates) {
+    result["coordinates"] = toDynamic(coordinates);
+  }
+    
+  if (fillColor != oldProps->fillColor) {
+    result["fillColor"] = *fillColor;
+  }
+    
+  if (strokeColor != oldProps->strokeColor) {
+    result["strokeColor"] = *strokeColor;
+  }
+    
+  if ((strokeWidth != oldProps->strokeWidth) && !(std::isnan(strokeWidth) && std::isnan(oldProps->strokeWidth))) {
+    result["strokeWidth"] = strokeWidth;
+  }
+    
+  if (holes != oldProps->holes) {
+    result["holes"] = toDynamic(holes);
+  }
+    
+  if (lineCap != oldProps->lineCap) {
+    result["lineCap"] = toDynamic(lineCap);
+  }
+    
+  if (lineJoin != oldProps->lineJoin) {
+    result["lineJoin"] = toDynamic(lineJoin);
+  }
+    
+  if ((miterLimit != oldProps->miterLimit) && !(std::isnan(miterLimit) && std::isnan(oldProps->miterLimit))) {
+    result["miterLimit"] = miterLimit;
+  }
+    
+  if ((lineDashPhase != oldProps->lineDashPhase) && !(std::isnan(lineDashPhase) && std::isnan(oldProps->lineDashPhase))) {
+    result["lineDashPhase"] = lineDashPhase;
+  }
+    
+  if (lineDashPattern != oldProps->lineDashPattern) {
+    result["lineDashPattern"] = toDynamic(lineDashPattern);
   }
   return result;
 }

@@ -9,8 +9,10 @@
 #import "RNMapsMapView.h"
 #import "AIRMap.h"
 #import "AIRMapMarker.h"
+#import "AIRMapPolygon.h"
 #import "AIRMapManager.h"
 #import "RNMapsMarkerView.h"
+#import "RNMapsPolygonView.h"
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
 #import <ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>
 #import <ReactNativeMaps/generated/RNMapsSpecs.h>
@@ -443,6 +445,9 @@ mapViewEventEmitter->emitterFunction(data);                               \
     } else if ([childComponentView isKindOfClass:[RNMapsMarkerView class]]){
         RNMapsMarkerView* fabricMarker = (RNMapsMarkerView *) childComponentView;
         [_view insertReactSubview:[fabricMarker marker] atIndex:index];
+    } else if ([childComponentView isKindOfClass:[RNMapsPolygonView class]]){
+        RNMapsPolygonView* fabricPolygon = (RNMapsPolygonView *) childComponentView;
+        [_view insertReactSubview:[fabricPolygon polygon] atIndex:index];
     }
     else  {
         [_view insertReactSubview:childComponentView atIndex:index];
@@ -458,6 +463,9 @@ mapViewEventEmitter->emitterFunction(data);                               \
     else if ([childComponentView isKindOfClass:[RNMapsMarkerView class]]){
        RNMapsMarkerView* fabricMarker = (RNMapsMarkerView *) childComponentView;
         [_view removeReactSubview:[fabricMarker marker]];
+   } else if ([childComponentView isKindOfClass:[RNMapsPolygonView class]]){
+       RNMapsPolygonView* fabricPolygon = (RNMapsPolygonView *) childComponentView;
+        [_view removeReactSubview:[fabricPolygon polygon]];
    } else {
         [_view removeReactSubview:childComponentView];
     }

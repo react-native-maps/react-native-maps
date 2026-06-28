@@ -9,7 +9,9 @@
 
 #import "RNMapsGoogleMapView.h"
 #import "RNMapsGooglePolygonView.h"
+#import "RNMapsGoogleMarkerView.h"
 #import "AIRGoogleMap.h"
+#import "AIRGoogleMapMarker.h"
 #import "AIRGoogleMapManager.h"
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
 #import <ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>
@@ -458,6 +460,9 @@ using namespace facebook::react;
         } else {
             [_pendingInsertsSubviews setObject:paperView forKey:[NSNumber numberWithInteger:index]];
         }
+    } else if ([childComponentView isKindOfClass:[RNMapsGoogleMarkerView class]]){
+        RNMapsGoogleMarkerView* fabricMarker = (RNMapsGoogleMarkerView *) childComponentView;
+        [_view insertReactSubview:[fabricMarker marker] atIndex:index];
     } else {
         [_view insertReactSubview:childComponentView atIndex:index];
         if ([childComponentView isKindOfClass:[RNMapsGooglePolygonView class]]){
@@ -477,6 +482,9 @@ using namespace facebook::react;
         } else {
             [_pendingInsertsSubviews removeObjectForKey:[NSNumber numberWithInteger:index]];
         }
+    } else if ([childComponentView isKindOfClass:[RNMapsGoogleMarkerView class]]){
+        RNMapsGoogleMarkerView* fabricMarker = (RNMapsGoogleMarkerView *) childComponentView;
+        [_view removeReactSubview:[fabricMarker marker]];
     } else {
         [_view removeReactSubview:childComponentView];
         if ([childComponentView isKindOfClass:[RNMapsGooglePolygonView class]]){
