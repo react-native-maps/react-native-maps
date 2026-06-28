@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.29.0](https://github.com/react-native-maps/react-native-maps/compare/v1.28.2...v1.29.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** ios fabric support (GoogleMaps Marker, Polygon) ([#5944](https://github.com/react-native-maps/react-native-maps/issues/5944)) ([91ce461](https://github.com/react-native-maps/react-native-maps/commit/91ce461d4ed3b089914e97f346de95b45d491800))
+
 ## [1.28.2](https://github.com/react-native-maps/react-native-maps/compare/v1.28.1...v1.28.2) (2026-06-28)
 
 
