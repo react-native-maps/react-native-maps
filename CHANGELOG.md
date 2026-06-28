@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.2](https://github.com/react-native-maps/react-native-maps/compare/v1.28.1...v1.28.2) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** remember selected mapType ([#5879](https://github.com/react-native-maps/react-native-maps/issues/5879)) ([d7f58ae](https://github.com/react-native-maps/react-native-maps/commit/d7f58ae2e96714ad2245544cb89f801d2a3fca56))
+
 ## [1.28.1](https://github.com/react-native-maps/react-native-maps/compare/v1.28.0...v1.28.1) (2026-06-28)
 
 
