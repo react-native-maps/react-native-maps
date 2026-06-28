@@ -1,5 +1,19 @@
 # Changelog
 
+# [1.28.0](https://github.com/react-native-maps/react-native-maps/compare/v1.27.2...v1.28.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** allow GoogleMaps pod versions to be overridden ([#5923](https://github.com/react-native-maps/react-native-maps/issues/5923)) ([5fae05a](https://github.com/react-native-maps/react-native-maps/commit/5fae05a906567ca7a88a86d155f9fd62da889ab8))
+
+## [1.27.2](https://github.com/react-native-maps/react-native-maps/compare/v1.27.1...v1.27.2) (2026-03-11)
+
+
+### Bug Fixes
+
+* **ios:** expo plug-in to match [@main](https://github.com/main) in react-native-maps-import ([#5844](https://github.com/react-native-maps/react-native-maps/issues/5844)) ([7ef397d](https://github.com/react-native-maps/react-native-maps/commit/7ef397df99003826fad7dfdafd824984d223b9c1))
+
 ## [1.27.1](https://github.com/react-native-maps/react-native-maps/compare/v1.27.0...v1.27.1) (2026-02-01)
 
 
