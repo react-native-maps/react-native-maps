@@ -171,6 +171,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private Boolean scrollEnabled;
     private Boolean scrollDuringRotateOrZoomEnabled;
     private String kmlSrc = null;
+    private Boolean preventDefaultMarkerSelection = false;
 
     private static boolean contextHasBug(Context context) {
         return context == null ||
@@ -585,6 +586,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
 
                 handleMarkerSelection(airMapMarker);
+
+                if (view.preventDefaultMarkerSelection) {
+                    return true;
+                }
 
                 // Return false to open the callout info window and center on the marker
                 // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
@@ -1913,6 +1918,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         } else {
             this.kmlSrc = kmlSrc;
         }
+    }
+
+    public void setPreventDefaultMarkerSelection(Boolean preventDefaultMarkerSelection) {
+        this.preventDefaultMarkerSelection = preventDefaultMarkerSelection;
     }
 
     @Override

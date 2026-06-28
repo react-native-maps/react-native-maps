@@ -595,6 +595,7 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
   bool zoomControlEnabled{false};
   bool zoomEnabled{true};
   bool zoomTapEnabled{true};
+  bool preventDefaultMarkerSelection{false};
 
   #ifdef RN_SERIALIZABLE_STATE
   ComponentName getDiffPropsImplementationTarget() const override;
@@ -1610,6 +1611,7 @@ class RNMapsMapViewProps final : public ViewProps {
   bool showsTraffic{false};
   bool zoomTapEnabled{true};
   RNMapsMapViewCameraZoomRangeStruct cameraZoomRange{};
+  bool preventDefaultMarkerSelection{false};
 
   #ifdef RN_SERIALIZABLE_STATE
   ComponentName getDiffPropsImplementationTarget() const override;

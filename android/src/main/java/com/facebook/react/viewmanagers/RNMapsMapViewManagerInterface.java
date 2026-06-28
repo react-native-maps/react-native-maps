@@ -68,6 +68,7 @@ public interface RNMapsMapViewManagerInterface<T extends View> extends ViewManag
   void setShowsTraffic(T view, boolean value);
   void setZoomTapEnabled(T view, boolean value);
   void setCameraZoomRange(T view, @Nullable ReadableMap value);
+  void setPreventDefaultMarkerSelection(T view, boolean value);
   void animateToRegion(T view, String regionJSON, int duration);
   void setCamera(T view, String cameraJSON);
   void animateCamera(T view, String cameraJSON, int duration);
