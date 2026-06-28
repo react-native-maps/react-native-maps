@@ -117,8 +117,10 @@
       "componentProvider": {
         "RNMapsGoogleMapView": "RNMapsGoogleMapView",
         "RNMapsGooglePolygon": "RNMapsGooglePolygonView",
+        "RNMapsGoogleMarker": "RNMapsGoogleMarkerView",
         "RNMapsMapView": "RNMapsMapView",
-        "RNMapsMarker": "RNMapsMarkerView"
+        "RNMapsMarker": "RNMapsMarkerView",
+        "RNMapsPolygon": "RNMapsPolygonView"
       }
     }
   },
