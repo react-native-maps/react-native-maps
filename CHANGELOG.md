@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.1](https://github.com/react-native-maps/react-native-maps/compare/v1.28.0...v1.28.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** fix ghost features on MapView ([#5859](https://github.com/react-native-maps/react-native-maps/issues/5859)) ([b874b0f](https://github.com/react-native-maps/react-native-maps/commit/b874b0ff29f6c6227da7907e813f2b4406c5486d))
+
 # [1.28.0](https://github.com/react-native-maps/react-native-maps/compare/v1.27.2...v1.28.0) (2026-06-28)
 
 
