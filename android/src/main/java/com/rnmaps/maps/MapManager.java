@@ -158,7 +158,7 @@ public class MapManager extends ViewGroupManager<MapView> {
     @ReactProp(name = "mapType")
     public void setMapType(MapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
-        view.map.setMapType(typeId);
+        view.setMapType(typeId);
     }
 
     @ReactProp(name = "customMapStyleString")
