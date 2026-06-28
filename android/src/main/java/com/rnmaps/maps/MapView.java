@@ -55,6 +55,7 @@ import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.IndoorLevel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapColorScheme;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -171,6 +172,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private Boolean scrollEnabled;
     private Boolean scrollDuringRotateOrZoomEnabled;
     private String kmlSrc = null;
+    private String userInterfaceStyle = null;
 
     private static boolean contextHasBug(Context context) {
         return context == null ||
@@ -518,6 +520,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
         if (scrollDuringRotateOrZoomEnabled != null) {
             setScrollDuringRotateOrZoomEnabled(scrollDuringRotateOrZoomEnabled);
+        }
+        if (userInterfaceStyle != null) {
+            setUserInterfaceStyle(userInterfaceStyle);
         }
         if (hasPermissions()) {
             //noinspection MissingPermission
@@ -986,6 +991,19 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         this.customMapStyleString = customMapStyleString;
         if (map != null && customMapStyleString != null) {
             map.setMapStyle(new MapStyleOptions(customMapStyleString));
+        }
+    }
+
+    public void setUserInterfaceStyle(@Nullable String userInterfaceStyle) {
+        this.userInterfaceStyle = userInterfaceStyle;
+        if (map != null && userInterfaceStyle != null) {
+            if ("system".equals(userInterfaceStyle)) {
+                map.setMapColorScheme(MapColorScheme.FOLLOW_SYSTEM);
+            } else if ("light".equals(userInterfaceStyle)) {
+                map.setMapColorScheme(MapColorScheme.LIGHT);
+            } else if ("dark".equals(userInterfaceStyle)) {
+                map.setMapColorScheme(MapColorScheme.DARK);
+            }
         }
     }
 
