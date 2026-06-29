@@ -40,6 +40,15 @@ public class PolygonManager extends ViewGroupManager<MapPolygon> implements RNMa
         return new MapPolygon(context);
     }
 
+    @Override
+    public void onDropViewInstance(MapPolygon view) {
+        // Identity-based overlay removal when Fabric drops/recycles the view, so a
+        // removed overlay can't linger as a "ghost" under the New Architecture (the
+        // index-based removeFeatureAt path is unreliable for batches).
+        view.removeFromMapDirectly();
+        super.onDropViewInstance(view);
+    }
+
 
 
     public static final String REACT_CLASS = "RNMapsGooglePolygon";
