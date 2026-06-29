@@ -12,6 +12,7 @@
 #include <react/renderer/components/view/ViewProps.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/core/propsConversions.h>
+#include <react/renderer/debug/DebugStringConvertible.h>
 #include <react/renderer/graphics/Color.h>
 #include <react/renderer/imagemanager/primitives.h>
 #include <vector>
@@ -33,11 +34,14 @@ class RNMapsCalloutProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 struct RNMapsCircleCenterStruct {
   double latitude{0.0};
   double longitude{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsCircleCenterStruct&) const = default;
@@ -92,6 +96,8 @@ class RNMapsCircleProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 enum class RNMapsGoogleMapViewMapType { Hybrid, MutedStandard, None, Satellite, Standard, Terrain, SatelliteFlyover, HybridFlyover };
@@ -202,6 +208,7 @@ struct RNMapsGoogleMapViewCameraCenterStruct {
   double latitude{0.0};
   double longitude{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGoogleMapViewCameraCenterStruct&) const = default;
 
@@ -243,6 +250,7 @@ struct RNMapsGoogleMapViewCameraStruct {
   double heading{0.0};
   double pitch{0.0};
   Float zoom{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGoogleMapViewCameraStruct&) const = default;
@@ -298,6 +306,7 @@ struct RNMapsGoogleMapViewInitialCameraCenterStruct {
   double latitude{0.0};
   double longitude{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGoogleMapViewInitialCameraCenterStruct&) const = default;
 
@@ -339,6 +348,7 @@ struct RNMapsGoogleMapViewInitialCameraStruct {
   double heading{0.0};
   double pitch{0.0};
   Float zoom{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGoogleMapViewInitialCameraStruct&) const = default;
@@ -396,6 +406,7 @@ struct RNMapsGoogleMapViewInitialRegionStruct {
   double latitudeDelta{0.0};
   double longitudeDelta{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGoogleMapViewInitialRegionStruct&) const = default;
 
@@ -447,6 +458,7 @@ struct RNMapsGoogleMapViewMapPaddingStruct {
   double bottom{0.0};
   double left{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGoogleMapViewMapPaddingStruct&) const = default;
 
@@ -497,6 +509,7 @@ struct RNMapsGoogleMapViewRegionStruct {
   double longitude{0.0};
   double latitudeDelta{0.0};
   double longitudeDelta{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGoogleMapViewRegionStruct&) const = default;
@@ -588,11 +601,166 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
+};
+
+struct RNMapsGoogleMarkerAnchorStruct {
+  double x{0.0};
+  double y{0.0};
+
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsGoogleMarkerAnchorStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["x"] = x;
+    result["y"] = y;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsGoogleMarkerAnchorStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_x = map.find("x");
+  if (tmp_x != map.end()) {
+    fromRawValue(context, tmp_x->second, result.x);
+  }
+  auto tmp_y = map.find("y");
+  if (tmp_y != map.end()) {
+    fromRawValue(context, tmp_y->second, result.y);
+  }
+}
+
+static inline std::string toString(const RNMapsGoogleMarkerAnchorStruct &value) {
+  return "[Object RNMapsGoogleMarkerAnchorStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsGoogleMarkerAnchorStruct &value) {
+  return value.toDynamic();
+}
+#endif
+
+struct RNMapsGoogleMarkerCalloutAnchorStruct {
+  double x{0.0};
+  double y{0.0};
+
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsGoogleMarkerCalloutAnchorStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["x"] = x;
+    result["y"] = y;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsGoogleMarkerCalloutAnchorStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_x = map.find("x");
+  if (tmp_x != map.end()) {
+    fromRawValue(context, tmp_x->second, result.x);
+  }
+  auto tmp_y = map.find("y");
+  if (tmp_y != map.end()) {
+    fromRawValue(context, tmp_y->second, result.y);
+  }
+}
+
+static inline std::string toString(const RNMapsGoogleMarkerCalloutAnchorStruct &value) {
+  return "[Object RNMapsGoogleMarkerCalloutAnchorStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsGoogleMarkerCalloutAnchorStruct &value) {
+  return value.toDynamic();
+}
+#endif
+
+struct RNMapsGoogleMarkerCoordinateStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsGoogleMarkerCoordinateStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["latitude"] = latitude;
+    result["longitude"] = longitude;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsGoogleMarkerCoordinateStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
+  }
+}
+
+static inline std::string toString(const RNMapsGoogleMarkerCoordinateStruct &value) {
+  return "[Object RNMapsGoogleMarkerCoordinateStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsGoogleMarkerCoordinateStruct &value) {
+  return value.toDynamic();
+}
+#endif
+class RNMapsGoogleMarkerProps final : public ViewProps {
+ public:
+  RNMapsGoogleMarkerProps() = default;
+  RNMapsGoogleMarkerProps(const PropsParserContext& context, const RNMapsGoogleMarkerProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  RNMapsGoogleMarkerAnchorStruct anchor{};
+  RNMapsGoogleMarkerCalloutAnchorStruct calloutAnchor{};
+  ImageSource image{};
+  ImageSource icon{};
+  RNMapsGoogleMarkerCoordinateStruct coordinate{};
+  std::string description{};
+  bool draggable{false};
+  std::string title{};
+  bool tracksViewChanges{true};
+  bool tracksInfoWindowChanges{false};
+  bool flat{false};
+  Float rotation{0.0};
+  std::string identifier{};
+  bool tappable{true};
+  double opacity{1.0};
+  SharedColor pinColor{};
+
+  #ifdef RN_SERIALIZABLE_STATE
+  ComponentName getDiffPropsImplementationTarget() const override;
+
+  folly::dynamic getDiffProps(const Props* prevProps) const override;
+  #endif
+
+  
 };
 
 struct RNMapsGooglePolygonCoordinatesStruct {
   double latitude{0.0};
   double longitude{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGooglePolygonCoordinatesStruct&) const = default;
@@ -642,6 +810,7 @@ static inline void fromRawValue(const PropsParserContext& context, const RawValu
 struct RNMapsGooglePolygonHolesStruct {
   double latitude{0.0};
   double longitude{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsGooglePolygonHolesStruct&) const = default;
@@ -711,6 +880,8 @@ class RNMapsGooglePolygonProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 enum class RNMapsMapViewGoogleRenderer { LATEST, LEGACY };
@@ -842,6 +1013,7 @@ struct RNMapsMapViewCameraCenterStruct {
   double latitude{0.0};
   double longitude{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewCameraCenterStruct&) const = default;
 
@@ -883,6 +1055,7 @@ struct RNMapsMapViewCameraStruct {
   double heading{0.0};
   double pitch{0.0};
   Float zoom{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewCameraStruct&) const = default;
@@ -938,6 +1111,7 @@ struct RNMapsMapViewCompassOffsetStruct {
   double x{0.0};
   double y{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewCompassOffsetStruct&) const = default;
 
@@ -976,6 +1150,7 @@ static inline folly::dynamic toDynamic(const RNMapsMapViewCompassOffsetStruct &v
 struct RNMapsMapViewInitialCameraCenterStruct {
   double latitude{0.0};
   double longitude{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewInitialCameraCenterStruct&) const = default;
@@ -1018,6 +1193,7 @@ struct RNMapsMapViewInitialCameraStruct {
   double heading{0.0};
   double pitch{0.0};
   Float zoom{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewInitialCameraStruct&) const = default;
@@ -1075,6 +1251,7 @@ struct RNMapsMapViewInitialRegionStruct {
   double latitudeDelta{0.0};
   double longitudeDelta{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewInitialRegionStruct&) const = default;
 
@@ -1126,6 +1303,7 @@ struct RNMapsMapViewLegalLabelInsetsStruct {
   double bottom{0.0};
   double left{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewLegalLabelInsetsStruct&) const = default;
 
@@ -1171,11 +1349,64 @@ static inline folly::dynamic toDynamic(const RNMapsMapViewLegalLabelInsetsStruct
 }
 #endif
 
+struct RNMapsMapViewAppleLogoInsetsStruct {
+  double top{0.0};
+  double right{0.0};
+  double bottom{0.0};
+  double left{0.0};
+
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsMapViewAppleLogoInsetsStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["top"] = top;
+    result["right"] = right;
+    result["bottom"] = bottom;
+    result["left"] = left;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsMapViewAppleLogoInsetsStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_top = map.find("top");
+  if (tmp_top != map.end()) {
+    fromRawValue(context, tmp_top->second, result.top);
+  }
+  auto tmp_right = map.find("right");
+  if (tmp_right != map.end()) {
+    fromRawValue(context, tmp_right->second, result.right);
+  }
+  auto tmp_bottom = map.find("bottom");
+  if (tmp_bottom != map.end()) {
+    fromRawValue(context, tmp_bottom->second, result.bottom);
+  }
+  auto tmp_left = map.find("left");
+  if (tmp_left != map.end()) {
+    fromRawValue(context, tmp_left->second, result.left);
+  }
+}
+
+static inline std::string toString(const RNMapsMapViewAppleLogoInsetsStruct &value) {
+  return "[Object RNMapsMapViewAppleLogoInsetsStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsMapViewAppleLogoInsetsStruct &value) {
+  return value.toDynamic();
+}
+#endif
+
 struct RNMapsMapViewMapPaddingStruct {
   double top{0.0};
   double right{0.0};
   double bottom{0.0};
   double left{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewMapPaddingStruct&) const = default;
@@ -1228,6 +1459,7 @@ struct RNMapsMapViewRegionStruct {
   double latitudeDelta{0.0};
   double longitudeDelta{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewRegionStruct&) const = default;
 
@@ -1277,6 +1509,7 @@ struct RNMapsMapViewCameraZoomRangeStruct {
   double minCenterCoordinateDistance{0.0};
   double maxCenterCoordinateDistance{0.0};
   bool animated{false};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMapViewCameraZoomRangeStruct&) const = default;
@@ -1333,6 +1566,7 @@ class RNMapsMapViewProps final : public ViewProps {
   RNMapsMapViewInitialRegionStruct initialRegion{};
   std::string kmlSrc{};
   RNMapsMapViewLegalLabelInsetsStruct legalLabelInsets{};
+  RNMapsMapViewAppleLogoInsetsStruct appleLogoInsets{};
   bool liteMode{false};
   std::string googleMapId{};
   RNMapsMapViewGoogleRenderer googleRenderer{RNMapsMapViewGoogleRenderer::LATEST};
@@ -1382,6 +1616,8 @@ class RNMapsMapViewProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 enum class RNMapsMarkerDisplayPriority { Required, High, Low };
@@ -1457,6 +1693,7 @@ struct RNMapsMarkerAnchorStruct {
   double x{0.0};
   double y{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMarkerAnchorStruct&) const = default;
 
@@ -1495,6 +1732,7 @@ static inline folly::dynamic toDynamic(const RNMapsMarkerAnchorStruct &value) {
 struct RNMapsMarkerCalloutAnchorStruct {
   double x{0.0};
   double y{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMarkerCalloutAnchorStruct&) const = default;
@@ -1535,6 +1773,7 @@ struct RNMapsMarkerCalloutOffsetStruct {
   double x{0.0};
   double y{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMarkerCalloutOffsetStruct&) const = default;
 
@@ -1574,6 +1813,7 @@ struct RNMapsMarkerCenterOffsetStruct {
   double x{0.0};
   double y{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMarkerCenterOffsetStruct&) const = default;
 
@@ -1612,6 +1852,7 @@ static inline folly::dynamic toDynamic(const RNMapsMarkerCenterOffsetStruct &val
 struct RNMapsMarkerCoordinateStruct {
   double latitude{0.0};
   double longitude{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsMarkerCoordinateStruct&) const = default;
@@ -1680,11 +1921,14 @@ class RNMapsMarkerProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 struct RNMapsOverlayBoundsNorthEastStruct {
   double latitude{0.0};
   double longitude{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsOverlayBoundsNorthEastStruct&) const = default;
@@ -1725,6 +1969,7 @@ struct RNMapsOverlayBoundsSouthWestStruct {
   double latitude{0.0};
   double longitude{0.0};
 
+
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsOverlayBoundsSouthWestStruct&) const = default;
 
@@ -1763,6 +2008,7 @@ static inline folly::dynamic toDynamic(const RNMapsOverlayBoundsSouthWestStruct 
 struct RNMapsOverlayBoundsStruct {
   RNMapsOverlayBoundsNorthEastStruct northEast{};
   RNMapsOverlayBoundsSouthWestStruct southWest{};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsOverlayBoundsStruct&) const = default;
@@ -1816,6 +2062,184 @@ class RNMapsOverlayProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
+};
+
+enum class RNMapsPolygonLineCap { Butt, Round, Square };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolygonLineCap &result) {
+  auto string = (std::string)value;
+  if (string == "butt") { result = RNMapsPolygonLineCap::Butt; return; }
+  if (string == "round") { result = RNMapsPolygonLineCap::Round; return; }
+  if (string == "square") { result = RNMapsPolygonLineCap::Square; return; }
+  abort();
+}
+
+static inline std::string toString(const RNMapsPolygonLineCap &value) {
+  switch (value) {
+    case RNMapsPolygonLineCap::Butt: return "butt";
+    case RNMapsPolygonLineCap::Round: return "round";
+    case RNMapsPolygonLineCap::Square: return "square";
+  }
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsPolygonLineCap &value) {
+  return toString(value);
+}
+#endif
+enum class RNMapsPolygonLineJoin { Miter, Round, Bevel };
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolygonLineJoin &result) {
+  auto string = (std::string)value;
+  if (string == "miter") { result = RNMapsPolygonLineJoin::Miter; return; }
+  if (string == "round") { result = RNMapsPolygonLineJoin::Round; return; }
+  if (string == "bevel") { result = RNMapsPolygonLineJoin::Bevel; return; }
+  abort();
+}
+
+static inline std::string toString(const RNMapsPolygonLineJoin &value) {
+  switch (value) {
+    case RNMapsPolygonLineJoin::Miter: return "miter";
+    case RNMapsPolygonLineJoin::Round: return "round";
+    case RNMapsPolygonLineJoin::Bevel: return "bevel";
+  }
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsPolygonLineJoin &value) {
+  return toString(value);
+}
+#endif
+struct RNMapsPolygonCoordinatesStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsPolygonCoordinatesStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["latitude"] = latitude;
+    result["longitude"] = longitude;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolygonCoordinatesStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
+  }
+}
+
+static inline std::string toString(const RNMapsPolygonCoordinatesStruct &value) {
+  return "[Object RNMapsPolygonCoordinatesStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsPolygonCoordinatesStruct &value) {
+  return value.toDynamic();
+}
+#endif
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, std::vector<RNMapsPolygonCoordinatesStruct> &result) {
+  auto items = (std::vector<RawValue>)value;
+  for (const auto &item : items) {
+    RNMapsPolygonCoordinatesStruct newItem;
+    fromRawValue(context, item, newItem);
+    result.emplace_back(newItem);
+  }
+}
+
+
+struct RNMapsPolygonHolesStruct {
+  double latitude{0.0};
+  double longitude{0.0};
+
+
+#ifdef RN_SERIALIZABLE_STATE
+  bool operator==(const RNMapsPolygonHolesStruct&) const = default;
+
+  folly::dynamic toDynamic() const {
+    folly::dynamic result = folly::dynamic::object();
+    result["latitude"] = latitude;
+    result["longitude"] = longitude;
+    return result;
+  }
+#endif
+};
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNMapsPolygonHolesStruct &result) {
+  auto map = (std::unordered_map<std::string, RawValue>)value;
+
+  auto tmp_latitude = map.find("latitude");
+  if (tmp_latitude != map.end()) {
+    fromRawValue(context, tmp_latitude->second, result.latitude);
+  }
+  auto tmp_longitude = map.find("longitude");
+  if (tmp_longitude != map.end()) {
+    fromRawValue(context, tmp_longitude->second, result.longitude);
+  }
+}
+
+static inline std::string toString(const RNMapsPolygonHolesStruct &value) {
+  return "[Object RNMapsPolygonHolesStruct]";
+}
+
+#ifdef RN_SERIALIZABLE_STATE
+static inline folly::dynamic toDynamic(const RNMapsPolygonHolesStruct &value) {
+  return value.toDynamic();
+}
+#endif
+
+static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, std::vector<std::vector<RNMapsPolygonHolesStruct>> &result) {
+  auto items = (std::vector<std::vector<RawValue>>)value;
+  for (const std::vector<RawValue> &item : items) {
+    auto nestedArray = std::vector<RNMapsPolygonHolesStruct>{};
+    for (const RawValue &nestedItem : item) {
+      RNMapsPolygonHolesStruct newItem;
+      fromRawValue(context, nestedItem, newItem);
+      nestedArray.emplace_back(newItem);
+    }
+    result.emplace_back(nestedArray);
+  }
+}
+
+class RNMapsPolygonProps final : public ViewProps {
+ public:
+  RNMapsPolygonProps() = default;
+  RNMapsPolygonProps(const PropsParserContext& context, const RNMapsPolygonProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  std::vector<RNMapsPolygonCoordinatesStruct> coordinates{};
+  SharedColor fillColor{};
+  SharedColor strokeColor{};
+  Float strokeWidth{1.0};
+  std::vector<std::vector<RNMapsPolygonHolesStruct>> holes{};
+  RNMapsPolygonLineCap lineCap{RNMapsPolygonLineCap::Round};
+  RNMapsPolygonLineJoin lineJoin{RNMapsPolygonLineJoin::Round};
+  Float miterLimit{10.0};
+  Float lineDashPhase{0.0};
+  std::vector<Float> lineDashPattern{};
+
+  #ifdef RN_SERIALIZABLE_STATE
+  ComponentName getDiffPropsImplementationTarget() const override;
+
+  folly::dynamic getDiffProps(const Props* prevProps) const override;
+  #endif
+
+  
 };
 
 enum class RNMapsPolylineLineCap { Butt, Round, Square };
@@ -1867,6 +2291,7 @@ static inline folly::dynamic toDynamic(const RNMapsPolylineLineJoin &value) {
 struct RNMapsPolylineCoordinatesStruct {
   double latitude{0.0};
   double longitude{0.0};
+
 
 #ifdef RN_SERIALIZABLE_STATE
   bool operator==(const RNMapsPolylineCoordinatesStruct&) const = default;
@@ -1934,6 +2359,8 @@ class RNMapsPolylineProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 class RNMapsUrlTileProps final : public ViewProps {
@@ -1960,6 +2387,8 @@ class RNMapsUrlTileProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 class RNMapsWMSTileProps final : public ViewProps {
@@ -1984,6 +2413,8 @@ class RNMapsWMSTileProps final : public ViewProps {
 
   folly::dynamic getDiffProps(const Props* prevProps) const override;
   #endif
+
+  
 };
 
 } // namespace facebook::react

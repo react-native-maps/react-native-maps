@@ -51,6 +51,17 @@ using RNMapsGoogleMapViewShadowNode = ConcreteViewShadowNode<
     RNMapsGoogleMapViewEventEmitter,
     RNMapsGoogleMapViewState>;
 
+JSI_EXPORT extern const char RNMapsGoogleMarkerComponentName[];
+
+/*
+ * `ShadowNode` for <RNMapsGoogleMarker> component.
+ */
+using RNMapsGoogleMarkerShadowNode = ConcreteViewShadowNode<
+    RNMapsGoogleMarkerComponentName,
+    RNMapsGoogleMarkerProps,
+    RNMapsGoogleMarkerEventEmitter,
+    RNMapsGoogleMarkerState>;
+
 JSI_EXPORT extern const char RNMapsGooglePolygonComponentName[];
 
 /*
@@ -94,6 +105,17 @@ using RNMapsOverlayShadowNode = ConcreteViewShadowNode<
     RNMapsOverlayProps,
     RNMapsOverlayEventEmitter,
     RNMapsOverlayState>;
+
+JSI_EXPORT extern const char RNMapsPolygonComponentName[];
+
+/*
+ * `ShadowNode` for <RNMapsPolygon> component.
+ */
+using RNMapsPolygonShadowNode = ConcreteViewShadowNode<
+    RNMapsPolygonComponentName,
+    RNMapsPolygonProps,
+    RNMapsPolygonEventEmitter,
+    RNMapsPolygonState>;
 
 JSI_EXPORT extern const char RNMapsPolylineComponentName[];
 

@@ -12,6 +12,7 @@ import decorateMapComponent, {
   ProviderContext,
   SUPPORTED,
   USES_DEFAULT_IMPLEMENTATION,
+  googleMapIsInstalled,
   type MapManagerCommand,
   type NativeComponent,
   type UIManagerCommand,
@@ -506,9 +507,9 @@ export class MapMarker extends React.Component<MapMarkerProps> {
     const {stopPropagation = false} = this.props;
     if (this.fabricMarker === undefined) {
       const provider = this.context;
-      this.fabricMarker = !(
-        Platform.OS === 'ios' && provider === PROVIDER_GOOGLE
-      );
+      this.fabricMarker =
+        !(Platform.OS === 'ios' && provider === PROVIDER_GOOGLE) ||
+        googleMapIsInstalled;
     }
 
     let icon: any = this.props.icon;

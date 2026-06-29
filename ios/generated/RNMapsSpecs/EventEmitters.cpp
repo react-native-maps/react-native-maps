@@ -384,6 +384,159 @@ void RNMapsGoogleMapViewEventEmitter::onUserLocationChange(OnUserLocationChange 
 }
 
 
+void RNMapsGoogleMarkerEventEmitter::onCalloutPress(OnCalloutPress event) const {
+  dispatchEvent("calloutPress", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "action", event.action);
+payload.setProperty(runtime, "id", event.id);
+{
+  auto frame = jsi::Object(runtime);
+  frame.setProperty(runtime, "x", event.frame.x);
+  frame.setProperty(runtime, "y", event.frame.y);
+  frame.setProperty(runtime, "width", event.frame.width);
+  frame.setProperty(runtime, "height", event.frame.height);
+  payload.setProperty(runtime, "frame", frame);
+}
+{
+  auto point = jsi::Object(runtime);
+  point.setProperty(runtime, "x", event.point.x);
+  point.setProperty(runtime, "y", event.point.y);
+  payload.setProperty(runtime, "point", point);
+}
+    return payload;
+  });
+}
+
+
+void RNMapsGoogleMarkerEventEmitter::onDrag(OnDrag event) const {
+  dispatchEvent("drag", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "id", event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", event.coordinate.longitude);
+  payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", event.position.x);
+  position.setProperty(runtime, "y", event.position.y);
+  payload.setProperty(runtime, "position", position);
+}
+    return payload;
+  });
+}
+
+
+void RNMapsGoogleMarkerEventEmitter::onDragEnd(OnDragEnd event) const {
+  dispatchEvent("dragEnd", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "id", event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", event.coordinate.longitude);
+  payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", event.position.x);
+  position.setProperty(runtime, "y", event.position.y);
+  payload.setProperty(runtime, "position", position);
+}
+    return payload;
+  });
+}
+
+
+void RNMapsGoogleMarkerEventEmitter::onDragStart(OnDragStart event) const {
+  dispatchEvent("dragStart", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "id", event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", event.coordinate.longitude);
+  payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", event.position.x);
+  position.setProperty(runtime, "y", event.position.y);
+  payload.setProperty(runtime, "position", position);
+}
+    return payload;
+  });
+}
+
+
+void RNMapsGoogleMarkerEventEmitter::onPress(OnPress event) const {
+  dispatchEvent("press", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "action", event.action);
+payload.setProperty(runtime, "id", event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", event.coordinate.longitude);
+  payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", event.position.x);
+  position.setProperty(runtime, "y", event.position.y);
+  payload.setProperty(runtime, "position", position);
+}
+    return payload;
+  });
+}
+
+
+void RNMapsGoogleMarkerEventEmitter::onSelect(OnSelect event) const {
+  dispatchEvent("select", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "action", event.action);
+payload.setProperty(runtime, "id", event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", event.coordinate.longitude);
+  payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", event.position.x);
+  position.setProperty(runtime, "y", event.position.y);
+  payload.setProperty(runtime, "position", position);
+}
+    return payload;
+  });
+}
+
+
+void RNMapsGoogleMarkerEventEmitter::onDeselect(OnDeselect event) const {
+  dispatchEvent("deselect", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "action", event.action);
+payload.setProperty(runtime, "id", event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", event.coordinate.longitude);
+  payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", event.position.x);
+  position.setProperty(runtime, "y", event.position.y);
+  payload.setProperty(runtime, "position", position);
+}
+    return payload;
+  });
+}
+
+
 void RNMapsGooglePolygonEventEmitter::onPress(OnPress event) const {
   dispatchEvent("press", [event=std::move(event)](jsi::Runtime &runtime) {
     auto payload = jsi::Object(runtime);
@@ -932,6 +1085,28 @@ payload.setProperty(runtime, "id", event.id);
 
 
 void RNMapsOverlayEventEmitter::onPress(OnPress event) const {
+  dispatchEvent("press", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "action", event.action);
+payload.setProperty(runtime, "id", event.id);
+{
+  auto coordinate = jsi::Object(runtime);
+  coordinate.setProperty(runtime, "latitude", event.coordinate.latitude);
+  coordinate.setProperty(runtime, "longitude", event.coordinate.longitude);
+  payload.setProperty(runtime, "coordinate", coordinate);
+}
+{
+  auto position = jsi::Object(runtime);
+  position.setProperty(runtime, "x", event.position.x);
+  position.setProperty(runtime, "y", event.position.y);
+  payload.setProperty(runtime, "position", position);
+}
+    return payload;
+  });
+}
+
+
+void RNMapsPolygonEventEmitter::onPress(OnPress event) const {
   dispatchEvent("press", [event=std::move(event)](jsi::Runtime &runtime) {
     auto payload = jsi::Object(runtime);
     payload.setProperty(runtime, "action", event.action);

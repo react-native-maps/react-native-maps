@@ -9,6 +9,8 @@
 
 #import "AIRGoogleMapMarker.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import <React/RCTBridge.h>
+#import <React/RCTBridge+Private.h>
 #import <React/RCTImageLoaderProtocol.h>
 #import <React/RCTUtils.h>
 #import "AIRGMSMarker.h"
@@ -454,7 +456,7 @@ CGRect unionRect(CGRect a, CGRect b) {
     }
     __weak AIRGoogleMapMarker* weakSelf = self;
 
-    _reloadImageCancellationBlock = [[_bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                                                size:self.bounds.size
                                                                                               scale:RCTScreenScale()
                                                                                             clipped:YES
@@ -521,7 +523,7 @@ CGRect unionRect(CGRect a, CGRect b) {
     }
 
     _reloadImageCancellationBlock =
-    [[_bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
+    [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
                                                                size:self.bounds.size
                                                               scale:RCTScreenScale()
                                                             clipped:YES
@@ -618,6 +620,7 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)setTracksInfoWindowChanges:(BOOL)tracksInfoWindowChanges {
+    _tracksInfoWindowChanges = tracksInfoWindowChanges;
     _realMarker.tracksInfoWindowChanges = tracksInfoWindowChanges;
 }
 

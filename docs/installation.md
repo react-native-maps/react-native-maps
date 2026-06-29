@@ -97,6 +97,18 @@ rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-maps/Google', :path => rn_maps_path
 ```
 
+### Overriding Google Maps dependency versions
+
+You can optionally pin specific versions for the Google Maps dependencies by setting global variables in your `Podfile` **before** the `react-native-maps/Google` pod declaration:
+
+```ruby
+$RNMapsGoogleMapsVersion = '10.10.0'
+$RNMapsGoogleMapsUtilsVersion = '7.0.0'
+
+rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-maps/Google', :path => rn_maps_path
+```
+
 The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.
 
 That's it, you made it! 👍

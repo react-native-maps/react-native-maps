@@ -130,7 +130,7 @@ const createFabricMap = (
               JSON.stringify(region),
               duration,
             );
-          } catch (error) {
+          } catch {
             throw new Error('Failed to animateToRegion');
           }
         } else {
@@ -147,7 +147,7 @@ const createFabricMap = (
               JSON.stringify(edgePadding),
               animated,
             );
-          } catch (error) {
+          } catch {
             throw new Error('Failed to fitToElements');
           }
         } else {
@@ -169,7 +169,7 @@ const createFabricMap = (
               JSON.stringify(edgePadding),
               animated,
             );
-          } catch (error) {
+          } catch {
             throw new Error('Failed to fitToSuppliedMarkers');
           }
         } else {
@@ -186,7 +186,7 @@ const createFabricMap = (
               JSON.stringify(camera),
               duration,
             );
-          } catch (error) {
+          } catch {
             throw new Error('Failed to animateCamera');
           }
         } else {
@@ -208,7 +208,7 @@ const createFabricMap = (
               JSON.stringify(edgePadding),
               animated,
             );
-          } catch (error) {
+          } catch {
             throw new Error('Failed to fitToCoordinates');
           }
         } else {

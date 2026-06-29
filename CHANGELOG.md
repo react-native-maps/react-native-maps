@@ -1,5 +1,33 @@
 # Changelog
 
+# [1.29.0](https://github.com/react-native-maps/react-native-maps/compare/v1.28.2...v1.29.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** ios fabric support (GoogleMaps Marker, Polygon) ([#5944](https://github.com/react-native-maps/react-native-maps/issues/5944)) ([91ce461](https://github.com/react-native-maps/react-native-maps/commit/91ce461d4ed3b089914e97f346de95b45d491800))
+
+## [1.28.2](https://github.com/react-native-maps/react-native-maps/compare/v1.28.1...v1.28.2) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** remember selected mapType ([#5879](https://github.com/react-native-maps/react-native-maps/issues/5879)) ([d7f58ae](https://github.com/react-native-maps/react-native-maps/commit/d7f58ae2e96714ad2245544cb89f801d2a3fca56))
+
+## [1.28.1](https://github.com/react-native-maps/react-native-maps/compare/v1.28.0...v1.28.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** fix ghost features on MapView ([#5859](https://github.com/react-native-maps/react-native-maps/issues/5859)) ([b874b0f](https://github.com/react-native-maps/react-native-maps/commit/b874b0ff29f6c6227da7907e813f2b4406c5486d))
+
+# [1.28.0](https://github.com/react-native-maps/react-native-maps/compare/v1.27.2...v1.28.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** allow GoogleMaps pod versions to be overridden ([#5923](https://github.com/react-native-maps/react-native-maps/issues/5923)) ([5fae05a](https://github.com/react-native-maps/react-native-maps/commit/5fae05a906567ca7a88a86d155f9fd62da889ab8))
+
 ## [1.27.2](https://github.com/react-native-maps/react-native-maps/compare/v1.27.1...v1.27.2) (2026-03-11)
 
 
