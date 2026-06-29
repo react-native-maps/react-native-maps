@@ -1,7 +1,8 @@
+import {name, version} from '../../package.json';
 import {withMapsIOS} from './ios';
 import withMapsAndroid from './android';
 
-import type {ConfigPlugin} from '@expo/config-plugins';
+import {type ConfigPlugin, createRunOncePlugin} from '@expo/config-plugins';
 import type {ConfigPluginProps} from './types';
 
 const withMaps: ConfigPlugin<ConfigPluginProps> = (config, props) => {
@@ -11,4 +12,4 @@ const withMaps: ConfigPlugin<ConfigPluginProps> = (config, props) => {
   return config;
 };
 
-export default withMaps;
+export default createRunOncePlugin(withMaps, name, version);

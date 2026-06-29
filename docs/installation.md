@@ -20,7 +20,7 @@ When using Google Maps on iOS, you need also to obtain an [API key for the iOS S
 
 ## Expo
 
-If you're using Expo, you can add react-native-maps to your project by adding it to the plugins array in your `app.json` or `app.config.js`:
+If you're using Expo, you need to add `react-native-maps` to your project by adding it to the plugins array in your `app.json` or `app.config.js/ts`:
 
 > **Note:** This plugin is only compatible with react-native-maps version 1.22 and above, and requires Expo SDK version 53 or higher.
 
@@ -32,7 +32,11 @@ If you're using Expo, you can add react-native-maps to your project by adding it
 }
 ```
 
+### Google Maps
+
 If you're using Google as the map provider, also provide an API key for the respective platform:
+
+**app.json**
 
 ```json
 {
@@ -48,6 +52,22 @@ If you're using Google as the map provider, also provide an API key for the resp
     ]
   }
 }
+```
+
+**app.config.js/ts**
+
+```ts
+import reactNativeMapsExpoPlugin from "react-native-maps/expo";
+
+export default {
+  ...
+  plugins: [
+    reactNativeMapsExpoPlugin({
+      iosGoogleMapsApiKey: "YOUR_KEY_HERE",
+      androidGoogleMapsApiKey: "YOUR_KEY_HERE"
+    })
+  ]
+};
 ```
 
 ## For bare workflow projects, you'll need to follow the iOS and Android setup instructions below.

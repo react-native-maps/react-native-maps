@@ -5,5 +5,5 @@
     "emitDeclarationOnly": true,
     "allowImportingTsExtensions": false
   },
-  "include": ["src", "plugin"]
+  "include": ["src"]
 }

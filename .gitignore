@@ -69,6 +69,7 @@ yarn-error.log
 
 # ts outDir
 lib/
+dist/
 
 example/vendor/bundle/
 

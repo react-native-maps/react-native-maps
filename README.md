@@ -14,6 +14,10 @@ See [Setup Instructions for the Included Example Project](docs/examples-setup.md
 
 ## Compatibility
 
+## Expo
+
+If you're using Expo then you'll need to add the `react-native-maps` expo plugin. See [Expo Installation Instructions](docs/installation.md#expo).
+
 ## React Native Compatibility
 
 ### Version Requirements:

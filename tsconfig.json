@@ -13,6 +13,6 @@
     "composite": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src", "plugin"],
+  "include": ["src", "plugin", "package.json"],
   "exclude": ["**/Pods/**", "dist"]
 }
