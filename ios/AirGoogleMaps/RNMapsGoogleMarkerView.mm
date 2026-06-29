@@ -341,6 +341,8 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y);  \
     REMAP_MARKER_PROP(flat)
     REMAP_MARKER_PROP(opacity)
     REMAP_MARKER_PROP(tracksViewChanges)
+    REMAP_MARKER_STRING_PROP(snapshotCacheKey)
+    REMAP_MARKER_PROP(useSnapshot)
     REMAP_MARKER_PROP(tracksInfoWindowChanges)
 
     [super updateProps:props oldProps:oldProps];

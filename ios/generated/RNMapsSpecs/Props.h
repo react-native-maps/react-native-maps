@@ -740,6 +740,8 @@ class RNMapsGoogleMarkerProps final : public ViewProps {
   bool draggable{false};
   std::string title{};
   bool tracksViewChanges{true};
+  bool useSnapshot{false};
+  std::string snapshotCacheKey{};
   bool tracksInfoWindowChanges{false};
   bool flat{false};
   Float rotation{0.0};

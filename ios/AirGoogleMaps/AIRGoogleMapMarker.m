@@ -657,7 +657,16 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)setSnapshotCacheKey:(NSString *)snapshotCacheKey {
+    if (_snapshotCacheKey == snapshotCacheKey || [_snapshotCacheKey isEqualToString:snapshotCacheKey]) {
+        return;
+    }
+
     _snapshotCacheKey = [snapshotCacheKey copy];
+
+    if (_useSnapshot) {
+        _isSnapshotDirty = YES;
+        [self generateSnapshot];
+    }
 }
 
 - (id)makeEventData:(NSString *)action {
