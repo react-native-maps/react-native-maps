@@ -306,6 +306,8 @@ RNMapsGoogleMarkerProps::RNMapsGoogleMarkerProps(
     draggable(convertRawProp(context, rawProps, "draggable", sourceProps.draggable, {false})),
     title(convertRawProp(context, rawProps, "title", sourceProps.title, {})),
     tracksViewChanges(convertRawProp(context, rawProps, "tracksViewChanges", sourceProps.tracksViewChanges, {true})),
+    useSnapshot(convertRawProp(context, rawProps, "useSnapshot", sourceProps.useSnapshot, {false})),
+    snapshotCacheKey(convertRawProp(context, rawProps, "snapshotCacheKey", sourceProps.snapshotCacheKey, {})),
     tracksInfoWindowChanges(convertRawProp(context, rawProps, "tracksInfoWindowChanges", sourceProps.tracksInfoWindowChanges, {false})),
     flat(convertRawProp(context, rawProps, "flat", sourceProps.flat, {false})),
     rotation(convertRawProp(context, rawProps, "rotation", sourceProps.rotation, {0.0})),
@@ -364,6 +366,14 @@ folly::dynamic RNMapsGoogleMarkerProps::getDiffProps(
     
   if (tracksViewChanges != oldProps->tracksViewChanges) {
     result["tracksViewChanges"] = tracksViewChanges;
+  }
+
+  if (useSnapshot != oldProps->useSnapshot) {
+    result["useSnapshot"] = useSnapshot;
+  }
+
+  if (snapshotCacheKey != oldProps->snapshotCacheKey) {
+    result["snapshotCacheKey"] = snapshotCacheKey;
   }
     
   if (tracksInfoWindowChanges != oldProps->tracksInfoWindowChanges) {
@@ -762,6 +772,8 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     tracksViewChanges(convertRawProp(context, rawProps, "tracksViewChanges", sourceProps.tracksViewChanges, {true})),
     identifier(convertRawProp(context, rawProps, "identifier", sourceProps.identifier, {})),
     isPreselected(convertRawProp(context, rawProps, "isPreselected", sourceProps.isPreselected, {false})),
+    useSnapshot(convertRawProp(context, rawProps, "useSnapshot", sourceProps.useSnapshot, {false})),
+    snapshotCacheKey(convertRawProp(context, rawProps, "snapshotCacheKey", sourceProps.snapshotCacheKey, {})),
     opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
     pinColor(convertRawProp(context, rawProps, "pinColor", sourceProps.pinColor, {})),
     titleVisibility(convertRawProp(context, rawProps, "titleVisibility", sourceProps.titleVisibility, {RNMapsMarkerTitleVisibility::Visible})),
@@ -834,6 +846,14 @@ folly::dynamic RNMapsMarkerProps::getDiffProps(
     
   if (isPreselected != oldProps->isPreselected) {
     result["isPreselected"] = isPreselected;
+  }
+    
+  if (useSnapshot != oldProps->useSnapshot) {
+    result["useSnapshot"] = useSnapshot;
+  }
+    
+  if (snapshotCacheKey != oldProps->snapshotCacheKey) {
+    result["snapshotCacheKey"] = snapshotCacheKey;
   }
     
   if ((opacity != oldProps->opacity) && !(std::isnan(opacity) && std::isnan(oldProps->opacity))) {

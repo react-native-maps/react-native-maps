@@ -37,6 +37,9 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     NSTimeInterval _animationStartTime;
     NSTimeInterval _animationDuration;
     BOOL _isAnimating;
+    
+    BOOL _useSnapshot;
+    NSString* _snapshotCacheKey;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -477,6 +480,14 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
         _displayLink = nil;
         _isAnimating = NO; // Reset the animation state
     }
+}
+
+- (void)setUseSnapshot:(BOOL)useSnapshot {
+    // not supported
+}
+
+- (void)setSnapshotCacheKey:(NSString *)snapshotCacheKey {
+    // not supported
 }
 
 @end

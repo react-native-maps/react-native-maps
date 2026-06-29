@@ -38,6 +38,8 @@
 @property (nonatomic, assign) MKFeatureVisibility titleVisibility;
 @property (nonatomic, assign) MKFeatureVisibility subtitleVisibility;
 @property (nonatomic, assign) BOOL useLegacyPinView;
+@property (nonatomic, assign) BOOL useSnapshot;
+@property (nonatomic, strong) NSString *snapshotCacheKey;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTDirectEventBlock onSelect;

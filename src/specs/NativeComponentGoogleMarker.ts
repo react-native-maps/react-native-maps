@@ -170,6 +170,30 @@ export interface GoogleMarkerFabricNativeProps extends ViewProps {
   tracksViewChanges?: WithDefault<boolean, true>;
 
   /**
+   * Captures a static bitmap snapshot of the marker in its current visual state.
+   * Useful for performance optimizations (e.g. rendering complex custom views as images).
+   * Doesn't work with `tracksViewChanges`. When `snapshot` is enabled, `tracksViewChanges` will be automatically disabled.
+   * Use `redraw` to refresh the snapshot.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Not supported
+   */
+  useSnapshot?: WithDefault<boolean, false>;
+
+  /**
+   * Optional cache key for the marker's snapshot.
+   * When provided, the snapshot image will be reused across renders
+   * as long as the cache key remains the same.
+   *
+   * Useful when multiple markers share the same appearance or
+   * when you want to persist a snapshot between updates.
+   *
+   * @platform iOS: Google Maps only
+   * @platform Android: Not supported
+   */
+  snapshotCacheKey?: string;
+
+  /**
    * Sets whether this marker's info window should track view changes.
    *
    * @default false
