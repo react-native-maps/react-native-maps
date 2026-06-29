@@ -18,13 +18,10 @@
 #import "SMCalloutView.h"
 #import "RCTConvert+AirMap.h"
 
-@class RCTBridge;
-
 @interface AIRMapMarker : MKAnnotationView <MKAnnotation>
 
 @property (nonatomic, strong) AIRMapCallout *calloutView;
 @property (nonatomic, weak) AIRMap *map;
-@property (nonatomic, weak) RCTBridge *bridge;
 
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, copy) NSString *imageSrc;

@@ -9,22 +9,78 @@
 
 #import "AIRMapMarker.h"
 
-#import <React/RCTBridge.h>
-#import <React/RCTEventDispatcher.h>
-#import <React/RCTImageLoaderProtocol.h>
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
-#import <React/RCTImageLoader.h>
-#import <React/RCTBridge+Private.h>
 
 NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
+
+// ---------------------------------------------------------------------------
+// Image loading — coalescing cache
+//
+// Multiple markers sharing the same image URL (common case: all markers use
+// the same pin asset) would each fire an independent NSURLSession request
+// without this. The coalescer ensures exactly one in-flight request per URL.
+// All callers that arrive while a request is in-flight are queued and notified
+// together when it completes. Results are cached in memory for the process
+// lifetime so subsequent mounts are instant.
+//
+// All access to these dictionaries happens on the main thread:
+//   - setImageSrc: is called from React Native's UI thread
+//   - the NSURLSession completion block dispatches back to the main queue
+// ---------------------------------------------------------------------------
+static NSCache<NSString *, UIImage *>                                          *AIRImageCache;
+static NSMutableDictionary<NSString *, NSMutableArray<void (^)(UIImage *)> *>  *AIRPendingHandlers;
+
+// Requests the image at urlString, returning a cancel block.
+// "Cancel" means this caller no longer wants the result — it does NOT abort
+// the network request, which other waiting callers still need.
+static dispatch_block_t AIRLoadImage(NSString *urlString, CGFloat scale, void (^completion)(UIImage *)) {
+    if (!AIRImageCache)      AIRImageCache      = [NSCache new];
+    if (!AIRPendingHandlers) AIRPendingHandlers = [NSMutableDictionary new];
+
+    // Cache hit — deliver on next run-loop tick so callers always get async behaviour
+    UIImage *cached = [AIRImageCache objectForKey:urlString];
+    if (cached) {
+        dispatch_async(dispatch_get_main_queue(), ^{ completion(cached); });
+        return ^{};
+    }
+
+    // Coalesce: register callback and let the existing in-flight request deliver it
+    __block BOOL cancelled = NO;
+    void (^handler)(UIImage *) = ^(UIImage *image) { if (!cancelled) completion(image); };
+
+    NSMutableArray *handlers = AIRPendingHandlers[urlString];
+    if (handlers) {
+        [handlers addObject:handler];
+        return ^{ cancelled = YES; };
+    }
+
+    // First request for this URL
+    AIRPendingHandlers[urlString] = [NSMutableArray arrayWithObject:handler];
+
+    NSURL *url = [NSURL URLWithString:urlString];
+    [[[NSURLSession sharedSession]
+        dataTaskWithURL:url
+      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        UIImage *image = (!error && data) ? [UIImage imageWithData:data scale:scale] : nil;
+        if (!image) NSLog(@"AIRMapMarker failed to load image: %@", error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (image) [AIRImageCache setObject:image forKey:urlString];
+            NSArray *pending = AIRPendingHandlers[urlString];
+            [AIRPendingHandlers removeObjectForKey:urlString];
+            for (void (^h)(UIImage *) in pending) h(image);
+        });
+    }] resume];
+
+    return ^{ cancelled = YES; };
+}
 
 @implementation AIREmptyCalloutBackgroundView
 @end
 
 @implementation AIRMapMarker {
     BOOL _hasSetCalloutOffset;
-    RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
+    dispatch_block_t _imageLoadCancel;
     MKMarkerAnnotationView *_markerView;
     MKPinAnnotationView *_pinView;
     BOOL _calloutIsOpen;
@@ -362,29 +418,17 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     _imageSrc = imageSrc;
 
-    if (_reloadImageCancellationBlock) {
-        _reloadImageCancellationBlock();
-        _reloadImageCancellationBlock = nil;
+    // Deregister from any previous in-flight load
+    if (_imageLoadCancel) {
+        _imageLoadCancel();
+        _imageLoadCancel = nil;
     }
-    __weak __typeof(self) weakSelf = self;
+    if (!imageSrc) return;
 
-    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
-                                                                                                                 size:self.bounds.size
-                                                                                                                scale:RCTScreenScale()
-                                                                                                              clipped:YES
-                                                                                                           resizeMode:RCTResizeModeCenter
-                                                                                                        progressBlock:nil
-                                                                                                     partialLoadBlock:nil
-                                                                                                      completionBlock:^(NSError *error, UIImage *image) {
-        if (error) {
-            // TODO(lmr): do something with the error?
-            NSLog(@"failed to load image: %@", error);
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf.image = image;
-        });
-    }];
+    __weak __typeof(self) weakSelf = self;
+    _imageLoadCancel = AIRLoadImage(imageSrc, RCTScreenScale(), ^(UIImage *image) {
+        weakSelf.image = image;
+    });
 }
 
 - (void)setPinColor:(UIColor *)pinColor
