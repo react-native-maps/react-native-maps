@@ -435,7 +435,7 @@ CGRect unionRect(CGRect a, CGRect b) {
     _reloadImageCancellationBlock =
     [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
                                                                size:self.bounds.size
-                                                              scale:RCTScreenScale()
+                                                              scale:(_iconScale > 0 ? _iconScale : RCTScreenScale())
                                                             clipped:YES
                                                          resizeMode:RCTResizeModeCenter
                                                       progressBlock:nil
@@ -449,6 +449,17 @@ CGRect unionRect(CGRect a, CGRect b) {
             self->_realMarker.icon = image;
         });
     }];
+}
+
+- (void)setIconScale:(CGFloat)iconScale
+{
+    if (_iconScale == iconScale) {
+        return;
+    }
+    _iconScale = iconScale;
+    if (_iconSrc) {
+        [self setIconSrc:_iconSrc];
+    }
 }
 
 - (void)setTitle:(NSString *)title {

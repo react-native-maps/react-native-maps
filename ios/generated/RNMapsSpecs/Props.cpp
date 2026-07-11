@@ -301,6 +301,7 @@ RNMapsGoogleMarkerProps::RNMapsGoogleMarkerProps(
     calloutAnchor(convertRawProp(context, rawProps, "calloutAnchor", sourceProps.calloutAnchor, {})),
     image(convertRawProp(context, rawProps, "image", sourceProps.image, {})),
     icon(convertRawProp(context, rawProps, "icon", sourceProps.icon, {})),
+    iconScale(convertRawProp(context, rawProps, "iconScale", sourceProps.iconScale, {0.0})),
     coordinate(convertRawProp(context, rawProps, "coordinate", sourceProps.coordinate, {})),
     description(convertRawProp(context, rawProps, "description", sourceProps.description, {})),
     draggable(convertRawProp(context, rawProps, "draggable", sourceProps.draggable, {false})),
@@ -344,6 +345,10 @@ folly::dynamic RNMapsGoogleMarkerProps::getDiffProps(
     
   if (icon != oldProps->icon) {
     result["icon"] = toDynamic(icon);
+  }
+    
+  if (iconScale != oldProps->iconScale) {
+    result["iconScale"] = iconScale;
   }
     
   if (coordinate != oldProps->coordinate) {
