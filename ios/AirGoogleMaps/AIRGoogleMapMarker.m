@@ -29,7 +29,8 @@ CGRect unionRect(CGRect a, CGRect b) {
 @end
 
 /**
- * Decoded marker icons, shared by every marker instance and keyed by source.
+ * Decoded marker icons, shared by every marker instance and keyed by source
+ * plus the scale they are decoded at (see AIRGoogleMapMarkerIconKey).
  *
  * Without it each marker loads and decodes its own copy of the same artwork,
  * so a map with a few hundred pins performs a few hundred redundant reads and
@@ -63,6 +64,12 @@ static NSMutableDictionary<NSString *, NSHashTable *> *AIRGoogleMapMarkerIconWai
         waiters = [NSMutableDictionary new];
     });
     return waiters;
+}
+
+/** The cache key of an icon: its source plus the scale it is decoded at, which is baked into the UIImage. */
+static NSString *AIRGoogleMapMarkerIconKey(NSString *iconSrc, CGFloat scale)
+{
+    return [NSString stringWithFormat:@"%@|%f", iconSrc, scale];
 }
 
 @implementation AIRGoogleMapMarker {
@@ -462,6 +469,11 @@ static NSMutableDictionary<NSString *, NSHashTable *> *AIRGoogleMapMarkerIconWai
     }];
 }
 
+- (CGFloat)effectiveIconScale
+{
+    return _iconScale > 0 ? _iconScale : RCTScreenScale();
+}
+
 - (void)setIconSrc:(NSString *)iconSrc
 {
     _iconSrc = iconSrc;
@@ -477,7 +489,10 @@ static NSMutableDictionary<NSString *, NSHashTable *> *AIRGoogleMapMarkerIconWai
         return;
     }
 
-    UIImage *cached = [AIRGoogleMapMarkerIconCache() objectForKey:iconSrc];
+    CGFloat scale = [self effectiveIconScale];
+    NSString *cacheKey = AIRGoogleMapMarkerIconKey(iconSrc, scale);
+
+    UIImage *cached = [AIRGoogleMapMarkerIconCache() objectForKey:cacheKey];
     if (cached) {
         // Applied synchronously: no blank frame when a marker that has already
         // shown this icon sets it again.
@@ -496,43 +511,55 @@ static NSMutableDictionary<NSString *, NSHashTable *> *AIRGoogleMapMarkerIconWai
     }
 
     // Already being decoded for another marker: wait for that decode.
-    NSHashTable *waiting = AIRGoogleMapMarkerIconWaiters()[iconSrc];
+    NSHashTable *waiting = AIRGoogleMapMarkerIconWaiters()[cacheKey];
     if (waiting) {
         [waiting addObject:self];
         return;
     }
     waiting = [NSHashTable weakObjectsHashTable];
     [waiting addObject:self];
-    AIRGoogleMapMarkerIconWaiters()[iconSrc] = waiting;
+    AIRGoogleMapMarkerIconWaiters()[cacheKey] = waiting;
 
     // [RCTBridge currentBridge] is nil in bridgeless mode, so the RCTImageLoader
     // lookup below returned nil there and the completion block never ran: the
     // icon prop silently did nothing on the new architecture. Load the image
-    // directly instead, which works in both modes.
+    // directly instead, which works in both modes. `iconScale` sets the scale
+    // it is decoded at (display size = pixels / scale).
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSData *data = [NSData dataWithContentsOfURL:url];
         if (!data) {
             NSLog(@"AIRGoogleMapMarker: failed to load icon from %@", url);
         }
-        UIImage *image = data ? [UIImage imageWithData:data scale:RCTScreenScale()] : nil;
+        UIImage *image = data ? [UIImage imageWithData:data scale:scale] : nil;
         if (image) {
-            [AIRGoogleMapMarkerIconCache() setObject:image forKey:iconSrc];
+            [AIRGoogleMapMarkerIconCache() setObject:image forKey:cacheKey];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSHashTable *waiters = AIRGoogleMapMarkerIconWaiters()[iconSrc];
-            [AIRGoogleMapMarkerIconWaiters() removeObjectForKey:iconSrc];
+            NSHashTable *waiters = AIRGoogleMapMarkerIconWaiters()[cacheKey];
+            [AIRGoogleMapMarkerIconWaiters() removeObjectForKey:cacheKey];
             if (!image) {
                 return;
             }
             // Every waiting marker that still wants this icon gets it in this one block.
             for (AIRGoogleMapMarker *marker in waiters) {
-                if ([marker->_iconSrc isEqualToString:iconSrc]) {
+                if ([marker->_iconSrc isEqualToString:iconSrc] && [marker effectiveIconScale] == scale) {
                     marker->_iconImage = image;
                     marker->_realMarker.icon = image;
                 }
             }
         });
     });
+}
+
+- (void)setIconScale:(CGFloat)iconScale
+{
+    if (_iconScale == iconScale) {
+        return;
+    }
+    _iconScale = iconScale;
+    if (_iconSrc) {
+        [self setIconSrc:_iconSrc];
+    }
 }
 
 - (void)setTitle:(NSString *)title {

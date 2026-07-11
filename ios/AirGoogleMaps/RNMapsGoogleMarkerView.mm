@@ -327,6 +327,10 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y);  \
         }
     }
 
+    if (newViewProps.iconScale != oldViewProps.iconScale) {
+        [_view setIconScale:newViewProps.iconScale];
+    }
+
     if (newViewProps.icon.uri != oldViewProps.icon.uri) {
         if (newViewProps.icon.uri.size()) {
             [_view setIconSrc:RCTNSStringFromString(newViewProps.icon.uri)];

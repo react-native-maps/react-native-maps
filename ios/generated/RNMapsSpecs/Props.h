@@ -735,6 +735,7 @@ class RNMapsGoogleMarkerProps final : public ViewProps {
   RNMapsGoogleMarkerCalloutAnchorStruct calloutAnchor{};
   ImageSource image{};
   ImageSource icon{};
+  double iconScale{0.0};
   RNMapsGoogleMarkerCoordinateStruct coordinate{};
   std::string description{};
   bool draggable{false};
