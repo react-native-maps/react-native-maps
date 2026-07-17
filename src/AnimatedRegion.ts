@@ -134,7 +134,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
   }
 
   spring(config: Animated.SpringAnimationConfig & Region) {
-    const animations = [];
+    const animations: Animated.CompositeAnimation[] = [];
     for (const type of configTypes) {
       if (config.hasOwnProperty(type)) {
         animations.push(
@@ -151,7 +151,7 @@ export default class AnimatedMapRegion extends AnimatedWithChildren {
   }
 
   timing(config: Animated.TimingAnimationConfig & Region) {
-    const animations = [];
+    const animations: Animated.CompositeAnimation[] = [];
     for (const type of configTypes) {
       if (config.hasOwnProperty(type)) {
         animations.push(
