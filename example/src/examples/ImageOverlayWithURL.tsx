@@ -57,6 +57,7 @@ export default class ImageOverlayWithURL extends Component<any, any> {
           <Overlay
             bounds={this.state.overlay1.bounds}
             image={this.state.overlay1.image}
+            opacity={0.5}
           />
           <Overlay
             bounds={this.state.overlay2.bounds}
