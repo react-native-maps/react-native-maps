@@ -60,7 +60,7 @@ export type MapOverlayProps = ViewProps & {
    * The opacity of the overlay.
    *
    * @default 1
-   * @platform iOS: Google Maps only
+   * @platform iOS: Supported
    * @platform Android: Supported
    */
   opacity?: number;
