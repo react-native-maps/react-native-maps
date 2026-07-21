@@ -21,7 +21,7 @@
 @property (nonatomic, strong, readonly) UIImage *overlayImage;
 @property (nonatomic, copy) NSArray *boundsRect;
 @property (nonatomic, assign) NSInteger rotation;
-@property (nonatomic, assign) CGFloat transparency;
+@property (nonatomic, assign) CGFloat opacity;
 @property (nonatomic, assign) NSInteger zIndex;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;

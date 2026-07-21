@@ -17,6 +17,14 @@
     MKMapRect _mapRect;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if ((self = [super initWithFrame:frame])) {
+        _opacity = 1.0;
+    }
+    return self;
+}
+
 - (void)setImageSrc:(NSString *)imageSrc
 {
     NSLog(@">>> SET IMAGESRC: %@", imageSrc);
@@ -61,11 +69,20 @@
     [self update];
 }
 
+- (void)setOpacity:(CGFloat)opacity {
+    _opacity = opacity;
+    if (self.renderer) {
+        self.renderer.alpha = opacity;
+        [self.renderer setNeedsDisplay];
+    }
+}
+
 - (void)createOverlayRendererIfPossible
 {
     if (MKMapRectIsEmpty(_mapRect) || !self.overlayImage) return;
     __weak typeof(self) weakSelf = self;
     self.renderer = [[AIRMapOverlayRenderer alloc] initWithOverlay:weakSelf];
+    self.renderer.alpha = _opacity;
 }
 
 - (void)update
