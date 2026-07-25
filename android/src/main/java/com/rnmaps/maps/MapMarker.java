@@ -107,6 +107,9 @@ public class MapMarker extends MapFeature {
     private final MapMarkerManager markerManager;
     private String imageUri;
     private boolean loadingImage;
+    // Cached fully-transparent icon shown while an async image load is in flight, so
+    // the marker doesn't fall back to the default pin (parity with iOS, see #738).
+    private static BitmapDescriptor transparentBitmapDescriptor;
 
     private SoftReference<MarkerManager.Collection> markerCollectionRef;
 
@@ -595,6 +598,15 @@ public class MapMarker extends MapFeature {
         } else if (iconBitmapDescriptor != null) {
             // use local image as a marker
             return iconBitmapDescriptor;
+        } else if (imageUri != null) {
+            // An async image load is in flight. Render a fully transparent marker
+            // instead of the default pin until the bitmap arrives, matching iOS which
+            // shows an empty placeholder image view while loading (see issue #738).
+            if (transparentBitmapDescriptor == null) {
+                transparentBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(
+                        Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888));
+            }
+            return transparentBitmapDescriptor;
         } else {
             // render the default marker pin
             return BitmapDescriptorFactory.defaultMarker(this.markerHue);
