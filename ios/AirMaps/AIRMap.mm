@@ -829,8 +829,6 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 
         [self updateScrollEnabled];
         [self updateZoomEnabled];
-        [self updateLegalLabelInsets];
-        [self updateAppleLogoInsets];
     }
 }
 
@@ -863,64 +861,14 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     self.mapType = type;
 }
 
-- (void)updateLegalLabelInsets {
-    if (_legalLabel) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            CGRect frame = self->_legalLabel.frame;
-            if (self->_legalLabelInsets.left) {
-                frame.origin.x = self->_legalLabelInsets.left;
-            } else if (self->_legalLabelInsets.right) {
-                frame.origin.x = self.frame.size.width - self->_legalLabelInsets.right - frame.size.width;
-            }
-            if (self->_legalLabelInsets.top) {
-                frame.origin.y = self->_legalLabelInsets.top;
-            } else if (self->_legalLabelInsets.bottom) {
-                frame.origin.y = self.frame.size.height - self->_legalLabelInsets.bottom - frame.size.height;
-            }
-            self->_legalLabel.frame = frame;
-        });
-    }
-}
-
-
 - (void)setLegalLabelInsets:(UIEdgeInsets)legalLabelInsets {
     _legalLabelInsets = legalLabelInsets;
-    [self updateLegalLabelInsets];
-}
-
-- (void)updateAppleLogoInsets {
-    // Search for Apple logo if not found yet (it may be added after init)
-    if (!_appleLogo) {
-        for (UIView *subview in self.subviews) {
-            NSString *className = NSStringFromClass(subview.class);
-            if ([className isEqualToString:@"MKAppleLogoImageView"] ||
-                [className containsString:@"Logo"]) {
-                _appleLogo = subview;
-                break;
-            }
-        }
-    }
-    if (_appleLogo) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            CGRect frame = self->_appleLogo.frame;
-            if (self->_appleLogoInsets.left) {
-                frame.origin.x = self->_appleLogoInsets.left;
-            } else if (self->_appleLogoInsets.right) {
-                frame.origin.x = self.frame.size.width - self->_appleLogoInsets.right - frame.size.width;
-            }
-            if (self->_appleLogoInsets.top) {
-                frame.origin.y = self->_appleLogoInsets.top;
-            } else if (self->_appleLogoInsets.bottom) {
-                frame.origin.y = self.frame.size.height - self->_appleLogoInsets.bottom - frame.size.height;
-            }
-            self->_appleLogo.frame = frame;
-        });
-    }
+    [self setNeedsLayout];
 }
 
 - (void)setAppleLogoInsets:(UIEdgeInsets)appleLogoInsets {
     _appleLogoInsets = appleLogoInsets;
-    [self updateAppleLogoInsets];
+    [self setNeedsLayout];
 }
 
 - (void)setMapPadding:(UIEdgeInsets)mapPadding {
@@ -995,6 +943,53 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self cacheViewIfNeeded];
+    // Synchronously reposition Apple logo and legal label after Auto Layout.
+    // MKMapView's constraints override frame changes made via dispatch_async;
+    // repositioning here (after [super layoutSubviews] resolves constraints)
+    // with translatesAutoresizingMaskIntoConstraints ensures insets persist.
+    // Cached ivars are re-scanned only when the view leaves the hierarchy.
+    if (_appleLogoInsets.top || _appleLogoInsets.left || _appleLogoInsets.bottom || _appleLogoInsets.right) {
+        if (!_appleLogo || ![_appleLogo isDescendantOfView:self]) {
+            _appleLogo = nil;
+            for (UIView *subview in self.subviews) {
+                NSString *className = NSStringFromClass(subview.class);
+                if ([className isEqualToString:@"MKAppleLogoImageView"] ||
+                    [className containsString:@"Logo"]) {
+                    _appleLogo = subview;
+                    break;
+                }
+            }
+        }
+        if (_appleLogo) {
+            _appleLogo.translatesAutoresizingMaskIntoConstraints = YES;
+            CGRect frame = _appleLogo.frame;
+            if (_appleLogoInsets.left) frame.origin.x = _appleLogoInsets.left;
+            else if (_appleLogoInsets.right) frame.origin.x = self.frame.size.width - _appleLogoInsets.right - frame.size.width;
+            if (_appleLogoInsets.top) frame.origin.y = _appleLogoInsets.top;
+            else if (_appleLogoInsets.bottom) frame.origin.y = self.frame.size.height - _appleLogoInsets.bottom - frame.size.height;
+            _appleLogo.frame = frame;
+        }
+    }
+    if (_legalLabelInsets.top || _legalLabelInsets.left || _legalLabelInsets.bottom || _legalLabelInsets.right) {
+        if (!_legalLabel || ![_legalLabel isDescendantOfView:self]) {
+            _legalLabel = nil;
+            for (UIView *subview in self.subviews) {
+                if ([NSStringFromClass(subview.class) isEqualToString:@"MKAttributionLabel"]) {
+                    _legalLabel = subview;
+                    break;
+                }
+            }
+        }
+        if (_legalLabel) {
+            _legalLabel.translatesAutoresizingMaskIntoConstraints = YES;
+            CGRect frame = _legalLabel.frame;
+            if (_legalLabelInsets.left) frame.origin.x = _legalLabelInsets.left;
+            else if (_legalLabelInsets.right) frame.origin.x = self.frame.size.width - _legalLabelInsets.right - frame.size.width;
+            if (_legalLabelInsets.top) frame.origin.y = _legalLabelInsets.top;
+            else if (_legalLabelInsets.bottom) frame.origin.y = self.frame.size.height - _legalLabelInsets.bottom - frame.size.height;
+            _legalLabel.frame = frame;
+        }
+    }
 }
 
 // based on https://medium.com/@dmytrobabych/getting-actual-rotation-and-zoom-level-for-mapkit-mkmapview-e7f03f430aa9
