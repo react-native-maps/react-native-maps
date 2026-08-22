@@ -28,6 +28,33 @@ CGRect unionRect(CGRect a, CGRect b) {
 @interface AIRGoogleMapMarker ()
 @end
 
+/**
+ * Redraws an icon at the screen scale, preserving its point size.
+ *
+ * `iconScale` decodes the icon at a density other than the screen's, so the
+ * resulting UIImage has the right `size` but a `scale` the Maps SDK does not
+ * expect. The SDK packs marker icons into a shared texture atlas and sizes
+ * each slot from size * screenScale, so a bitmap larger than that (210px art
+ * shown at 56pt is scale 3.75, 1.25x the slot on a 3x screen) can overrun its
+ * slot. Handing the SDK a conventional screen-scale image avoids relying on
+ * how it handles the mismatch.
+ */
+static UIImage *AIRGoogleMapMarkerIconAtScreenScale(UIImage *image)
+{
+    if (!image || fabs(image.scale - RCTScreenScale()) < 0.0001) {
+        return image;
+    }
+
+    UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat preferredFormat];
+    format.scale = RCTScreenScale();
+    format.opaque = NO;
+
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:image.size format:format];
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+        [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
+    }];
+}
+
 @implementation AIRGoogleMapMarker {
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     RCTBubblingEventBlock _onPress;
@@ -435,7 +462,7 @@ CGRect unionRect(CGRect a, CGRect b) {
     _reloadImageCancellationBlock =
     [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
                                                                size:self.bounds.size
-                                                              scale:RCTScreenScale()
+                                                              scale:(_iconScale > 0 ? _iconScale : RCTScreenScale())
                                                             clipped:YES
                                                          resizeMode:RCTResizeModeCenter
                                                       progressBlock:nil
@@ -446,9 +473,20 @@ CGRect unionRect(CGRect a, CGRect b) {
             NSLog(@"%@", error);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->_realMarker.icon = image;
+            self->_realMarker.icon = AIRGoogleMapMarkerIconAtScreenScale(image);
         });
     }];
+}
+
+- (void)setIconScale:(CGFloat)iconScale
+{
+    if (_iconScale == iconScale) {
+        return;
+    }
+    _iconScale = iconScale;
+    if (_iconSrc) {
+        [self setIconSrc:_iconSrc];
+    }
 }
 
 - (void)setTitle:(NSString *)title {
