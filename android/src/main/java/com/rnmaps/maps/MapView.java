@@ -523,6 +523,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
   // called as soon as the map is ready. Assuming nothing was set on the map at this point.
   private void applyBridgedProps() {
+    applyBaseMapPadding(
+        baseLeftMapPadding,
+        baseTopMapPadding,
+        baseRightMapPadding,
+        baseBottomMapPadding);
     if(boundary != null) {
       map.setLatLngBoundsForCameraTarget(boundary);
     }
