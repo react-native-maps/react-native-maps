@@ -52,6 +52,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 @implementation AIRMap
 {
     UIView *_legalLabel;
+    UIView *_appleLogo;
     BOOL _initialRegionSet;
     BOOL _initialRegionProvided;
     BOOL _initialCameraProvided;
@@ -85,6 +86,14 @@ const NSInteger AIRMapMaxZoomLevel = 20;
                 // This check is super hacky, but the whole premise of moving around
                 // Apple's internal subviews is super hacky
                 _legalLabel = subview;
+                break;
+            }
+        }
+
+        // Find Apple logo (iOS 13+)
+        for (UIView *subview in self.subviews) {
+            if ([NSStringFromClass(subview.class) isEqualToString:@"MKAppleLogoImageView"]) {
+                _appleLogo = subview;
                 break;
             }
         }
@@ -821,6 +830,7 @@ const NSInteger AIRMapMaxZoomLevel = 20;
         [self updateScrollEnabled];
         [self updateZoomEnabled];
         [self updateLegalLabelInsets];
+        [self updateAppleLogoInsets];
     }
 }
 
@@ -876,6 +886,41 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 - (void)setLegalLabelInsets:(UIEdgeInsets)legalLabelInsets {
     _legalLabelInsets = legalLabelInsets;
     [self updateLegalLabelInsets];
+}
+
+- (void)updateAppleLogoInsets {
+    // Search for Apple logo if not found yet (it may be added after init)
+    if (!_appleLogo) {
+        for (UIView *subview in self.subviews) {
+            NSString *className = NSStringFromClass(subview.class);
+            if ([className isEqualToString:@"MKAppleLogoImageView"] ||
+                [className containsString:@"Logo"]) {
+                _appleLogo = subview;
+                break;
+            }
+        }
+    }
+    if (_appleLogo) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CGRect frame = self->_appleLogo.frame;
+            if (self->_appleLogoInsets.left) {
+                frame.origin.x = self->_appleLogoInsets.left;
+            } else if (self->_appleLogoInsets.right) {
+                frame.origin.x = self.frame.size.width - self->_appleLogoInsets.right - frame.size.width;
+            }
+            if (self->_appleLogoInsets.top) {
+                frame.origin.y = self->_appleLogoInsets.top;
+            } else if (self->_appleLogoInsets.bottom) {
+                frame.origin.y = self.frame.size.height - self->_appleLogoInsets.bottom - frame.size.height;
+            }
+            self->_appleLogo.frame = frame;
+        });
+    }
+}
+
+- (void)setAppleLogoInsets:(UIEdgeInsets)appleLogoInsets {
+    _appleLogoInsets = appleLogoInsets;
+    [self updateAppleLogoInsets];
 }
 
 - (void)setMapPadding:(UIEdgeInsets)mapPadding {

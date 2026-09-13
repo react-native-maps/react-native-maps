@@ -22,8 +22,10 @@
     thirdPartyComponents = @{
 		@"RNMapsGoogleMapView": NSClassFromString(@"RNMapsGoogleMapView"), // react-native-maps
 		@"RNMapsGooglePolygon": NSClassFromString(@"RNMapsGooglePolygonView"), // react-native-maps
+		@"RNMapsGoogleMarker": NSClassFromString(@"RNMapsGoogleMarkerView"), // react-native-maps
 		@"RNMapsMapView": NSClassFromString(@"RNMapsMapView"), // react-native-maps
 		@"RNMapsMarker": NSClassFromString(@"RNMapsMarkerView"), // react-native-maps
+		@"RNMapsPolygon": NSClassFromString(@"RNMapsPolygonView"), // react-native-maps
     };
   });
 

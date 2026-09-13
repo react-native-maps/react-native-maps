@@ -15,10 +15,12 @@ namespace facebook::react {
 extern const char RNMapsCalloutComponentName[] = "RNMapsCallout";
 extern const char RNMapsCircleComponentName[] = "RNMapsCircle";
 extern const char RNMapsGoogleMapViewComponentName[] = "RNMapsGoogleMapView";
+extern const char RNMapsGoogleMarkerComponentName[] = "RNMapsGoogleMarker";
 extern const char RNMapsGooglePolygonComponentName[] = "RNMapsGooglePolygon";
 extern const char RNMapsMapViewComponentName[] = "RNMapsMapView";
 extern const char RNMapsMarkerComponentName[] = "RNMapsMarker";
 extern const char RNMapsOverlayComponentName[] = "RNMapsOverlay";
+extern const char RNMapsPolygonComponentName[] = "RNMapsPolygon";
 extern const char RNMapsPolylineComponentName[] = "RNMapsPolyline";
 extern const char RNMapsUrlTileComponentName[] = "RNMapsUrlTile";
 extern const char RNMapsWMSTileComponentName[] = "RNMapsWMSTile";

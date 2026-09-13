@@ -1,5 +1,61 @@
 # Changelog
 
+# [1.29.0](https://github.com/react-native-maps/react-native-maps/compare/v1.28.2...v1.29.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** ios fabric support (GoogleMaps Marker, Polygon) ([#5944](https://github.com/react-native-maps/react-native-maps/issues/5944)) ([91ce461](https://github.com/react-native-maps/react-native-maps/commit/91ce461d4ed3b089914e97f346de95b45d491800))
+
+## [1.28.2](https://github.com/react-native-maps/react-native-maps/compare/v1.28.1...v1.28.2) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** remember selected mapType ([#5879](https://github.com/react-native-maps/react-native-maps/issues/5879)) ([d7f58ae](https://github.com/react-native-maps/react-native-maps/commit/d7f58ae2e96714ad2245544cb89f801d2a3fca56))
+
+## [1.28.1](https://github.com/react-native-maps/react-native-maps/compare/v1.28.0...v1.28.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** fix ghost features on MapView ([#5859](https://github.com/react-native-maps/react-native-maps/issues/5859)) ([b874b0f](https://github.com/react-native-maps/react-native-maps/commit/b874b0ff29f6c6227da7907e813f2b4406c5486d))
+
+# [1.28.0](https://github.com/react-native-maps/react-native-maps/compare/v1.27.2...v1.28.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** allow GoogleMaps pod versions to be overridden ([#5923](https://github.com/react-native-maps/react-native-maps/issues/5923)) ([5fae05a](https://github.com/react-native-maps/react-native-maps/commit/5fae05a906567ca7a88a86d155f9fd62da889ab8))
+
+## [1.27.2](https://github.com/react-native-maps/react-native-maps/compare/v1.27.1...v1.27.2) (2026-03-11)
+
+
+### Bug Fixes
+
+* **ios:** expo plug-in to match [@main](https://github.com/main) in react-native-maps-import ([#5844](https://github.com/react-native-maps/react-native-maps/issues/5844)) ([7ef397d](https://github.com/react-native-maps/react-native-maps/commit/7ef397df99003826fad7dfdafd824984d223b9c1))
+
+## [1.27.1](https://github.com/react-native-maps/react-native-maps/compare/v1.27.0...v1.27.1) (2026-02-01)
+
+
+### Bug Fixes
+
+* fix ci by adding the package's version to the git commit ([#5854](https://github.com/react-native-maps/react-native-maps/issues/5854)) ([7f4f34c](https://github.com/react-native-maps/react-native-maps/commit/7f4f34c5dd8dcb6cbf4e6e1d28c853c4f05d5104))
+
+# [1.27.0](https://github.com/react-native-maps/react-native-maps/compare/v1.26.20...v1.27.0) (2026-02-01)
+
+
+### Bug Fixes
+
+* **android:** unstable api MapUIBlock ([#5831](https://github.com/react-native-maps/react-native-maps/issues/5831)) ([670910f](https://github.com/react-native-maps/react-native-maps/commit/670910f73bdfcfaaf93ad72f04dc8068f3e37fcc))
+* ci by skipping NPM_Tokens all together ([#5852](https://github.com/react-native-maps/react-native-maps/issues/5852)) ([436c8be](https://github.com/react-native-maps/react-native-maps/commit/436c8bec1c6e50c6a9c654e8f99bde90132631ae))
+* ci by using a separate publish to npm step that shouldn't require action ([#5853](https://github.com/react-native-maps/react-native-maps/issues/5853)) ([dd0b1c4](https://github.com/react-native-maps/react-native-maps/commit/dd0b1c42d45d6033d09864ca18e93e1e53d7c7b0))
+
+
+### Features
+
+* **ios:** add appleLogoInsets prop for Apple Maps logo positioning ([#5851](https://github.com/react-native-maps/react-native-maps/issues/5851)) ([7ea73dc](https://github.com/react-native-maps/react-native-maps/commit/7ea73dc16f2240ce30e265b2c08fcf75e6e3c2b2))
+
 ## [1.26.20](https://github.com/react-native-maps/react-native-maps/compare/v1.26.19...v1.26.20) (2025-12-07)
 
 

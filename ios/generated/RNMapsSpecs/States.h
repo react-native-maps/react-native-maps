@@ -21,6 +21,8 @@ using RNMapsCircleState = StateData;
 
 using RNMapsGoogleMapViewState = StateData;
 
+using RNMapsGoogleMarkerState = StateData;
+
 using RNMapsGooglePolygonState = StateData;
 
 using RNMapsMapViewState = StateData;
@@ -28,6 +30,8 @@ using RNMapsMapViewState = StateData;
 using RNMapsMarkerState = StateData;
 
 using RNMapsOverlayState = StateData;
+
+using RNMapsPolygonState = StateData;
 
 using RNMapsPolylineState = StateData;
 

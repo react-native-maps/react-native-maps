@@ -19,10 +19,12 @@ void RNMapsSpecs_registerComponentDescriptorsFromCodegen(
 registry->add(concreteComponentDescriptorProvider<RNMapsCalloutComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsCircleComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsGoogleMapViewComponentDescriptor>());
+registry->add(concreteComponentDescriptorProvider<RNMapsGoogleMarkerComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsGooglePolygonComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsMapViewComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsMarkerComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsOverlayComponentDescriptor>());
+registry->add(concreteComponentDescriptorProvider<RNMapsPolygonComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsPolylineComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsUrlTileComponentDescriptor>());
 registry->add(concreteComponentDescriptorProvider<RNMapsWMSTileComponentDescriptor>());
