@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.1](https://github.com/react-native-maps/react-native-maps/compare/v1.29.0...v1.29.1) (2026-09-13)
+
+
+### Bug Fixes
+
+* **android:** guard removeFromMap against a null overlay ([#5976](https://github.com/react-native-maps/react-native-maps/issues/5976)) ([5e1f3cd](https://github.com/react-native-maps/react-native-maps/commit/5e1f3cd6702796fd62870da5e07dec7cb40b2f42))
+
 # [1.29.0](https://github.com/react-native-maps/react-native-maps/compare/v1.28.2...v1.29.0) (2026-06-28)
 
 
