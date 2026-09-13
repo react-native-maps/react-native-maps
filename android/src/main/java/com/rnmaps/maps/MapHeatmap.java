@@ -107,7 +107,11 @@ public class MapHeatmap extends MapFeature {
 
     @Override
     public void removeFromMap(Object map) {
+        if (heatmap == null) {
+            return;
+        }
         heatmap.remove();
+        heatmap = null;
     }
 
 }
