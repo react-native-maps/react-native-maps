@@ -64,7 +64,9 @@ $ npx pod-install
 
 ### Enabling Google Maps
 
-If you want to enable Google Maps on iOS, obtain the Google API key and edit your `AppDelegate.m(m)` as follows:
+If you want to enable Google Maps on iOS, obtain the Google API key and edit your app delegate as follows.
+
+#### Objective-C (`AppDelegate.m(m)`)
 
 ```diff
 + #import <GoogleMaps/GoogleMaps.h>
@@ -79,6 +81,27 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 ```
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
+
+#### Swift (`AppDelegate.swift`)
+
+Projects created with React Native 0.77 and above ship a Swift app delegate instead:
+
+```diff
++ import GoogleMaps
+
+  @main
+  class AppDelegate: RCTAppDelegate {
+    override func application(
+      _ application: UIApplication,
+      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
++     GMSServices.provideAPIKey("_YOUR_API_KEY_") // add this line using the api key obtained from Google Console
+      ...
+    }
+  }
+```
+
+`GMSServices.provideAPIKey` should be the **first call** of the method.
 
 Google Maps SDK for iOS requires iOS 14, so make sure that your deployment target is >= 14 in your iOS project settings.
 
