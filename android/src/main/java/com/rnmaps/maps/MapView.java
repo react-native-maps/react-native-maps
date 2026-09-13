@@ -1354,9 +1354,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         Projection projection = map.getProjection();
         Point screenPoint = projection.toScreenLocation(point);
 
+        // toScreenLocation() answers in device pixels, but every other frame point this library
+        // hands to JS is in dp: MapModule.pointForCoordinate() divides by the very same density,
+        // and the views an app positions from this event are laid out in dp as well.
+        double density = getResources().getDisplayMetrics().density;
+
         WritableMap position = new WritableNativeMap();
-        position.putDouble("x", screenPoint.x);
-        position.putDouble("y", screenPoint.y);
+        position.putDouble("x", screenPoint.x / density);
+        position.putDouble("y", screenPoint.y / density);
         event.putMap("position", position);
 
         return event;
