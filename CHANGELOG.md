@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.2](https://github.com/react-native-maps/react-native-maps/compare/v1.29.1...v1.29.2) (2026-09-13)
+
+
+### Bug Fixes
+
+* **ios:** keep the marker anchored to its coordinate when its content is transformed ([#6001](https://github.com/react-native-maps/react-native-maps/issues/6001)) ([bab94e7](https://github.com/react-native-maps/react-native-maps/commit/bab94e736070b5771e57879c568f0662b84708e5))
+
 ## [1.29.1](https://github.com/react-native-maps/react-native-maps/compare/v1.29.0...v1.29.1) (2026-09-13)
 
 
