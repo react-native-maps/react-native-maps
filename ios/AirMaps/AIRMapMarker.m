@@ -425,17 +425,9 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     CGRect reactFrame = self.frame;
 
     UIView *firstSubView = self.subviews.firstObject;
-    if (firstSubView) {
-        // Measure the content by its bounds, not its frame: in UIKit `frame` is the bounds with
-        // the transform already applied, so scaling the marker content would grow the annotation.
-        // MapKit keeps the annotation centred on its coordinate, so the content -- whose own
-        // layout frame never changed -- would then be drawn half the gain away from the point it
-        // belongs to.
-        CGSize contentSize = firstSubView.bounds.size;
-        if (contentSize.width > CGRectGetWidth(reactFrame) ||
-            contentSize.height > CGRectGetHeight(reactFrame)) {
-            reactFrame = (CGRect){ firstSubView.frame.origin, contentSize };
-        }
+    if (firstSubView && (CGRectGetWidth(firstSubView.bounds) > CGRectGetWidth(reactFrame) ||
+                         CGRectGetHeight(firstSubView.bounds) > CGRectGetHeight(reactFrame))) {
+        reactFrame.size = firstSubView.bounds.size;
     }
     [self reactSetFrame:reactFrame];
 }
