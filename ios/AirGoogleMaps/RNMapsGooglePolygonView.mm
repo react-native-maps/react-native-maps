@@ -55,10 +55,12 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
 }
 
 @interface RNMapsGooglePolygonView () <RCTRNMapsGooglePolygonViewProtocol>
+- (void) attachIfReady;
 @end
 
 @implementation RNMapsGooglePolygonView {
     AIRGMSPolygon *_view;
+    __weak AIRGoogleMap *_pendingMap;
 }
 
 
@@ -73,11 +75,28 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
 
 - (void) didInsertInMap:(AIRGoogleMap*) map
 {
-    _view.map = map;
+    // Defer the attach until the path is renderable. Under Fabric the coordinates
+    // (props) can arrive AFTER mount, and attaching a GMSPolygon whose path has
+    // fewer than 3 points crashes Google Maps (null-deref in gmssdk::CoordsToPoints
+    // during setMap:). Remember the target map and attach from attachIfReady — here
+    // if the path is already valid, otherwise from updateProps once coordinates land.
+    _pendingMap = map;
+    [self attachIfReady];
+}
+
+// Attach to the map only when the polygon has a renderable path. Idempotent: safe
+// to call from both didInsertInMap and updateProps.
+- (void) attachIfReady
+{
+    if (_view != nil && _view.map == nil && _pendingMap != nil
+        && _view.path != nil && _view.path.count >= 3) {
+        _view.map = _pendingMap;
+    }
 }
 
 -(void) didRemoveFromMap
 {
+    _pendingMap = nil;
     _view.map = nil;
     _view = nil;
 }
@@ -209,6 +228,10 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     if (newViewProps.strokeWidth != oldViewProps.strokeWidth){
         _view.strokeWidth = newViewProps.strokeWidth;
     }
+
+    // Coordinates may have just been applied above; attach now if the mount was
+    // deferred while the path was still empty.
+    [self attachIfReady];
 
   [super updateProps:props oldProps:oldProps];
 }
