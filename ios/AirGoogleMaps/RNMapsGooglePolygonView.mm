@@ -55,10 +55,14 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
 }
 
 @interface RNMapsGooglePolygonView () <RCTRNMapsGooglePolygonViewProtocol>
+- (void) attachIfReady;
 @end
 
 @implementation RNMapsGooglePolygonView {
     AIRGMSPolygon *_view;
+    __weak AIRGoogleMap *_pendingMap;
+    // YES while a GMS detach is queued for the next runloop tick (see didRemoveFromMap).
+    BOOL _detachScheduled;
 }
 
 
@@ -73,13 +77,46 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
 
 - (void) didInsertInMap:(AIRGoogleMap*) map
 {
-    _view.map = map;
+    // Defer the attach until the path is renderable. Under Fabric the coordinates
+    // (props) can arrive AFTER mount, and attaching a GMSPolygon whose path has
+    // fewer than 3 points crashes Google Maps (null-deref in gmssdk::CoordsToPoints
+    // during setMap:). Remember the target map and attach from attachIfReady — here
+    // if the path is already valid, otherwise from updateProps once coordinates land.
+    // Cancel a detach queued by a just-fired didRemoveFromMap: an unmount immediately
+    // followed by this re-mount (same view, same transaction) is a Fabric reorder,
+    // not a removal, so the overlay must stay attached (no detach/reattach churn).
+    _detachScheduled = NO;
+    _pendingMap = map;
+    [self attachIfReady];
+}
+
+// Attach to the map only when the polygon has a renderable path. Idempotent: safe
+// to call from both didInsertInMap and updateProps.
+- (void) attachIfReady
+{
+    if (_view != nil && _view.map == nil && _pendingMap != nil
+        && _view.path != nil && _view.path.count >= 3) {
+        _view.map = _pendingMap;
+    }
 }
 
 -(void) didRemoveFromMap
 {
-    _view.map = nil;
-    _view = nil;
+    // Defer the detach by one runloop tick instead of detaching now. Fabric expresses
+    // a zIndex reorder as unmount-then-remount of the SAME view within one synchronous
+    // transaction; didInsertInMap clears _detachScheduled before this block runs, so a
+    // reorder leaves the overlay attached with its props intact (no vanish, and no stale
+    // fillColor when two overlays reorder at once). Only a genuine removal (no matching
+    // re-mount) reaches the detach. Full teardown still happens in prepareForRecycle.
+    _detachScheduled = YES;
+    __weak RNMapsGooglePolygonView *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RNMapsGooglePolygonView *strongSelf = weakSelf;
+        if (strongSelf == nil || !strongSelf->_detachScheduled) return;
+        strongSelf->_detachScheduled = NO;
+        strongSelf->_pendingMap = nil;
+        strongSelf->_view.map = nil;
+    });
 }
 
 - (void) prepareContentView {
@@ -134,6 +171,9 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     [super prepareForRecycle];
     static const auto defaultProps = std::make_shared<const RNMapsGooglePolygonProps>();
     _props = defaultProps;
+    _detachScheduled = NO;
+    _pendingMap = nil;
+    _view.map = nil;
     _view = nil;
 }
 
@@ -209,6 +249,10 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     if (newViewProps.strokeWidth != oldViewProps.strokeWidth){
         _view.strokeWidth = newViewProps.strokeWidth;
     }
+
+    // Coordinates may have just been applied above; attach now if the mount was
+    // deferred while the path was still empty.
+    [self attachIfReady];
 
   [super updateProps:props oldProps:oldProps];
 }

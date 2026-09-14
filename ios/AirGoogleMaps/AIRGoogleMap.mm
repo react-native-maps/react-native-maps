@@ -257,8 +257,16 @@ id regionAsJSON(MKCoordinateRegion region) {
     [self.polygons addObject:polygon];
 
   } else if ([NSStringFromClass([subview class]) isEqualToString:@"RNMapsGooglePolygonView"]){
-//      RNMapsGooglePolygonView *polygon = (RNMapsGooglePolygonView*)subview;
-//      [polygon didInsertInMap:self];
+      // New-Architecture Google polygon view. Attach the underlying GMSPolygon to
+      // the map; upstream left this commented out, so Polygon/Geojson overlays never
+      // rendered under the New Architecture. Invoked via a dynamic selector to avoid
+      // importing the codegen-only RNMapsGooglePolygonView header here.
+      if ([subview respondsToSelector:@selector(didInsertInMap:)]) {
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        [subview performSelector:@selector(didInsertInMap:) withObject:self];
+        #pragma clang diagnostic pop
+      }
       [self.polygons addObject:subview];
   } else if ([subview isKindOfClass:[AIRGoogleMapPolyline class]]) {
     AIRGoogleMapPolyline *polyline = (AIRGoogleMapPolyline*)subview;
@@ -305,6 +313,14 @@ id regionAsJSON(MKCoordinateRegion region) {
     marker.realMarker.map = nil;
     [self.markers removeObject:marker];
   } else if ([NSStringFromClass([subview class]) isEqualToString:@"RNMapsGooglePolygonView"]) {
+      // Detach the GMSPolygon from the map; upstream only dropped it from the
+      // tracking array, leaving removed New-Arch overlays stuck on the map.
+      if ([subview respondsToSelector:@selector(didRemoveFromMap)]) {
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        [subview performSelector:@selector(didRemoveFromMap)];
+        #pragma clang diagnostic pop
+      }
       [self.polygons removeObject:subview];
    } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
     AIRGoogleMapPolygon *polygon = (AIRGoogleMapPolygon*)subview;
