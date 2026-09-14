@@ -189,8 +189,25 @@ public class MapPolyline extends MapFeature {
 
     @Override
     public void removeFromMap(Object collection) {
+        if (polyline == null) return;
         PolylineManager.Collection polylineCollection = (PolylineManager.Collection) collection;
         polylineCollection.remove(polyline);
+        polyline = null;
+    }
+
+    /** Re-commit the points to force a New-Arch composite. See MapPolygon#forceRedraw. */
+    public void forceRedraw() {
+        if (polyline != null) {
+            polyline.setPoints(polyline.getPoints());
+        }
+    }
+
+    /** Remove this polyline's overlay by identity. See MapPolygon#removeFromMapDirectly. */
+    public void removeFromMapDirectly() {
+        if (polyline != null) {
+            polyline.remove();
+            polyline = null;
+        }
     }
 
     public void setLineCap(String lineCap) {

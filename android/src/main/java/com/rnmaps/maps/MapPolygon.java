@@ -218,7 +218,33 @@ public class MapPolygon extends MapFeature {
 
   @Override
   public void removeFromMap(Object collection) {
+    if (polygon == null) return;
     PolygonManager.Collection polygonCollection = (PolygonManager.Collection) collection;
     polygonCollection.remove(polygon);
+    polygon = null;
+  }
+
+  /**
+   * Re-commit the (unchanged) points to force the GoogleMap surface to composite the
+   * overlay. Under the New Architecture a freshly-added polygon is not painted until a
+   * property mutates; re-applying its points triggers that paint with no visual or
+   * state change. Called from MapView on map-load and when the camera settles.
+   */
+  public void forceRedraw() {
+    if (polygon != null) {
+      polygon.setPoints(polygon.getPoints());
+    }
+  }
+
+  /**
+   * Remove this polygon's GoogleMap overlay directly, by identity. Called from
+   * PolygonManager#onDropViewInstance when Fabric drops/recycles the view, so removal
+   * doesn't depend on the index-based removeFeatureAt path (unreliable for batches).
+   */
+  public void removeFromMapDirectly() {
+    if (polygon != null) {
+      polygon.remove();
+      polygon = null;
+    }
   }
 }

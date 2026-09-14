@@ -50,6 +50,13 @@ public class PolylineManager extends ViewGroupManager<MapPolyline> implements RN
         return new MapPolyline(context);
     }
 
+    @Override
+    public void onDropViewInstance(MapPolyline view) {
+        // Identity-based overlay removal — see PolygonManager#onDropViewInstance.
+        view.removeFromMapDirectly();
+        super.onDropViewInstance(view);
+    }
+
 
     public static final String REACT_CLASS = "RNMapsPolyline";
 
