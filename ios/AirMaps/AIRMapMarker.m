@@ -9,22 +9,120 @@
 
 #import "AIRMapMarker.h"
 
-#import <React/RCTBridge.h>
-#import <React/RCTEventDispatcher.h>
-#import <React/RCTImageLoaderProtocol.h>
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
-#import <React/RCTImageLoader.h>
-#import <React/RCTBridge+Private.h>
 
 NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
+
+// ---------------------------------------------------------------------------
+// Image loading — coalescing cache
+//
+// Multiple markers sharing the same image URL (common case: all markers use
+// the same pin asset) would each fire an independent NSURLSession request
+// without this. The coalescer ensures exactly one in-flight request per URL.
+// All callers that arrive while a request is in-flight are queued and notified
+// together when it completes. Results are cached in memory for the process
+// lifetime so subsequent mounts are instant.
+//
+// All access to these dictionaries happens on the main thread:
+//   - setImageSrc: is called from React Native's UI thread
+//   - the NSURLSession completion block dispatches back to the main queue
+// ---------------------------------------------------------------------------
+static NSCache<NSString *, UIImage *>                                          *AIRImageCache;
+static NSMutableDictionary<NSString *, NSMutableArray<void (^)(UIImage *)> *>  *AIRPendingHandlers;
+
+// True for URIs that came out of RN's asset pipeline rather than an arbitrary
+// remote URL: an on-device bundled asset (file:// under the app's bundle,
+// library, or home directory — what RCTIsLocalAssetURL already recognizes
+// for RN's own image loaders) or the Metro dev-server form produced by
+// AssetSourceResolver's assetServerURL(), e.g. ".../assets/Foo/icon@2x.png
+// ?platform=ios&hash=...".
+static BOOL AIRIsPackagerAssetURL(NSURL *url) {
+    if (RCTIsLocalAssetURL(url)) {
+        return YES;
+    }
+    NSString *query = url.query;
+    return url.path != nil && [url.path containsString:@"/assets/"]
+        && query != nil && [query containsString:@"hash="];
+}
+
+// React Native's asset resolver bakes the chosen density into the filename
+// (e.g. "pin@2x.png"), omitting the suffix for 1x. That resolved density is
+// what the pixel data actually is, so for RN assets it — not the screen's
+// scale — is what UIImage must be decoded with. Arbitrary remote URLs carry
+// no such baked-in density, so they keep using the screen's scale as before.
+static CGFloat AIRScaleFromAssetURL(NSString *urlString) {
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (!AIRIsPackagerAssetURL(url)) {
+        return RCTScreenScale();
+    }
+
+    CGFloat scale = 1;
+    NSString *filename = url.path.lastPathComponent;
+    NSRange at = [filename rangeOfString:@"@" options:NSBackwardsSearch];
+    if (at.location != NSNotFound) {
+        NSString *suffix = [filename substringFromIndex:at.location + 1];
+        NSRange x = [suffix rangeOfString:@"x"];
+        if (x.location != NSNotFound) {
+            CGFloat parsed = [[suffix substringToIndex:x.location] doubleValue];
+            if (parsed > 0) {
+                scale = parsed;
+            }
+        }
+    }
+    return scale;
+}
+
+// Requests the image at urlString, returning a cancel block.
+// "Cancel" means this caller no longer wants the result — it does NOT abort
+// the network request, which other waiting callers still need.
+static dispatch_block_t AIRLoadImage(NSString *urlString, CGFloat scale, void (^completion)(UIImage *)) {
+    if (!AIRImageCache)      AIRImageCache      = [NSCache new];
+    if (!AIRPendingHandlers) AIRPendingHandlers = [NSMutableDictionary new];
+
+    // Cache hit — deliver on next run-loop tick so callers always get async behaviour
+    UIImage *cached = [AIRImageCache objectForKey:urlString];
+    if (cached) {
+        dispatch_async(dispatch_get_main_queue(), ^{ completion(cached); });
+        return ^{};
+    }
+
+    // Coalesce: register callback and let the existing in-flight request deliver it
+    __block BOOL cancelled = NO;
+    void (^handler)(UIImage *) = ^(UIImage *image) { if (!cancelled) completion(image); };
+
+    NSMutableArray *handlers = AIRPendingHandlers[urlString];
+    if (handlers) {
+        [handlers addObject:handler];
+        return ^{ cancelled = YES; };
+    }
+
+    // First request for this URL
+    AIRPendingHandlers[urlString] = [NSMutableArray arrayWithObject:handler];
+
+    NSURL *url = [NSURL URLWithString:urlString];
+    [[[NSURLSession sharedSession]
+        dataTaskWithURL:url
+      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        UIImage *image = (!error && data) ? [UIImage imageWithData:data scale:scale] : nil;
+        if (!image) NSLog(@"AIRMapMarker failed to load image: %@", error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (image) [AIRImageCache setObject:image forKey:urlString];
+            NSArray *pending = AIRPendingHandlers[urlString];
+            [AIRPendingHandlers removeObjectForKey:urlString];
+            for (void (^h)(UIImage *) in pending) h(image);
+        });
+    }] resume];
+
+    return ^{ cancelled = YES; };
+}
 
 @implementation AIREmptyCalloutBackgroundView
 @end
 
 @implementation AIRMapMarker {
     BOOL _hasSetCalloutOffset;
-    RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
+    dispatch_block_t _imageLoadCancel;
     MKMarkerAnnotationView *_markerView;
     MKPinAnnotationView *_pinView;
     BOOL _calloutIsOpen;
@@ -362,29 +460,26 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     _imageSrc = imageSrc;
 
-    if (_reloadImageCancellationBlock) {
-        _reloadImageCancellationBlock();
-        _reloadImageCancellationBlock = nil;
+    // Deregister from any previous in-flight load
+    if (_imageLoadCancel) {
+        _imageLoadCancel();
+        _imageLoadCancel = nil;
     }
-    __weak __typeof(self) weakSelf = self;
+    if (!imageSrc) return;
 
-    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
-                                                                                                                 size:self.bounds.size
-                                                                                                                scale:RCTScreenScale()
-                                                                                                              clipped:YES
-                                                                                                           resizeMode:RCTResizeModeCenter
-                                                                                                        progressBlock:nil
-                                                                                                     partialLoadBlock:nil
-                                                                                                      completionBlock:^(NSError *error, UIImage *image) {
-        if (error) {
-            // TODO(lmr): do something with the error?
-            NSLog(@"failed to load image: %@", error);
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf.image = image;
-        });
-    }];
+    // A bare name with no URL scheme (e.g. image={{uri: 'custom_pin'}}) refers
+    // to an Xcode asset-catalog image, not something NSURLSession can fetch.
+    // Load it synchronously via the catalog instead, as RCTLocalAssetImageLoader
+    // did before this component moved off RCTImageLoader.
+    if ([NSURL URLWithString:imageSrc].scheme == nil) {
+        self.image = [UIImage imageNamed:imageSrc];
+        return;
+    }
+
+    __weak __typeof(self) weakSelf = self;
+    _imageLoadCancel = AIRLoadImage(imageSrc, AIRScaleFromAssetURL(imageSrc), ^(UIImage *image) {
+        weakSelf.image = image;
+    });
 }
 
 - (void)setPinColor:(UIColor *)pinColor
