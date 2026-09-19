@@ -64,7 +64,9 @@ $ npx pod-install
 
 ### Enabling Google Maps
 
-If you want to enable Google Maps on iOS, obtain the Google API key and edit your `AppDelegate.m(m)` as follows:
+If you want to enable Google Maps on iOS, obtain the Google API key and edit your app delegate as follows.
+
+#### Objective-C (`AppDelegate.m(m)`)
 
 ```diff
 + #import <GoogleMaps/GoogleMaps.h>
@@ -80,6 +82,27 @@ If you want to enable Google Maps on iOS, obtain the Google API key and edit you
 
 The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
+#### Swift (`AppDelegate.swift`)
+
+Projects created with React Native 0.77 and above ship a Swift app delegate instead:
+
+```diff
++ import GoogleMaps
+
+  @main
+  class AppDelegate: RCTAppDelegate {
+    override func application(
+      _ application: UIApplication,
+      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
++     GMSServices.provideAPIKey("_YOUR_API_KEY_") // add this line using the api key obtained from Google Console
+      ...
+    }
+  }
+```
+
+`GMSServices.provideAPIKey` should be the **first call** of the method.
+
 Google Maps SDK for iOS requires iOS 14, so make sure that your deployment target is >= 14 in your iOS project settings.
 
 Also make sure that your Podfile deployment target is set to >= 14 at the top of your Podfile, eg:
@@ -92,6 +115,18 @@ Add the following to your Podfile above the `use_native_modules!` function and r
 
 ```ruby
 # React Native Maps dependencies
+
+rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-maps/Google', :path => rn_maps_path
+```
+
+### Overriding Google Maps dependency versions
+
+You can optionally pin specific versions for the Google Maps dependencies by setting global variables in your `Podfile` **before** the `react-native-maps/Google` pod declaration:
+
+```ruby
+$RNMapsGoogleMapsVersion = '10.10.0'
+$RNMapsGoogleMapsUtilsVersion = '7.0.0'
 
 rn_maps_path = '../node_modules/react-native-maps'
 pod 'react-native-maps/Google', :path => rn_maps_path
