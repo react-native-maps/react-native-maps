@@ -1,5 +1,75 @@
 # Changelog
 
+## [1.29.6](https://github.com/react-native-maps/react-native-maps/compare/v1.29.5...v1.29.6) (2026-09-19)
+
+
+### Bug Fixes
+
+* **android:** guard GoogleMap access when mapPadding is set before onMapReady ([#5983](https://github.com/react-native-maps/react-native-maps/issues/5983)) ([bdf84a8](https://github.com/react-native-maps/react-native-maps/commit/bdf84a87ef4b5a523e5415313048c541c33e6b5a))
+
+## [1.29.5](https://github.com/react-native-maps/react-native-maps/compare/v1.29.4...v1.29.5) (2026-09-19)
+
+
+### Bug Fixes
+
+* **android:** custom Marker views clipped due to undersized bitmap ([#5913](https://github.com/react-native-maps/react-native-maps/issues/5913)) ([57d85cc](https://github.com/react-native-maps/react-native-maps/commit/57d85ccef46436004082d7cb0747b4b0efae1f1f)), closes [#1](https://github.com/react-native-maps/react-native-maps/issues/1)
+
+## [1.29.4](https://github.com/react-native-maps/react-native-maps/compare/v1.29.3...v1.29.4) (2026-09-19)
+
+
+### Bug Fixes
+
+* **ios:** guard Google Maps subview insertion ([#5940](https://github.com/react-native-maps/react-native-maps/issues/5940)) ([a7afe9e](https://github.com/react-native-maps/react-native-maps/commit/a7afe9e8619145219adb93b69e9e0d2bb037ad23))
+
+## [1.29.3](https://github.com/react-native-maps/react-native-maps/compare/v1.29.2...v1.29.3) (2026-09-19)
+
+
+### Bug Fixes
+
+* **ios:** add nil check for subview insertion in Apple Maps ([#5871](https://github.com/react-native-maps/react-native-maps/issues/5871)) ([5cc4a25](https://github.com/react-native-maps/react-native-maps/commit/5cc4a25850d13cba6537df40609641a58244ac28))
+
+## [1.29.2](https://github.com/react-native-maps/react-native-maps/compare/v1.29.1...v1.29.2) (2026-09-13)
+
+
+### Bug Fixes
+
+* **ios:** keep the marker anchored to its coordinate when its content is transformed ([#6001](https://github.com/react-native-maps/react-native-maps/issues/6001)) ([bab94e7](https://github.com/react-native-maps/react-native-maps/commit/bab94e736070b5771e57879c568f0662b84708e5))
+
+## [1.29.1](https://github.com/react-native-maps/react-native-maps/compare/v1.29.0...v1.29.1) (2026-09-13)
+
+
+### Bug Fixes
+
+* **android:** guard removeFromMap against a null overlay ([#5976](https://github.com/react-native-maps/react-native-maps/issues/5976)) ([5e1f3cd](https://github.com/react-native-maps/react-native-maps/commit/5e1f3cd6702796fd62870da5e07dec7cb40b2f42))
+
+# [1.29.0](https://github.com/react-native-maps/react-native-maps/compare/v1.28.2...v1.29.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** ios fabric support (GoogleMaps Marker, Polygon) ([#5944](https://github.com/react-native-maps/react-native-maps/issues/5944)) ([91ce461](https://github.com/react-native-maps/react-native-maps/commit/91ce461d4ed3b089914e97f346de95b45d491800))
+
+## [1.28.2](https://github.com/react-native-maps/react-native-maps/compare/v1.28.1...v1.28.2) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** remember selected mapType ([#5879](https://github.com/react-native-maps/react-native-maps/issues/5879)) ([d7f58ae](https://github.com/react-native-maps/react-native-maps/commit/d7f58ae2e96714ad2245544cb89f801d2a3fca56))
+
+## [1.28.1](https://github.com/react-native-maps/react-native-maps/compare/v1.28.0...v1.28.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* **android:** fix ghost features on MapView ([#5859](https://github.com/react-native-maps/react-native-maps/issues/5859)) ([b874b0f](https://github.com/react-native-maps/react-native-maps/commit/b874b0ff29f6c6227da7907e813f2b4406c5486d))
+
+# [1.28.0](https://github.com/react-native-maps/react-native-maps/compare/v1.27.2...v1.28.0) (2026-06-28)
+
+
+### Features
+
+* **ios:** allow GoogleMaps pod versions to be overridden ([#5923](https://github.com/react-native-maps/react-native-maps/issues/5923)) ([5fae05a](https://github.com/react-native-maps/react-native-maps/commit/5fae05a906567ca7a88a86d155f9fd62da889ab8))
+
 ## [1.27.2](https://github.com/react-native-maps/react-native-maps/compare/v1.27.1...v1.27.2) (2026-03-11)
 
 

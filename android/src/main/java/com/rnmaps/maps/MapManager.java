@@ -158,7 +158,7 @@ public class MapManager extends ViewGroupManager<MapView> {
     @ReactProp(name = "mapType")
     public void setMapType(MapView view, @Nullable String mapType) {
         int typeId = MAP_TYPES.get(mapType);
-        view.map.setMapType(typeId);
+        view.setMapType(typeId);
     }
 
     @ReactProp(name = "customMapStyleString")
@@ -193,7 +193,9 @@ public class MapManager extends ViewGroupManager<MapView> {
         }
 
         view.applyBaseMapPadding(left, top, right, bottom);
-        view.map.setPadding(left, top, right, bottom);
+        if (view.map != null) {
+            view.map.setPadding(left, top, right, bottom);
+        }
     }
 
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)

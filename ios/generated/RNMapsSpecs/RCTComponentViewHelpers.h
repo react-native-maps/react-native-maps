@@ -229,6 +229,145 @@ if ([commandName isEqualToString:@"setIndoorActiveLevelIndex"]) {
 #endif
 }
 
+@protocol RCTRNMapsGoogleMarkerViewProtocol <NSObject>
+- (void)animateToCoordinates:(double)latitude longitude:(double)longitude duration:(NSInteger)duration;
+- (void)setCoordinates:(double)latitude longitude:(double)longitude;
+- (void)showCallout;
+- (void)hideCallout;
+- (void)redrawCallout;
+- (void)redraw;
+@end
+
+RCT_EXTERN inline void RCTRNMapsGoogleMarkerHandleCommand(
+  id<RCTRNMapsGoogleMarkerViewProtocol> componentView,
+  NSString const *commandName,
+  NSArray const *args)
+{
+  if ([commandName isEqualToString:@"animateToCoordinates"]) {
+#if RCT_DEBUG
+  if ([args count] != 3) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMarker", commandName, (int)[args count], 3);
+    return;
+  }
+#endif
+
+  NSObject *arg0 = args[0];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg0, [NSNumber class], @"double", @"RNMapsGoogleMarker", commandName, @"1st")) {
+    return;
+  }
+#endif
+  double latitude = [(NSNumber *)arg0 doubleValue];
+
+NSObject *arg1 = args[1];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg1, [NSNumber class], @"double", @"RNMapsGoogleMarker", commandName, @"2nd")) {
+    return;
+  }
+#endif
+  double longitude = [(NSNumber *)arg1 doubleValue];
+
+NSObject *arg2 = args[2];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg2, [NSNumber class], @"number", @"RNMapsGoogleMarker", commandName, @"3rd")) {
+    return;
+  }
+#endif
+  NSInteger duration = [(NSNumber *)arg2 intValue];
+
+  [componentView animateToCoordinates:latitude longitude:longitude duration:duration];
+  return;
+}
+
+if ([commandName isEqualToString:@"setCoordinates"]) {
+#if RCT_DEBUG
+  if ([args count] != 2) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMarker", commandName, (int)[args count], 2);
+    return;
+  }
+#endif
+
+  NSObject *arg0 = args[0];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg0, [NSNumber class], @"double", @"RNMapsGoogleMarker", commandName, @"1st")) {
+    return;
+  }
+#endif
+  double latitude = [(NSNumber *)arg0 doubleValue];
+
+NSObject *arg1 = args[1];
+#if RCT_DEBUG
+  if (!RCTValidateTypeOfViewCommandArgument(arg1, [NSNumber class], @"double", @"RNMapsGoogleMarker", commandName, @"2nd")) {
+    return;
+  }
+#endif
+  double longitude = [(NSNumber *)arg1 doubleValue];
+
+  [componentView setCoordinates:latitude longitude:longitude];
+  return;
+}
+
+if ([commandName isEqualToString:@"showCallout"]) {
+#if RCT_DEBUG
+  if ([args count] != 0) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMarker", commandName, (int)[args count], 0);
+    return;
+  }
+#endif
+
+  
+
+  [componentView showCallout];
+  return;
+}
+
+if ([commandName isEqualToString:@"hideCallout"]) {
+#if RCT_DEBUG
+  if ([args count] != 0) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMarker", commandName, (int)[args count], 0);
+    return;
+  }
+#endif
+
+  
+
+  [componentView hideCallout];
+  return;
+}
+
+if ([commandName isEqualToString:@"redrawCallout"]) {
+#if RCT_DEBUG
+  if ([args count] != 0) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMarker", commandName, (int)[args count], 0);
+    return;
+  }
+#endif
+
+  
+
+  [componentView redrawCallout];
+  return;
+}
+
+if ([commandName isEqualToString:@"redraw"]) {
+#if RCT_DEBUG
+  if ([args count] != 0) {
+    RCTLogError(@"%@ command %@ received %d arguments, expected %d.", @"RNMapsGoogleMarker", commandName, (int)[args count], 0);
+    return;
+  }
+#endif
+
+  
+
+  [componentView redraw];
+  return;
+}
+
+#if RCT_DEBUG
+  RCTLogError(@"%@ received command %@, which is not a supported command.", @"RNMapsGoogleMarker", commandName);
+#endif
+}
+
 @protocol RCTRNMapsGooglePolygonViewProtocol <NSObject>
 
 @end
@@ -587,5 +726,9 @@ if ([commandName isEqualToString:@"redraw"]) {
   RCTLogError(@"%@ received command %@, which is not a supported command.", @"RNMapsMarker", commandName);
 #endif
 }
+
+@protocol RCTRNMapsPolygonViewProtocol <NSObject>
+
+@end
 
 NS_ASSUME_NONNULL_END
