@@ -168,7 +168,20 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     if(newViewProps.zIndex.has_value()){
         _view.zIndex = newViewProps.zIndex.value();
     }
-    if (newViewProps.coordinates.size() != oldViewProps.coordinates.size()){
+    // Rebuild the path when the coordinates change in count OR value. Comparing
+    // only the count means moving an existing vertex (same point count, new
+    // lat/lng) never updates the rendered shape.
+    bool coordsChanged = newViewProps.coordinates.size() != oldViewProps.coordinates.size();
+    if (!coordsChanged) {
+        for (size_t i = 0; i < newViewProps.coordinates.size(); i++) {
+            if (newViewProps.coordinates.at(i).latitude  != oldViewProps.coordinates.at(i).latitude ||
+                newViewProps.coordinates.at(i).longitude != oldViewProps.coordinates.at(i).longitude) {
+                coordsChanged = true;
+                break;
+            }
+        }
+    }
+    if (coordsChanged){
         GMSMutablePath *path = [GMSMutablePath path];
         for(int i = 0; i < newViewProps.coordinates.size(); i++)
         {
