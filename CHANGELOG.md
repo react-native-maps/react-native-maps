@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.5](https://github.com/react-native-maps/react-native-maps/compare/v1.29.4...v1.29.5) (2026-09-19)
+
+
+### Bug Fixes
+
+* **android:** custom Marker views clipped due to undersized bitmap ([#5913](https://github.com/react-native-maps/react-native-maps/issues/5913)) ([57d85cc](https://github.com/react-native-maps/react-native-maps/commit/57d85ccef46436004082d7cb0747b4b0efae1f1f)), closes [#1](https://github.com/react-native-maps/react-native-maps/issues/1)
+
 ## [1.29.4](https://github.com/react-native-maps/react-native-maps/compare/v1.29.3...v1.29.4) (2026-09-19)
 
 
