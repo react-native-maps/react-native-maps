@@ -17,6 +17,7 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
 
+@SuppressWarnings("deprecation")
 public class RNMapsPolylineManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMapsPolylineManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMapsPolylineManagerDelegate(U viewManager) {
     super(viewManager);
