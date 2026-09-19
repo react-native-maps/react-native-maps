@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.3](https://github.com/react-native-maps/react-native-maps/compare/v1.29.2...v1.29.3) (2026-09-19)
+
+
+### Bug Fixes
+
+* **ios:** add nil check for subview insertion in Apple Maps ([#5871](https://github.com/react-native-maps/react-native-maps/issues/5871)) ([5cc4a25](https://github.com/react-native-maps/react-native-maps/commit/5cc4a25850d13cba6537df40609641a58244ac28))
+
 ## [1.29.2](https://github.com/react-native-maps/react-native-maps/compare/v1.29.1...v1.29.2) (2026-09-13)
 
 
