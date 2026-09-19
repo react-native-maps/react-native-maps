@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.29.5](https://github.com/react-native-maps/react-native-maps/compare/v1.29.4...v1.29.5) (2026-09-19)
+
+
+### Bug Fixes
+
+* **android:** custom Marker views clipped due to undersized bitmap ([#5913](https://github.com/react-native-maps/react-native-maps/issues/5913)) ([57d85cc](https://github.com/react-native-maps/react-native-maps/commit/57d85ccef46436004082d7cb0747b4b0efae1f1f)), closes [#1](https://github.com/react-native-maps/react-native-maps/issues/1)
+
+## [1.29.4](https://github.com/react-native-maps/react-native-maps/compare/v1.29.3...v1.29.4) (2026-09-19)
+
+
+### Bug Fixes
+
+* **ios:** guard Google Maps subview insertion ([#5940](https://github.com/react-native-maps/react-native-maps/issues/5940)) ([a7afe9e](https://github.com/react-native-maps/react-native-maps/commit/a7afe9e8619145219adb93b69e9e0d2bb037ad23))
+
+## [1.29.3](https://github.com/react-native-maps/react-native-maps/compare/v1.29.2...v1.29.3) (2026-09-19)
+
+
+### Bug Fixes
+
+* **ios:** add nil check for subview insertion in Apple Maps ([#5871](https://github.com/react-native-maps/react-native-maps/issues/5871)) ([5cc4a25](https://github.com/react-native-maps/react-native-maps/commit/5cc4a25850d13cba6537df40609641a58244ac28))
+
+## [1.29.2](https://github.com/react-native-maps/react-native-maps/compare/v1.29.1...v1.29.2) (2026-09-13)
+
+
+### Bug Fixes
+
+* **ios:** keep the marker anchored to its coordinate when its content is transformed ([#6001](https://github.com/react-native-maps/react-native-maps/issues/6001)) ([bab94e7](https://github.com/react-native-maps/react-native-maps/commit/bab94e736070b5771e57879c568f0662b84708e5))
+
+## [1.29.1](https://github.com/react-native-maps/react-native-maps/compare/v1.29.0...v1.29.1) (2026-09-13)
+
+
+### Bug Fixes
+
+* **android:** guard removeFromMap against a null overlay ([#5976](https://github.com/react-native-maps/react-native-maps/issues/5976)) ([5e1f3cd](https://github.com/react-native-maps/react-native-maps/commit/5e1f3cd6702796fd62870da5e07dec7cb40b2f42))
+
 # [1.29.0](https://github.com/react-native-maps/react-native-maps/compare/v1.28.2...v1.29.0) (2026-06-28)
 
 
