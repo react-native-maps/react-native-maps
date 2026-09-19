@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.4](https://github.com/react-native-maps/react-native-maps/compare/v1.29.3...v1.29.4) (2026-09-19)
+
+
+### Bug Fixes
+
+* **ios:** guard Google Maps subview insertion ([#5940](https://github.com/react-native-maps/react-native-maps/issues/5940)) ([a7afe9e](https://github.com/react-native-maps/react-native-maps/commit/a7afe9e8619145219adb93b69e9e0d2bb037ad23))
+
 ## [1.29.3](https://github.com/react-native-maps/react-native-maps/compare/v1.29.2...v1.29.3) (2026-09-19)
 
 
