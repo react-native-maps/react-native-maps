@@ -112,8 +112,22 @@ Pod::Spec.new do |s|
     }
     # Fixed compiler flags to avoid -Wno warnings
     ss.compiler_flags = folly_compiler_flags + ' -DHAVE_GOOGLE_MAPS=1 -DHAVE_GOOGLE_MAPS_UTILS=1'
-    ss.dependency 'GoogleMaps', '9.4.0'
-    ss.dependency 'Google-Maps-iOS-Utils', '6.1.0'
+    
+    google_maps_version = '9.4.0'
+    google_maps_utils_version = '6.1.0'
+
+    if defined?($RNMapsGoogleMapsVersion)
+      Pod::UI.puts "#{s.name}: Using user specified GoogleMaps version '#{$RNMapsGoogleMapsVersion}'"
+      google_maps_version = $RNMapsGoogleMapsVersion
+    end
+
+    if defined?($RNMapsGoogleMapsUtilsVersion)
+      Pod::UI.puts "#{s.name}: Using user specified Google-Maps-iOS-Utils version '#{$RNMapsGoogleMapsUtilsVersion}'"
+      google_maps_utils_version = $RNMapsGoogleMapsUtilsVersion
+    end
+
+    ss.dependency 'GoogleMaps', google_maps_version #'8.4.0'
+    ss.dependency 'Google-Maps-iOS-Utils', google_maps_utils_version #'5.0.0'
     ss.dependency 'react-native-maps/Generated'
     ss.dependency 'react-native-maps/Maps'
     install_modules_dependencies(ss)

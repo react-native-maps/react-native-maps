@@ -21,7 +21,9 @@ import {MapUrlTile} from './MapUrlTile';
 import {MapWMSTile} from './MapWMSTile';
 import {Commands} from './MapViewNativeComponent';
 import GooglePolygon from './specs/NativeComponentGooglePolygon';
+import ApplePolygon from './specs/NativeComponentPolygon';
 import FabricMarker from './specs/NativeComponentMarker';
+import FabricGoogleMarker from './specs/NativeComponentGoogleMarker';
 import FabricUrlTile from './specs/NativeComponentUrlTile';
 import FabricWMSTile from './specs/NativeComponentWMSTile';
 import FabricCallout from './specs/NativeComponentCallout';
@@ -79,22 +81,34 @@ export default function decorateMapComponent<Type extends Component>(
   Component.prototype.getNativeComponent =
     function getNativeComponent(): NativeComponent {
       const provider = this.context;
-      if (
-        componentName === 'Marker' &&
-        (Platform.OS !== 'ios' || provider !== PROVIDER_GOOGLE)
-      ) {
-        // @ts-ignore
-        return FabricMarker;
+      if (componentName === 'Marker') {
+        if (Platform.OS === 'ios' && provider === PROVIDER_GOOGLE) {
+          if (googleMapIsInstalled) {
+            // @ts-ignore
+            return FabricGoogleMarker;
+          }
+        } else {
+          // @ts-ignore
+          return FabricMarker;
+        }
       }
-      if (
-        componentName === 'Polygon' &&
-        ((provider === PROVIDER_GOOGLE &&
-          Platform.OS === 'ios' &&
-          googleMapIsInstalled) ||
-          Platform.OS === 'android')
-      ) {
-        // @ts-ignore
-        return GooglePolygon;
+      if (componentName === 'Polygon') {
+        if (Platform.OS === 'android') {
+          // @ts-ignore
+          return GooglePolygon;
+        }
+        if (Platform.OS === 'ios') {
+          if (provider === PROVIDER_GOOGLE) {
+            if (googleMapIsInstalled) {
+              // @ts-ignore
+              return GooglePolygon;
+            }
+            // Google Maps not installed: fall through to provider resolution below.
+          } else {
+            // @ts-ignore
+            return ApplePolygon;
+          }
+        }
       }
       if (Platform.OS === 'android') {
         if (componentName === 'Callout') {

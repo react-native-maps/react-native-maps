@@ -19,10 +19,12 @@ namespace facebook::react {
 using RNMapsCalloutComponentDescriptor = ConcreteComponentDescriptor<RNMapsCalloutShadowNode>;
 using RNMapsCircleComponentDescriptor = ConcreteComponentDescriptor<RNMapsCircleShadowNode>;
 using RNMapsGoogleMapViewComponentDescriptor = ConcreteComponentDescriptor<RNMapsGoogleMapViewShadowNode>;
+using RNMapsGoogleMarkerComponentDescriptor = ConcreteComponentDescriptor<RNMapsGoogleMarkerShadowNode>;
 using RNMapsGooglePolygonComponentDescriptor = ConcreteComponentDescriptor<RNMapsGooglePolygonShadowNode>;
 using RNMapsMapViewComponentDescriptor = ConcreteComponentDescriptor<RNMapsMapViewShadowNode>;
 using RNMapsMarkerComponentDescriptor = ConcreteComponentDescriptor<RNMapsMarkerShadowNode>;
 using RNMapsOverlayComponentDescriptor = ConcreteComponentDescriptor<RNMapsOverlayShadowNode>;
+using RNMapsPolygonComponentDescriptor = ConcreteComponentDescriptor<RNMapsPolygonShadowNode>;
 using RNMapsPolylineComponentDescriptor = ConcreteComponentDescriptor<RNMapsPolylineShadowNode>;
 using RNMapsUrlTileComponentDescriptor = ConcreteComponentDescriptor<RNMapsUrlTileShadowNode>;
 using RNMapsWMSTileComponentDescriptor = ConcreteComponentDescriptor<RNMapsWMSTileShadowNode>;
