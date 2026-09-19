@@ -1363,7 +1363,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void updateExtraData(Object extraData) {
-        if (setPaddingDeferred && super.getHeight() > 0 && super.getWidth() > 0) {
+        if (setPaddingDeferred && map != null && super.getHeight() > 0 && super.getWidth() > 0) {
             CameraUpdate cu = CameraUpdateFactory.newCameraPosition(map.getCameraPosition());
 
             map.setPadding(edgeLeftPadding + baseLeftMapPadding,
@@ -1530,8 +1530,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     int edgeBottomPadding;
 
     public void applyBaseMapPadding(int left, int top, int right, int bottom) {
-        if (super.getHeight() <= 0 || super.getWidth() <= 0) {
-            // the map is not laid out yet and calling setPadding() now has no effect
+        if (map == null || super.getHeight() <= 0 || super.getWidth() <= 0) {
+            // the map is not ready or not laid out yet and calling setPadding() now
+            // has no effect, or crashes when the GoogleMap instance does not exist
             baseLeftMapPadding = left;
             baseRightMapPadding = right;
             baseTopMapPadding = top;
