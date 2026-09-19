@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.7](https://github.com/react-native-maps/react-native-maps/compare/v1.29.6...v1.29.7) (2026-09-19)
+
+
+### Bug Fixes
+
+* **iOS:** update polygon path when a coordinate value changes (not only on count change) ([#5934](https://github.com/react-native-maps/react-native-maps/issues/5934)) ([4758d5a](https://github.com/react-native-maps/react-native-maps/commit/4758d5adf3249d1dfe91553ccbd56c79462749c6))
+
 ## [1.29.6](https://github.com/react-native-maps/react-native-maps/compare/v1.29.5...v1.29.6) (2026-09-19)
 
 
