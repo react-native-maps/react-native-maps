@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.6](https://github.com/react-native-maps/react-native-maps/compare/v1.29.5...v1.29.6) (2026-09-19)
+
+
+### Bug Fixes
+
+* **android:** guard GoogleMap access when mapPadding is set before onMapReady ([#5983](https://github.com/react-native-maps/react-native-maps/issues/5983)) ([bdf84a8](https://github.com/react-native-maps/react-native-maps/commit/bdf84a87ef4b5a523e5415313048c541c33e6b5a))
+
 ## [1.29.5](https://github.com/react-native-maps/react-native-maps/compare/v1.29.4...v1.29.5) (2026-09-19)
 
 
