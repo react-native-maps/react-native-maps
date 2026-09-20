@@ -191,6 +191,12 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     }
 
     @Override
+    public void setFlat(MapMarker view, boolean value) {
+        view.setFlat(value);
+        view.setUpdated(true);
+    }
+
+    @Override
     public void setTitle(MapMarker view, @Nullable String value) {
         view.setTitle(value);
         view.setUpdated(true);

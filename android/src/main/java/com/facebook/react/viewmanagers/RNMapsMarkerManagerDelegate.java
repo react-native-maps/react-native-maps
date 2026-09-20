@@ -53,6 +53,9 @@ public class RNMapsMarkerManagerDelegate<T extends View, U extends BaseViewManag
       case "draggable":
         mViewManager.setDraggable(view, value == null ? false : (boolean) value);
         break;
+      case "flat":
+        mViewManager.setFlat(view, value == null ? false : (boolean) value);
+        break;
       case "title":
         mViewManager.setTitle(view, value == null ? null : (String) value);
         break;
