@@ -1904,6 +1904,7 @@ class RNMapsMarkerProps final : public ViewProps {
   RNMapsMarkerCoordinateStruct coordinate{};
   std::string description{};
   bool draggable{false};
+  bool flat{false};
   std::string title{};
   bool tracksViewChanges{true};
   std::string identifier{};
