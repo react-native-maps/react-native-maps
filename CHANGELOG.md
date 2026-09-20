@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.8](https://github.com/react-native-maps/react-native-maps/compare/v1.29.7...v1.29.8) (2026-09-20)
+
+
+### Bug Fixes
+
+* added the flat prop to the native marker component ([#5947](https://github.com/react-native-maps/react-native-maps/issues/5947)) ([2302fdf](https://github.com/react-native-maps/react-native-maps/commit/2302fdf1c644ea4c9799ea9f5dd900d2b448d197))
+
 ## [1.29.7](https://github.com/react-native-maps/react-native-maps/compare/v1.29.6...v1.29.7) (2026-09-19)
 
 
