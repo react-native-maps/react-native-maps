@@ -428,8 +428,21 @@ CGRect unionRect(CGRect a, CGRect b) {
 
     if (!_realMarker.icon) {
         // prevent glitch with marker (cf. https://github.com/react-native-maps/react-native-maps/issues/3657)
-        UIImage *emptyImage = [[UIImage alloc] init];
-        _realMarker.icon = emptyImage;
+        // A 0x0 image is not a valid texture for the Metal renderer used by
+        // Google Maps SDK 9.x: allocation fails ("Failed to allocate texture
+        // space for marker") and the marker renders the default red pin, which
+        // is exactly what this placeholder is meant to avoid. A 1x1 transparent
+        // image keeps the marker invisible while loading with a valid texture.
+        // It is created once and shared, so markers reuse a single UIImage
+        // instance as the Google Maps documentation recommends.
+        static UIImage *sharedEmptyIcon;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 0);
+            sharedEmptyIcon = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+        });
+        _realMarker.icon = sharedEmptyIcon;
     }
 
     _reloadImageCancellationBlock =
