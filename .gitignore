@@ -92,3 +92,5 @@ Secrets.xcconfig
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+example/ios/.spm.pods
