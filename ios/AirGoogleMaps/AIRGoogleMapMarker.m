@@ -67,8 +67,10 @@ CGRect unionRect(CGRect a, CGRect b) {
 
     for (UIView *v in [_iconView subviews]) {
 
-        float fw = v.frame.origin.x + v.frame.size.width;
-        float fh = v.frame.origin.y + v.frame.size.height;
+        // frame includes a UIView transform. Custom markers can be scaled by
+        // Reanimated while entering, so use the stable layout bounds instead.
+        float fw = v.bounds.size.width;
+        float fh = v.bounds.size.height;
 
         width = MAX(fw, width);
         height = MAX(fh, height);
@@ -145,6 +147,10 @@ CGRect unionRect(CGRect a, CGRect b) {
     if (_zIndex){
         [_realMarker setZIndex:_zIndex];
     }
+    [self layoutSubviews];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self layoutSubviews];
+    });
     [_realMarker setMap:map];
 }
 
@@ -152,10 +158,16 @@ CGRect unionRect(CGRect a, CGRect b) {
     if (!_iconView){
         _iconView = [[UIView alloc] init];
     }
+    [_iconView insertSubview:subview atIndex:atIndex];
+    // Size _iconView to fit its children before setting it on the marker.
+    [self layoutSubviews];
     if (!_realMarker.iconView) {
         _realMarker.iconView = _iconView;
     }
-    [_iconView insertSubview:subview atIndex:atIndex];
+    // Fabric lays out children asynchronously, so measure once more next run loop.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self layoutSubviews];
+    });
 }
 
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
