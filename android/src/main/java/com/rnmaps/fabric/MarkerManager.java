@@ -3,6 +3,7 @@ package com.rnmaps.fabric;
 
 import android.graphics.Color;
 import android.view.View;
+import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,25 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     }
     private final RNMapsMarkerManagerDelegate<MapMarker, MarkerManager> delegate =
             new RNMapsMarkerManagerDelegate<>(this);
+    private final View.OnLayoutChangeListener markerLayoutChangeListener =
+            new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(
+                        View view,
+                        int left,
+                        int top,
+                        int right,
+                        int bottom,
+                        int oldLeft,
+                        int oldTop,
+                        int oldRight,
+                        int oldBottom) {
+                    ViewParent parent = view.getParent();
+                    if (parent instanceof MapMarker) {
+                        ((MapMarker) parent).update(right - left, bottom - top);
+                    }
+                }
+            };
 
     @Override
     public ViewManagerDelegate<MapMarker> getDelegate() {
@@ -290,19 +310,20 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
         } else {
             super.addView(parent, child, index);
             if (index == 0) {
-                child.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                    @Override
-                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                        int newWidth = right - left;
-                        int newHeight = bottom - top;
-                        MapMarker marker = (MapMarker) v.getParent();
-                        if(marker != null){
-                            marker.update(newWidth, newHeight);
-                        }
-                    }
-                });
+                child.removeOnLayoutChangeListener(markerLayoutChangeListener);
+                child.addOnLayoutChangeListener(markerLayoutChangeListener);
             }
             parent.update(true);
         }
+    }
+
+    @Override
+    public void removeViewAt(MapMarker parent, int index) {
+        View child = parent.getChildAt(index);
+        if (child != null) {
+            child.removeOnLayoutChangeListener(markerLayoutChangeListener);
+        }
+        super.removeViewAt(parent, index);
+        parent.update(true);
     }
 }
