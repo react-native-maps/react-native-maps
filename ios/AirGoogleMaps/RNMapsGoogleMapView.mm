@@ -552,6 +552,8 @@ using namespace facebook::react;
 
     if (!_view){
         [self prepareContentView];
+        _view.showsIndoors = newViewProps.showsIndoors;
+        _view.showsIndoorLevelPicker = newViewProps.showsIndoorLevelPicker;
     }
 
 #define REMAP_MAPVIEW_PROP(name)                    \
@@ -602,6 +604,8 @@ using namespace facebook::react;
     REMAP_MAPVIEW_STRING_PROP(kmlSrc)
     REMAP_MAPVIEW_STRING_PROP(customMapStyleString)
     REMAP_MAPVIEW_PROP(showsBuildings)
+    REMAP_MAPVIEW_PROP(showsIndoors)
+    REMAP_MAPVIEW_PROP(showsIndoorLevelPicker)
     REMAP_MAPVIEW_PROP(rotateEnabled)
 
 
