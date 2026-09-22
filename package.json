@@ -73,6 +73,7 @@
     "@react-native/typescript-config": "0.83.10",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
+    "@types/node": "^24.0.0",
     "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",
     "@types/jest": "^29.5.13",

@@ -1,10 +1,14 @@
-import {withAndroidManifest, type ConfigPlugin} from '@expo/config-plugins';
-import type {ConfigPluginProps} from './types';
 import {
+  AndroidConfig,
+  withAndroidManifest,
+  type ConfigPlugin,
+} from 'expo/config-plugins';
+import type {ConfigPluginProps} from './types';
+const {
   addMetaDataItemToMainApplication,
   getMainApplicationOrThrow,
   removeMetaDataItemFromMainApplication,
-} from '@expo/config-plugins/build/android/Manifest';
+} = AndroidConfig.Manifest;
 
 const withMapsAndroid: ConfigPlugin<ConfigPluginProps> = (config, props) => {
   config = withAndroidManifest(config, async conf => {
