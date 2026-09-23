@@ -127,6 +127,14 @@ export interface GoogleMarkerFabricNativeProps extends ViewProps {
   icon?: ImageSource | null;
 
   /**
+   * Pixel density the `icon` image is decoded at (rendered size in points =
+   * pixel size / iconScale). 0 falls back to the screen scale.
+   *
+   * @platform iOS: Google Maps only
+   */
+  iconScale?: Double;
+
+  /**
    * The coordinate for the marker.
    *
    * @platform iOS: Supported
