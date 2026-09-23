@@ -28,6 +28,24 @@ CGRect unionRect(CGRect a, CGRect b) {
 @interface AIRGoogleMapMarker ()
 @end
 
+/**
+ * Decoded marker icons, shared by every marker instance and keyed by source.
+ *
+ * Without it each marker loads and decodes its own copy of the same artwork,
+ * so a map with a few hundred pins performs a few hundred redundant reads and
+ * decodes of the same handful of files.
+ */
+static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
+{
+    static NSCache<NSString *, UIImage *> *cache = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cache = [NSCache new];
+        cache.countLimit = 128;
+    });
+    return cache;
+}
+
 @implementation AIRGoogleMapMarker {
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     RCTBubblingEventBlock _onPress;
@@ -426,29 +444,46 @@ CGRect unionRect(CGRect a, CGRect b) {
         _reloadImageCancellationBlock = nil;
     }
 
+    NSURL *url = [NSURL URLWithString:_iconSrc];
+    if (!url) {
+        return;
+    }
+
+    UIImage *cached = [AIRGoogleMapMarkerIconCache() objectForKey:iconSrc];
+    if (cached) {
+        // Applied synchronously: no blank frame when a marker that has already
+        // shown this icon sets it again.
+        _realMarker.icon = cached;
+        return;
+    }
+
     if (!_realMarker.icon) {
         // prevent glitch with marker (cf. https://github.com/react-native-maps/react-native-maps/issues/3657)
         UIImage *emptyImage = [[UIImage alloc] init];
         _realMarker.icon = emptyImage;
     }
 
-    _reloadImageCancellationBlock =
-    [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
-                                                               size:self.bounds.size
-                                                              scale:RCTScreenScale()
-                                                            clipped:YES
-                                                         resizeMode:RCTResizeModeCenter
-                                                      progressBlock:nil
-                                                   partialLoadBlock:nil
-                                                    completionBlock:^(NSError *error, UIImage *image) {
-        if (error) {
-            // TODO(lmr): do something with the error?
-            NSLog(@"%@", error);
+    // [RCTBridge currentBridge] is nil in bridgeless mode, so the RCTImageLoader
+    // lookup below returned nil there and the completion block never ran: the
+    // icon prop silently did nothing on the new architecture. Load the image
+    // directly instead, which works in both modes.
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        if (!data) {
+            NSLog(@"AIRGoogleMapMarker: failed to load icon from %@", url);
+            return;
         }
+        UIImage *image = [UIImage imageWithData:data scale:RCTScreenScale()];
+        if (!image) {
+            return;
+        }
+        [AIRGoogleMapMarkerIconCache() setObject:image forKey:iconSrc];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->_realMarker.icon = image;
+            if ([self->_iconSrc isEqualToString:iconSrc]) {
+                self->_realMarker.icon = image;
+            }
         });
-    }];
+    });
 }
 
 - (void)setTitle:(NSString *)title {
