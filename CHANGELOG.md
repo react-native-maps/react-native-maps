@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.11](https://github.com/react-native-maps/react-native-maps/compare/v1.29.10...v1.29.11) (2026-09-27)
+
+
+### Bug Fixes
+
+* **ios:** keep google marker icon when the marker is re-added to the map ([#5950](https://github.com/react-native-maps/react-native-maps/issues/5950)) ([b16c1af](https://github.com/react-native-maps/react-native-maps/commit/b16c1af66834c3f65d83dcfee5388288013877f3))
+
 ## [1.29.10](https://github.com/react-native-maps/react-native-maps/compare/v1.29.9...v1.29.10) (2026-09-27)
 
 
