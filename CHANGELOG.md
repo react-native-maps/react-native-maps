@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.10](https://github.com/react-native-maps/react-native-maps/compare/v1.29.9...v1.29.10) (2026-09-27)
+
+
+### Bug Fixes
+
+* **android:** re-attach the marker container after Google's MapView removes it ([#6013](https://github.com/react-native-maps/react-native-maps/issues/6013)) ([28dac45](https://github.com/react-native-maps/react-native-maps/commit/28dac45261c71f0f034b7017b9bb86ad731d4390))
+
 ## [1.29.9](https://github.com/react-native-maps/react-native-maps/compare/v1.29.8...v1.29.9) (2026-09-27)
 
 
