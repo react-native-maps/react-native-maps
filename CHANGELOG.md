@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.9](https://github.com/react-native-maps/react-native-maps/compare/v1.29.8...v1.29.9) (2026-09-27)
+
+
+### Bug Fixes
+
+* **ios:** size Google marker icon view from Fabric layout metrics ([#6011](https://github.com/react-native-maps/react-native-maps/issues/6011)) ([56b79a6](https://github.com/react-native-maps/react-native-maps/commit/56b79a65bb12048fc5c2650097cd155a90f03794))
+
 ## [1.29.8](https://github.com/react-native-maps/react-native-maps/compare/v1.29.7...v1.29.8) (2026-09-20)
 
 
