@@ -244,6 +244,11 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
     }
 
     @Override
+    public void setAppleLogoInsets(MapView view, @Nullable ReadableMap value) {
+        // not supported
+    }
+
+    @Override
     public void setLegalLabelInsets(MapView view, @Nullable ReadableMap value) {
         // not supported
     }

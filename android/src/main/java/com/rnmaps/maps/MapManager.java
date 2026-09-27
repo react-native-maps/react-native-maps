@@ -193,7 +193,9 @@ public class MapManager extends ViewGroupManager<MapView> {
         }
 
         view.applyBaseMapPadding(left, top, right, bottom);
-        view.map.setPadding(left, top, right, bottom);
+        if (view.map != null) {
+            view.map.setPadding(left, top, right, bottom);
+        }
     }
 
     @ReactProp(name = "showsUserLocation", defaultBoolean = false)

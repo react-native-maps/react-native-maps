@@ -245,6 +245,10 @@ id regionAsJSON(MKCoordinateRegion region) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
+  if (subview == nil) {
+    return;
+  }
+
   // Our desired API is to pass up markers/overlays as children to the mapview component.
   // This is where we intercept them and do the appropriate underlying mapview action.
   if ([subview isKindOfClass:[AIRGoogleMapMarker class]]) {
@@ -290,7 +294,9 @@ id regionAsJSON(MKCoordinateRegion region) {
       [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
     }
   }
-  [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
+  NSUInteger safeIndex = atIndex < 0 ? 0 : (NSUInteger)atIndex;
+  safeIndex = MIN(safeIndex, _reactSubviews.count);
+  [_reactSubviews insertObject:(UIView *)subview atIndex:safeIndex];
 }
 #pragma clang diagnostic pop
 

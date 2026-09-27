@@ -175,6 +175,15 @@ export interface MarkerFabricNativeProps extends ViewProps {
   draggable?: boolean;
 
   /**
+   * Sets whether this marker should be flat against the map true or a billboard facing the camera.
+   *
+   * @default false
+   * @platform iOS: Google Maps only
+   * @platform Android: Supported
+   */
+  flat?: boolean;
+
+  /**
    * The title of the marker.
    * This is only used if the <Marker /> component has no `<Callout />` children.
    *

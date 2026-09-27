@@ -15,6 +15,7 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
 
+@SuppressWarnings("deprecation")
 public class RNMapsUrlTileManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMapsUrlTileManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMapsUrlTileManagerDelegate(U viewManager) {
     super(viewManager);
