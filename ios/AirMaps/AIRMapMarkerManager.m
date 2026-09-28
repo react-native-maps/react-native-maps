@@ -26,7 +26,6 @@ RCT_EXPORT_MODULE()
 {
     AIRMapMarker *marker = [AIRMapMarker new];
     [marker addTapGestureRecognizer];
-    marker.bridge = self.bridge;
     marker.isAccessibilityElement = YES;
     marker.accessibilityElementsHidden = NO;
     return marker;
