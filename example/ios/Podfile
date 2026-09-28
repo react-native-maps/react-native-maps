@@ -5,13 +5,22 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, '15.1'
+# Set USE_GOOGLE_SPM=1 to test the GoogleSPM subspec instead of the default
+# Google (CocoaPods) one.
+use_google_spm = ENV['USE_GOOGLE_SPM'] == '1'
+
+# GoogleMaps/Google-Maps-iOS-Utils published via SPM require iOS 16.
+platform :ios, use_google_spm ? '16.0' : '15.1'
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
+elsif use_google_spm
+  # Static linkage, not the dynamic default, is what links GoogleMaps'
+  # symbols into react-native-maps' own framework.
+  use_frameworks! :linkage => :static
 end
 
 target 'rnmshowcase' do
@@ -24,7 +33,13 @@ target 'rnmshowcase' do
 
   rn_maps_path = '../..'
 
-  pod 'react-native-maps/Google', :path => rn_maps_path
+  if use_google_spm
+    spm_pkg 'GoogleMaps', :url => 'https://github.com/googlemaps/ios-maps-sdk', :version => '10.15.0'
+    spm_pkg 'GoogleMapsUtils', :url => 'https://github.com/googlemaps/google-maps-ios-utils', :version => '6.1.3'
+    pod 'react-native-maps/GoogleSPM', :path => rn_maps_path
+  else
+    pod 'react-native-maps/Google', :path => rn_maps_path
+  end
 
   post_install do |installer|
     react_native_post_install(
@@ -33,5 +48,21 @@ target 'rnmshowcase' do
       :mac_catalyst_enabled => false,
     )
 
+    if use_google_spm
+      user_project = installer.aggregate_targets.first.user_project
+      target = user_project.targets.find { |t| t.name == 'rnmshowcase' }
+      if target
+        target.build_configurations.each do |config|
+          existing = config.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] || '$(inherited)'
+          unless existing.split(' ').include?('USE_GOOGLE_SPM')
+            config.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = "#{existing} USE_GOOGLE_SPM"
+          end
+          config.build_settings['SWIFT_OBJC_BRIDGING_HEADER'] = 'rnmshowcase/rnmshowcase-Bridging-Header.h'
+          # `platform :ios` above only governs the Pods, not this target.
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+        end
+      end
+      user_project.save
+    end
   end
 end

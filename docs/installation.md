@@ -136,6 +136,59 @@ The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription wit
 
 That's it, you made it! 👍
 
+### Enabling Google Maps via Swift Package Manager (experimental)
+
+Google is phasing out CocoaPods releases of the Google Maps Platform iOS SDKs. As an alternative to the `Google` subspec above, `GoogleSPM` resolves GoogleMaps/Google-Maps-iOS-Utils via [Swift Package Manager](https://www.swift.org/documentation/package-manager/) instead, using the [`cocoapods-spm`](https://github.com/trinhngocthuyen/cocoapods-spm) plugin so integration stays automatic through a normal `pod install` - no manual Xcode "Package Dependencies" step required.
+
+**Requirements:**
+
+- iOS deployment target **16.0 or higher**. GoogleMaps and Google-Maps-iOS-Utils versions published via SPM (10.x+ / 6.1.3+ respectively) require it - set this in your Podfile (`platform :ios, '16.0'`) and in your Xcode project's deployment target.
+
+Add the plugin to your `Gemfile`:
+
+```ruby
+gem 'cocoapods-spm'
+```
+
+Then in your `Podfile`, declare the two package sources and select `GoogleSPM` instead of `Google`:
+
+```ruby
+platform :ios, '16.0'
+
+spm_pkg 'GoogleMaps', :url => 'https://github.com/googlemaps/ios-maps-sdk', :version => '10.15.0'
+spm_pkg 'GoogleMapsUtils', :url => 'https://github.com/googlemaps/google-maps-ios-utils', :version => '6.1.3'
+
+rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-maps/GoogleSPM', :path => rn_maps_path
+```
+
+`react-native-maps` should stay autolinked as normal (do **not** exclude it in `react-native.config.js` the way you might for other native dependencies) - autolinking is also what registers this library's Fabric components, so excluding it breaks map rendering with an `Unimplemented component: <RNMapsGoogleMapView>` error even though the native build succeeds.
+
+**AppDelegate:** `cocoapods-spm` links the GoogleMaps package to this library's own pod target, not to your app's target directly - attaching it there too would duplicate GoogleMaps' bundled resources and fail the build. So instead of importing `<GoogleMaps/GoogleMaps.h>` and calling `[GMSServices provideAPIKey:...]` from your `AppDelegate.m(m)` as shown above, do this instead:
+
+```diff
+-#import <GoogleMaps/GoogleMaps.h>
++#import <ReactNativeMaps/AIRGMSServicesProvider.h>
+
+ ...
+
+-[GMSServices provideAPIKey:@"_YOUR_API_KEY_"];
++[AIRGMSServicesProvider provideAPIKey:@"_YOUR_API_KEY_"];
+```
+
+If your `AppDelegate` is Swift, `import ReactNativeMaps` (even just from a bridging header) makes Swift build a full Clang module for it, which transitively pulls in React's C++-heavy Fabric/JSI headers and can fail depending on your project's settings. Forward-declare the plain C entry point in your bridging header instead, and call that:
+
+```c
+// YourApp-Bridging-Header.h
+extern void RNMapsProvideGoogleMapsAPIKey(const char *_Nonnull apiKey);
+```
+
+```swift
+RNMapsProvideGoogleMapsAPIKey(apiKey)
+```
+
+**Trying it out:** the `example/` app in this repo can be built against `GoogleSPM` by setting `USE_GOOGLE_SPM=1` before `pod install` (its `AppDelegate.swift` and `Podfile` already branch on this), without disturbing its default `Google` configuration.
+
 ---
 
 ## Android

@@ -3,7 +3,10 @@ import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 
+#if !USE_GOOGLE_SPM
 import GoogleMaps
+#endif
+// RNMapsProvideGoogleMapsAPIKey is forward-declared in the bridging header.
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,7 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
       if let MAPS_API_KEY = Bundle.main.object(forInfoDictionaryKey: "MAPS_API_KEY") as? String {
+#if USE_GOOGLE_SPM
+          RNMapsProvideGoogleMapsAPIKey(MAPS_API_KEY)
+#else
           GMSServices.provideAPIKey(MAPS_API_KEY)
+#endif
       }
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
