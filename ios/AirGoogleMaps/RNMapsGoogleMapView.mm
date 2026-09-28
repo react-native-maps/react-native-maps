@@ -613,7 +613,7 @@ using namespace facebook::react;
     REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
     REMAP_MAPVIEW_PROP(zoomEnabled)
-
+    REMAP_MAPVIEW_PROP(preventDefaultMarkerSelection)
 
     REMAP_MAPVIEW_REGION_PROP(region)
     REMAP_MAPVIEW_REGION_PROP(initialRegion)
