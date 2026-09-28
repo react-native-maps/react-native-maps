@@ -283,7 +283,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (view.moveOnMarkerPress) {
           return false;
         } else {
-          marker.showInfoWindow();
+          String title = marker.getTitle();
+          if (rnmMapMarker.getCalloutView() != null || (title != null && !title.isEmpty())) {
+            marker.showInfoWindow();
+          }
           return true;
         }
       }
