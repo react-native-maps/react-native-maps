@@ -93,6 +93,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private Bundle savedMapState;
     private ArrayList<MapFeature> savedFeatures = null;
     private boolean shouldRestorePadding = false;
+    private boolean mapCreated = false;
 
     private MarkerManager markerManager;
     private MarkerManager.Collection markerCollection;
@@ -205,7 +206,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     @Override
     public void onCreate(LifecycleOwner owner) {
-        super.onCreate(null);
+        if (!mapCreated) {
+            mapCreated = true;
+            super.onCreate(null);
+        }
     }
 
     @Override
@@ -332,11 +336,15 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         attachLifecycleObserver();
         if (savedMapState != null) {
-            super.onCreate(savedMapState);
+            if (!mapCreated) {
+                mapCreated = true;
+                super.onCreate(savedMapState);
+            }
             super.onStart();
             super.onResume();
             prepareAttacherView();
             getMapAsync((map)->{
+                removeSavedFeaturesFromPreviousCollections();
                 onMapReady(map);
                 if (savedFeatures != null && !savedFeatures.isEmpty()) {
                     features.clear();
@@ -355,38 +363,68 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
+    private void removeSavedFeaturesFromPreviousCollections() {
+        if (markerCollection != null) markerCollection.clear();
+        if (polylineCollection != null) polylineCollection.clear();
+        if (polygonCollection != null) polygonCollection.clear();
+        if (circleCollection != null) circleCollection.clear();
+        if (groundOverlayCollection != null) groundOverlayCollection.clear();
+        if (savedFeatures == null || map == null) return;
+        for (MapFeature feature : savedFeatures) {
+            if (feature == null) continue;
+            boolean addedToMapDirectly = feature instanceof MapHeatmap
+                    || feature instanceof MapGradientPolyline
+                    || feature instanceof MapUrlTile
+                    || feature instanceof MapWMSTile
+                    || feature instanceof MapLocalTile;
+            if (addedToMapDirectly && feature.getFeature() != null) {
+                feature.removeFromMap(map);
+            }
+        }
+    }
+
     // Override onDetachedFromWindow to detach lifecycle observer
     @Override
     protected void onDetachedFromWindow() {
         synchronized (this) {
-            // Save instance state if not already saved and map is ready
-            if (map != null && isMapReady) {
-                try {
-                    if (savedMapState == null) {
-                        savedMapState = new Bundle();
+            if (!destroyed) {
+                // Save instance state if not already saved and map is ready
+                if (map != null && isMapReady) {
+                    try {
+                        if (savedMapState == null) {
+                            savedMapState = new Bundle();
+                        }
+                        super.onSaveInstanceState(savedMapState);
+                    } catch (Exception e) {
+                        Log.e("MapView", "Error saving state in onDetachedFromWindow: " + e.getMessage());
+                        // Continue with cleanup even if state saving fails
                     }
-                    super.onSaveInstanceState(savedMapState);
-                } catch (Exception e) {
-                    Log.e("MapView", "Error saving state in onDetachedFromWindow: " + e.getMessage());
-                    // Continue with cleanup even if state saving fails
                 }
-            }
 
-            // Pause safely if not already paused
-            if (!paused) {
-                pauseSafely();
+                // Pause safely if not already paused
+                if (!paused) {
+                    pauseSafely();
+                }
             }
         }
 
         // These operations don't need synchronization
-        try {
-            onStop();
-        } catch (Exception e) {
-            Log.e("MapView", "Error during stop in onDetachedFromWindow: " + e.getMessage());
+        if (!destroyed) {
+            try {
+                onStop();
+            } catch (Exception e) {
+                Log.e("MapView", "Error during stop in onDetachedFromWindow: " + e.getMessage());
+            }
         }
 
         savedFeatures = new ArrayList<>(features);
         features.clear();
+        markerMap.clear();
+        polylineMap.clear();
+        polygonMap.clear();
+        overlayMap.clear();
+        heatmapMap.clear();
+        gradientPolylineMap.clear();
         shouldRestorePadding = true;
         removeView(attacherGroup);
         attacherGroup = null;
