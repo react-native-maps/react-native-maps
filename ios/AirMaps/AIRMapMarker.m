@@ -43,6 +43,10 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     self = [super initWithFrame:frame];
     if (self) {
         [self.layer addObserver:self forKeyPath:@"zPosition" options:NSKeyValueObservingOptionNew context:nil];
+        // Match the JS defaults (titleVisibility 'visible', subtitleVisibility 'adaptive'): Fabric only
+        // pushes a prop that differs from its codegen default, so the unset ivar must already hold it.
+        _titleVisibility = MKFeatureVisibilityVisible;
+        _subtitleVisibility = MKFeatureVisibilityAdaptive;
     }
     return self;
 }
@@ -131,8 +135,9 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
             _markerView.draggable = self.draggable;
             _markerView.layer.zPosition = self.zIndex;
             _markerView.markerTintColor = self.pinColor;
-            _markerView.titleVisibility = self.titleVisibility ?: MKFeatureVisibilityHidden;
-            _markerView.subtitleVisibility = self.subtitleVisibility ?: MKFeatureVisibilityHidden;
+            // No `?:` fallback: MKFeatureVisibilityAdaptive is 0, so it would collapse to Hidden.
+            _markerView.titleVisibility = self.titleVisibility;
+            _markerView.subtitleVisibility = self.subtitleVisibility;
             _markerView.displayPriority = self.displayPriority;
             _markerView.zPriority = self.zIndex;
             _markerView.centerOffset = self.centerOffset;
