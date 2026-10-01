@@ -2,8 +2,11 @@
   "compilerOptions": {
     "outDir": "build",
     "rootDir": "src",
+    "declaration": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["./src"],
+  "include": ["./src", "../package.json"],
   "exclude": ["**/__mocks__/*", "**/__tests__/*"]
 }
