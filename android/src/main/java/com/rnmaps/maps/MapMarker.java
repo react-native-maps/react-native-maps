@@ -105,6 +105,7 @@ public class MapMarker extends MapFeature {
     private boolean tracksViewChangesActive = false;
 
     private boolean hasCustomMarkerView = false;
+    private boolean pendingDefaultIconCheck = false;
     private final MapMarkerManager markerManager;
     private String imageUri;
     private boolean loadingImage;
@@ -537,11 +538,20 @@ public class MapMarker extends MapFeature {
         super.requestLayout();
 
         if (getChildCount() == 0) {
-            if (hasCustomMarkerView) {
-                hasCustomMarkerView = false;
-                clearDrawableCache();
-                updateTracksViewChanges();
-                update(true);
+            if (hasCustomMarkerView && !pendingDefaultIconCheck) {
+                // Fabric removes a marker's children before it removes the marker itself. Switching
+                // to the default pin right away paints a red pin on a marker that is about to be
+                // removed, so only fall back once the marker is still childless on the next frame.
+                pendingDefaultIconCheck = true;
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    pendingDefaultIconCheck = false;
+                    if (getChildCount() == 0 && hasCustomMarkerView) {
+                        hasCustomMarkerView = false;
+                        clearDrawableCache();
+                        updateTracksViewChanges();
+                        update(true);
+                    }
+                });
             }
         } else {
             // custom subview
