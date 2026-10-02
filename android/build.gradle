@@ -36,11 +36,24 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && (project.newArchEnabled == "true" || project.newArchEnabled == true)
 }
 
+def hasBuiltInKotlinSupport() {
+    def major = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+
+    // Built-in Kotlin support was added in AGP 9, where it is enabled by default and can be
+    // turned off with the `android.builtInKotlin` Gradle property. When it is active, applying
+    // `kotlin-android` on top of it fails the build.
+    def builtInKotlin = project.findProperty('android.builtInKotlin')
+
+    return major >= 9 && (builtInKotlin == null || builtInKotlin.toString().toBoolean())
+}
+
 apply plugin: 'com.android.library'
 if (isNewArchitectureEnabled()) {
     apply plugin: 'com.facebook.react'
 }
-apply plugin: 'kotlin-android'
+if (!hasBuiltInKotlinSupport()) {
+    apply plugin: 'kotlin-android'
+}
 
 android {
     if (supportsNamespace()) {
