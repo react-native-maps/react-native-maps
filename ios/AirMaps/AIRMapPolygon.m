@@ -13,42 +13,42 @@
 
 - (void)setFillColor:(UIColor *)fillColor {
     _fillColor = fillColor;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setStrokeColor:(UIColor *)strokeColor {
     _strokeColor = strokeColor;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setStrokeWidth:(CGFloat)strokeWidth {
     _strokeWidth = strokeWidth;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setLineJoin:(CGLineJoin)lineJoin {
     _lineJoin = lineJoin;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setLineCap:(CGLineCap)lineCap {
     _lineCap = lineCap;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setMiterLimit:(CGFloat)miterLimit {
     _miterLimit = miterLimit;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setLineDashPhase:(CGFloat)lineDashPhase {
     _lineDashPhase = lineDashPhase;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setLineDashPattern:(NSArray <NSNumber *> *)lineDashPattern {
     _lineDashPattern = lineDashPattern;
-    [self update];
+    [self updateStyle];
 }
 
 - (void)setCoordinates:(NSArray<AIRMapCoordinate *> *)coordinates {
@@ -81,6 +81,25 @@
         }
         _interiorPolygons = polygons;
     }
+}
+
+// Style-only changes (colors, width, dash) update the existing renderer and
+// ask it to redraw. Removing and re-adding the overlay re-renders its tiles,
+// so animating a fill or stroke color flickered on every step. Geometry
+// changes (`setCoordinates:`) still go through `update`, because they replace
+// the renderer itself.
+- (void) updateStyle
+{
+    if (!_renderer) return;
+    _renderer.fillColor = _fillColor;
+    _renderer.strokeColor = _strokeColor;
+    _renderer.lineWidth = _strokeWidth;
+    _renderer.lineCap = _lineCap;
+    _renderer.lineJoin = _lineJoin;
+    _renderer.miterLimit = _miterLimit;
+    _renderer.lineDashPhase = _lineDashPhase;
+    _renderer.lineDashPattern = _lineDashPattern;
+    [_renderer setNeedsDisplay];
 }
 
 - (void) update
