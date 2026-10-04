@@ -24,6 +24,7 @@ public interface RNMapsMarkerManagerInterface<T extends View> extends ViewManage
   void setCoordinate(T view, @Nullable ReadableMap value);
   void setDescription(T view, @Nullable String value);
   void setDraggable(T view, boolean value);
+  void setFlat(T view, boolean value);
   void setTitle(T view, @Nullable String value);
   void setTracksViewChanges(T view, boolean value);
   void setIdentifier(T view, @Nullable String value);

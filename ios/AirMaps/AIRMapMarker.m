@@ -425,9 +425,9 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     CGRect reactFrame = self.frame;
 
     UIView *firstSubView = self.subviews.firstObject;
-    if (firstSubView && (CGRectGetWidth(firstSubView.frame) > CGRectGetWidth(reactFrame) ||
-                         CGRectGetHeight(firstSubView.frame) > CGRectGetHeight(reactFrame))) {
-        reactFrame = firstSubView.frame;
+    if (firstSubView && (CGRectGetWidth(firstSubView.bounds) > CGRectGetWidth(reactFrame) ||
+                         CGRectGetHeight(firstSubView.bounds) > CGRectGetHeight(reactFrame))) {
+        reactFrame.size = firstSubView.bounds.size;
     }
     [self reactSetFrame:reactFrame];
 }

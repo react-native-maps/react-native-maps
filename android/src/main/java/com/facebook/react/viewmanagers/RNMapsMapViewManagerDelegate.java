@@ -18,6 +18,7 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
 
+@SuppressWarnings("deprecation")
 public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMapsMapViewManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMapsMapViewManagerDelegate(U viewManager) {
     super(viewManager);
@@ -51,6 +52,9 @@ public class RNMapsMapViewManagerDelegate<T extends View, U extends BaseViewMana
         break;
       case "legalLabelInsets":
         mViewManager.setLegalLabelInsets(view, (ReadableMap) value);
+        break;
+      case "appleLogoInsets":
+        mViewManager.setAppleLogoInsets(view, (ReadableMap) value);
         break;
       case "liteMode":
         mViewManager.setLiteMode(view, value == null ? false : (boolean) value);

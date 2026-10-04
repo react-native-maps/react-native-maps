@@ -709,6 +709,14 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
 
         isMapReady = true;
+        // Google's MapView removes every child when its map delegate is created
+        // (MapView.zza.onCreate -> removeAllViews). That takes the attacher group added
+        // in our constructor with it, so custom marker views added before the first
+        // detach/re-attach cycle never reach the window and Fresco never loads their
+        // images. Put the group back as soon as the map is ready.
+        if (attacherGroup != null && attacherGroup.getParent() == null) {
+            addView(attacherGroup);
+        }
         if (kmlSrc != null) {
             setKmlSrc(kmlSrc);
             kmlSrc = null;
@@ -1225,6 +1233,10 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             // Ensure attacherGroup is not null before using it
             if (attacherGroup == null) {
                 prepareAttacherView();
+            } else if (attacherGroup.getParent() == null) {
+                // Orphaned by Google's removeAllViews (see onMapReady); re-add it so the
+                // marker view below actually attaches and its images load.
+                addView(attacherGroup);
             }
             // Add to the parent group
             attacherGroup.addView(annotation);
@@ -1363,7 +1375,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void updateExtraData(Object extraData) {
-        if (setPaddingDeferred && super.getHeight() > 0 && super.getWidth() > 0) {
+        if (setPaddingDeferred && map != null && super.getHeight() > 0 && super.getWidth() > 0) {
             CameraUpdate cu = CameraUpdateFactory.newCameraPosition(map.getCameraPosition());
 
             map.setPadding(edgeLeftPadding + baseLeftMapPadding,
@@ -1530,8 +1542,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     int edgeBottomPadding;
 
     public void applyBaseMapPadding(int left, int top, int right, int bottom) {
-        if (super.getHeight() <= 0 || super.getWidth() <= 0) {
-            // the map is not laid out yet and calling setPadding() now has no effect
+        if (map == null || super.getHeight() <= 0 || super.getWidth() <= 0) {
+            // the map is not ready or not laid out yet and calling setPadding() now
+            // has no effect, or crashes when the GoogleMap instance does not exist
             baseLeftMapPadding = left;
             baseRightMapPadding = right;
             baseTopMapPadding = top;

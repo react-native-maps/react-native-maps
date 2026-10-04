@@ -9,6 +9,7 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.animation.ObjectAnimator;
 import android.util.Property;
@@ -658,6 +659,22 @@ public class MapMarker extends MapFeature {
 
     private Bitmap mLastBitmapCreated = null;
 
+    // Walks the subtree to find the union of descendant bounds for bitmap sizing.
+    // Uses only laid-out dimensions — do NOT call View#measure() here (Fabric assertion).
+    private void expandSnapshotSizeFromSubtree(View view, int offsetX, int offsetY, int[] outWh) {
+        int w = view.getWidth() > 0 ? view.getWidth() : view.getMeasuredWidth();
+        int h = view.getHeight() > 0 ? view.getHeight() : view.getMeasuredHeight();
+        outWh[0] = Math.max(outWh[0], offsetX + w);
+        outWh[1] = Math.max(outWh[1], offsetY + h);
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                View child = group.getChildAt(i);
+                expandSnapshotSizeFromSubtree(child, offsetX + child.getLeft(), offsetY + child.getTop(), outWh);
+            }
+        }
+    }
+
     private void clearDrawableCache() {
         mLastBitmapCreated = null;
     }
@@ -665,6 +682,27 @@ public class MapMarker extends MapFeature {
     private Bitmap createDrawable() {
         int width = this.width <= 0 ? 100 : this.width;
         int height = this.height <= 0 ? 100 : this.height;
+
+        // Bitmap must cover laid-out custom-marker subtree; Yoga box alone can be too small (Fabric).
+        if (hasCustomMarkerView) {
+            int[] expanded = new int[] { width, height };
+            for (int i = 0; i < getChildCount(); i++) {
+                View child = getChildAt(i);
+                if (child instanceof MapCallout) {
+                    continue;
+                }
+                expandSnapshotSizeFromSubtree(child, child.getLeft(), child.getTop(), expanded);
+            }
+            width = expanded[0];
+            height = expanded[1];
+        }
+
+        if (width <= 0) {
+            width = 100;
+        }
+        if (height <= 0) {
+            height = 100;
+        }
 
         // Do not create the doublebuffer-bitmap each time. reuse it to save memory.
         Bitmap bitmap = mLastBitmapCreated;

@@ -758,6 +758,7 @@ RNMapsMarkerProps::RNMapsMarkerProps(
     coordinate(convertRawProp(context, rawProps, "coordinate", sourceProps.coordinate, {})),
     description(convertRawProp(context, rawProps, "description", sourceProps.description, {})),
     draggable(convertRawProp(context, rawProps, "draggable", sourceProps.draggable, {false})),
+    flat(convertRawProp(context, rawProps, "flat", sourceProps.flat, {false})),
     title(convertRawProp(context, rawProps, "title", sourceProps.title, {})),
     tracksViewChanges(convertRawProp(context, rawProps, "tracksViewChanges", sourceProps.tracksViewChanges, {true})),
     identifier(convertRawProp(context, rawProps, "identifier", sourceProps.identifier, {})),
@@ -818,6 +819,10 @@ folly::dynamic RNMapsMarkerProps::getDiffProps(
     
   if (draggable != oldProps->draggable) {
     result["draggable"] = draggable;
+  }
+    
+  if (flat != oldProps->flat) {
+    result["flat"] = flat;
   }
     
   if (title != oldProps->title) {

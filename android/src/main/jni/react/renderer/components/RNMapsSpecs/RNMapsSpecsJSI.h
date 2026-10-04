@@ -15,7 +15,6 @@
 namespace facebook::react {
 
 
-  
 #pragma mark - NativeAirMapsModuleLatLng
 
 template <typename P0, typename P1>
@@ -45,7 +44,6 @@ struct NativeAirMapsModuleLatLngBridging {
   static double latitudeToJs(jsi::Runtime &rt, decltype(types.latitude) value) {
     return bridging::toJs(rt, value);
   }
-
   static double longitudeToJs(jsi::Runtime &rt, decltype(types.longitude) value) {
     return bridging::toJs(rt, value);
   }
@@ -93,7 +91,6 @@ struct NativeAirMapsModuleMapBoundariesBridging {
   static jsi::Object northEastToJs(jsi::Runtime &rt, decltype(types.northEast) value) {
     return bridging::toJs(rt, value);
   }
-
   static jsi::Object southWestToJs(jsi::Runtime &rt, decltype(types.southWest) value) {
     return bridging::toJs(rt, value);
   }
@@ -141,7 +138,6 @@ struct NativeAirMapsModulePointBridging {
   static double xToJs(jsi::Runtime &rt, decltype(types.x) value) {
     return bridging::toJs(rt, value);
   }
-
   static double yToJs(jsi::Runtime &rt, decltype(types.y) value) {
     return bridging::toJs(rt, value);
   }
@@ -158,111 +154,84 @@ struct NativeAirMapsModulePointBridging {
   }
 };
 
-class JSI_EXPORT NativeAirMapsModuleCxxSpecJSI : public TurboModule {
-protected:
-  NativeAirMapsModuleCxxSpecJSI(std::shared_ptr<CallInvoker> jsInvoker);
-
-public:
-  virtual jsi::Value getCamera(jsi::Runtime &rt, double tag) = 0;
-  virtual jsi::Value getMarkersFrames(jsi::Runtime &rt, double tag, bool onlyVisible) = 0;
-  virtual jsi::Value getMapBoundaries(jsi::Runtime &rt, double tag) = 0;
-  virtual jsi::Value takeSnapshot(jsi::Runtime &rt, double tag, jsi::String config) = 0;
-  virtual jsi::Value getAddressFromCoordinates(jsi::Runtime &rt, double tag, jsi::Object coordinate) = 0;
-  virtual jsi::Value getPointForCoordinate(jsi::Runtime &rt, double tag, jsi::Object coordinate) = 0;
-  virtual jsi::Value getCoordinateForPoint(jsi::Runtime &rt, double tag, jsi::Object point) = 0;
-
-};
 
 template <typename T>
 class JSI_EXPORT NativeAirMapsModuleCxxSpec : public TurboModule {
 public:
-  jsi::Value create(jsi::Runtime &rt, const jsi::PropNameID &propName) override {
-    return delegate_.create(rt, propName);
-  }
-
-  std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime& runtime) override {
-    return delegate_.getPropertyNames(runtime);
-  }
-
   static constexpr std::string_view kModuleName = "RNMapsAirModule";
 
 protected:
-  NativeAirMapsModuleCxxSpec(std::shared_ptr<CallInvoker> jsInvoker)
-    : TurboModule(std::string{NativeAirMapsModuleCxxSpec::kModuleName}, jsInvoker),
-      delegate_(reinterpret_cast<T*>(this), jsInvoker) {}
-
-
+  NativeAirMapsModuleCxxSpec(std::shared_ptr<CallInvoker> jsInvoker) : TurboModule(std::string{NativeAirMapsModuleCxxSpec::kModuleName}, jsInvoker) {
+    methodMap_["getCamera"] = MethodMetadata {.argCount = 1, .invoker = __getCamera};
+    methodMap_["getMarkersFrames"] = MethodMetadata {.argCount = 2, .invoker = __getMarkersFrames};
+    methodMap_["getMapBoundaries"] = MethodMetadata {.argCount = 1, .invoker = __getMapBoundaries};
+    methodMap_["takeSnapshot"] = MethodMetadata {.argCount = 2, .invoker = __takeSnapshot};
+    methodMap_["getAddressFromCoordinates"] = MethodMetadata {.argCount = 2, .invoker = __getAddressFromCoordinates};
+    methodMap_["getPointForCoordinate"] = MethodMetadata {.argCount = 2, .invoker = __getPointForCoordinate};
+    methodMap_["getCoordinateForPoint"] = MethodMetadata {.argCount = 2, .invoker = __getCoordinateForPoint};
+  }
+  
 private:
-  class Delegate : public NativeAirMapsModuleCxxSpecJSI {
-  public:
-    Delegate(T *instance, std::shared_ptr<CallInvoker> jsInvoker) :
-      NativeAirMapsModuleCxxSpecJSI(std::move(jsInvoker)), instance_(instance) {
+  static jsi::Value __getCamera(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+    static_assert(
+      bridging::getParameterCount(&T::getCamera) == 2,
+      "Expected getCamera(...) to have 2 parameters");
+    return bridging::callFromJs<jsi::Value>(rt, &T::getCamera,  static_cast<NativeAirMapsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber());
+  }
 
-    }
+  static jsi::Value __getMarkersFrames(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+    static_assert(
+      bridging::getParameterCount(&T::getMarkersFrames) == 3,
+      "Expected getMarkersFrames(...) to have 3 parameters");
+    return bridging::callFromJs<jsi::Value>(rt, &T::getMarkersFrames,  static_cast<NativeAirMapsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber(),
+      count <= 1 ? throw jsi::JSError(rt, "Expected argument in position 1 to be passed") : args[1].asBool());
+  }
 
-    jsi::Value getCamera(jsi::Runtime &rt, double tag) override {
-      static_assert(
-          bridging::getParameterCount(&T::getCamera) == 2,
-          "Expected getCamera(...) to have 2 parameters");
+  static jsi::Value __getMapBoundaries(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+    static_assert(
+      bridging::getParameterCount(&T::getMapBoundaries) == 2,
+      "Expected getMapBoundaries(...) to have 2 parameters");
+    return bridging::callFromJs<jsi::Value>(rt, &T::getMapBoundaries,  static_cast<NativeAirMapsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber());
+  }
 
-      return bridging::callFromJs<jsi::Value>(
-          rt, &T::getCamera, jsInvoker_, instance_, std::move(tag));
-    }
-    jsi::Value getMarkersFrames(jsi::Runtime &rt, double tag, bool onlyVisible) override {
-      static_assert(
-          bridging::getParameterCount(&T::getMarkersFrames) == 3,
-          "Expected getMarkersFrames(...) to have 3 parameters");
+  static jsi::Value __takeSnapshot(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+    static_assert(
+      bridging::getParameterCount(&T::takeSnapshot) == 3,
+      "Expected takeSnapshot(...) to have 3 parameters");
+    return bridging::callFromJs<jsi::Value>(rt, &T::takeSnapshot,  static_cast<NativeAirMapsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber(),
+      count <= 1 ? throw jsi::JSError(rt, "Expected argument in position 1 to be passed") : args[1].asString(rt));
+  }
 
-      return bridging::callFromJs<jsi::Value>(
-          rt, &T::getMarkersFrames, jsInvoker_, instance_, std::move(tag), std::move(onlyVisible));
-    }
-    jsi::Value getMapBoundaries(jsi::Runtime &rt, double tag) override {
-      static_assert(
-          bridging::getParameterCount(&T::getMapBoundaries) == 2,
-          "Expected getMapBoundaries(...) to have 2 parameters");
+  static jsi::Value __getAddressFromCoordinates(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+    static_assert(
+      bridging::getParameterCount(&T::getAddressFromCoordinates) == 3,
+      "Expected getAddressFromCoordinates(...) to have 3 parameters");
+    return bridging::callFromJs<jsi::Value>(rt, &T::getAddressFromCoordinates,  static_cast<NativeAirMapsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber(),
+      count <= 1 ? throw jsi::JSError(rt, "Expected argument in position 1 to be passed") : args[1].asObject(rt));
+  }
 
-      return bridging::callFromJs<jsi::Value>(
-          rt, &T::getMapBoundaries, jsInvoker_, instance_, std::move(tag));
-    }
-    jsi::Value takeSnapshot(jsi::Runtime &rt, double tag, jsi::String config) override {
-      static_assert(
-          bridging::getParameterCount(&T::takeSnapshot) == 3,
-          "Expected takeSnapshot(...) to have 3 parameters");
+  static jsi::Value __getPointForCoordinate(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+    static_assert(
+      bridging::getParameterCount(&T::getPointForCoordinate) == 3,
+      "Expected getPointForCoordinate(...) to have 3 parameters");
+    return bridging::callFromJs<jsi::Value>(rt, &T::getPointForCoordinate,  static_cast<NativeAirMapsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber(),
+      count <= 1 ? throw jsi::JSError(rt, "Expected argument in position 1 to be passed") : args[1].asObject(rt));
+  }
 
-      return bridging::callFromJs<jsi::Value>(
-          rt, &T::takeSnapshot, jsInvoker_, instance_, std::move(tag), std::move(config));
-    }
-    jsi::Value getAddressFromCoordinates(jsi::Runtime &rt, double tag, jsi::Object coordinate) override {
-      static_assert(
-          bridging::getParameterCount(&T::getAddressFromCoordinates) == 3,
-          "Expected getAddressFromCoordinates(...) to have 3 parameters");
-
-      return bridging::callFromJs<jsi::Value>(
-          rt, &T::getAddressFromCoordinates, jsInvoker_, instance_, std::move(tag), std::move(coordinate));
-    }
-    jsi::Value getPointForCoordinate(jsi::Runtime &rt, double tag, jsi::Object coordinate) override {
-      static_assert(
-          bridging::getParameterCount(&T::getPointForCoordinate) == 3,
-          "Expected getPointForCoordinate(...) to have 3 parameters");
-
-      return bridging::callFromJs<jsi::Value>(
-          rt, &T::getPointForCoordinate, jsInvoker_, instance_, std::move(tag), std::move(coordinate));
-    }
-    jsi::Value getCoordinateForPoint(jsi::Runtime &rt, double tag, jsi::Object point) override {
-      static_assert(
-          bridging::getParameterCount(&T::getCoordinateForPoint) == 3,
-          "Expected getCoordinateForPoint(...) to have 3 parameters");
-
-      return bridging::callFromJs<jsi::Value>(
-          rt, &T::getCoordinateForPoint, jsInvoker_, instance_, std::move(tag), std::move(point));
-    }
-
-  private:
-    friend class NativeAirMapsModuleCxxSpec;
-    T *instance_;
-  };
-
-  Delegate delegate_;
+  static jsi::Value __getCoordinateForPoint(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
+    static_assert(
+      bridging::getParameterCount(&T::getCoordinateForPoint) == 3,
+      "Expected getCoordinateForPoint(...) to have 3 parameters");
+    return bridging::callFromJs<jsi::Value>(rt, &T::getCoordinateForPoint,  static_cast<NativeAirMapsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asNumber(),
+      count <= 1 ? throw jsi::JSError(rt, "Expected argument in position 1 to be passed") : args[1].asObject(rt));
+  }
 };
 
 } // namespace facebook::react

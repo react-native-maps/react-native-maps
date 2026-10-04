@@ -25,6 +25,7 @@ public interface RNMapsMapViewManagerInterface<T extends View> extends ViewManag
   void setInitialRegion(T view, @Nullable ReadableMap value);
   void setKmlSrc(T view, @Nullable String value);
   void setLegalLabelInsets(T view, @Nullable ReadableMap value);
+  void setAppleLogoInsets(T view, @Nullable ReadableMap value);
   void setLiteMode(T view, boolean value);
   void setGoogleMapId(T view, @Nullable String value);
   void setGoogleRenderer(T view, @Nullable String value);

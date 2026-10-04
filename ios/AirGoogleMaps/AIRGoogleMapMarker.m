@@ -34,6 +34,7 @@ CGRect unionRect(CGRect a, CGRect b) {
     RCTDirectEventBlock _onSelect;
     RCTDirectEventBlock _onDeselect;
     __weak UIImageView *_iconImageView;
+    UIImage *_iconImage;
     UIView *_iconView;
     UIColor *_pinColor;
     CLLocationCoordinate2D _coordinates;
@@ -129,6 +130,13 @@ CGRect unionRect(CGRect a, CGRect b) {
     [_realMarker setTappable:_tappable];
     if (_pinColor){
         _realMarker.icon = [GMSMarker markerImageWithColor:_pinColor];
+    }
+    if (_iconSrc){
+        if (_iconImage){
+            _realMarker.icon = _iconImage;
+        } else {
+            [self setIconSrc:_iconSrc];
+        }
     }
     if (_opacity != 1.0){
         [_realMarker setOpacity:_opacity];
@@ -420,6 +428,7 @@ CGRect unionRect(CGRect a, CGRect b) {
 - (void)setIconSrc:(NSString *)iconSrc
 {
     _iconSrc = iconSrc;
+    _iconImage = nil;
 
     if (_reloadImageCancellationBlock) {
         _reloadImageCancellationBlock();
@@ -446,6 +455,7 @@ CGRect unionRect(CGRect a, CGRect b) {
             NSLog(@"%@", error);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
+            self->_iconImage = image;
             self->_realMarker.icon = image;
         });
     }];
