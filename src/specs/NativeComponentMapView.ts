@@ -248,7 +248,7 @@ export type MarkerPressEventHandler = DirectEventHandler<
     position?: {
       x: Double; // Inlined Point
       y: Double;
-    }; // Optional position for Android
+    }; // Optional position for Android and iOS Apple Maps
   }>
 >;
 

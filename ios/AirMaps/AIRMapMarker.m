@@ -289,7 +289,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     }
 
     // the actual marker got clicked
-    CGPoint touchPointReal = [recognizer locationInView:self.calloutView];
+    CGPoint touchPointReal = [recognizer locationInView:marker.map];
     id event = @{
         @"action": @"marker-press",
         @"id": marker.identifier ?: @"unknown",

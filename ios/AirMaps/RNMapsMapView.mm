@@ -425,7 +425,24 @@ mapViewEventEmitter->emitterFunction(data);                               \
     };
 
     _view.onMarkerPress = [self](NSDictionary* dictionary) {
-        HANDLE_MARKER_EVENT(OnMarkerPress, onMarkerPress, "marker-press");
+        if (_eventEmitter) {
+            NSDictionary* coordinateDict = dictionary[@"coordinate"];
+            NSDictionary* positionDict = dictionary[@"position"];
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsMapViewEventEmitter::OnMarkerPress data = {
+                .action = "marker-press",
+                .id = std::string([[dictionary valueForKey:@"id"] UTF8String]),
+                .coordinate = {
+                    .latitude = [coordinateDict[@"latitude"] doubleValue],
+                    .longitude = [coordinateDict[@"longitude"] doubleValue],
+                },
+                .position = {
+                    .x = [positionDict[@"x"] doubleValue],
+                    .y = [positionDict[@"y"] doubleValue],
+                },
+            };
+            mapViewEventEmitter->onMarkerPress(data);
+        }
     };
 }
 - (instancetype)initWithFrame:(CGRect)frame
