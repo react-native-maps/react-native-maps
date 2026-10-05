@@ -66,7 +66,7 @@ using namespace facebook::react;
 
 - (void) animateToCoordinates:(double)latitude longitude:(double)longitude duration:(NSInteger)duration
 {
-    [_view animateToCoordinate:CLLocationCoordinate2DMake(latitude, longitude) duration:duration/1000];
+    [_view animateToCoordinate:CLLocationCoordinate2DMake(latitude, longitude) duration:duration/1000.0];
 }
 
 - (void) showCallout
