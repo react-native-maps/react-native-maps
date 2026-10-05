@@ -112,8 +112,8 @@ using namespace facebook::react;
 
             // Populate the OnCalloutPressPoint struct
             facebook::react::RNMapsMarkerEventEmitter::OnPressPosition point = {
-                .x = [coordinateDict[@"x"] doubleValue],
-                .y = [coordinateDict[@"y"] doubleValue],
+                .x = [positionDict[@"x"] doubleValue],
+                .y = [positionDict[@"y"] doubleValue],
             };
 
 
@@ -141,8 +141,8 @@ using namespace facebook::react;
 
             // Populate the OnCalloutPressPoint struct
             facebook::react::RNMapsMarkerEventEmitter::OnDeselectPosition point = {
-                .x = [coordinateDict[@"x"] doubleValue],
-                .y = [coordinateDict[@"y"] doubleValue],
+                .x = [positionDict[@"x"] doubleValue],
+                .y = [positionDict[@"y"] doubleValue],
             };
 
 
@@ -228,8 +228,8 @@ using namespace facebook::react;
 
             // Populate the OnCalloutPressPoint struct
             facebook::react::RNMapsMarkerEventEmitter::OnSelectPosition point = {
-                .x = [coordinateDict[@"x"] doubleValue],
-                .y = [coordinateDict[@"y"] doubleValue],
+                .x = [positionDict[@"x"] doubleValue],
+                .y = [positionDict[@"y"] doubleValue],
             };
 
 

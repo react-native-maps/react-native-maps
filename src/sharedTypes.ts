@@ -95,7 +95,9 @@ export type MarkerPressEvent = NativeSyntheticEvent<{
   coordinate: LatLng;
 
   /**
-   * @platform Android
+   * Touch position relative to the map view.
+   * @platform iOS: Apple Maps only
+   * @platform Android: Supported
    */
   position?: Point;
 }>;
