@@ -1,15 +1,11 @@
-import type {ConfigPlugin} from '@expo/config-plugins/build/Plugin.types';
 import {
+  type ConfigPlugin,
   withAppDelegate,
   withInfoPlist,
   withPodfile,
-} from '@expo/config-plugins/build/plugins/ios-plugins';
+} from 'expo/config-plugins';
 
-import {
-  mergeContents,
-  removeContents,
-  type MergeResults,
-} from '@expo/config-plugins/build/utils/generateCode';
+import {mergeContents, removeContents, type MergeResults} from './generateCode';
 import type {ConfigPluginProps} from './types';
 
 export const MATCH_INIT =
