@@ -6,6 +6,7 @@ import {
   Platform,
   requireNativeComponent,
   type HostComponent,
+  type LayoutChangeEvent,
   type NativeSyntheticEvent,
   type ViewProps,
 } from 'react-native';
@@ -382,6 +383,27 @@ export type MapViewProps = ViewProps & {
    * @platform Android: Supported
    */
   onMapReady?: (event?: NativeSyntheticEvent<null>) => void;
+
+  /**
+   * Hold imperative camera commands (`fitToCoordinates`, `fitToElements`,
+   * `fitToSuppliedMarkers`, `animateToRegion`, `setRegion`, `setCamera`,
+   * `animateCamera`, `setMapBoundaries`) until the map is ready AND has a
+   * non-zero size, then run them in call order.
+   *
+   * Without it, a command issued before `onMapReady` is lost: on Android it
+   * is a no-op while the native map is not created yet, and on iOS (Apple
+   * Maps) the deferred `initialRegion` overwrites it once rendering starts.
+   * Commands issued while the view has no size (e.g. inside an animating
+   * sheet) can likewise be dropped.
+   *
+   * Queued commands run before `onMapReady` is called. Pending commands are
+   * discarded on unmount. Promise-returning methods are not affected.
+   *
+   * @default false
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  deferCommandsUntilReady?: boolean;
 
   /**
    * Callback that is called when a marker on the map becomes deselected.
@@ -798,6 +820,10 @@ class MapView extends React.Component<MapViewProps, State> {
 
   private fabricMap = React.createRef<FabricMapHandle>();
 
+  private pendingCommands: Array<() => void> = [];
+
+  private hasSize = false;
+
   constructor(props: MapViewProps) {
     super(props);
 
@@ -807,6 +833,11 @@ class MapView extends React.Component<MapViewProps, State> {
     };
 
     this._onMapReady = this._onMapReady.bind(this);
+    this._onLayout = this._onLayout.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.pendingCommands = [];
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -817,10 +848,41 @@ class MapView extends React.Component<MapViewProps, State> {
   private _onMapReady() {
     const {onMapReady} = this.props;
     this.setState({isReady: true}, () => {
+      this._flushPendingCommands();
       if (onMapReady) {
         onMapReady();
       }
     });
+  }
+
+  private _onLayout(event: LayoutChangeEvent) {
+    const {width, height} = event.nativeEvent.layout;
+    this.hasSize = width > 0 && height > 0;
+    if (this.props.onLayout) {
+      this.props.onLayout(event);
+    }
+    this._flushPendingCommands();
+  }
+
+  private _canRunCommands() {
+    return this.state.isReady && this.hasSize;
+  }
+
+  private _runOrDefer(command: () => void) {
+    if (!this.props.deferCommandsUntilReady || this._canRunCommands()) {
+      command();
+    } else {
+      this.pendingCommands.push(command);
+    }
+  }
+
+  private _flushPendingCommands() {
+    if (!this._canRunCommands() || this.pendingCommands.length === 0) {
+      return;
+    }
+    const commands = this.pendingCommands;
+    this.pendingCommands = [];
+    commands.forEach(command => command());
   }
 
   getCamera(): Promise<Camera> {
@@ -831,94 +893,108 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setCamera(camera: Partial<Camera>) {
-    if (this.fabricMap.current) {
-      this.fabricMap.current.setCamera(camera);
-    } else if (this.map.current) {
-      Commands.setCamera(this.map.current, camera);
-    }
+    this._runOrDefer(() => {
+      if (this.fabricMap.current) {
+        this.fabricMap.current.setCamera(camera);
+      } else if (this.map.current) {
+        Commands.setCamera(this.map.current, camera);
+      }
+    });
   }
 
   animateCamera(camera: Partial<Camera>, opts?: {duration?: number}) {
-    if (this.fabricMap.current) {
-      this.fabricMap.current.animateCamera(
-        camera,
-        opts?.duration ? opts.duration : 500,
-      );
-    } else if (this.map.current) {
-      Commands.animateCamera(
-        this.map.current,
-        camera,
-        opts?.duration ? opts.duration : 500,
-      );
-    }
+    this._runOrDefer(() => {
+      if (this.fabricMap.current) {
+        this.fabricMap.current.animateCamera(
+          camera,
+          opts?.duration ? opts.duration : 500,
+        );
+      } else if (this.map.current) {
+        Commands.animateCamera(
+          this.map.current,
+          camera,
+          opts?.duration ? opts.duration : 500,
+        );
+      }
+    });
   }
 
   animateToRegion(region: Region, duration: number = 500) {
-    if (this.fabricMap.current) {
-      this.fabricMap.current.animateToRegion(region, duration);
-    } else if (this.map.current) {
-      Commands.animateToRegion(this.map.current, region, duration);
-    }
+    this._runOrDefer(() => {
+      if (this.fabricMap.current) {
+        this.fabricMap.current.animateToRegion(region, duration);
+      } else if (this.map.current) {
+        Commands.animateToRegion(this.map.current, region, duration);
+      }
+    });
   }
   setRegion(region: Region) {
-    if (this.fabricMap.current) {
-      this.fabricMap.current.animateToRegion(region, 0);
-    }
-    //TODO fix for android
+    this._runOrDefer(() => {
+      if (this.fabricMap.current) {
+        this.fabricMap.current.animateToRegion(region, 0);
+      }
+      //TODO fix for android
+    });
   }
 
   fitToElements(options: FitToOptions = {}) {
-    const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-      animated = true,
-    } = options;
-    if (this.fabricMap.current) {
-      this.fabricMap.current.fitToElements(edgePadding, animated);
-    } else if (this.map.current) {
-      Commands.fitToElements(this.map.current, edgePadding, animated);
-    }
+    this._runOrDefer(() => {
+      const {
+        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+        animated = true,
+      } = options;
+      if (this.fabricMap.current) {
+        this.fabricMap.current.fitToElements(edgePadding, animated);
+      } else if (this.map.current) {
+        Commands.fitToElements(this.map.current, edgePadding, animated);
+      }
+    });
   }
 
   fitToSuppliedMarkers(markers: string[], options: FitToOptions = {}) {
-    const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-      animated = true,
-    } = options;
-    if (this.fabricMap.current) {
-      this.fabricMap.current.fitToSuppliedMarkers(
-        markers,
-        edgePadding,
-        animated,
-      );
-    } else if (this.map.current) {
-      Commands.fitToSuppliedMarkers(
-        this.map.current,
-        markers,
-        edgePadding,
-        animated,
-      );
-    }
+    this._runOrDefer(() => {
+      const {
+        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+        animated = true,
+      } = options;
+      if (this.fabricMap.current) {
+        this.fabricMap.current.fitToSuppliedMarkers(
+          markers,
+          edgePadding,
+          animated,
+        );
+      } else if (this.map.current) {
+        Commands.fitToSuppliedMarkers(
+          this.map.current,
+          markers,
+          edgePadding,
+          animated,
+        );
+      }
+    });
   }
 
   fitToCoordinates(coordinates: LatLng[] = [], options: FitToOptions = {}) {
-    const {
-      edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
-      animated = true,
-    } = options;
-    if (this.fabricMap.current) {
-      this.fabricMap.current.fitToCoordinates(
-        coordinates,
-        edgePadding,
-        animated,
-      );
-    } else if (this.map.current) {
-      Commands.fitToCoordinates(
-        this.map.current,
-        coordinates,
-        edgePadding,
-        animated,
-      );
-    }
+    this._runOrDefer(() => {
+      const {
+        edgePadding = {top: 0, right: 0, bottom: 0, left: 0},
+        animated = true,
+      } = options;
+      if (this.fabricMap.current) {
+        this.fabricMap.current.fitToCoordinates(
+          coordinates,
+          edgePadding,
+          animated,
+        );
+      } else if (this.map.current) {
+        Commands.fitToCoordinates(
+          this.map.current,
+          coordinates,
+          edgePadding,
+          animated,
+        );
+      }
+    });
   }
 
   /**
@@ -934,9 +1010,11 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   setMapBoundaries(northEast: LatLng, southWest: LatLng) {
-    if (this.map.current) {
-      Commands.setMapBoundaries(this.map.current, northEast, southWest);
-    }
+    this._runOrDefer(() => {
+      if (this.map.current) {
+        Commands.setMapBoundaries(this.map.current, northEast, southWest);
+      }
+    });
   }
 
   setIndoorActiveLevelIndex(activeLevelIndex: number) {
@@ -1220,6 +1298,10 @@ class MapView extends React.Component<MapViewProps, State> {
       props.style = this.props.style;
       props.initialCamera = this.props.initialCamera;
       props.onLayout = this.props.onLayout;
+    }
+
+    if (this.props.deferCommandsUntilReady) {
+      props.onLayout = this._onLayout;
     }
 
     const childrenNodes = this.state.isReady ? children : null;
