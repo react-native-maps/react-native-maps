@@ -98,6 +98,12 @@ id regionAsJSON(MKCoordinateRegion region) {
     // Set paddingAdjustmentBehavior immediately to prevent Google Maps SDK default behavior
     // from automatically adjusting padding based on safe area insets during initialization
     self.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorNever;
+
+    // Match the JS default of showsIndoorLevelPicker (false). GMSMapView turns the
+    // picker on by default, and updateProps only forwards a prop once it changes,
+    // so a mount that passes the default value never reaches the setter and the
+    // picker could not be turned off from JS at all.
+    self.settings.indoorPicker = NO;
     
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
