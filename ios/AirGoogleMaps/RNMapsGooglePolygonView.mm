@@ -144,13 +144,29 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
   const auto &newViewProps = *std::static_pointer_cast<RNMapsGooglePolygonProps const>(props);
 
 
+    /*
+     * Fabric recycles this component view. On reuse `_view` is nil, because
+     * `didRemoveFromMap` cleared it, so a brand new (empty) AIRGMSPolygon is
+     * created here. Every prop below is only applied when it differs from the
+     * previous props, so a recycled view that happens to receive the same
+     * coordinates as its previous tenant never gets its path assigned.
+     * `RNMapsGoogleMapView` then attaches it with `_view.map = map` and Google
+     * dereferences a null path in `CoordsToPoints`.
+     *
+     * A freshly created view has no meaningful "old props": re-apply all of
+     * them. `RNMapsGoogleMarkerView` already does the equivalent by resetting
+     * `_props` to the defaults in `prepareMarkerView`; the polygon cannot,
+     * because `oldViewProps` is captured before `prepareContentView` runs.
+     */
+    BOOL recreated = NO;
     if (!_view){
         [self prepareContentView];
+        recreated = YES;
     }
 
-#define REMAP_MAPVIEW_PROP(name)                    \
-    if (oldViewProps.name != newViewProps.name) {   \
-        _view.name = newViewProps.name;             \
+#define REMAP_MAPVIEW_PROP(name)                                \
+    if (recreated || oldViewProps.name != newViewProps.name) {  \
+        _view.name = newViewProps.name;                         \
     }
 
 #define REMAP_MAPVIEW_STRING_PROP(name)                             \
@@ -171,7 +187,7 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     // Rebuild the path when the coordinates change in count OR value. Comparing
     // only the count means moving an existing vertex (same point count, new
     // lat/lng) never updates the rendered shape.
-    bool coordsChanged = newViewProps.coordinates.size() != oldViewProps.coordinates.size();
+    bool coordsChanged = recreated || newViewProps.coordinates.size() != oldViewProps.coordinates.size();
     if (!coordsChanged) {
         for (size_t i = 0; i < newViewProps.coordinates.size(); i++) {
             if (newViewProps.coordinates.at(i).latitude  != oldViewProps.coordinates.at(i).latitude ||
@@ -192,7 +208,7 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
         _view.path = path;
     }
 
-    if (!areHolesEqual(newViewProps.holes, oldViewProps.holes)){
+    if (recreated || !areHolesEqual(newViewProps.holes, oldViewProps.holes)){
         NSMutableArray<GMSMutablePath *> *interiorPolygons = [NSMutableArray array];
         for(int h = 0; h < newViewProps.holes.size(); h++)
         {
@@ -219,7 +235,7 @@ bool areHolesEqual(const std::vector<std::vector<RNMapsGooglePolygonHolesStruct>
     if (newViewProps.strokeColor){
         _view.strokeColor = RCTUIColorFromSharedColor(newViewProps.strokeColor);
     }
-    if (newViewProps.strokeWidth != oldViewProps.strokeWidth){
+    if (recreated || newViewProps.strokeWidth != oldViewProps.strokeWidth){
         _view.strokeWidth = newViewProps.strokeWidth;
     }
 
