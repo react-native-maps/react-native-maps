@@ -399,6 +399,11 @@ export type MapViewProps = ViewProps & {
    * Queued commands run before `onMapReady` is called. Pending commands are
    * discarded on unmount. Promise-returning methods are not affected.
    *
+   * If `onMapReady` fires again on a map that was already ready — Android
+   * recreates the native map when its view is re-attached (e.g. returning
+   * from another screen, #5948), and a command issued in between is lost —
+   * the most recent camera command is replayed once.
+   *
    * @default false
    * @platform iOS: Supported
    * @platform Android: Supported
@@ -824,6 +829,8 @@ class MapView extends React.Component<MapViewProps, State> {
 
   private hasSize = false;
 
+  private lastCommand: (() => void) | null = null;
+
   constructor(props: MapViewProps) {
     super(props);
 
@@ -838,6 +845,7 @@ class MapView extends React.Component<MapViewProps, State> {
 
   componentWillUnmount() {
     this.pendingCommands = [];
+    this.lastCommand = null;
   }
 
   setNativeProps(props: Partial<NativeProps>) {
@@ -847,8 +855,20 @@ class MapView extends React.Component<MapViewProps, State> {
 
   private _onMapReady() {
     const {onMapReady} = this.props;
+    // A second onMapReady means the native map was recreated (Android view
+    // re-attach): replay the last camera command unless the flush below
+    // already delivers a newer one.
+    const replay =
+      this.props.deferCommandsUntilReady &&
+      this.state.isReady &&
+      this.pendingCommands.length === 0
+        ? this.lastCommand
+        : null;
     this.setState({isReady: true}, () => {
       this._flushPendingCommands();
+      if (replay) {
+        this._runOrDefer(replay);
+      }
       if (onMapReady) {
         onMapReady();
       }
@@ -869,6 +889,9 @@ class MapView extends React.Component<MapViewProps, State> {
   }
 
   private _runOrDefer(command: () => void) {
+    if (this.props.deferCommandsUntilReady) {
+      this.lastCommand = command;
+    }
     if (!this.props.deferCommandsUntilReady || this._canRunCommands()) {
       command();
     } else {

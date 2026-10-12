@@ -190,6 +190,53 @@ describe('MapView deferCommandsUntilReady', () => {
       expect(onLayout.mock.calls[0][0].nativeEvent.layout.width).toBe(390);
     });
 
+    describe('onMapReady fires again (Android recreates the native map, #5948)', () => {
+      it('replays only the most recent command, once', () => {
+        const {map, handle, ready, layout} = render({
+          deferCommandsUntilReady: true,
+        });
+        layout(390, 240);
+        ready();
+        map.animateToRegion(REGION, 400); // e.g. zoom to current location
+        map.fitToCoordinates(COORDS); // sent while the native map is recreated
+        expect(handle.animateToRegion).toHaveBeenCalledTimes(1);
+        expect(handle.fitToCoordinates).toHaveBeenCalledTimes(1);
+
+        ready(); // native map recreated
+        expect(handle.animateToRegion).toHaveBeenCalledTimes(1);
+        expect(handle.fitToCoordinates).toHaveBeenCalledTimes(2);
+      });
+
+      it('replays nothing when no command was ever issued', () => {
+        const {handle, ready, layout} = render({deferCommandsUntilReady: true});
+        layout(390, 240);
+        ready();
+        ready();
+        Object.values(handle).forEach(fn => expect(fn).not.toHaveBeenCalled());
+      });
+
+      it('does not double a command still waiting in the queue', () => {
+        const {map, handle, ready, layout} = render({
+          deferCommandsUntilReady: true,
+        });
+        layout(390, 240);
+        ready();
+        layout(390, 0); // collapses — the next command queues
+        map.fitToCoordinates(COORDS);
+        ready(); // recreated while unsized: the queued fit stays queued
+        layout(390, 240);
+        expect(handle.fitToCoordinates).toHaveBeenCalledTimes(1);
+      });
+
+      it('replays nothing with the prop off (upstream behaviour)', () => {
+        const {map, handle, ready} = render();
+        ready();
+        map.fitToCoordinates(COORDS);
+        ready();
+        expect(handle.fitToCoordinates).toHaveBeenCalledTimes(1);
+      });
+    });
+
     it('discards pending commands on unmount', () => {
       const {map, handle, renderer, host} = render({
         deferCommandsUntilReady: true,
