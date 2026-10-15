@@ -47,6 +47,19 @@ export type ClickEvent = BubblingEventHandler<
   }>
 >;
 
+export type DoublePressEventHandler = DirectEventHandler<
+  Readonly<{
+    coordinate: {
+      latitude: Double; // Inlined LatLng
+      longitude: Double;
+    };
+    position: {
+      x: Double; // Inlined Point
+      y: Double;
+    };
+  }>
+>;
+
 export type KmlMarker = {
   id: string; // Non-nullable string
   title: string; // Non-nullable string
@@ -458,6 +471,14 @@ export interface MapFabricNativeProps extends ViewProps {
    * @deprecated on Apple Maps, use `cameraZoomRange` instead
    */
   minZoom?: Float;
+
+  /**
+   * Callback that is called when user double taps on the map.
+   *
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  onDoublePress?: DoublePressEventHandler;
 
   /**
    * Callback that is called when an indoor building is focused/unfocused

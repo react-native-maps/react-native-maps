@@ -327,7 +327,7 @@ export type MapViewProps = ViewProps & {
   /**
    * Callback that is called when user double taps on the map.
    *
-   * @platform iOS: Apple Maps only
+   * @platform iOS: Supported
    * @platform Android: Supported
    */
   onDoublePress?: (event: ClickEvent) => void;

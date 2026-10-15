@@ -933,15 +933,11 @@ id regionAsJSON(MKCoordinateRegion region) {
         for (NSObject* trg in origTargets) {
             NSObject* target = [trg valueForKey:@"target"];
             SEL action = [self getActionForTarget:trg];
-            isZoomTapGesture = [NSStringFromSelector(action) isEqualToString:@"handleZoomTapGesture:"];
+            isZoomTapGesture = isZoomTapGesture || [NSStringFromSelector(action) isEqualToString:@"handleZoomTapGesture:"];
             [origTargetsActions addObject:@{
                                             @"target": [NSValue valueWithNonretainedObject:target],
                                             @"action": NSStringFromSelector(action)
                                             }];
-        }
-        if (isZoomTapGesture && self.zoomTapEnabled == NO) {
-            [self removeGestureRecognizer:gestureRecognizer];
-            continue;
         }
 
         //replace with extendedMapGestureHandler
@@ -954,7 +950,11 @@ id regionAsJSON(MKCoordinateRegion region) {
         }
         [gestureRecognizer addTarget:self action:@selector(extendedMapGestureHandler:)];
 
-        [self.origGestureRecognizersMeta setObject:@{@"targets": origTargetsActions}
+        // The double-tap zoom stays attached even while zoomTapEnabled is off, so the prop
+        // can be turned off and on again after the map is created: extendedMapGestureHandler
+        // skips the zoom while it is off.
+        [self.origGestureRecognizersMeta setObject:@{@"targets": origTargetsActions,
+                                                     @"isZoomTap": @(isZoomTapGesture)}
                                             forKey:grHash];
     }
 }
@@ -1033,6 +1033,17 @@ id regionAsJSON(MKCoordinateRegion region) {
                 performOriginalActions = NO;
             }
         }
+    }
+
+    BOOL isZoomTap = [[[self.origGestureRecognizersMeta objectForKey:grHash] objectForKey:@"isZoomTap"] boolValue];
+    // The SDK's double-tap zoom recognizer sees every double tap on the map,
+    // so it reports them too, whether it zooms or not.
+    if (isZoomTap && gestureRecognizer.state == UIGestureRecognizerStateEnded && self.onDoublePress) {
+        CGPoint doubleTapPoint = [gestureRecognizer locationInView:self];
+        self.onDoublePress([self eventFromCoordinate:[self.projection coordinateForPoint:doubleTapPoint]]);
+    }
+    if (isZoomTap && !self.zoomTapEnabled) {
+        performOriginalActions = NO;
     }
 
     if (performOriginalActions) {
