@@ -28,6 +28,83 @@ CGRect unionRect(CGRect a, CGRect b) {
 @interface AIRGoogleMapMarker ()
 @end
 
+/**
+ * Decoded marker icons, shared by every marker instance and keyed by source
+ * plus the scale they are decoded at (see AIRGoogleMapMarkerIconKey).
+ *
+ * Without it each marker loads and decodes its own copy of the same artwork,
+ * so a map with a few hundred pins performs a few hundred redundant reads and
+ * decodes of the same handful of files.
+ *
+ * Every size an icon is shown at (`iconScale`) is an entry of its own, so the
+ * cache holds plenty: markers that change size, when selected or animated
+ * through a few sizes, keep reusing the same images. That matters to the Maps
+ * SDK too, which packs every distinct marker image into a shared texture: a
+ * new UIImage on every resize keeps adding to it.
+ */
+static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
+{
+    static NSCache<NSString *, UIImage *> *cache = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cache = [NSCache new];
+        cache.countLimit = 512;
+    });
+    return cache;
+}
+
+/**
+ * Icons being decoded right now, keyed like the cache, with the markers
+ * waiting for each (weakly held). Main thread only.
+ *
+ * When many markers switch to the same icon at once, the first one starts the
+ * decode and the rest join it: one decode instead of one per marker, and every
+ * waiting marker gets the icon in the same main-queue block, so they all switch
+ * together instead of one by one.
+ */
+static NSMutableDictionary<NSString *, NSHashTable *> *AIRGoogleMapMarkerIconWaiters(void)
+{
+    static NSMutableDictionary<NSString *, NSHashTable *> *waiters = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        waiters = [NSMutableDictionary new];
+    });
+    return waiters;
+}
+
+/** The cache key of an icon: its source plus the scale it is decoded at, which is baked into the UIImage. */
+static NSString *AIRGoogleMapMarkerIconKey(NSString *iconSrc, CGFloat scale)
+{
+    return [NSString stringWithFormat:@"%@|%f", iconSrc, scale];
+}
+
+/**
+ * Redraws an icon at the screen scale, preserving its point size.
+ *
+ * `iconScale` decodes the icon at a density other than the screen's, so the
+ * resulting UIImage has the right `size` but a `scale` the Maps SDK does not
+ * expect. The SDK packs marker icons into a shared texture atlas and sizes
+ * each slot from size * screenScale, so a bitmap larger than that (210px art
+ * shown at 56pt is scale 3.75, 1.25x the slot on a 3x screen) can overrun its
+ * slot. Handing the SDK a conventional screen-scale image avoids relying on
+ * how it handles the mismatch.
+ */
+static UIImage *AIRGoogleMapMarkerIconAtScreenScale(UIImage *image)
+{
+    if (!image || fabs(image.scale - RCTScreenScale()) < 0.0001) {
+        return image;
+    }
+
+    UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat preferredFormat];
+    format.scale = RCTScreenScale();
+    format.opaque = NO;
+
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:image.size format:format];
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+        [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
+    }];
+}
+
 @implementation AIRGoogleMapMarker {
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     RCTBubblingEventBlock _onPress;
@@ -425,40 +502,103 @@ CGRect unionRect(CGRect a, CGRect b) {
     }];
 }
 
+- (CGFloat)effectiveIconScale
+{
+    return _iconScale > 0 ? _iconScale : RCTScreenScale();
+}
+
 - (void)setIconSrc:(NSString *)iconSrc
 {
     _iconSrc = iconSrc;
-    _iconImage = nil;
 
     if (_reloadImageCancellationBlock) {
         _reloadImageCancellationBlock();
         _reloadImageCancellationBlock = nil;
     }
 
+    NSURL *url = [NSURL URLWithString:_iconSrc];
+    if (!url) {
+        _iconImage = nil;
+        return;
+    }
+
+    CGFloat scale = [self effectiveIconScale];
+    NSString *cacheKey = AIRGoogleMapMarkerIconKey(iconSrc, scale);
+
+    UIImage *cached = [AIRGoogleMapMarkerIconCache() objectForKey:cacheKey];
+    if (cached) {
+        // Applied synchronously: no blank frame when a marker that has already
+        // shown this icon sets it again.
+        _iconImage = cached;
+        _realMarker.icon = cached;
+        return;
+    }
+
+    // Not decoded yet: the marker keeps showing its current icon until the new
+    // one is ready, and so does _iconImage, so a re-insert in the meantime
+    // (didInsertInMap:) shows that icon instead of nothing.
     if (!_realMarker.icon) {
         // prevent glitch with marker (cf. https://github.com/react-native-maps/react-native-maps/issues/3657)
         UIImage *emptyImage = [[UIImage alloc] init];
         _realMarker.icon = emptyImage;
     }
 
-    _reloadImageCancellationBlock =
-    [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
-                                                               size:self.bounds.size
-                                                              scale:RCTScreenScale()
-                                                            clipped:YES
-                                                         resizeMode:RCTResizeModeCenter
-                                                      progressBlock:nil
-                                                   partialLoadBlock:nil
-                                                    completionBlock:^(NSError *error, UIImage *image) {
-        if (error) {
-            // TODO(lmr): do something with the error?
-            NSLog(@"%@", error);
+    // Already being decoded for another marker: wait for that decode.
+    NSHashTable *waiting = AIRGoogleMapMarkerIconWaiters()[cacheKey];
+    if (waiting) {
+        [waiting addObject:self];
+        return;
+    }
+    waiting = [NSHashTable weakObjectsHashTable];
+    [waiting addObject:self];
+    AIRGoogleMapMarkerIconWaiters()[cacheKey] = waiting;
+
+    // [RCTBridge currentBridge] is nil in bridgeless mode, so the RCTImageLoader
+    // lookup below returned nil there and the completion block never ran: the
+    // icon prop silently did nothing on the new architecture. Load the image
+    // directly instead, which works in both modes. `iconScale` sets the scale
+    // it is decoded at (display size = pixels / scale).
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        if (!data) {
+            NSLog(@"AIRGoogleMapMarker: failed to load icon from %@", url);
+        }
+        UIImage *image = data ? AIRGoogleMapMarkerIconAtScreenScale([UIImage imageWithData:data scale:scale]) : nil;
+        if (image) {
+            [AIRGoogleMapMarkerIconCache() setObject:image forKey:cacheKey];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->_iconImage = image;
-            self->_realMarker.icon = image;
+            NSHashTable *waiters = AIRGoogleMapMarkerIconWaiters()[cacheKey];
+            [AIRGoogleMapMarkerIconWaiters() removeObjectForKey:cacheKey];
+            if (!image) {
+                return;
+            }
+            // Every waiting marker that still wants this icon gets it in this one block.
+            for (AIRGoogleMapMarker *marker in waiters) {
+                if ([marker->_iconSrc isEqualToString:iconSrc] && [marker effectiveIconScale] == scale) {
+                    marker->_iconImage = image;
+                    marker->_realMarker.icon = image;
+                }
+            }
         });
-    }];
+    });
+}
+
+- (void)setIconSrc:(NSString *)iconSrc scale:(CGFloat)iconScale
+{
+    _iconScale = iconScale;
+    [self setIconSrc:iconSrc];
+}
+
+- (void)setIconScale:(CGFloat)iconScale
+{
+    if (_iconScale == iconScale) {
+        return;
+    }
+    _iconScale = iconScale;
+    if (_iconSrc) {
+        [self setIconSrc:_iconSrc];
+    }
 }
 
 - (void)setTitle:(NSString *)title {

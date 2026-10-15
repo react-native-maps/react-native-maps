@@ -146,6 +146,14 @@ export type MapMarkerProps = ViewProps & {
   icon?: ImageURISource | ImageRequireSource;
 
   /**
+   * Pixel density the `icon` image is decoded at (rendered size in points =
+   * pixel size / iconScale). 0 falls back to the screen scale.
+   *
+   * @platform iOS: Google Maps only
+   */
+  iconScale?: number;
+
+  /**
    * A string that can be used to identify this marker.
    *
    * @platform iOS: Supported

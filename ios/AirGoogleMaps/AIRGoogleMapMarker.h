@@ -31,6 +31,9 @@
 @property (nonatomic, assign) BOOL flat;
 @property (nonatomic, copy) NSString *imageSrc;
 @property (nonatomic, copy) NSString *iconSrc;
+@property (nonatomic, assign) CGFloat iconScale;
+/** Sets the icon source and scale together, so changing both loads the icon once. */
+- (void)setIconSrc:(NSString *)iconSrc scale:(CGFloat)iconScale;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, strong) UIColor *pinColor;
