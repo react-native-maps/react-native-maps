@@ -46,6 +46,25 @@ static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
     return cache;
 }
 
+/**
+ * Icons being decoded right now, keyed like the cache, with the markers
+ * waiting for each (weakly held). Main thread only.
+ *
+ * When many markers switch to the same icon at once, the first one starts the
+ * decode and the rest join it: one decode instead of one per marker, and every
+ * waiting marker gets the icon in the same main-queue block, so they all switch
+ * together instead of one by one.
+ */
+static NSMutableDictionary<NSString *, NSHashTable *> *AIRGoogleMapMarkerIconWaiters(void)
+{
+    static NSMutableDictionary<NSString *, NSHashTable *> *waiters = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        waiters = [NSMutableDictionary new];
+    });
+    return waiters;
+}
+
 @implementation AIRGoogleMapMarker {
     RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
     RCTBubblingEventBlock _onPress;
@@ -446,7 +465,6 @@ static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
 - (void)setIconSrc:(NSString *)iconSrc
 {
     _iconSrc = iconSrc;
-    _iconImage = nil;
 
     if (_reloadImageCancellationBlock) {
         _reloadImageCancellationBlock();
@@ -455,6 +473,7 @@ static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
 
     NSURL *url = [NSURL URLWithString:_iconSrc];
     if (!url) {
+        _iconImage = nil;
         return;
     }
 
@@ -467,11 +486,24 @@ static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
         return;
     }
 
+    // Not decoded yet: the marker keeps showing its current icon until the new
+    // one is ready, and so does _iconImage, so a re-insert in the meantime
+    // (didInsertInMap:) shows that icon instead of nothing.
     if (!_realMarker.icon) {
         // prevent glitch with marker (cf. https://github.com/react-native-maps/react-native-maps/issues/3657)
         UIImage *emptyImage = [[UIImage alloc] init];
         _realMarker.icon = emptyImage;
     }
+
+    // Already being decoded for another marker: wait for that decode.
+    NSHashTable *waiting = AIRGoogleMapMarkerIconWaiters()[iconSrc];
+    if (waiting) {
+        [waiting addObject:self];
+        return;
+    }
+    waiting = [NSHashTable weakObjectsHashTable];
+    [waiting addObject:self];
+    AIRGoogleMapMarkerIconWaiters()[iconSrc] = waiting;
 
     // [RCTBridge currentBridge] is nil in bridgeless mode, so the RCTImageLoader
     // lookup below returned nil there and the completion block never ran: the
@@ -481,17 +513,23 @@ static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
         NSData *data = [NSData dataWithContentsOfURL:url];
         if (!data) {
             NSLog(@"AIRGoogleMapMarker: failed to load icon from %@", url);
-            return;
         }
-        UIImage *image = [UIImage imageWithData:data scale:RCTScreenScale()];
-        if (!image) {
-            return;
+        UIImage *image = data ? [UIImage imageWithData:data scale:RCTScreenScale()] : nil;
+        if (image) {
+            [AIRGoogleMapMarkerIconCache() setObject:image forKey:iconSrc];
         }
-        [AIRGoogleMapMarkerIconCache() setObject:image forKey:iconSrc];
         dispatch_async(dispatch_get_main_queue(), ^{
-            if ([self->_iconSrc isEqualToString:iconSrc]) {
-                self->_iconImage = image;
-                self->_realMarker.icon = image;
+            NSHashTable *waiters = AIRGoogleMapMarkerIconWaiters()[iconSrc];
+            [AIRGoogleMapMarkerIconWaiters() removeObjectForKey:iconSrc];
+            if (!image) {
+                return;
+            }
+            // Every waiting marker that still wants this icon gets it in this one block.
+            for (AIRGoogleMapMarker *marker in waiters) {
+                if ([marker->_iconSrc isEqualToString:iconSrc]) {
+                    marker->_iconImage = image;
+                    marker->_realMarker.icon = image;
+                }
             }
         });
     });
