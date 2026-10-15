@@ -347,7 +347,7 @@ folly::dynamic RNMapsGoogleMarkerProps::getDiffProps(
     result["icon"] = toDynamic(icon);
   }
     
-  if (iconScale != oldProps->iconScale) {
+  if ((iconScale != oldProps->iconScale) && !(std::isnan(iconScale) && std::isnan(oldProps->iconScale))) {
     result["iconScale"] = iconScale;
   }
     
