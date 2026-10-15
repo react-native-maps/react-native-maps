@@ -57,6 +57,16 @@ payload.setProperty(runtime, "id", event.id);
 }
 
 
+void RNMapsGoogleMapViewEventEmitter::onUserTrackingModeChange(OnUserTrackingModeChange event) const {
+  dispatchEvent("userTrackingModeChange", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "userTrackingMode", event.userTrackingMode);
+payload.setProperty(runtime, "reason", event.reason);
+    return payload;
+  });
+}
+
+
 void RNMapsGoogleMapViewEventEmitter::onIndoorBuildingFocused(OnIndoorBuildingFocused event) const {
   dispatchEvent("indoorBuildingFocused", [event=std::move(event)](jsi::Runtime &runtime) {
     auto payload = jsi::Object(runtime);
@@ -944,6 +954,16 @@ void RNMapsMapViewEventEmitter::onUserLocationChange(OnUserLocationChange event)
   error.setProperty(runtime, "message", event.error.message);
   payload.setProperty(runtime, "error", error);
 }
+    return payload;
+  });
+}
+
+
+void RNMapsMapViewEventEmitter::onUserTrackingModeChange(OnUserTrackingModeChange event) const {
+  dispatchEvent("userTrackingModeChange", [event=std::move(event)](jsi::Runtime &runtime) {
+    auto payload = jsi::Object(runtime);
+    payload.setProperty(runtime, "userTrackingMode", event.userTrackingMode);
+payload.setProperty(runtime, "reason", event.reason);
     return payload;
   });
 }

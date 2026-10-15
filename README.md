@@ -278,6 +278,27 @@ This example displays some of them in a log as a demonstration.
 
 ### Tracking Region / Location
 
+Use `followsUserLocation` to keep the map centered on the user's location, or
+`userTrackingMode="followWithHeading"` to also follow the device heading. Both are
+supported on Apple Maps and Google Maps. Location permission and
+`showsUserLocation` are required.
+
+```jsx
+const [trackingMode, setTrackingMode] = useState('followWithHeading');
+
+<MapView
+  showsUserLocation
+  userTrackingMode={trackingMode}
+  onUserTrackingModeChange={({nativeEvent}) =>
+    setTrackingMode(nativeEvent.userTrackingMode)
+  }
+/>;
+```
+
+With `userTrackingMode`, moving the map with a gesture stops tracking. Set it to
+`follow` or `followWithHeading` to resume. Use `initialRegion` or `initialCamera`
+to set the starting view while tracking.
+
 ![](http://i.giphy.com/3o6UBoPSLlIKQ2dv7q.gif) ![](http://i.giphy.com/xT77XWjqECvdgjx9oA.gif)
 
 ### Programmatically Changing Region

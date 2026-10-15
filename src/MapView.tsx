@@ -50,6 +50,8 @@ import type {
   PoiClickEvent,
   SnapshotOptions,
   UserLocationChangeEvent,
+  UserTrackingMode,
+  UserTrackingModeChangeEvent,
 } from './MapView.types';
 import type {Modify} from './sharedTypesInternal';
 import {
@@ -126,10 +128,22 @@ export type MapViewProps = ViewProps & {
    * This only works if `showsUserLocation` is true and the user has shared their location.
    *
    * @default false
-   * @platform iOS: Apple Maps only
-   * @platform Android: Not supported
+   * @platform iOS: Supported
+   * @platform Android: Supported
    */
   followsUserLocation?: boolean;
+
+  /**
+   * Native camera tracking. `followWithHeading` follows device heading as well as position.
+   * Requires showsUserLocation and existing location permission. Overrides followsUserLocation.
+   * Leave region/camera uncontrolled while tracking. Defaults to legacy followsUserLocation behavior.
+   * @platform iOS: Supported
+   * @platform Android: Supported
+   */
+  userTrackingMode?: UserTrackingMode;
+
+  /** Reports native mode changes, including cancellation by a user gesture. */
+  onUserTrackingModeChange?: (event: UserTrackingModeChangeEvent) => void;
 
   /**
    * If `false` the map will not capture PoI clicks
@@ -1118,6 +1132,12 @@ class MapView extends React.Component<MapViewProps, State> {
     }
   };
 
+  private handleUserTrackingModeChange = (
+    event: UserTrackingModeChangeEvent,
+  ) => {
+    this.props.onUserTrackingModeChange?.(event);
+  };
+
   private handleIndoorBuildingFocused = (event: any) => {
     if (this.props.onIndoorBuildingFocused) {
       if (typeof event.nativeEvent.levels === 'string') {
@@ -1161,6 +1181,7 @@ class MapView extends React.Component<MapViewProps, State> {
       onRegionChangeStart,
       onRegionChange,
       onRegionChangeComplete,
+      onUserTrackingModeChange,
       onPress,
       onMapReady,
       minZoomLevel,
@@ -1196,6 +1217,7 @@ class MapView extends React.Component<MapViewProps, State> {
       onRegionChangeStart: this.handleRegionChangeStarted,
       onRegionChangeComplete: this.handleRegionChangeComplete,
       onIndoorBuildingFocused: this.handleIndoorBuildingFocused,
+      onUserTrackingModeChange: this.handleUserTrackingModeChange as any,
       // @ts-ignore
       onIndoorLevelActivated: this.handleIndoorLevelActivated,
       onLongPress: this.handleLongPress,

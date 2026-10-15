@@ -203,6 +203,12 @@ public class MapManager extends ViewGroupManager<MapView> {
         view.setShowsUserLocation(showUserLocation);
     }
 
+    @ReactProp(name = "userTrackingMode")
+    public void setUserTrackingMode(MapView view, @Nullable String mode) { view.setUserTrackingMode(mode); }
+
+    @ReactProp(name = "followsUserLocation", defaultBoolean = false)
+    public void setFollowsUserLocation(MapView view, boolean follows) { view.setFollowsUserLocation(follows); }
+
     @ReactProp(name = "userLocationPriority")
     public void setUserLocationPriority(MapView view, @Nullable String accuracy) {
         view.setUserLocationPriority(MY_LOCATION_PRIORITY.get(accuracy));
@@ -434,6 +440,8 @@ public class MapManager extends ViewGroupManager<MapView> {
                 "onMarkerPress", MapBuilder.of("registrationName", "onMarkerPress"),
                 "onCalloutPress", MapBuilder.of("registrationName", "onCalloutPress")
         );
+
+        map.put("topUserTrackingModeChange", MapBuilder.of("registrationName", "onUserTrackingModeChange"));
 
         map.putAll(MapBuilder.of(
                 "onUserLocationChange", MapBuilder.of("registrationName", "onUserLocationChange"),

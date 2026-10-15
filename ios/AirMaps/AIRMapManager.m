@@ -88,6 +88,8 @@ RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(userLocationAnnotationTitle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(userInterfaceStyle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(followsUserLocation, BOOL)
+RCT_REMAP_VIEW_PROPERTY(userTrackingMode, reactUserTrackingMode, NSString)
+RCT_EXPORT_VIEW_PROPERTY(onUserTrackingModeChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(userLocationCalloutEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsPointsOfInterest, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showsBuildings, BOOL)
@@ -906,10 +908,19 @@ static int kDragCenterContext;
         mapView.onUserLocationChange(event);
     }
 
-    if (mapView.followsUserLocation) {
+    if (mapView.followsUserLocation && !mapView.reactUserTrackingMode.length) {
         [mapView setCenterCoordinate:location.coordinate animated:YES];
     }
 
+}
+
+- (void)mapView:(AIRMap *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated
+{
+    if (!mapView.onUserTrackingModeChange || !mapView.reactUserTrackingMode.length) return;
+    NSString *value = mode == MKUserTrackingModeFollowWithHeading ? @"followWithHeading" :
+        (mode == MKUserTrackingModeFollow ? @"follow" : @"none");
+    NSString *reason = [value isEqualToString:mapView.reactUserTrackingMode] ? @"programmatic" : @"userInteraction";
+    mapView.onUserTrackingModeChange(@{@"userTrackingMode": value, @"reason": reason});
 }
 
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(BOOL)animated

@@ -8,6 +8,7 @@
 #ifdef HAVE_GOOGLE_MAPS
 
 #import "AIRGoogleMap.h"
+#import "RNMapsGoogleUserTracking.h"
 #import "AIRGoogleMapMarker.h"
 #import "AIRGoogleMapMarkerManager.h"
 #import "AIRGoogleMapPolygon.h"
@@ -76,6 +77,7 @@ id regionAsJSON(MKCoordinateRegion region) {
   BOOL _zoomTapEnabled;
   BOOL _isAnimating;
   NSString* _googleMapId;
+  RNMapsGoogleUserTracking *_userTracking;
 }
 
 - (instancetype)initWithMapId:(NSString *)mapId initialCamera:(GMSCameraPosition*) camera backgroundColor:(UIColor *) backgroundColor andZoomTapEnabled:(BOOL)zoomTapEnabled
@@ -116,6 +118,13 @@ id regionAsJSON(MKCoordinateRegion region) {
     _didPrepareMap = false;
     _didCallOnMapReady = false;
     _zoomTapEnabled = zoomTapEnabled;
+
+    _userTracking = [[RNMapsGoogleUserTracking alloc] initWithMap:self];
+    __weak AIRGoogleMap *weakSelf = self;
+    _userTracking.onModeChange = ^(NSString *mode, NSString *reason) {
+      AIRGoogleMap *map = weakSelf;
+      if (map.onUserTrackingModeChange) map.onUserTrackingModeChange(@{@"userTrackingMode": mode, @"reason": reason});
+    };
 
     // Listen to the myLocation property of GMSMapView.
     [self addObserver:self
@@ -390,8 +399,40 @@ id regionAsJSON(MKCoordinateRegion region) {
     };
 }
 
+- (void)animateToCameraPosition:(GMSCameraPosition *)camera {
+  NSUInteger generation = [_userTracking beginCameraAnimation];
+  __weak AIRGoogleMap *weakMap = self;
+  [CATransaction begin];
+  [CATransaction setCompletionBlock:^{
+    AIRGoogleMap *map = weakMap;
+    // A no-op camera animation may not emit idle. Real movement finishes in the SDK delegate.
+    if (map && !map->_isAnimating) [map->_userTracking endCameraAnimation:generation];
+  }];
+  [super animateToCameraPosition:camera];
+  [CATransaction commit];
+}
+
+- (void)animateWithCameraUpdate:(GMSCameraUpdate *)update {
+  NSUInteger generation = [_userTracking beginCameraAnimation];
+  __weak AIRGoogleMap *weakMap = self;
+  [CATransaction begin];
+  [CATransaction setCompletionBlock:^{
+    AIRGoogleMap *map = weakMap;
+    // A no-op camera animation may not emit idle. Real movement finishes in the SDK delegate.
+    if (map && !map->_isAnimating) [map->_userTracking endCameraAnimation:generation];
+  }];
+  [super animateWithCameraUpdate:update];
+  [CATransaction commit];
+}
+
+- (void)didMoveToWindow {
+  [super didMoveToWindow];
+  [_userTracking updateVisibility];
+}
+
 - (void)layoutSubviews {
   [super layoutSubviews];
+  [_userTracking updateVisibility];
   if(_didLayoutSubviews) return;
   _didLayoutSubviews = true;
 
@@ -528,6 +569,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)willMove:(BOOL)gesture {
+    if (gesture) [_userTracking cancelForGesture];
     _isAnimating = YES;
     GMSCameraPosition *position = self.camera;
     id event = @{@"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
@@ -559,6 +601,7 @@ id regionAsJSON(MKCoordinateRegion region) {
 }
 
 - (void)idleAtCameraPosition:(GMSCameraPosition *)position  isGesture:(BOOL)isGesture{
+  [_userTracking cameraDidBecomeIdle];
   id event = @{@"region": regionAsJSON([AIRGoogleMap makeGMSCameraPositionFromMap:self andGMSCameraPosition:position]),
                               @"isGesture": [NSNumber numberWithBool:isGesture],
                               };
@@ -691,6 +734,17 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 - (void)setShowsUserLocation:(BOOL)showsUserLocation {
   self.myLocationEnabled = showsUserLocation;
+  [_userTracking updateVisibility];
+}
+
+- (void)setUserTrackingMode:(NSString *)mode {
+  _userTrackingMode = [mode copy];
+  [_userTracking setMode:mode legacyFollow:_followsUserLocation];
+}
+
+- (void)setFollowsUserLocation:(BOOL)follows {
+  _followsUserLocation = follows;
+  [_userTracking setMode:_userTrackingMode legacyFollow:follows];
 }
 
 - (BOOL)showsUserLocation {
@@ -1062,6 +1116,7 @@ id regionAsJSON(MKCoordinateRegion region) {
                        context:(void *)context {
   if ([keyPath isEqualToString:@"myLocation"]){
     CLLocation *location = [object myLocation];
+    [_userTracking updateLocation:location];
 
     id event = @{@"coordinate": @{
                     @"latitude": @(location.coordinate.latitude),
