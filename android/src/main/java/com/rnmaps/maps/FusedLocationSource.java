@@ -21,6 +21,16 @@ public class FusedLocationSource implements LocationSource {
     private final FusedLocationProviderClient fusedLocationClientProviderClient;
     private final LocationRequest locationRequest;
     private LocationCallback locationCallback;
+    private long activationGeneration;
+    interface LocationObserver { void onLocation(Location location); }
+    private LocationObserver locationObserver;
+
+    void setLocationObserver(LocationObserver observer) { locationObserver = observer; }
+
+    private void deliverLocation(OnLocationChangedListener listener, Location location) {
+        listener.onLocationChanged(location);
+        if (locationObserver != null) locationObserver.onLocation(location);
+    }
 
     public FusedLocationSource(Context context){
         fusedLocationClientProviderClient =
@@ -31,34 +41,54 @@ public class FusedLocationSource implements LocationSource {
     }
 
     public void setPriority(int priority){
+        if (locationRequest.getPriority() == priority) return;
         locationRequest.setPriority(priority);
+        refreshLocationRequest();
     }
 
     public void setInterval(int interval){
+        if (locationRequest.getInterval() == interval) return;
         locationRequest.setInterval(interval);
+        refreshLocationRequest();
     }
 
     public void setFastestInterval(int fastestInterval){
+        if (locationRequest.getFastestInterval() == fastestInterval) return;
         locationRequest.setFastestInterval(fastestInterval);
+        refreshLocationRequest();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void refreshLocationRequest() {
+        if (locationCallback == null) return;
+        try {
+            // Updating the same callback replaces its request; it does not add a watcher.
+            fusedLocationClientProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        } catch (SecurityException ignored) {
+            // Permission can be revoked while the map is visible.
+        }
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void activate(final OnLocationChangedListener onLocationChangedListener) {
+        deactivate();
+        final long generation = ++activationGeneration;
         try {
             fusedLocationClientProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    if (location != null) {
-                        onLocationChangedListener.onLocationChanged(location);
+                    if (generation == activationGeneration && location != null) {
+                        deliverLocation(onLocationChangedListener, location);
                     }
                 }
             });
             locationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
+                    if (generation != activationGeneration) return;
                     for (Location location : locationResult.getLocations()) {
-                        onLocationChangedListener.onLocationChanged(location);
+                        deliverLocation(onLocationChangedListener, location);
                     }
                 }
             };
@@ -70,6 +100,10 @@ public class FusedLocationSource implements LocationSource {
 
     @Override
     public void deactivate() {
-        fusedLocationClientProviderClient.removeLocationUpdates(locationCallback);
+        activationGeneration++;
+        if (locationCallback != null) {
+            fusedLocationClientProviderClient.removeLocationUpdates(locationCallback);
+            locationCallback = null;
+        }
     }
 }

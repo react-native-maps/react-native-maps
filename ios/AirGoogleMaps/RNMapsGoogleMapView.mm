@@ -300,7 +300,17 @@ using namespace facebook::react;
           }
       };
 
-      _view.onUserLocationChange =  [self](NSDictionary* dictionary) {
+    _view.onUserTrackingModeChange = [self](NSDictionary *dictionary) {
+        if (_eventEmitter) {
+            auto emitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+            emitter->onUserTrackingModeChange({
+                .userTrackingMode = [dictionary[@"userTrackingMode"] UTF8String],
+                .reason = [dictionary[@"reason"] UTF8String],
+            });
+        }
+    };
+
+    _view.onUserLocationChange = [self](NSDictionary* dictionary) {
           if (_eventEmitter) {
 
               NSDictionary* coordinateDict = dictionary[@"coordinate"];
@@ -612,6 +622,8 @@ using namespace facebook::react;
     REMAP_MAPVIEW_PROP(showsMyLocationButton)
     REMAP_MAPVIEW_PROP(showsTraffic)
     REMAP_MAPVIEW_PROP(showsUserLocation)
+    REMAP_MAPVIEW_PROP(followsUserLocation)
+    REMAP_MAPVIEW_STRING_PROP(userTrackingMode)
     REMAP_MAPVIEW_PROP(zoomEnabled)
 
 

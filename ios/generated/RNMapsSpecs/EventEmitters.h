@@ -61,6 +61,11 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
  public:
   using ViewEventEmitter::ViewEventEmitter;
 
+  struct OnUserTrackingModeChange {
+      std::string userTrackingMode;
+    std::string reason;
+    };
+
   struct OnIndoorBuildingFocused {
       bool underground;
     int activeLevelIndex;
@@ -292,6 +297,8 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
       OnUserLocationChangeCoordinate coordinate;
     OnUserLocationChangeError error;
     };
+  void onUserTrackingModeChange(OnUserTrackingModeChange value) const;
+
   void onIndoorBuildingFocused(OnIndoorBuildingFocused value) const;
 
   void onIndoorLevelActivated(OnIndoorLevelActivated value) const;
@@ -775,6 +782,11 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
       OnUserLocationChangeCoordinate coordinate;
     OnUserLocationChangeError error;
     };
+
+  struct OnUserTrackingModeChange {
+      std::string userTrackingMode;
+    std::string reason;
+    };
   void onCalloutPress(OnCalloutPress value) const;
 
   void onDoublePress(OnDoublePress value) const;
@@ -816,6 +828,8 @@ class RNMapsMapViewEventEmitter : public ViewEventEmitter {
   void onRegionChangeComplete(OnRegionChangeComplete value) const;
 
   void onUserLocationChange(OnUserLocationChange value) const;
+
+  void onUserTrackingModeChange(OnUserTrackingModeChange value) const;
 };
 class RNMapsMarkerEventEmitter : public ViewEventEmitter {
  public:

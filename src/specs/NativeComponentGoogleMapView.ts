@@ -350,6 +350,15 @@ export type CameraZoomRange = Readonly<{
 }>;
 
 export interface MapFabricNativeProps extends ViewProps {
+  followsUserLocation?: WithDefault<boolean, false>;
+  userTrackingMode?: WithDefault<string, ''>;
+  onUserTrackingModeChange?: DirectEventHandler<
+    Readonly<{
+      userTrackingMode: string;
+      reason: string;
+    }>
+  >;
+
   /**
    * The camera view the map should display.
    *

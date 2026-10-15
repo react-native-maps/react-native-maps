@@ -31,6 +31,8 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 @property (nonatomic, copy) NSString *userLocationAnnotationTitle;
 @property (nonatomic, assign) BOOL followsUserLocation;
+@property (nonatomic, copy) NSString *reactUserTrackingMode;
+@property (nonatomic, copy) RCTDirectEventBlock onUserTrackingModeChange;
 @property (nonatomic, assign) BOOL userLocationCalloutEnabled;
 @property (nonatomic, assign) BOOL hasStartedRendering;
 @property (nonatomic, assign) BOOL cacheEnabled;

@@ -35,6 +35,9 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTDirectEventBlock onPanDrag;
 @property (nonatomic, copy) RCTDirectEventBlock onUserLocationChange;
+@property (nonatomic, copy) RCTDirectEventBlock onUserTrackingModeChange;
+@property (nonatomic, copy) NSString *userTrackingMode;
+@property (nonatomic, assign) BOOL followsUserLocation;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerPress;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerSelect;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerDeselect;

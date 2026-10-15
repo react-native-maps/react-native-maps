@@ -154,6 +154,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     private boolean destroyed = false;
     private final ThemedReactContext context;
     private final FusedLocationSource fusedLocationSource;
+    private final UserTrackingController userTracking;
 
     private ViewAttacherGroup attacherGroup;
     private LatLng tapLocation;
@@ -226,10 +227,12 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
             paused = false;
         }
+        updateUserTrackingActive();
     }
 
 
     public void pauseSafely() {
+        userTracking.setActive(false);
         if (hasPermissions() && map != null) {
             //noinspection MissingPermission
             map.setMyLocationEnabled(false);
@@ -262,11 +265,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                    GoogleMapOptions googleMapOptions) {
         super(context, googleMapOptions);
         this.context = context;
+        userTracking = new UserTrackingController(this);
         super.getMapAsync(this);
 
         final MapView view = this;
 
         fusedLocationSource = new FusedLocationSource(context);
+        fusedLocationSource.setLocationObserver(userTracking::onLocation);
 
         gestureDetector =
                 new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -358,6 +363,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     // Override onDetachedFromWindow to detach lifecycle observer
     @Override
     protected void onDetachedFromWindow() {
+        userTracking.setActive(false);
         synchronized (this) {
             // Save instance state if not already saved and map is ready
             if (map != null && isMapReady) {
@@ -643,6 +649,8 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
         });
 
+        updateUserTrackingActive();
+
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
@@ -676,6 +684,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         });
 
         map.setOnCameraMoveStartedListener(reason -> {
+            if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) userTracking.onGesture();
             cameraMoveReason = reason;
             LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
             boolean isGesture = GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE == reason;
@@ -786,6 +795,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         builder.put(OnMapLoadedEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapLoadedEvent.EVENT_NAME));
         builder.put(OnMapReadyEvent.EVENT_NAME, MapBuilder.of("registrationName", OnMapReadyEvent.EVENT_NAME));
         builder.put(OnUserLocationChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnUserLocationChangeEvent.EVENT_NAME));
+        builder.put(OnUserTrackingModeChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", "onUserTrackingModeChange"));
         builder.put(OnRegionChangeEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeEvent.EVENT_NAME));
         builder.put(OnRegionChangeStartEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeStartEvent.EVENT_NAME));
         builder.put(OnRegionChangeCompleteEvent.EVENT_NAME, MapBuilder.of("registrationName", OnRegionChangeCompleteEvent.EVENT_NAME));
@@ -804,6 +814,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             return;
         }
         destroyed = true;
+        userTracking.dispose();
         savedMapState = null;
         savedFeatures = null;
         try {
@@ -997,6 +1008,34 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
+    void onUserTrackingModeChange(String mode, String reason) {
+        WritableMap event = Arguments.createMap();
+        event.putString("userTrackingMode", mode);
+        event.putString("reason", reason);
+        dispatchEvent(event, OnUserTrackingModeChangeEvent::new);
+    }
+
+    private void updateUserTrackingActive() {
+        if (userTracking == null) return; // View visibility callbacks also run during construction.
+        userTracking.setActive(showUserLocation && map != null && !paused && !destroyed &&
+                isAttachedToWindow() && isShown() && getWindowVisibility() == VISIBLE && hasPermissions());
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        updateUserTrackingActive();
+    }
+
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        updateUserTrackingActive();
+    }
+
+    public void setUserTrackingMode(String mode) { userTracking.setMode(mode); }
+    public void setFollowsUserLocation(boolean follows) { userTracking.setLegacyFollow(follows); }
+
     public void setShowsUserLocation(boolean showUserLocation) {
         this.showUserLocation = showUserLocation; // hold onto this for lifecycle handling
         if (hasPermissions() && map != null) {
@@ -1004,6 +1043,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             //noinspection MissingPermission
             map.setMyLocationEnabled(showUserLocation);
         }
+        updateUserTrackingActive();
     }
 
     public void setUserLocationPriority(int priority) {
@@ -1413,13 +1453,23 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
+    private void animateCameraWithTracking(CameraUpdate update, @Nullable Integer duration) {
+        final long generation = userTracking.beginCameraAnimation();
+        GoogleMap.CancelableCallback callback = new GoogleMap.CancelableCallback() {
+            @Override public void onFinish() { userTracking.endCameraAnimation(generation); }
+            @Override public void onCancel() { userTracking.endCameraAnimation(generation); }
+        };
+        if (duration == null) map.animateCamera(update, callback);
+        else map.animateCamera(update, duration, callback);
+    }
+
     public void animateToCamera(CameraPosition position, int duration) {
         if (map == null) return;
         CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
         if (duration <= 0) {
             map.moveCamera(update);
         } else {
-            map.animateCamera(update, duration, null);
+            animateCameraWithTracking(update, duration);
         }
     }
 
@@ -1447,7 +1497,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         if (duration <= 0) {
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
         } else {
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration, null);
+            animateCameraWithTracking(CameraUpdateFactory.newLatLngBounds(bounds, 0), duration);
         }
     }
 
@@ -1477,7 +1527,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
 
             if (animated) {
-                map.animateCamera(cu);
+                animateCameraWithTracking(cu, null);
             } else {
                 map.moveCamera(cu);
             }
@@ -1521,7 +1571,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             }
 
             if (animated) {
-                map.animateCamera(cu);
+                animateCameraWithTracking(cu, null);
             } else {
                 map.moveCamera(cu);
             }
@@ -1598,7 +1648,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
 
         if (animated) {
-            map.animateCamera(cu);
+            animateCameraWithTracking(cu, null);
         } else {
             map.moveCamera(cu);
         }

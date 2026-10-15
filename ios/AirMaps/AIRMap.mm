@@ -555,6 +555,20 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     _followsUserLocation = followsUserLocation;
 }
 
+- (void)setReactUserTrackingMode:(NSString *)mode
+{
+    BOOL wasExplicit = _reactUserTrackingMode.length > 0;
+    _reactUserTrackingMode = [mode copy];
+    if (!mode.length) {
+        if (wasExplicit) [self setUserTrackingMode:MKUserTrackingModeNone animated:NO];
+        return; // Return control to the legacy boolean behavior.
+    }
+    MKUserTrackingMode tracking = MKUserTrackingModeNone;
+    if ([mode isEqualToString:@"follow"]) tracking = MKUserTrackingModeFollow;
+    else if ([mode isEqualToString:@"followWithHeading"]) tracking = MKUserTrackingModeFollowWithHeading;
+    [self setUserTrackingMode:tracking animated:YES];
+}
+
 - (void)setUserLocationCalloutEnabled:(BOOL)calloutEnabled
 {
     _userLocationCalloutEnabled = calloutEnabled;

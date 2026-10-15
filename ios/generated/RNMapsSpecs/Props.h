@@ -562,6 +562,8 @@ class RNMapsGoogleMapViewProps final : public ViewProps {
 
 #pragma mark - Props
 
+  bool followsUserLocation{false};
+  std::string userTrackingMode{std::string{""}};
   RNMapsGoogleMapViewCameraStruct camera{};
   RNMapsGoogleMapViewInitialCameraStruct initialCamera{};
   RNMapsGoogleMapViewInitialRegionStruct initialRegion{};
@@ -1561,6 +1563,7 @@ class RNMapsMapViewProps final : public ViewProps {
   RNMapsMapViewCameraStruct camera{};
   RNMapsMapViewCompassOffsetStruct compassOffset{};
   bool followsUserLocation{false};
+  std::string userTrackingMode{std::string{""}};
   bool poiClickEnabled{false};
   RNMapsMapViewInitialCameraStruct initialCamera{};
   RNMapsMapViewInitialRegionStruct initialRegion{};

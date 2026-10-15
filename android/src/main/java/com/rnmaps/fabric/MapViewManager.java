@@ -216,7 +216,12 @@ public class MapViewManager extends ViewGroupManager<MapView> implements RNMapsM
 
     @Override
     public void setFollowsUserLocation(MapView view, boolean value) {
-        // not supported
+        view.setFollowsUserLocation(value);
+    }
+
+    @Override
+    public void setUserTrackingMode(MapView view, @Nullable String value) {
+        view.setUserTrackingMode(value);
     }
 
     @Override

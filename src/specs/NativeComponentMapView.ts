@@ -394,6 +394,9 @@ export interface MapFabricNativeProps extends ViewProps {
    */
   followsUserLocation?: boolean;
 
+  // Empty means the legacy boolean remains in control; explicit "none" disables it.
+  userTrackingMode?: WithDefault<string, ''>;
+
   /**
    * If `false` the map will not capture PoI clicks
    * This can improve click handling on the map for android
@@ -785,6 +788,12 @@ export interface MapFabricNativeProps extends ViewProps {
    * @platform Android: Supported
    */
   onUserLocationChange?: UserLocationChangeEventHandler;
+  onUserTrackingModeChange?: DirectEventHandler<
+    Readonly<{
+      userTrackingMode: string;
+      reason: string;
+    }>
+  >;
 
   /**
    * Indicates how/when to affect padding with safe area insets
