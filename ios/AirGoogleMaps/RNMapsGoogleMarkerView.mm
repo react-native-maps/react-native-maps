@@ -327,16 +327,17 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y);  \
         }
     }
 
-    if (newViewProps.iconScale != oldViewProps.iconScale) {
-        [_view setIconScale:newViewProps.iconScale];
-    }
-
+    // Source and scale are applied together: a marker switching to an icon of
+    // another size changes both, and applying them one by one would decode a
+    // throwaway icon (the old source at the new scale) first.
     if (newViewProps.icon.uri != oldViewProps.icon.uri) {
         if (newViewProps.icon.uri.size()) {
-            [_view setIconSrc:RCTNSStringFromString(newViewProps.icon.uri)];
+            [_view setIconSrc:RCTNSStringFromString(newViewProps.icon.uri) scale:newViewProps.iconScale];
         } else {
-            [_view setIconSrc:nil];
+            [_view setIconSrc:nil scale:newViewProps.iconScale];
         }
+    } else if (newViewProps.iconScale != oldViewProps.iconScale) {
+        [_view setIconScale:newViewProps.iconScale];
     }
 
     if (newViewProps.description != oldViewProps.description) {

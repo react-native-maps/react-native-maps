@@ -35,6 +35,12 @@ CGRect unionRect(CGRect a, CGRect b) {
  * Without it each marker loads and decodes its own copy of the same artwork,
  * so a map with a few hundred pins performs a few hundred redundant reads and
  * decodes of the same handful of files.
+ *
+ * Every size an icon is shown at (`iconScale`) is an entry of its own, so the
+ * cache holds plenty: markers that change size, when selected or animated
+ * through a few sizes, keep reusing the same images. That matters to the Maps
+ * SDK too, which packs every distinct marker image into a shared texture: a
+ * new UIImage on every resize keeps adding to it.
  */
 static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
 {
@@ -42,7 +48,7 @@ static NSCache<NSString *, UIImage *> *AIRGoogleMapMarkerIconCache(void)
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         cache = [NSCache new];
-        cache.countLimit = 128;
+        cache.countLimit = 512;
     });
     return cache;
 }
@@ -576,6 +582,12 @@ static UIImage *AIRGoogleMapMarkerIconAtScreenScale(UIImage *image)
             }
         });
     });
+}
+
+- (void)setIconSrc:(NSString *)iconSrc scale:(CGFloat)iconScale
+{
+    _iconScale = iconScale;
+    [self setIconSrc:iconSrc];
 }
 
 - (void)setIconScale:(CGFloat)iconScale
