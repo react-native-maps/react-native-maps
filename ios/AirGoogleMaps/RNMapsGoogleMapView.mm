@@ -202,6 +202,30 @@ using namespace facebook::react;
         }
     };
 
+    _view.onDoublePress = [self](NSDictionary* dictionary) {
+        if (_eventEmitter) {
+            NSDictionary* coordinateDict = dictionary[@"coordinate"];
+            NSDictionary* positionDict = dictionary[@"position"];
+
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnDoublePressCoordinate coordinate = {
+                .latitude = [coordinateDict[@"latitude"] doubleValue],
+                .longitude = [coordinateDict[@"longitude"] doubleValue],
+            };
+
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnDoublePressPosition position = {
+                .x = [positionDict[@"x"] doubleValue],
+                .y = [positionDict[@"y"] doubleValue],
+            };
+
+            auto mapViewEventEmitter = std::static_pointer_cast<RNMapsGoogleMapViewEventEmitter const>(_eventEmitter);
+            facebook::react::RNMapsGoogleMapViewEventEmitter::OnDoublePress data = {
+                .coordinate = coordinate,
+                .position = position
+            };
+            mapViewEventEmitter->onDoublePress(data);
+        }
+    };
+
       _view.onMapReady = [self](NSDictionary* dictionary) {
           [self loadPendingInsertSubviews];
           if (_eventEmitter) {

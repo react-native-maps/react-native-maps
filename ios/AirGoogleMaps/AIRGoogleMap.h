@@ -33,6 +33,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onKmlReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
+@property (nonatomic, copy) RCTDirectEventBlock onDoublePress;
 @property (nonatomic, copy) RCTDirectEventBlock onPanDrag;
 @property (nonatomic, copy) RCTDirectEventBlock onUserLocationChange;
 @property (nonatomic, copy) RCTDirectEventBlock onMarkerPress;

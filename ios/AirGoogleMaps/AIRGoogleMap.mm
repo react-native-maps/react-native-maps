@@ -1036,6 +1036,12 @@ id regionAsJSON(MKCoordinateRegion region) {
     }
 
     BOOL isZoomTap = [[[self.origGestureRecognizersMeta objectForKey:grHash] objectForKey:@"isZoomTap"] boolValue];
+    // The SDK's double-tap zoom recognizer sees every double tap on the map,
+    // so it reports them too, whether it zooms or not.
+    if (isZoomTap && gestureRecognizer.state == UIGestureRecognizerStateEnded && self.onDoublePress) {
+        CGPoint doubleTapPoint = [gestureRecognizer locationInView:self];
+        self.onDoublePress([self eventFromCoordinate:[self.projection coordinateForPoint:doubleTapPoint]]);
+    }
     if (isZoomTap && !self.zoomTapEnabled) {
         performOriginalActions = NO;
     }

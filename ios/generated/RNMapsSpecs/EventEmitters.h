@@ -61,6 +61,21 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
  public:
   using ViewEventEmitter::ViewEventEmitter;
 
+  struct OnDoublePressCoordinate {
+      double latitude;
+    double longitude;
+    };
+
+  struct OnDoublePressPosition {
+      double x;
+    double y;
+    };
+
+  struct OnDoublePress {
+      OnDoublePressCoordinate coordinate;
+    OnDoublePressPosition position;
+    };
+
   struct OnIndoorBuildingFocused {
       bool underground;
     int activeLevelIndex;
@@ -292,6 +307,8 @@ class RNMapsGoogleMapViewEventEmitter : public ViewEventEmitter {
       OnUserLocationChangeCoordinate coordinate;
     OnUserLocationChangeError error;
     };
+  void onDoublePress(OnDoublePress value) const;
+
   void onIndoorBuildingFocused(OnIndoorBuildingFocused value) const;
 
   void onIndoorLevelActivated(OnIndoorLevelActivated value) const;
