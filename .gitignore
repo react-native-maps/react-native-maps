@@ -65,7 +65,6 @@ yarn-error.log
 *.jsbundle
 
 # VSCode workspace settings
-.vscode
 
 # ts outDir
 lib/
@@ -92,3 +91,4 @@ Secrets.xcconfig
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+config.bat

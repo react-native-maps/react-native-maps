@@ -13,7 +13,7 @@
     "lint": "eslint . --max-warnings 0",
     "tscheck": "tsc --noEmit",
     "format-check": "prettier --check .",
-    "build": "tsc --project tsconfig.build.json && tsc --project plugin/tsconfig.json",
+    "build": "node init && tsc --project tsconfig.build.json && tsc --project plugin/tsconfig.json",
     "test": "jest",
     "prepare": "husky",
     "release": "semantic-release",
