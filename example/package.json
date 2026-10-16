@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "tscheck": "tsc --noEmit",
-    "start": "react-native start",
+    "start": "node api.js && react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
