@@ -83,7 +83,7 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
          * @return true if there is, false otherwise
          */
         public synchronized boolean hasMarker() {
-            return this.markers.isEmpty();
+            return !this.markers.isEmpty();
         }
 
         /**
