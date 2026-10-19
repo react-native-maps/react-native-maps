@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rnmaps.maps.MapCallout;
 import com.rnmaps.maps.MapMarker;
+import com.rnmaps.maps.MapMarkerManager;
 
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     public MarkerManager(ReactApplicationContext context){
         super(context);
     }
+    private final MapMarkerManager sharedIconManager = new MapMarkerManager();
+
     private final RNMapsMarkerManagerDelegate<MapMarker, MarkerManager> delegate =
             new RNMapsMarkerManagerDelegate<>(this);
 
@@ -47,7 +50,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
 
     @Override
     public MapMarker createViewInstance(ThemedReactContext context) {
-        return new MapMarker(context, null);
+        return new MapMarker(context, sharedIconManager);
     }
     private MarkerOptions optionsForInitialProps(ReactStylesDiffMap initialProps){
         MarkerOptions options = new MarkerOptions();
@@ -99,7 +102,7 @@ public class MarkerManager extends ViewGroupManager<MapMarker> implements RNMaps
     @Override
     protected MapMarker createViewInstance(int reactTag, @NonNull ThemedReactContext reactContext, @Nullable ReactStylesDiffMap initialProps, @Nullable StateWrapper stateWrapper) {
         MapMarker view = null;
-        view = new MapMarker(reactContext, optionsForInitialProps(initialProps), null);
+        view = new MapMarker(reactContext, optionsForInitialProps(initialProps), sharedIconManager);
         view.setId(reactTag);
         this.addEventEmitters(reactContext, view);
         if (initialProps != null) {
