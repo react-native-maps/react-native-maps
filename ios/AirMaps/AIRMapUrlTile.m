@@ -110,11 +110,14 @@
     _opacity = opacity;
     _opacitySet = YES;
     if (self.renderer) {
+        // Apply alpha in place. Calling [self update] here would remove and
+        // re-add the overlay (and every other overlay), causing the map to
+        // flash on every opacity change - e.g. when animating radar frames.
         self.renderer.alpha = opacity;
     } else {
         [self createTileOverlayAndRendererIfPossible];
+        [self update];
     }
-    [self update];
 }
 
 - (void)createTileOverlayAndRendererIfPossible
