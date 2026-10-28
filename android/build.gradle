@@ -60,6 +60,8 @@ android {
         minSdkVersion safeExtGet('minSdkVersion', 21)
         targetSdkVersion safeExtGet('targetSdkVersion', 35)
 
+        consumerProguardFiles 'consumer-rules.pro'
+
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         ndk {
