@@ -9,6 +9,7 @@
 
 
 #import "RNMapsAirModule.h"
+#import "RNMapsImageLoader.h"
 #import <React/RCTUIManager.h>
 #import <React/RCTViewManager.h>
 #import "RNMapsMapView.h"
@@ -29,7 +30,14 @@
 
 @implementation RNMapsAirModule
 
+@synthesize moduleRegistry = _moduleRegistry;
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
+
+- (void)setModuleRegistry:(RCTModuleRegistry *)moduleRegistry
+{
+    _moduleRegistry = moduleRegistry;
+    RNMapsSetModuleRegistry(moduleRegistry);
+}
 
 - (void)executeWithMapView:(double)tag
                    success:(void (^)(id<RNMapsAirModuleDelegate> mapView))success

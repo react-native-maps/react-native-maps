@@ -31,6 +31,8 @@
 @property (nonatomic, assign) BOOL flat;
 @property (nonatomic, copy) NSString *imageSrc;
 @property (nonatomic, copy) NSString *iconSrc;
+@property (nonatomic, assign) CGFloat imageScale;
+@property (nonatomic, assign) CGFloat iconScale;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic, strong) UIColor *pinColor;

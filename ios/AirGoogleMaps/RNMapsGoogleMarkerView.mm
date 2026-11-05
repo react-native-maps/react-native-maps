@@ -30,6 +30,7 @@
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
 #import "UIView+AirMap.h"
+#import "RNMapsImageLoader.h"
 
 using namespace facebook::react;
 
@@ -103,9 +104,6 @@ using namespace facebook::react;
     _props = defaultProps;
     _legacyMarkerManager = [[AIRGoogleMapMarkerManager alloc] init];
     _view = (AIRGoogleMapMarker *)[_legacyMarkerManager view];
-    // Image/icon loading no longer depends on the instance `bridge`: AIRGoogleMapMarker
-    // now loads via the global `[RCTBridge currentBridge]` (bridgeless-safe), matching
-    // AIRMapMarker. So there is nothing bridge-related to wire up here.
 
     _view.onPress = [self](NSDictionary *dictionary) {
         if (!_eventEmitter) return;
@@ -321,6 +319,7 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y);  \
 
     if (newViewProps.image.uri != oldViewProps.image.uri) {
         if (newViewProps.image.uri.size()) {
+            _view.imageScale = RNMapsImageSourceScale(newViewProps.image);
             [_view setImageSrc:RCTNSStringFromString(newViewProps.image.uri)];
         } else {
             [_view setImageSrc:nil];
@@ -329,6 +328,7 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y);  \
 
     if (newViewProps.icon.uri != oldViewProps.icon.uri) {
         if (newViewProps.icon.uri.size()) {
+            _view.iconScale = RNMapsImageSourceScale(newViewProps.icon);
             [_view setIconSrc:RCTNSStringFromString(newViewProps.icon.uri)];
         } else {
             [_view setIconSrc:nil];

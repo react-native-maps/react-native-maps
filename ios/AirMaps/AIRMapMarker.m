@@ -16,6 +16,7 @@
 #import <React/UIView+React.h>
 #import <React/RCTImageLoader.h>
 #import <React/RCTBridge+Private.h>
+#import "RNMapsImageLoader.h"
 
 NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 
@@ -368,9 +369,9 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
     }
     __weak __typeof(self) weakSelf = self;
 
-    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+    _reloadImageCancellationBlock = [RNMapsImageLoader(self.bridge) loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                                                                  size:self.bounds.size
-                                                                                                                scale:RCTScreenScale()
+                                                                                                                scale:_imageScale ?: RCTScreenScale()
                                                                                                               clipped:YES
                                                                                                            resizeMode:RCTResizeModeCenter
                                                                                                         progressBlock:nil

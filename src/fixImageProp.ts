@@ -10,7 +10,7 @@ export function fixImageProp(
   if (typeof image === 'number') {
     // Handle local image asset (require('./image.png'))
     const resolvedImage = Image.resolveAssetSource(image);
-    return resolvedImage?.uri ? {uri: resolvedImage.uri} : image;
+    return resolvedImage?.uri ? resolvedImage : image;
   }
 
   return image;

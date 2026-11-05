@@ -16,6 +16,7 @@
 #import "AIRGMSMarker.h"
 #import "AIRGoogleMapCallout.h"
 #import "AIRDummyView.h"
+#import "RNMapsImageLoader.h"
 
 CGRect unionRect(CGRect a, CGRect b) {
     return CGRectMake(
@@ -374,9 +375,9 @@ CGRect unionRect(CGRect a, CGRect b) {
     }
     __weak AIRGoogleMapMarker* weakSelf = self;
 
-    _reloadImageCancellationBlock = [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
+    _reloadImageCancellationBlock = [RNMapsImageLoader(self.bridge) loadImageWithURLRequest:[RCTConvert NSURLRequest:_imageSrc]
                                                                                                size:self.bounds.size
-                                                                                              scale:RCTScreenScale()
+                                                                                              scale:_imageScale ?: RCTScreenScale()
                                                                                             clipped:YES
                                                                                          resizeMode:RCTResizeModeCenter
                                                                                       progressBlock:nil
@@ -442,9 +443,9 @@ CGRect unionRect(CGRect a, CGRect b) {
     }
 
     _reloadImageCancellationBlock =
-    [[[RCTBridge currentBridge] moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
+    [RNMapsImageLoader(self.bridge) loadImageWithURLRequest:[RCTConvert NSURLRequest:_iconSrc]
                                                                size:self.bounds.size
-                                                              scale:RCTScreenScale()
+                                                              scale:_iconScale ?: RCTScreenScale()
                                                             clipped:YES
                                                          resizeMode:RCTResizeModeCenter
                                                       progressBlock:nil
