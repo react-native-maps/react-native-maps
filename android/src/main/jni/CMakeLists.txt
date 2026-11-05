@@ -26,3 +26,11 @@ target_link_libraries(
 )
 
 target_compile_reactnative_options(react_codegen_RNMapsSpecs PRIVATE)
+
+find_package(ReactAndroid REQUIRED CONFIG)
+
+target_compile_definitions(
+  react_codegen_RNMapsSpecs
+  PRIVATE
+  REACT_NATIVE_MINOR_VERSION=${ReactAndroid_VERSION_MINOR}
+)
