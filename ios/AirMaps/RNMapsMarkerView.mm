@@ -26,6 +26,7 @@
 #import "RCTFabricComponentsPlugins.h"
 #import <React/RCTConversions.h>
 #import "UIView+AirMap.h"
+#import "RNMapsImageLoader.h"
 
 using namespace facebook::react;
 
@@ -351,6 +352,7 @@ _view.name = CGPointMake(newViewProps.name.x, newViewProps.name.y); \
     }
     if (newViewProps.image != oldViewProps.image){
         if (newViewProps.image.uri.size()){
+            _view.imageScale = RNMapsImageSourceScale(newViewProps.image);
             [_view setImageSrc:RCTNSStringFromString(newViewProps.image.uri)];
             completionHandlerCalled = true;
         } else {
