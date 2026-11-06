@@ -96,6 +96,9 @@ repositories {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+
     implementation 'com.facebook.react:react-native:+'
     implementation "com.google.android.gms:play-services-base:${safeExtGet('googlePlayServicesBaseVersion', '18.5.0')}"
     implementation "com.google.android.gms:play-services-maps:${safeExtGet('googlePlayServicesMapsVersion', '19.1.0')}"
