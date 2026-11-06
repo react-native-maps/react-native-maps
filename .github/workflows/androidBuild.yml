@@ -41,3 +41,6 @@ jobs:
 
       - name: Build Android
         run: cd example/android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug
+
+      - name: Test Android feature removal
+        run: cd example/android && ./gradlew :react-native-maps:testDebugUnitTest
