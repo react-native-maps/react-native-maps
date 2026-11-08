@@ -291,7 +291,11 @@ id regionAsJSON(MKCoordinateRegion region) {
   } else {
     NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
     for (int i = 0; i < childSubviews.count; i++) {
-      [self insertReactSubview:(UIView *)childSubviews[i] atIndex:atIndex];
+      id child = childSubviews[i];
+      if (child == nil) {
+        continue;
+      }
+      [self insertReactSubview:(UIView *)child atIndex:atIndex];
     }
   }
   NSUInteger safeIndex = atIndex < 0 ? 0 : (NSUInteger)atIndex;
