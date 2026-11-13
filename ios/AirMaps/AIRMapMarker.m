@@ -402,7 +402,7 @@ NSInteger const AIR_CALLOUT_OPEN_ZINDEX_BASELINE = 999;
 {
     _zIndexBeforeOpen = zIndex;
     _zIndex = _calloutIsOpen ? zIndex + AIR_CALLOUT_OPEN_ZINDEX_BASELINE : zIndex;
-    self.layer.zPosition = zIndex;
+    self.layer.zPosition = _zIndex;
 }
 
 - (BOOL)isSelected {
