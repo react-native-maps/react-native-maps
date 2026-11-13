@@ -572,12 +572,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             public boolean onMarkerClick(@NonNull Marker marker) {
                 MapMarker airMapMarker = getMarkerMap(marker);
 
-                WritableMap eventData = makeClickEventData(marker.getPosition());
+                // coordinate is the marker's; position is where the finger went up
+                // (tapLocation, as polygon and polyline presses use), not the marker's anchor.
+                LatLng touch = tapLocation != null ? tapLocation : marker.getPosition();
+
+                WritableMap eventData = makeClickEventData(marker.getPosition(), touch);
                 eventData.putString("action", "marker-press");
                 eventData.putString("id", airMapMarker.getIdentifier());
                 airMapMarker.dispatchEvent(eventData, OnPressEvent::new);
 
-                WritableMap mapEventData = makeClickEventData(marker.getPosition());
+                WritableMap mapEventData = makeClickEventData(marker.getPosition(), touch);
                 mapEventData.putString("action", "marker-press");
                 mapEventData.putString("id", airMapMarker.getIdentifier());
 
@@ -1356,6 +1360,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public WritableMap makeClickEventData(LatLng point) {
+        return makeClickEventData(point, point);
+    }
+
+    // `point` fills the event's coordinate, `touch` its position (screen point).
+    private WritableMap makeClickEventData(LatLng point, LatLng touch) {
         WritableMap event = new WritableNativeMap();
 
         WritableMap coordinate = new WritableNativeMap();
@@ -1364,7 +1373,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         event.putMap("coordinate", coordinate);
 
         Projection projection = map.getProjection();
-        Point screenPoint = projection.toScreenLocation(point);
+        Point screenPoint = projection.toScreenLocation(touch);
 
         WritableMap position = new WritableNativeMap();
         position.putDouble("x", screenPoint.x);
