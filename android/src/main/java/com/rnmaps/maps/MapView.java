@@ -592,7 +592,13 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 if (view.moveOnMarkerPress) {
                     return false;
                 } else {
-                    marker.showInfoWindow();
+                    // Only show an info window the marker has (a callout or a title).
+                    // Google draws the marker whose info window is showing above every
+                    // other marker whatever their zIndex, and an empty one still counts.
+                    String title = marker.getTitle();
+                    if (airMapMarker.getCalloutView() != null || (title != null && !title.isEmpty())) {
+                        marker.showInfoWindow();
+                    }
                     return true;
                 }
             }
