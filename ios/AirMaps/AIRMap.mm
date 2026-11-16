@@ -560,6 +560,13 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     _userLocationCalloutEnabled = calloutEnabled;
 }
 
+- (void)setRegionChangeFromUserInteraction:(BOOL)regionChangeFromUserInteraction {
+    _regionChangeFromUserInteraction = regionChangeFromUserInteraction;
+    if (!regionChangeFromUserInteraction) {
+        _lastDoubleTapTime = 0;
+    }
+}
+
 - (void)setHandlePanDrag:(BOOL)handlePanDrag {
     for (UIGestureRecognizer *recognizer in [self gestureRecognizers]) {
         if ([recognizer isKindOfClass:[UIPanGestureRecognizer class]]) {

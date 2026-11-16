@@ -12,6 +12,7 @@ import {PROVIDER_GOOGLE, PROVIDER_DEFAULT} from 'react-native-maps';
 import DisplayLatLng from './examples/DisplayLatLng';
 import ViewsAsMarkers from './examples/ViewsAsMarkers';
 import EventListener from './examples/EventListener';
+import RegionChangeIsGesture from './examples/RegionChangeIsGesture';
 import MarkerTypes from './examples/MarkerTypes';
 import DraggableMarkers from './examples/DraggableMarkers';
 import PolygonCreator from './examples/PolygonCreator';
@@ -145,6 +146,7 @@ export default class App extends React.Component<any, any> {
         [DisplayLatLng, 'Tracking Position', true],
         [ViewsAsMarkers, 'Arbitrary Views as Markers', true],
         [EventListener, 'Events', true, '(incomplete)'],
+        [RegionChangeIsGesture, 'Region change isGesture', true],
         [MarkerTypes, 'Image Based Markers', true],
         [DraggableMarkers, 'Draggable Markers', true],
         [PolygonCreator, 'Polygon Creator', true],
