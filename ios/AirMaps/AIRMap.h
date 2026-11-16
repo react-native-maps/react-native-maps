@@ -59,8 +59,13 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
 // YES while the current region change was started (or taken over) by a user gesture.
-// Reported to JS as `isGesture` on the region change events.
+// Reported to JS as `isGesture` on the region change events. Setting it to NO also
+// forgets a pending double tap (see lastDoubleTapTime).
 @property (nonatomic, assign) BOOL regionChangeFromUserInteraction;
+// CACurrentMediaTime() of the last double tap on the map, or 0. MapKit starts its
+// double-tap zoom after its tap recognizers have reset, so the zoom can't be
+// detected from recognizer state alone.
+@property (nonatomic, assign) CFTimeInterval lastDoubleTapTime;
 
 @property (nonatomic, copy) RCTDirectEventBlock onMapReady;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;

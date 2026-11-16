@@ -29,11 +29,14 @@
 #import "RCTConvert+AirMap.h"
 #import "AIRMapOverlay.h"
 #import <MapKit/MapKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 static NSString *const RCTMapViewKey = @"MapView";
 // Name given to the recognizers this manager adds to the map, so they are not
 // mistaken for MapKit's own gestures when computing `isGesture`.
 static NSString *const AIRMapInternalGestureRecognizerName = @"AIRMapInternalGestureRecognizer";
+// How long after a double tap a region change still counts as MapKit's double-tap zoom.
+static const CFTimeInterval AIRMapDoubleTapZoomWindow = 0.5;
 
 
 @interface AIRMapManager() <MKMapViewDelegate, UIGestureRecognizerDelegate>
@@ -703,6 +706,7 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 - (void)handleMapDoubleTap:(UIPanGestureRecognizer*)recognizer {
     AIRMap *map = (AIRMap *)recognizer.view;
+    map.lastDoubleTapTime = CACurrentMediaTime();
     if (!map.onDoublePress) return;
 
     CGPoint touchPoint = [recognizer locationInView:map];
@@ -922,10 +926,12 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-    // A region change starts while one of MapKit's gesture recognizers is active
-    // only when the user is moving the map. The flag is kept until the change
-    // ends, so a fling keeps reporting isGesture after the finger is lifted.
-    mapView.regionChangeFromUserInteraction = [self _isUserInteractingWithMap:mapView];
+    // A region change that starts while a finger is moving the map, or right after a
+    // double tap (MapKit's double-tap zoom), comes from the user. The flag is kept until
+    // the change ends, so a fling keeps reporting isGesture after the finger is lifted.
+    BOOL afterDoubleTap = mapView.lastDoubleTapTime > 0 &&
+        CACurrentMediaTime() - mapView.lastDoubleTapTime < AIRMapDoubleTapZoomWindow;
+    mapView.regionChangeFromUserInteraction = afterDoubleTap || [self _isUserInteractingWithMap:mapView];
 
     MKCoordinateRegion region = mapView.region;
     if (!CLLocationCoordinate2DIsValid(region.center)) {
@@ -1001,31 +1007,22 @@ static int kDragCenterContext;
 
 - (BOOL)_isGestureRecognizerMovingMap:(UIGestureRecognizer *)recognizer
 {
+    // Only continuous gestures in progress (a finger is down and moving the map).
+    // A tap that just ended is excluded: tapping a marker can scroll its callout
+    // into view, which is a programmatic change.
     UIGestureRecognizerState state = recognizer.state;
     if (state != UIGestureRecognizerStateBegan &&
-        state != UIGestureRecognizerStateChanged &&
-        state != UIGestureRecognizerStateEnded) {
+        state != UIGestureRecognizerStateChanged) {
         return NO;
     }
-    // The tap, double tap, long press and pan-drag recognizers added in -view only report events.
-    if ([recognizer.name isEqualToString:AIRMapInternalGestureRecognizerName]) {
-        return NO;
-    }
-    // A single one-finger tap never moves the map itself; it selects annotations.
-    // Region changes it causes (e.g. scrolling a callout into view) are programmatic.
-    if ([recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
-        UITapGestureRecognizer *tap = (UITapGestureRecognizer *)recognizer;
-        if (tap.numberOfTapsRequired == 1 && tap.numberOfTouchesRequired == 1) {
-            return NO;
-        }
-    }
-    return YES;
+    // The long press and pan-drag recognizers added in -view only report events.
+    return ![recognizer.name isEqualToString:AIRMapInternalGestureRecognizerName];
 }
 
 - (BOOL)_isUserInteractingWithMap:(AIRMap *)mapView
 {
-    // MapKit's pan, pinch, rotate and zoom recognizers live on a private subview
-    // (historically the first one). Check the map and every direct subview
+    // MapKit's pan, pinch, rotate and zoom recognizers live on a private direct
+    // subview (_MKMapContentView on iOS 26). Check the map and every direct subview
     // instead of relying on that layout.
     for (UIGestureRecognizer *recognizer in mapView.gestureRecognizers) {
         if ([self _isGestureRecognizerMovingMap:recognizer]) {
