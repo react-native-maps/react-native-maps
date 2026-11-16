@@ -58,6 +58,9 @@ extern const NSInteger AIRMapMaxZoomLevel;
 
 
 @property (nonatomic, assign) BOOL ignoreRegionChanges;
+// YES while the current region change was started (or taken over) by a user gesture.
+// Reported to JS as `isGesture` on the region change events.
+@property (nonatomic, assign) BOOL regionChangeFromUserInteraction;
 
 @property (nonatomic, copy) RCTDirectEventBlock onMapReady;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionChangeStart;

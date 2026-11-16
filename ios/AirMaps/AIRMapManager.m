@@ -31,6 +31,9 @@
 #import <MapKit/MapKit.h>
 
 static NSString *const RCTMapViewKey = @"MapView";
+// Name given to the recognizers this manager adds to the map, so they are not
+// mistaken for MapKit's own gestures when computing `isGesture`.
+static NSString *const AIRMapInternalGestureRecognizerName = @"AIRMapInternalGestureRecognizer";
 
 
 @interface AIRMapManager() <MKMapViewDelegate, UIGestureRecognizerDelegate>
@@ -72,6 +75,11 @@ RCT_EXPORT_MODULE()
     // disable drag by default
     drag.enabled = NO;
     drag.delegate = self;
+
+    tap.name = AIRMapInternalGestureRecognizerName;
+    doubleTap.name = AIRMapInternalGestureRecognizerName;
+    longPress.name = AIRMapInternalGestureRecognizerName;
+    drag.name = AIRMapInternalGestureRecognizerName;
 
     [map addGestureRecognizer:tap];
     [map addGestureRecognizer:doubleTap];
@@ -914,6 +922,11 @@ static int kDragCenterContext;
 
 - (void)mapView:(AIRMap *)mapView regionWillChangeAnimated:(BOOL)animated
 {
+    // A region change starts while one of MapKit's gesture recognizers is active
+    // only when the user is moving the map. The flag is kept until the change
+    // ends, so a fling keeps reporting isGesture after the finger is lifted.
+    mapView.regionChangeFromUserInteraction = [self _isUserInteractingWithMap:mapView];
+
     MKCoordinateRegion region = mapView.region;
     if (!CLLocationCoordinate2DIsValid(region.center)) {
         return;
@@ -925,17 +938,27 @@ static int kDragCenterContext;
             @"longitude": @(FLUSH_NAN(region.center.longitude)),
             @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
             @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
-        }
+        },
+        @"isGesture": @(mapView.regionChangeFromUserInteraction),
     });
 }
 
 - (void)mapViewDidChangeVisibleRegion:(AIRMap *)mapView
 {
+    // A gesture can take over a change that started programmatically (e.g. the
+    // user grabs the map during animateToRegion). Only upgrade here; the flag is
+    // cleared by programmatic changes and when the region change completes.
+    if (!mapView.regionChangeFromUserInteraction && [self _isUserInteractingWithMap:mapView]) {
+        mapView.regionChangeFromUserInteraction = YES;
+    }
     [self _regionChanged:mapView continuous:YES];
 }
 
 - (void)mapView:(AIRMap *)mapView regionDidChangeAnimated:(__unused BOOL)animated
 {
+    // Read before applyLegacyZoomConstrains, which can start a new programmatic change.
+    BOOL isGesture = mapView.regionChangeFromUserInteraction;
+
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
     if (animated && mapView.ignoreRegionChanges){
@@ -949,8 +972,9 @@ static int kDragCenterContext;
     // Don't send region did change events until map has
     // started rendering, as these won't represent the final location
     if (mapView.hasStartedRendering) {
-        [self _emitRegionChangeEvent:mapView continuous:NO];
+        [self _emitRegionChangeEvent:mapView continuous:NO isGesture:isGesture];
     };
+    mapView.regionChangeFromUserInteraction = NO;
 
     mapView.pendingCenter = mapView.region.center;
     mapView.pendingSpan = mapView.region.span;
@@ -974,6 +998,49 @@ static int kDragCenterContext;
 }
 
 #pragma mark Private
+
+- (BOOL)_isGestureRecognizerMovingMap:(UIGestureRecognizer *)recognizer
+{
+    UIGestureRecognizerState state = recognizer.state;
+    if (state != UIGestureRecognizerStateBegan &&
+        state != UIGestureRecognizerStateChanged &&
+        state != UIGestureRecognizerStateEnded) {
+        return NO;
+    }
+    // The tap, double tap, long press and pan-drag recognizers added in -view only report events.
+    if ([recognizer.name isEqualToString:AIRMapInternalGestureRecognizerName]) {
+        return NO;
+    }
+    // A single one-finger tap never moves the map itself; it selects annotations.
+    // Region changes it causes (e.g. scrolling a callout into view) are programmatic.
+    if ([recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        UITapGestureRecognizer *tap = (UITapGestureRecognizer *)recognizer;
+        if (tap.numberOfTapsRequired == 1 && tap.numberOfTouchesRequired == 1) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (BOOL)_isUserInteractingWithMap:(AIRMap *)mapView
+{
+    // MapKit's pan, pinch, rotate and zoom recognizers live on a private subview
+    // (historically the first one). Check the map and every direct subview
+    // instead of relying on that layout.
+    for (UIGestureRecognizer *recognizer in mapView.gestureRecognizers) {
+        if ([self _isGestureRecognizerMovingMap:recognizer]) {
+            return YES;
+        }
+    }
+    for (UIView *subview in mapView.subviews) {
+        for (UIGestureRecognizer *recognizer in subview.gestureRecognizers) {
+            if ([self _isGestureRecognizerMovingMap:recognizer]) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
 
 - (void)_regionChanged:(AIRMap *)mapView continuous:(BOOL)continuous
 {
@@ -1001,10 +1068,10 @@ static int kDragCenterContext;
     }
 
     // Continuously observe region changes
-    [self _emitRegionChangeEvent:mapView continuous:continuous];
+    [self _emitRegionChangeEvent:mapView continuous:continuous isGesture:mapView.regionChangeFromUserInteraction];
 }
 
-- (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous
+- (void)_emitRegionChangeEvent:(AIRMap *)mapView continuous:(BOOL)continuous isGesture:(BOOL)isGesture
 {
     if (!mapView.ignoreRegionChanges && mapView.onRegionChange) {
         MKCoordinateRegion region = mapView.region;
@@ -1019,7 +1086,8 @@ static int kDragCenterContext;
                 @"longitude": @(FLUSH_NAN(region.center.longitude)),
                 @"latitudeDelta": @(FLUSH_NAN(region.span.latitudeDelta)),
                 @"longitudeDelta": @(FLUSH_NAN(region.span.longitudeDelta)),
-            }
+            },
+            @"isGesture": @(isGesture),
         };
         
 

@@ -63,11 +63,13 @@ using namespace facebook::react;
     MKCoordinateRegion region = [RCTConvert MKCoordinateRegion:regionDic];
     Boolean animated = duration == 0 ? NO :YES;
     _view.ignoreRegionChanges = animated;
+    _view.regionChangeFromUserInteraction = NO;
     [_view setRegion:region animated:animated];
 }
 - (void)setCamera:(NSString *)cameraJSON{
     NSDictionary* cameraDic = [RCTConvert dictonaryFromString:cameraJSON];
     MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:cameraDic existingCamera:[_view camera]];
+    _view.regionChangeFromUserInteraction = NO;
     [_view setCamera:camera];
 }
 
@@ -76,10 +78,12 @@ using namespace facebook::react;
     MKMapCamera *camera = [RCTConvert MKMapCameraWithDefaults:cameraDic existingCamera:[_view camera]];
     // don't emit region change events when we are setting the camera
     _view.ignoreRegionChanges = YES;
+    _view.regionChangeFromUserInteraction = NO;
     [_view setCamera:camera animated:YES];
 }
 
 - (void)fitToElements:(NSString *)edgePaddingJSON animated:(BOOL)animated {
+    _view.regionChangeFromUserInteraction = NO;
     [_view showAnnotations:_view.annotations animated:animated];
 }
 
@@ -90,6 +94,7 @@ using namespace facebook::react;
         return [marker isKindOfClass:[AIRMapMarker class]] && [markers containsObject:marker.identifier];
     }];
     NSArray *filteredMarkers = [_view.annotations filteredArrayUsingPredicate:filterMarkers];
+    _view.regionChangeFromUserInteraction = NO;
     [_view showAnnotations:filteredMarkers animated:animated];
 }
 - (void)fitToCoordinates:(NSString *)coordinatesJSON edgePaddingJSON:(NSString *)edgePaddingJSON animated:(BOOL)animated {
@@ -102,6 +107,7 @@ using namespace facebook::react;
     NSDictionary* edgePadding = [RCTConvert dictonaryFromString:edgePaddingJSON];
 
     UIEdgeInsets edgeInsets = [RCTConvert UIEdgeInsets:edgePadding];
+    _view.regionChangeFromUserInteraction = NO;
     [_view fitToCoordinates:mutableArray edgePadding:edgeInsets animated:animated];
 
 }
@@ -525,6 +531,7 @@ if (!(newViewProps.name.latitude == 0 &&                                    \
         MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake( \
                                                            newViewProps.name.latitude, \
                                                            newViewProps.name.longitude), span); \
+        _view.regionChangeFromUserInteraction = NO;                          \
         _view.name = region;                                                 \
     }                                                                        \
 }
@@ -544,6 +551,7 @@ camera.centerCoordinate = center;                                 \
 camera.heading = newViewProps.name.heading;                       \
 camera.pitch = newViewProps.name.pitch;                           \
 camera.centerCoordinateDistance = newViewProps.name.altitude;     \
+_view.regionChangeFromUserInteraction = NO;                       \
 _view.name = camera;                                              \
 }
 
