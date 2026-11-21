@@ -508,6 +508,20 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
+  // Guard the deep-link mount path on the new architecture (RN 0.88):
+  // when this view's screen is mounted via a deep link while a recycled
+  // RNMapsGoogleMapView is being re-prepared, Fabric can call updateProps
+  // with (a) a null props pointer and (b) base ViewProps instead of
+  // RNMapsGoogleMapViewProps. Both cases abort the app in
+  // RCTViewComponentView's props assert (NSInternalInconsistencyException,
+  // "`RCTViewComponentView` subclasses ... must setup `_props`"). Skip both;
+  // the next mount transaction carries the fully-typed props.
+  if (props == nullptr) {
+    return;
+  }
+  if (typeid(*props) == typeid(const facebook::react::ViewProps)) {
+    return;
+  }
   const auto &oldViewProps = *std::static_pointer_cast<RNMapsGoogleMapViewProps const>(_props);
   const auto &newViewProps = *std::static_pointer_cast<RNMapsGoogleMapViewProps const>(props);
 
