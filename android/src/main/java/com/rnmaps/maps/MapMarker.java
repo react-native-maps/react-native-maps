@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.view.Choreographer;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -99,10 +100,11 @@ public class MapMarker extends MapFeature {
     private float calloutAnchorY;
     private boolean calloutAnchorIsSet;
 
-    private int updated = 0;
-
+    /**
+     * Whether we redraw the marker when its custom view changes. When false,
+     * the marker keeps its last bitmap until something calls redraw().
+     */
     private boolean tracksViewChanges = true;
-    private boolean tracksViewChangesActive = false;
 
     private boolean hasCustomMarkerView = false;
     private final MapMarkerManager markerManager;
@@ -216,6 +218,8 @@ public class MapMarker extends MapFeature {
     }
 
     public void doDestroy() {
+        Choreographer.getInstance().removeFrameCallback(redrawFrameCallback);
+        isRedrawScheduled = false;
         MarkerManager.Collection collection = markerCollectionRef != null
                 ? markerCollectionRef.get()
                 : null;
@@ -311,44 +315,18 @@ public class MapMarker extends MapFeature {
     }
 
     public void setTracksViewChanges(boolean tracksViewChanges) {
+        boolean wasTracking = this.tracksViewChanges;
         this.tracksViewChanges = tracksViewChanges;
-        updateTracksViewChanges();
-    }
-
-    private void updateTracksViewChanges() {
-        boolean shouldTrack = tracksViewChanges && hasCustomMarkerView && marker != null;
-        if (shouldTrack == tracksViewChangesActive) return;
-        tracksViewChangesActive = shouldTrack;
-
-        if (shouldTrack) {
-            ViewChangesTracker.getInstance().addMarker(this);
-        } else {
-            ViewChangesTracker.getInstance().removeMarker(this);
-
-            // Let it render one more time to avoid race conditions.
-            // i.e. Image onLoad ->
-            //      ViewChangesTracker may not get a chance to render ->
-            //      setState({ tracksViewChanges: false }) ->
-            //      image loaded but not rendered.
-            updateMarkerIcon();
+        // Draw one last time when tracking turns off. A common pattern is
+        // tracksViewChanges={!imageLoaded}: the image's onLoad turns tracking
+        // off before we've drawn the loaded image.
+        if (wasTracking && !tracksViewChanges && hasCustomMarkerView) {
+            redraw();
         }
     }
 
     public LatLng getPosition() {
         return position;
-    }
-
-    public boolean updateCustomForTracking() {
-        if (!tracksViewChangesActive || updated == 0) {
-            tracksViewChangesActive = false;
-            return false;
-        }
-
-        updateMarkerIcon();
-        if (updated > 0) {
-            updated--;
-        }
-        return true;
     }
 
     public void updateMarkerIcon() {
@@ -469,10 +447,11 @@ public class MapMarker extends MapFeature {
         // if children are added, it means we are rendering a custom marker
         if (!(child instanceof MapCallout)) {
             hasCustomMarkerView = true;
-            updateTracksViewChanges();
             hackToHandleDraweeLifecycle(child);
         }
-        update(true);
+        // The new child hasn't been laid out yet, so wait until it has
+        update(false);
+        redraw();
     }
     private void hackToHandleDraweeLifecycle(View child){
         if (child instanceof DraweeView<?>) {
@@ -540,16 +519,7 @@ public class MapMarker extends MapFeature {
             if (hasCustomMarkerView) {
                 hasCustomMarkerView = false;
                 clearDrawableCache();
-                updateTracksViewChanges();
                 update(true);
-            }
-        } else {
-            // custom subview
-            if (!(getChildAt(0) instanceof MapCallout)) {
-                if (updated == 0) {
-                    updated = 1;
-                    updateTracksViewChanges();
-                }
             }
         }
     }
@@ -564,7 +534,6 @@ public class MapMarker extends MapFeature {
         MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
         marker = markerCollection.addMarker(getMarkerOptions());
         this.markerCollectionRef = new SoftReference<>(markerCollection);
-        updateTracksViewChanges();
     }
 
     @Override
@@ -575,7 +544,6 @@ public class MapMarker extends MapFeature {
         MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
         markerCollection.remove(marker);
         marker = null;
-        updateTracksViewChanges();
     }
 
     private BitmapDescriptor getIcon() {
@@ -636,25 +604,16 @@ public class MapMarker extends MapFeature {
         } else {
             marker.setInfoWindowAnchor(0.5f, 0);
         }
-        updated += 1;
     }
 
     public void update(int width, int height) {
         this.width = width;
         this.height = height;
-        updated += 1;
-        updateTracksViewChanges();
         clearDrawableCache();
-        update(true);
-    }
-
-    public void redraw() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                updateMarkerIcon();
-            }
-        });
+        // Our children might not be laid out at their new size yet, so wait
+        // until they are
+        update(false);
+        redraw();
     }
 
     private Bitmap mLastBitmapCreated = null;
@@ -808,14 +767,6 @@ public class MapMarker extends MapFeature {
         this.imageLoadedListener = imageLoadedListener;
     }
 
-    public void setUpdated(boolean updated) {
-        if (updated) {
-            this.updated += 1;
-        } else {
-            this.updated = 0;
-        }
-    }
-
     @FunctionalInterface
     public interface EventCreator<T extends Event> {
         T create(int surfaceId, int viewId, WritableMap payload);
@@ -859,7 +810,65 @@ public class MapMarker extends MapFeature {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        this.height = b - t;
-        this.width = r - l;
+        int newWidth = r - l;
+        int newHeight = b - t;
+        if (newWidth == width && newHeight == height) {
+            return;
+        }
+        this.width = newWidth;
+        this.height = newHeight;
+        clearDrawableCache();
+        redraw();
     }
+
+    /**
+     * Called when a child changes how it looks, e.g. React sets a new
+     * background color or text on it, or an image finishes loading. This lets
+     * tracksViewChanges={true} redraw only when something changed, instead of
+     * relying on React telling the marker itself about a change. With
+     * tracksViewChanges={false}, the marker keeps showing its last bitmap
+     * until something calls redraw().
+     */
+    @Override
+    public void onDescendantInvalidated(@NonNull View child, @NonNull View target) {
+        super.onDescendantInvalidated(child, target);
+        if (tracksViewChanges) {
+            redraw();
+        }
+    }
+
+    private boolean isRedrawScheduled = false;
+
+    /**
+     * Redraws the marker's bitmap from its custom view once, on the next
+     * frame, after React finishes this batch.
+     *
+     * When a marker changes, React gives us the change in several steps: the
+     * children's props, then layout. If we drew after each step, the map
+     * would show a bitmap with the old contents at the new size, or the new
+     * contents clipped to the old size. React applies all the steps from one
+     * render in a single batch, so waiting until the next frame puts the new
+     * size and the new contents on screen together. It also means many
+     * changes in a frame only cost one redraw.
+     *
+     * We use Choreographer instead of a pre-draw listener because our view
+     * sits in a hidden, zero-size group. Changes to it alone might not make
+     * Android draw the window, so a pre-draw listener could wait until some
+     * unrelated part of the screen changes.
+     *
+     * A child that animates changes every frame, so we redraw it at most once
+     * per frame, at the display's refresh rate.
+     */
+    public void redraw() {
+        if (isRedrawScheduled) {
+            return;
+        }
+        isRedrawScheduled = true;
+        Choreographer.getInstance().postFrameCallback(redrawFrameCallback);
+    }
+
+    private final Choreographer.FrameCallback redrawFrameCallback = frameTimeNanos -> {
+        isRedrawScheduled = false;
+        updateMarkerIcon();
+    };
 }

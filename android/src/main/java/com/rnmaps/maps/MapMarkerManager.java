@@ -281,15 +281,15 @@ public class MapMarkerManager extends ViewGroupManager<MapMarker> {
         if (child instanceof MapCallout) {
             parent.setCalloutView((MapCallout) child);
         } else {
+            // MapMarker.addView() redraws the marker once the child is laid out
             super.addView(parent, child, index);
-            parent.update(true);
         }
     }
 
     @Override
     public void removeViewAt(MapMarker parent, int index) {
         super.removeViewAt(parent, index);
-        parent.update(true);
+        parent.redraw();
     }
 
     @Override
