@@ -45,6 +45,14 @@
 @property (nonatomic, copy) RCTDirectEventBlock onIndoorLevelActivated;
 @property (nonatomic, copy) RCTDirectEventBlock onIndoorBuildingFocused;
 @property (nonatomic, strong) NSMutableArray *markers;
+/**
+ * Markers React removed in the current Fabric mounting transaction. They stay
+ * on the map until the transaction ends, because React moves a marker by
+ * removing it and inserting it again in the same transaction. Keeping its
+ * Google marker means we don't have to draw it again. See
+ * removeMarkersPendingRemoval.
+ */
+@property (nonatomic, strong) NSMutableSet *markersPendingRemoval;
 @property (nonatomic, strong) NSMutableArray *polygons;
 @property (nonatomic, strong) NSMutableArray *polylines;
 @property (nonatomic, strong) NSMutableArray *circles;
@@ -67,6 +75,11 @@
 @property (nonatomic, assign) BOOL showsIndoorLevelPicker;
 @property (nonatomic, assign) NSString *kmlSrc;
 
+/**
+ * Takes markers React removed off the map, unless React added them back.
+ * Call at the end of each Fabric mounting transaction.
+ */
+- (void)removeMarkersPendingRemoval;
 - (BOOL) isReady;
 - (void)didPrepareMap;
 - (void)mapViewDidFinishTileRendering;

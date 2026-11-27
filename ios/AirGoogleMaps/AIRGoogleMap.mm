@@ -101,6 +101,7 @@ id regionAsJSON(MKCoordinateRegion region) {
     
     _reactSubviews = [NSMutableArray new];
     _markers = [NSMutableArray array];
+    _markersPendingRemoval = [NSMutableSet set];
     _polygons = [NSMutableArray array];
     _polylines = [NSMutableArray array];
     _circles = [NSMutableArray array];
@@ -253,6 +254,8 @@ id regionAsJSON(MKCoordinateRegion region) {
   // This is where we intercept them and do the appropriate underlying mapview action.
   if ([subview isKindOfClass:[AIRGoogleMapMarker class]]) {
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker*)subview;
+    // React is moving the marker, and it's still on the map
+    [self.markersPendingRemoval removeObject:marker];
     [marker didInsertInMap:self];
     [self.markers addObject:marker];
   } else if ([subview isKindOfClass:[AIRGoogleMapPolygon class]]) {
@@ -303,12 +306,24 @@ id regionAsJSON(MKCoordinateRegion region) {
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
+- (void)removeMarkersPendingRemoval {
+  for (AIRGoogleMapMarker *marker in self.markersPendingRemoval) {
+    marker.realMarker.map = nil;
+  }
+  [self.markersPendingRemoval removeAllObjects];
+}
+
 - (void)removeReactSubview:(id<RCTComponent>)subview {
   // similarly, when the children are being removed we have to do the appropriate
   // underlying mapview action here.
   if ([subview isKindOfClass:[AIRGoogleMapMarker class]]) {
     AIRGoogleMapMarker *marker = (AIRGoogleMapMarker*)subview;
+    // Only Fabric tells us when a mounting transaction ends
+#ifdef RCT_NEW_ARCH_ENABLED
+    [self.markersPendingRemoval addObject:marker];
+#else
     marker.realMarker.map = nil;
+#endif
     [self.markers removeObject:marker];
   } else if ([NSStringFromClass([subview class]) isEqualToString:@"RNMapsGooglePolygonView"]) {
       [self.polygons removeObject:subview];

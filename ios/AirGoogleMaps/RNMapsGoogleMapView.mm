@@ -497,14 +497,20 @@ using namespace facebook::react;
 }
 
 /**
- * Fabric calls this after every transaction in our surface. We let markers
- * with tracksViewChanges={true} redraw once after React changes their
- * contents, instead of Google re-rendering them every frame.
+ * Fabric calls this after every transaction in our surface. We:
+ * 1. Take markers React removed in this transaction off the map, now that we
+ *    know React didn't just move them
+ * 2. Let markers with tracksViewChanges={true} redraw once after React
+ *    changes their contents, instead of Google re-rendering them every frame
  */
 - (void)mountingTransactionDidMount:(const facebook::react::MountingTransaction &)transaction
                withSurfaceTelemetry:(const facebook::react::SurfaceTelemetry &)surfaceTelemetry
 {
-    if (!_view || _view.markers.count == 0) return;
+    if (!_view) return;
+    [_view removeMarkersPendingRemoval];
+    // We took removed markers off above, so with no markers left, there's
+    // nothing to redraw
+    if (_view.markers.count == 0) return;
 
     NSMutableSet<NSNumber *> *changedViewTags = [NSMutableSet new];
     for (const auto &mutation : transaction.getMutations()) {

@@ -137,6 +137,8 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (void) didInsertInMap:(AIRGoogleMap *) map
 {
+    // React moved us, and we're still on this map. See markersPendingRemoval.
+    if (_realMarker && _realMarker.map == map) return;
     _realMarker = [AIRGMSMarker new];
     _realMarker.fakeMarker = self;
     // When we draw the icon into an image, we redraw on change ourselves, so
