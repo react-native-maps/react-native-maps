@@ -13,6 +13,7 @@
 #import "AIRGoogleMap.h"
 #import "AIRGoogleMapMarker.h"
 #import "AIRGoogleMapManager.h"
+#import <React/RCTMountingTransactionObserving.h>
 #if __has_include(<ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>)
 #import <ReactNativeMaps/generated/RNMapsAirModuleDelegate.h>
 #import <ReactNativeMaps/generated/RNMapsHostViewDelegate.h>
@@ -42,7 +43,7 @@
 
 using namespace facebook::react;
 
-@interface RNMapsGoogleMapView () <RCTRNMapsGoogleMapViewViewProtocol>
+@interface RNMapsGoogleMapView () <RCTRNMapsGoogleMapViewViewProtocol, RCTMountingTransactionObserving>
 @end
 
 @implementation RNMapsGoogleMapView {
@@ -494,6 +495,39 @@ using namespace facebook::react;
         }
     }
 }
+
+/**
+ * Fabric calls this after every transaction in our surface. We let markers
+ * with tracksViewChanges={true} redraw once after React changes their
+ * contents, instead of Google re-rendering them every frame.
+ */
+- (void)mountingTransactionDidMount:(const facebook::react::MountingTransaction &)transaction
+               withSurfaceTelemetry:(const facebook::react::SurfaceTelemetry &)surfaceTelemetry
+{
+    if (!_view || _view.markers.count == 0) return;
+
+    NSMutableSet<NSNumber *> *changedViewTags = [NSMutableSet new];
+    for (const auto &mutation : transaction.getMutations()) {
+        switch (mutation.type) {
+            case facebook::react::ShadowViewMutation::Update:
+                [changedViewTags addObject:@(mutation.newChildShadowView.tag)];
+                break;
+            case facebook::react::ShadowViewMutation::Insert:
+            case facebook::react::ShadowViewMutation::Remove:
+                [changedViewTags addObject:@(mutation.parentTag)];
+                break;
+            default:
+                // Create and Delete always come with an Insert or Remove
+                break;
+        }
+    }
+    if (changedViewTags.count == 0) return;
+
+    for (AIRGoogleMapMarker *marker in _view.markers) {
+        [marker redrawIfNeededAfterMountingTransaction:changedViewTags];
+    }
+}
+
 - (void) prepareForRecycle
 {
     [super prepareForRecycle];

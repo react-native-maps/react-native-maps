@@ -273,7 +273,8 @@ using namespace facebook::react;
 // The legacy AIRGoogleMapMarker is never added to a view hierarchy under Fabric, so its
 // layoutSubviews never runs and the iconView it hands to GMSMarker stays 0x0 — custom-view
 // markers render blank. Size it from Fabric's layout (the marker is position:absolute, so
-// this is the size of its children) and ask GMS to re-snapshot the icon.
+// this is the size of its children) and redraw the icon. We redraw at the end of the
+// mounting transaction, so a transaction that also changes our views draws only once.
 - (void)updateLayoutMetrics:(LayoutMetrics const &)layoutMetrics
            oldLayoutMetrics:(LayoutMetrics const &)oldLayoutMetrics
 {
@@ -284,7 +285,7 @@ using namespace facebook::react;
     }
     _view.frame = bounds;
     _view.iconView.frame = bounds;
-    [_view redraw];
+    [_view setNeedsRedrawAfterMountingTransaction];
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
