@@ -88,6 +88,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -173,6 +174,34 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
     private ViewAttacherGroup attacherGroup;
     private LatLng tapLocation;
+    /**
+     * Where the latest touch event happened, in map view pixels. When Google
+     * reports a marker click right after a tap, this is where the finger
+     * lifted. Null until the first touch.
+     */
+    @Nullable
+    private Point lastTouchScreenPoint;
+    /**
+     * When the finger last lifted, from SystemClock.uptimeMillis(), or 0
+     * before the first tap. Google also reports marker clicks that don't come
+     * from a touch, e.g. from TalkBack. We check this to tell them apart.
+     */
+    private long lastTouchUpTimeMs = 0;
+    /**
+     * How soon after the finger lifts Google reports the marker click. Google
+     * waits to see whether the tap is the start of a double tap, which is
+     * ViewConfiguration.getDoubleTapTimeout(), 300ms. A click that comes
+     * later than this didn't come from that touch.
+     */
+    private static final long maxTouchUpToMarkerClickMs = 1000;
+    /**
+     * The marker that our last marker tap went to. A repeated tap on a spot
+     * where markers overlap goes to the next marker after this one, the same
+     * way the Google Maps iOS SDK cycles through them. Null after a tap on
+     * empty map, or when that marker gets removed.
+     */
+    @Nullable
+    private MapMarker lastTappedMarker;
     private Float maxZoomLevel;
     private Float minZoomLevel;
     private Integer mapType;
@@ -362,6 +391,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                     // so we add every marker to it again. Old markers would
                     // otherwise show up twice in markerMap.
                     markerMap.clear();
+                    lastTappedMarker = null;
                     // React already removed these, so they don't get added
                     // back. They went with the old map.
                     for (MapMarker marker : markersToSwap) {
@@ -598,32 +628,51 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         markerCollection.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(@NonNull Marker marker) {
-                MapMarker airMapMarker = getMarkerMap(marker);
+            public boolean onMarkerClick(@NonNull Marker googleMarker) {
+                // Google calls this for taps up to 30dp away from a marker, and
+                // may pick a neighbor over the marker that's under the finger.
+                // So we redo the hit test ourselves. See MarkerHitTest.
+                MapMarker mapMarker = findTappedMarker(googleMarker);
+                if (mapMarker == null) {
+                    // The tap missed every marker, so treat it as a map tap,
+                    // like the Google Maps iOS SDK does. This is on purpose:
+                    // e.g. a tap just outside a pin deselects the selected one
+                    // instead of selecting a nearby pin. Returning true stops
+                    // Google from opening an info window or moving the camera
+                    // to the marker it picked.
+                    dispatchMapPress(tapLocation);
+                    return true;
+                }
+                lastTappedMarker = mapMarker;
+                Marker marker = (Marker) mapMarker.getFeature();
 
                 WritableMap eventData = makeClickEventData(marker.getPosition());
                 eventData.putString("action", "marker-press");
-                eventData.putString("id", airMapMarker.getIdentifier());
-                airMapMarker.dispatchEvent(eventData, OnPressEvent::new);
+                eventData.putString("id", mapMarker.getIdentifier());
+                mapMarker.dispatchEvent(eventData, OnPressEvent::new);
 
                 WritableMap mapEventData = makeClickEventData(marker.getPosition());
                 mapEventData.putString("action", "marker-press");
-                mapEventData.putString("id", airMapMarker.getIdentifier());
+                mapEventData.putString("id", mapMarker.getIdentifier());
 
                 dispatchEvent(mapEventData, OnMarkerPressEvent::new);
 
 
-                handleMarkerSelection(airMapMarker);
+                handleMarkerSelection(mapMarker);
 
                 // Return false to open the callout info window and center on the marker
                 // https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap
                 // .OnMarkerClickListener
-                if (view.moveOnMarkerPress) {
+                if (view.moveOnMarkerPress && marker.equals(googleMarker)) {
                     return false;
-                } else {
-                    marker.showInfoWindow();
-                    return true;
                 }
+                if (view.moveOnMarkerPress) {
+                    // Google would center on the marker it picked, so we do
+                    // what it would have done for ours
+                    map.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                }
+                marker.showInfoWindow();
+                return true;
             }
         });
 
@@ -675,11 +724,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
-                WritableMap event = makeClickEventData(point);
-                event.putString("action", "press");
-                dispatchEvent(event, OnPressEvent::new);
-
-                handleMarkerSelection(null);
+                dispatchMapPress(point);
             }
         });
 
@@ -1399,6 +1444,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
             // Taps shouldn't go to a marker React removed. addFeature() puts
             // it back if React is moving it.
             markerMap.remove(marker.getFeature());
+            if (marker == lastTappedMarker) {
+                lastTappedMarker = null;
+            }
             scheduleSwapMarkersAfterBatch();
             safeRemoveFeatureFromAttacherGroup(feature);
         } else if (feature instanceof MapHeatmap) {
@@ -1801,11 +1849,15 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
         int X = (int) ev.getX();
         int Y = (int) ev.getY();
+        lastTouchScreenPoint = new Point(X, Y);
         if (map != null) {
-            tapLocation = map.getProjection().fromScreenLocation(new Point(X, Y));
+            tapLocation = map.getProjection().fromScreenLocation(lastTouchScreenPoint);
         }
 
         int action = ev.getActionMasked();
+        if (action == MotionEvent.ACTION_UP) {
+            lastTouchUpTimeMs = ev.getEventTime();
+        }
 
         switch (action) {
             case (MotionEvent.ACTION_DOWN):
@@ -2124,6 +2176,56 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
     }
 
+    /**
+     * Tells JS about a tap on empty map, and deselects the selected marker.
+     * The next tap on overlapping markers starts again from the front one.
+     */
+    private void dispatchMapPress(LatLng point) {
+        WritableMap event = makeClickEventData(point);
+        event.putString("action", "press");
+        dispatchEvent(event, OnPressEvent::new);
+
+        lastTappedMarker = null;
+        handleMarkerSelection(null);
+    }
+
+    /**
+     * Decides which marker a tap went to, or null for a tap on the map. See
+     * MarkerHitTest.
+     *
+     * We go with Google's pick when the click didn't come right after a tap,
+     * e.g. when TalkBack clicks a marker. Then lastTouchScreenPoint is from
+     * an older touch, maybe far from the marker.
+     */
+    @Nullable
+    private MapMarker findTappedMarker(Marker googleMarker) {
+        MapMarker googleMapMarker = getMarkerMap(googleMarker);
+        boolean isClickFromTap = SystemClock.uptimeMillis() - lastTouchUpTimeMs <= maxTouchUpToMarkerClickMs;
+        if (map == null || lastTouchScreenPoint == null || googleMapMarker == null || !isClickFromTap) {
+            return googleMapMarker;
+        }
+        Projection projection = map.getProjection();
+        List<MarkerHitTest.Candidate<MapMarker>> candidates = new ArrayList<>();
+        for (MapMarker mapMarker : markerMap.values()) {
+            // Google doesn't pick hidden markers either
+            if (!mapMarker.isVisibleOnMap()) {
+                continue;
+            }
+            candidates.add(new MarkerHitTest.Candidate<>(
+                    mapMarker,
+                    mapMarker.getIconScreenRect(projection),
+                    ((Marker) mapMarker.getFeature()).getZIndex()));
+        }
+        float tapSquareSizePx = MarkerHitTest.tapSquareSizeDp * getResources().getDisplayMetrics().density;
+        return MarkerHitTest.findTappedMarker(candidates, new MarkerHitTest.Tap<>(
+                lastTouchScreenPoint.x,
+                lastTouchScreenPoint.y,
+                tapSquareSizePx,
+                googleMapMarker,
+                lastTappedMarker));
+    }
+
+    @Nullable
     private MapMarker getMarkerMap(Marker marker) {
         MapMarker airMarker = markerMap.get(marker);
 
@@ -2140,8 +2242,9 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         }
 
         for (Map.Entry<Marker, MapMarker> entryMarker : markerMap.entrySet()) {
+            // Titles are null unless the `title` prop is set
             if (entryMarker.getKey().getPosition().equals(marker.getPosition())
-                    && entryMarker.getKey().getTitle().equals(marker.getTitle())) {
+                    && Objects.equals(entryMarker.getKey().getTitle(), marker.getTitle())) {
                 airMarker = entryMarker.getValue();
                 break;
             }

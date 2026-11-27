@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -50,6 +51,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -128,6 +130,17 @@ public class MapMarker extends MapFeature implements MarkerSwapPlanner.PendingMa
     private MapView mapView;
 
     private boolean hasCustomMarkerView = false;
+    /**
+     * Size in screen pixels of the icon we last gave Google Maps. Google
+     * draws bitmap icons at 1 bitmap pixel per screen pixel, so this is the
+     * icon's size on screen.
+     *
+     * Null when we don't know the size: for the default pin, or for an icon
+     * from a drawable resource we couldn't decode. Tap handling falls back to
+     * Google's own hit test for those markers.
+     */
+    @Nullable
+    private Size iconSizePx = null;
     private final MapMarkerManager markerManager;
     private String imageUri;
 
@@ -369,7 +382,7 @@ public class MapMarker extends MapFeature implements MarkerSwapPlanner.PendingMa
         // off the map. See the getChildCount() == 0 case in requestLayout().
         if (marker == null || phase == MarkerPhase.REMOVED_BY_REACT) return;
 
-        marker.setIcon(getIcon());
+        applyIcon(getIcon(), null);
         if (isIconReady()) {
             onIconReady();
         }
@@ -770,7 +783,19 @@ public class MapMarker extends MapFeature implements MarkerSwapPlanner.PendingMa
         phase = MarkerPhase.OFF_MAP;
     }
 
-    private BitmapDescriptor getIcon() {
+    /** An icon for Google Maps, and its size. See `iconSizePx`. */
+    private static class MarkerIcon {
+        final BitmapDescriptor descriptor;
+        @Nullable
+        final Size sizePx;
+
+        MarkerIcon(BitmapDescriptor descriptor, @Nullable Size sizePx) {
+            this.descriptor = descriptor;
+            this.sizePx = sizePx;
+        }
+    }
+
+    private MarkerIcon getIcon() {
         if (hasCustomMarkerView) {
             // creating a bitmap from an arbitrary view
             if (iconBitmapDescriptor != null) {
@@ -781,17 +806,66 @@ public class MapMarker extends MapFeature implements MarkerSwapPlanner.PendingMa
                 Canvas canvas = new Canvas(combinedBitmap);
                 canvas.drawBitmap(iconBitmap, 0, 0, null);
                 canvas.drawBitmap(viewBitmap, 0, 0, null);
-                return BitmapDescriptorFactory.fromBitmap(combinedBitmap);
+                return new MarkerIcon(
+                        BitmapDescriptorFactory.fromBitmap(combinedBitmap),
+                        new Size(width, height));
             } else {
-                return BitmapDescriptorFactory.fromBitmap(createDrawable());
+                Bitmap viewBitmap = createDrawable();
+                return new MarkerIcon(
+                        BitmapDescriptorFactory.fromBitmap(viewBitmap),
+                        new Size(viewBitmap.getWidth(), viewBitmap.getHeight()));
             }
         } else if (iconBitmapDescriptor != null) {
             // use local image as a marker
-            return iconBitmapDescriptor;
+            return new MarkerIcon(
+                    iconBitmapDescriptor,
+                    iconBitmap != null
+                            ? new Size(iconBitmap.getWidth(), iconBitmap.getHeight())
+                            : null);
         } else {
             // render the default marker pin
-            return BitmapDescriptorFactory.defaultMarker(this.markerHue);
+            return new MarkerIcon(BitmapDescriptorFactory.defaultMarker(this.markerHue), null);
         }
+    }
+
+    /**
+     * Where this marker's icon sits on screen, in map view pixels, or null
+     * when we can't tell. We can't tell when:
+     * - The marker isn't visible on the map
+     * - We don't know the icon's size (see `iconSizePx`)
+     * - The marker is rotated or flat, so its icon isn't an upright rectangle
+     *
+     * MapView uses this to decide which marker a tap hit. See MarkerHitTest.
+     */
+    @Nullable
+    public MarkerHitTest.IconRect getIconScreenRect(Projection projection) {
+        if (!isVisibleOnMap() || iconSizePx == null || flat || rotation != 0) {
+            return null;
+        }
+
+        Point anchorPoint = projection.toScreenLocation(marker.getPosition());
+        // Google's default anchor is the bottom middle of the icon:
+        // https://developers.google.com/android/reference/com/google/android/gms/maps/model/MarkerOptions#anchor(float,float)
+        float effectiveAnchorX = anchorIsSet ? anchorX : 0.5f;
+        float effectiveAnchorY = anchorIsSet ? anchorY : 1.0f;
+        float left = anchorPoint.x - effectiveAnchorX * iconSizePx.getWidth();
+        float top = anchorPoint.y - effectiveAnchorY * iconSizePx.getHeight();
+        return new MarkerHitTest.IconRect(
+                left, top, left + iconSizePx.getWidth(), top + iconSizePx.getHeight());
+    }
+
+    /**
+     * Gives the icon to Google Maps: to `options` for a marker we're about to
+     * add, or to our marker when `options` is null. We always set the icon
+     * and `iconSizePx` together, so the hit test matches what's on screen.
+     */
+    private void applyIcon(MarkerIcon icon, @Nullable MarkerOptions options) {
+        if (options != null) {
+            options.icon(icon.descriptor);
+        } else {
+            marker.setIcon(icon.descriptor);
+        }
+        iconSizePx = icon.sizePx;
     }
 
     private MarkerOptions fillMarkerOptions(MarkerOptions options) {
@@ -805,7 +879,7 @@ public class MapMarker extends MapFeature implements MarkerSwapPlanner.PendingMa
         options.draggable(draggable);
         options.zIndex(zIndex);
         options.alpha(opacity);
-        options.icon(getIcon());
+        applyIcon(getIcon(), options);
         return options;
     }
 
