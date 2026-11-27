@@ -45,7 +45,24 @@
 
 - (void)showCalloutView;
 - (void)hideCalloutView;
+/**
+ * Draws the icon again now. On Fabric, we draw our views into an image and
+ * give Google that. On the old architecture, Google re-renders our views.
+ */
 - (void)redraw;
+/**
+ * Redraws the icon at the end of this Fabric mounting transaction, even with
+ * tracksViewChanges={false}. Use it for changes React doesn't send through
+ * our views, like Fabric resizing us.
+ */
+- (void)setNeedsRedrawAfterMountingTransaction;
+/**
+ * Call at the end of each Fabric mounting transaction. Redraws the icon if
+ * the transaction changed any of its views, or added or removed any. Only
+ * does anything with tracksViewChanges={true}, right after it turns off, or
+ * after setNeedsRedrawAfterMountingTransaction.
+ */
+- (void)redrawIfNeededAfterMountingTransaction:(NSSet<NSNumber *> *)changedViewTags;
 - (UIView *)markerInfoContents;
 - (UIView *)markerInfoWindow;
 - (void)didTapInfoWindowOfMarker:(AIRGMSMarker *)marker;

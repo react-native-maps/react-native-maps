@@ -17,6 +17,23 @@
 #import "AIRGoogleMapCallout.h"
 #import "AIRDummyView.h"
 
+/**
+ * Whether we draw our views into an image ourselves, instead of letting
+ * Google render them. Only Fabric (the new architecture) tells us when React
+ * changed our views, through RNMapsGoogleMapView's mountingTransactionDidMount.
+ * On the old architecture, we keep Google's own tracksViewChanges.
+ *
+ * We only ship the new architecture, but this file still compiles for the
+ * library's old-architecture builds. We keep that path working instead of
+ * breaking it, which also keeps this patch closer to something we could
+ * upstream.
+ */
+#ifdef RCT_NEW_ARCH_ENABLED
+static const BOOL drawsIconIntoImage = YES;
+#else
+static const BOOL drawsIconIntoImage = NO;
+#endif
+
 CGRect unionRect(CGRect a, CGRect b) {
     return CGRectMake(
                       MIN(a.origin.x, b.origin.x),
@@ -40,7 +57,33 @@ CGRect unionRect(CGRect a, CGRect b) {
     CLLocationCoordinate2D _coordinates;
     CLLocationDegrees _rotation;
     BOOL _tracksInfoWindowChanges;
+    /**
+     * With tracksViewChanges={true} on Fabric, we draw our views into an
+     * image at the end of each mounting transaction that changed one of
+     * them, instead of letting Google re-render the icon every frame. See
+     * redrawIfNeededAfterMountingTransaction:.
+     *
+     * That only catches changes React makes. Views that change on their own,
+     * like GIFs, Lottie animations, or Animated values with useNativeDriver,
+     * keep their last image until React changes the marker or someone calls
+     * redraw.
+     */
     BOOL _tracksViewChanges;
+    /**
+     * React tags of the views in our icon, so we can tell whether a mounting
+     * transaction touched them. nil when views were added or removed since we
+     * last collected them, and after each redraw, since the transaction that
+     * caused it might have added or removed views deeper in our icon.
+     */
+    NSSet<NSNumber *> *_iconViewTags;
+    /** Whether our children changed since our last redraw */
+    BOOL _needsRedraw;
+    /**
+     * Whether we draw at the end of this mounting transaction, even with
+     * tracksViewChanges off. That's when tracking just turned off, or when
+     * Fabric resized us.
+     */
+    BOOL _isRedrawPending;
     BOOL _draggable;
     BOOL _tappable;
     BOOL _flat;
@@ -94,9 +137,13 @@ CGRect unionRect(CGRect a, CGRect b) {
 
 - (void) didInsertInMap:(AIRGoogleMap *) map
 {
+    // React moved us, and we're still on this map. See markersPendingRemoval.
+    if (_realMarker && _realMarker.map == map) return;
     _realMarker = [AIRGMSMarker new];
     _realMarker.fakeMarker = self;
-    _realMarker.tracksViewChanges = _tracksViewChanges;
+    // When we draw the icon into an image, we redraw on change ourselves, so
+    // Google never needs to re-render every frame
+    _realMarker.tracksViewChanges = drawsIconIntoImage ? NO : _tracksViewChanges;
     _realMarker.tracksInfoWindowChanges = _tracksInfoWindowChanges;
 
     [_realMarker setPosition:_coordinates];
@@ -171,6 +218,8 @@ CGRect unionRect(CGRect a, CGRect b) {
         self.calloutView = (AIRGoogleMapCallout *)subview;
     } else { // a child view of the marker
         [self iconViewInsertSubview:(UIView*)subview atIndex:atIndex+1];
+        _iconViewTags = nil;
+        _needsRedraw = YES;
     }
     AIRDummyView *dummySubview = [[AIRDummyView alloc] initWithView:(UIView *)subview];
     [super insertReactSubview:(UIView*)dummySubview atIndex:atIndex];
@@ -183,6 +232,8 @@ CGRect unionRect(CGRect a, CGRect b) {
         self.calloutView = nil;
     } else {
         [subview removeFromSuperview];
+        _iconViewTags = nil;
+        _needsRedraw = YES;
     }
     [super removeReactSubview:(UIView*)dummySubview];
 }
@@ -196,6 +247,107 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)redraw {
+    if (!drawsIconIntoImage) {
+        [self redrawWithGoogle];
+        return;
+    }
+    if (!_iconView || !_realMarker) return;
+    _needsRedraw = NO;
+
+    // We draw our views into an image ourselves and give Google that, instead
+    // of letting Google render them with its own tracksViewChanges:
+    // 1. Google re-renders a tracking marker's views every frame, even when
+    //    nothing changed. We only draw after React changes them.
+    // 2. Google hides a marker for a frame while it re-renders its views, so
+    //    the marker flickers. We swap in a new image without a frame gap.
+
+    // The icon view may still have its old size until our next layout pass.
+    // Fabric already set our frame for this transaction, so update the size
+    // now to draw the new contents at the new size.
+    if (!CGSizeEqualToSize(self.bounds.size, CGSizeZero)) {
+        [_iconView setFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+    }
+
+    if (CGRectIsEmpty(_iconView.bounds)) return;
+    [_iconView layoutIfNeeded];
+
+    // Views like text draw their contents only when UIKit is about to show
+    // them. Our icon view isn't on screen, so we ask them to draw now.
+    [self displayLayerTreeIfNeeded:_iconView.layer];
+
+    // renderInContext draws sublayers in array order and ignores zPosition.
+    // Fabric puts each view's background and border in layers after its
+    // children, with a negative zPosition to show them behind. To work with
+    // that, we sort sublayers by zPosition to draw, then put them back.
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    // [layer, original sublayers] for each layer we sort
+    NSMutableArray<NSArray *> *originalSublayers = [NSMutableArray new];
+    NSMutableArray<CALayer *> *layersToSort = [NSMutableArray arrayWithObject:_iconView.layer];
+    while (layersToSort.count > 0) {
+        CALayer *layer = layersToSort.lastObject;
+        [layersToSort removeLastObject];
+        NSArray<CALayer *> *sublayers = layer.sublayers ?: @[];
+        NSArray<CALayer *> *sorted = [sublayers sortedArrayWithOptions:NSSortStable usingComparator:^NSComparisonResult(CALayer *a, CALayer *b) {
+            if (a.zPosition < b.zPosition) return NSOrderedAscending;
+            if (a.zPosition > b.zPosition) return NSOrderedDescending;
+            return NSOrderedSame;
+        }];
+        if (sublayers.count > 1 && ![sorted isEqualToArray:sublayers]) {
+            [originalSublayers addObject:@[layer, sublayers]];
+            layer.sublayers = sorted;
+        }
+        [layersToSort addObjectsFromArray:sorted];
+    }
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithBounds:_iconView.bounds];
+    UIView *iconView = _iconView;
+    UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *context) {
+        [iconView.layer renderInContext:context.CGContext];
+    }];
+
+    // Restore the original sublayer order for each layer we sorted
+    for (NSArray *layerAndSublayers in originalSublayers) {
+        ((CALayer *)layerAndSublayers[0]).sublayers = layerAndSublayers[1];
+    }
+    [CATransaction commit];
+
+    _realMarker.iconView = nil;
+    _realMarker.icon = image;
+}
+
+- (void)setNeedsRedrawAfterMountingTransaction {
+    _isRedrawPending = YES;
+}
+
+- (void)redrawIfNeededAfterMountingTransaction:(NSSet<NSNumber *> *)changedViewTags {
+    if (!_iconView) return;
+    if (_isRedrawPending) {
+        _isRedrawPending = NO;
+        _iconViewTags = nil;
+        [self redraw];
+        return;
+    }
+    if (!_tracksViewChanges) return;
+
+    // Most transactions change views outside our icon, like other markers or
+    // the rest of the screen. We only redraw when the views the transaction
+    // changed include one of ours.
+    if (!_iconViewTags) {
+        NSMutableSet<NSNumber *> *tags = [NSMutableSet new];
+        [self collectTagsOfView:_iconView into:tags];
+        _iconViewTags = tags;
+    }
+    // A non-nil iconView means a child was just added, and Google would
+    // render it live until we replace it with an image
+    BOOL isShowingIconView = _realMarker.iconView != nil;
+    if (!_needsRedraw && !isShowingIconView && ![_iconViewTags intersectsSet:changedViewTags]) return;
+
+    _iconViewTags = nil;
+    [self redraw];
+}
+
+/** Upstream react-native-maps' redraw, for the old architecture */
+- (void)redrawWithGoogle {
     if (!_realMarker.iconView) return;
 
     BOOL oldValue = _realMarker.tracksViewChanges;
@@ -212,6 +364,28 @@ CGRect unionRect(CGRect a, CGRect b) {
         // Refresh according to docs
         _realMarker.tracksViewChanges = YES;
         _realMarker.tracksViewChanges = NO;
+    }
+}
+
+- (void)displayLayerTreeIfNeeded:(CALayer *)layer {
+    [layer displayIfNeeded];
+    for (CALayer *sublayer in layer.sublayers) {
+        [self displayLayerTreeIfNeeded:sublayer];
+    }
+}
+
+/**
+ * Collects the React tags of a view and everything inside it. We compare
+ * them with the tags a mounting transaction changed, to tell whether it
+ * changed our icon and we need to redraw.
+ */
+- (void)collectTagsOfView:(UIView *)view into:(NSMutableSet<NSNumber *> *)tags {
+    // Fabric sets each view's tag to its React tag. Our own views have tag 0.
+    if (view.tag != 0) {
+        [tags addObject:@(view.tag)];
+    }
+    for (UIView *subview in view.subviews) {
+        [self collectTagsOfView:subview into:tags];
     }
 }
 
@@ -346,10 +520,24 @@ CGRect unionRect(CGRect a, CGRect b) {
     return _realMarker.onDeselect;
 }
 
+// By default, Core Animation animates changes to layer properties over 0.25s.
+// That includes the marker layer's opacity:
+// https://developers.google.com/maps/documentation/ios-sdk/reference/objc/Classes/GMSMarkerLayer
+//
+// The 0.25s comes from the iOS SDK header CATransaction.h, which says
+// animationDuration "Defaults to 1/4s".
+//
+// Animated sets a new opacity every frame, so the marker would lag behind. We
+// instead set the opacity in a transaction with actions disabled, so it takes
+// effect immediately:
+// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/ReactingtoLayerChanges/ReactingtoLayerChanges.html#//apple_ref/doc/uid/TP40004514-CH7-SW3
 - (void)setOpacity:(double)opacity
 {
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
     _realMarker.opacity = opacity;
     _opacity = opacity;
+    [CATransaction commit];
 }
 
 - (void)setImageSrc:(NSString *)imageSrc
@@ -529,12 +717,26 @@ CGRect unionRect(CGRect a, CGRect b) {
 }
 
 - (void)setTracksViewChanges:(BOOL)tracksViewChanges {
+    BOOL wasTracking = _tracksViewChanges;
     _tracksViewChanges = tracksViewChanges;
-    _realMarker.tracksViewChanges = tracksViewChanges;
+    if (!drawsIconIntoImage) {
+        _realMarker.tracksViewChanges = tracksViewChanges;
+        return;
+    }
+    // We leave Google's tracksViewChanges off when we draw the icon into an
+    // image, since we track view changes ourselves. See redraw.
+
+    // Draw one last time when tracking turns off, at the end of this
+    // mounting transaction. A common pattern is
+    // tracksViewChanges={!imageLoaded}: the same React update that turns
+    // tracking off can also change our views.
+    if (wasTracking && !tracksViewChanges) {
+        _isRedrawPending = YES;
+    }
 }
 
 - (BOOL)tracksViewChanges {
-    return _realMarker.tracksViewChanges;
+    return _tracksViewChanges;
 }
 
 - (void)setTracksInfoWindowChanges:(BOOL)tracksInfoWindowChanges {
