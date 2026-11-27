@@ -346,10 +346,24 @@ CGRect unionRect(CGRect a, CGRect b) {
     return _realMarker.onDeselect;
 }
 
+// By default, Core Animation animates changes to layer properties over 0.25s.
+// That includes the marker layer's opacity:
+// https://developers.google.com/maps/documentation/ios-sdk/reference/objc/Classes/GMSMarkerLayer
+//
+// The 0.25s comes from the iOS SDK header CATransaction.h, which says
+// animationDuration "Defaults to 1/4s".
+//
+// Animated sets a new opacity every frame, so the marker would lag behind. We
+// instead set the opacity in a transaction with actions disabled, so it takes
+// effect immediately:
+// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/ReactingtoLayerChanges/ReactingtoLayerChanges.html#//apple_ref/doc/uid/TP40004514-CH7-SW3
 - (void)setOpacity:(double)opacity
 {
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
     _realMarker.opacity = opacity;
     _opacity = opacity;
+    [CATransaction commit];
 }
 
 - (void)setImageSrc:(NSString *)imageSrc
