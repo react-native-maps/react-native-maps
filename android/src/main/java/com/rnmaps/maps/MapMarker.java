@@ -18,6 +18,8 @@ import android.animation.TypeEvaluator;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
+import android.util.Size;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,7 +50,6 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
-import com.google.android.gms.common.images.ImageManager;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -66,7 +67,7 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class MapMarker extends MapFeature {
+public class MapMarker extends MapFeature implements MarkerSwapPlanner.PendingMarker {
 
     private MarkerOptions markerOptions;
     private Marker marker;
@@ -105,26 +106,39 @@ public class MapMarker extends MapFeature {
      * the marker keeps its last bitmap until something calls redraw().
      */
     private boolean tracksViewChanges = true;
+    /** See MarkerPhase for what each phase means and what changes it */
+    private MarkerPhase phase = MarkerPhase.OFF_MAP;
+    /**
+     * When this marker started waiting for MapView to swap it, from
+     * SystemClock.uptimeMillis(). Only means something while the phase is
+     * WAITING_FOR_ICON, READY_TO_SHOW or REMOVED_BY_REACT. See MarkerPhase.
+     */
+    private long swapWaitStartMs = 0;
+    /**
+     * Whether Fresco is still loading the `image` prop. Until it's done, we
+     * wait for the image instead of showing Google's default pin. See
+     * markReadyAfterBatchIfNoCustomView().
+     */
+    private boolean isLoadingImage = false;
+    /**
+     * The MapView that added this marker to its map, or null when it's off
+     * the map
+     */
+    @Nullable
+    private MapView mapView;
 
     private boolean hasCustomMarkerView = false;
     private final MapMarkerManager markerManager;
     private String imageUri;
-    private boolean loadingImage;
 
     private SoftReference<MarkerManager.Collection> markerCollectionRef;
 
 
 
     private final DraweeHolder<?> logoHolder;
-    private ImageManager.OnImageLoadedListener imageLoadedListener;
     private DataSource<CloseableReference<CloseableImage>> dataSource;
     private final ControllerListener<ImageInfo> mLogoControllerListener =
             new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onSubmit(String id, Object callerContext) {
-                    loadingImage = true;
-                }
-
                 @Override
                 public void onFinalImageSet(
                         String id,
@@ -155,13 +169,22 @@ public class MapMarker extends MapFeature {
                         MapMarker.this.markerManager.getSharedIcon(MapMarker.this.imageUri)
                                 .updateIcon(iconBitmapDescriptor, iconBitmap);
                     }
+                    isLoadingImage = false;
                     update(true);
-                    loadingImage = false;
-                    if (imageLoadedListener != null) {
-                        imageLoadedListener.onImageLoaded(null, null, false);
-                        // fire and forget
-                        imageLoadedListener = null;
+                    // We couldn't make a bitmap from the image, e.g. it's
+                    // animated. Fall back to the default pin, like onFailure().
+                    if (iconBitmapDescriptor == null) {
+                        markReadyAfterBatchIfNoCustomView();
                     }
+                }
+
+                @Override
+                public void onFailure(String id, Throwable throwable) {
+                    // Upstream shows Google's default pin when the image
+                    // fails, so we do too. Without this, the marker would
+                    // wait for an icon forever.
+                    isLoadingImage = false;
+                    markReadyAfterBatchIfNoCustomView();
                 }
             };
 
@@ -220,6 +243,14 @@ public class MapMarker extends MapFeature {
     public void doDestroy() {
         Choreographer.getInstance().removeFrameCallback(redrawFrameCallback);
         isRedrawScheduled = false;
+        // React deletes a marker right after removing it, in the same batch.
+        // We leave it on the map anyway: MapView's removeFeatureAt() put it
+        // in markersToSwap, and swapMarkersIfReady() calls removeFromMap() on
+        // it once the markers replacing it are shown. Removing it here would
+        // bring back the gap the swap avoids. See MarkerPhase.
+        if (phase == MarkerPhase.REMOVED_BY_REACT) {
+            return;
+        }
         MarkerManager.Collection collection = markerCollectionRef != null
                 ? markerCollectionRef.get()
                 : null;
@@ -329,10 +360,19 @@ public class MapMarker extends MapFeature {
         return position;
     }
 
+    /**
+     * Gives Google Maps our current icon. Once the icon is what this marker
+     * should look like, this also tells MapView the marker is ready to show.
+     */
     public void updateMarkerIcon() {
-        if (marker == null) return;
+        // Once React removes us, we keep our last icon until MapView takes us
+        // off the map. See the getChildCount() == 0 case in requestLayout().
+        if (marker == null || phase == MarkerPhase.REMOVED_BY_REACT) return;
 
         marker.setIcon(getIcon());
+        if (isIconReady()) {
+            onIconReady();
+        }
     }
 
     public LatLng interpolate(float fraction, LatLng a, LatLng b) {
@@ -387,6 +427,7 @@ public class MapMarker extends MapFeature {
             return;
         }
 
+        isLoadingImage = false;
         if (uri == null) {
             iconBitmapDescriptor = null;
             update(true);
@@ -396,6 +437,7 @@ public class MapMarker extends MapFeature {
                     .newBuilderWithSource(Uri.parse(uri))
                     .build();
 
+            isLoadingImage = true;
             ImagePipeline imagePipeline = Fresco.getImagePipeline();
             dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
             DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -518,8 +560,14 @@ public class MapMarker extends MapFeature {
         if (getChildCount() == 0) {
             if (hasCustomMarkerView) {
                 hasCustomMarkerView = false;
+                // When React removes a marker, it removes our custom view
+                // first. MapView then keeps the marker on the map until the
+                // markers replacing it are ready to show. Redrawing now would
+                // show Google's red default pin in the meantime, so we keep
+                // our last icon. We only switch to the default pin if React
+                // keeps the marker once this batch of UI changes finishes.
                 clearDrawableCache();
-                update(true);
+                markReadyAfterBatchIfNoCustomView();
             }
         }
     }
@@ -529,11 +577,185 @@ public class MapMarker extends MapFeature {
         return marker;
     }
 
+    /**
+     * Use onAddedByReact() instead, so the marker can tell MapView when it's
+     * ready
+     */
     @Override
     public void addToMap(Object collection) {
-        MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
-        marker = markerCollection.addMarker(getMarkerOptions());
-        this.markerCollectionRef = new SoftReference<>(markerCollection);
+        throw new UnsupportedOperationException("MapView adds markers with onAddedByReact()");
+    }
+
+    /**
+     * MapView calls this when React adds the marker. Returns whether the
+     * marker now waits for a swap, i.e. whether it's WAITING_FOR_ICON or
+     * READY_TO_SHOW. See MarkerPhase.
+     *
+     * React only adds a marker that's new or that it just removed: it moves a
+     * marker by removing it and adding it back in one batch.
+     */
+    boolean onAddedByReact(MapView mapView, MarkerManager.Collection markerCollection) {
+        if (phase != MarkerPhase.REMOVED_BY_REACT) {
+            // A new marker. Add it to the map hidden, since until our icon is
+            // ready, Google would show its red default pin. With the new
+            // architecture, React Native adds the marker to the map before it
+            // adds our custom view as a child, so we usually don't have an
+            // icon here yet. MapView shows it once its icon is ready, along
+            // with the other new markers.
+            this.mapView = mapView;
+            startWaitingForIcon();
+            MarkerOptions options = getMarkerOptions();
+            options.visible(false);
+            marker = markerCollection.addMarker(options);
+            this.markerCollectionRef = new SoftReference<>(markerCollection);
+            if (isIconReady()) {
+                // We don't call onIconReady(), which tells MapView: MapView is
+                // still adding us, and decides when to swap once React's batch
+                // is done.
+                phase = MarkerPhase.READY_TO_SHOW;
+            } else {
+                markReadyAfterBatchIfNoCustomView();
+            }
+            return true;
+        }
+        // React is moving the marker, and it's still on the map
+        if (isVisibleOnMap()) {
+            phase = MarkerPhase.SHOWN;
+            return false;
+        }
+        // React removed it before we showed it. We skipped its redraws since
+        // then, so draw it again before showing it.
+        startWaitingForIcon();
+        if (hasCustomMarkerView) {
+            redraw();
+        } else {
+            markReadyAfterBatchIfNoCustomView();
+        }
+        return true;
+    }
+
+    /**
+     * MapView calls this when React removes the marker. Returns whether it's
+     * still on the map, and so waits for a swap to take it off. See
+     * MarkerPhase.
+     */
+    boolean onRemovedByReact() {
+        if (phase == MarkerPhase.OFF_MAP) {
+            // React added it while the map was detached, and removed it
+            // before we put it on the map
+            return false;
+        }
+        phase = MarkerPhase.REMOVED_BY_REACT;
+        swapWaitStartMs = SystemClock.uptimeMillis();
+        return true;
+    }
+
+    /**
+     * MapView calls this to show a READY_TO_SHOW marker, in the same frame
+     * that it takes REMOVED_BY_REACT markers off the map. See MarkerPhase.
+     */
+    void show() {
+        phase = MarkerPhase.SHOWN;
+        if (marker != null) {
+            marker.setVisible(true);
+        }
+    }
+
+    /**
+     * MapView calls this after the Google map behind it was recreated, which
+     * removed all of its markers. The marker goes back to OFF_MAP, so MapView
+     * can add it to the new map. See MarkerPhase.
+     */
+    void onMapRecreated() {
+        marker = null;
+        mapView = null;
+        markerCollectionRef = null;
+        phase = MarkerPhase.OFF_MAP;
+    }
+
+    @Override
+    public MarkerPhase getPhase() {
+        return phase;
+    }
+
+    @Override
+    public long getSwapWaitStartMs() {
+        return swapWaitStartMs;
+    }
+
+    /**
+     * Whether Google Maps shows the marker: it's on the map and not hidden.
+     * We keep a marker hidden until it's SHOWN. See MarkerPhase.
+     */
+    boolean isVisibleOnMap() {
+        return marker != null && marker.isVisible();
+    }
+
+    /** See MarkerPhase */
+    private void startWaitingForIcon() {
+        phase = MarkerPhase.WAITING_FOR_ICON;
+        swapWaitStartMs = SystemClock.uptimeMillis();
+    }
+
+    /**
+     * Called once our icon is what this marker should look like. Moves a
+     * WAITING_FOR_ICON marker to READY_TO_SHOW and tells MapView, which might
+     * swap it in now. Does nothing in other phases. See MarkerPhase.
+     */
+    private void onIconReady() {
+        if (phase != MarkerPhase.WAITING_FOR_ICON) {
+            return;
+        }
+        phase = MarkerPhase.READY_TO_SHOW;
+        if (mapView != null) {
+            mapView.onMarkerIconReady();
+        }
+    }
+
+    /**
+     * Whether the icon we'd give Google Maps is what this marker should look
+     * like, rather than a stand-in:
+     * - With a custom view, the view must have been laid out. Before that,
+     *   createDrawable() draws an empty 100×100 bitmap.
+     * - Without one, we need the image from the `image` prop. Before it
+     *   loads, getIcon() returns Google's red default pin.
+     */
+    private boolean isIconReady() {
+        if (!hasCustomMarkerView) {
+            return iconBitmapDescriptor != null;
+        }
+        // We check the snapshot size rather than our own, since a child can
+        // be laid out outside our box, e.g. with absolute positioning
+        Size snapshotSize = getSnapshotSize();
+        return snapshotSize.getWidth() > 0 && snapshotSize.getHeight() > 0;
+    }
+
+    private boolean isMarkReadyAfterBatchScheduled = false;
+
+    /**
+     * Some markers really do use Google's default pin: they have no custom
+     * view and no `image`, or their image failed to load. So once nothing
+     * else will give us an icon, we show the default pin. React Native adds
+     * or removes a marker's children in the same batch of UI changes that
+     * adds or removes the marker. So if React still has the marker with no
+     * custom view once that batch finishes, we show what we have.
+     */
+    private void markReadyAfterBatchIfNoCustomView() {
+        if (isMarkReadyAfterBatchScheduled) {
+            return;
+        }
+        isMarkReadyAfterBatchScheduled = true;
+        // Like MapView.scheduleSwapMarkersAfterBatch(), this runs after
+        // React's batch
+        Choreographer.getInstance().postFrameCallback(frameTimeNanos -> {
+            isMarkReadyAfterBatchScheduled = false;
+            // A custom view or an image that's still loading will give us
+            // our icon later
+            if (marker == null || hasCustomMarkerView || isLoadingImage
+                    || phase == MarkerPhase.REMOVED_BY_REACT) return;
+            update(true);
+            onIconReady();
+        });
     }
 
     @Override
@@ -544,6 +766,8 @@ public class MapMarker extends MapFeature {
         MarkerManager.Collection markerCollection = (MarkerManager.Collection) collection;
         markerCollection.remove(marker);
         marker = null;
+        mapView = null;
+        phase = MarkerPhase.OFF_MAP;
     }
 
     private BitmapDescriptor getIcon() {
@@ -638,29 +862,31 @@ public class MapMarker extends MapFeature {
         mLastBitmapCreated = null;
     }
 
+    /**
+     * The size of the bitmap we draw our custom view into. It covers every
+     * laid-out child, since with Fabric our own Yoga box can be too small.
+     * Either side is 0 before we're laid out.
+     */
+    private Size getSnapshotSize() {
+        int[] expanded = new int[] { Math.max(0, width), Math.max(0, height) };
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof MapCallout) {
+                continue;
+            }
+            expandSnapshotSizeFromSubtree(child, child.getLeft(), child.getTop(), expanded);
+        }
+        return new Size(expanded[0], expanded[1]);
+    }
+
     private Bitmap createDrawable() {
         int width = this.width <= 0 ? 100 : this.width;
         int height = this.height <= 0 ? 100 : this.height;
 
-        // Bitmap must cover laid-out custom-marker subtree; Yoga box alone can be too small (Fabric).
         if (hasCustomMarkerView) {
-            int[] expanded = new int[] { width, height };
-            for (int i = 0; i < getChildCount(); i++) {
-                View child = getChildAt(i);
-                if (child instanceof MapCallout) {
-                    continue;
-                }
-                expandSnapshotSizeFromSubtree(child, child.getLeft(), child.getTop(), expanded);
-            }
-            width = expanded[0];
-            height = expanded[1];
-        }
-
-        if (width <= 0) {
-            width = 100;
-        }
-        if (height <= 0) {
-            height = 100;
+            Size snapshotSize = getSnapshotSize();
+            width = Math.max(width, snapshotSize.getWidth());
+            height = Math.max(height, snapshotSize.getHeight());
         }
 
         // Do not create the doublebuffer-bitmap each time. reuse it to save memory.
@@ -753,18 +979,6 @@ public class MapMarker extends MapFeature {
                 name,
                 "drawable",
                 getContext().getPackageName());
-    }
-
-    public boolean isLoadingImage() {
-        return loadingImage;
-    }
-
-    public ImageManager.OnImageLoadedListener getImageLoadedListener() {
-        return imageLoadedListener;
-    }
-
-    public void setImageLoadedListener(ImageManager.OnImageLoadedListener imageLoadedListener) {
-        this.imageLoadedListener = imageLoadedListener;
     }
 
     @FunctionalInterface
